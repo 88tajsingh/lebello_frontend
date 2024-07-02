@@ -1,5 +1,6 @@
 <template>
-  <div class="flex  content-between justify-between px-1 mb-2">
+  <PageHeader > Material</PageHeader>
+  <div class="flex  content-between justify-between  mb-2">
     <div class="flex">
       <Select cusClass="h-[38px] border-boxdark	  " :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="actionSelected" />
       <Button class="px-2 py-2 m-auto">Apply</Button>
@@ -66,7 +67,7 @@
   <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen">
     <AddAndEdit />
   </PopupModal>
-  <PopupModal modalTitle="Add Materials" v-model:isOpen="editIsOpen">
+  <PopupModal modalTitle="Edit Materials" v-model:isOpen="editIsOpen">
     <AddAndEdit :material='editData'/>
   </PopupModal>
   {{ editData }}
@@ -74,6 +75,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
+import PageHeader  from '@/components/Admin-components/PageHeader.vue'
 import DataTable  from  '@/components/Admin-components/DataTable.vue'
 import AddAndEdit from './AddAndEdit.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
@@ -100,12 +102,21 @@ const actionsFlag = ref(null)
 const modalIsOpen = ref(false)
 const editIsOpen = ref(false)
 
+
+
+
+
+
+
+
+
 const customModalTitle = 'Custom Modal Title'
 
 const openModal = () => {
   modalIsOpen.value = true
 }
-const editModal = () => {
+const editModal = (data) => {
+  editData.value = { ...data };
   editIsOpen.value = true
 }
 

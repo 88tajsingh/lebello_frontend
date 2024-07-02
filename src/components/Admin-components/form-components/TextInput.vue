@@ -1,5 +1,5 @@
 <template>
-  <label v-if="label" class="mb-2.5 block font-medium text-black dark:text-white">{{ label }}</label>
+  <label v-if="label" class="mb-1 block font-medium  dark:text-white">{{ label }}</label>
   <div v-if="isTextarea" class="mb-4">
     <textarea
       class="py-3 px-4 block w-full rounded-lg border border-stroke bg-transparent  pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"

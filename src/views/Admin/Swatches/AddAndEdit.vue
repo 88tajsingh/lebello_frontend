@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <h1 class="text-2xl text-[#1d2327]">Add New Swatches</h1>
-        <form @submit.prevent="">
-            <div class="grid grid-cols-12 gap-4 mt-5">
+        <PageHeader >Add Swatches</PageHeader>
+            <DefaultCard >
+        <form @submit.prevent="" class="mb-5">
+            <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <div>
                         <TextInput id="title" type="text" class="block w-full text-lg  py-5 mr-2 h-[33px]"
@@ -10,9 +10,7 @@
                     </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Description">
-                            <div class="mt-2 px-6 flex h-auto">
-                                <div class="w-1/6">Description</div>
-                                <div class="w-5/6 pb-5">
+                            <InputLabel >Description</InputLabel>                               
                                     <div class="mb-2">
                                         <Button @click="handleSubmit" type="">
                                             <span class="flex">
@@ -51,94 +49,65 @@
                                             </span>
                                         </Button>
                                     </div>
-
-                                    <TinyMCE v-model="form.description" />
+                                    <div class="px-2">
+                                        <TinyMCE v-model="form.description" />
+                                    </div>
                                     <InputError class="mt-2" :message="errors?.description" />
-                                    <span class="text-sm">Put Material Description.</span>
-
-                                </div>
-                            </div>
+                                    <span class="text-sm pl-2">Put Material Description.</span>
                         </Accordion>
                     </div>
-                    <div class="mt-5">
+                    <div class="mt-5 px-6">
                         <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
                             v-model="form.trade_mark_label" placeholder="" label="Trade Mark Label
                  " :message="errors?.trade_mark_label" />
                     </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Material Options">
-                            <div class="my-5 px-6 flex h-auto items-center">
-                                <div class="w-1/6">Term key </div>
-                                <div class="w-5/6">
-                                    <div class="flex items-center text-gray-600 text-sm">
-                                        <TextInput id=" " type="number" class="block w-[180px] mr-2 h-[33px]"
-                                            v-model="form.term_key" placeholder="" label=""
+                            <div class="my-5 px-6 flex h-auto items-center">    
+                                    <div class=" items-center text-gray-600 text-sm">
+                                        <TextInput  type="number" class="block w-[180px] mr-2 h-[33px]"
+                                            v-model="form.term_key" placeholder="Term key" label="Term key"
                                             :message="errors.term_key" />
                                         <span>The material term id. This is generated from material taxonomy.
                                             Please do not make any changes here.
                                         </span>
-                                    </div>
                                 </div>
-                            </div>
-                            <div class="my-5 px-6 flex h-auto ">
-                                <div class="w-1/6 pt-2">Material item</div>
-                                <div class="w-5/6">
-                                    <div class=" items-center text-gray-600 text-sm">
-                                        <TextInput id=" " type="number" class="block w-[180px] mr-2 h-[33px]"
-                                            v-model="form.material_item" placeholder="" label=""
+                            </div>      
+                                    <div class="px-6 items-center text-gray-600 text-sm">
+                                        <TextInput id="" type="number" class="block w-[180px] mr-2 h-[33px]"
+                                            v-model="form.material_item" placeholder="Material item" label="Material item"
                                             :message="errors.material_item" />
 
                                         <span>Put material taxonomy term id. Seperate with commas.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="my-5 px-6 flex h-auto items-center">
-                                <div class="w-1/6">Group Name</div>
-                                <div class="w-5/6">
-                                    <div class=" items-center text-gray-600 text-sm">
+                                    </div>     
+                                    <div class="px-6 mt-2 items-center text-gray-600 text-sm">
                                         <TextInput id=" " type="text" class="block w-[180px] mr-2 h-[33px]"
-                                            v-model="abc" placeholder="" label="" />
+                                            v-model="abc" placeholder="Group Name" label="Group Name" />
                                     </div>
-                                </div>
-                            </div>
                         </Accordion>
                     </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Seo Options">
-                            <div class="my-5 px-6 flex h-auto items-center">
-                                <div class="w-1/6">Title Tag</div>
-                                <div class="w-5/6">
-                                    <div class=" items-center text-gray-600 text-sm">
+                           
+                                    <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                         <TextInput id=" " type="text" class="block w-[180px] mr-2 h-[33px]"
-                                            v-model="form.seo_title" placeholder="" label=""
+                                            v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
                                             :message="errors.seo_title" />
                                         <span>Custom title tag.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="my-5 px-6 flex h-auto items-center">
-                                <div class="w-1/6">Meta Description</div>
-                                <div class="w-5/6">
-                                    <div class=" items-center text-gray-600 text-sm">
+                                 </div> 
+                                    <div class="px-6 mt-3 items-center text-gray-600 text-sm">
                                         <TextInput id=" " isTextarea="true" rows='4' type="text"
                                             class="block w-[180px] mr-2 h-[33px]" v-model="form.seo_description"
-                                            placeholder="" label="" :message="errors.seo_description" />
+                                            placeholder="Meta Description" label="Meta Description" :message="errors.seo_description" />
                                         <span>Most search engines use a maximum of 160 chars for the description.
                                         </span>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="my-5 px-6 flex h-auto items-center">
-                                <div class="w-1/6">Meta Keywords</div>
-                                <div class="w-5/6">
-                                    <div class=" items-center text-gray-600 text-sm">
+                                    <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
                                         <TextInput id=" " isTextarea="true" rows='4' type="text"
                                             class="block w-[180px] mr-2 h-[33px]" v-model="form.meta_keywords"
-                                            placeholder="" label="" :message="errors.meta_keywords" />
+                                            placeholder="Meta Keywords" label="Meta Keywords" :message="errors.meta_keywords" />
                                         <span>Seperate each term with comma.</span>
                                     </div>
-                                </div>
-                            </div>
                         </Accordion>
                     </div>
                     <div class="mt-5">
@@ -380,9 +349,7 @@
                                             </span>
                                         </span>
                                     </Button>
-                                    <TinyMCE v-model="form.description" />
-                                    <!-- <RichEditor :height="500">
-                                </RichEditor> -->
+                                    <!-- <TinyMCE v-model="form.description" /> -->
                                     <p class="text-sm text-gray-600 my-2"> The material term id. This is generated from
                                         material
                                         taxonomy. Please do not make any changes here. </p>
@@ -390,13 +357,13 @@
                             </div>
                         </Accordion>
                     </div>
-
                 </div>
             </div>
         </form>
-    </div>
+    </DefaultCard>
 </template>
 <script setup>
+import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Checkbox from '@/components/Admin-components/form-components/CheckBox.vue';
@@ -405,6 +372,7 @@ import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Dropdown from "@/components/Admin-components/form-components/Select.vue";
 import ImageUpload2 from "@/components/Admin-components/form-components/ImageUpload2.vue"
 import { ref } from "vue";
+import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import LinkBtn from "@/components/Admin-components/Buttons/LinkBtn.vue";
 import RadioBtn from "@/components/Admin-components/form-components/RadioBtn.vue";
 import Tabs from '@/components/Admin-components/Tabs.vue';

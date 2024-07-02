@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <div>
-      <div class="text-[23px] mb-3 text-sans text-[#1d2327]">Material - Re-Order</div>
+  <PageHeader> Material - Re-Order</PageHeader>
       <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="name" Classes=" border-l-4 border-[#ccd0d4]">
       </Dreagable>
       <Button type="" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class=" text-sm ml-auto px-3 py-1">
         Update
       </Button>
-    </div>
-  </div>
 </template>
 <script setup>
 import { ref } from "vue";
+import PageHeader  from '@/components/Admin-components/PageHeader.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Dreagable from "@/components/Admin-components/Dreag-able.vue";
 

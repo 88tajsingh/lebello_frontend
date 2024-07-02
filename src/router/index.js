@@ -136,7 +136,13 @@ const router = createRouter({
           name: 'TaxonomyOrder',
           component:()=> import('../views/Admin/Swatches/TaxonomyOrder.vue'),
           meta: { requiresAuth: true }
-        }
+        },
+        {
+          path: '/pages',
+          name: 'Pages',
+          component:()=> import('../views/Admin/Pages/Index.vue'),
+          meta: { requiresAuth: true }
+        },
       ]
     }
   ]

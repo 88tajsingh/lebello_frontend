@@ -1,4 +1,5 @@
 <template>
+  <PageHeader> Swatches</PageHeader>
     <div class="flex  content-between justify-between px-1 mb-2">
     <div class="flex">
       <Select cusClass="h-[38px] border-boxdark	  " :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="actionSelected" />
@@ -42,6 +43,7 @@
 
 <script setup>
 import {swatches} from '@/json/data.js'
+import PageHeader  from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Select from "@/components/Admin-components/form-components/Select.vue";
@@ -93,6 +95,6 @@ const isRowHovered = (value) => {
 </script>
 <style scoped >
 .bh-pagination-info .bh-pagesize{
-  width : 70px !important;
+  width : 70px !important
 }
 </style>

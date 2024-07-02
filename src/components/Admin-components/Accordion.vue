@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-auto bg-white" >
+    <div class="mx-auto bg-white border border-[#e6e3e3] rounded-md " >
         <div class="grid divide-y divide-neutral-100  ">
             <div class=" ">
                 <details class="group " :open='toggle'>
@@ -31,7 +31,7 @@
 
                         </span>
                     </summary>
-                    <div class="border " >
+                    <div class="border mb-4 " >
                     <slot />
                     </div>
                 </details>

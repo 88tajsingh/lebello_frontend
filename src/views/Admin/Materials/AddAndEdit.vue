@@ -176,7 +176,7 @@ watch(
 )
 
 console.log(props.material)
-const form = ref({})
+const form = ref({...props.material })
 
 const validateForm = () => {
     let isValid = true
@@ -209,6 +209,7 @@ const validateForm = () => {
 
 const handleSubmit = async () => {
     console.log("run submit")
+    console.log(form.value)
     try {
         if (validateForm()) {
             // processing.value = true

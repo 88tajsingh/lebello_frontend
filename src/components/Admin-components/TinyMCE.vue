@@ -13,7 +13,7 @@ const content = ref('')
 </script>
 
 <template>
-  <main id="sample">
+  <main id="sample" class=" overflow-hidden ">
     <Editor
       :api-key='key'
       :init="{
