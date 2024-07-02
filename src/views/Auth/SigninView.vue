@@ -47,17 +47,15 @@ const handleLogin = async () => {
       if (validateForm()) {
         processing.value = true;
         const user = { ...form.value };
-        // store.dispatch('login', { token, user });
-        // router.push('/admin');
         LoginService.login(user)
         .then(res => {
-          console.log('Login Response:', res.data);
-          const token = res.data.access_token
-          store.dispatch('login', { token });
           if (res.status === 200) {
-            // store.dispatch('login', { token, user });
+            const token = res.data.data.access_token
+            const user = res.data.data.user_data
+            // console.log(res.data.data.access_token)
+            store.dispatch('login', { token, user });
+            console.log("token login",token)
             router.push('/admin');
-            console.log("sdcs")
             processing.value = false;       
          }
         if (res.status === 401) {

@@ -1,19 +1,16 @@
-import LoginServices from "@/services/loginServices/LoginServices";
+import CommonServices from "@/services/CommonServices";
 import store from "@/store";
 import router from "@/router";
 
 export const logout = async () => {
-    const payload = store.getters.token;
-    console.log(payload)
     try {
-        store.dispatch('logout');
-        router.push('/login')
-        console.log('enter logout')
-      const res = await LoginServices.logout(payload);
+      const res = await CommonServices.logout();
       if (res.status === 200) {
             store.dispatch('logout');
+            router.push('/login')
         return ;
-      } else if (res.status === 200 ) {
+      } else if (res.status === 401) {
+        
         return ;
       }
     } catch (err) {

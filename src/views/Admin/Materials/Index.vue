@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="bg-white">
-    <vue3-datatable skin="bh-table-striped bh-table-hover "  :hasCheckbox="true" :loading="false"
+    <vue3-datatable skin="bh-table-striped bh-table-hover "  :hasCheckbox="true" :loading="processing"
     :rows="rows" :columns="cols" paginationInfo="showing {0} to {1} of {2}" showNumbersCount="3"
     class="next-prev-pagination" :cloneHeaderInFooter="true"
     rowClass=""
@@ -28,10 +28,9 @@
     </template>
     <template #actions="data">
       <div class="flex">
-        <Button :onclick="editModal "bg_th_color="bg-[#2271b1] text-white px-3 py-2" class="m-0 py-1 px-2" @click="()=>{editData=data.value}">Edit</Button>
-          <Button Button :onclick="openModal" class="m-0  px-2" @click="deleteUser(data.value)"
-          bg_th_color="bg-red border-red text-white "
-          >Delete</Button>
+        <Button :onClick="editModal" bg_th_color="bg-[#2271b1] text-white px-3 py-2" class="m-0 py-1 px-2" @click="()=>{editData=data.value}">Edit</Button>
+        <Button  class="m-0 px-2" :onClick="openDeleteModal" bg_th_color="bg-red border-red text-white" @click="()=>{material_id=data.value}">Delete</Button>
+
       </div>
   </template>
   </vue3-datatable>
@@ -65,25 +64,32 @@
 
 
   <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen">
-    <AddAndEdit />
+    <AddAndEdit @handleApi='handleAddMaterials' formHeader="Add Material" />
   </PopupModal>
   <PopupModal modalTitle="Edit Materials" v-model:isOpen="editIsOpen">
-    <AddAndEdit :material='editData'/>
+    <AddAndEdit :material='editData' @handleApi="handleEditMaterials"/>
   </PopupModal>
+  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Item'" @delete="handleDeleteMaterials" >
+  </DeleteModal>
+   
+  <Loader :isLoading="processing" :fullPage="true"/>
   {{ editData }}
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import DeleteModal  from '@/components/Admin-components/Modals/DeleteModal.vue'
+// import Loader  from '@/components/Admin-components/Loader.vue'
+import { reactive, ref,watch,onMounted  } from 'vue'
 import PageHeader  from '@/components/Admin-components/PageHeader.vue'
 import DataTable  from  '@/components/Admin-components/DataTable.vue'
 import AddAndEdit from './AddAndEdit.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { materialsData } from '@/json/data.js'
+// import { materialsData } from '@/json/data.js'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
-import PopupModal from '@/components/Admin-components/PopupModal.vue'
+import PopupModal from '@/components/Admin-components/Modals/PopupModal.vue'
+import materialsServices from '@/services/MaterialsServices'
 const actionSelected = ref('')
 const search = ref('')
 const bulkOption = [{ text: 'Delete', value: 'Delete' }]
@@ -95,28 +101,20 @@ const cols = ref([
   { field: 'count', title: 'Count' },
   { field: 'actions', title: 'Actions' },
 ])
+const material_id = ref('') 
+const processing = ref(false)
 const editData = ref({})
-const rows = ref(materialsData)
-console.log("editData", editData.value)
+const rows = ref([])
 const actionsFlag = ref(null)
 const modalIsOpen = ref(false)
 const editIsOpen = ref(false)
 
 
 
-
-
-
-
-
-
-const customModalTitle = 'Custom Modal Title'
-
 const openModal = () => {
-  modalIsOpen.value = true
+modalIsOpen.value = true
 }
-const editModal = (data) => {
-  editData.value = { ...data };
+const editModal = () => {
   editIsOpen.value = true
 }
 
@@ -131,7 +129,99 @@ const handleMouseLeave = () => {
 const isRowHovered = (value) => {
   return actionsFlag.value === value.name
 }
+
+const deleteModalIsOpen = ref(false);
+const openDeleteModal = () => {
+  deleteModalIsOpen.value = true;
+  console.log('material_id',material_id.value)
+};
+
+// get materials function
+const handleGetMaterials = () => {
+  try {
+        processing.value = true;
+        materialsServices.getMaterials()
+        .then(res => {
+          if (res.status === 200) {
+            rows.value = res?.data?.data
+            processing.value = false; 
+                  
+         }
+         
+        })  
+    } catch (e) {
+      console.error('Error while log in:', e);
+    } finally {
+      processing.value = false;
+    }
+}
+// add material function
+const handleAddMaterials = (payload) => {
+  try {
+    console.log("payload: " + payload)
+        processing.value = true;
+        materialsServices.addMaterial(payload)
+        .then(res => {
+          if (res.status === 200) {
+            modalIsOpen.value = false;  
+            rows.value = res?.data?.data
+            processing.value = false;  
+            handleGetMaterials();   
+         }
+        })  
+    } catch (e) {
+      console.error('Error while log in:', e);
+    } finally {
+      processing.value = false;
+    }
+}
+// delete material
+const handleDeleteMaterials = () => {
+  try {
+    processing.value = true;
+    const payload = {"id":material_id.value.id}
+        materialsServices.deleteMaterial(payload)
+        .then(res => {
+          if (res.status === 200) {
+            console.log(res.data.data)
+            rows.value = res.data.data
+            processing.value = false;   
+            handleGetMaterials(); 
+            deleteModalIsOpen.value = false;    
+            
+         }
+        })  
+    } catch (e) {
+      console.error('Error while log in:', e);
+    } finally {
+      processing.value = false;
+    }
+}
+
+const handleEditMaterials = (payload) => {
+  try {
+        processing.value = true;
+        materialsServices.editMaterial(payload)
+        .then(res => {
+          if (res.status === 200) {
+            console.log(res.data.data)
+            rows.value = res.data.data
+            processing.value = false;    
+            handleGetMaterials(); 
+            editIsOpen.value = false;
+         }
+        })  
+    } catch (e) {
+      console.error('Error while log in:', e);
+    } finally {
+      processing.value = false;
+    }
+}
+
+onMounted(() => handleGetMaterials());
 </script>
+
+
 <style scoped>
 .bh-pagesize {
   width: 72px !important;

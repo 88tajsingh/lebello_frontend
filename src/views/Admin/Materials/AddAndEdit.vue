@@ -33,8 +33,8 @@
             <div class="flex flex-col ">
                 <InputLabel for="Display in Material Options" value="Display in Material Options" />
                 <Select :options="trueFalse" showfield="name" class="w-full" valueField="value" label="Select an option"
-                    v-model="form.material_option" />
-                <InputError class="mt-2" :message="errors?.material_option" />
+                    v-model="form.display_material_option" />
+                <InputError class="mt-2" :message="errors?.display_material_option" />
             </div>
             <div class="flex flex-col w-full">
                 <InputLabel for="Material Price" value="Material Price" />
@@ -50,14 +50,14 @@
                 <InputLabel for="Yellow Banner Display On Material Images"
                     value="Yellow Banner Display On Material Images" />
                 <Select :options="trueFalse" showfield="name" class="w-full" valueField="value" label="Select an option"
-                    v-model="form.yellow_banner" />
-                <InputError class="mt-2" :message="errors?.yellow_banner" />
+                    v-model="form.yellow_banner_material_image" />
+                <InputError class="mt-2" :message="errors?.yellow_banner_material_image" />
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Show New Badge" value="Show New Badge" />
                 <Select :options="trueFalse" showfield="name" class="w-full" valueField="value" label="Select an option"
-                    v-model="form.new_badge" />
-                <InputError class="mt-2" :message="errors?.new_badge" />
+                    v-model="form.show_new_badge" />
+                <InputError class="mt-2" :message="errors?.show_new_badge" />
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Label" value="Label" />
@@ -81,12 +81,12 @@
                 <InputLabel for="Label Background Color" value="Label Background Color" />
                 <div class="flex gap-2">
                     <TextInput type="color" class="block h-[40px] min-w-[200px] px-2 rounded-lg"
-                        :class="{ 'border-red-500': errors.bg_color }" placeholder="" v-model="form.bg_color"
-                        :errMessage="errors.bg_color" @update:model="clearError(errors, 'bg_color')" />
+                        :class="{ 'border-red-500': errors.label_background_color }" placeholder="" v-model="form.label_background_color"
+                        :errMessage="errors.label_background_color" @update:model="clearError(errors, 'label_background_color')" />
 
                     <TextInput type="text" class="block mr-2 h-[40px] min-w-[220px]"
-                        :class="{ 'border-red-500': errors.bg_color }" placeholder="" v-model="form.bg_color"
-                        @update:model="clearError(errors, 'bg_color')" />
+                        :class="{ 'border-red-500': errors.label_background_color }" placeholder="" v-model="form.label_background_color"
+                        @update:model="clearError(errors, 'label_background_color')" />
                 </div>
             </div>
             <div class="flex flex-col ">
@@ -99,8 +99,9 @@
             <div class="flex flex-col ">
                 <InputLabel for="Show New Badge 2021" value="Show New Badge 2021" />
                 <Select :options="trueFalse" showfield="name" class="w-full" valueField="value" label="Select an option"
-                    v-model="form.show_badge_2021" />
-                <InputError class="mt-2" :message="errors?.show_badge_2021" />
+                    v-model="form.show_new_badge_2021" />
+                   
+                <InputError class="mt-2" :message="errors?.show_new_badge_2021" />
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Single Color" value="Single Color" />
@@ -110,14 +111,14 @@
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Multiple Color" value="Multiple Color" />
-                <MultiSelect v-model="form.multi_color" :options="colors" placeHolder="Select multiple color" />
-                <InputError class="mt-2" :message="errors?.multi_color" />
+                <MultiSelect v-model="form.multiple_color" :options="colors" placeHolder="Select multiple color"  />
+                <InputError class="mt-2" :message="errors?.multiple_color" />
             </div>
             <div class="flex flex-col w-full">
                 <InputLabel for="Featured_image" value="Featured_image" />
-                <ImageUpload2 @file-selected="form.featured_image = $event"
+                <ImageUpload2 @file-selected="form.media_id = $event"
                     :accepted-formats="['jpg', 'jpeg', 'png']" />
-                <InputError class="mt-2" :message="errors?.featured_image" />
+                <InputError class="mt-2" :message="errors?.media_id" />
             </div>
             <div class="flex flex-col w-full">
                 <InputLabel for="Description" value="Description" />
@@ -135,7 +136,7 @@
             Submit
         </button>
     </form>
-    {{ form }}
+    
 </template>
 
 <script setup>
@@ -151,6 +152,7 @@ import { useRoute } from 'vue-router'
 import { clearError } from '@/helper/functions'
 import { ref, watch, watchEffect } from 'vue'
 import { trueFalse, colors, parentMaterial } from '@/json/data'
+import { defineEmits } from 'vue';
 
 const route = useRoute()
 const swatchId = ref(route.params.id)
@@ -162,8 +164,15 @@ const props =defineProps({
     options: {
         type: Object,
         default: () => { }
-    }
+    },
+    formHeader:{
+        type: String,
+    },
+    formHeader:{
+        type: String,
+    },
 })
+const emit = defineEmits(['handleApi']);
 
 watch(
     () => props.material, (newValue) => {
@@ -208,17 +217,13 @@ const validateForm = () => {
 }
 
 const handleSubmit = async () => {
-    console.log("run submit")
-    console.log(form.value)
     try {
-        if (validateForm()) {
-            // processing.value = true
-            // const res = await axios.post('/login', {})
-            // const user = { ...form.value }
-            // router.push('/admin')
+
+        if (validateForm()) {  
+            emit('handleApi', {...form.value}); 
         }
     } catch (e) {
-        console.error('Error material add edit in:', e)
+        console.error('Error material add edit :', e)
     }
 }
 </script>

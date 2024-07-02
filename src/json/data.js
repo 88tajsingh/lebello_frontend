@@ -1,6 +1,6 @@
 export const trueFalse = [
-  { name: 'No', value: 'No' },
-  { name: 'Yes', value: 'Yes' }
+  { name: 'No', value: 0 },
+  { name: 'Yes', value: 1 }
 ]
 
 export const colors = [

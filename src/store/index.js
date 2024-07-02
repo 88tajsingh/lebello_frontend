@@ -31,13 +31,13 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    login({ commit }, { token }) {
+    login({ commit }, { token, user }) {
       commit('setToken', token);
-      // commit('setUser', user);
+      commit('setUser', user);
     },
     logout({ commit }) {
       commit('clearToken');
-      // commit('clearUser');
+      commit('clearUser');
     },
   },
   modules: {},

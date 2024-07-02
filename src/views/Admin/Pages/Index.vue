@@ -82,7 +82,7 @@
   import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
   import Select from '@/components/Admin-components/form-components/Select.vue'
   import Button from '@/components/Admin-components/Buttons/Button.vue'
-  import PopupModal from '@/components/Admin-components/PopupModal.vue'
+  import PopupModal from '@/components/Admin-components/Modals/PopupModal.vue'
   const actionSelected = ref('')
   const search = ref('')
   const bulkOption = [{ text: 'Delete', value: 'Delete' }]

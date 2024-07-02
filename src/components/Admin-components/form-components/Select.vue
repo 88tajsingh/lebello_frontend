@@ -1,21 +1,30 @@
 <template>
-  <div class="bg-white border rounded-lg  p-auto">
-    <select class="rounded-lg border border-stroke bg-transparent  outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white" v-bind="$attrs" v-model="selectedOption" :class="cusClass"  @change="handleChange">
-    <option value="" disabled>{{ label }}</option>
-    <option v-for="(option, index) in options" :key="index" :value="option[valueField]">
-      <span v-if="option.parent_material === 1">&nbsp;&nbsp;&nbsp;</span>
-      <span >{{ option[showfield] }}</span>
-    </option>
-  </select>
+  <div class="">
+    <select 
+      class="rounded-lg border bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
+      v-bind="$attrs"
+      v-model="selectedOption"
+      :class="cusClass"
+      @change="handleChange"
+    >
+      <option value="" disabled>{{ label }}</option>
+      <option 
+        v-for="(option, index) in options" 
+        :key="index" 
+        :value="option[valueField]"
+      >
+        <span v-if="option.value === 1">&nbsp;&nbsp;&nbsp;</span>
+        <span>{{ option[showfield] }}</span>
+      </option>
+    </select>
   </div>
-  
 </template>
 
 <script setup>
-import { ref, watch, defineEmits } from 'vue';
+import { ref, watch } from 'vue';
 
+// Define props and emit setup
 const props = defineProps({
-  
   options: {
     type: Array,
     required: true
@@ -32,25 +41,25 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  value: {
-    type: String,
-    default: ''
-  },
   cusClass: {
     type: String,
     default: ''
-  }
+  },
+  modelValue: {
+    type: [String, Number], 
+    default: ''
+  },
 });
 
-const emits = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
 
-const selectedOption = ref(props.value);
+const selectedOption = ref(props.modelValue);
 
-watch(() => props.value, (newVal) => {
-  selectedOption.value = newVal;
+watch(() => props.modelValue, (newValue) => {
+  selectedOption.value = newValue;
 });
 
 const handleChange = (event) => {
-  emits('update:modelValue', event.target.value);
+  emit('update:modelValue', event.target.value);
 };
 </script>
