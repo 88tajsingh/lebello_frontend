@@ -1,3 +1,5 @@
+
+
 // Authenticated user check
 export function isAuthenticated(token) {
   return true;

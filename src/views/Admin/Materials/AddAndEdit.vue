@@ -178,13 +178,8 @@ watch(
     () => props.material, (newValue) => {
   form.value = {...newValue};
 }
-    // () => route.params.id,
-    // (newId) => {
-    //     swatchId.value = newId
-    // }
 )
 
-console.log(props.material)
 const form = ref({...props.material })
 
 const validateForm = () => {

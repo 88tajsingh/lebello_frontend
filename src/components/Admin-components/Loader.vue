@@ -1,5 +1,5 @@
 <template>
-    <div class="vl-parent">
+    <div class="vl-parent z-999999">
         <loading :active="isLoading"
                  :is-full-page="fullPage"
                  @update:active="isLoading = $event"

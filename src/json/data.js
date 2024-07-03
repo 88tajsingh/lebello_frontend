@@ -140,3 +140,26 @@ export const materialsData = [
     viewUrl: ""
   }
 ];
+
+export const role =   [
+  {
+      "id": 3,
+      "role": "Subscriber"
+  },
+  {
+      "id": 4,
+      "role": "Contributor"
+  },
+  {
+      "id": 5,
+      "role": "Author"
+  },
+  {
+      "id": 6,
+      "role": "Editor"
+  },
+  {
+      "id": 7,
+      "role": "Adminstrator"
+  }
+]

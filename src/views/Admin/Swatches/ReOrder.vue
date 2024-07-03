@@ -5,6 +5,7 @@
       <Button type="" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class=" text-sm ml-auto px-3 py-1">
         Update
       </Button>
+      {{sortedData  }}
 </template>
 <script setup>
 import { ref } from "vue";

@@ -160,11 +160,11 @@
 </template>
 
 <script setup>
-import NavBar from "../components/Nav-bar.vue";
-import MenuSvg from "../components/Svg/Menu-Svg.vue";
+import NavBar from "@/components/frontend-components/Nav-bar.vue";
+import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { onClickOutside } from "@vueuse/core";
-import FooterSection from "../components/Footer-section.vue";
+import FooterSection from "@/components/frontend-components/Footer-section.vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
 

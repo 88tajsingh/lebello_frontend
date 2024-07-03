@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="bg-white">
-    <vue3-datatable skin="bh-table-striped bh-table-hover "  :hasCheckbox="true" :loading="processing"
+    <vue3-datatable skin="bh-table-striped bh-table-hover "  :hasCheckbox="true" 
     :rows="rows" :columns="cols" paginationInfo="showing {0} to {1} of {2}" showNumbersCount="3"
     class="next-prev-pagination" :cloneHeaderInFooter="true"
     rowClass=""
@@ -72,8 +72,8 @@
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Item'" @delete="handleDeleteMaterials" >
   </DeleteModal>
    
-  <Loader :isLoading="processing" :fullPage="true"/>
-  {{ editData }}
+  <Loader :isLoading="loading" :fullPage="true"/>
+  
 </template>
 
 <script setup>
@@ -102,7 +102,7 @@ const cols = ref([
   { field: 'actions', title: 'Actions' },
 ])
 const material_id = ref('') 
-const processing = ref(false)
+const loading = ref(false)
 const editData = ref({})
 const rows = ref([])
 const actionsFlag = ref(null)
@@ -137,76 +137,53 @@ const openDeleteModal = () => {
 };
 
 // get materials function
-const handleGetMaterials = () => {
+const handleGetMaterials =  () => {
   try {
-        processing.value = true;
+    loading.value = true;
         materialsServices.getMaterials()
         .then(res => {
-          if (res.status === 200) {
+          if (res.status === 200 && res.data.success === true) {
             rows.value = res?.data?.data
-            processing.value = false; 
-                  
+            loading.value = false;  
          }
-         
         })  
     } catch (e) {
       console.error('Error while log in:', e);
+      loading.value = false; 
     } finally {
-      processing.value = false;
+      loading.value = false; 
     }
 }
 // add material function
-const handleAddMaterials = (payload) => {
+const handleAddMaterials = async (payload) => {
   try {
     console.log("payload: " + payload)
-        processing.value = true;
-        materialsServices.addMaterial(payload)
+        loading.value = true;
+    await    materialsServices.addMaterial(payload)
         .then(res => {
           if (res.status === 200) {
             modalIsOpen.value = false;  
             rows.value = res?.data?.data
-            processing.value = false;  
+            loading.value = false;  
             handleGetMaterials();   
          }
         })  
     } catch (e) {
       console.error('Error while log in:', e);
     } finally {
-      processing.value = false;
+      loading.value = false;
     }
 }
-// delete material
-const handleDeleteMaterials = () => {
-  try {
-    processing.value = true;
-    const payload = {"id":material_id.value.id}
-        materialsServices.deleteMaterial(payload)
-        .then(res => {
-          if (res.status === 200) {
-            console.log(res.data.data)
-            rows.value = res.data.data
-            processing.value = false;   
-            handleGetMaterials(); 
-            deleteModalIsOpen.value = false;    
-            
-         }
-        })  
-    } catch (e) {
-      console.error('Error while log in:', e);
-    } finally {
-      processing.value = false;
-    }
-}
-
+// edit material function
 const handleEditMaterials = (payload) => {
   try {
-        processing.value = true;
+        loading.value = true;
         materialsServices.editMaterial(payload)
         .then(res => {
           if (res.status === 200) {
             console.log(res.data.data)
             rows.value = res.data.data
-            processing.value = false;    
+            loading.value = false;    
             handleGetMaterials(); 
             editIsOpen.value = false;
          }
@@ -214,9 +191,33 @@ const handleEditMaterials = (payload) => {
     } catch (e) {
       console.error('Error while log in:', e);
     } finally {
-      processing.value = false;
+      loading.value = false;
     }
 }
+// delete material
+const handleDeleteMaterials = () => {
+  try {
+    loading.value = true;
+    const payload = {"id":material_id.value.id}
+        materialsServices.deleteMaterial(payload)
+        .then(res => {
+          if (res.status === 200) {
+            console.log(res.data.data)
+            rows.value = res.data.data
+            loading.value = false;  
+            deleteModalIsOpen.value = false;    
+            handleGetMaterials(); 
+            
+         }
+        })  
+    } catch (e) {
+      console.error('Error while log in:', e);
+    } finally {
+      loading.value = false;
+    }
+}
+
+
 
 onMounted(() => handleGetMaterials());
 </script>

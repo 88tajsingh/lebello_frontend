@@ -84,6 +84,7 @@ export default {
             success: '#219653',
             danger: '#D34053',
             warning: '#FFA70B'
+            
           },
           fontSize: {
             'title-xxl': ['44px', '55px'],

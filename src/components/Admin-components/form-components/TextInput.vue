@@ -21,7 +21,7 @@
         ref="inputRef"
         v-bind="$attrs"
         @input="updateValue($event.target.value)" />
-      <span class="absolute right-4 top-4">
+      <span class="absolute right-4 mt-2">
         <slot></slot>
       </span>
     </div>
