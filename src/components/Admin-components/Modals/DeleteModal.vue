@@ -1,7 +1,7 @@
 <template>
     <transition name="modal-fade">
       <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center py-2  bg-black bg-opacity-50 z-999999">
-        <div class="modal-container bg-white rounded-lg shadow-lg max-w-sm w-full h-full overflow-y-auto">
+        <div class="modal-container bg-white rounded-lg shadow-lg max-w-sm  max-h-sm w-[400] h-[200px] overflow-y-auto">
           <div class="modal-header flex justify-between items-center mt-4 ml-3 px-4 bg-gray-200 rounded-t-lg">
             <h3 class="text-lg font-semibold">{{ modalTitle }}</h3>
             <button @click="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
@@ -10,14 +10,14 @@
               </svg>
             </button>
           </div>
-          <div class="modal-body overflow-y-auto">
+          <div class="modal-body overflow-y-auto mt-4 pl-7 pb-4 pt-2">
             <slot></slot>
           </div>
-          <div class="modal-footer flex justify-end mt-4 px-4 py-2 bg-gray-100 rounded-b-lg">
+          <div class=" flex justify-end mt-4 px-6 py-2 bg-gray-100 rounded-b-lg ">
             <button @click="deleteItem" class="bg-red hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none">
               Delete
             </button>
-            <button @click="closeModal" class="ml-4 bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded focus:outline-none">
+            <button @click="closeModal" class="ml-4 bg-gray-300 border border-black hover:bg-gray-400 text-gray-800 px-4 py-2 rounded focus:outline-none">
               Cancel
             </button>
           </div>
@@ -62,6 +62,7 @@
   
   .modal-body {
     border-bottom-left-radius: 0.5rem;
+    
     border-bottom-right-radius: 0.5rem;
   }
   

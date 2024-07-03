@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 import { role } from '@/json/data';
 import router from '@/router';
+import Select from '@/components/Admin-components/form-components/Select.vue';
+import TextInput from '@/components/Admin-components/form-components/TextInput.vue';
 import LoginServices from '@/services/loginServices/LoginServices';
 
 const errors = ref({})
@@ -52,17 +54,19 @@ const handleSubmit = () => {
             const payload = { ...form.value };
             LoginServices.register(payload)
                 .then(res => {
+                    console.log('res',res)
                     if (res.status === 200 && res?.data?.success === true) {
-                        toast.success('Wow so easy!');
                          router.push('/login');
                         processing.value = false;
                     }
-                    if (res.status === 401) {
-                        processing.value = false;
-                    }
+                    
                 })
         }
     } catch (e) {
+        if (res.status === 400) {
+                        console.log(res.data.message)
+                        processing.value = false;
+                    }
         console.error('Error while register:', e);
         processing.value = false;
     } finally {

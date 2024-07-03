@@ -1,7 +1,5 @@
 <template>
-        <PageHeader >Add Swatches</PageHeader>
-            <DefaultCard >
-        <form @submit.prevent="" class="mb-5">
+        <form @submit.prevent="" class="mb-5 mx-5 my-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <div>
@@ -66,8 +64,8 @@
                             <div class="my-5 px-6 flex h-auto items-center">    
                                     <div class=" items-center text-gray-600 text-sm">
                                         <TextInput  type="number" class="block w-[180px] mr-2 h-[33px]"
-                                            v-model="form.term_key" placeholder="Term key" label="Term key"
-                                            :message="errors.term_key" />
+                                            v-model="form.material_term_key" placeholder="Term key" label="Term key"
+                                            :message="errors.material_term_key" />
                                         <span>The material term id. This is generated from material taxonomy.
                                             Please do not make any changes here.
                                         </span>
@@ -81,8 +79,8 @@
                                         <span>Put material taxonomy term id. Seperate with commas.</span>
                                     </div>     
                                     <div class="px-6 mt-2 items-center text-gray-600 text-sm">
-                                        <TextInput id=" " type="text" class="block w-[180px] mr-2 h-[33px]"
-                                            v-model="abc" placeholder="Group Name" label="Group Name" />
+                                        <TextInput id="material_group_name" type="text" class="block w-[180px] mr-2 h-[33px]"
+                                            v-model="material_group_name" placeholder="Group Name" label="Group Name" />
                                     </div>
                         </Accordion>
                     </div>
@@ -97,15 +95,15 @@
                                  </div> 
                                     <div class="px-6 mt-3 items-center text-gray-600 text-sm">
                                         <TextInput id=" " isTextarea="true" rows='4' type="text"
-                                            class="block w-[180px] mr-2 h-[33px]" v-model="form.seo_description"
-                                            placeholder="Meta Description" label="Meta Description" :message="errors.seo_description" />
+                                            class="block w-[180px] mr-2 h-[33px]" v-model="form.seo_meta_description"
+                                            placeholder="Meta Description" label="Meta Description" :message="errors.seo_meta_description" />
                                         <span>Most search engines use a maximum of 160 chars for the description.
                                         </span>
                                     </div>
                                     <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
                                         <TextInput id=" " isTextarea="true" rows='4' type="text"
-                                            class="block w-[180px] mr-2 h-[33px]" v-model="form.meta_keywords"
-                                            placeholder="Meta Keywords" label="Meta Keywords" :message="errors.meta_keywords" />
+                                            class="block w-[180px] mr-2 h-[33px]" v-model="form.seo_meta_keywords"
+                                            placeholder="Meta Keywords" label="Meta Keywords" :message="errors.seo_meta_keywords" />
                                         <span>Seperate each term with comma.</span>
                                     </div>
                         </Accordion>
@@ -116,10 +114,11 @@
                                 <div class="w-1/6 py-auto ml-3 mt-3  ">
                                     Image Upload
                                 </div>
+                                <!-- material_image_overlay -->
                                 <div class="w-5/6 mx-2 my-2">
                                     <ImageUpload2 @file-selected="handleImage_Overlay"
                                         :accepted-formats="['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx']" />
-                                    <InputError class="mt-2" :message="errors.featured_image" />
+                                    <InputError class="mt-2" :message="errors.material_image_overlay" />
 
                                 </div>
                             </div>
@@ -359,8 +358,7 @@
                     </div>
                 </div>
             </div>
-        </form>
-    </DefaultCard>
+        </form> 
 </template>
 <script setup>
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'

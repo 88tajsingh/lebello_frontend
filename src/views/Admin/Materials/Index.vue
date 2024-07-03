@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="bg-white">
-    <vue3-datatable skin="bh-table-striped bh-table-hover "  :hasCheckbox="true" 
+    <vue3-datatable skin="bh-table-striped bh-table-hover "  :hasCheckbox="true" :loading="dataTableLOding" 
     :rows="rows" :columns="cols" paginationInfo="showing {0} to {1} of {2}" showNumbersCount="3"
     class="next-prev-pagination" :cloneHeaderInFooter="true"
     rowClass=""
@@ -64,12 +64,15 @@
 
 
   <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen">
-    <AddAndEdit @handleApi='handleAddMaterials' formHeader="Add Material" />
+  <!-- <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen"> -->
+    <AddAndEdit @handleApi='handleAddMaterials' formHeader="Add Material" :materialTree='MaterialTreeListData' />
   </PopupModal>
   <PopupModal modalTitle="Edit Materials" v-model:isOpen="editIsOpen">
     <AddAndEdit :material='editData' @handleApi="handleEditMaterials"/>
   </PopupModal>
+
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Item'" @delete="handleDeleteMaterials" >
+  Do you want to delete ?
   </DeleteModal>
    
   <Loader :isLoading="loading" :fullPage="true"/>
@@ -84,6 +87,7 @@ import PageHeader  from '@/components/Admin-components/PageHeader.vue'
 import DataTable  from  '@/components/Admin-components/DataTable.vue'
 import AddAndEdit from './AddAndEdit.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
+import { MaterialTreeList } from '@/helper/Apis'
 // import { materialsData } from '@/json/data.js'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
@@ -101,7 +105,9 @@ const cols = ref([
   { field: 'count', title: 'Count' },
   { field: 'actions', title: 'Actions' },
 ])
+const MaterialTreeListData = ref([])
 const material_id = ref('') 
+const dataTableLOding = ref(false) 
 const loading = ref(false)
 const editData = ref({})
 const rows = ref([])
@@ -110,12 +116,15 @@ const modalIsOpen = ref(false)
 const editIsOpen = ref(false)
 
 
-
 const openModal = () => {
 modalIsOpen.value = true
 }
 const editModal = () => {
-  editIsOpen.value = true
+  editIsOpen.value = true;
+}
+const editCloseModal = () => {
+  editIsOpen.value = false;
+  console.log('run close modal');
 }
 
 const handleMouseEnter = (data) => {
@@ -137,21 +146,25 @@ const openDeleteModal = () => {
 };
 
 // get materials function
-const handleGetMaterials =  () => {
+const handleGetMaterials = async () => {
+  dataTableLOding.value = true;
   try {
-    loading.value = true;
-        materialsServices.getMaterials()
+      await  materialsServices.getMaterials()
         .then(res => {
           if (res.status === 200 && res.data.success === true) {
-            rows.value = res?.data?.data
-            loading.value = false;  
+            if(res.data.data && res.data.data.length > 0) {
+              rows.value = res.data.data
+            } 
+            dataTableLOding.value = false;  
          }
-        })  
+        }).catch((res) => {
+          console.log("error", res)
+        });  
     } catch (e) {
       console.error('Error while log in:', e);
-      loading.value = false; 
+      dataTableLOding.value = false; 
     } finally {
-      loading.value = false; 
+      dataTableLOding.value = false; 
     }
 }
 // add material function
@@ -162,10 +175,14 @@ const handleAddMaterials = async (payload) => {
     await    materialsServices.addMaterial(payload)
         .then(res => {
           if (res.status === 200) {
-            modalIsOpen.value = false;  
-            rows.value = res?.data?.data
+            modalIsOpen.value = false; 
+            if(res.data.data && res.data.data.length > 0) {
+              rows.value = res?.data?.data
+              handleGetMaterials();
+            } 
+            
             loading.value = false;  
-            handleGetMaterials();   
+            // handleGetMaterials();   
          }
         })  
     } catch (e) {
@@ -175,31 +192,40 @@ const handleAddMaterials = async (payload) => {
     }
 }
 // edit material function
-const handleEditMaterials = (payload) => {
+const handleEditMaterials =async (payload) => {
+  loading.value = true;
   try {
-        loading.value = true;
-        materialsServices.editMaterial(payload)
-        .then(res => {
-          if (res.status === 200) {
-            console.log(res.data.data)
-            rows.value = res.data.data
-            loading.value = false;    
-            handleGetMaterials(); 
-            editIsOpen.value = false;
+  await  materialsServices.editMaterial(payload)
+    .then(res => {
+      console.log("res.status",res.status)
+      // editCloseModal();
+      if (res && res.status === 200) {
+        if(res.data.data && res.data.data.length > 0) {
+              rows.value = res.data.data
+              handleGetMaterials();
+            } 
+            editCloseModal();
+
+            handleGetMaterials();
+            // rows.value = res.data.data
+            // loading.value = false;    
+            // console.log('editIsOpen.value',editIsOpen.value)
+            // handleGetMaterials(); 
          }
         })  
     } catch (e) {
       console.error('Error while log in:', e);
     } finally {
       loading.value = false;
+      // editCloseModal();
     }
 }
 // delete material
-const handleDeleteMaterials = () => {
+const handleDeleteMaterials = async  () => {
   try {
     loading.value = true;
     const payload = {"id":material_id.value.id}
-        materialsServices.deleteMaterial(payload)
+      await  materialsServices.deleteMaterial(payload)
         .then(res => {
           if (res.status === 200) {
             console.log(res.data.data)
@@ -216,10 +242,16 @@ const handleDeleteMaterials = () => {
       loading.value = false;
     }
 }
+const materialTree = async ()=>{
+  MaterialTreeListData.value= await MaterialTreeList()
+}
 
 
-
-onMounted(() => handleGetMaterials());
+onMounted(() =>{ 
+  handleGetMaterials();
+  materialTree();
+}
+);
 </script>
 
 

@@ -12,7 +12,7 @@
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Slug" value="Slug" />
-                <TextInput type="text" class="block mr-2 h-[40px] w-full" :class="{ 'border-red-500': errors.slug }"
+                <TextInput type="text"  class="block mr-2 h-[40px] w-full" :class="{ 'border-red-500': errors.slug }"
                     placeholder="" v-model="form.slug" :errMessage="errors.slug"
                     @update:model="clearError(errors, 'slug')" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
@@ -22,7 +22,7 @@
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Parent Material" value="Parent Material" />
-                <Select :options="parentMaterial" showfield="name" class="w-full" valueField="value"
+                <Select :options="materialTree" showfield="name" class="w-full" valueField="id"
                     label="Select an option" v-model="form.parent_material" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
@@ -161,12 +161,12 @@ const props =defineProps({
     material: {
         type: Object,
     },
+    materialTree: {
+        type: Array,
+    },
     options: {
         type: Object,
         default: () => { }
-    },
-    formHeader:{
-        type: String,
     },
     formHeader:{
         type: String,

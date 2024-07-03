@@ -37,6 +37,11 @@ export const colors = [
     { text: "Move to trash", value: "earnings" },
   ];
 
+  export const SwatchesBulkOption = [
+    { text: "Edit", value: "1" },
+    { text: "Move to trash", value: "2" },
+  ];
+
   export const tableHeaders = [
     { text: "Image", width: "w-64", filter: false },
     { text: "Name", width: "w-64", filter: true },

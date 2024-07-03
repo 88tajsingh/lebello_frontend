@@ -6,6 +6,9 @@ class LoginService {
   logout() {
     return instance.post(ApiConfig.logout)
   }
+  MaterialTreeList() {
+    return instance.get(ApiConfig.getMaterialTeeeList)
+  }
 
 }
 

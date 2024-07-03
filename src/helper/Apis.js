@@ -9,11 +9,20 @@ export const logout = async () => {
             store.dispatch('logout');
             router.push('/login')
         return ;
-      } else if (res.status === 401) {
-        
-        return ;
-      }
+      } 
     } catch (err) {
       console.log("logout err", err);
+    }
+  };
+
+export const MaterialTreeList = async () => {
+    try {
+      const res = await CommonServices.MaterialTreeList();
+      if (res.status === 200) {
+        // console.log('tree data ',res.data.data)
+        return  res.data.data;
+      } 
+    } catch (err) {
+      console.log("MaterialTreeList err", err);
     }
   };
