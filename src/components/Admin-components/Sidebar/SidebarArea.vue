@@ -58,13 +58,13 @@ const menuGroups = ref([
                             label: 'Material',
                             route: '/materials'
                         },
+                        // {
+                        //     label: 'Re-orders',
+                        //     route: '/ReOrder'
+                        // },
                         {
                             label: 'Re-orders',
                             route: '/ReOrder'
-                        },
-                        {
-                            label: 'Navigation Order',
-                            route: '/NavigationOrder'
                         },
                         {
                             label: 'Taxonomy Order',

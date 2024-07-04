@@ -180,7 +180,7 @@ watch(
 }
 )
 
-const form = ref({...props.material })
+const form = ref({...props.material})
 
 const validateForm = () => {
     let isValid = true

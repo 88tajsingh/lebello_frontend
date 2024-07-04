@@ -1,71 +1,59 @@
 <template>
-    <PageHeader>Rearrange Postion of Right Navigation
-    </PageHeader>
-    <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="navName" Classes="mt-3 border-[#ccc]">
-    </Dreagable>
-    <Button type="" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class="text-sm ml-auto px-3 py-1">
-        Save
-    </Button>
+  <PageHeader> Material - Re-Order</PageHeader>
+      <Dreagable v-model:list="MaterialTreeListData " @update:list="handleListUpdate" parentfield="name" Classes=" border-l-4 border-[#ccd0d4]">
+      </Dreagable>
+      <Button @click="handleSortMaterials" :disabled='sortedData.length === 0' type="" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class=" text-sm ml-auto px-3 py-1">
+        Update
+      </Button>
+      <Loader :isLoading="loading" :fullPage="true"/>
 
 </template>
 <script setup>
-import { ref } from 'vue';
-import PageHeader from '@/components/Admin-components/PageHeader.vue'
+import { ref,onMounted } from "vue";
+import PageHeader  from '@/components/Admin-components/PageHeader.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Dreagable from "@/components/Admin-components/Dreag-able.vue";
-const sortedData = ref([])
-const list =
-    ref([
-        {
-            "navName": "RopeTek",
-            "rightNav": "383",
-            "rightNavId": "3261"
-        },
-        {
-            "navName": "Lebello Fibers",
-            "rightNav": "349",
-            "rightNavId": "2744"
-        },
-        {
-            "navName": "Knittex",
-            "rightNav": "419",
-            "rightNavId": "3437"
-        },
-        {
-            "navName": "Surface Tex",
-            "rightNav": "433",
-            "rightNavId": "3451"
-        },
-        {
-            "navName": "Performance Fabrics",
-            "rightNav": "348",
-            "rightNavId": "2730"
-        },
-        {
-            "navName": "",
-            "rightNav": "437",
-            "rightNavId": ""
-        },
-        {
-            "navName": "Colored Surfaces",
-            "rightNav": "340",
-            "rightNavId": "2596"
-        },
-        {
-            "navName": "Pixie Weaving",
-            "rightNav": "350",
-            "rightNavId": "14339"
-        },
-        {
-            "navName": "",
-            "rightNav": "",
-            "rightNavId": ""
-        }
-    ]
-    )
+import { MaterialTreeList } from '@/helper/Apis'
+import materialsServices from "@/services/MaterialsServices";
+
+const MaterialTreeListData = ref([])
+const props = defineProps({
+  materials: {
+    type: Object,
+    default: () => {},
+  },
+});
+const sortedData = ref([]);
+
+// update order
 function handleListUpdate(updatedList) {
-    console.log('Updated list in parent:', updatedList);
-    sortedData.value = updatedList;
-    console.log("sortedData", sortedData.value)
-};
+  sortedData.value = updatedList;
+}
+// material sorting 
+const materialTree = async ()=>{
+  MaterialTreeListData.value= await MaterialTreeList()
+}
+const loading = ref(false);
+// material sorting api call 
+const handleSortMaterials = async () => {
+    let id = sortedData.value.map(item => item.id)
+  try {
+        loading.value = true;
+    await  materialsServices.materialSorting({key:'material',data:id})
+        .then(res => {
+          if (res.status === 200 && res.data.success === true) {
+            console.log('sprting responce: ' + res.data)
+            materialTree();
+              loading.value = false;
+         }
+        })  
+    } catch (e) {
+      console.error('Error while log in:', e);
+    } 
+}
+
+onMounted(() =>{ 
+  materialTree();
+}
+);
 </script>

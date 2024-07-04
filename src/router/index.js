@@ -121,15 +121,15 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/ReOrder',
-          name: 'ReOrder',
-          component:()=> import('../views/Admin/Swatches/ReOrder.vue'),
+          path: '/navigation-order',
+          name: 'NavigationOrder',
+          component:()=> import('../views/Admin/Swatches/NavigationOrder.vue'),
           meta: { requiresAuth: true }
         },
         {
-          path: '/NavigationOrder',
-          name: 'NavigationOrder',
-          component:()=> import('../views/Admin/Swatches/NavigationOrder.vue'),
+          path: '/ReOrder',
+          name: 'ReOrder',
+          component:()=> import('../views/Admin/Swatches/ReOrder.vue'),
           meta: { requiresAuth: true }
         },
         {

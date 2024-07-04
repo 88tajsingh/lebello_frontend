@@ -18,3 +18,7 @@ export function isAuthenticated(token) {
     }
 };
 
+// cehckbox 
+export const isChecked = (variable,id) => {
+  return variable.value.some(item => item.id === id);
+};

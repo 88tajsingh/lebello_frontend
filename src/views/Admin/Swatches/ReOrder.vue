@@ -1,68 +1,68 @@
 <template>
-  <PageHeader> Material - Re-Order</PageHeader>
-      <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="name" Classes=" border-l-4 border-[#ccd0d4]">
-      </Dreagable>
-      <Button type="" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class=" text-sm ml-auto px-3 py-1">
-        Update
-      </Button>
-      {{sortedData  }}
+    <PageHeader>Material - Re-Order</PageHeader>
+    <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="title" Classes="mt-3 border-[#ccc]">
+    </Dreagable>
+    <Button @click="handleSortSwatches" :disabled="sortedData.length===0" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class="text-sm ml-auto px-3 py-1">
+        Save
+    </Button>
+
 </template>
 <script setup>
-import { ref } from "vue";
-import PageHeader  from '@/components/Admin-components/PageHeader.vue'
+import { ref,onMounted } from 'vue';
+import SwatchesServices from '@/services/SwatchesServices';
+import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Dreagable from "@/components/Admin-components/Dreag-able.vue";
-
-const props = defineProps({
-  materials: {
-    type: Object,
-    default: () => {},
-  },
-});
-// const list = ref(props.materials)
-const sortedData = ref([]);
-
-// console.log(props.materials);
-
-const list = ref([
-    {
-        "id": "14339",
-        "name": "Pixie Weaving"
-    },
-    {
-        "id": "3261",
-        "name": "RopeTek"
-    },
-    {
-        "id": "2744",
-        "name": "Lebello Fibers"
-    },
-    {
-        "id": "3437",
-        "name": "Knittex"
-    },
-    {
-        "id": "3451",
-        "name": "Surface Tex"
-    },
-    {
-        "id": "2730",
-        "name": "Performance Fabrics"
-    },
-    {
-        "id": "3458",
-        "name": "Base Fabrics"
-    },
-    {
-        "id": "2596",
-        "name": "Colored Surfaces"
-    }
-]);
-
-  
+const sortedData = ref([])
+const list = ref([])
 function handleListUpdate(updatedList) {
-  console.log("Updated list in parent:", updatedList);
-  sortedData.value = updatedList;
-  console.log("sortedData", sortedData.value);
+    console.log('Updated list in parent:', updatedList);
+    sortedData.value = updatedList;
+    console.log("sortedData", sortedData.value)
+};
+
+const loading = ref(false);
+// get Swatches function
+const handleGetSwatches = async () => {
+  loading.value = true;
+  try {
+    await SwatchesServices.getSwatches()
+      .then(res => {
+        if (res.status === 200 && res.data.success === true) {
+          if (res.data.data && res.data.data.length > 0) {
+            list.value = res.data.data
+          }
+          loading.value = false;
+        }
+      }).catch((res) => {
+        console.log("error", res)
+      });
+  } catch (e) {
+    console.error('Error while log in:', e);
+    loading.value = false;
+  }
 }
+
+// Swatches sorting api call 
+const handleSortSwatches = async () => {
+    let id = sortedData.value.map(item => item.id)
+    console.log("idddd", id)
+  try {
+        loading.value = true;
+    await  SwatchesServices.swatchesSorting({key:'swatches',data:id})
+        .then(res => {
+          if (res.status === 200 && res.data.success === true) {
+            console.log('sorting responce: ' + res.data)
+              loading.value = false;
+         }
+        })  
+    } catch (e) {
+      console.error('Error while log in:', e);
+    } 
+}
+
+onMounted(() =>{ 
+    handleGetSwatches();
+}
+);
 </script>

@@ -13,8 +13,16 @@ class LoginService {
   editMaterial(payload) {
     return instance.post(ApiConfig.editMaterial, payload)
   }
+ 
   deleteMaterial(payload) {
     return instance.delete(ApiConfig.deleteMaterial, {params: {...payload}})
+  }
+
+  BulkDeleteMaterial(payload) {
+    return instance.post(ApiConfig.bulkDeleteMaterial, payload)
+  }
+  materialSorting(payload) {
+    return instance.post(ApiConfig.materialSorting, payload)
   }
   // deleteMaterial(payload) {
   //   return instance.get(`${ApiConfig.deleteMaterial}/id=${payload.id}`)

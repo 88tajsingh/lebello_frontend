@@ -16,6 +16,12 @@ class Swatcheservices {
   deleteSwatches(payload) {
     return instance.delete(ApiConfig.deleteSwatches, {params: {...payload}})
   }
+  bulkDeleteSwatches(payload) {
+    return instance.post(ApiConfig.bulkDeleteSwatches,payload)
+  }
+  swatchesSorting(payload) {
+    return instance.post(ApiConfig.swatchesSorting,payload)
+  }
   // deleteMaterial(payload) {
   //   return instance.get(`${ApiConfig.deleteMaterial}/id=${payload.id}`)
   // }

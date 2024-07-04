@@ -32,14 +32,12 @@ export const colors = [
     { id: 3, name: 'Option 3', parent_material: 1, value: '3' }
   ]
   export const bulkOption = [
-    { text: "Bulk Action", value: "dashboard" },
     { text: "Edit", value: "settings" },
-    { text: "Move to trash", value: "earnings" },
+    { text: "Move to trash", value: "delete" },
   ];
 
   export const SwatchesBulkOption = [
-    { text: "Edit", value: "1" },
-    { text: "Move to trash", value: "2" },
+    { text: "Move to trash", value:'delete' },
   ];
 
   export const tableHeaders = [

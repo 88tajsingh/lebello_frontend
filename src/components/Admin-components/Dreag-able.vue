@@ -10,12 +10,10 @@
        @change="log" 
       @start="dragStart" @end="dragEnd">
     <div v-for="group in list" :key="group" class="group">
-          <div class="bg-white  text-sans bg-white border  mt-1 py-2 px-3  text-[13px]"
+          <div class="bg-white  text-san border  mt-1 py-2 px-3  text-[13px]"
             :class="Classes"
           >{{ group[parentfield] }}</div>
           <draggable class="list-group w-full" :list="group.children" @change="log">
-         
-            
             <div
               class="list-group-item text-sans bg-white border ml-4 mt-1 py-2 px-3  text-[13px]"
               v-for="element in group.children"
@@ -67,13 +65,12 @@
     },
     methods: {
       log(event) {
-        console.log(event);
+        // console.log(event);
       },
       dragStart(event) {
-        console.log('Drag start:', event);
+        // console.log('Drag start:', event);
       },
       dragEnd(event) {
-        console.log('Drag end:', event);
         this.$emit('update:list', this.localList);
       },
     },
