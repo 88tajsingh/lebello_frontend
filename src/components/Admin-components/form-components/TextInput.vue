@@ -47,14 +47,13 @@ const props = defineProps({
     type: Number,
     default: 3,
   },
-  // For v-model binding
-  modelValue: String, // This receives the value from the parent
+  
+  modelValue: String, 
 });
 
 const emit = defineEmits(['update:modelValue']);
 
-const inputValue = ref(props.modelValue); // Bind initial value from props
-
+const inputValue = ref(props.modelValue); 
 const inputRef = ref(null);
 onMounted(() => {
   if (inputRef.value && inputRef.value.hasAttribute('autofocus')) {
@@ -66,6 +65,6 @@ defineExpose({ focus: () => inputRef.value.focus() });
 
 const updateValue = (newValue) => {
   inputValue.value = newValue;
-  emit('update:modelValue', newValue); // Emit event to update parent
+  emit('update:modelValue', newValue); 
 };
 </script>

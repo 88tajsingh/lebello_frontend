@@ -1,10 +1,11 @@
 <template>
   <transition name="modal-fade">
     <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center py-2 px-28 bg-black bg-opacity-50 z-999999 ">
-      <div class="modal-container bg-white rounded-lg shadow-lg max-w-full w-full h-full overflow-y-auto">
-        <div class="modal-header flex justify-between items-center mt-4 ml-3 px-4 bg-gray-200 rounded-t-lg">
+      <div :class="custonClasses ? custonClasses :'max-w-full w-full h-full'" class="modal-container bg-white rounded-lg shadow-lg  overflow-y-auto" 
+      >
+        <div class="modal-header flex justify-between items-center mt-4 ml-3  bg-gray-200 rounded-t-lg">
           <h3 class="text-lg font-semibold">{{ modalTitle }}</h3>
-          <button @click="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+          <button @click="closeModal" class="text-gray-500 pr-3 hover:text-gray-700 focus:outline-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -28,7 +29,8 @@ export default defineComponent({
     isOpen: {
       type: Boolean,
       required: true
-    }
+    },
+    custonClasses: String,
   },
   emits: ['update:isOpen'],
   setup(props, { emit }) {
@@ -50,9 +52,7 @@ export default defineComponent({
 </script>
 
   <style scoped>
-  .modal-container {
-    width: 100%;
-  }
+  
 
   .modal-header {
     border-top-left-radius: 0.5rem;

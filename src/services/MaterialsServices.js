@@ -21,8 +21,8 @@ class LoginService {
   BulkDeleteMaterial(payload) {
     return instance.post(ApiConfig.bulkDeleteMaterial, payload)
   }
-  materialSorting(payload) {
-    return instance.post(ApiConfig.materialSorting, payload)
+  taxonomySorting(payload) {
+    return instance.post(ApiConfig.taxonomySort, payload)
   }
   // deleteMaterial(payload) {
   //   return instance.get(`${ApiConfig.deleteMaterial}/id=${payload.id}`)

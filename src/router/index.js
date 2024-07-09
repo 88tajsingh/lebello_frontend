@@ -79,6 +79,12 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
+          path: '/profile',
+          name: 'profile',
+          component:()=> import('@/components/Admin-components/Header/ProfilePopup.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
           path: '/dashboard',
           name: 'dashboard1',
           component:()=> import('../views/Dashboard.vue'),
@@ -144,6 +150,12 @@ const router = createRouter({
           component:()=> import('../views/Admin/Pages/Index.vue'),
           meta: { requiresAuth: true }
         },
+        {
+          path: '/media',
+          name: 'Media',
+          component:()=> import('../views/Admin/Media-section/index.vue'),
+          meta: { requiresAuth: true }
+        },
       ]
     }
   ]
@@ -151,10 +163,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = store.getters.token
-  if (to.meta.requiresAuth && !isAuthenticated(token)) {
-    next('/login')
+  if (to.name === 'login' && isAuthenticated(token)) {
+    next('/dashboard');
+  } else if (to.meta.requiresAuth && !isAuthenticated(token)) {
+    next('/login');
   } else {
-    next()
+    next();
   }
 })
 

@@ -5,6 +5,7 @@
     <Button @click="handleSortSwatches" :disabled="sortedData.length===0" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class="text-sm ml-auto px-3 py-1">
         Save
     </Button>
+    <Loader :isLoading="loading" :fullPage="true"/>
 
 </template>
 <script setup>
@@ -31,6 +32,7 @@ const handleGetSwatches = async () => {
         if (res.status === 200 && res.data.success === true) {
           if (res.data.data && res.data.data.length > 0) {
             list.value = res.data.data
+
           }
           loading.value = false;
         }
@@ -46,14 +48,13 @@ const handleGetSwatches = async () => {
 // Swatches sorting api call 
 const handleSortSwatches = async () => {
     let id = sortedData.value.map(item => item.id)
-    console.log("idddd", id)
   try {
         loading.value = true;
     await  SwatchesServices.swatchesSorting({key:'swatches',data:id})
         .then(res => {
           if (res.status === 200 && res.data.success === true) {
-            console.log('sorting responce: ' + res.data)
               loading.value = false;
+              sortedData.value = [];
          }
         })  
     } catch (e) {

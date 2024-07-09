@@ -39,6 +39,9 @@ export default new Vuex.Store({
       commit('clearToken');
       commit('clearUser');
     },
+    userUpdate({ commit }) {
+      commit('setUser', user);
+    },
   },
   modules: {},
 });

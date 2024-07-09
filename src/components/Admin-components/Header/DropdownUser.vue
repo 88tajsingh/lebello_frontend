@@ -1,15 +1,3 @@
-<script setup lang="ts">
-import { onClickOutside } from '@vueuse/core'
-import { ref } from 'vue'
-
-const target = ref(null)
-const dropdownOpen = ref(false)
-
-onClickOutside(target, () => {
-  dropdownOpen.value = false
-})
-</script>
-
 <template>
   <div class="relative" ref="target">
     <router-link
@@ -18,12 +6,13 @@ onClickOutside(target, () => {
       @click.prevent="dropdownOpen = !dropdownOpen"
     >
       <span class="hidden text-right lg:block">
-        <span class="block text-sm font-medium text-black dark:text-white">Thomas Anree</span>
-        <span class="block text-xs font-medium">UX Designer</span>
+        
+        <span class="block text-sm font-medium text-black dark:text-white">{{ store.getters.user.name }}</span>
+        <span class="block text-xs font-medium">{{ store.getters.user.email }}</span>
       </span>
 
       <span class="h-12 w-12 rounded-full">
-        <img src="@/assets/images/user/user-01.png" alt="User" />
+        <img class="rounded-full"src="@/assets/profilepic.png" alt="User" />
       </span>
 
       <svg
@@ -52,7 +41,7 @@ onClickOutside(target, () => {
       <ul class="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
         <li>
           <router-link
-            to="/profile"
+           to="/profile"
             class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
           >
             <svg
@@ -122,7 +111,7 @@ onClickOutside(target, () => {
           </router-link>
         </li>
       </ul>
-      <button @click="$logout()"
+      <button @click="logout()"
         class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
         >
         <svg
@@ -146,5 +135,24 @@ onClickOutside(target, () => {
       </button>
     </div>
     <!-- Dropdown End -->
+      
   </div>
+ 
 </template>
+<script setup>
+import { onClickOutside } from '@vueuse/core'
+import { ref } from 'vue'
+import { logout } from '@/helper/Apis';
+import store from '@/store';
+
+const target = ref(null)
+const dropdownOpen = ref(false)
+
+onClickOutside(target, () => {
+  dropdownOpen.value = false
+})
+const isopen = ref(false)
+const handleOpen = () => {
+  isopen.value = true;
+}
+</script>

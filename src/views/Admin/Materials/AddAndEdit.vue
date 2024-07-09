@@ -140,13 +140,9 @@
 </template>
 
 <script setup>
-import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import MultiSelect from '@/components/Admin-components/form-components/MultiSelect.vue'
-import Button from '@/components/Admin-components/Buttons/Button.vue'
-import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import InputError from '@/components/Admin-components/form-components/InputError.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import Select from '@/components/Admin-components/form-components/Select.vue'
 import ImageUpload2 from "@/components/Admin-components/form-components/ImageUpload2.vue"
 import { useRoute } from 'vue-router'
 import { clearError } from '@/helper/functions'
@@ -213,7 +209,9 @@ const validateForm = () => {
 
 const handleSubmit = async () => {
     try {
-
+        if(form.value.parent_material == null || form.value.parent_material == '' || form.value.material_price== undefined) {
+      form.value.parent_material = 0;
+        }
         if (validateForm()) {  
             emit('handleApi', {...form.value}); 
         }

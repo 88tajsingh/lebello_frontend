@@ -166,3 +166,33 @@ export const role =   [
       "role": "Adminstrator"
   }
 ]
+
+export const pagesDummy = [
+  {
+  page_title:'acb',
+  seo_title:'sdsa',
+  seo_meta_description:'sdsa',
+  seo_meta_keywords:'sdsa',
+  page_tagline:'sdsa',
+  page_description:'sdsa',
+  status:'sdsa',
+},
+  {
+  page_title:'acb',
+  seo_title:'sdsa',
+  seo_meta_description:'sdsa',
+  seo_meta_keywords:'sdsa',
+  page_tagline:'sdsa',
+  page_description:'sdsa',
+  status:'sdsa',
+},
+  {
+  page_title:'acb',
+  seo_title:'sdsa',
+  seo_meta_description:'sdsa',
+  seo_meta_keywords:'sdsa',
+  page_tagline:'sdsa',
+  page_description:'sdsa',
+  status:'sdsa',
+},
+]

@@ -34,13 +34,14 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("res time", error)
+    // console.log("res time", error)
     if (error.response.status === 401){
       // logout();
       store.dispatch('logout');
       router.push('/login')
     }
-    return Promise.reject(error);
+    return error.response.data;
+    // return Promise.reject(error);
   }
 );
 

@@ -3,6 +3,7 @@ const ApiConfig = {
     register:'/register',
     login: '/login',
     logout: '/logout',
+    updateProfile: '/update-profile',
     forgetPassword: '/reset/password/email',
     updatePassword: '/update-password',
 
@@ -14,7 +15,7 @@ const ApiConfig = {
     materialStatus: 'update-material-status',
     getMaterialTeeeList:'/get-material-tree-list',
     materialSorting:'/sort-data',
-    taxonomySort:'/sort-data',
+    taxonomySort:'/add-taxanomy-order',
     bulkDeleteMaterial:'/mterial-bulk-delete',
 
 
@@ -27,6 +28,27 @@ const ApiConfig = {
     bulkDeleteSwatches :'/bulk-swatches-delete',
     // materialStatus: 'update-material-status',
 
+    // folders 
+    getFolder:'/get-folders',
+    getFolderChild:'/get-folder-child',
+    addFolder:'/add-folder',
+    editFolder:'/update-folder',
+    deleteFolder:'/delete-folder',
+
+    // media 
+    getMedia:'/get-media',
+    getMediaChild:'/get-media-items',
+    addMedia:'/add-media',
+    editMedia:'/update-media',
+    deleteMedia:'/delete-media',
+
+    // pages 
+    getPages :'/pages-list?limit=20',
+    addPages :'/add-pages',
+    editPages:'/update-pages',
+    deletePages :'/delete-pages',
+    PagesSorting:'/sort-data',
+    // bulkDeletePages :'/bulk-Pages-delete',
   };
   
   export default ApiConfig;

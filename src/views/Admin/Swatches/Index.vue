@@ -2,8 +2,8 @@
   <PageHeader> Swatches</PageHeader>
   <div class="flex  content-between justify-between px-1 mb-2">
     <div class="flex">
-      <Select cusClass="h-[38px] border-boxdark" :options="SwatchesBulkOption" showfield="text" valueField="value"
-        label="Bulk Action" v-model="bulkActionSelected" />
+      <Select cusClass="h-[38px] border-boxdark	  " :options="SwatchesBulkOption" showfield="text" valueField="value"
+        label="Bulk Options" v-model="bulkActionSelected" />
       <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
     </div>
     <div class="flex">
@@ -75,7 +75,7 @@ const rows = ref([]);
 const editData = ref({});
 const loading = ref(false);
 const datatable = ref('')
-const bulkActionSelected = ref(0)
+const bulkActionSelected = ref('')
 const search = ref('')
 
 const cols = ref([
@@ -153,7 +153,7 @@ const handleAddSwatches = async (payload) => {
     await SwatchesServices.addSwatches(payload)
       .then(res => {
         if (res.status === 200) {
-          if (res && res.status === 200 && res.data.success === true) {
+          if (res && res.status === 200 && res.data.data.success === true) {
             rows.value = res?.data?.data
             handleGetSwatches();
             modalflag.value.open = false;
@@ -163,7 +163,8 @@ const handleAddSwatches = async (payload) => {
         }
       })
   } catch (e) {
-    loading.value = false;
+    modalflag.value.open = false;
+            loading.value = false;
     console.error('Error while log in:', e);
   }
 }
@@ -181,6 +182,8 @@ const handleEditSwatches = async (payload) => {
         }
       })
   } catch (e) {
+    loading.value = false;
+    modalflag.value.edit = false;
     console.error('Error while log in:', e);
   }
 }
@@ -218,7 +221,7 @@ const handleBulkActions = async () => {
   let id = selected.map(item => item.id)
   if (bulkActionSelected.value === 'delete') {
     try {
-      await SwatchesServices.bulkDeleteSwatches({'id':id})
+      await SwatchesServices.bulkDeleteSwatches({ 'id': id })
         .then(res => {
           if (res && res.status === 200 && res.data.success === true) {
             rows.value = res.data.data
@@ -229,6 +232,7 @@ const handleBulkActions = async () => {
         })
     } catch (e) {
       loading.value = false;
+      modalflag.value.delete = false;
       console.error('Error while log in:', e);
     }
   }

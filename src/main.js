@@ -17,19 +17,45 @@ import {Tabs, Tab} from 'vue3-tabs-component';
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Checkbox from '@/components/Admin-components/form-components/CheckBox.vue';
+import PopupModal from '@/components/Admin-components/Modals/PopupModal.vue'
+import Select from '@/components/Admin-components/form-components/Select.vue'
+import PageHeader from '@/components/Admin-components/PageHeader.vue'
+import DeleteModal from './components/Admin-components/Modals/DeleteModal.vue';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
+
+const options = {
+    position: "top-right",
+    timeout: 5000,
+    closeOnClick: true,
+    draggable: true,
+    draggablePercent: 0.6,
+    transition: "Vue-Toastification__bounce",
+    containerClassName: "my-toast-container",
+    toastClassName: "my-toast",
+    hideProgressBar: false,
+    closeButton: true,
+    pauseOnHover: true,
+    pauseOnFocusLoss: true
+  };
 
 const app = createApp(App)
+app.use(apiPlugin)
+app.use(HelpersPlugin)
+app.use(Toast, options);
+app.use(router)
+.use(store)
+.use(createPinia())
+app.use(VueApexCharts)
 app.component('RouterLink', router.options.history.routerLink);
 app.component('Loader', Loader);
 app.component('TextInput', TextInput);
 app.component('Button', Button);
 app.component('Checkbox', Checkbox);
+app.component('PopupModal', PopupModal);
+app.component('Select', Select);
 app.component('EditSvg', EditSvg);
 app.component('DeleteSvg', DeleteSvg);
-app.use(router)
-.use(store)
-.use(createPinia())
-app.use(VueApexCharts)
-app.use(apiPlugin)
-app.use(HelpersPlugin)
+app.component('DeleteModal', DeleteModal);
+app.component('PageHeader', PageHeader);
 app.mount('#app')

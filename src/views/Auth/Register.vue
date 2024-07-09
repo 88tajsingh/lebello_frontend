@@ -47,12 +47,12 @@ const validateForm = () => {
 
     return isValid;
 };
-const handleSubmit = () => {
+const handleSubmit =async () => {
     try {
         if (validateForm()) {
             processing.value = true;
             const payload = { ...form.value };
-            LoginServices.register(payload)
+         await LoginServices.register(payload)
                 .then(res => {
                     console.log('res',res)
                     if (res.status === 200 && res?.data?.success === true) {
