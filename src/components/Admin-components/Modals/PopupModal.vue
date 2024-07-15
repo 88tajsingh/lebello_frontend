@@ -11,7 +11,7 @@
             </svg>
           </button>
         </div>
-        <div class="modal-body overflow-y-auto">
+        <div class="modal-body overflow-y-auto ">
           <slot></slot>
         </div>
       </div>

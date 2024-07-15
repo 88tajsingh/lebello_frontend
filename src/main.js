@@ -22,6 +22,7 @@ import Select from '@/components/Admin-components/form-components/Select.vue'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import DeleteModal from './components/Admin-components/Modals/DeleteModal.vue';
 import Toast from 'vue-toastification';
+import _ from 'lodash';
 import 'vue-toastification/dist/index.css';
 
 const options = {
@@ -49,6 +50,7 @@ app.use(router)
 app.use(VueApexCharts)
 app.component('RouterLink', router.options.history.routerLink);
 app.component('Loader', Loader);
+app.config.globalProperties.$lodash = _;
 app.component('TextInput', TextInput);
 app.component('Button', Button);
 app.component('Checkbox', Checkbox);

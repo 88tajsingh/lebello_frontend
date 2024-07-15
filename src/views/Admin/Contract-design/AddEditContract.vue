@@ -1,19 +1,11 @@
 <template>
-    <DefaultCard :cardTitle="id ? `Edit Swatches` : `Add Swatches`">
+    <DefaultCard :cardTitle="id ? `Edit Contract ` : `Add New Contract `">
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <div>
-                        <TextInput 
-  type="text" 
-  class="block mr-2 h-[40px] w-full" 
-  label="Title" 
-  placeholder="Add title"
-  v-model="form.title" 
-  :errMessage="errors.title" 
-  :errors="errors"
-  :class="{ 'border-red': errors.title }"
-/>
+                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title" placeholder="Add title"
+                            v-model="form.title" :errMessage="errors.title" :errors="errors" />
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Description">
@@ -66,47 +58,16 @@
                             </div>
                         </Accordion>
                     </div>
-                    <div class="mt-5 px-6">
-                        <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
-                            v-model="form.trade_mark_label" placeholder="" label="Trade Mark Label
-                 " :message="errors?.trade_mark_label" />
-                    </div>
-                    <div class="mt-5">
-                        <Accordion :open="true" header="Material Options">
-                            <div class="my-5 px-6 flex h-auto items-center">
-                                <div class=" items-center text-gray-600 text-sm">
-                                    <TextInput type="number" class="block w-[180px] mr-2 h-[33px]"
-                                        v-model="form.material_term_key" placeholder="Term key" label="Term key"
-                                        :message="errors.material_term_key" />
-                                    <span>The material term id. This is generated from material taxonomy.
-                                        Please do not make any changes here.
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="px-6 items-center text-gray-600 text-sm">
-                                <TextInput id="" type="number" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.material_item" placeholder="Material item" label="Material item"
-                                    :message="errors.material_item" />
-
-                                <span>Put material taxonomy term id. Seperate with commas.</span>
-                            </div>
-                            <div class="px-6 mt-2 items-center text-gray-600 text-sm">
-                                <TextInput id="material_group_name" type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.material_group_name" placeholder="Group Name" label="Group Name" />
-                            </div>
-                        </Accordion>
-                    </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Seo Options">
-
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id=" " type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                    :message="errors.seo_title" />
+                                    v-model="form.seo_title_tag" placeholder="Title Tag" label="Title Tag"
+                                   />
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id=" " :isTextarea="true" :rows=4 type="text" class="block w-[180px] mr-2 "
+                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text" class="block w-[180px] mr-2 "
                                     v-model="form.seo_meta_description" placeholder="Meta Description"
                                     label="Meta Description" :message="errors.seo_meta_description" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
@@ -115,35 +76,53 @@
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id=" " :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
                                     v-model="form.seo_meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
-                                    :message="errors.seo_meta_keywords" />
+                                    />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-5">
-                        <!-- <Accordion :open="true" header="Image Overlay">
-                        <div class="flex ">
-                            <div class="w-1/6 py-auto ml-3 mt-3  ">
-                                Image Upload
-                            </div>
-                            <div class="w-5/6 mx-2 my-2">
-                                <ImageUpload2 @file-selected="handleImage_Overlay"
-                                    :accepted-formats="['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx']" />
-                                <InputError class="mt-2" :message="errors.material_image_overlay" />
-
-                            </div>
-                        </div>
-                    </Accordion> -->
-                    </div>
-                    <div class="mt-5">
-                        <Accordion open="false" header="Slug">
-                            <div class="px-5 items-center text-gray-600 text-sm">
-
-                                <TextInput id=" " :rows=4 type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.slug" placeholder="Slug" label="Slug" :message="errors.slug" />
+                        <Accordion :open="true" header="Contract Slide">
+                            <div class='mx-5'>
+                                <div>
+                                    <p>Show on Contract HomePage Slide</p>
+                                    <span>form.contract_home_page_slide</span>
+                                    <span>Checked this option to show this contract on contract home slide
+                                        section.</span>
+                                </div>
+                                <InputLabel for="ContractLogo" value="SliderImage" />
+                                <div class="py-2 rounded-lg mb-2 px-2 border border-stroke" @click="() => IsOpen = true"> {{
+                                    mediaName }}</div>
+                                
+                                <TextInput id="TitleBackground" type="text" class="block w-full mr-2 mb-2 h-[33px]"
+                                    v-model="form.contract_background_title" placeholder="" label="Title Background		
+                          " />
+                                <TextInput id="TitleColor" type="text" class="block w-full mr-2 mb-2 h-[33px]"
+                                    v-model="form.contract_title_color" placeholder="" label="Title Color			
+                          " />
+                                <TextInput id="LocationBackground	" type="text" class="block w-full mb-2 mr-2 h-[33px]"
+                                    v-model="form.contract_location_background" placeholder="" label="Location Background			
+                          " />
+                                <TextInput id="LocationColor" type="text" class="block w-full mr-2 mb-2 h-[33px]"
+                                    v-model="form.contract_location_color" placeholder="" label="Location Color			
+                          " />
                             </div>
                         </Accordion>
                     </div>
+                    <div class="mt-5">
+                        <Accordion open="false" header="Contract Logo">
+                            <div class=" px-6  h-auto ">
+                                <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
+                                    mediaName }}</div>
+                                <div class=" mt-3 flex overflow-x-auto">
+                                    <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                </div>
+                                <InputError class="mt-2" :message="errors?.featured_image" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    
                 </div>
 
                 <div class="col-span-4">
@@ -272,47 +251,68 @@
                         </div>
                     </Accordion>
                     <div class="mt-3 ">
-                        <Accordion :open="true" header="Materials Template">
-                            <div class="mt-2 px-6 flex h-auto ">
-                                <div class="w-2/6 px-2 my-3">Use New Material Template</div>
-                                <div class="w-4/6 m-auto ">
-                                    <Checkbox :checked="isChecked" @update:checked="updateChecked" label=""
-                                        v-model="isChecked" class="" />
-                                </div>
-                            </div>
-                        </Accordion>
-                    </div>
-                    <div class="mt-3 ">
-                        <Accordion :open="true" header="Materials">
-                            <div class="mt-2 px-6 flex h-auto ">
-                                <div class="w-full">                                         
-                                        <Checkbox :nexted=true :data="MaterialTreeListData"
-                                            @checked-items="handleCheckedItems" /> 
-                                    <!-- <div v-else>sdfsdf</div> -->
-                                </div>
-                            </div>
-                        </Accordion>
-                    </div>
+                        <Accordion :open="true" header="Contract Information">
+                            <div class="px-6 h-auto ">
+                                <TextInput id="Location" type="text" class="block w-[180px] mr-2  h-[33px]"
+                                    v-model="form.contract_info_location" placeholder="Location" label="Location" />
+                                <p class="mb-1">Put the contract location.</p>
+                                <TextInput id="Designer" type="text" class="block w-[180px] mr-2 mb-1 h-[33px]"
+                                    v-model="form.contract_info_designer" placeholder="Designer" label="Designer" />
+                                <p class="mb-1">Put the designer name here.</p>
 
-                    <div class="mt-3 ">
-                        <Accordion :open="true" header="Tab Posiotion Options">
-                            <div class="mt-2 px-6 flex h-auto ">
+                                <TextInput id="Client" type="text" class="block mb-1 w-[180px] mr-2 h-[33px]"
+                                    v-model="form.contract_info_client" placeholder="Client" label="Client" />
+                                <p class="mb-1">Put the client name here.</p>
+
+                                <TextInput id="Project " type="text" class="block mb-1 w-[180px] mr-2 h-[33px]"
+                                    v-model="form.contract_info_project_link" placeholder="Project Link" label="Project Link " />
+                                <p class="mb-1">Put the project link URL here. Do not start with 'http://'. Example:
+                                    projectlink.com</p>
+
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
-                        <Accordion :open="true" header="Swatches Options Material">
-                            <div class="my-5 px-6  h-auto ">
-                                <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
-                                    v-model="form.material_teaser_text" placeholder="" label="Material text overlay"
-                                    :message="errors.material_teaser_text" />
+                        <Accordion :open="true" header="Featured Option">
+                            <div class="mt-2 px-6 flex h-auto ">
+                                <div>Set as featured</div>
+                                <div class="text-[13px]"> form.featured_option If set as featured, it will be displayed at the top of
+                                    "Contract Design" page.</div>
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-3 ">
+                        <Accordion :open="true" header="Contract Type">
+                            <div class="mt-2 px-6 flex h-auto ">
+                                <Checkbox :nexted=true :data="MaterialTreeListData"
+                                    @checked-items="handleCheckedItems" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-3 ">
+                        <Accordion :open="true" header="Contract Location">
+                            <div class="mt-2 px-6 flex h-auto ">
+                                <Checkbox :nexted=true :data="MaterialTreeListData"
+                                    @checked-items="handleCheckedItems" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Featured image">
-                            <div class="my-5 px-6  h-auto ">
-                                <InputLabel for="Featured_image" value="Featured_image" />
+                            <div class="px-6  h-auto ">
+                                <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
+                                <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
+                                    mediaName }}</div>
+                                <div class=" mt-3 flex overflow-x-auto">
+                                    <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                </div>
+                                <InputError class="mt-2" :message="errors?.featured_image" />
+                            </div>
+                        </Accordion>
+                        <Accordion :open="true" header="Gallery">
+                            <div class="px-6  h-auto ">
+                                <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
                                 <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
                                     mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
@@ -325,50 +325,46 @@
                     </div>
                     <!-- Teaser -->
                     <div class="mt-5">
-                        <Accordion :open="true" header="Description">
+                        <Accordion :open="true" header="Simple Fields">
                             <div class="mt-2 px-6 flex h-auto">
-                                <div class="w-2/6">Material teaser text</div>
-                                <div class="w-4/6">
-                                    <Button type="">
-                                        <span class="flex">
-                                            <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1920 1920"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M101.002 1230.637V377.955c557.71-147.638 1076.312-35.47 1214.45 0v395.924l101.053-30.316V302.165l-35.671-11.014c-26.274-8.287-651.588-197.154-1349.154 1.313L-.05 305.197v1001.23l35.671 10.913c17.28 5.457 295.781 89.533 682.206 89.533 122.173 0 255.866-10.004 394.712-31.933v-101.255c-476.362 77.811-890.476-12.025-1011.537-43.048M1919.91 789.31v693.524c-.101 103.074-82.257 186.846-183.31 186.846-91.856 0-167.343-69.524-180.58-159.46-1.415-9.095-2.729-18.19-2.729-27.689 0-103.074 82.156-187.048 183.31-187.048 16.673 0 32.539 2.93 47.899 7.275 12.025 3.234 23.545 7.882 34.357 13.541V924.62l-39.814 11.824-362.577 107.317-27.89 8.186v579.94c0 2.83-.708 5.458-.81 8.186-4.243 99.234-84.176 178.964-182.601 178.964-101.154 0-183.31-83.975-183.31-187.15 0-68.513 36.682-128.033 90.645-160.572 27.385-16.471 58.711-26.577 92.665-26.577 29.81 0 57.499 7.983 82.358 20.817V976.46l27.89-8.185 101.053-29.911 360.96-106.813 142.484-42.24ZM527.515 480.635l560.842 329.835-560.842 329.735v-659.57Zm101.053 176.64v306.29L888.98 810.47 628.568 657.275ZM1736.6 1568.628c-38.097 0-68.817-27.689-78.114-64.674-1.82-6.973-4.143-13.743-4.143-21.423 0-47.394 36.884-85.996 82.257-85.996 18.896 0 35.671 7.781 49.515 19.1 19.504 15.763 32.741 39.309 32.741 66.896 0 47.495-36.884 86.097-82.256 86.097Zm-531.436 149.356c-45.373 0-82.257-38.603-82.257-86.097 0-47.495 36.884-86.097 82.257-86.097 45.372 0 82.358 38.602 82.358 86.097 0 47.494-36.986 86.097-82.358 86.097Z"
-                                                        fill-rule="evenodd"></path>
-                                                </g>
-                                            </svg>
-                                            <span class="ml-1">
-                                                Add Media
-                                            </span>
-                                        </span>
-                                    </Button>
-                                    <Button type="">
-                                        <span class="flex">
-                                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M16.2857 20C19.4416 20 22 17.4717 22 14.3529C22 11.8811 20.393 9.78024 18.1551 9.01498C17.8371 6.19371 15.4159 4 12.4762 4C9.32028 4 6.7619 6.52827 6.7619 9.64706C6.7619 10.3369 6.88706 10.9978 7.11616 11.6089C6.8475 11.5567 6.56983 11.5294 6.28571 11.5294C3.91878 11.5294 2 13.4256 2 15.7647C2 18.1038 3.91878 20 6.28571 20H16.2857Z"
-                                                        fill="#1C274C"></path>
-                                                </g>
-                                            </svg> <span class="ml-1">
-                                                Add Weather
-                                            </span>
-                                        </span>
-                                    </Button>
-                                    <!-- <TinyMCE v-model="form.description" /> -->
-                                    <p class="text-sm text-gray-600 my-2"> The material term id. This is generated from
-                                        material
-                                        taxonomy. Please do not make any changes here. </p>
+                                <Select :options="colors" showfield="name" class="w-full" valueField="value" label="Select Color"
+                    v-model="form.single_color" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-5">
+                        <Accordion :open="true" header="Sub Heading Settings">
+                            <div class="mt-2 px-6  h-auto">
+                               <div>
+                                   checkbox 1 
+                                   checkbox 2
                                 </div>
+                                <div class=" gap-2">
+             <InputLabel for="Text Color" value="Text Color" />
+                    <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg"
+                         placeholder=""
+                        v-model="form.label_background_color" :errMessage="errors.label_background_color" />
+                        <InputLabel for="Text Color" value="Enter Color code "  />
+                        <TextInput type="text" class="block mr-2 mb-2 h-[40px] "
+                         placeholder=""
+                        v-model="form.label_background_color" />
+                </div>
+            
+                    <TextInput type="text" class="block mr-2 mb-2 h-[40px] "
+                     placeholder="" label="Heading Font Size"
+                        v-model="form.label_background_color" />
+                    <TextInput type="text" class="block mr-2 mb-2 h-[40px] "
+                     placeholder="" label="Transparent %"
+                        v-model="form.label_background_color" />
+                
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-5">
+                        <Accordion :open="true" header="Simple Fields">
+                            <div class="mt-2 px-6 flex h-auto">
+                                <Select :options="colors" showfield="name" class="w-full" valueField="value" label="Select Color"
+                    v-model="form.single_color" />
                             </div>
                         </Accordion>
                     </div>
@@ -403,6 +399,7 @@ import router from '@/router';
 const errors = ref({})
 const mediaName = ref('select Feature Media')
 const selectedFiles = ref([])
+const contract_logo = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
@@ -426,7 +423,7 @@ const handleFiles = (data) => {
 
 const handleSubmit = () => {
     if (validateForm()) {
-        if (props.id !== null) 
+        if (props.id !== null)
             handleEditSwatches({ ...form.value })
         else
             handleAddSwatches({ ...form.value })

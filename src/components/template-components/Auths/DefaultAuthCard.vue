@@ -5,21 +5,21 @@ const props = defineProps(['subtitle', 'title', 'customClasses'])
 <template>
   <!-- ====== Forms Section Start -->
   <div
-    class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
+    class=" border m-auto p-auto  rounded-lg my-10 border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
   >
-    <div class="flex  flex-wrap items-center">
+    <div class="flex border border-gray-4 my-auto rounded-lg  flex-wrap items-center">
       <div class="hidden w-full xl:block xl:w-1/2">
-        <div class=" px-26 text-center">
-          <router-link class="mb-5.5 inline-block" to="/">
+        <div class=" px-26  my-auto text-center">
+          <!-- <router-link class="mb-5.5 inline-block" to="/">
             <img class="hidden dark:block" src="@/assets/images/logo/logo.svg" alt="Logo" />
             <img class="dark:hidden" src="@/assets/images/logo/logo-dark.svg" alt="Logo" />
-          </router-link>
+          </router-link> -->
 
-          <p class="font-medium 2xl:px-20">
+          <!-- <p class="font-medium 2xl:px-20">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit suspendisse.
-          </p>
+          </p> -->
 
-          <span class="mt-15 inline-block">
+          <span class="m-auto inline-block">
             <img src="@/assets/images/illustration/illustration-03.svg" alt="illustration" />
           </span>
         </div>
@@ -30,7 +30,6 @@ const props = defineProps(['subtitle', 'title', 'customClasses'])
           <h2 class="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
             {{ props.title }}
           </h2>
-
           <slot></slot>
         </div>
       </div>

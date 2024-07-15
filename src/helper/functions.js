@@ -1,5 +1,3 @@
-const baseURL = 'http://172.105.152.65/lebello_backend/api/v1'
-
 // Authenticated user check
 export function isAuthenticated(token) {
   // return true;
@@ -24,5 +22,35 @@ export const isChecked = (variable,id) => {
 };
 
 export const filePath = (fileUrl) =>{
-   return `${baseURL}${fileUrl}`
+   return `${import.meta.env.VITE_FILES_PATH}${fileUrl}`
+}
+
+// files id make array
+export const isSelected = (selectedMedia, media) => {
+  return selectedMedia.value.some(item => item?.id === media?.id);
+};
+
+export const toggleSelection = (media) => {
+  if (props.singleFile) {
+      if (isSelected(selectedMedia,media)) {
+          selectedMedia.value = [];
+      } else {
+          selectedMedia.value = [media];
+      }
+  } else {
+      const index = selectedMedia.value.findIndex(item => item.id === media.id);
+      if (index !== -1) {
+          selectedMedia.value.splice(index, 1);
+      } else {
+          selectedMedia.value.push(media);
+      }
+  }
+};
+
+export const handleFiles = (data) => {
+   const media_titles = data.map(item => item.title);
+   const mediaName = media_titles.join(', ');
+  const media_ids = data.map(item => item.id);
+  return {mediaName , media_ids}
+  
 }

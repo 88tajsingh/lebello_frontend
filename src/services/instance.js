@@ -2,10 +2,10 @@ import axios from 'axios';
 import store from '@/store';
 import router from '@/router';
 
-const token= store.getters.token;
-console.log(token)
- const baseURL = 'http://172.105.152.65/lebello_backend/api/v1'
- 
+// const token= store.getters.token;
+const token =  localStorage.getItem('token') || store.getters.token;
+
+const baseURL = import.meta.env.VITE_BASE_URL
  const instance = axios.create({
   baseURL: baseURL,
   // timeout: 10000, 

@@ -7,13 +7,14 @@
     </div>
     <div class="flex">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="openModal" class="px-2 py-2">Add Pages</Button>
+      <Button @click="() => {router.push({ name:'pages-add'}) }" class="px-2 py-2">Add Pages</Button>
+      
     </div>
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable skin="bh-table-striped bh-table-hover" :hasCheckbox="true" :loading="getLoading"
-      :rows="rows" :columns="cols" paginationInfo="showing {0} to {1} of {2}" showNumbersCount="3"
-      class="next-prev-pagination" :cloneHeaderInFooter="true" :search="search">
+    <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+    :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
+    :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -25,7 +26,7 @@
       </template>
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click="editModal(data)" id="edit svg">
+          <div @click="() => {router.push({ name:'pages-edit',params: { id: data.value.id }}); store.dispatch('editData',data.value ); }" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="openDeleteModal(data.value)">
@@ -36,10 +37,10 @@
     </vue3-datatable>
   </div>
 
-  <PopupModal modalTitle="Add Pages" custonClasses="w-[600px] h-[600px]" v-model:isOpen="modalIsOpen">
+  <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
     <AddEditForm @handleApi="handleAddPages" />
   </PopupModal>
-  <PopupModal modalTitle="Edit Pages" custonClasses="w-[600px] h-[600px]" v-model:isOpen="editIsOpen">
+  <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
     <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
   </PopupModal>
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeletePages">
@@ -53,8 +54,11 @@ import { ref, onMounted } from 'vue';
 import AddEditForm from './AddEditForm.vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PagesServices from '@/services/PagesServices';
+import { useRouter } from 'vue-router';
+import store from '@/store';
 
-const actionSelected = ref('');
+const router = useRouter();
+const actionSelected = ref(null);
 const loading = ref(false);
 const search = ref('');
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
@@ -71,6 +75,7 @@ const actionsFlag = ref(null);
 const modalIsOpen = ref(false);
 const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
+const  totalRows = ref('')
 
 const openDeleteModal = (data) => {
   deleteModalIsOpen.value = true;
@@ -83,7 +88,8 @@ const openModal = () => {
 
 const editModal = (data) => {
   editData.value = { ...data.value };
-  editIsOpen.value = true;
+  // router.push({ name: 'EditPages', params: { id: data.value.id } });
+  editIsOpen.value=true;
 };
 
 const handleMouseEnter = (data) => {
@@ -98,13 +104,24 @@ const isRowHovered = (value) => {
   return actionsFlag.value === value.name;
 };
 
-const handleGetPages = async () => {
+const changeServer =(page) => {
+  console.log("page changed", page)
+  const payload = {limit:page.pagesize,page:page.current_page}
+  handleGetPages(payload);
+}
+const navigateToRoute = () => {
+      router.push({ name: 'EditPages', params: { id: '1' } });
+    };
+
+// api calls
+const handleGetPages = async (payload) => {
   try {
     getLoading.value = true;
-    const res = await PagesServices.getPages();
+    const res = await PagesServices.getPages(payload);
     if (res.status === 200 && res.data.success === true) {
       rows.value = res.data.data;
       getLoading.value = false;
+      totalRows.value= res.data.total_records
     }
   } catch (e) {
     console.error('Error while pages get:', e);
@@ -164,6 +181,7 @@ const handleDeletePages = async () => {
 };
 
 onMounted(() => {
-  handleGetPages();
+  handleGetPages({limit:10, page:1});
+  // navigateToRoute();
 });
 </script>

@@ -7,9 +7,9 @@
       :class="cusClass"
       @change="handleChange"
     >
-      <option value="" disabled>{{ label }}</option>
+      <option :value="selectedOption=== null ? null :0" disabled>{{ label }}</option>
       <template v-for="option in options" :key="option[valueField]">
-                <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>
+                <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>                
                 <option v-if="option.children" v-for="child in option.children" :value="child[valueField]" :key="child[valueField]">
                   &nbsp;&nbsp;&nbsp;{{ child[showfield] }}</option>
             </template>

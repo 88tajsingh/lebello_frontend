@@ -59,6 +59,11 @@ const menuGroups = ref([
           , label: 'Media ',
                             route: '/media'
       },
+      { 
+        icon:`<svg width="23px" height="23px" class=ml-0 viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <defs> <style>.cls-1{fill:#ffffff;}</style> </defs> <title></title> <g data-name="Layer 6" id="Layer_6"> <path class="cls-1" d="M5,5V27H27V5ZM25,7V17.83l-3.5-3.25-5.71,6.33L12,18.83,7,23.65V7ZM8.49,25l3.86-3.71,3.86,2.13,5.41-6L25,20.56V25Z"></path> <rect class="cls-1" height="2" width="1.81" x="11.06" y="15"></rect> </g> </g></svg>`
+          , label: 'Contract Design ',
+                            route: '/Contract-design'
+      },
       // {
       //   icon: `<svg
       //             class="fill-current"

@@ -1,9 +1,10 @@
 <template>
   <div class="relative">
-    <input ref="fileInput" type="file" @change="handleFileInputChange" accept="image/*"
-           class="py-2 px-4 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-0 ">
+    <input ref="fileInput" type="file" @change="handleFileInputChange"
+      accept=".jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx, .mp4, .avi, .mkv, .mov"
+      class="py-2 px-4 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-0 ">
     <button v-if="imageUrl" @click="clearImage" class="absolute top-0 right-0 p-2 pt-3 text-red-600 hover:text-red-800">
-      &#10006; 
+      &#10006;
     </button>
   </div>
   <!-- <div v-if="imageUrl">
@@ -16,7 +17,7 @@ import { ref, defineEmits } from 'vue';
 
 const emits = defineEmits(['file-selected']);
 const imageUrl = ref('');
-const fileInput = ref(null); 
+const fileInput = ref(null);
 let selectedFile = null;
 
 const handleFileInputChange = (event) => {

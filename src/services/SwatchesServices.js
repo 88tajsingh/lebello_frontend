@@ -2,12 +2,10 @@ import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 
 class Swatcheservices {
-
-  getSwatches() {
-    return instance.get(ApiConfig.getSwatches)
+  getSwatches(payload) {
+    return instance.get(ApiConfig.getSwatches,{params: {...payload}})
   }
   addSwatches(payload) {
-      console.log("Added material", payload)
     return instance.post(ApiConfig.addSwatches, payload)
   }
   editSwatches(payload) {

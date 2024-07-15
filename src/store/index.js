@@ -4,10 +4,12 @@ export default new Vuex.Store({
   state: {
     token: localStorage.getItem('token') || '',
     user: JSON.parse(localStorage.getItem('user')) || {email: null, password: null},
+    editData: ''
   },
   getters: {
-    token: state => state.token,
-    user: state => state.user,
+    token: state => state?.token,
+    user: state => state?.user,
+    editData: state => state?.editData,
   },
   mutations: {
     setToken(state, token) {
@@ -21,6 +23,9 @@ export default new Vuex.Store({
     setUser(state, user) {
       state.user = user;
       localStorage.setItem('user', JSON.stringify(user));
+    },
+    setEditData(state, data) {
+      state.editData = data;
     },
     clearUser(state) {
       state.user = null;
@@ -41,6 +46,9 @@ export default new Vuex.Store({
     },
     userUpdate({ commit }) {
       commit('setUser', user);
+    },
+    editData({ commit }, {data  }) {
+      commit('setEditData', data);
     },
   },
   modules: {},

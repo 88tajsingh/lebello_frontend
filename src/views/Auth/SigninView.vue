@@ -54,9 +54,9 @@ const handleLogin = async () => {
             const user = res.data.data.user_data
             // console.log(res.data.data.access_token)
             store.dispatch('login', { token, user });
-            console.log("token login",token)
-            router.push('/admin');
+            localStorage.setItem('token', token);
             processing.value = false;       
+            router.push('/admin');
          }
         if (res.status === 401) {
           processing.value = false;
@@ -78,8 +78,8 @@ const handleLogin = async () => {
     <!-- Breadcrumb Start -->
     <!-- <BreadcrumbDefault :pageTitle="pageTitle" /> -->
     <!-- Breadcrumb End -->
-    <div class="my-auto mt-4">   
-    <DefaultAuthCard subtitle="Start for free" title="Sign In to TailAdmin">
+    <div class="m-auto mt-4">   
+    <DefaultAuthCard subtitle="" title="Sign In to Lebello">
       <form @submit.prevent="handleLogin">
         <TextInput
             name="email"

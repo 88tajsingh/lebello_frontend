@@ -106,7 +106,8 @@ const router = createRouter({
           path: '/swatches/:id',
           name: 'swatches-edit',
           component:()=> import('../views/Admin/Swatches/AddAndEdit.vue'),
-          meta: { requiresAuth: true }
+          meta: { requiresAuth: true },
+          props:true,
         },
         {
           path: '/materials',
@@ -121,11 +122,13 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/materials-edit',
+          path: '/materials-edit/:id',
           name: 'materials-edit',
-          component:()=> import('../views/Admin/Materials/Edit.vue'),
+          component:()=> import('../views/Admin/Materials/AddAndEdit.vue'),
+          props:true,
           meta: { requiresAuth: true }
         },
+        
         {
           path: '/navigation-order',
           name: 'NavigationOrder',
@@ -151,10 +154,42 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
+          path: '/pages-add',
+          name: 'pages-add',
+          component:()=> import('../views/Admin/Pages/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/pages-edit/:id',
+          name: 'pages-edit',
+          component:()=> import('../views/Admin/Pages/AddEditForm.vue'),
+          props: true,
+          meta: { requiresAuth: true }
+        },
+        {
           path: '/media',
           name: 'Media',
-          component:()=> import('../views/Admin/Media-section/index.vue'),
+          component:()=> import('../views/Admin/Media-section/Index.vue'),
           meta: { requiresAuth: true }
+        },
+        {
+          path: '/Contract-design',
+          name: 'Contract',
+          component:()=> import('../views/Admin/Contract-design/NewContract.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/Contract-add',
+          name: 'Contract-add',
+          component:()=> import('../views/Admin/Contract-design/AddEditContract.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/Contract-edit/:id',
+          name: 'Contract-edit',
+          component:()=> import('../views/Admin/Contract-design/AddEditContract.vue'),
+          meta: { requiresAuth: true },
+          props:true,
         },
       ]
     }

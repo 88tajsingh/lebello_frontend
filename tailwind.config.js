@@ -62,6 +62,7 @@ export default {
             stroke: '#E2E8F0',
             gray: '#EFF4FB',
             graydark: '#333A48',
+            'gray-4':'#C6C6C6',
             'gray-2': '#F7F9FC',
             'gray-3': '#FAFAFA',
             whiten: '#F1F5F9',

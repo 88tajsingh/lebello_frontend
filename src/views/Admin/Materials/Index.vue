@@ -1,20 +1,20 @@
 <template>
   <PageHeader> Material</PageHeader>
-  <div class="flex  content-between justify-between  mb-2">
+  <div class="flex  content-between justify-between   mb-2">
     <div class="flex">
-      <Select cusClass="h-[38px] border-boxdark	  " :options="bulkOption" showfield="text" valueField="value"
+      <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
         label="Bulk Options" v-model="bulkActionSelected" />
       <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
     </div>
-    <div class="flex">
-      <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button :onclick="openModal" class="px-2 py-2 ">Add Materials</Button>
-    </div>
+    <div class="flex rounded-lg bg-transparent">
+      <TextInput type="text" class="block  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
+      <Button @click="() => {router.push({ name: 'materials-add'}) }"class="px-2 py-2 m-auto whitespace-nowrap">Add Materials</Button>
+    </div>  
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable ref="datatable" skin="bh-table-striped bh-table-hover " :hasCheckbox="true"
-      :loading="dataTableLOding" :rows="rows" :columns="cols" paginationInfo="showing {0} to {1} of {2}"
-      showNumbersCount="3" class="next-prev-pagination" :cloneHeaderInFooter="true" rowClass="" :search="search">
+    <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+    :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
+    :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -26,7 +26,7 @@
       </template>
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click='() => { editData = data.value; editModal(); }' id="edit svg">
+          <div @click="() => {router.push({ name: 'materials-edit', params: { id: data.value.id } }) }" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => { material_id = data.value; openDeleteModal(); }">
@@ -65,8 +65,6 @@
         </div>
               </template>
 </DataTable> -->
-
-
   <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen">
     <!-- <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen"> -->
     <AddAndEdit @handleApi='handleAddMaterials' formHeader="Add Material" :materialTree='MaterialTreeListData' />
@@ -78,6 +76,7 @@
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteMaterials">
     Do you want to delete ?
   </DeleteModal>
+
 
   <Loader :isLoading="loading" :fullPage="true" />
 
@@ -95,7 +94,10 @@ import TextInput from '@/components/Admin-components/form-components/TextInput.v
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
 import materialsServices from '@/services/MaterialsServices'
-const bulkActionSelected = ref('')
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const bulkActionSelected = ref(null)
 const search = ref('')
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
 const cols = ref([
@@ -108,26 +110,27 @@ const cols = ref([
 ])
 const MaterialTreeListData = ref([])
 const material_id = ref('')
-const dataTableLOding = ref(false)
+const dataTableLoding = ref(false)
 const loading = ref(false)
 const editData = ref({})
 const rows = ref([])
 const datatable = ref('')
+const  totalRows = ref('')
 const actionsFlag = ref(null)
-const modalIsOpen = ref(false)
-const editIsOpen = ref(false)
 
+// const modalIsOpen = ref(false)
+// const editIsOpen = ref(false)
 
-const openModal = () => {
-  modalIsOpen.value = true
-}
-const editModal = () => {
-  editIsOpen.value = true;
-}
-const editCloseModal = () => {
-  editIsOpen.value = false;
-  console.log('run close modal');
-}
+// const openModal = () => {
+//   modalIsOpen.value = true
+// }
+// const editModal = () => {
+//   editIsOpen.value = true;
+// }
+// const editCloseModal = () => {
+//   editIsOpen.value = false;
+//   console.log('run close modal');
+// }
 
 const handleMouseEnter = (data) => {
   actionsFlag.value = data.value.name
@@ -146,79 +149,31 @@ const openDeleteModal = () => {
   deleteModalIsOpen.value = true;
 };
 
+const changePage =(page) => {
+  const payload = {limit:page.pagesize,page:page.current_page}
+  handleGetMaterials(payload);
+}
 // get materials function
-const handleGetMaterials = async () => {
-  dataTableLOding.value = true;
+const handleGetMaterials = async (payload) => {
+  dataTableLoding.value = true;
   try {
-    await materialsServices.getMaterials()
+    await materialsServices.getMaterials(payload)
       .then(res => {
         if (res.status === 200 && res.data.success === true) {
           if (res.data.data && res.data.data.length > 0) {
             rows.value = res.data.data
+            totalRows.value= res.data.total_records
           }
-          dataTableLOding.value = false;
+          dataTableLoding.value = false;
         }
       }).catch((res) => {
         console.log("error", res)
       });
   } catch (e) {
     console.error('Error while log in:', e);
-    dataTableLOding.value = false;
+    dataTableLoding.value = false;
   } finally {
-    dataTableLOding.value = false;
-  }
-}
-// add material function
-const handleAddMaterials = async (payload) => {
-  try {
-    loading.value = true;
-    await materialsServices.addMaterial(payload)
-      .then(res => {
-        if (res.status === 200) {
-          modalIsOpen.value = false;
-          if (res.data.data && res.data.data.length > 0) {
-            rows.value = res?.data?.data;
-
-            handleGetMaterials();
-          }
-
-          loading.value = false;
-          // handleGetMaterials();   
-        }
-      })
-  } catch (e) {
-    console.error('Error while log in:', e);
-  } finally {
-    loading.value = false;
-  }
-}
-// edit material function
-const handleEditMaterials = async (payload) => {
-  loading.value = true;
-  try {
-    await materialsServices.editMaterial(payload)
-      .then(res => {
-        console.log("res.status", res.status)
-        // editCloseModal();
-        if (res && res.status === 200) {
-          if (res.data.data && res.data.data.length > 0) {
-            rows.value = res.data.data
-            handleGetMaterials();
-          }
-          editCloseModal();
-
-          handleGetMaterials();
-          // rows.value = res.data.data
-          // loading.value = false;    
-          // console.log('editIsOpen.value',editIsOpen.value)
-          // handleGetMaterials(); 
-        }
-      })
-  } catch (e) {
-    console.error('Error while log in:', e);
-  } finally {
-    loading.value = false;
-    // editCloseModal();
+    dataTableLoding.value = false;
   }
 }
 // delete material
@@ -243,7 +198,6 @@ const handleDeleteMaterials = async () => {
     loading.value = false;
   }
 }
-
 // Bulk Delete 
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
@@ -267,18 +221,63 @@ const handleBulkActions = async () => {
   }
 };
 
-const materialTree = async () => {
-  MaterialTreeListData.value = await MaterialTreeList()
-}
+// add material function
+// const handleAddMaterials = async (payload) => {
+//   try {
+//     loading.value = true;
+//     await materialsServices.addMaterial(payload)
+//       .then(res => {
+//         if (res.status === 200 && res.data.success === true) {
+//           modalIsOpen.value = false;
+//           handleGetMaterials();
+//           loading.value = false;
+//           // handleGetMaterials();   
+//         }
+//       })
+//   } catch (e) {
+//     console.error('Error while log in:', e);
+//   } finally {
+//     loading.value = false;
+//   }
+// }
+// edit material function
+// const handleEditMaterials = async (payload) => {
+//   loading.value = true;
+//   try {
+//     await materialsServices.editMaterial(payload)
+//       .then(res => {
+//         console.log("res.status", res.status)
+//         // editCloseModal();
+//         if (res && res.status === 200) {
+//           if (res.data.data && res.data.data.length > 0) {
+//             rows.value = res.data.data
+//             handleGetMaterials();
+//           }
+//           editCloseModal();
 
+//           handleGetMaterials();
+//           // rows.value = res.data.data
+//           // loading.value = false;    
+//           // console.log('editIsOpen.value',editIsOpen.value)
+//           // handleGetMaterials(); 
+//         }
+//       })
+//   } catch (e) {
+//     console.error('Error while log in:', e);
+//   } finally {
+//     loading.value = false;
+//     // editCloseModal();
+//   }
+// }
+// const materialTree = async () => {
+//   MaterialTreeListData.value = await MaterialTreeList()
+// }
 
 onMounted(() => {
-  handleGetMaterials();
-  materialTree();
+  handleGetMaterials({limit:10,page:1});
 }
 );
 </script>
-
 
 <style scoped>
 .bh-pagesize {

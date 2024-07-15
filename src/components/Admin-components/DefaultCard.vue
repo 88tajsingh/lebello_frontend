@@ -4,9 +4,9 @@ const props = defineProps(['cardTitle'])
 
 <template>
   <div
-    class="rounded-sm border border-stroke px-3 bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
+    class="rounded-lg border border-stroke px-3 bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
   >
-    <div class="border-bpy-4 px-6.5 dark:border-strokedark" :class=" {'border-stroke' :props.cardTitle }">
+    <div class="border-b text-xl py-4 px-6.5 dark:border-strokedark" :class=" {'border-stroke' :props.cardTitle }">
       <h3 class="font-medium text-black dark:text-white">{{ props.cardTitle }}</h3>
     </div>
     <slot></slot>

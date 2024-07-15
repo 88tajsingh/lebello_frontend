@@ -19,7 +19,7 @@ export const MaterialTreeList = async () => {
     try {
       const res = await CommonServices.MaterialTreeList();
       if (res.status === 200) {
-        // console.log('tree data ',res.data.data)
+        console.log('MaterialTreeList data ',res.data.data)
         return  res.data.data;
       } 
     } catch (err) {

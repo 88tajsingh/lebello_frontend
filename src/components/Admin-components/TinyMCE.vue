@@ -2,8 +2,7 @@
 import Editor from '@tinymce/tinymce-vue'
 import { ref } from "vue";
 
-const key = import.meta.env.VUE_APP_TINY_MCE
-console.log("key",key)
+const key = import.meta.env.VITE_APP_TINY_MCE
 const model = defineModel({
     type: String,
     required: true,

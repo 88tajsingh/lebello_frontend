@@ -10,7 +10,7 @@
                 @change="handleOptionChange"
             />
             {{ option.title }}
-            <div v-if="selected === 'Option 2'  && option.title === 'Option 2'">
+            <div v-if="selected === 'Option2'  && option.title === 'Option2'">
                 <TextInput
                     id="title"
                     type="text"

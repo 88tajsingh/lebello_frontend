@@ -3,11 +3,10 @@ import ApiConfig from '@/config/apiConfig'
 
 class LoginService {
 
-  getMaterials() {
-    return instance.get(ApiConfig.getMaterial)
+  getMaterials(payload) {
+    return instance.get(ApiConfig.getMaterial,{params: {...payload}})
   }
   addMaterial(payload) {
-      console.log("Added material", payload)
     return instance.post(ApiConfig.addMaterial, payload)
   }
   editMaterial(payload) {

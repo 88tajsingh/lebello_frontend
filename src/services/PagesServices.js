@@ -3,8 +3,8 @@ import ApiConfig from '@/config/apiConfig'
 
 class Pageservices {
 
-  getPages() {
-    return instance.get(ApiConfig.getPages)
+  getPages(payload) {
+    return instance.get(ApiConfig.getPages,{params: {...payload}})
   }
   addPages(payload) {
       console.log("Added material", payload)

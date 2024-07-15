@@ -1,7 +1,6 @@
 import axios from 'axios';
-const baseURL = 'http://172.105.152.65/lebello_backend/api/v1'
 const instance = axios.create({
-  baseURL: baseURL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   // timeout: 10000, 
   headers: {
     'Content-Type': 'application/json',
