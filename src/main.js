@@ -14,6 +14,7 @@ import EditSvg  from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg  from '@/components/Admin-components/svg/DeleteSvg.vue'
 import Loader from '@/components/Admin-components/Loader.vue';
 import {Tabs, Tab} from 'vue3-tabs-component';
+import SingleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Checkbox from '@/components/Admin-components/form-components/CheckBox.vue';
@@ -48,16 +49,17 @@ app.use(router)
 .use(store)
 .use(createPinia())
 app.use(VueApexCharts)
-app.component('RouterLink', router.options.history.routerLink);
 app.component('Loader', Loader);
-app.config.globalProperties.$lodash = _;
-app.component('TextInput', TextInput);
 app.component('Button', Button);
-app.component('Checkbox', Checkbox);
-app.component('PopupModal', PopupModal);
 app.component('Select', Select);
 app.component('EditSvg', EditSvg);
+app.component('Checkbox', Checkbox);
 app.component('DeleteSvg', DeleteSvg);
-app.component('DeleteModal', DeleteModal);
+app.component('TextInput', TextInput);
+app.component('PopupModal', PopupModal);
 app.component('PageHeader', PageHeader);
+app.config.globalProperties.$lodash = _;
+app.component('DeleteModal', DeleteModal);
+app.component('SingleCheckBox', SingleCheckBox);
+app.component('RouterLink', router.options.history.routerLink);
 app.mount('#app')

@@ -192,8 +192,6 @@
 </template>
 
 <script setup>
-
-import ProfileView from '@/views/template-views/ProfileView.vue'
 import { FolderIcon } from '@heroicons/vue/20/solid'
 import { filePath } from '@/helper/functions'
 import Breadcrumb from '@/components/Admin-components/Breadcrumb.vue'
@@ -233,12 +231,16 @@ const newFolder = ref()
 const mediaFIle = ref()
 const errorMessage = ref()
 const breadcrumbData = ref([])
-const selectedMedia = ref(props.selected)
+const selectedMedia = ref(props.selected || [])
 const breadcrumbFlag = ref(true)
 
 const isSelected = (media) => {
+    if (!Array.isArray(selectedMedia.value)) {
+        return false; 
+    }
     return selectedMedia.value.some(item => item?.id === media?.id);
 };
+
 
 const toggleSelection = (media) => {
     if (props.singleFile) {

@@ -1,11 +1,14 @@
 <template>
-    <DefaultCard :cardTitle="id ? `Edit Contract ` : `Add New Contract `">
+    {{ form }}
+    <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <div>
                         <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title" placeholder="Add title"
                             v-model="form.title" :errMessage="errors.title" :errors="errors" />
+                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug" placeholder="slug"
+                            v-model="form.slug" :errMessage="errors.slug" />
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Description">
@@ -62,38 +65,41 @@
                         <Accordion :open="true" header="Seo Options">
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id=" " type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.seo_title_tag" placeholder="Title Tag" label="Title Tag"
-                                   />
+                                    v-model="form.seo_title_tag" placeholder="Title Tag" label="Title Tag" />
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text" class="block w-[180px] mr-2 "
-                                    v-model="form.seo_meta_description" placeholder="Meta Description"
-                                    label="Meta Description" :message="errors.seo_meta_description" />
+                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
+                                    class="block w-[180px] mr-2 " v-model="form.seo_meta_description"
+                                    placeholder="Meta Description" label="Meta Description"
+                                    :message="errors.seo_meta_description" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id=" " :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
-                                    v-model="form.seo_meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
-                                    />
+                                    v-model="form.seo_meta_keywords" placeholder="Meta Keywords"
+                                    label="Meta Keywords" />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Contract Slide">
-                            <div class='mx-5'>
-                                <div>
-                                    <p>Show on Contract HomePage Slide</p>
-                                    <span>form.contract_home_page_slide</span>
-                                    <span>Checked this option to show this contract on contract home slide
-                                        section.</span>
+                            <div class='mx-5 mb-2'>
+                                <div class=' mb-2'>
+                                    <InputLabel for="ContractLogo" value="Show on Contract HomePage Slide" />
+                                    <span>
+                                        <singleCheckBox id="checkbox1"
+                                            label="Checked this option to show this contract on contract home slide section."
+                                            v-model:modelValue="form.contract_home_page_slide"></singleCheckBox>
+                                    </span>
                                 </div>
                                 <InputLabel for="ContractLogo" value="SliderImage" />
-                                <div class="py-2 rounded-lg mb-2 px-2 border border-stroke" @click="() => IsOpen = true"> {{
-                                    mediaName }}</div>
-                                
+                                <div class="py-2 rounded-lg mb-2 px-2 border border-stroke"
+                                    @click="() => IsOpen = true"> {{
+                                        mediaName }}</div>
+
                                 <TextInput id="TitleBackground" type="text" class="block w-full mr-2 mb-2 h-[33px]"
                                     v-model="form.contract_background_title" placeholder="" label="Title Background		
                           " />
@@ -112,8 +118,8 @@
                     <div class="mt-5">
                         <Accordion open="false" header="Contract Logo">
                             <div class=" px-6  h-auto ">
-                                <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
-                                    mediaName }}</div>
+                                <div class="py-2 min-h-10 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
+                                    contractLogoName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
                                     <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
@@ -122,13 +128,13 @@
                             </div>
                         </Accordion>
                     </div>
-                    
+
                 </div>
 
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
-                            <div class="flex justify-between mb-2">
+                            <!-- <div class="flex justify-between mb-2">
                                 <LinkBtn :buttonText="'Preview'" />
                                 <Button type="submit" class=" text-sm ml-auto px-2">
                                     Save Draft
@@ -209,39 +215,29 @@
                                         class="ml-2 text-sm border-none underline">
                                         Cancel</Button>
                                 </div>
+                            </div> -->
+                            <div class="flex flex-col ">
+                                <InputLabel for="status" value="Status" />
+                                <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                    label="Select an option" v-model="form.status" />
+                            </div>
+                            <div class="col-span-1 w-full">
+                                <input-label for="parentOrder" value="Visibility" />
+                                <div class="flex items-center  gap-2">
+                                    <RadioButton v-for="option in PublishOptions" :key="option.value" name="Visibility"
+                                        :value="option.value" :label="option.label" :modelValue="form.visibility"
+                                        @update:modelValue="form.visibility = $event" />
+                                </div>
+                                <div v-if="form.visibility === 'Password protected'" class="">
+                                    <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
+                                        placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="col-span-1 w-full">
+                                <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
+                                    dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
                             </div>
 
-                            <div id="wraper Publish ">
-                                <div>
-                                    <span class="text-sm flex items-center m-auto">
-                                        <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                            </g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <path
-                                                    d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 15H8M11 15H13M16 15H18M6 18H8M11 18H13M16 18H18M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z"
-                                                    stroke="#000000" stroke-width="2" stroke-linecap="round"></path>
-                                            </g>
-                                        </svg> <span class="ml-1">
-                                            Publish :
-                                            <strong class="text-gray-600"> immediately</strong>
-                                        </span>
-                                        <Button v-if="!showHidePublish.Publish" type=""
-                                            @click="showHidePublish.Publish = !showHidePublish.Publish"
-                                            class="ml-2 text-sm border-none underline">
-                                            Edit</Button>
-                                    </span>
-                                </div>
-                                <div v-if="showHidePublish.Publish">
-                                    <Dropdown :options="menuItems" @optionSelected="handleOptionSelected" />
-                                    <LinkBtn click="route('add.swatches')" class=" " :buttonText="'ok'" />
-                                    <Button type="" @click="showHidePublish.Publish = !showHidePublish.Publish"
-                                        class="ml-2 text-sm border-none underline">Cancel</Button>
-                                </div>
-                            </div>
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
@@ -265,7 +261,8 @@
                                 <p class="mb-1">Put the client name here.</p>
 
                                 <TextInput id="Project " type="text" class="block mb-1 w-[180px] mr-2 h-[33px]"
-                                    v-model="form.contract_info_project_link" placeholder="Project Link" label="Project Link " />
+                                    v-model="form.contract_info_project_link" placeholder="Project Link"
+                                    label="Project Link " />
                                 <p class="mb-1">Put the project link URL here. Do not start with 'http://'. Example:
                                     projectlink.com</p>
 
@@ -275,25 +272,23 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Featured Option">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <div>Set as featured</div>
-                                <div class="text-[13px]"> form.featured_option If set as featured, it will be displayed at the top of
-                                    "Contract Design" page.</div>
+                                <singleCheckBox id="FeaturedOption" label="If set as featured, it will be displayed
+                                    at the top of
+                                    'Contract Design' page" v-model:modelValue="form.featured_option"></singleCheckBox>
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Type">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :data="MaterialTreeListData"
-                                    @checked-items="handleCheckedItems" />
+                                <Checkbox :data="MaterialTreeListData" @checked-items="handleContractType" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Location">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :data="MaterialTreeListData"
-                                    @checked-items="handleCheckedItems" />
+                                <Checkbox :data="MaterialTreeListData" @checked-items="handleContractLocation" />
                             </div>
                         </Accordion>
                     </div>
@@ -323,48 +318,67 @@
                             </div>
                         </Accordion>
                     </div>
-                    <!-- Teaser -->
                     <div class="mt-5">
                         <Accordion :open="true" header="Simple Fields">
                             <div class="mt-2 px-6 flex h-auto">
-                                <Select :options="colors" showfield="name" class="w-full" valueField="value" label="Select Color"
-                    v-model="form.single_color" />
+                                <Select :options="options" showfield="name" class="w-full" valueField="value"
+                                    label="None " v-model="form.simple_fields" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Sub Heading Settings">
                             <div class="mt-2 px-6  h-auto">
-                               <div>
-                                   checkbox 1 
-                                   checkbox 2
+                                <div>
+                                    <div class="">
+                                        <RadioButton v-for="option in withBgWithoutBg" :key="option.value"
+                                            name="Visibility" :value="option.value" :label="option.label"
+                                            :modelValue="withBgWithoutBgValue"
+                                            @update:modelValue="withBgWithoutBgValue = $event" />
+                                    </div>
+                                    <div v-if="form.withBgWithoutBg" class="">
+                                        <InputLabel for="Text Color" value="bg Color" />
+                                        <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg"
+                                            placeholder="" v-model="form.label_background_color"
+                                            :errMessage="errors.label_background_color" />
+                                        <InputLabel for="Text Color" value="Enter Color code " />
+                                        <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                            v-model="form.label_background_color" />
+                                    </div>
+
                                 </div>
-                                <div class=" gap-2">
-             <InputLabel for="Text Color" value="Text Color" />
-                    <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg"
-                         placeholder=""
-                        v-model="form.label_background_color" :errMessage="errors.label_background_color" />
-                        <InputLabel for="Text Color" value="Enter Color code "  />
-                        <TextInput type="text" class="block mr-2 mb-2 h-[40px] "
-                         placeholder=""
-                        v-model="form.label_background_color" />
-                </div>
-            
-                    <TextInput type="text" class="block mr-2 mb-2 h-[40px] "
-                     placeholder="" label="Heading Font Size"
-                        v-model="form.label_background_color" />
-                    <TextInput type="text" class="block mr-2 mb-2 h-[40px] "
-                     placeholder="" label="Transparent %"
-                        v-model="form.label_background_color" />
-                
+                                <div class="">
+                                    <InputLabel for="Text Color" value="Text Color" />
+                                    <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg" placeholder=""
+                                        v-model="form.label_background_color"
+                                        :errMessage="errors.label_background_color" />
+                                </div>
+
+                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                    label="Heading Font Size" v-model="form.heading_font_size" />
+
+                                <div class="">
+                                    <InputLabel for="-HeadingCase" value="Heading Case" />
+                                    <RadioButton v-for="option in capsNOCaps" :key="option.value" name="Visibility"
+                                        :value="option.value" :label="option.label" :modelValue="form.contract_design"
+                                        @update:modelValue="form.contract_design = $event" />
+                                </div>
+
+                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                    label="Transparent %" v-model="form.heading_transparent_percentagea" />
+
                             </div>
                         </Accordion>
                     </div>
+
                     <div class="mt-5">
-                        <Accordion :open="true" header="Simple Fields">
+                        <Accordion :open="true" header="Contract design">
                             <div class="mt-2 px-6 flex h-auto">
-                                <Select :options="colors" showfield="name" class="w-full" valueField="value" label="Select Color"
-                    v-model="form.single_color" />
+                                <div class="">
+                                    <RadioButton v-for="option in oldNewContract" :key="option.value" name="Visibility"
+                                        :value="option.value" :label="option.label" :modelValue="form.contract_design"
+                                        @update:modelValue="form.contract_design = $event" />
+                                </div>
                             </div>
                         </Accordion>
                     </div>
@@ -377,33 +391,41 @@
         <GetLibrary :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
             :selectedFiles="handleFiles" />
     </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
+        <GetLibrary :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
+            :selectedFiles="handleFiles" />
+    </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 
 </template>
 <script setup>
-
+import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
+import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import GetLibrary from '@/views/Admin/Media-section/Index.vue'
+import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import Accordion from "@/components/Admin-components/Accordion.vue";
-import Dropdown from "@/components/Admin-components/form-components/Select.vue";
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
+import ContractDesignServices from '@/services/ContractDesignServices';
 import SwatchesServices from '@/services/SwatchesServices';
-import LinkBtn from "@/components/Admin-components/Buttons/LinkBtn.vue";
-import RadioBtn from "@/components/Admin-components/form-components/RadioBtn.vue";
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
 import { MaterialTreeList } from '@/helper/Apis';
 import router from '@/router';
+import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps } from '@/json/data';
 
 const errors = ref({})
 const mediaName = ref('select Feature Media')
+const contractLogoName = ref('Select Logo')
+const contractLogoids = ref([])
 const selectedFiles = ref([])
+const withBgWithoutBgValue = ref(false)
 const contract_logo = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
-const form = ref({});
+const form = ref({ status: '0', simple_fields: '0', contract_home_page_slide: false, });
 
 
 const emit = defineEmits(['handleApi']);
@@ -411,6 +433,15 @@ const emit = defineEmits(['handleApi']);
 const close = () => {
     IsOpen.value = false;
 }
+const handleFeatureFiles = (data) => {
+  close();
+   const object = handleFiles(data);
+   console.log(object)
+   featurImage.value.mediaName = object.mediaName;
+   form.value.feature_image = object.media_ids
+   console.log(object)
+}
+
 const handleFiles = (data) => {
     close();
     selectedFiles.value = data
@@ -445,39 +476,20 @@ const props = defineProps({
         default: null,
     }
 });
+const options = [{ name: 'Inherit from parent (No parent found)', value: 0 },
+{ name: 'Contract Logo', value: 1 }]
+
 const id = ref(props.id || null)
 
-const showHidePublish = ref({
-    Status: false,
-    Visibility: false,
-    Publish: false,
-});
-
-function updateEditorValue(newValue) {
-    form.description = newValue.value;
-    console.log(newValue)
-}
-
-const selected = ref("");
-const handleOptionSelected = (option) => {
-    selected.value = option;
+const handleContractType = (checkedItems) => {
+    form.value = { ...form.value, contract_type: checkedItems }
+};
+const handleContractLocation = (checkedItems) => {
+    form.value = { ...form.value, contract_location: checkedItems }
 };
 
-const selectedOption = ref(null);
-
-const handleOptionChange = (option) => {
-    console.log(option);
-    selectedOption.value = option;
-};
-
-const handleCheckedItems = (checkedItems) => {
-    console.log('Received checked items in parent:', checkedItems);
-    form.value = { ...form.value, materials: checkedItems }
-};
 // api calls 
-// get Swatches function
 const handleGetSwatches = async (payload) => {
-    // dataTableLoding.value = true;
     console.log(payload);
     try {
         await SwatchesServices.getSwatches(payload)
@@ -485,10 +497,7 @@ const handleGetSwatches = async (payload) => {
                 if (res.status === 200 && res.data.success === true) {
                     if (res.data.data && res.data.data.length > 0) {
                         form.value = res.data.data[0]
-
-                        // imgKey.value=Object.keys(cols.value)
                     }
-                    // dataTableLoding.value = false;
                 }
             }).catch((res) => {
                 console.log("error", res)
@@ -497,14 +506,13 @@ const handleGetSwatches = async (payload) => {
         console.error('Error while log in:', e);
     }
 }
-// add Swatches function
 const handleAddSwatches = async (payload) => {
-    loading.value = true;
+    // loading.value = true;
     try {
-        await SwatchesServices.addSwatches(payload)
+        await ContractDesignServices.addNewContract(payload)
             .then(res => {
                 if (res && res.status === 200 && res.data.success === true) {
-                    router.push('/swatches')
+                    // router.push('/swatches')
                     loading.value = false;
                 }
             })
@@ -513,7 +521,6 @@ const handleAddSwatches = async (payload) => {
         console.error('Error while log in:', e);
     }
 }
-// edit Swatches function
 const handleEditSwatches = async (payload) => {
     loading.value = true;
     try {

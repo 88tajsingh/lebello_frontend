@@ -1,4 +1,5 @@
 <template>
+    {{ form }}
     <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`">
     <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -275,7 +276,7 @@ const handleFiles = (data) => {
 
     // mediaName.value=data[0].title   
     const media_ids = data.map(item => item.id);
-    form.value.media_id = media_ids;
+    form.value.media_id = media_ids[0];
 }
 // api for get patents child json parent material listing 
 const materialTree = async () => {

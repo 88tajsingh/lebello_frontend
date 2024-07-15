@@ -14,7 +14,7 @@
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
     :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
+    :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -104,8 +104,7 @@ const isRowHovered = (value) => {
   return actionsFlag.value === value.name;
 };
 
-const changeServer =(page) => {
-  console.log("page changed", page)
+const changePages =(page) => {
   const payload = {limit:page.pagesize,page:page.current_page}
   handleGetPages(payload);
 }
@@ -181,7 +180,7 @@ const handleDeletePages = async () => {
 };
 
 onMounted(() => {
-  handleGetPages({limit:10, page:1});
+  handleGetPages({page:1});
   // navigateToRoute();
 });
 </script>

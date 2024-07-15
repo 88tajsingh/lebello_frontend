@@ -51,7 +51,7 @@ defineExpose({ focus: () => input.value.focus() });
 </script>
 
 <template>
-  <InputLabel> {{ props.label }}</InputLabel>
+  <InputLabel :for="props.label" > {{ props.label }}</InputLabel>
     <div v-if="isTextarea" class="m-0 p-0 border-0">
         <textarea 
         :class="textareaClass"

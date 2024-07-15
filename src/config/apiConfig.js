@@ -43,12 +43,19 @@ const ApiConfig = {
     deleteMedia:'/delete-media',
 
     // pages 
-    getPages :'/pages-list?limit=20',
+    getPages :'/pages-list',
     addPages :'/add-pages',
     editPages:'/update-pages',
     deletePages :'/delete-pages',
     PagesSorting:'/sort-data',
     // bulkDeletePages :'/bulk-Pages-delete',
+
+    // contract design 
+    getNewContract :'/get-contract-design',
+    addNewContract :'/add-contract-design',
+    editNewContract:'/update-contract-design',
+    deleteNewContract :'/delete-contract-design',
+    bulkNewContract :'/bulk-delete-contract-design',
   };
   
   export default ApiConfig;

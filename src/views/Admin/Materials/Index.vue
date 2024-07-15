@@ -7,7 +7,7 @@
       <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
     </div>
     <div class="flex rounded-lg bg-transparent">
-      <TextInput type="text" class="block  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
+      <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
       <Button @click="() => {router.push({ name: 'materials-add'}) }"class="px-2 py-2 m-auto whitespace-nowrap">Add Materials</Button>
     </div>  
   </div>

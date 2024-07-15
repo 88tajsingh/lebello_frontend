@@ -276,7 +276,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-2/6 px-2 my-3">Use New Material Template</div>
                                 <div class="w-4/6 m-auto ">
-                                    <Checkbox :checked="isChecked" @update:checked="updateChecked" label=""
+                                    <Checkbox :checked="isChecked" :dropdown="true" @update:checked="updateChecked" label=""
                                         v-model="isChecked" class="" />
                                 </div>
                             </div>
@@ -286,7 +286,7 @@
                         <Accordion :open="true" header="Materials">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">                                         
-                                        <Checkbox :nexted=true :data="MaterialTreeListData"
+                                        <Checkbox :nexted=true :dropdown="true" valueField="id" showField="name"  :data="MaterialTreeListData"
                                             @checked-items="handleCheckedItems" /> 
                                     <!-- <div v-else>sdfsdf</div> -->
                                 </div>
@@ -420,7 +420,7 @@ const handleFiles = (data) => {
     const media_titles = data.map(item => item.title);
     mediaName.value = media_titles.join(', ');
     const media_ids = data.map(item => item.id);
-    form.value.featured_image = media_ids;
+    form.value.featured_image = media_ids[0];
     console.log('in form ', selectedFiles.value)
 }
 
@@ -465,6 +465,10 @@ const selected = ref("");
 const handleOptionSelected = (option) => {
     selected.value = option;
 };
+
+const updateChecked =(data)=>{
+ console.log('updated checkbox value',data)
+}
 
 const selectedOption = ref(null);
 

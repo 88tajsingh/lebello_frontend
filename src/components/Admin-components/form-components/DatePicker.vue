@@ -1,19 +1,22 @@
 <template>
     <div>
-      <label :for="id" class="block text-sm font-medium text-gray-700">{{ label }}</label>
+      <InputLabel :for="id" >{{ label }}</InputLabel>
       <DateTimePicker
         v-model="internalValue"
         :format="format"
         :use12-hour="use12Hour"
         :id="id"
-        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        class="mt-1 block w-full  "
       />
     </div>
   </template>
   
   <script setup>
   import { ref, watch } from 'vue';
+  import InputLabel from './InputLabel.vue';
   import DateTimePicker from '@vuepic/vue-datepicker';
+  import dayjs from 'dayjs';
+
   import '@vuepic/vue-datepicker/dist/main.css'
   
   const props = defineProps({
@@ -27,7 +30,7 @@
     },
     format: {
       type: String,
-      default: 'YYYY-MM-DD HH:mm:ss',
+      default: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
     },
     use12Hour: {
       type: Boolean,
@@ -36,6 +39,10 @@
     id: {
       type: String,
       default: 'datetime-picker',
+    },
+    dayjsFormat: {
+      type: String,
+      default: 'YYYY-MM-DD HH:mm:ss',
     },
   });
   
@@ -47,12 +54,9 @@
     emits('update:modelValue', newValue);
   });
   
-  watch(
-    () => props.modelValue,
-    (newValue) => {
-      internalValue.value = newValue;
-    }
-  );
+  watch(internalValue, (newValue) => {
+  emits('update:modelValue', newValue);
+});
   </script>
   
   <style scoped>

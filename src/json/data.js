@@ -2,6 +2,14 @@ export const trueFalse = [
   { name: 'No', value: 0 },
   { name: 'Yes', value: 1 }
 ]
+export const withBgWithoutBg = [
+  { label: 'Without BG', value: 0 },
+  { label: 'BG Color', value: 1 }
+]
+export const oldNewContract = [
+  { label:'Old Contract Design', value:'Old Contract Design' },
+  { label:'New Contract Design', value:'New Contract Design' }
+]
 
 export const colors = [
     { name: 'Beige', value: 'Beige' },
@@ -196,3 +204,11 @@ export const pagesDummy = [
   status:'sdsa',
 },
 ]
+
+export const  PublishOptions = [
+  { value: 'Public', label: 'Public' },
+  { value: 'Private', label: 'Private' },
+  { value: 'Password protected', label: 'Password protected' }
+]
+
+export const capsNOCaps=[{label:'Caps',value:'Caps'},{label:'No Caps',value:'No Caps'}]

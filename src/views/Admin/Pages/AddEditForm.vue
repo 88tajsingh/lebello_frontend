@@ -14,7 +14,6 @@
           <TextInput type="text" class="block mr-2 h-[40px] w-full" v-model="form.page_slug"
             :errMessage="errors.page_slug" />
         </div>
-
         <div class="flex flex-col">
           <input-label for="seo_title" value="SEO Title" />
           <TextInput type="text" class="block mr-2 h-[40px] w-full" :class="{ 'border-red-500': errors.seo_title }"
@@ -37,8 +36,8 @@
           <input-label for="slides" value="Slider " />
           <div class="text-gray-4 text-[13px]">Minimum Size 1600 x 700px</div>
           <div class=" flex flex-wrap">
-            <div class="relative p-1" v-for="(slide, index) in slider" :key="`slide-${index}`">
-              <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]" src="../../../assets/profilepic.png">
+            <div class="relative p-1" v-for="(slide, index) in SliderSelects" :key="`slide-${index}`">
+              <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]" :src="$filePath(slide.file_url)">
               <div class=" absolute top-2 right-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="size-6">
@@ -48,7 +47,7 @@
               </div>
             </div>
           </div>
-          <button @click="()=> IsOpen=true" type="button"
+          <button @click="()=> isOpenSlider=true" type="button"
             class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
             Gallery
           </button>
@@ -79,69 +78,63 @@
             :isTextarea="true" :rows="3" v-model="form.page_tagline" :errMessage="errors.page_tagline" />
           <p class="text-sm text-[#646970] text-[11.5px]">Type the page tagline here.</p>
         </div>
-        <div class="col-span-1 w-full">
-          <input-label for="page_tagline" value="Page Tagline" />
-          <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
-            mediaName }}</div>
-          <div class=" mt-3 flex overflow-x-auto">
-            <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
-              class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
-          </div>
-        </div>
+       
         <div class="col-span-1 w-full">
           <input-label for="template" value="Template" />
           <TextInput type="text" class="block mr-2 w-full" v-model="form.template" />
-        </div>
-        <div class="col-span-1 w-full">
-          <input-label for="comments" value="Comments" />
-          <TextInput type="text" class="block mr-2 w-full" v-model="form.comments" />
         </div>
         <div class="col-span-1 w-full">
           <input-label for="parent_page" value="Parent Page" />
           <TextInput type="text" class="block mr-2 w-full" v-model="form.parent_page" />
         </div>
         <div class="col-span-1 w-full">
+          <input-label for="comments" value="Comments" />
+          <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+            label="Options" v-model="form.comments" />
+        </div>
+     
+        <div class="col-span-1 w-full">
           <input-label for="page_order" value="Page Order" />
           <TextInput type="text" class="block mr-2 w-full" v-model="form.page_order" />
         </div>
         <div class="col-span-1 w-full">
-          <input-label for="parentOrder" value="Visibility" />
-          <TextInput type="text" class="block mr-2 w-full" v-model="form.visibility" />
+      <DatePicker
+        v-model="form.publish"
+        label="Publish Date"
+        format="yyyy-mm-dd hh:mm:ss"
+        dayjsFormat='YYYY-MM-DD HH:mm:ss'
+        :use12-hour="false"
+      />
+      <div class="mt-2">
+        <input-label for="page_tagline" value="Featured Image" />
+          <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
+            featurImage.mediaName }}</div>
+          <div class=" mt-3 flex overflow-x-auto">
+            <img :src="$filePath(form.feature_image_url)"
+              class="inline-block w-auto h-34 mr-4" >
+          </div>
+      </div>
         </div>
-        
+       
         <div class="col-span-1 w-full">
           <input-label for="parentOrder" value="Visibility" />
          <div class="flex gap-2">
            <RadioButton 
-           v-for="option in options" 
+           v-for="option in PublishOptions" 
            :key="option.value" 
         name="Visibility" 
       :value="option.value" 
       :label="option.label" 
-      :modelValue="selectedOption"
-      
-      @update:modelValue="selectedOption = $event"
+      :modelValue="form.visibility"
+      @update:modelValue="form.visibility = $event"
       />
     </div>
-    <div v-if="selectedOption==='Password protected'" class="">
-      <TextInput type="password" class="block mr-2 w-full" v-model="form.visibility" placeholder="Password" />
-    </div>
-      <div class="mt-4">
-      Selected Option: {{ selectedOption }}
+    <div v-if="form.visibility==='Password protected'" class="">
+      <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd" placeholder="Password" />
     </div>
         </div>
-        <!-- <div class="flex justify-center items-center h-screen">
-    <div class="bg-white p-6 rounded shadow-md w-64">
-      <DatePicker
-        v-model="selectedDateTime"
-        label="Select Date and Time"
-        format="YYYY-MM-DD HH:mm:ss"
-        :use12-hour="false"
-      />
-
-      <p class="mt-2 text-sm text-gray-500">Selected Date and Time: {{ selectedDateTime }}</p>
-    </div>add 
-  </div> -->
+        <div class="col-span-1 w-full">
+        </div>
         <button type="submit"
           class="flex col-span-2 mt-5 w-full mb-10 m-auto justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
           Submit
@@ -149,9 +142,13 @@
       </div>
     </form>
   </DefaultCard>
-  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-    <GetLibrary :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
+  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="isOpenSlider">
+    <GetLibrary :getFlag="true" :selected="SliderSelects" :singleFile="true" :closeModal="isSliderClose"
       :selectedFiles="handleLibrary" />
+  </popupModal>
+  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
+    <GetLibrary :getFlag="true" :selected="libraryImages.value.selectedImage" :singleFile="false" :closeModal="close"
+      :selectedFiles="handleFeatureFiles" />
   </popupModal>
 </template>
 <script setup>
@@ -165,6 +162,7 @@ import TinyMCE from '@/components/Admin-components/TinyMCE.vue';
 import PagesServices from '@/services/PagesServices';
 import router from '@/router';
 import store from '@/store';
+import { PublishOptions,trueFalse } from '@/json/data';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 const props = defineProps({
   id: {
@@ -172,47 +170,54 @@ const props = defineProps({
     default: null,
   }
 });
-const mediaName = ref('select Feature Media')
-// const props = defineProps(['id']);
+const featurImage = ref({
+  mediaName:'select Feature Media' ,
+  selectedImage :[] || from.feature_image ,
+})
+const libraryImages = ref({
+  mediaName:'select Feature Media' ,
+  selectedImage :[] || from.feature_image ,
+})
+const mediaName = ref('select Feature Media' )
 const data = JSON.stringify(store.getters);
 console.log('data in vuex: ' + data)
 const id = props.id
 const errors = ref({});
-const selectedFiles = ref([]);
+const featureSelects = ref([]);
+const SliderSelects = ref([]);
 const IsOpen = ref(false)
-const form = ref({ gallery: [1, 2, 3,] });
+const isOpenSlider = ref(false)
+const form = ref({ gallery: [] });
 const loading = ref(false)
 const slider = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-const selectedOption = ref('option1')
-const radioName = 'options'
 
-const options = [
-  { value: 'Public', label: 'Public' },
-  { value: 'Private', label: 'Private' },
-  { value: 'Password protected', label: 'Password protected' }
-]
+
 const close = () => {
   IsOpen.value = false;
 }
-
-const handleLibrary = (data) => {
+const isSliderClose = () => {
+  isOpenSlider.value = false;
+}
+const handleFeatureFiles = (data) => {
+   featureSelects.value= data;
   close();
-  selectedFiles.value = data
+   const object = handleFiles(data);
+   featurImage.value.mediaName = object.mediaName;
+   form.value.feature_image = object.media_ids
+}
+const handleLibrary = (data) => {
+  isSliderClose();
+  console.log(data)
+  libraryImages.value.selectedImage = data;
   const object = handleFiles(data)
-  mediaName.value= object.mediaName;
-
-  console.log("object",object)
-  // const media_titles = data.map(item => item.title);
-  // mediaName.value = media_titles.join(', ');
-  // const media_ids = data.map(item => item.id);
-  // form.value.featured_image = media_ids;
-  // console.log('in form ', selectedFiles.value)
+  libraryImages.value.mediaName= object.mediaName;
+  form.value.feature_image = object.media_ids
+ 
 }
 
 const validateForm = () => {
   let isValid = true;
   errors.value = {};
-
   if (!form.value.page_title) {
     errors.value.page_title = 'Page title is required';
     isValid = false;
