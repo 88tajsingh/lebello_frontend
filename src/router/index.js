@@ -168,8 +168,8 @@ const router = createRouter({
         },
         {
           path: '/media',
-          name: 'Media',
-          component:()=> import('@/views/Admin/Media-section/Index.vue') ,
+          name: 'Media-section',
+          component:()=> import('../views/Admin/Media-section/Index.vue') ,
           meta: { requiresAuth: true }
         },
         {
