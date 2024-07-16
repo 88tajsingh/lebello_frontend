@@ -147,7 +147,7 @@
       :selectedFiles="handleLibrary" />
   </popupModal>
   <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-    <GetLibrary :getFlag="true" :selected="libraryImages.value.selectedImage" :singleFile="false" :closeModal="close"
+    <GetLibrary :getFlag="true" :selected="selectedImage" :singleFile="false" :closeModal="close"
       :selectedFiles="handleFeatureFiles" />
   </popupModal>
 </template>
@@ -156,7 +156,7 @@ import { ref, onMounted } from 'vue';
 import { handleFiles } from '@/helper/functions';
 import DatePicker from  '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import GetLibrary from '@/views/Admin/Media-section/Index.vue'
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import TinyMCE from '@/components/Admin-components/TinyMCE.vue';
 import PagesServices from '@/services/PagesServices';

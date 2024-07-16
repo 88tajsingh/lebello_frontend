@@ -401,7 +401,7 @@
 <script setup>
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import GetLibrary from '@/views/Admin/Media-section/Index.vue'
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'

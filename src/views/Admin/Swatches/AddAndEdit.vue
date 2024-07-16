@@ -386,7 +386,7 @@
 </template>
 <script setup>
 
-import GetLibrary from '@/views/Admin/Media-section/Index.vue'
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import Accordion from "@/components/Admin-components/Accordion.vue";

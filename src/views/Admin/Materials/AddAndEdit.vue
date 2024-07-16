@@ -154,7 +154,7 @@
 </template>
 
 <script setup>
-import GetLibrary from '@/views/Admin/Media-section/Index.vue'
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 // import TextInput from '@/components/Admin-components/TextInput.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import MultiSelect from '@/components/Admin-components/form-components/MultiSelect.vue'
