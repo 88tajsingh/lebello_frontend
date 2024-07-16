@@ -66,12 +66,17 @@
                             </div>
                         </Accordion>
                     </div>
-                    <div class="mt-5 px-6">
-                        <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
-                            v-model="form.trade_mark_label" placeholder="" label="Trade Mark Label
-                 " :message="errors?.trade_mark_label" />
+                    <div class="mt-4">
+
+                        <Accordion :open="true" header="Trade Mark Label">
+                            <div class=" px-6">
+                                <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
+                                v-model="form.trade_mark_label" placeholder="Trade Mark Label" label="
+                                " :message="errors?.trade_mark_label" />
+                            </div>
+                        </Accordion>
                     </div>
-                    <div class="mt-5">
+                        <div class="mt-5">
                         <Accordion :open="true" header="Material Options">
                             <div class="my-5 px-6 flex h-auto items-center">
                                 <div class=" items-center text-gray-600 text-sm">
@@ -138,9 +143,8 @@
                     <div class="mt-5">
                         <Accordion open="false" header="Slug">
                             <div class="px-5 items-center text-gray-600 text-sm">
-
-                                <TextInput id=" " :rows=4 type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.slug" placeholder="Slug" label="Slug" :message="errors.slug" />
+                                <TextInput id="slug" :rows=4 type="text" class="block w-[180px] mr-2 h-[33px]"
+                                    v-model="form.slug" placeholder="Slug" label="" :message="errors.slug" />
                             </div>
                         </Accordion>
                     </div>
@@ -155,7 +159,7 @@
                                     Save Draft
                                 </Button>
                             </div>
-                            <div id="wraper status">
+                            <!-- <div id="wraper status">
                                 <div>
                                     <span class="text-sm flex items-center m-auto">
                                         <svg fill="#000000" height="15px" width="15px" version="1.1" id="Layer_1"
@@ -195,8 +199,8 @@
                                         Cancel
                                     </Button>
                                 </div>
-                            </div>
-                            <div id="wraper Visibility">
+                            </div> -->
+                            <!-- <div id="wraper Visibility">
                                 <div>
                                     <span class="text-sm flex items-center m-auto">
                                         <svg width="15px" height="15px" viewBox="0 0 16 16" version="1.1"
@@ -230,9 +234,9 @@
                                         class="ml-2 text-sm border-none underline">
                                         Cancel</Button>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div id="wraper Publish ">
+                            <!-- <div id="wraper Publish ">
                                 <div>
                                     <span class="text-sm flex items-center m-auto">
                                         <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none"
@@ -262,7 +266,30 @@
                                     <Button type="" @click="showHidePublish.Publish = !showHidePublish.Publish"
                                         class="ml-2 text-sm border-none underline">Cancel</Button>
                                 </div>
+                            </div> -->
+                           <div>
+                            <InputLabel for="status" value="Status" />
+                                <Select :options="statusData" showfield="name" class="w-full" valueField="value"
+                                    label="Select an option" v-model="form.status" />
                             </div>
+                            <div class="col-span-1 w-full">
+                                <input-label for="parentOrder" value="Visibility" />
+                                <div class="flex items-center  gap-2">
+                                    <RadioButton v-for="option in PublishOptions" :key="option.value" name="Visibility"
+                                        :value="option.value" :label="option.label" :modelValue="form.visibility"
+                                        @update:modelValue="form.visibility = $event" />
+                                </div>
+                                <div v-if="form.visibility === 'Password protected'" class="">
+                                    <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
+                                        placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="col-span-1 w-full">
+                                <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
+                                    dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
+                            </div>
+
+
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
@@ -274,10 +301,8 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Materials Template">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <div class="w-2/6 px-2 my-3">Use New Material Template</div>
-                                <div class="w-4/6 m-auto ">
-                                    <Checkbox :checked="isChecked" :dropdown="true" @update:checked="updateChecked" label=""
-                                        v-model="isChecked" class="" />
+                                <div class=" m-auto ">
+                                    <singleCheckBox id="FeaturedOption" label="Use New Material Template" v-model:modelValue="form.material_template"></singleCheckBox>
                                 </div>
                             </div>
                         </Accordion>
@@ -294,12 +319,12 @@
                         </Accordion>
                     </div>
 
-                    <div class="mt-3 ">
+                    <!-- <div class="mt-3 ">
                         <Accordion :open="true" header="Tab Posiotion Options">
                             <div class="mt-2 px-6 flex h-auto ">
                             </div>
                         </Accordion>
-                    </div>
+                    </div> -->
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Swatches Options Material">
                             <div class="my-5 px-6  h-auto ">
@@ -385,7 +410,7 @@
 
 </template>
 <script setup>
-
+import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
@@ -399,6 +424,7 @@ import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
 import { MaterialTreeList } from '@/helper/Apis';
 import router from '@/router';
+import { PublishOptions,trueFalse,statusData } from '@/json/data';
 
 const errors = ref({})
 const mediaName = ref('select Feature Media')
@@ -406,7 +432,7 @@ const selectedFiles = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
-const form = ref({});
+const form = ref({status:null});
 
 
 const emit = defineEmits(['handleApi']);
@@ -512,6 +538,9 @@ const handleAddSwatches = async (payload) => {
             .then(res => {
                 if (res && res.status === 200 && res.data.success === true) {
                     router.push('/swatches')
+                    loading.value = false;
+                }
+                if (res && res.status === 400 ) {
                     loading.value = false;
                 }
             })

@@ -22,6 +22,8 @@ import PopupModal from '@/components/Admin-components/Modals/PopupModal.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import DeleteModal from './components/Admin-components/Modals/DeleteModal.vue';
+import DatePicker from  '@/components/Admin-components/form-components/DatePicker.vue'
+import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import Toast from 'vue-toastification';
 import _ from 'lodash';
 import 'vue-toastification/dist/index.css';
@@ -57,9 +59,12 @@ app.component('Checkbox', Checkbox);
 app.component('DeleteSvg', DeleteSvg);
 app.component('TextInput', TextInput);
 app.component('PopupModal', PopupModal);
+app.component('DatePicker', DatePicker);
+app.component('PopupModal', PopupModal);
 app.component('PageHeader', PageHeader);
 app.config.globalProperties.$lodash = _;
 app.component('DeleteModal', DeleteModal);
+app.component('RadioButton', RadioButton);
 app.component('SingleCheckBox', SingleCheckBox);
 app.component('RouterLink', router.options.history.routerLink);
 app.mount('#app')

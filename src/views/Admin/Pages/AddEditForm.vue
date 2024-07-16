@@ -38,7 +38,7 @@
           <div class=" flex flex-wrap">
             <div class="relative p-1" v-for="(slide, index) in SliderSelects" :key="`slide-${index}`">
               <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]" :src="$filePath(slide.file_url)">
-              <div class=" absolute top-2 right-2">
+              <div @click="()=>handleRemoveImage(slide)" class=" absolute top-2 right-2">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="size-6">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -109,10 +109,10 @@
         <input-label for="page_tagline" value="Featured Image" />
           <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
             featurImage.mediaName }}</div>
-          <div class=" mt-3 flex overflow-x-auto">
+          <!-- <div class=" mt-3 flex overflow-x-auto">
             <img :src="$filePath(form.feature_image_url)"
               class="inline-block w-auto h-34 mr-4" >
-          </div>
+          </div> -->
       </div>
         </div>
        
@@ -143,11 +143,11 @@
     </form>
   </DefaultCard>
   <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="isOpenSlider">
-    <GetLibrary :getFlag="true" :selected="SliderSelects" :singleFile="true" :closeModal="isSliderClose"
+    <GetLibrary :getFlag="true" :selected="SliderSelects" :singleFile="false" :closeModal="isSliderClose"
       :selectedFiles="handleLibrary" />
   </popupModal>
   <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-    <GetLibrary :getFlag="true" :selected="selectedImage" :singleFile="false" :closeModal="close"
+    <GetLibrary :getFlag="true" :selected="SliderSelects" :singleFile="true" :closeModal="close"
       :selectedFiles="handleFeatureFiles" />
   </popupModal>
 </template>
@@ -187,7 +187,7 @@ const featureSelects = ref([]);
 const SliderSelects = ref([]);
 const IsOpen = ref(false)
 const isOpenSlider = ref(false)
-const form = ref({ gallery: [] });
+const form = ref({ gallery: [],password:'',});
 const loading = ref(false)
 const slider = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -198,20 +198,27 @@ const close = () => {
 const isSliderClose = () => {
   isOpenSlider.value = false;
 }
+const handleRemoveImage = (slide) => {
+    console.log("slide: " + slide.id)
+    const index = SliderSelects.value.findIndex(item => item.id === slide.id);
+        if (index !== -1) {
+          SliderSelects.value.splice(index, 1);
+          form.value.gallery.splice(index, 1);}
+}
 const handleFeatureFiles = (data) => {
    featureSelects.value= data;
   close();
    const object = handleFiles(data);
    featurImage.value.mediaName = object.mediaName;
-   form.value.feature_image = object.media_ids
+   form.value.feature_image = object.media_ids[0]
 }
 const handleLibrary = (data) => {
   isSliderClose();
   console.log(data)
-  libraryImages.value.selectedImage = data;
+  SliderSelects.value = data;
   const object = handleFiles(data)
   libraryImages.value.mediaName= object.mediaName;
-  form.value.feature_image = object.media_ids
+  form.value.gallery = object.media_ids
  
 }
 

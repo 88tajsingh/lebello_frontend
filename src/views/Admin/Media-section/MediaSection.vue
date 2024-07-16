@@ -40,13 +40,13 @@
                 <div class=" p-2">
                 <label class="" @click="() => getFlag == false ? mediaEdit(media) : ''">
                     <img v-if="isImage(media.file_url)" :src="filePath(media.file_url)" alt="abc" class="w-26 h-20" />
-                    <img v-else-if="isPdf(media.file_url)" class="w-20 h-20" src="../../../assets/Icons/pdf.svg"
+                    <img v-else-if="isPdf(media.file_url)" class="w-20 h-20" src="@/assets/Icons/pdf.svg"
                         alt="PDF Document" />
-                    <img v-else-if="isWord(media.file_url)" class="w-20 h-20" src="../../../assets/Icons/msWord.svg"
+                    <img v-else-if="isWord(media.file_url)" class="w-20 h-20" src="@/assets/Icons/msWord.svg"
                         alt="Word Document" />
-                    <img v-else-if="isExcel(media.file_url)" class="w-20 h-20" src="../../../assets/Icons/msExcel.svg"
-                        alt="Excel Document" />
-                    <img v-else-if="isVideo(media.file_url)" class="w-20 h-20" src="../../../assets/Icons/video.svg"
+                    <!-- <img v-else-if="isExcel(media.file_url)" class="w-20 h-20" src="@/assets/Icons/msExcel.svg"
+                        alt="Excel Document" /> -->
+                    <img v-else-if="isVideo(media.file_url)" class="w-20 h-20" src="@/assets/Icons/video.svg"
                         alt="Video File" />
                     <span v-else>Unknown file format.</span>
                     <span class="m-auto break-all text-[13px] text-wrap w-[20px]">{{ media.title }} </span>
@@ -82,7 +82,7 @@
             </div>
             </div>
         </div>
-        <div v-if="singleFile" class=" absolute bottom-0 right-4 border m-0  ">
+        <div v-if="btnName" class=" absolute bottom-0 right-4 border m-0  ">
             <Button class="px-2 py-1 mt-auto" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                 @click="() => selectedFiles([...selectedMedia])">
                 {{ btnName }}</Button>

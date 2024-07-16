@@ -1,6 +1,5 @@
 <template>
     <PageHeader> Taxonomy Order </PageHeader>
-    <!-- {{ MaterialTreeListData }} -->
     <Dreagable v-model:list="MaterialTreeListData" parentfield="name" childField="name" @update:list="handleListUpdate">
     </Dreagable>
     <div v-if="!MaterialTreeListData"> No data here </div>
@@ -8,8 +7,6 @@
         Save
     </Button>
     <Loader :isLoading="loading" :fullPage="true"/>
-
-    {{ sortedData }}
 </template>
 <script setup>
 import { ref,onMounted } from 'vue'

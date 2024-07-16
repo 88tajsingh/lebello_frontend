@@ -6,6 +6,10 @@ export const withBgWithoutBg = [
   { label: 'Without BG', value: 0 },
   { label: 'BG Color', value: 1 }
 ]
+export const statusData = [
+  { name: 'Draft', value:'draft' },
+  { name: 'Pending review', value: 'pending review' }
+]
 export const oldNewContract = [
   { label:'Old Contract Design', value:'Old Contract Design' },
   { label:'New Contract Design', value:'New Contract Design' }
