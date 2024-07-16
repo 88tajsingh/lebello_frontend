@@ -1,5 +1,5 @@
 <template>
-    {{ form }}
+  
     <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`">
     <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
