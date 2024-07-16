@@ -3,18 +3,13 @@
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
-                    <div>
-                        <TextInput 
-  type="text" 
-  class="block mr-2 h-[40px] w-full" 
-  label="Title" 
-  placeholder="Add title"
-  v-model="form.title" 
-  :errMessage="errors.title" 
-  :errors="errors"
-  :class="{ 'border-red': errors.title }"
-/>
+                    <Accordion :open="true" header="Title *">
+                    <div class="px-7">
+                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="" placeholder="Add title"
+                            v-model="form.title" :errMessage="errors.title" :errors="errors"
+                            :class="{ 'border-red': errors.title }" />
                     </div>
+                    </Accordion>
                     <div class="mt-5">
                         <Accordion :open="true" header="Description">
                             <div class="px-5     pt-2">
@@ -67,16 +62,15 @@
                         </Accordion>
                     </div>
                     <div class="mt-4">
-
                         <Accordion :open="true" header="Trade Mark Label">
                             <div class=" px-6">
                                 <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
-                                v-model="form.trade_mark_label" placeholder="Trade Mark Label" label="
+                                    v-model="form.trade_mark_label" placeholder="Trade Mark Label" label="
                                 " :message="errors?.trade_mark_label" />
                             </div>
                         </Accordion>
                     </div>
-                        <div class="mt-5">
+                    <div class="mt-5">
                         <Accordion :open="true" header="Material Options">
                             <div class="my-5 px-6 flex h-auto items-center">
                                 <div class=" items-center text-gray-600 text-sm">
@@ -154,7 +148,9 @@
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
                             <div class="flex justify-between mb-2">
-                                <LinkBtn :buttonText="'Preview'" />
+                                <Button type="submit" class=" text-sm ml-auto px-2">
+                                    preview
+                                </Button>
                                 <Button type="submit" class=" text-sm ml-auto px-2">
                                     Save Draft
                                 </Button>
@@ -267,12 +263,13 @@
                                         class="ml-2 text-sm border-none underline">Cancel</Button>
                                 </div>
                             </div> -->
-                           <div>
-                            <InputLabel for="status" value="Status" />
+                            <div class="px-2">
+                            <div>
+                                <InputLabel for="status" value="Status" />
                                 <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                     label="Select an option" v-model="form.status" />
                             </div>
-                            <div class="col-span-1 w-full">
+                            <div class="col-span-1 w-full mt-2 ">
                                 <input-label for="parentOrder" value="Visibility" />
                                 <div class="flex items-center  gap-2">
                                     <RadioButton v-for="option in PublishOptions" :key="option.value" name="Visibility"
@@ -288,7 +285,7 @@
                                 <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
                                     dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
                             </div>
-
+                        </div>
 
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
@@ -302,7 +299,8 @@
                         <Accordion :open="true" header="Materials Template">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class=" m-auto ">
-                                    <singleCheckBox id="FeaturedOption" label="Use New Material Template" v-model:modelValue="form.material_template"></singleCheckBox>
+                                    <singleCheckBox id="FeaturedOption" label="Use New Material Template"
+                                        v-model:modelValue="form.material_template"></singleCheckBox>
                                 </div>
                             </div>
                         </Accordion>
@@ -310,9 +308,9 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Materials">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <div class="w-full">                                         
-                                        <Checkbox :nexted=true :dropdown="true" valueField="id" showField="name"  :data="MaterialTreeListData"
-                                            @checked-items="handleCheckedItems" /> 
+                                <div class="w-full">
+                                    <Checkbox :nexted=true :dropdown="true" valueField="id" showField="name"
+                                        :data="MaterialTreeListData" @checked-items="handleCheckedItems" />
                                     <!-- <div v-else>sdfsdf</div> -->
                                 </div>
                             </div>
@@ -349,7 +347,7 @@
                         </Accordion>
                     </div>
                     <!-- Teaser -->
-                    <div class="mt-5">
+                    <!-- <div class="mt-5">
                         <Accordion :open="true" header="Description">
                             <div class="mt-2 px-6 flex h-auto">
                                 <div class="w-2/6">Material teaser text</div>
@@ -389,14 +387,14 @@
                                             </span>
                                         </span>
                                     </Button>
-                                    <!-- <TinyMCE v-model="form.description" /> -->
+                                    <TinyMCE v-model="form.description" />
                                     <p class="text-sm text-gray-600 my-2"> The material term id. This is generated from
                                         material
                                         taxonomy. Please do not make any changes here. </p>
                                 </div>
                             </div>
                         </Accordion>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -424,7 +422,7 @@ import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
 import { MaterialTreeList } from '@/helper/Apis';
 import router from '@/router';
-import { PublishOptions,trueFalse,statusData } from '@/json/data';
+import { PublishOptions, trueFalse, statusData } from '@/json/data';
 
 const errors = ref({})
 const mediaName = ref('select Feature Media')
@@ -432,7 +430,7 @@ const selectedFiles = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
-const form = ref({status:null});
+const form = ref({ status: null });
 
 
 const emit = defineEmits(['handleApi']);
@@ -452,7 +450,7 @@ const handleFiles = (data) => {
 
 const handleSubmit = () => {
     if (validateForm()) {
-        if (props.id !== null) 
+        if (props.id !== null)
             handleEditSwatches({ ...form.value })
         else
             handleAddSwatches({ ...form.value })
@@ -492,8 +490,8 @@ const handleOptionSelected = (option) => {
     selected.value = option;
 };
 
-const updateChecked =(data)=>{
- console.log('updated checkbox value',data)
+const updateChecked = (data) => {
+    console.log('updated checkbox value', data)
 }
 
 const selectedOption = ref(null);
@@ -540,7 +538,7 @@ const handleAddSwatches = async (payload) => {
                     router.push('/swatches')
                     loading.value = false;
                 }
-                if (res && res.status === 400 ) {
+                if (res && res.status === 400) {
                     loading.value = false;
                 }
             })

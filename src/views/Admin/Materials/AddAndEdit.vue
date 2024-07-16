@@ -1,5 +1,4 @@
 <template>
-    {{ form }}
     <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`">
     <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -79,13 +78,13 @@
                     :class="{ 'border-red-500': errors.group_name }" placeholder="" v-model="form.group_name"
                     :errMessage="errors.group_name" @update:model="clearError(errors, 'group_name')" />
             </div>
-            <div class="flex flex-col ">
+            <div class="flex flex-col mt-1">
                 <InputLabel for="Label Background Color" value="Label Background Color" />
                 <div class="flex gap-2">
                     <TextInput type="color" class="block h-[40px] min-w-[200px] px-2 rounded-lg"
                         :class="{ 'border-red': errors.label_background_color }" placeholder=""
                         v-model="form.label_background_color" :errMessage="errors.label_background_color" />
-                    <TextInput type="text" class="block mr-2 h-[40px] min-w-[220px]"
+                    <TextInput type="text" class="block mr-2 h-[40px] min-w-[10px]"
                         :class="{ 'border-red': errors.label_background_color }" placeholder=""
                         v-model="form.label_background_color" />
                 </div>
@@ -133,7 +132,7 @@
                     The description is not prominent by default; however, some themes may show it.
                 </p>
             </div>
-            <div class="flex flex-col w-full">
+            <div v-if="selectedFiles.length > 0" class="flex flex-col w-full">
                 <div class=" mt-3 flex overflow-x-auto">
                     <img v-if="selectedFiles" v-for="file in selectedFiles" :key="file" :src="$filePath(file?.file_url || 'text')"
                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">

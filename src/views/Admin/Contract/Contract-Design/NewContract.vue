@@ -18,11 +18,11 @@
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
-            <div v-if="isRowHovered(data.value)">overed</div>
+            <!-- <div v-if="isRowHovered(data.value)">overed</div> -->
           </div>
         </template>
         <template #image="data">
-          <img :src="data.value.image" alt="Material Image" style="max-width: 50px; max-height: 50px" />
+          <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
         </template>
         <template #actions="data">
           <div class="flex gap-3">

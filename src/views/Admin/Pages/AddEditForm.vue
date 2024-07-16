@@ -1,11 +1,10 @@
 <template>
-  {{ form }}
   <DefaultCard :cardTitle="id ? `Edit Pages` : `Add Pages`">
     <form @submit.prevent="handleSubmit">
       <div class="p-6.5 grid grid-cols-2 gap-2">
 
         <div class="flex flex-col">
-          <input-label for="page_title" value="Page Title" />
+          <input-label for="page_title " value="Page Title *" />
           <TextInput type="text" class="block mr-2 h-[40px] w-full" v-model="form.page_title"
             :errMessage="errors.page_title" />
         </div>
