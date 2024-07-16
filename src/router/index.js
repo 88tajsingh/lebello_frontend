@@ -169,7 +169,7 @@ const router = createRouter({
         {
           path: '/media',
           name: 'Media-section',
-          component:()=> import('../views/Admin/Media-section/Index.vue') ,
+          component:()=> import('../views/Admin/Media-section/MediaSection.vue') ,
           meta: { requiresAuth: true }
         },
         {
