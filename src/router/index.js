@@ -167,12 +167,12 @@ const router = createRouter({
           props: true,
           meta: { requiresAuth: true }
         },
-        {
-          path: '/media',
-          name: 'Media',
-          component: Media,
-          meta: { requiresAuth: true }
-        },
+        // {
+        //   path: '/media',
+        //   name: 'Media',
+        //   component: Media,
+        //   meta: { requiresAuth: true }
+        // },
         {
           path: '/Contract-design',
           name: 'Contract',
