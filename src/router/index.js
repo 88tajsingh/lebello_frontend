@@ -176,19 +176,19 @@ const router = createRouter({
         {
           path: '/Contract-design',
           name: 'Contract',
-          component:()=> import('../views/Admin/Contract-design/NewContract.vue'),
+          component:()=> import('../views/Admin/Contract/Contract-Design/NewContract.vue'),
           meta: { requiresAuth: true }
         },
         {
           path: '/Contract-add',
           name: 'Contract-add',
-          component:()=> import('../views/Admin/Contract-design/AddEditContract.vue'),
+          component:()=> import('../views/Admin/Contract/Contract-Design/AddEditContract.vue'),
           meta: { requiresAuth: true }
         },
         {
           path: '/Contract-edit/:id',
           name: 'Contract-edit',
-          component:()=> import('../views/Admin/Contract-design/AddEditContract.vue'),
+          component:()=> import('../views/Admin/Contract/Contract-Design/AddEditContract.vue'),
           meta: { requiresAuth: true },
           props:true,
         },

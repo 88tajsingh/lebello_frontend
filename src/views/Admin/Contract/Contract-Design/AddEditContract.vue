@@ -333,10 +333,10 @@
                                     <div class="">
                                         <RadioButton v-for="option in withBgWithoutBg" :key="option.value"
                                             name="Visibility" :value="option.value" :label="option.label"
-                                            :modelValue="withBgWithoutBgValue"
-                                            @update:modelValue="withBgWithoutBgValue = $event" />
+                                            :modelValue="iswithBg"
+                                            @update:modelValue="iswithBg = $event" />
                                     </div>
-                                    <div v-if="form.withBgWithoutBg" class="">
+                                    <div v-if="iswithBg" class="">
                                         <InputLabel for="Text Color" value="bg Color" />
                                         <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg"
                                             placeholder="" v-model="form.label_background_color"
@@ -420,7 +420,7 @@ const mediaName = ref('select Feature Media')
 const contractLogoName = ref('Select Logo')
 const contractLogoids = ref([])
 const selectedFiles = ref([])
-const withBgWithoutBgValue = ref(false)
+const iswithBg = ref(false)
 const contract_logo = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
