@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { isAuthenticated } from '@/helper/functions'
 import store from '@/store'
-import Media  from '../views/Admin/Media-section/Index.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -170,7 +169,7 @@ const router = createRouter({
         {
           path: '/media',
           name: 'Media',
-          component: Media,
+          component:()=> import('../views/Admin/Media-section/Index.vue') ,
           meta: { requiresAuth: true }
         },
         {
