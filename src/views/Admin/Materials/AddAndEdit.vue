@@ -133,9 +133,9 @@
                     The description is not prominent by default; however, some themes may show it.
                 </p>
             </div>
-            <div v-if="selectedFiles.length > 0" class="flex flex-col w-full">
+            <div class="flex flex-col w-full">
                 <div class=" mt-3 flex overflow-x-auto">
-                    <img v-if="selectedFiles" v-for="file in selectedFiles" :key="file" :src="$filePath(file?.file_url || 'text')"
+                    <img v-if="form.image" :src="$filePath(form.image)"
                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                 </div>
             </div>
@@ -147,7 +147,7 @@
     </form>
 </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
+        <GetLibrary btnName="Select file" :getFlag="true" :selected="selectedFiles"  :singleFile="true" :closeModal="close"
             :selectedFiles="handleFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -174,7 +174,6 @@ const router = useRouter();
 // const props = defineProps(['id']);
 const IsOpen = ref(false)
 const MaterialTreeListData = ref([])
-const mediaName = ref('Select Media')
 const loading = ref(false)
 const props = defineProps({
     // material: {
@@ -206,7 +205,8 @@ const form = ref({
     single_color:null,
     show_new_badge_2021:null
 })
-const selectedFiles = ref([form.value.image])
+const mediaName = ref( 'Select Media' || form.image)
+const selectedFiles = ref(form.value.image)
 
 const errors = ref({})
 

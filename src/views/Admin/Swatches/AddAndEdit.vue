@@ -401,7 +401,7 @@
         </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
+        <GetLibrary  btnName="Select file" :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
             :selectedFiles="handleFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />

@@ -33,7 +33,6 @@ const handleGetSwatches = async () => {
         if (res.status === 200 && res.data.success === true) {
           if (res.data.data && res.data.data.length > 0) {
             list.value = res.data.data
-            showToast(' Sorting data sucessfully','success')
             loading.value = false;
           }
           if (res.status === 400 ) {
@@ -61,6 +60,7 @@ const handleSortSwatches = async () => {
           if (res.status === 200 && res.data.success === true) {
               loading.value = false;
               sortedData.value = [];
+              showToast(' Sorting data sucessfully','success')
          }
         })  
     } catch (e) {

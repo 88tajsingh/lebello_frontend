@@ -142,11 +142,11 @@
     </form>
   </DefaultCard>
   <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="isOpenSlider">
-    <GetLibrary :getFlag="true" :selected="SliderSelects" :singleFile="false" :closeModal="isSliderClose"
+    <GetLibrary btnName="Select files" :getFlag="true" :selected="SliderSelects" :singleFile="false" :closeModal="isSliderClose"
       :selectedFiles="handleLibrary" />
   </popupModal>
   <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-    <GetLibrary :getFlag="true" :selected="SliderSelects" :singleFile="true" :closeModal="close"
+    <GetLibrary btnName="Select file" :getFlag="true" :selected="SliderSelects" :singleFile="true" :closeModal="close"
       :selectedFiles="handleFeatureFiles" />
   </popupModal>
 </template>
