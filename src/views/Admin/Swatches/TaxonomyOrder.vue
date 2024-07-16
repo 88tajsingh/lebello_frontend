@@ -10,6 +10,7 @@
 </template>
 <script setup>
 import { ref,onMounted } from 'vue'
+import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
 import { MaterialTreeList } from '@/helper/Apis'
@@ -41,8 +42,13 @@ const handleSortMaterials = async () => {
     await  materialsServices.taxonomySorting({key:'contract_location',data:id})
         .then(res => {
           if (res.status === 200 && res.data.success === true) {
-            console.log('sorting responce: ' + res.data)
+            showToast(' Sorting data sucessfully','success')
             materialTree();
+              loading.value = false;
+         }
+         if (res.status === 400 ) {
+            showToast(' Somthing went wrong','error')
+              materialTree();
               loading.value = false;
          }
         })  

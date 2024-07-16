@@ -21,7 +21,7 @@
         </button>
       </div>
       <div v-show="item.expanded && item.children" class="ml-8">
-        <div v-for="child in item.children" :key="child.id" class="mt-2">
+        <div v-for="child in item.children" :key="child.id" class="mt-2 ">
           <label class="flex items-center">
             <input type="checkbox"
                    :checked="isChecked(child[valueField])"

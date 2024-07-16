@@ -1,4 +1,5 @@
 <template>
+    {{ form }}
     <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`">
     <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -162,7 +163,7 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
 import _ from 'lodash';
-import { clearError } from '@/helper/functions'
+import { clearError,showToast } from '@/helper/functions'
 import { onMounted, ref, watch, } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
 import { defineEmits } from 'vue';
@@ -194,6 +195,8 @@ const props = defineProps({
         type: String,
     }
 })
+
+
 const id = ref(props.id || null)
 const form = ref({
     parent_material: 0,
@@ -308,9 +311,14 @@ const handleAddMaterials = async (payload) => {
     await MaterialsServices.addMaterial(payload)
       .then(res => {
         if (res.status === 200 && res.data.success === true) {
-          router.push('/materials')
-          loading.value = false;
+            showToast('Add Material sucessfully','success')
+            router.push('/materials')
+            loading.value = false;
           // handleGetMaterials();   
+        }
+        if (res && res.status === 400 ) {
+            showToast('Somthing went wrong','error')
+            loading.value = false
         }
       })
   } catch (e) {
@@ -328,10 +336,14 @@ const handleEditMaterials = async (payload) => {
         console.log("res.status", res.status)
         // editCloseModal();
         if (res && res.status === 200) {
-            router.push({ name: 'materials'})
-            editCloseModal();
+            showToast('Edit Material sucessfully' ,'success')
             loading.value = false
+            router.push('/materials')
 
+        }
+        if (res && res.status === 400 ) {
+            showToast('Somthing went wrong','error')
+            loading.value = false
         }
       })
   } catch (e) {
@@ -347,6 +359,8 @@ onMounted(()=>{
         handleGetMaterialsById({id:props.id});
     }
     materialTree();
+
+
 })
 </script>
 

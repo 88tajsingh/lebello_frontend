@@ -12,6 +12,7 @@
 import { ref,onMounted } from "vue";
 import PageHeader  from '@/components/Admin-components/PageHeader.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
+import { showToast } from '@/helper/functions'
 import Dreagable from "@/components/Admin-components/Dreag-able.vue";
 import { MaterialTreeList } from '@/helper/Apis'
 import materialsServices from "@/services/MaterialsServices";
@@ -42,8 +43,13 @@ const handleSortMaterials = async () => {
     await  materialsServices.materialSorting({key:'material',data:id})
         .then(res => {
           if (res.status === 200 && res.data.success === true) {
-            console.log('sprting responce: ' + res.data)
-            materialTree();
+            showToast(' Sorting data sucessfully','success')
+              materialTree();
+              loading.value = false;
+         }
+          if (res.status === 400 ) {
+            showToast(' Somthing went wrong','error')
+              materialTree();
               loading.value = false;
          }
         })  

@@ -1,11 +1,11 @@
 <template>
   <PageHeader>Pages</PageHeader>
   <div class="flex content-between justify-between px-1 mb-2">
-    <div class="flex">
+    <!-- <div class="flex">
       <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="actionSelected" />
       <Button class="px-2 py-2 m-auto">Apply</Button>
-    </div>
-    <div class="flex">
+    </div> -->
+    <div class="flex ml-auto">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
       <Button @click="() => {router.push({ name:'pages-add'}) }" class="px-2 py-2">Add Pages</Button>
       
@@ -13,7 +13,7 @@
   </div>
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-    :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
+    :hasCheckbox="false":cloneHeaderInFooter="true"  :stickyHeader="false"
     :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
@@ -51,6 +51,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { showToast } from '@/helper/functions'
 import AddEditForm from './AddEditForm.vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PagesServices from '@/services/PagesServices';
@@ -64,8 +65,8 @@ const search = ref('');
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const cols = ref([
   { field: 'page_title', title: 'Page Title', slot: true },
-  { field: 'seo_title', title: 'Sco Title', filter: true },
-  { field: 'status', title: 'status' },
+  { field: 'seo_title', title: 'Seo Title', filter: true },
+  { field: 'status', title: 'Status' },
   { field: 'actions', title: 'Actions' }
 ]);
 const getLoading = ref(false);
@@ -127,43 +128,6 @@ const handleGetPages = async (payload) => {
   }
 };
 
-const handleAddPages = async (payload) => {
-  try {
-    loading.value = true;
-    const res = await PagesServices.addPages(payload);
-    if (res.status === 200 && res.data.success === true) {
-      loading.value = false;
-      handleGetPages();
-      modalIsOpen.value = false;
-    }
-    if (res.status_code === 400) {
-      loading.value = false;
-      console.error('Error while adding pages:', res.message);
-    }
-  } catch (e) {
-    loading.value = false;
-    console.error('Error while adding pages:', e);
-  }
-};
-
-const handleEditPages = async (payload) => {
-  try {
-    loading.value = true;
-    const res = await PagesServices.editPages(payload);
-    if (res.status === 200 && res.data.success === true) {
-      editIsOpen.value = false;
-      handleGetPages();
-    }
-    if (res.status_code === 400) {
-      loading.value = false;
-      console.error('Error while editing pages:', res.message);
-    }
-  } catch (e) {
-    loading.value = false;
-    console.error('Error while editing pages:', e);
-  }
-};
-
 const handleDeletePages = async () => {
   try {
     loading.value = true;
@@ -172,7 +136,12 @@ const handleDeletePages = async () => {
       loading.value = false;
       deleteModalIsOpen.value = false;
       editData.value = null;
+      showToast(' Delete Page sucessfully','success')
       handleGetPages();
+    }
+    if(res.status === 400){
+      loading.value = false;
+      showToast('Unable to delete','error')
     }
   } catch (e) {
     console.error('Error while deleting pages:', e);

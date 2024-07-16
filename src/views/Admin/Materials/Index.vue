@@ -85,6 +85,7 @@
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue'
 import { ref, onMounted } from 'vue'
+import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import DataTable from '@/components/Admin-components/DataTable.vue'
 import AddAndEdit from './AddAndEdit.vue'
@@ -184,12 +185,14 @@ const handleDeleteMaterials = async () => {
     await materialsServices.deleteMaterial(payload)
       .then(res => {
         if (res.status === 200) {
-          console.log(res.data.data)
-          rows.value = res.data.data
           loading.value = false;
+          showToast(' Material Deleted sucessfully','success')
           deleteModalIsOpen.value = false;
           handleGetMaterials();
-
+        }
+        if (res.status === 400) {
+          loading.value = false;
+          showToast(' Somthing went wrong','error')
         }
       })
   } catch (e) {

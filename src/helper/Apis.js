@@ -1,6 +1,10 @@
 import CommonServices from "@/services/CommonServices";
 import store from "@/store";
 import router from "@/router";
+import {useToast} from 'vue-toast-notification';
+
+const $toast = useToast();
+
 
 export const logout = async () => {
     try {
@@ -26,3 +30,4 @@ export const MaterialTreeList = async () => {
       console.log("MaterialTreeList err", err);
     }
   };
+  

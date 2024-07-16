@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white relative h-[80vh] p-2 ">
+    <div class="bg-white relative pb-5 px-6">
         <div v-if="getFlag == false" class="pt-4">
             <PageHeader> Media Library </PageHeader>
         </div>
@@ -194,6 +194,7 @@
 <script setup>
 import { FolderIcon } from '@heroicons/vue/20/solid'
 import { filePath } from '@/helper/functions'
+import { showToast } from '@/helper/functions'
 import Breadcrumb from '@/components/Admin-components/Breadcrumb.vue'
 import FolderServices from '@/services/MediaAndFolderServices'
 import ImageUpload from '@/components/Admin-components/form-components/ImageUpload.vue'
@@ -210,7 +211,6 @@ const props = defineProps({
     },
     btnName: {
         type: String,
-        default: 'select file',
     },
     closeModal: {
         type: Function,
@@ -349,8 +349,6 @@ const getGoogleDocsViewerUrl = (url) => {
     return `https://docs.google.com/viewer?url=${encodeURIComponent(`${filePath(url)}`)}&embedded=true`;
 }
 
-
-
 // const handleGetFolders = async () => {
 //     try {
 //         loading.value = true;
@@ -387,10 +385,13 @@ const handleAddFolders = async () => {
         const res = await FolderServices.AddFolder(payload);
         if (res.status === 200 && res.data.success === true) {
             closeModal();
+            showToast(' Create folder sucessfully','success')
             const parent_id = { id: res.data.data.parent };
             await handleGetChildFolders(parent_id);
         } else if (res.status === 400) {
             errorMessage.value = res.message;
+            showToast('Somthing went wrong','error')
+
         }
     } catch (e) {
         console.error('Error while adding folder:', e);
@@ -410,6 +411,7 @@ const handleEditFolders = async () => {
         const res = await FolderServices.EditFolder(payload);
         if (res.status === 200 && res.data.success === true) {
             closeModal();
+            showToast(' Edit folder sucessfully','success')
             const parent_id = { id: SelectedFolder.value.parent };
             if (SelectedFolder.value.parent > 0) {
                 await handleGetChildFolders(parent_id);
@@ -418,6 +420,7 @@ const handleEditFolders = async () => {
             }
         } else if (res.status === 400) {
             errorMessage.value = res.message;
+            showToast(' Somthing went wrong','success')
         }
     } catch (e) {
         console.error('Error while editing folder:', e);
@@ -433,9 +436,12 @@ const handleDeleteFolders = async () => {
         const parent_id = { id: SelectedFolder.value.parent };
         const res = await FolderServices.DeleteFolder(payload);
         if (res.status === 200 && res.data.success === true) {
-
+            showToast(' Delete folder sucessfully','success')
             await handleGetChildFolders(parent_id);
             closeModal();
+        }
+        if(res.status === 400){
+            showToast('Somthing went wrong','error')
         }
     } catch (e) {
         console.error('Error while deleting folder:', e);
@@ -452,7 +458,6 @@ const handleGetMediaChild = async (payload) => {
             .then((res) => {
                 if (res.status === 200 && res.data.success === true) {
                     mediaData.value = res.data.data
-
                 }
             })
             .catch((e) => {
@@ -489,6 +494,7 @@ const handleAddMedia = async () => {
             loading.value = false
             handleGetMediaChild({ id: SelectedFolder.value.id });
             closeMediaModal();
+            showToast(' Add file sucessfully','success')
             // if (SelectedFolder.value.parent > 0) {
             //     handleGetChildFolders({ id: res.data.data.parent })
             // } else {
@@ -498,6 +504,7 @@ const handleAddMedia = async () => {
         if (res.status_code === 400) {
             loading.value = false
             errorMessage.value = res.message
+            showToast('Somthing went wrong','success')
         }
     } catch (e) {
         loading.value = false
@@ -519,6 +526,7 @@ const handleEditMedia = async () => {
                 if (res.status === 200) {
                     loading.value = false
                     closeMediaModal();
+                    showToast(' Edit file sucessfully','success')
                     // if (SelectedFolder.value.parent > 0) {
                     //     handleGetChildFolders(parent_id)
                     // } else {
@@ -528,6 +536,7 @@ const handleEditMedia = async () => {
                 if (res.status_code === 400) {
                     loading.value = false
                     errorMessage.value = res.message
+                    showToast('Somthing went wrong','success')
                 }
             })
             .catch((e) => {
@@ -548,14 +557,18 @@ const handleDeleteMedia = async () => {
                 if (res.status === 200) {
                     handleGetMediaChild({ id: SelectedFolder.value.id });
                     loading.value = false
+                    showToast(' Delete file sucessfully','success')
                     // if (SelectedFolder.value.parent > 0) {
                     //     handleGetChildFolders(parent_id)
                     // } else {
                     //     handleGetFolders()
                     // }
                     // handleGetChildFolders({payload})
-
                     closeModal()
+                }
+                if(res.status ===400){
+                    loading.value = false
+                    showToast('Somthing went wrong','success')
                 }
             })
             .catch((e) => {

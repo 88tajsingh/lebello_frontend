@@ -9,6 +9,9 @@ import { createPinia } from 'pinia'
 import router from './router'
 import store from "./store";
 import HelpersPlugin from './helper/helperPlugin';
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
+
 import apiPlugin from './helper/apiPlugin';
 import EditSvg  from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg  from '@/components/Admin-components/svg/DeleteSvg.vue'
@@ -48,6 +51,7 @@ app.use(apiPlugin)
 app.use(HelpersPlugin)
 app.use(Toast, options);
 app.use(router)
+app.use(ToastPlugin)
 .use(store)
 .use(createPinia())
 app.use(VueApexCharts)

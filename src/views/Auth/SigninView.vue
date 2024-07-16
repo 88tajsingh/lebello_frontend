@@ -4,6 +4,7 @@ import TextInput from '@/components/Admin-components/form-components/TextInput.v
 import BreadcrumbDefault from '@/components/template-components/Breadcrumbs/BreadcrumbDefault.vue'
 import DefaultLayout from '@/Layouts/GuestLayout.vue'
 import { ref } from 'vue'
+import { showToast } from '@/helper/functions'
 import LoginService from '@/services/loginServices/LoginServices';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -52,6 +53,7 @@ const handleLogin = async () => {
           if (res.status === 200) {
             const token = res.data.data.access_token
             const user = res.data.data.user_data
+            showToast(' Login sucessfully','success')
             // console.log(res.data.data.access_token)
             store.dispatch('login', { token, user });
             localStorage.setItem('token', token);
@@ -60,8 +62,8 @@ const handleLogin = async () => {
          }
         if (res.status === 401) {
           processing.value = false;
-              
         }
+
         })
       }
     } catch (e) {

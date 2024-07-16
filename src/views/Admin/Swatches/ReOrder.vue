@@ -10,6 +10,7 @@
 </template>
 <script setup>
 import { ref,onMounted } from 'vue';
+import { showToast } from '@/helper/functions'
 import SwatchesServices from '@/services/SwatchesServices';
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
@@ -32,9 +33,14 @@ const handleGetSwatches = async () => {
         if (res.status === 200 && res.data.success === true) {
           if (res.data.data && res.data.data.length > 0) {
             list.value = res.data.data
-
+            showToast(' Sorting data sucessfully','success')
+            loading.value = false;
           }
-          loading.value = false;
+          if (res.status === 400 ) {
+            showToast(' Somthing went wrong','error')
+              materialTree();
+              loading.value = false;
+         }
         }
       }).catch((res) => {
         console.log("error", res)

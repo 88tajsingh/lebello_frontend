@@ -14,7 +14,7 @@
                         <Accordion :open="true" header="Description">
                             <div class="px-5     pt-2">
                                 <div class="mb-2">
-                                    <Button type="">
+                                    <!-- <Button type="">
                                         <span class="flex">
                                             <svg class="text-black hover:text-white" fill="text-textColor2" width="20px"
                                                 height="20px" viewBox="0 0 1920 1920"
@@ -33,8 +33,8 @@
                                                 Add Media
                                             </span>
                                         </span>
-                                    </Button>
-                                    <Button type="" class="ml-0">
+                                    </Button> -->
+                                    <!-- <Button type="" class="ml-0">
                                         <span class="flex">
                                             <svg width="20px" height="20px" viewBox="0 0 24 24" fill="#0a4b78"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +51,7 @@
                                                 Add Weather
                                             </span>
                                         </span>
-                                    </Button>
+                                    </Button> -->
                                 </div>
                                 <div class="px-2">
                                     <TinyMCE v-model="form.description" />
@@ -148,7 +148,7 @@
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
                             <div class="flex justify-between mb-2">
-                                <Button type="submit" class=" text-sm ml-auto px-2">
+                                <Button type="button" class=" text-sm ml-auto px-2">
                                     preview
                                 </Button>
                                 <Button type="submit" class=" text-sm ml-auto px-2">
@@ -422,6 +422,7 @@ import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
 import { MaterialTreeList } from '@/helper/Apis';
 import router from '@/router';
+import { showToast } from '@/helper/functions'
 import { PublishOptions, trueFalse, statusData } from '@/json/data';
 
 const errors = ref({})
@@ -535,11 +536,14 @@ const handleAddSwatches = async (payload) => {
         await SwatchesServices.addSwatches(payload)
             .then(res => {
                 if (res && res.status === 200 && res.data.success === true) {
+                    showToast(' Swatches Add sucessfully','success')
                     router.push('/swatches')
                     loading.value = false;
                 }
                 if (res && res.status === 400) {
                     loading.value = false;
+                    showToast(' Somthing went wrong','error')
+
                 }
             })
     } catch (e) {
@@ -555,7 +559,12 @@ const handleEditSwatches = async (payload) => {
             .then(res => {
                 if (res && res.status === 200 && res.data.success === true) {
                     loading.value = false;
+                    showToast(' Swatches edit sucessfully','success')
                     router.push('/swatches')
+                }
+                if (res && res.status === 400) {
+                    loading.value = false;
+                    showToast(' Somthing went wrong','error')
                 }
             })
     } catch (e) {

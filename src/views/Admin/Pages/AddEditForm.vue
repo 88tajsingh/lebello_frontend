@@ -161,6 +161,7 @@ import TinyMCE from '@/components/Admin-components/TinyMCE.vue';
 import PagesServices from '@/services/PagesServices';
 import router from '@/router';
 import store from '@/store';
+import { showToast } from '@/helper/functions'
 import { PublishOptions,trueFalse } from '@/json/data';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 const props = defineProps({
@@ -264,10 +265,12 @@ const handleAddPages = async (payload) => {
     const res = await PagesServices.addPages(payload);
     if (res.status === 200 && res.data.success === true) {
       loading.value = false;
+      showToast(' Add Page sucessfully','success')
       router.push('/pages')
     }
     if (res.status_code === 400) {
       loading.value = false;
+      showToast('Somthing went wrong','error')
       console.error('Error while adding pages:', res.message);
     }
   } catch (e) {
@@ -281,10 +284,13 @@ const handleEditPages = async (payload) => {
     const res = await PagesServices.editPages(payload);
     if (res.status === 200 && res.data.success === true) {
       loading.value = false;
+      showToast(' Edit Page sucessfully','success')
       router.push('/pages')
     }
     if (res.status_code === 400) {
       loading.value = false;
+      showToast('Somthing went wrong','error')
+
       console.error('Error while editing pages:', res.message);
     }
   } catch (e) {

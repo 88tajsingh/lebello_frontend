@@ -1,3 +1,6 @@
+
+import {useToast} from 'vue-toast-notification';
+const $toast = useToast();
 // Authenticated user check
 export function isAuthenticated(token) {
   // return true;
@@ -22,7 +25,10 @@ export const isChecked = (variable,id) => {
 };
 
 export const filePath = (fileUrl) =>{
+  if(fileUrl)
    return `${import.meta.env.VITE_FILES_PATH}${fileUrl}`
+  else
+  return import.meta.env.VITE_DEFAULT_IMAGE
 }
 
 // files id make array
@@ -54,3 +60,13 @@ export const handleFiles = (data) => {
   return {mediaName , media_ids}
   
 }
+
+
+export const showToast = (message , type) => {
+  $toast.open({
+    message: message,
+    type: type,
+    position: 'top-right',
+    duration: 3000,
+  });
+};

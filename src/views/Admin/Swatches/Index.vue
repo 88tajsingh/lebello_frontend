@@ -50,6 +50,7 @@
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue';
 import { SwatchesBulkOption } from '@/json/data.js'
 import { MaterialTreeList } from '@/helper/Apis';
+import { showToast } from '@/helper/functions'
 import SwatchesServices from '@/services/SwatchesServices';
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
@@ -137,10 +138,15 @@ const handleDeleteSwatches = async () => {
       .then(res => {
         if (res && res.status === 200 && res.data.success === true) {
           modalflag.value.delete = false;
+          showToast(' Swatches delete sucessfully','success')
           handleGetSwatches();
           loading.value = false;
-
         }
+        if (res && res.status === 400) {
+                    loading.value = false;
+                    showToast(' Somthing went wrong','error')
+
+                }
       })
   } catch (e) {
     loading.value = false;
@@ -159,9 +165,15 @@ const handleBulkActions = async () => {
           if (res && res.status === 200 && res.data.success === true) {
             rows.value = res.data.data
             modalflag.value.delete = false;
+            showToast(' Swatches bulk delete sucessfully','success')
             handleGetSwatches();
             loading.value = false;
           }
+          if (res && res.status === 400) {
+                    loading.value = false;
+                    showToast(' Somthing went wrong','error')
+
+                }
         })
     } catch (e) {
       loading.value = false;
