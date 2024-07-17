@@ -199,7 +199,7 @@
                                             @update:modelValue="form.visibility = $event" />
                                     </div>
                                     <div v-if="form.visibility === 'Password protected'" class="">
-                                        <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
+                                        <TextInput type="password" class="block mr-2 w-full" v-model="form.password"
                                             placeholder="Password" />
                                     </div>
                                 </div>
@@ -511,7 +511,7 @@ const handleEditContract = async (payload) => {
             .then(res => {
                 if (res && res.status === 200 && res.data.success === true) {
                     loading.value = false;
-                    router.push('/swatches')
+                    router.push('/Contract-Design')
                 }
             })
     } catch (e) {
