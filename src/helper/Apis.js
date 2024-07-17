@@ -1,10 +1,8 @@
 import CommonServices from "@/services/CommonServices";
+import MaterialsServices from "@/services/MaterialsServices";
+import ContractServices from "@/services/ContractServices";
 import store from "@/store";
 import router from "@/router";
-import {useToast} from 'vue-toast-notification';
-
-const $toast = useToast();
-
 
 export const logout = async () => {
     try {
@@ -21,7 +19,29 @@ export const logout = async () => {
 
 export const MaterialTreeList = async () => {
     try {
-      const res = await CommonServices.MaterialTreeList();
+      const res = await MaterialsServices.MaterialTreeList();
+      if (res.status === 200) {
+        console.log('MaterialTreeList data ',res.data.data)
+        return  res.data.data;
+      } 
+    } catch (err) {
+      console.log("MaterialTreeList err", err);
+    }
+  };
+export const contractTypeTreeList = async () => {
+    try {
+      const res = await ContractServices.getAllContractType();
+      if (res.status === 200) {
+        console.log('MaterialTreeList data ',res.data.data)
+        return  res.data.data;
+      } 
+    } catch (err) {
+      console.log("MaterialTreeList err", err);
+    }
+  };
+export const contractLoctionTreeList = async () => {
+    try {
+      const res = await ContractServices.getAllContractLocation();
       if (res.status === 200) {
         console.log('MaterialTreeList data ',res.data.data)
         return  res.data.data;

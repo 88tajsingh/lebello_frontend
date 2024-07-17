@@ -173,19 +173,19 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/Contract-design',
-          name: 'Contract',
-          component:()=> import('../views/Admin/Contract/Contract-Design/NewContract.vue'),
+          path: '/Contract-Design',
+          name: 'Contract-design',
+          component:()=> import('../views/Admin/Contract/Contract-Design/Index.vue'),
           meta: { requiresAuth: true }
         },
         {
-          path: '/Contract-add',
+          path: '/contract-add',
           name: 'Contract-add',
           component:()=> import('../views/Admin/Contract/Contract-Design/AddEditContract.vue'),
           meta: { requiresAuth: true }
         },
         {
-          path: '/Contract-edit/:id',
+          path: '/contract-edit/:id',
           name: 'Contract-edit',
           component:()=> import('../views/Admin/Contract/Contract-Design/AddEditContract.vue'),
           meta: { requiresAuth: true },
@@ -193,7 +193,7 @@ const router = createRouter({
         },
         {
           path: '/contract-type',
-          name: 'Contract',
+          name: 'Contract-type',
           component:()=> import('../views/Admin/Contract/Contract-type/Index.vue'),
           meta: { requiresAuth: true }
         },
@@ -204,9 +204,35 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/Contract-type-edit/:id',
+          path: '/contract-type-edit/:id',
           name: 'Contract-type-edit',
           component:()=> import('../views/Admin/Contract/Contract-type/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+        {
+          path: '/contract-location',
+          name: 'Contract-location',
+          component:()=> import('../views/Admin/Contract/contract-location/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/contract-loaction-add',
+          name: 'Contract-location-add',
+          component:()=> import('../views/Admin/Contract/contract-location/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/contract-location-edit/:id',
+          name: 'Contract-location-edit',
+          component:()=> import('../views/Admin/Contract/contract-location/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+        {
+          path: '/contract-taxonomy-order',
+          name: 'Contract-taxonomy-order',
+          component:()=> import('../views/Admin/Contract/TaxonomyOrder.vue'),
           meta: { requiresAuth: true },
           props:true,
         },

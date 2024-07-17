@@ -54,6 +54,8 @@ app.use(router)
 app.use(ToastPlugin)
 .use(store)
 .use(createPinia())
+.component('tabs', Tabs)
+.component('tab', Tab)
 app.use(VueApexCharts)
 app.component('Loader', Loader);
 app.component('Button', Button);

@@ -82,7 +82,7 @@
             </div>
             </div>
         </div>
-        <div v-if="btnName" class=" absolute bottom-0 right-4 border m-0  ">
+        <div v-if="btnName " class=" absolute bottom-0 right-4 border m-0  ">
             <Button class="px-2 py-1 mt-auto" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                 @click="() => selectedFiles([...selectedMedia])">
                 {{ btnName }}</Button>

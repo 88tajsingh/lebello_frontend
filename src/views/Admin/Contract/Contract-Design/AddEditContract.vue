@@ -1,4 +1,5 @@
 <template>
+
     <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
@@ -11,47 +12,7 @@
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Description">
-                            <div class="px-5     pt-2">
-                                <div class="mb-2">
-                                    <Button type="">
-                                        <span class="flex">
-                                            <svg class="text-black hover:text-white" fill="text-textColor2" width="20px"
-                                                height="20px" viewBox="0 0 1920 1920"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                </g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M101.002 1230.637V377.955c557.71-147.638 1076.312-35.47 1214.45 0v395.924l101.053-30.316V302.165l-35.671-11.014c-26.274-8.287-651.588-197.154-1349.154 1.313L-.05 305.197v1001.23l35.671 10.913c17.28 5.457 295.781 89.533 682.206 89.533 122.173 0 255.866-10.004 394.712-31.933v-101.255c-476.362 77.811-890.476-12.025-1011.537-43.048M1919.91 789.31v693.524c-.101 103.074-82.257 186.846-183.31 186.846-91.856 0-167.343-69.524-180.58-159.46-1.415-9.095-2.729-18.19-2.729-27.689 0-103.074 82.156-187.048 183.31-187.048 16.673 0 32.539 2.93 47.899 7.275 12.025 3.234 23.545 7.882 34.357 13.541V924.62l-39.814 11.824-362.577 107.317-27.89 8.186v579.94c0 2.83-.708 5.458-.81 8.186-4.243 99.234-84.176 178.964-182.601 178.964-101.154 0-183.31-83.975-183.31-187.15 0-68.513 36.682-128.033 90.645-160.572 27.385-16.471 58.711-26.577 92.665-26.577 29.81 0 57.499 7.983 82.358 20.817V976.46l27.89-8.185 101.053-29.911 360.96-106.813 142.484-42.24ZM527.515 480.635l560.842 329.835-560.842 329.735v-659.57Zm101.053 176.64v306.29L888.98 810.47 628.568 657.275ZM1736.6 1568.628c-38.097 0-68.817-27.689-78.114-64.674-1.82-6.973-4.143-13.743-4.143-21.423 0-47.394 36.884-85.996 82.257-85.996 18.896 0 35.671 7.781 49.515 19.1 19.504 15.763 32.741 39.309 32.741 66.896 0 47.495-36.884 86.097-82.256 86.097Zm-531.436 149.356c-45.373 0-82.257-38.603-82.257-86.097 0-47.495 36.884-86.097 82.257-86.097 45.372 0 82.358 38.602 82.358 86.097 0 47.494-36.986 86.097-82.358 86.097Z"
-                                                        fill-rule="evenodd"></path>
-                                                </g>
-                                            </svg>
-                                            <span class="ml-1">
-                                                Add Media
-                                            </span>
-                                        </span>
-                                    </Button>
-                                    <Button type="" class="ml-0">
-                                        <span class="flex">
-                                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="#0a4b78"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                </g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M16.2857 20C19.4416 20 22 17.4717 22 14.3529C22 11.8811 20.393 9.78024 18.1551 9.01498C17.8371 6.19371 15.4159 4 12.4762 4C9.32028 4 6.7619 6.52827 6.7619 9.64706C6.7619 10.3369 6.88706 10.9978 7.11616 11.6089C6.8475 11.5567 6.56983 11.5294 6.28571 11.5294C3.91878 11.5294 2 13.4256 2 15.7647C2 18.1038 3.91878 20 6.28571 20H16.2857Z"
-                                                        fill="text-textColor2"></path>
-                                                </g>
-                                            </svg> <span class="ml-1">
-                                                Add Weather
-                                            </span>
-                                        </span>
-                                    </Button>
-                                </div>
+                            <div class="px-5 pt-2">
                                 <div class="px-2">
                                     <TinyMCE v-model="form.description" />
                                 </div>
@@ -117,13 +78,21 @@
                     <div class="mt-5">
                         <Accordion open="false" header="Contract Logo">
                             <div class=" px-6  h-auto ">
-                                <div class="py-2 min-h-10 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
-                                    contractLogoName }}</div>
+                                <div class="py-2 min-h-10 rounded-lg px-2 border border-stroke"
+                                    @click="() => IsOpen = true"> {{
+                                        contractLogoName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
                                     <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-5">
+                        <Accordion open="false" header="Featured Products ">
+                            <div class=" px-6  h-auto ">
+
                             </div>
                         </Accordion>
                     </div>
@@ -215,29 +184,30 @@
                                         Cancel</Button>
                                 </div>
                             </div> -->
-                            <div class="px-4">                            
-                            <div class="flex flex-col ">
-                                <InputLabel for="status" value="Status" />
-                                <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                                    label="Select an option" v-model="form.status" />
-                            </div>
-                            <div class="col-span-1 w-full">
-                                <input-label for="parentOrder" value="Visibility" />
-                                <div class="flex items-center  gap-2">
-                                    <RadioButton v-for="option in PublishOptions" :key="option.value" name="Visibility"
-                                        :value="option.value" :label="option.label" :modelValue="form.visibility"
-                                        @update:modelValue="form.visibility = $event" />
+                            <div class="px-4">
+                                <div class="flex flex-col ">
+                                    <InputLabel for="status" value="Status" />
+                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                        label="Select an option" v-model="form.status" />
                                 </div>
-                                <div v-if="form.visibility === 'Password protected'" class="">
-                                    <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
-                                        placeholder="Password" />
+                                <div class="col-span-1 w-full">
+                                    <input-label for="parentOrder" value="Visibility" />
+                                    <div class="flex items-center  gap-2">
+                                        <RadioButton v-for="option in PublishOptions" :key="option.value"
+                                            name="Visibility" :value="option.value" :label="option.label"
+                                            :modelValue="form.visibility"
+                                            @update:modelValue="form.visibility = $event" />
+                                    </div>
+                                    <div v-if="form.visibility === 'Password protected'" class="">
+                                        <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
+                                            placeholder="Password" />
+                                    </div>
+                                </div>
+                                <div class="col-span-1 w-full">
+                                    <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
+                                        dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
                                 </div>
                             </div>
-                            <div class="col-span-1 w-full">
-                                <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
-                                    dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
-                            </div>
-                        </div>
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
@@ -281,14 +251,16 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Type">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :data="MaterialTreeListData" @checked-items="handleContractType" />
+                                <Checkbox :nexted=true :dropdown="true" valueField="id" showField="contract_name" :checkedData='form.contract_type'
+                                    :data="contractType" @checked-items="handleContractType" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Location">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :data="MaterialTreeListData" @checked-items="handleContractLocation" />
+                                <Checkbox :nexted=true :checkedData='form.contract_location' :dropdown="true" valueField="id" showField="contract_location"
+                                    :data="contractLocation" @checked-items="handleContractLocation" />
                             </div>
                         </Accordion>
                     </div>
@@ -333,15 +305,13 @@
                                     <div class="">
                                         <RadioButton v-for="option in withBgWithoutBg" :key="option.value"
                                             name="Visibility" :value="option.value" :label="option.label"
-                                            :modelValue="iswithBg"
-                                            @update:modelValue="iswithBg = $event" />
+                                            :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
                                     <div v-if="iswithBg" class="">
                                         <InputLabel for="Text Color" value="bg Color" />
                                         <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg"
-                                            placeholder="" v-model="form.sub_heading_background"
-                                         />
-                                       
+                                            placeholder="" v-model="form.sub_heading_background" />
+
                                     </div>
 
                                 </div>
@@ -361,10 +331,8 @@
                                         :value="option.value" :label="option.label" :modelValue="form.contract_design"
                                         @update:modelValue="form.contract_design = $event" />
                                 </div>
-
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
                                     label="Transparent %" v-model="form.heading_transparent_percentage" />
-
                             </div>
                         </Accordion>
                     </div>
@@ -386,12 +354,20 @@
         </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
-            :selectedFiles="handleFiles" />
+        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
+            :closeModal="close" :selectedFiles="handleFiles" />
     </popupModal>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
-            :selectedFiles="handleFiles" />
+        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
+            :closeModal="close" :selectedFiles="handleFiles" />
+    </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
+            :closeModal="close" :selectedFiles="handleFiles" />
+    </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
+            :closeModal="close" :selectedFiles="handleFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 
@@ -408,6 +384,7 @@ import { ref, onMounted } from "vue";
 import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
+import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
 import { MaterialTreeList } from '@/helper/Apis';
 import router from '@/router';
 import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps } from '@/json/data';
@@ -417,7 +394,8 @@ const mediaName = ref('select Feature Media')
 const contractLogoName = ref('Select Logo')
 const selectedFiles = ref([])
 const iswithBg = ref(false)
-const MaterialTreeListData = ref([]);
+const contractType = ref([]);
+const contractLocation = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
 const form = ref({ status: '0', simple_fields: '0', contract_home_page_slide: false, });
@@ -429,12 +407,12 @@ const close = () => {
     IsOpen.value = false;
 }
 const handleFeatureFiles = (data) => {
-  close();
-   const object = handleFiles(data);
-   console.log(object)
-   featurImage.value.mediaName = object.mediaName;
-   form.value.feature_image = object.media_ids
-   console.log(object)
+    close();
+    const object = handleFiles(data);
+    console.log(object)
+    featurImage.value.mediaName = object.mediaName;
+    form.value.feature_image = object.media_ids
+    console.log(object)
 }
 
 const handleFiles = (data) => {
@@ -443,11 +421,16 @@ const handleFiles = (data) => {
     const media_titles = data.map(item => item.title);
     mediaName.value = media_titles.join(', ');
     const media_ids = data.map(item => item.id);
-    form.value.featured_image = media_ids;
+    form.value.featured_image = media_ids[0];
     console.log('in form ', selectedFiles.value)
 }
 
 const handleSubmit = () => {
+    form.value = {
+        ...form.value,
+        contract_home_page_slide: form.value.contract_home_page_slide ? 1 : 0,
+        featured_option: form.value.featured_option ? 1 : 0,
+    }
     if (validateForm()) {
         if (props.id !== null)
             handleEditContract({ ...form.value })
@@ -492,6 +475,11 @@ const handleGetContract = async (payload) => {
                 if (res.status === 200 && res.data.success === true) {
                     if (res.data.data && res.data.data.length > 0) {
                         form.value = res.data.data[0]
+                        form.value = {
+                            ...form.value,
+                            contract_home_page_slide: form.value.contract_home_page_slide ? true : false,
+                            featured_option: form.value.featured_option ? true : false,
+                        }
                     }
                 }
             }).catch((res) => {
@@ -532,6 +520,17 @@ const handleEditContract = async (payload) => {
     }
 }
 
+// contractLoctionTree sorting 
+const contractLoctionTree = async () => {
+    contractLocation.value = await contractLoctionTreeList()
+    loading.value = false;
+}
+// contractLoctionTree sorting 
+const contractTypeTree = async () => {
+    contractType.value = await contractTypeTreeList()
+    loading.value = false;
+}
+
 const materialTree = async () => {
     MaterialTreeListData.value = await MaterialTreeList()
     console.log("object", MaterialTreeListData)
@@ -541,7 +540,8 @@ onMounted(() => {
     if (id.value !== undefined && id.value !== null && id.value !== '') {
         handleGetContract({ id: id.value });
     }
-    materialTree();
+    contractLoctionTree();
+    contractTypeTree();
 }
 );
 </script>

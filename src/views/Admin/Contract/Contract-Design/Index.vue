@@ -52,9 +52,9 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import ContractServices from '@/services/ContractServices';
-  import { useRouter } from 'vue-router';
   import store from '@/store';
 
   

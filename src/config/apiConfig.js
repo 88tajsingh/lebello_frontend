@@ -56,6 +56,25 @@ const ApiConfig = {
     editNewContract:'/update-contract-design',
     deleteNewContract :'/delete-contract-design',
     bulkNewContract :'/bulk-delete-contract-design',
+
+     // Contract Type Tree List 
+     getContract :'/get-contract-type',
+     addContract :'/add-contract-type',
+     editContract :'/update-contract-type',
+     deleteContract :'/delete-contract-type',
+     getContractTreeList:'/get-contract-tree-type',
+     bulkDeleteMaterial:'/delete-bulk-contract-type',
+     contractTaxonomySort:'/add-taxanomy-order',
+
+     // Contract location Tree List 
+     getContractLocation :'/get-contract-location',
+     addContractLocation :'/add-contract-location',
+     editContractLocation :'/update-contract-location',
+     deleteContractLocation :'/delete-contract-location',
+     bulkDeleteLocation:'/bulk-delete-contract-location',
+     getContractLocationTreeList:'/get-contract-location-tree-list',
+     contractLocationTaxonomySort:'/add-taxanomy-order',
+
   };
   
   export default ApiConfig;

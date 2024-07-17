@@ -68,7 +68,7 @@ const menuGroups = ref([
         children: [
           {
             label: 'All Contracts',
-            route: '/Contract-design'
+            route: '/Contract-Design'
           },
           {
             label: 'Contract Type',
@@ -80,7 +80,7 @@ const menuGroups = ref([
           },
           {
             label: 'Taxonomy Order',
-            route: '/taxonomy-order'
+            route: '/contract-taxonomy-order'
           },
 
         ]

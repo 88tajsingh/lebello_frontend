@@ -13,8 +13,8 @@ import { ref,onMounted } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
+import CommonServices from '@/services/CommonServices'
 import { MaterialTreeList } from '@/helper/Apis'
-import materialsServices from "@/services/MaterialsServices";
 
 const sortedData = ref([])
 const MaterialTreeListData = ref([])
@@ -39,7 +39,7 @@ const handleSortMaterials = async () => {
   }));
   try {
         loading.value = true;
-    await  materialsServices.taxonomySorting({key:'contract_location',data:id})
+    await  CommonServices.taxonomySorting({key:'contract_location',data:id})
         .then(res => {
           if (res.status === 200 && res.data.success === true) {
             showToast(' Sorting data sucessfully','success')

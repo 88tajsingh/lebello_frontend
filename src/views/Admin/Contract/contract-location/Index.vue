@@ -2,19 +2,18 @@
     <PageHeader> All Contract </PageHeader>
     <div class="flex content-between justify-between px-1 mb-2">
       <div class="flex">
-        <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="actionSelected" />
-        <Button class="px-2 py-2 m-auto">Apply</Button>
+        <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+        <Button class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
       </div>
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-        <Button @click="() => {router.push({ name:'Contract-add'}) }" class="px-2 py-2">Add Contract</Button>
-        
+        <Button @click="() => {router.push('/contract-loaction-add') }" class="px-2 py-2">Add Contract Location</Button>  
       </div>
     </div>
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
+      :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
@@ -26,7 +25,7 @@
         </template>
         <template #actions="data">
           <div class="flex gap-3">
-            <div @click="() =>router.push({ name:'Contract-edit',params: { id: data.value.id }}) " id="edit svg">
+            <div @click="() =>router.push({ name:'Contract-location-edit',params: { id: data.value.id }}) " id="edit svg">
               <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
               <EditSvg />
             </div>
@@ -44,9 +43,12 @@
     <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
       <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
     </PopupModal>
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteContract">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteContractLocation">
       Do you want to delete?
     </DeleteModal>
+    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Material'" @delete="handleBulkActions()">
+    Do you want to delete ?
+  </DeleteModal>
     <!-- <Loader :isLoading="loading" :fullPage="true" /> -->
   </template>
   
@@ -55,24 +57,27 @@
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import ContractServices from '@/services/ContractServices';
   import { useRouter } from 'vue-router';
+  import { showToast } from '@/helper/functions';
   import store from '@/store';
 
   
   const router = useRouter();
-  const actionSelected = ref(null);
+  const bulkActionSelected = ref(null)
   const loading = ref(false);
   const search = ref('');
+  const datatable = ref(null);
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
   const cols = ref([
-    { field: 'title', title: 'Contract Title', slot: true },
+    { field: 'contract_location', title: 'Contract Location', slot: true },
     { field: 'slug', title: 'Slug', filter: true },
-    { field: 'status', title: 'status' },
+    { field: 'description', title: 'Description' },
     { field: 'actions', title: 'Actions' }
   ]);
   const getLoading = ref(false);
   const editData = ref({});
   const rows = ref([]);
   const actionsFlag = ref(null);
+  const bulkPopup = ref(null);
   const modalIsOpen = ref(false);
   const editIsOpen = ref(false);
   const deleteModalIsOpen = ref(false);
@@ -107,20 +112,16 @@
     return actionsFlag.value === value.name;
   };
   
-  const changeServer =(page) => {
+  const changePages =(page) => {
     console.log("page changed", page)
     const payload = {limit:page.pagesize,page:page.current_page}
-    hnadleGetContract(payload);
+    handleGetContractLocation(payload);
   }
-  const navigateToRoute = () => {
-        router.push({ name: 'EditPages', params: { id: '1' } });
-      };
-  
   // api calls
-  const hnadleGetContract = async (payload) => {
+  const handleGetContractLocation = async (payload) => {
     try {
       getLoading.value = true;
-      const res = await ContractServices.getNewContract(payload);
+      const res = await ContractServices.getContractLocation(payload);
       if (res.status === 200 && res.data.success === true) {
         rows.value = res.data.data;
         getLoading.value = false;
@@ -131,24 +132,50 @@
     }
   };
     
-  const handleDeleteContract = async () => {
+  const handleDeleteContractLocation = async () => {
     try {
       loading.value = true;
       console.log("editData.value",editData.value)
-      const res = await ContractServices.deleteNewContract({ id: editData.value });
+      const res = await ContractServices.deleteContractLocation({ id: editData.value });
       if (res.status === 200 && res.data.success === true) {
         loading.value = false;
+        showToast('Deleted sucessfully','success')
         deleteModalIsOpen.value = false;
         editData.value = null;
-        hnadleGetContract();
+        handleGetContractLocation();
       }
     } catch (e) {
       console.error('Error while deleting pages:', e);
     }
   };
+  // bulk delete
+const handleBulkActions = async () => {
+  const selected = datatable.value.getSelectedRows();
+  let id = selected.map(item => item.id)
+  console.log('run bulk delete',id,bulkActionSelected.value)
+  if (bulkActionSelected.value === 'Delete') {
+    loading.value = true;
+    try {
+      await ContractServices.BulkDeleteContractLocation({ 'id': id })
+        .then(res => {
+          if (res && res.status === 200 && res.data.success === true) {
+            rows.value = res.data.data
+            console.log('enter 200 status: ' + res.status)
+            showToast(' Bulk Delete sucessfully', 'success')
+            handleGetContractLocation();
+            loading.value = false;
+          }
+        })
+    } catch (e) {
+      loading.value = false;
+      console.error('Error while log in:', e);
+    }
+  }
+};
+
   
   onMounted(() => {
-    hnadleGetContract({limit:10, page:1});
+    handleGetContractLocation({limit:10, page:1});
     // navigateToRoute();
   });
   </script>

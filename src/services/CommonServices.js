@@ -9,8 +9,14 @@ class LoginService {
   MaterialTreeList() {
     return instance.get(ApiConfig.getMaterialTeeeList)
   }
+  MaterialTreeList() {
+    return instance.get(ApiConfig.getMaterialTeeeList)
+  }
   updateProfile(payload) {
     return instance.put(ApiConfig.updateProfile , null, payload)
+  }
+  taxonomySorting(payload) {
+    return instance.post(ApiConfig.taxonomySort, payload)
   }
 
 }

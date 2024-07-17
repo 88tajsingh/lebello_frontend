@@ -13,9 +13,9 @@ export function isAuthenticated(token) {
   
   // clear error message from fields
   export function clearError (errors , field) {
-    console.log("errors: " , errors , field);
-    if (errors[field]) {
-        errors[field] = null;
+    let fields = field || '';
+    if (errors[fields]) {
+        errors[fields] = null;
     }
 };
 
@@ -30,28 +30,6 @@ export const filePath = (fileUrl) =>{
   else
   return import.meta.env.VITE_DEFAULT_IMAGE
 }
-
-// files id make array
-export const isSelected = (selectedMedia, media) => {
-  return selectedMedia.value.some(item => item?.id === media?.id);
-};
-
-export const toggleSelection = (media) => {
-  if (props.singleFile) {
-      if (isSelected(selectedMedia,media)) {
-          selectedMedia.value = [];
-      } else {
-          selectedMedia.value = [media];
-      }
-  } else {
-      const index = selectedMedia.value.findIndex(item => item.id === media.id);
-      if (index !== -1) {
-          selectedMedia.value.splice(index, 1);
-      } else {
-          selectedMedia.value.push(media);
-      }
-  }
-};
 
 export const handleFiles = (data) => {
    const media_titles = data.map(item => item.title);
