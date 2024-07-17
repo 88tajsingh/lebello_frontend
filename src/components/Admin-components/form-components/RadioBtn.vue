@@ -30,6 +30,11 @@ import TextInput from "./TextInput.vue";
 const props = defineProps({
     options: Array,
     onChange: Function,
+    modelValue: {
+      type: [String, Number, Boolean],
+      default: ''
+    },
+
 });
 const selected = ref("");
 const handleOptionChange = (e) => {

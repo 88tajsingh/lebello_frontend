@@ -11,7 +11,7 @@ import store from "./store";
 import HelpersPlugin from './helper/helperPlugin';
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
-
+import InputError from './components/Admin-components/form-components/InputError.vue';
 import apiPlugin from './helper/apiPlugin';
 import EditSvg  from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg  from '@/components/Admin-components/svg/DeleteSvg.vue'
@@ -64,8 +64,8 @@ app.component('DeleteSvg', DeleteSvg);
 app.component('TextInput', TextInput);
 app.component('PopupModal', PopupModal);
 app.component('DatePicker', DatePicker);
-app.component('PopupModal', PopupModal);
 app.component('PageHeader', PageHeader);
+app.component('InputError', InputError);
 app.config.globalProperties.$lodash = _;
 app.component('DeleteModal', DeleteModal);
 app.component('RadioButton', RadioButton);

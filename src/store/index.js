@@ -2,14 +2,14 @@ import Vuex from 'vuex';
 
 export default new Vuex.Store({
   state: {
-    token: localStorage.getItem('token') || '',
-    user: JSON.parse(localStorage.getItem('user')) || {email: null, password: null},
+    token: localStorage.getItem('token') ,
+    user: JSON.parse(localStorage.getItem('user')) ,
     editData: ''
   },
   getters: {
-    token: state => state?.token,
-    user: state => state?.user,
-    editData: state => state?.editData,
+    token: state => state.token,
+    user: state => state.user,
+    editData: state => state.editData,
   },
   mutations: {
     setToken(state, token) {

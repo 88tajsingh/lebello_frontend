@@ -191,6 +191,25 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props:true,
         },
+        {
+          path: '/contract-type',
+          name: 'Contract',
+          component:()=> import('../views/Admin/Contract/Contract-type/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/contract-type-add',
+          name: 'Contract-type-add',
+          component:()=> import('../views/Admin/Contract/Contract-type/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/Contract-type-edit/:id',
+          name: 'Contract-type-edit',
+          component:()=> import('../views/Admin/Contract/Contract-type/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
       ]
     }
   ]

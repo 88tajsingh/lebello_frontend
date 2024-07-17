@@ -5,7 +5,7 @@
                 <div class="col-span-8">
                     <Accordion :open="true" header="Title *">
                     <div class="px-7">
-                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="" placeholder="Add title"
+                        <TextInput type="text" id="addTitle" class="block mr-2 h-[40px] w-full" label="" placeholder="Add title"
                             v-model="form.title" :errMessage="errors.title" :errors="errors"
                             :class="{ 'border-red': errors.title }" />
                     </div>
@@ -64,7 +64,7 @@
                     <div class="mt-4">
                         <Accordion :open="true" header="Trade Mark Label">
                             <div class=" px-6">
-                                <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
+                                <TextInput id="trade_mark_label" type="text" class="block w-full mr-2 h-[33px]"
                                     v-model="form.trade_mark_label" placeholder="Trade Mark Label" label="
                                 " :message="errors?.trade_mark_label" />
                             </div>
@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="px-6 items-center text-gray-600 text-sm">
-                                <TextInput id="" type="number" class="block w-[180px] mr-2 h-[33px]"
+                                <TextInput id="material_item" type="number" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.material_item" placeholder="Material item" label="Material item"
                                     :message="errors.material_item" />
 
@@ -99,20 +99,20 @@
                         <Accordion :open="true" header="Seo Options">
 
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
-                                <TextInput id=" " type="text" class="block w-[180px] mr-2 h-[33px]"
+                                <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
                                     :message="errors.seo_title" />
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id=" " :isTextarea="true" :rows=4 type="text" class="block w-[180px] mr-2 "
+                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text" class="block w-[180px] mr-2 "
                                     v-model="form.seo_meta_description" placeholder="Meta Description"
                                     label="Meta Description" :message="errors.seo_meta_description" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id=" " :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
+                                <TextInput id="seo_meta_keywords" :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
                                     v-model="form.seo_meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
                                     :message="errors.seo_meta_keywords" />
                                 <span>Seperate each term with comma.</span>
@@ -147,13 +147,17 @@
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
-                            <div class="flex justify-between mb-2">
-                                <Button type="button" class=" text-sm ml-auto px-2">
-                                    preview
-                                </Button>
-                                <Button type="submit" class=" text-sm ml-auto px-2">
-                                    Save Draft
-                                </Button>
+                            <div class="flex justify-between mb-2 px-2">
+                                <div>
+                                    <Button type="button" class=" text-sm ml-auto px-2 py-1">
+                                        preview
+                                    </Button>
+                                </div>
+                                <div>
+                                    <Button type="submit" class=" text-sm ml-auto px-2 py-1">
+                                        Save Draft
+                                    </Button>
+                                </div>
                             </div>
                             <!-- <div id="wraper status">
                                 <div>
@@ -299,7 +303,7 @@
                         <Accordion :open="true" header="Materials Template">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class=" m-auto ">
-                                    <singleCheckBox id="FeaturedOption" label="Use New Material Template"
+                                    <singleCheckBox id="material_template" label="Use New Material Template"
                                         v-model:modelValue="form.material_template"></singleCheckBox>
                                 </div>
                             </div>
@@ -326,7 +330,7 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Swatches Options Material">
                             <div class="my-5 px-6  h-auto ">
-                                <TextInput id="title" type="text" class="block w-full mr-2 h-[33px]"
+                                <TextInput id="material_teaser_text" type="text" class="block w-full mr-2 h-[33px]"
                                     v-model="form.material_teaser_text" placeholder="" label="Material text overlay"
                                     :message="errors.material_teaser_text" />
                             </div>
@@ -339,8 +343,8 @@
                                 <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
                                     mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    <img :src="$filePath(form.featured_image_url || 'text')"
+                                        class="inline-block w-auto h-34 mr-4" :alt="form.title">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -431,7 +435,7 @@ const selectedFiles = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
-const form = ref({ status: null });
+const form = ref({ status: null,description:' ' });
 
 
 const emit = defineEmits(['handleApi']);

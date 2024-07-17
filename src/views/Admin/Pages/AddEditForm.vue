@@ -19,11 +19,15 @@
             v-model="form.seo_title" :errMessage="errors.seo_title" />
           <p class="text-sm text-[#646970] text-[11.5px]">Custom title tag.</p>
         </div>
-        <div class="flex flex-col">
+        <div class="col-span-1 w-full mt-1">
+          <input-label for="template" value="Template" />
+          <TextInput type="text" class="block mr-2 w-full" v-model="form.template" />
+        </div>
+        <!-- <div class="flex flex-col">
           <input-label for="seo_title" value="Author" />
           <TextInput type="text" class="block mr-2 h-[40px] w-full" 
            v-model="form.author"  disabled/>
-        </div>
+        </div> -->
 
         <div class="col-span-2 w-full">
           <input-label for="seo_title" value="Page Description" />
@@ -77,11 +81,6 @@
             :isTextarea="true" :rows="3" v-model="form.page_tagline" :errMessage="errors.page_tagline" />
           <p class="text-sm text-[#646970] text-[11.5px]">Type the page tagline here.</p>
         </div>
-       
-        <div class="col-span-1 w-full">
-          <input-label for="template" value="Template" />
-          <TextInput type="text" class="block mr-2 w-full" v-model="form.template" />
-        </div>
         <div class="col-span-1 w-full">
           <input-label for="parent_page" value="Parent Page" />
           <TextInput type="text" class="block mr-2 w-full" v-model="form.parent_page" />
@@ -103,16 +102,7 @@
         format="yyyy-mm-dd hh:mm:ss"
         dayjsFormat='YYYY-MM-DD HH:mm:ss'
         :use12-hour="false"
-      />
-      <div class="mt-2">
-        <input-label for="page_tagline" value="Featured Image" />
-          <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
-            featurImage.mediaName }}</div>
-          <!-- <div class=" mt-3 flex overflow-x-auto">
-            <img :src="$filePath(form.feature_image_url)"
-              class="inline-block w-auto h-34 mr-4" >
-          </div> -->
-      </div>
+      /> 
         </div>
        
         <div class="col-span-1 w-full">
@@ -132,6 +122,15 @@
       <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd" placeholder="Password" />
     </div>
         </div>
+        <div class="mt-2">
+        <input-label for="page_tagline" value="Featured Image" />
+          <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
+            featurImage.mediaName }}</div>
+          <!-- <div class=" mt-3 flex overflow-x-auto">
+            <img :src="$filePath(form.feature_image_url)"
+              class="inline-block w-auto h-34 mr-4" >
+          </div> -->
+      </div>
         <div class="col-span-1 w-full">
         </div>
         <button type="submit"

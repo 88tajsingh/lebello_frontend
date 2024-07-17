@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import Button from '@/components/Admin-components/Buttons/Button.vue';
-import LoginService from '@/services/loginServices/LoginServices';
+import LoginService from '@/services/LoginServices';
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue';
 

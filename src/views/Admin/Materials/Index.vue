@@ -14,7 +14,7 @@
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
     :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
+    :rows="data" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -114,7 +114,7 @@ const material_id = ref('')
 const dataTableLoding = ref(false)
 const loading = ref(false)
 const editData = ref({})
-const rows = ref([])
+const data = ref([])
 const datatable = ref('')
 const  totalRows = ref('')
 const actionsFlag = ref(null)
@@ -162,7 +162,7 @@ const handleGetMaterials = async (payload) => {
       .then(res => {
         if (res.status === 200 && res.data.success === true) {
           if (res.data.data && res.data.data.length > 0) {
-            rows.value = res.data.data
+            data.value = res.data.data
             totalRows.value= res.data.total_records
           }
           dataTableLoding.value = false;

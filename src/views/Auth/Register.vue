@@ -4,7 +4,7 @@ import { role } from '@/json/data';
 import router from '@/router';
 import Select from '@/components/Admin-components/form-components/Select.vue';
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue';
-import LoginServices from '@/services/loginServices/LoginServices';
+import LoginServices from '@/services/LoginServices';
 
 const errors = ref({})
 const processing = ref(false)

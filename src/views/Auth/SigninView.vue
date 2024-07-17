@@ -5,7 +5,7 @@ import BreadcrumbDefault from '@/components/template-components/Breadcrumbs/Brea
 import DefaultLayout from '@/Layouts/GuestLayout.vue'
 import { ref } from 'vue'
 import { showToast } from '@/helper/functions'
-import LoginService from '@/services/loginServices/LoginServices';
+import LoginService from '@/services/LoginServices';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 

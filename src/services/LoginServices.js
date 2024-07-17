@@ -1,4 +1,4 @@
-import instance from './loginInstance'
+import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 
 class LoginService {

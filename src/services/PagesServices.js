@@ -1,9 +1,10 @@
 import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
-
+import store from '@/store'
 class Pageservices {
 
   getPages(payload) {
+    console.log('store.getters.token url',store.getters.token)
     return instance.get(ApiConfig.getPages,{params: {...payload}})
   }
   addPages(payload) {
@@ -11,7 +12,7 @@ class Pageservices {
     return instance.post(ApiConfig.addPages, payload)
   }
   editPages(payload) {
-    return instance.post(ApiConfig.editPages, payload)
+    return instance.post(ApiConfig.editPages, payload,)
   }
   deletePages(payload) {
     return instance.delete(ApiConfig.deletePages, {params: {...payload}})

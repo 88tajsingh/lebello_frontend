@@ -2,22 +2,22 @@ import axios from 'axios';
 import store from '@/store';
 import router from '@/router';
 
-// const token= store.getters.token;
-const token =  localStorage.getItem('token') || store.getters.token;
-
 const baseURL = import.meta.env.VITE_BASE_URL
- const instance = axios.create({
+const instance = axios.create({
   baseURL: baseURL,
   // timeout: 10000, 
   headers: {
     Accept: "application/json",
     'Content-Type': 'multipart/form-data',
-    Authorization: "Bearer " + token,
   },
 });
 
 instance.interceptors.request.use(
   (config) => {
+    const token = store.getters.token || localStorage.getItem('token'); 
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`; 
+    }
     // console.log("request time", config)
     return config;
   },

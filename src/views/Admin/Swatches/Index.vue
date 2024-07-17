@@ -72,8 +72,6 @@ const  totalRows = ref('')
 const imgKey=ref('')
 const actionsFlag = ref(null)
 
-
-console.log("kesy",imgKey.value)
 const cols = ref([
   { field: 'src', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', filter: true },

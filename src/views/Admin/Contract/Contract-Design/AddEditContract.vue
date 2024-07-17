@@ -1,5 +1,4 @@
 <template>
-    {{ form }}
     <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
@@ -216,6 +215,7 @@
                                         Cancel</Button>
                                 </div>
                             </div> -->
+                            <div class="px-4">                            
                             <div class="flex flex-col ">
                                 <InputLabel for="status" value="Status" />
                                 <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
@@ -237,7 +237,7 @@
                                 <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
                                     dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
                             </div>
-
+                        </div>
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
@@ -339,19 +339,17 @@
                                     <div v-if="iswithBg" class="">
                                         <InputLabel for="Text Color" value="bg Color" />
                                         <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg"
-                                            placeholder="" v-model="form.label_background_color"
-                                            :errMessage="errors.label_background_color" />
-                                        <InputLabel for="Text Color" value="Enter Color code " />
-                                        <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
-                                            v-model="form.label_background_color" />
+                                            placeholder="" v-model="form.sub_heading_background"
+                                         />
+                                       
                                     </div>
 
                                 </div>
                                 <div class="">
                                     <InputLabel for="Text Color" value="Text Color" />
                                     <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg" placeholder=""
-                                        v-model="form.label_background_color"
-                                        :errMessage="errors.label_background_color" />
+                                        v-model="form.sub_heading_text_color"
+                                        :errMessage="errors.sub_heading_text_color" />
                                 </div>
 
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
@@ -365,7 +363,7 @@
                                 </div>
 
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
-                                    label="Transparent %" v-model="form.heading_transparent_percentagea" />
+                                    label="Transparent %" v-model="form.heading_transparent_percentage" />
 
                             </div>
                         </Accordion>
@@ -388,11 +386,11 @@
         </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
+        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
             :selectedFiles="handleFiles" />
     </popupModal>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
+        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
             :selectedFiles="handleFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -407,8 +405,7 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import { ref, onMounted } from "vue";
-import ContractDesignServices from '@/services/ContractDesignServices';
-import SwatchesServices from '@/services/SwatchesServices';
+import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
 import { MaterialTreeList } from '@/helper/Apis';
@@ -418,10 +415,8 @@ import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps 
 const errors = ref({})
 const mediaName = ref('select Feature Media')
 const contractLogoName = ref('Select Logo')
-const contractLogoids = ref([])
 const selectedFiles = ref([])
 const iswithBg = ref(false)
-const contract_logo = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
@@ -455,9 +450,9 @@ const handleFiles = (data) => {
 const handleSubmit = () => {
     if (validateForm()) {
         if (props.id !== null)
-            handleEditSwatches({ ...form.value })
+            handleEditContract({ ...form.value })
         else
-            handleAddSwatches({ ...form.value })
+            handleAddContract({ ...form.value })
     }
 }
 
@@ -489,10 +484,10 @@ const handleContractLocation = (checkedItems) => {
 };
 
 // api calls 
-const handleGetSwatches = async (payload) => {
+const handleGetContract = async (payload) => {
     console.log(payload);
     try {
-        await SwatchesServices.getSwatches(payload)
+        await ContractServices.getNewContract(payload)
             .then(res => {
                 if (res.status === 200 && res.data.success === true) {
                     if (res.data.data && res.data.data.length > 0) {
@@ -506,10 +501,10 @@ const handleGetSwatches = async (payload) => {
         console.error('Error while log in:', e);
     }
 }
-const handleAddSwatches = async (payload) => {
+const handleAddContract = async (payload) => {
     // loading.value = true;
     try {
-        await ContractDesignServices.addNewContract(payload)
+        await ContractServices.addNewContract(payload)
             .then(res => {
                 if (res && res.status === 200 && res.data.success === true) {
                     // router.push('/swatches')
@@ -521,10 +516,10 @@ const handleAddSwatches = async (payload) => {
         console.error('Error while log in:', e);
     }
 }
-const handleEditSwatches = async (payload) => {
+const handleEditContract = async (payload) => {
     loading.value = true;
     try {
-        await SwatchesServices.editSwatches(payload)
+        await ContractServices.editNewContract(payload)
             .then(res => {
                 if (res && res.status === 200 && res.data.success === true) {
                     loading.value = false;
@@ -544,7 +539,7 @@ const materialTree = async () => {
 onMounted(() => {
     console.log("id vlaiue ", props.id)
     if (id.value !== undefined && id.value !== null && id.value !== '') {
-        handleGetSwatches({ id: id.value });
+        handleGetContract({ id: id.value });
     }
     materialTree();
 }
