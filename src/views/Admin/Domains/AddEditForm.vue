@@ -44,9 +44,7 @@
   });
   const emit = defineEmits(['handleApi']);
 
-  const data = JSON.stringify(store.getters);
-  console.log('data in vuex: ' + data)
-  const form = ref({ status:0,country_id:0});
+  const form = ref({ status:null,country_id:null});
   const errors = ref({});
   const domainStatus =[{name:'Active',value:1},{name:'inactive',value:0}] 
  

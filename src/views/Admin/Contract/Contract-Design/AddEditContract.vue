@@ -1,7 +1,7 @@
 <template>
 
     <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
-        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
+        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -25,7 +25,7 @@
                     <div class="mt-5">
                         <Accordion :open="true" header="Seo Options">
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
-                                <TextInput id=" " type="text" class="block w-[180px] mr-2 h-[33px]"
+                                <TextInput id="TitleTag" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.seo_title_tag" placeholder="Title Tag" label="Title Tag" />
                                 <span>Custom title tag.</span>
                             </div>
@@ -38,7 +38,7 @@
                                 </span>
                             </div>
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id=" " :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
+                                <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
                                     v-model="form.seo_meta_keywords" placeholder="Meta Keywords"
                                     label="Meta Keywords" />
                                 <span>Seperate each term with comma.</span>
@@ -56,11 +56,6 @@
                                             v-model:modelValue="form.contract_home_page_slide"></singleCheckBox>
                                     </span>
                                 </div>
-                                <InputLabel for="ContractLogo" value="SliderImage" />
-                                <div class="py-2 rounded-lg mb-2 px-2 border border-stroke"
-                                    @click="() => IsOpen = true"> {{
-                                        mediaName }}</div>
-
                                 <TextInput id="TitleBackground" type="text" class="block w-full mr-2 mb-2 h-[33px]"
                                     v-model="form.contract_background_title" placeholder="" label="Title Background		
                           " />
@@ -73,6 +68,15 @@
                                 <TextInput id="LocationColor" type="text" class="block w-full mr-2 mb-2 h-[33px]"
                                     v-model="form.contract_location_color" placeholder="" label="Location Color			
                           " />
+                          <InputLabel for="SliderImage" value="SliderImage" />
+                                <div class="py-2 rounded-lg mb-2 px-2 border border-stroke"
+                                    @click="() => sliderImageData.isOpen = true"> {{
+                                        sliderImageData.mediaName }}</div>
+                                        <div class=" mt-3 flex overflow-x-auto">
+                                    <img v-for="file in sliderImageData.images" :key="file"
+                                        :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file.alternative_text || 'image'">
+                                </div>
                             </div>
                         </Accordion>
                     </div>
@@ -80,11 +84,12 @@
                         <Accordion open="false" header="Contract Logo">
                             <div class=" px-6  h-auto ">
                                 <div class="py-2 min-h-10 rounded-lg px-2 border border-stroke"
-                                    @click="() => IsOpen = true"> {{
-                                        contractLogoName }}</div>
+                                    @click="() => contractLogoData.isOpen = true"> {{
+                                        contractLogoData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    <img v-for="file in contractLogoData.images" :key="file"
+                                        :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -252,16 +257,18 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Type">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :dropdown="true" valueField="id" showField="contract_name" :checkedData='form.contract_type'
-                                    :data="contractType" @checked-items="handleContractType" />
+                                <Checkbox :nexted=true :dropdown="true" valueField="id" showField="contract_name"
+                                    :checkedData='form.contract_type' :data="contractType"
+                                    @checked-items="handleContractType" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Location">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :checkedData='form.contract_location' :dropdown="true" valueField="id" showField="contract_location"
-                                    :data="contractLocation" @checked-items="handleContractLocation" />
+                                <Checkbox :nexted=true :checkedData='form.contract_location' :dropdown="true"
+                                    valueField="id" showField="contract_location" :data="contractLocation"
+                                    @checked-items="handleContractLocation" />
                             </div>
                         </Accordion>
                     </div>
@@ -269,10 +276,11 @@
                         <Accordion :open="true" header="Featured image">
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
-                                    mediaName }}</div>
+                                <div class="py-2 rounded-lg px-2 border border-stroke"
+                                    @click="() => featureData.isOpen = true"> {{
+                                        featureData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
+                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
@@ -281,10 +289,11 @@
                         <Accordion :open="true" header="Gallery">
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
-                                    mediaName }}</div>
+                                <div class="py-2 rounded-lg px-2 border border-stroke"
+                                    @click="() => galleryData.isOpen = true"> {{
+                                        galleryData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in selectedFiles" :key="file" :src="$filePath(file.file_url)"
+                                    <img v-for="file in galleryData.images" :key="file" :src="$filePath(file.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
@@ -354,84 +363,118 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
-            :closeModal="close" :selectedFiles="handleFeatureFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
+            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
     </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
-            :closeModal="close" :selectedFiles="handleFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="galleryData.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="galleryData.images" :singleFile="false"
+            :closeModal="() => { galleryData.isOpen = false }" :selectedFiles="handleGalleryFiles" />
     </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
-            :closeModal="close" :selectedFiles="handleFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="contractLogoData.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="contractLogoData.images" :singleFile="true"
+            :closeModal="() => { contractLogoData.isOpen = false }" :selectedFiles="handleContractLogoFiles" />
     </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
-            :closeModal="close" :selectedFiles="handleFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="sliderImageData.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="sliderImageData.images" :singleFile="true"
+            :closeModal="() => { sliderImageData.isOpen = false }" :selectedFiles="handleSliderImageFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
-
 </template>
 <script setup>
-import { clearError,showToast } from '@/helper/functions'
-import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
-import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
-import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import Accordion from "@/components/Admin-components/Accordion.vue";
+import router from '@/router';
+import { defineEmits } from 'vue';
 import { ref, onMounted } from "vue";
+import { handleFiles } from '@/helper/functions';
+import { showToast } from '@/helper/functions'
 import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
-import { defineEmits } from 'vue';
+import Accordion from "@/components/Admin-components/Accordion.vue";
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
+import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
-import { MaterialTreeList } from '@/helper/Apis';
-import router from '@/router';
+import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
+import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
+import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps } from '@/json/data';
 
+const emit = defineEmits(['handleApi']);
 const errors = ref({})
-const mediaName = ref('select Feature Media')
-const contractLogoName = ref('Select Logo')
-const selectedFiles = ref([])
 const iswithBg = ref(false)
 const contractType = ref([]);
 const contractLocation = ref([]);
-const IsOpen = ref(false)
 const loading = ref(false)
 const form = ref({ status: '0', simple_fields: '0', contract_home_page_slide: false, });
 
+// images variables 
+const featureData = ref({
+    isOpen: false,
+    mediaName: 'feature Image',
+    images: []
+})
+const galleryData = ref({
+    isOpen: false,
+    mediaName: 'gallery Image',
+    images: []
+})
+const contractLogoData = ref({
+    isOpen: false,
+    mediaName: 'Logo Image',
+    images: []
+})
+const sliderImageData = ref({
+    isOpen: false,
+    mediaName: 'Main Slider Image',
+    images: []
+})
 
-const emit = defineEmits(['handleApi']);
-
-const close = () => {
-    IsOpen.value = false;
-}
+// images functions 
 const handleFeatureFiles = (data) => {
-    close();
     const object = handleFiles(data);
-    console.log(object)
-    featurImage.value.mediaName = object.mediaName;
-    form.value.feature_image = object.media_ids
-    console.log(object)
+    featureData.value.isOpen = false
+    featureData.value.images = data;
+    featureData.value.mediaName = object.mediaName;
+    form.value.featured_image = object.media_ids[0]
+}
+const handleGalleryFiles = (data) => {
+    const object = handleFiles(data);
+    galleryData.value.isOpen = false
+    galleryData.value.images = data;
+    galleryData.value.mediaName = object.mediaName;
+    form.value.gallery = object.media_ids
+}
+const handleContractLogoFiles = (data) => {
+    const object = handleFiles(data);
+    contractLogoData.value.isOpen = false
+    contractLogoData.value.images = data;
+    contractLogoData.value.mediaName = object.mediaName;
+    form.value.contract_logo = object.media_ids[0]
+}
+const handleSliderImageFiles = (data) => {
+    const object = handleFiles(data);
+    sliderImageData.value.isOpen = false
+    sliderImageData.value.images = data;
+    sliderImageData.value.mediaName = object.mediaName;
+    form.value.contract_slider_image = object.media_ids[0]
 }
 
-const handleFiles = (data) => {
-    close();
-    selectedFiles.value = data
-    const media_titles = data.map(item => item.title);
-    mediaName.value = media_titles.join(', ');
-    const media_ids = data.map(item => item.id);
-    form.value.featured_image = media_ids[0];
-    console.log('in form ', selectedFiles.value)
-}
+
+// const handleFiles = (data) => {
+//     close();
+//     selectedFiles.value = data
+//     const media_titles = data.map(item => item.title);
+//     mediaName.value = media_titles.join(', ');
+//     const media_ids = data.map(item => item.id);
+//     form.value.featured_image = media_ids[0];
+//     console.log('in form ', selectedFiles.value)
+// }
 
 const handleSubmit = () => {
     form.value = {
         ...form.value,
         contract_home_page_slide: form.value.contract_home_page_slide ? 1 : 0,
-        featured_option:form.value.featured_option ? 1 : 0,
+        featured_option: form.value.featured_option ? 1 : 0,
     }
     delete form.value?.domain;
     if (validateForm()) {
@@ -475,7 +518,8 @@ const handleGetContract = async (payload) => {
         const res = await ContractServices.getNewContract(payload);
         if (res.status === 200 && res.data.success) {
             if (res.data.data?.length > 0) {
-                form.value=res.data.data[0]
+                form.value = res.data.data[0]
+                console.log(res.data.data)
             }
         }
     } catch (e) {
