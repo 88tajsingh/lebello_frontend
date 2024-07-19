@@ -272,7 +272,7 @@
                             </div>
                         </Accordion>
                     </div>
-                    <div class="mt-3 ">
+                    <div class="mt-4 ">
                         <Accordion :open="true" header="Featured image">
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
@@ -286,6 +286,7 @@
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
+                        <div class="mt-4">
                         <Accordion :open="true" header="Gallery">
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
@@ -299,6 +300,7 @@
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
+                    </div>
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Simple Fields">
