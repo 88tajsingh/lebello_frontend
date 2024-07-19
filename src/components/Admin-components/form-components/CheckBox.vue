@@ -26,7 +26,7 @@
       
       </div>
       <div v-show="item.expanded && item.children" class="ml-5">
-        <div v-for="child in item.children" :key="child.id" class="mt-2 ">
+        <div v-for="child in item.children" :key="child.id" class="mt-2">
           <label class="flex items-center">
             <input type="checkbox"
                    :checked="isChecked(child[valueField])"
@@ -37,21 +37,22 @@
         </div>
       </div>
     </div>
-    <!-- <div v-if="checkedIds.length > 0" class="mt-2">
-      <p class="text-gray-800">Checked IDs: {{ checkedIds.join(', ') }}</p>
-    </div> -->
+   
+    <div v-if="checkedItems.length < 0" class="mt-2">
+      <p class="text-gray-800">No data Found</p>
+    </div>
   </div>
 </template>
 
 <script setup>
-  import { reactive,ref, defineProps, defineEmits, computed } from 'vue';
+  import { ref, defineProps, defineEmits, computed, watch } from 'vue';
 
   const emit = defineEmits(['checked-items']);
 
   const props = defineProps({
     data: {
       type: Array,
-      default: [ ],
+      default: [],
     },
     dropdown: {
       type: Boolean,
@@ -71,23 +72,38 @@
     },
     checkedData: {
       type: Array,
-      default: [],
+      default: [],  
     },
   });
-  const checkedItems = reactive([props.checkedData]);
-console.log('checked data in check box ',checkedItems)
-  const toggleChecked = (id) => {
-    const index = checkedItems.indexOf(id);
-    if (index === -1) {
-      checkedItems.push(id);
+
+  const checkedItems = ref([]);
+
+  function flattenArray(arr) {
+  if (!Array.isArray(arr)) return [];
+
+  return arr.reduce((acc, item) => {
+    if (Array.isArray(item)) {
+      acc.push(...flattenArray(item));
     } else {
-      checkedItems.splice(index, 1);
+      acc.push(item);
+    }
+    return acc;
+  }, []);
+}
+
+
+  const toggleChecked = (id) => {
+    const index = checkedItems.value.indexOf(id);
+    if (index === -1) {
+      checkedItems.value.push(id);
+    } else {
+      checkedItems.value.splice(index, 1);
     }
     getCheckedIds();
   };
 
   const isChecked = (id) => {
-    return checkedItems.includes(id);
+    return checkedItems.value.includes(id);
   };
 
   const toggleChildren = (item) => {
@@ -95,12 +111,17 @@ console.log('checked data in check box ',checkedItems)
   };
 
   const getCheckedIds = () => {
-    emit('checked-items', checkedItems);
-    console.log('Checked IDs:', checkedItems);
+    emit('checked-items', checkedItems.value);
   };
 
-  const checkedIds = computed(() => checkedItems);
+  watch(() => props.checkedData, (newVal) => {
+    checkedItems.value = flattenArray(newVal);
+    console.log('Flattened Checked Data:', checkedItems.value);
+  });
+
+  const checkedIds = computed(() => checkedItems.value);
 </script>
+
 
 <style scoped>
 </style>

@@ -1,5 +1,6 @@
 <template>
     <DefaultCard :cardTitle="id ? `Edit Swatches` : `Add Swatches`">
+        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -313,7 +314,7 @@
                         <Accordion :open="true" header="Materials">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">
-                                    <Checkbox :nexted=true :dropdown="true" valueField="id" showField="name"
+                                    <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true" valueField="id" showField="name"
                                         :data="MaterialTreeListData" @checked-items="handleCheckedItems" />
                                     <!-- <div v-else>sdfsdf</div> -->
                                 </div>
@@ -417,17 +418,16 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import Accordion from "@/components/Admin-components/Accordion.vue";
-import Dropdown from "@/components/Admin-components/form-components/Select.vue";
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import SwatchesServices from '@/services/SwatchesServices';
-import LinkBtn from "@/components/Admin-components/Buttons/LinkBtn.vue";
-import RadioBtn from "@/components/Admin-components/form-components/RadioBtn.vue";
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
 import { MaterialTreeList } from '@/helper/Apis';
 import router from '@/router';
 import { showToast } from '@/helper/functions'
-import { PublishOptions, trueFalse, statusData } from '@/json/data';
+import { PublishOptions, statusData } from '@/json/data';
+
+const emit = defineEmits(['handleApi']);
 
 const errors = ref({})
 const mediaName = ref('select Feature Media')
@@ -436,9 +436,10 @@ const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
 const form = ref({ status: null,description:' ' });
+const props = defineProps(['id']);
+const id = ref(props.id || null)
 
 
-const emit = defineEmits(['handleApi']);
 
 const close = () => {
     IsOpen.value = false;
@@ -454,11 +455,13 @@ const handleFiles = (data) => {
 }
 
 const handleSubmit = () => {
+    const payload= {...form.value, material_template:form.value.material_template == true ? 1:0}
+
     if (validateForm()) {
         if (props.id !== null)
-            handleEditSwatches({ ...form.value })
+            handleEditSwatches(payload)
         else
-            handleAddSwatches({ ...form.value })
+            handleAddSwatches(payload)
     }
 }
 
@@ -471,118 +474,69 @@ const validateForm = () => {
     }
     return isValid
 }
-const props = defineProps({
-    id: {
-        type: String,
-        default: null,
-    }
-});
-const id = ref(props.id || null)
-
-const showHidePublish = ref({
-    Status: false,
-    Visibility: false,
-    Publish: false,
-});
-
-function updateEditorValue(newValue) {
-    form.description = newValue.value;
-    console.log(newValue)
-}
-
-const selected = ref("");
-const handleOptionSelected = (option) => {
-    selected.value = option;
-};
-
-const updateChecked = (data) => {
-    console.log('updated checkbox value', data)
-}
-
-const selectedOption = ref(null);
-
-const handleOptionChange = (option) => {
-    console.log(option);
-    selectedOption.value = option;
-};
 
 const handleCheckedItems = (checkedItems) => {
     console.log('Received checked items in parent:', checkedItems);
     form.value = { ...form.value, materials: checkedItems }
 };
 // api calls 
-// get Swatches function
 const handleGetSwatches = async (payload) => {
-    // dataTableLoding.value = true;
-    console.log(payload);
     try {
-        await SwatchesServices.getSwatches(payload)
-            .then(res => {
-                if (res.status === 200 && res.data.success === true) {
-                    if (res.data.data && res.data.data.length > 0) {
-                        form.value = res.data.data[0]
-
-                        // imgKey.value=Object.keys(cols.value)
-                    }
-                    // dataTableLoding.value = false;
-                }
-            }).catch((res) => {
-                console.log("error", res)
-            });
-    } catch (e) {
-        console.error('Error while log in:', e);
+        const res = await SwatchesServices.getSwatches(payload);
+        if (res.status === 200 && res.data.success) {
+            if (res.data.data && res.data.data.length > 0) {
+                form.value = { 
+                    ...res.data.data[0], 
+                    material_template: res.data.data[0].material_template === 1 
+                };
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching swatches:', error);
     }
 }
-// add Swatches function
+
 const handleAddSwatches = async (payload) => {
     loading.value = true;
     try {
-        await SwatchesServices.addSwatches(payload)
-            .then(res => {
-                if (res && res.status === 200 && res.data.success === true) {
-                    showToast(' Swatches Add sucessfully','success')
-                    router.push('/swatches')
-                    loading.value = false;
-                }
-                if (res && res.status === 400) {
-                    loading.value = false;
-                    showToast(' Somthing went wrong','error')
-
-                }
-            })
-    } catch (e) {
+        const res = await SwatchesServices.addSwatches(payload);
+        if (res.status === 200 && res.data.success) {
+            showToast('Swatches added successfully', 'success');
+            router.push('/swatches');
+        } else {
+            showToast('Something went wrong', 'error');
+        }
+    } catch (error) {
+        console.error('Error adding swatches:', error);
+        showToast('Something went wrong', 'error');
+    } finally {
         loading.value = false;
-        console.error('Error while log in:', e);
     }
 }
-// edit Swatches function
+
 const handleEditSwatches = async (payload) => {
     loading.value = true;
     try {
-        await SwatchesServices.editSwatches(payload)
-            .then(res => {
-                if (res && res.status === 200 && res.data.success === true) {
-                    loading.value = false;
-                    showToast(' Swatches edit sucessfully','success')
-                    router.push('/swatches')
-                }
-                if (res && res.status === 400) {
-                    loading.value = false;
-                    showToast(' Somthing went wrong','error')
-                }
-            })
-    } catch (e) {
+        const res = await SwatchesServices.editSwatches(payload);
+        if (res.status === 200 && res.data.success) {
+            showToast('Swatches edited successfully', 'success');
+            router.push('/swatches');
+        } else {
+            showToast('Something went wrong', 'error');
+        }
+    } catch (error) {
+        console.error('Error editing swatches:', error);
+        showToast('Something went wrong', 'error');
+    } finally {
         loading.value = false;
-        console.error('Error while log in:', e);
     }
 }
 
 const materialTree = async () => {
     MaterialTreeListData.value = await MaterialTreeList()
-    console.log("object", MaterialTreeListData)
 }
+
 onMounted(() => {
-    console.log("id vlaiue ", props.id)
     if (id.value !== undefined && id.value !== null && id.value !== '') {
         handleGetSwatches({ id: id.value });
     }

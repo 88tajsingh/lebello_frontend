@@ -179,102 +179,45 @@ const handleGetMaterials = async (payload) => {
 }
 // delete material
 const handleDeleteMaterials = async () => {
+  loading.value = true;
   try {
-    loading.value = true;
-    const payload = { "id": material_id.value.id }
-    await materialsServices.deleteMaterial(payload)
-      .then(res => {
-        if (res.status === 200) {
-          loading.value = false;
-          showToast(' Material Deleted sucessfully','success')
-          deleteModalIsOpen.value = false;
-          handleGetMaterials();
-        }
-        if (res.status === 400) {
-          loading.value = false;
-          showToast(' Somthing went wrong','error')
-        }
-      })
+    const payload = { id: material_id.value.id };
+    const res = await materialsServices.deleteMaterial(payload);
+    if (res.status === 200) {
+      showToast(res.data.message, 'success');
+      deleteModalIsOpen.value = false;
+      handleGetMaterials();
+    } else if (res.status === 400) {
+      showToast(res.message, 'error');
+    }
   } catch (e) {
-    console.error('Error while log in:', e);
+    console.error('Error while deleting material:', e);
   } finally {
     loading.value = false;
   }
-}
+};
+
 // Bulk Delete 
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
-  let id = selected.map(item => item.id)
+  const ids = selected.map(item => item.id);
   if (bulkActionSelected.value === 'delete') {
     loading.value = true;
     try {
-      await materialsServices.BulkDeleteMaterial({ 'id': id })
-        .then(res => {
-          if (res && res.status === 200 && res.data.success === true) {
-            rows.value = res.data.data
-            console.log('enter 200 status: ' + res.status)
-            handleGetMaterials();
-            loading.value = false;
-          }
-        })
+      const res = await materialsServices.BulkDeleteMaterial({ id: ids });
+      if (res.status === 200 && res.data.success) {
+        rows.value = res.data.data;
+        showToast(res.data.message, 'success');
+        handleGetMaterials();
+      }
     } catch (e) {
+      console.error('Error while performing bulk delete:', e);
+    } finally {
       loading.value = false;
-      console.error('Error while log in:', e);
     }
   }
 };
 
-// add material function
-// const handleAddMaterials = async (payload) => {
-//   try {
-//     loading.value = true;
-//     await materialsServices.addMaterial(payload)
-//       .then(res => {
-//         if (res.status === 200 && res.data.success === true) {
-//           modalIsOpen.value = false;
-//           handleGetMaterials();
-//           loading.value = false;
-//           // handleGetMaterials();   
-//         }
-//       })
-//   } catch (e) {
-//     console.error('Error while log in:', e);
-//   } finally {
-//     loading.value = false;
-//   }
-// }
-// edit material function
-// const handleEditMaterials = async (payload) => {
-//   loading.value = true;
-//   try {
-//     await materialsServices.editMaterial(payload)
-//       .then(res => {
-//         console.log("res.status", res.status)
-//         // editCloseModal();
-//         if (res && res.status === 200) {
-//           if (res.data.data && res.data.data.length > 0) {
-//             rows.value = res.data.data
-//             handleGetMaterials();
-//           }
-//           editCloseModal();
-
-//           handleGetMaterials();
-//           // rows.value = res.data.data
-//           // loading.value = false;    
-//           // console.log('editIsOpen.value',editIsOpen.value)
-//           // handleGetMaterials(); 
-//         }
-//       })
-//   } catch (e) {
-//     console.error('Error while log in:', e);
-//   } finally {
-//     loading.value = false;
-//     // editCloseModal();
-//   }
-// }
-// const materialTree = async () => {
-//   MaterialTreeListData.value = await MaterialTreeList()
-// }
 
 onMounted(() => {
   handleGetMaterials({limit:10,page:1});

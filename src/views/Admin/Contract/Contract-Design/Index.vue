@@ -55,7 +55,7 @@
   import { useRouter } from 'vue-router';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import ContractServices from '@/services/ContractServices';
-  import store from '@/store';
+  import { showToast } from '@/helper/functions';
 
   
   const router = useRouter();
@@ -110,45 +110,47 @@
   const changeServer =(page) => {
     console.log("page changed", page)
     const payload = {limit:page.pagesize,page:page.current_page}
-    hnadleGetContract(payload);
+    handleGetContract(payload);
   }
   const navigateToRoute = () => {
         router.push({ name: 'EditPages', params: { id: '1' } });
       };
   
   // api calls
-  const hnadleGetContract = async (payload) => {
-    try {
-      getLoading.value = true;
-      const res = await ContractServices.getNewContract(payload);
-      if (res.status === 200 && res.data.success === true) {
-        rows.value = res.data.data;
-        getLoading.value = false;
-        totalRows.value= res.data.total_records
-      }
-    } catch (e) {
-      console.error('Error while pages get:', e);
+ const handleGetContract = async (payload) => {
+  try {
+    getLoading.value = true;
+    const res = await ContractServices.getNewContract(payload);
+    if (res.status === 200 && res.data.success) {
+      rows.value = res.data.data;
+      totalRows.value = res.data.total_records;
     }
-  };
-    
-  const handleDeleteContract = async () => {
-    try {
-      loading.value = true;
-      console.log("editData.value",editData.value)
-      const res = await ContractServices.deleteNewContract({ id: editData.value });
-      if (res.status === 200 && res.data.success === true) {
-        loading.value = false;
-        deleteModalIsOpen.value = false;
-        editData.value = null;
-        hnadleGetContract();
-      }
-    } catch (e) {
-      console.error('Error while deleting pages:', e);
+  } catch (error) {
+    console.error('Error while fetching contracts:', error);
+  } finally {
+    getLoading.value = false;
+  }
+};
+
+const handleDeleteContract = async () => {
+  try {
+    loading.value = true;
+    const res = await ContractServices.deleteNewContract({ id: editData.value });
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message,'success')
+      editData.value = null;
+      deleteModalIsOpen.value = false;
+      await handleGetContract(); 
     }
-  };
-  
+  } catch (error) {
+    console.error('Error while deleting contract:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
   onMounted(() => {
-    hnadleGetContract({limit:10, page:1});
+    handleGetContract({limit:10, page:1});
     // navigateToRoute();
   });
   </script>

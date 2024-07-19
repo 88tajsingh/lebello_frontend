@@ -1,6 +1,7 @@
 <template>
     <DefaultCard  :cardTitle="id ? `Edit Contract Location` : `Add Contract Location`">
-    <form @submit.prevent="handleSubmit">
+        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
+        <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
             <div class="flex flex-col ">
                 <TextInput type="text" class=" " :class="{ 'border-red': errors.contract_location }"
@@ -20,7 +21,7 @@
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Parent Material" value="Parent Contract Location" />
-                <Select :options="MaterialTreeListData" showfield="contract_location" class="w-full" valueField="id" label="Select Location"
+                <Select :options="MaterialTreeListData" :defaultZero='true' showfield="contract_location" class="w-full" valueField="id" label="Select Location"
                     v-model="form.parent_contract_location" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
@@ -61,11 +62,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const MaterialTreeListData = ref([])
 const loading = ref(false)
-const props = defineProps({
-    id:{
-        type: String,
-    }
-})
+const props = defineProps(['id'])
 const id = ref(props.id || null)
 const form = ref({ parent_contract_location:0})
 const errors = ref({})
@@ -94,77 +91,59 @@ const handleSubmit = async () => {
         console.error('Error material add edit :', e)
     }
 }
-
 // api for get patents child json parent material listing 
 const materialTree = async () => {
   MaterialTreeListData.value = await contractLoctionTreeList()
 }
 // get material
 const handleGetLocationById = async (payload) => {
-    loading.value = true
+  loading.value = true;
   try {
-    await ContractServices.getContractLocation(payload)
-      .then(res => {
-        if (res.status === 200 && res.data.success === true) {
-          if (res.data.data && res.data.data.length > 0) {
-            form.value = res.data.data[0]
-            loading.value = false
-          }
-        }
-      }).catch((res) => {
-        console.log("error", res)
-      });
-  } catch (e) {
-    console.error('Error while log in:', e);
-  } 
-}
-
-const handleAddContractLocation = async (payload) => {
-    loading.value = true
-  try {
-    loading.value = true;
-    await ContractServices.addContractLocation(payload)
-      .then(res => {
-        if (res.status === 200 && res.data.success === true) {
-            showToast('Add Contract Location sucessfully','success')
-            router.push('/contract-location')
-            loading.value = false;
-          // handleGetMaterials();   
-        }
-        if (res && res.status === 400 ) {
-            showToast('Somthing went wrong','error')
-            loading.value = false
-        }
-      })
-  } catch (e) {
-    console.error('Error while log in:', e);
+    const res = await ContractServices.getContractLocation(payload);
+    if (res.status === 200 && res.data.success) {
+      if (res.data.data?.length > 0) {
+        form.value = res.data.data[0];
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching location:', error);
   } finally {
     loading.value = false;
   }
 }
-// edit material function
+
+const handleAddContractLocation = async (payload) => {
+  loading.value = true;
+  try {
+    const res = await ContractServices.addContractLocation(payload);
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      router.push('/contract-location');
+    } else if (res.status === 400) {
+      showToast(res.data.message, 'error');
+    }
+  } catch (error) {
+    showToast('Something went wrong', 'error');
+    console.error('Error adding location:', error);
+  } finally {
+    loading.value = false;
+  }
+}
+
 const handleEditContractLocation = async (payload) => {
   loading.value = true;
   try {
-    await ContractServices.editContractLocation(payload)
-      .then(res => {
-        // editCloseModal();
-        if (res && res.status === 200) {
-            showToast('Edit Contract Location sucessfully' ,'success')
-            loading.value = false
-            router.push('/contract-location')
-
-        }
-        if (res && res.status === 400 ) {
-            showToast('Somthing went wrong','error')
-            loading.value = false
-        }
-      })
-  } catch (e) {
-    console.error('Error while log in:', e);
+    const res = await ContractServices.editContractLocation(payload);
+    if (res.status === 200) {
+      showToast(res.data.message, 'success');
+      router.push('/contract-location');
+    } else if (res.status === 400) {
+      showToast(res.data.message, 'error');
+    }
+  } catch (error) {
+    console.error('Error editing location:', error);
   } finally {
     loading.value = false;
-    // editCloseModal();
   }
 }
 
@@ -173,48 +152,5 @@ onMounted(()=>{
         handleGetLocationById({id:props.id});
     }
     materialTree();
-
-
 })
 </script>
-
-<style>
-.e-ddl.e-input-group.e-control-wrapper .e-input {
-    font-size: 20px;
-    font-family: emoji;
-    color: #ab3243;
-    background: #000505;
-}
-
-.e-ddl.e-input-group.e-control-wrapper .e-input {
-    font-size: 20px;
-    font-family: emoji;
-    color: #ab3243;
-    background: #32a5ab;
-}
-
-.custom-file-upload {
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
-}
-
-.custom-file-upload:hover {
-    background-color: #e2e2e2;
-}
-
-input[type='number']::-webkit-outer-spin-button,
-input[type='number']::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type='number'] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-</style>

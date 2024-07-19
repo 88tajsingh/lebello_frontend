@@ -50,4 +50,16 @@ export const contractLoctionTreeList = async () => {
       console.log("MaterialTreeList err", err);
     }
   };
+
+export const getAllCountries = async () => {
+    try {
+      const res = await CommonServices.allCountrys();
+      if (res.status === 200) {
+        console.log('MaterialTreeList data ',res.data.data)
+        return  res.data.data;
+      } 
+    } catch (err) {
+      console.log("MaterialTreeList err", err);
+    }
+  };
   

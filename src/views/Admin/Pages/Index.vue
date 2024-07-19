@@ -59,16 +59,10 @@ import { useRouter } from 'vue-router';
 import store from '@/store';
 
 const router = useRouter();
-const actionSelected = ref(null);
+// const actionSelected = ref(null);
+// const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const loading = ref(false);
 const search = ref('');
-const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-const cols = ref([
-  { field: 'page_title', title: 'Page Title', slot: true },
-  { field: 'seo_title', title: 'Seo Title', filter: true },
-  { field: 'status', title: 'Status' },
-  { field: 'actions', title: 'Actions' }
-]);
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
@@ -77,20 +71,16 @@ const modalIsOpen = ref(false);
 const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
 const  totalRows = ref('')
+const cols = ref([
+  { field: 'page_title', title: 'Page Title', slot: true },
+  { field: 'seo_title', title: 'Seo Title', filter: true },
+  { field: 'status', title: 'Status' },
+  { field: 'actions', title: 'Actions' }
+]);
 
 const openDeleteModal = (data) => {
   deleteModalIsOpen.value = true;
   editData.value = data.id;
-};
-
-const openModal = () => {
-  modalIsOpen.value = true;
-};
-
-const editModal = (data) => {
-  editData.value = { ...data.value };
-  // router.push({ name: 'EditPages', params: { id: data.value.id } });
-  editIsOpen.value=true;
 };
 
 const handleMouseEnter = (data) => {
@@ -101,55 +91,47 @@ const handleMouseLeave = () => {
   actionsFlag.value = null;
 };
 
-const isRowHovered = (value) => {
-  return actionsFlag.value === value.name;
-};
-
 const changePages =(page) => {
   const payload = {limit:page.pagesize,page:page.current_page}
   handleGetPages(payload);
 }
-const navigateToRoute = () => {
-      router.push({ name: 'EditPages', params: { id: '1' } });
-    };
 
 // api calls
 const handleGetPages = async (payload) => {
   try {
     getLoading.value = true;
-    const res = await PagesServices.getPages(payload);
-    if (res.status === 200 && res.data.success === true) {
-      rows.value = res.data.data;
-      getLoading.value = false;
-      totalRows.value= res.data.total_records
+    const { status, data } = await PagesServices.getPages(payload);
+    if (status === 200 && data.success) {
+      rows.value = data.data;
+      totalRows.value = data.total_records;
     }
-  } catch (e) {
-    console.error('Error while pages get:', e);
+  } catch (error) {
+    console.error('Error while getting pages:', error);
+  } finally {
+    getLoading.value = false;
   }
 };
-
+// Delete Pages
 const handleDeletePages = async () => {
   try {
     loading.value = true;
     const res = await PagesServices.deletePages({ id: editData.value });
-    if (res.status === 200 && res.data.success === true) {
-      loading.value = false;
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      handleGetPages();
       deleteModalIsOpen.value = false;
       editData.value = null;
-      showToast(' Delete Page sucessfully','success')
-      handleGetPages();
+    } else if (res.status === 400) {
+      showToast('Unable to delete', 'error');
     }
-    if(res.status === 400){
-      loading.value = false;
-      showToast('Unable to delete','error')
-    }
-  } catch (e) {
-    console.error('Error while deleting pages:', e);
+  } catch (error) {
+    console.error('Error while deleting pages:', error);
+  } finally {
+    loading.value = false;
   }
 };
 
 onMounted(() => {
   handleGetPages({page:1});
-  // navigateToRoute();
 });
 </script>

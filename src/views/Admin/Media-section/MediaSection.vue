@@ -349,19 +349,6 @@ const getGoogleDocsViewerUrl = (url) => {
     return `https://docs.google.com/viewer?url=${encodeURIComponent(`${filePath(url)}`)}&embedded=true`;
 }
 
-// const handleGetFolders = async () => {
-//     try {
-//         loading.value = true;
-//         const res = await FolderServices.GetFolder();
-//         if (res.status === 200 && res.data.success === true) {
-//             folders.value = res.data.data;
-//         }
-//     } catch (e) {
-//     } finally {
-//         loading.value = false;
-//     }
-// };
-
 const handleGetChildFolders = async (folder) => {
     try {
         mediaData.value = [];
@@ -391,7 +378,6 @@ const handleAddFolders = async () => {
         } else if (res.status === 400) {
             errorMessage.value = res.message;
             showToast('Somthing went wrong','error')
-
         }
     } catch (e) {
         console.error('Error while adding folder:', e);

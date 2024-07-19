@@ -236,6 +236,13 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props:true,
         },
+        {
+          path: '/domains',
+          name: 'Domains',
+          component:()=> import('../views/Admin/Domains/Index.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
       ]
     }
   ]

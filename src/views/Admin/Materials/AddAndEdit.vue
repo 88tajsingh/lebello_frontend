@@ -1,7 +1,7 @@
 <template>
-  
-    <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`">
+    <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`"   >
     <form @submit.prevent="handleSubmit">
+        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <div class="p-6.5 grid grid-cols-2 gap-6">
             <div class="flex flex-col ">
                 <InputLabel for="Name" value="Name" />
@@ -24,7 +24,7 @@
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Parent Material" value="Parent Material" />
-                <Select :options="MaterialTreeListData" showfield="name" class="w-full" valueField="id" label="Select Parent Material"
+                <Select :options="MaterialTreeListData" showfield="name" class="w-full" :defaultZero='true' valueField="id" label="Select Parent Material"
                     v-model="form.parent_material" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
@@ -175,21 +175,9 @@ const router = useRouter();
 const IsOpen = ref(false)
 const MaterialTreeListData = ref([])
 const loading = ref(false)
+const items = ref(['Item 1', 'Item 2', 'Item 3']);
+console.log()
 const props = defineProps({
-    // material: {
-    //     type: Object,
-    //     default :{label_background_color:'#000000'}
-    // },
-    // materialTree: {
-    //     type: Array,
-    // },
-    // options: {
-    //     type: Object,
-    //     default: () => { }
-    // },
-    // formHeader: {
-    //     type: String,
-    // },
     id:{
         type: String,
     }
@@ -218,6 +206,8 @@ watch(
     }
 )
 
+
+
 const close = () => {
     IsOpen.value = false;
 }
@@ -231,24 +221,6 @@ const validateForm = () => {
         errors.value.name = 'Name is required'
         isValid = false
     }
-
-    // if (!form.value.slug) {
-    //     errors.value.slug = 'Slug is required'
-    //     isValid = false
-    // }
-    // if (!form.value.parent_material) {
-    //     errors.value.parent_material = 'parent_material is required'
-    //     isValid = false
-    // }
-    // if (!form.value.description) {
-    //     errors.value.description = 'description is required'
-    //     isValid = false
-    // }
-    // if (!form.value.material_price) {
-    //     errors.value.material_price = 'price is required'
-    //     isValid = false
-    // }
-
     return isValid
 }
 
@@ -305,54 +277,42 @@ const handleGetMaterialsById = async (payload) => {
 }
 
 const handleAddMaterials = async (payload) => {
-    loading.value = true
+  loading.value = true;
   try {
-    loading.value = true;
-    await MaterialsServices.addMaterial(payload)
-      .then(res => {
-        if (res.status === 200 && res.data.success === true) {
-            showToast('Add Material sucessfully','success')
-            router.push('/materials')
-            loading.value = false;
-          // handleGetMaterials();   
-        }
-        if (res && res.status === 400 ) {
-            showToast('Somthing went wrong','error')
-            loading.value = false
-        }
-      })
+    const res = await MaterialsServices.addMaterial(payload);
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      router.push('/materials');
+    }
+     else if (res.status_code === 400) {
+      showToast(res.message, 'error');
+    }
   } catch (e) {
-    console.error('Error while log in:', e);
+    showToast('An error occurred', 'error');
   } finally {
     loading.value = false;
   }
-}
-// edit material function
+};
+
 const handleEditMaterials = async (payload) => {
   loading.value = true;
   try {
-    await MaterialsServices.editMaterial(payload)
-      .then(res => {
-        console.log("res.status", res.status)
-        // editCloseModal();
-        if (res && res.status === 200) {
-            showToast('Edit Material sucessfully' ,'success')
-            loading.value = false
-            router.push('/materials')
-
-        }
-        if (res && res.status === 400 ) {
-            showToast('Somthing went wrong','error')
-            loading.value = false
-        }
-      })
+    const res = await MaterialsServices.editMaterial(payload);
+    console.log("res.status", res.status);
+    if (res.status === 200) {
+      showToast(res.data.message, 'success');
+      router.push('/materials');
+    } else if (res.status === 400) {
+      showToast('res.data.message', 'error');
+    }
   } catch (e) {
-    console.error('Error while log in:', e);
+    console.error('Error while editing material:', e);
+    showToast(e.response?.data?.message || 'An error occurred', 'error');
   } finally {
     loading.value = false;
-    // editCloseModal();
   }
-}
+};
+
 
 onMounted(()=>{
     if(props.id !== undefined && props.id !== null && props.id !== '' ) {

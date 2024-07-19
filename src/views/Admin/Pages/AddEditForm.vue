@@ -1,5 +1,6 @@
 <template>
   <DefaultCard :cardTitle="id ? `Edit Pages` : `Add Pages`">
+    <DomainComponent :domains="items" @customChange="(id)=> form.domain_id = id"></DomainComponent>
     <form @submit.prevent="handleSubmit">
       <div class="p-6.5 grid grid-cols-2 gap-2">
 
@@ -150,7 +151,7 @@
   </popupModal>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted  } from 'vue';
 import { handleFiles } from '@/helper/functions';
 import DatePicker from  '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
@@ -177,7 +178,6 @@ const libraryImages = ref({
   mediaName:'select Feature Media' ,
   selectedImage :[] || from.feature_image ,
 })
-const mediaName = ref('select Feature Media' )
 const data = JSON.stringify(store.getters);
 console.log('data in vuex: ' + data)
 const id = props.id
@@ -188,7 +188,6 @@ const IsOpen = ref(false)
 const isOpenSlider = ref(false)
 const form = ref({ gallery: [],password:'',});
 const loading = ref(false)
-const slider = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
 const close = () => {
@@ -245,72 +244,58 @@ const handleSubmit = async () => {
 
 // api calls
 const handleGetPages = async (payload) => {
-  console.log('get payload: ' + JSON.stringify(payload))
+  loading.value = true;
   try {
-    loading.value = true;
     const res = await PagesServices.getPages(payload);
-    if (res.status === 200 && res.data.success === true) {
+    if (res.status === 200 && res.data.success) {
       form.value = res.data.data[0];
-      loading.value = false;
-
     }
   } catch (e) {
-    console.error('Error while pages get:', e);
+    showToast(e, 'error');
+  } finally {
+    loading.value = false;
   }
 };
+
 const handleAddPages = async (payload) => {
+  loading.value = true;
   try {
-    loading.value = true;
     const res = await PagesServices.addPages(payload);
-    if (res.status === 200 && res.data.success === true) {
-      loading.value = false;
-      showToast(' Add Page sucessfully','success')
-      router.push('/pages')
-    }
-    if (res.status_code === 400) {
-      loading.value = false;
-      showToast('Somthing went wrong','error')
-      console.error('Error while adding pages:', res.message);
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      router.push('/pages');
+    } else if (res.data.status_code === 400) {
+      showToast(res.data.message, 'error');
     }
   } catch (e) {
-    loading.value = false;
     console.error('Error while adding pages:', e);
+  } finally {
+    loading.value = false;
   }
 };
-const handleEditPages = async (payload) => {
-  try {
-    loading.value = true;
-    const res = await PagesServices.editPages(payload);
-    if (res.status === 200 && res.data.success === true) {
-      loading.value = false;
-      showToast(' Edit Page sucessfully','success')
-      router.push('/pages')
-    }
-    if (res.status_code === 400) {
-      loading.value = false;
-      showToast('Somthing went wrong','error')
 
-      console.error('Error while editing pages:', res.message);
+const handleEditPages = async () => {
+  delete form.value.domain;
+  loading.value = true;
+  try {
+    const res = await PagesServices.editPages(form.value);
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      router.push('/pages');
+    } else if (res.data.status_code === 400) {
+      showToast('Something went wrong', 'error');
     }
   } catch (e) {
-    loading.value = false;
     console.error('Error while editing pages:', e);
+  } finally {
+    loading.value = false;
   }
 };
 
 onMounted(() => {
   if (props.id !== undefined && props.id !== null && props.id !== '') {
     const payload = { id: props.id }
-    console.log("payload ", payload)
     handleGetPages(payload);
   }
-  // navigateToRoute();
 });
 </script>
-
-<!-- if (errors.value.page_title) {
-    const errorFieldRef = refs.page_title;
-    if (errorFieldRef && errorFieldRef.$el) {
-      errorFieldRef.$el.focus();
-    }
-  } -->

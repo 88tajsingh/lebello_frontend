@@ -119,59 +119,64 @@
   }
   // api calls
   const handleGetContractLocation = async (payload) => {
-    try {
-      getLoading.value = true;
-      const res = await ContractServices.getContractLocation(payload);
-      if (res.status === 200 && res.data.success === true) {
-        rows.value = res.data.data;
-        getLoading.value = false;
-        totalRows.value= res.data.total_records
-      }
-    } catch (e) {
-      console.error('Error while pages get:', e);
+  getLoading.value = true;
+  try {
+    const res = await ContractServices.getContractLocation(payload);
+    if (res.status === 200 && res.data.success) {
+      rows.value = res.data.data;
+      totalRows.value = res.data.total_records;
     }
-  };
-    
-  const handleDeleteContractLocation = async () => {
-    try {
-      loading.value = true;
-      console.log("editData.value",editData.value)
-      const res = await ContractServices.deleteContractLocation({ id: editData.value });
-      if (res.status === 200 && res.data.success === true) {
-        loading.value = false;
-        showToast('Deleted sucessfully','success')
-        deleteModalIsOpen.value = false;
-        editData.value = null;
-        handleGetContractLocation();
-      }
-    } catch (e) {
-      console.error('Error while deleting pages:', e);
+  } catch (e) {
+    console.error('Error while getting contract locations:', e);
+  } finally {
+    getLoading.value = false;
+  }
+};
+
+const handleDeleteContractLocation = async () => {
+  loading.value = true;
+  try {
+    const res = await ContractServices.deleteContractLocation({ id: editData.value });
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      deleteModalIsOpen.value = false;
+      editData.value = null;
+      await handleGetContractLocation();
     }
-  };
-  // bulk delete
+    else if (res.status === 400){
+        showToast(res.data.message, 'error');
+      }
+  } catch (e) {
+    console.error('Error while deleting contract location:', e);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Bulk delete
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
-  let id = selected.map(item => item.id)
-  console.log('run bulk delete',id,bulkActionSelected.value)
+  const ids = selected.map(item => item.id);
+
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
-      await ContractServices.BulkDeleteContractLocation({ 'id': id })
-        .then(res => {
-          if (res && res.status === 200 && res.data.success === true) {
-            rows.value = res.data.data
-            console.log('enter 200 status: ' + res.status)
-            showToast(' Bulk Delete sucessfully', 'success')
-            handleGetContractLocation();
-            loading.value = false;
-          }
-        })
+      const res = await ContractServices.BulkDeleteContractLocation({ id: ids });
+      if (res.status === 200 && res.data.success) {
+        showToast(res.data.message, 'success');
+        await handleGetContractLocation();
+      }
+      else if (res.status === 400){
+        showToast(res.data.message, 'error');
+      }
     } catch (e) {
+      console.error('Error while bulk deleting contract locations:', e);
+    } finally {
       loading.value = false;
-      console.error('Error while log in:', e);
     }
   }
 };
+
 
   
   onMounted(() => {

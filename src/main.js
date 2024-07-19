@@ -12,7 +12,9 @@ import HelpersPlugin from './helper/helperPlugin';
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import InputError from './components/Admin-components/form-components/InputError.vue';
+import InputLabel from './components/Admin-components/form-components/InputLabel.vue';
 import apiPlugin from './helper/apiPlugin';
+import DomainComponent  from '@/components/Admin-components/form-components/DomainComponent.vue'
 import EditSvg  from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg  from '@/components/Admin-components/svg/DeleteSvg.vue'
 import Loader from '@/components/Admin-components/Loader.vue';
@@ -54,20 +56,22 @@ app.use(router)
 app.use(ToastPlugin)
 .use(store)
 .use(createPinia())
-.component('tabs', Tabs)
-.component('tab', Tab)
+.component('Tabs', Tabs)
+.component('Tab', Tab)
 app.use(VueApexCharts)
 app.component('Loader', Loader);
 app.component('Button', Button);
 app.component('Select', Select);
 app.component('EditSvg', EditSvg);
 app.component('Checkbox', Checkbox);
+app.component('DomainComponent', DomainComponent);
 app.component('DeleteSvg', DeleteSvg);
 app.component('TextInput', TextInput);
 app.component('PopupModal', PopupModal);
 app.component('DatePicker', DatePicker);
 app.component('PageHeader', PageHeader);
 app.component('InputError', InputError);
+app.component('InputLabel', InputLabel);
 app.config.globalProperties.$lodash = _;
 app.component('DeleteModal', DeleteModal);
 app.component('RadioButton', RadioButton);

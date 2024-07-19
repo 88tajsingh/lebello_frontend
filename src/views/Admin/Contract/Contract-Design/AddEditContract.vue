@@ -1,6 +1,7 @@
 <template>
 
     <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
+        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -355,7 +356,7 @@
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
         <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
-            :closeModal="close" :selectedFiles="handleFiles" />
+            :closeModal="close" :selectedFiles="handleFeatureFiles" />
     </popupModal>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
         <GetLibrary btnName="select File" :getFlag="true" :selected="selectedFiles" :singleFile="true"
@@ -373,6 +374,7 @@
 
 </template>
 <script setup>
+import { clearError,showToast } from '@/helper/functions'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
@@ -429,8 +431,9 @@ const handleSubmit = () => {
     form.value = {
         ...form.value,
         contract_home_page_slide: form.value.contract_home_page_slide ? 1 : 0,
-        featured_option: form.value.featured_option ? 1 : 0,
+        featured_option:form.value.featured_option ? 1 : 0,
     }
+    delete form.value?.domain;
     if (validateForm()) {
         if (props.id !== null)
             handleEditContract({ ...form.value })
@@ -468,57 +471,47 @@ const handleContractLocation = (checkedItems) => {
 
 // api calls 
 const handleGetContract = async (payload) => {
-    console.log(payload);
     try {
-        await ContractServices.getNewContract(payload)
-            .then(res => {
-                if (res.status === 200 && res.data.success === true) {
-                    if (res.data.data && res.data.data.length > 0) {
-                        form.value = res.data.data[0]
-                        form.value = {
-                            ...form.value,
-                            contract_home_page_slide: form.value.contract_home_page_slide ? true : false,
-                            featured_option: form.value.featured_option ? true : false,
-                        }
-                    }
-                }
-            }).catch((res) => {
-                console.log("error", res)
-            });
+        const res = await ContractServices.getNewContract(payload);
+        if (res.status === 200 && res.data.success) {
+            if (res.data.data?.length > 0) {
+                form.value=res.data.data[0]
+            }
+        }
     } catch (e) {
-        console.error('Error while log in:', e);
+        console.error('Error while getting contract:', e);
     }
 }
+
 const handleAddContract = async (payload) => {
-    // loading.value = true;
     try {
-        await ContractServices.addNewContract(payload)
-            .then(res => {
-                if (res && res.status === 200 && res.data.success === true) {
-                    // router.push('/swatches')
-                    loading.value = false;
-                }
-            })
+        const res = await ContractServices.addNewContract(payload);
+        if (res.status === 200 && res.data.success) {
+            showToast(res.data.message, 'success');
+            router.push('/Contract-Design');
+        }
     } catch (e) {
+        console.error('Error while adding contract:', e);
+    } finally {
         loading.value = false;
-        console.error('Error while log in:', e);
     }
 }
+
 const handleEditContract = async (payload) => {
     loading.value = true;
     try {
-        await ContractServices.editNewContract(payload)
-            .then(res => {
-                if (res && res.status === 200 && res.data.success === true) {
-                    loading.value = false;
-                    router.push('/Contract-Design')
-                }
-            })
+        const res = await ContractServices.editNewContract(payload);
+        if (res.status === 200 && res.data.success) {
+            showToast(res.data.message, 'success');
+            router.push('/Contract-Design');
+        }
     } catch (e) {
+        console.error('Error while editing contract:', e);
+    } finally {
         loading.value = false;
-        console.error('Error while log in:', e);
     }
 }
+
 
 // contractLoctionTree sorting 
 const contractLoctionTree = async () => {
@@ -531,10 +524,6 @@ const contractTypeTree = async () => {
     loading.value = false;
 }
 
-const materialTree = async () => {
-    MaterialTreeListData.value = await MaterialTreeList()
-    console.log("object", MaterialTreeListData)
-}
 onMounted(() => {
     console.log("id vlaiue ", props.id)
     if (id.value !== undefined && id.value !== null && id.value !== '') {

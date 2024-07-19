@@ -1,5 +1,6 @@
 <template>
     <DefaultCard :cardTitle="id ? `Edit Contract Type` : `Add Contract Type`">
+        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
             <div class="p-6.5 grid grid-cols-2 gap-6">
                 <div class="flex flex-col ">
@@ -19,7 +20,7 @@
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Parent Contract Type" value="Parent Contract Type" />
-                    <Select :options="contractTypeTreeListData" showfield="contract_name" class="w-full" valueField="id"
+                    <Select :options="contractTypeTreeListData" :defaultZero='true' showfield="contract_name" class="w-full" valueField="id"
                         label="Select Contract Type" v-model="form.parent_contract_type" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of

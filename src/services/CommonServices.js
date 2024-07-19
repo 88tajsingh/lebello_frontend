@@ -18,7 +18,21 @@ class LoginService {
   taxonomySorting(payload) {
     return instance.post(ApiConfig.taxonomySort, payload)
   }
+  allCountrys(payload) {
+    return instance.get(ApiConfig.getAllCountries, payload)
+  }
+  getCountries(payload) {
+    return instance.get(ApiConfig.getCountries, payload)
+  }
+  getDomains(payload) {
+    return instance.get(ApiConfig.getDomains, payload)
+  }
+  addDomains(payload) {
+    return instance.post(ApiConfig.addDomains, payload)
+  }
+  deleteDomains(payload) {
+    return instance.delete(ApiConfig.deleteDomains, {params: {...payload}})
+  }
 
 }
-
 export default new LoginService()

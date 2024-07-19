@@ -1,5 +1,9 @@
 
 const ApiConfig = {
+
+    
+    
+    
     register:'/register',
     login: '/login',
     logout: '/logout',
@@ -27,21 +31,21 @@ const ApiConfig = {
     swatchesSorting:'/sort-data',
     bulkDeleteSwatches :'/bulk-swatches-delete',
     // materialStatus: 'update-material-status',
-
+    
     // folders 
     getFolder:'/get-folders',
     getFolderChild:'/get-folder-child',
     addFolder:'/add-folder',
     editFolder:'/update-folder',
     deleteFolder:'/delete-folder',
-
+    
     // media 
     getMedia:'/get-media',
     getMediaChild:'/get-media-items',
     addMedia:'/add-media',
     editMedia:'/update-media',
     deleteMedia:'/delete-media',
-
+    
     // pages 
     getPages :'/pages-list',
     addPages :'/add-pages',
@@ -63,7 +67,7 @@ const ApiConfig = {
      editContract :'/update-contract-type',
      deleteContract :'/delete-contract-type',
      getContractTreeList:'/get-contract-tree-type',
-     bulkDeleteMaterial:'/delete-bulk-contract-type',
+     bulkDeletecontract:'/delete-bulk-contract-type',
      contractTaxonomySort:'/add-taxanomy-order',
 
      // Contract location Tree List 
@@ -75,7 +79,16 @@ const ApiConfig = {
      getContractLocationTreeList:'/get-contract-location-tree-list',
      contractLocationTaxonomySort:'/add-taxanomy-order',
 
-  };
+    //  countries
+    getAllCountries:'/get-countries',
+    getCountries:'/get-country-list',
+
+    // domain
+    getDomains :'/domain-list',
+    addDomains :'/add-domain',
+    deleteDomains :'/delete-domain',
+
+    };
   
   export default ApiConfig;
   

@@ -7,7 +7,9 @@
       :class="cusClass"
       @change="handleChange"
     >
-      <option :value="selectedOption=== null ? null :0" >{{ label }}</option>
+      <!-- <option :value="selectedOption=== null ? null : ''" >{{ label }}</option> -->
+      <option v-if="props.defaultZero === true" value='0' >{{ label }}</option>
+      <option v-else :value="selectedOption=== null ? null : '' "  >{{ label }}</option>
       <template v-for="option in options" :key="option[valueField]">
                 <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>                
                 <option v-if="option.children" v-for="child in option.children" :value="child[valueField]" :key="child[valueField]">
@@ -42,9 +44,13 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  defaultZero: {
+    type: Boolean,
+    default: false
+  },
   modelValue: {
-    type: [String, Number], 
-    default: ''
+    type: [ Number, String], 
+    default: 0
   },
 });
 
