@@ -59,9 +59,7 @@
                                 <TextInput id="TitleBackground" type="text" class="block w-full mr-2 mb-2 h-[33px]"
                                     v-model="form.contract_background_title" placeholder="" label="Title Background		
                           " />
-                                <TextInput id="TitleColor" type="text" class="block w-full mr-2 mb-2 h-[33px]"
-                                    v-model="form.contract_title_color" placeholder="" label="Title Color			
-                          " />
+                          <ColorPicker v-model="form.contract_title_color" />
                                 <TextInput id="LocationBackground	" type="text" class="block w-full mb-2 mr-2 h-[33px]"
                                     v-model="form.contract_location_background" placeholder="" label="Location Background			
                           " />
@@ -320,18 +318,12 @@
                                             :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
                                     <div v-if="iswithBg" class="">
-                                        <InputLabel for="Text Color" value="bg Color" />
-                                        <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg"
-                                            placeholder="" v-model="form.sub_heading_background" />
-
+                                        <ColorPicker  label="Select BG Color" v-model="form.contract_title_color" />
                                     </div>
 
                                 </div>
                                 <div class="">
-                                    <InputLabel for="Text Color" value="Text Color" />
-                                    <TextInput type="color" class="block h-[40px] px-2 mb-2 rounded-lg" placeholder=""
-                                        v-model="form.sub_heading_text_color"
-                                        :errMessage="errors.sub_heading_text_color" />
+                                    <ColorPicker  label="Text Color" v-model="form.sub_heading_text_color" />
                                 </div>
 
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
@@ -580,7 +572,7 @@ onMounted(() => {
 }
 );
 </script>
-<style>
+<style scoped>
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;

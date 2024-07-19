@@ -19,6 +19,7 @@ import EditSvg  from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg  from '@/components/Admin-components/svg/DeleteSvg.vue'
 import Loader from '@/components/Admin-components/Loader.vue';
 import {Tabs, Tab} from 'vue3-tabs-component';
+import ColorInput from '@/components/Admin-components/form-components/ColorInput.vue'
 import SingleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
@@ -64,8 +65,8 @@ app.component('Button', Button);
 app.component('Select', Select);
 app.component('EditSvg', EditSvg);
 app.component('Checkbox', Checkbox);
-app.component('DomainComponent', DomainComponent);
 app.component('DeleteSvg', DeleteSvg);
+app.component('ColorPicker', ColorInput);
 app.component('TextInput', TextInput);
 app.component('PopupModal', PopupModal);
 app.component('DatePicker', DatePicker);
@@ -76,5 +77,6 @@ app.config.globalProperties.$lodash = _;
 app.component('DeleteModal', DeleteModal);
 app.component('RadioButton', RadioButton);
 app.component('SingleCheckBox', SingleCheckBox);
+app.component('DomainComponent', DomainComponent);
 app.component('RouterLink', router.options.history.routerLink);
 app.mount('#app')

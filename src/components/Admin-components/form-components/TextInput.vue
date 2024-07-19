@@ -1,6 +1,6 @@
 <script setup>
 import InputLabel from './InputLabel.vue';
-import { onMounted, ref ,computed} from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { clearError } from '@/helper/functions';
 
 const props = defineProps({
@@ -15,7 +15,7 @@ const props = defineProps({
     type: Number,
     default: 3,
   },
-  errors:{ Object}
+  errors: { Object }
 });
 // const handleInput = (event) => {
 //   const input = event.target.name
@@ -35,47 +35,35 @@ const textareaClass = computed(() => ({
   'border-red': props.errMessage,
 }));
 const model = defineModel({
-    type: String,
-    default:'',
+  type: String,
+  default: '',
 });
 
 const input = ref(null);
 
 onMounted(() => {
-    if (input.value.hasAttribute('autofocus')) {
-        input.value.focus();
-    }
+  if (input.value.hasAttribute('autofocus')) {
+    input.value.focus();
+  }
 });
 
 defineExpose({ focus: () => input.value.focus() });
 </script>
 
 <template>
-  <InputLabel :for="props.label" > {{ props.label }}</InputLabel>
-    <div v-if="isTextarea" class="m-0 p-0 border-0">
-        <textarea 
-        :class="textareaClass"
-        v-model="model"
-        ref="input" 
-        :rows="rows"
-        :placeholder="placeholder"
-        v-bind="$attrs"
-        />
-    </div>
-    <div v-else class="relative m-0 p-0 border-0">
-        <input
-        :class="inputClass"
-         v-model="model"
-        ref="input"
-        @input="handleInput"
-        :placeholder="placeholder"
-        v-bind="$attrs"
-        />
-        <span class="absolute right-4 mt-2">
-        <slot></slot>
-      </span>
-    </div>
-    <div v-show="errMessage">
+  <InputLabel :for="props.label"> {{ props.label }}</InputLabel>
+  <div v-if="isTextarea" class="m-0 p-0 border-0">
+    <textarea :class="textareaClass" v-model="model" ref="input" :rows="rows" :placeholder="placeholder"
+      v-bind="$attrs" />
+  </div>
+  <div v-else class="relative m-0 p-0 border-0">
+    <input :class="inputClass" v-model="model" ref="input" @input="handleInput" :placeholder="placeholder"
+      v-bind="$attrs" />
+    <span class="absolute right-4 mt-2">
+      <slot></slot>
+    </span>
+  </div>
+  <div v-show="errMessage">
     <p class="text-sm ml-1 text-red">{{ errMessage }}</p>
   </div>
-    </template>
+</template>
