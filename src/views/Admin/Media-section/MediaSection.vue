@@ -422,7 +422,7 @@ const handleDeleteFolders = async () => {
         const parent_id = { id: SelectedFolder.value.parent };
         const res = await FolderServices.DeleteFolder(payload);
         if (res.status === 200 && res.data.success === true) {
-            showToast(' Delete folder sucessfully','success')
+            showToast(res.data.message,'success')
             await handleGetChildFolders(parent_id);
             closeModal();
         }

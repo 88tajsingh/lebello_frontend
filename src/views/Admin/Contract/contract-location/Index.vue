@@ -138,10 +138,10 @@ const handleDeleteContractLocation = async () => {
   try {
     const res = await ContractServices.deleteContractLocation({ id: editData.value });
     if (res.status === 200 && res.data.success) {
+      rows.value = rows.value.filter(item => item.id !== editData.value)
       showToast(res.data.message, 'success');
       deleteModalIsOpen.value = false;
       editData.value = null;
-      await handleGetContractLocation();
     }
     else if (res.status === 400){
         showToast(res.data.message, 'error');

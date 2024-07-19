@@ -132,12 +132,12 @@ const swatch_id = ref('')
 const handleDeleteSwatches = async () => {
   loading.value = true;
   try {
-    await SwatchesServices.deleteSwatches({ ...swatch_id.value })
+    await SwatchesServices.deleteSwatches(swatch_id.value)
       .then(res => {
         if (res && res.status === 200 && res.data.success === true) {
           modalflag.value.delete = false;
+          rows.value = rows.value.filter(item => item.id !== swatch_id.value.id)
           showToast(' Swatches delete sucessfully','success')
-          handleGetSwatches();
           loading.value = false;
         }
         if (res && res.status === 400) {

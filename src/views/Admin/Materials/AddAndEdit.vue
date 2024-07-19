@@ -175,15 +175,7 @@ const router = useRouter();
 const IsOpen = ref(false)
 const MaterialTreeListData = ref([])
 const loading = ref(false)
-const items = ref(['Item 1', 'Item 2', 'Item 3']);
-console.log()
-const props = defineProps({
-    id:{
-        type: String,
-    }
-})
-
-
+const props = defineProps(['id'])
 const id = ref(props.id || null)
 const form = ref({
     parent_material: 0,
@@ -315,7 +307,7 @@ const handleEditMaterials = async (payload) => {
 
 
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== '' ) {
+    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
         handleGetMaterialsById({id:props.id});
     }
     materialTree();
@@ -324,43 +316,3 @@ onMounted(()=>{
 })
 </script>
 
-<style>
-.e-ddl.e-input-group.e-control-wrapper .e-input {
-    font-size: 20px;
-    font-family: emoji;
-    color: #ab3243;
-    background: #000505;
-}
-
-.e-ddl.e-input-group.e-control-wrapper .e-input {
-    font-size: 20px;
-    font-family: emoji;
-    color: #ab3243;
-    background: #32a5ab;
-}
-
-.custom-file-upload {
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
-}
-
-.custom-file-upload:hover {
-    background-color: #e2e2e2;
-}
-
-input[type='number']::-webkit-outer-spin-button,
-input[type='number']::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type='number'] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-</style>

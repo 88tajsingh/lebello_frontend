@@ -138,9 +138,9 @@ const handleDeleteContract = async () => {
     const res = await ContractServices.deleteNewContract({ id: editData.value });
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message,'success')
+      rows.value = rows.value.filter(item => item.id !== editData.value)
       editData.value = null;
       deleteModalIsOpen.value = false;
-      await handleGetContract(); 
     }
   } catch (error) {
     console.error('Error while deleting contract:', error);

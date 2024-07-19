@@ -116,7 +116,6 @@
 
   watch(() => props.checkedData, (newVal) => {
     checkedItems.value = flattenArray(newVal);
-    console.log('Flattened Checked Data:', checkedItems.value);
   });
 
   const checkedIds = computed(() => checkedItems.value);

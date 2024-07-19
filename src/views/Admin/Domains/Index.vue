@@ -7,7 +7,7 @@
       </div> -->
       <div class="flex ml-auto">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-        <Button @click="() =>openModal()" class="px-2 py-2">Add Domain</Button>
+        <Button @click="() =>{modalIsOpen = true}" class="px-2 py-2">Add Domain</Button>
       </div>
     </div>
     <div class="bg-white rounded-[20px]">
@@ -32,7 +32,7 @@
             <!-- <div @click="() =>editModal()" id="edit svg">
               <EditSvg />
             </div> -->
-            <div id="delete svg" @click="openDeleteModal(data.value)">
+            <div id="delete svg" @click="()=>{ deleteModalIsOpen = true; editData = data.value.id;}">
               <DeleteSvg />
             </div>
           </div>
@@ -83,16 +83,8 @@
   const editIsOpen = ref(false);
   const deleteModalIsOpen = ref(false);
   const  totalRows = ref('')
-  
-  const openDeleteModal = (data) => {
-    deleteModalIsOpen.value = true;
-    editData.value = data.id;
-  };
-  
-  const openModal = () => {
-    modalIsOpen.value = true;
-  };
-  
+  const pagination = ref({})
+    
   const editModal = (data) => {
     editData.value = { ...data.value };
     editIsOpen.value=true;
@@ -112,64 +104,65 @@
   
   const changePages =(page) => {
     const payload = {limit:page.pagesize,page:page.current_page}
+    pagination.value=payload
     handleGetDomains(payload);
   }
   
   // api calls
   const handleGetDomains = async (payload) => {
-    try {
-      getLoading.value = true;
-      const res = await CommonServices.getDomains(payload);
-      if (res.status === 200 && res.data.success === true) {
-        rows.value = res.data.data;
-        getLoading.value = false;
-        totalRows.value= res.data.total_records
-      }
-    } catch (e) {
-      console.error('Error while pages get:', e);
+  try {
+    getLoading.value = true;
+    const res = await CommonServices.getDomains(payload);
+    if (res.status === 200 && res.data.success) {
+      rows.value = res.data.data;
+      totalRows.value = res.data.total_records;
     }
-  };
-  
-  const handleDeleteDomain = async () => {
-    console.log(editData.value)
-    try {
-      loading.value = true;
-      const res = await CommonServices.deleteDomains({ id: editData.value });
-      if (res.status === 200 && res.data.success === true) {
-        loading.value = false;
-        deleteModalIsOpen.value = false;
-        editData.value = null;
-        showToast(res.data.message,'success')
-        handleGetDomains();
-      }
-      if(res.status === 400){
-        loading.value = false;
-        showToast('Unable to delete','error')
-      }
-    } catch (e) {
-      console.error('Error while deleting pages:', e);
-    }
-  };
+  } catch (e) {
+    console.error('Error while getting domains:', e);
+  } finally {
+    getLoading.value = false;
+  }
+};
 
-  const handleAddDomain = async (payload) => {
-    try {
-      loading.value = true;
-      const res = await CommonServices.addDomains(payload);
-      if (res.status === 200 && res.data.success === true) {
-        loading.value = false;
-        showToast(res.data.message,'success')
-        router.push('/domains')
-      }
-      if (res.status_code === 400) {
-        loading.value = false;
-        showToast('Somthing went wrong','error')
-        console.error('Error while adding pages:', res.message);
-      }
-    } catch (e) {
-      loading.value = false;
-      console.error('Error while adding pages:', e);
+const handleDeleteDomain = async () => {
+  try {
+    loading.value = true;
+    const res = await CommonServices.deleteDomains({ id: editData.value });
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      rows.value = rows.value.filter(item => item.id !== editData.value)
+      deleteModalIsOpen.value = false;
+      editData.value = null;
+    } else if(res.status === 400) {
+      showToast(res.data.message, 'error');
     }
-  };
+  } catch (e) {
+    console.error('Error while deleting domain:', e);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleAddDomain = async (payload) => {
+  try {
+    loading.value = true;
+    const res = await CommonServices.addDomains(payload);
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      router.push('/domains');
+      modalIsOpen.value=false;
+      handleGetDomains(pagination.value);
+    } else {
+      showToast('Something went wrong', 'error');
+      console.error('Error while adding domain:', res.message);
+    }
+  } catch (e) {
+    console.error('Error while adding domain:', e);
+  } finally {
+    loading.value = false;
+  }
+};
+
 //   const handleEditPages = async (payload) => {
 //     try {
 //       loading.value = true;

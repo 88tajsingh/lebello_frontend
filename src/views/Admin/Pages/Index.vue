@@ -118,7 +118,7 @@ const handleDeletePages = async () => {
     const res = await PagesServices.deletePages({ id: editData.value });
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
-      handleGetPages();
+      rows.value = rows.value.filter(item => item.id !== editData.value)
       deleteModalIsOpen.value = false;
       editData.value = null;
     } else if (res.status === 400) {

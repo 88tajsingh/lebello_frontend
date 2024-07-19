@@ -181,12 +181,11 @@ const handleGetMaterials = async (payload) => {
 const handleDeleteMaterials = async () => {
   loading.value = true;
   try {
-    const payload = { id: material_id.value.id };
-    const res = await materialsServices.deleteMaterial(payload);
+    const res = await materialsServices.deleteMaterial({ id: material_id.value.id });
     if (res.status === 200) {
       showToast(res.data.message, 'success');
+      data.value = data.value.filter(item => item.id !== material_id.value.id)
       deleteModalIsOpen.value = false;
-      handleGetMaterials();
     } else if (res.status === 400) {
       showToast(res.message, 'error');
     }

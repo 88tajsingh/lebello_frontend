@@ -436,10 +436,7 @@ const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
 const form = ref({ status: null,description:' ' });
-const props = defineProps(['id']);
-const id = ref(props.id || null)
-
-
+const props = defineProps({id:{type:Number,default:null}});
 
 const close = () => {
     IsOpen.value = false;
@@ -479,7 +476,8 @@ const handleCheckedItems = (checkedItems) => {
     console.log('Received checked items in parent:', checkedItems);
     form.value = { ...form.value, materials: checkedItems }
 };
-// api calls 
+
+// API calls 
 const handleGetSwatches = async (payload) => {
     try {
         const res = await SwatchesServices.getSwatches(payload);
@@ -537,13 +535,13 @@ const materialTree = async () => {
 }
 
 onMounted(() => {
-    if (id.value !== undefined && id.value !== null && id.value !== '') {
-        handleGetSwatches({ id: id.value });
+    if (props.id !== undefined && props.id !== null && props.id !== '') {
+        handleGetSwatches({ id: props.id });
     }
     materialTree();
-}
-);
+});
 </script>
+
 <style>
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

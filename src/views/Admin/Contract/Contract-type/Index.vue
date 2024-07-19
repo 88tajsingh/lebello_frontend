@@ -137,10 +137,10 @@ const handleDeleteContractType = async () => {
     const res = await ContractServices.deleteContractType({ id: editData.value });
     if (res.status === 200 && res.data.success === true) {
       loading.value = false;
-      showToast('Deleted  sucessfully', 'success')
+      showToast(res.data.message, 'success')
+      rows.value = rows.value.filter(item => item.id !== editData.value)
       deleteModalIsOpen.value = false;
       editData.value = null;
-      handleGetContractType();
     }
   } catch (e) {
     console.error('Error while deleting pages:', e);
