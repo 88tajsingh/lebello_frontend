@@ -78,15 +78,27 @@ const ApiConfig = {
      bulkDeleteLocation:'/bulk-delete-contract-location',
      getContractLocationTreeList:'/get-contract-location-tree-list',
      contractLocationTaxonomySort:'/add-taxanomy-order',
+     
+     // domain
+     getDomains :'/domain-list',
+     addDomains :'/add-domain',
+     deleteDomains :'/delete-domain',
 
     //  countries
     getAllCountries:'/get-countries',
     getCountries:'/get-country-list',
 
-    // domain
-    getDomains :'/domain-list',
-    addDomains :'/add-domain',
-    deleteDomains :'/delete-domain',
+    // Currencies
+    getCurrenciesList:'/get-currency-list',
+    getAllCurrencies:'/get-currencies',
+
+    //exchange rates
+    getExchangeRatesList:'/get-exchange-rate',
+    addExchangeRates:'/add-exchange-rate',
+    editExchangeRates:'/update-exchange-rate',
+    deleteExchangeRates:'/delete-exchange-rate',
+
+
 
     };
   

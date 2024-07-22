@@ -1,14 +1,11 @@
 import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
-import store from '@/store'
 class Pageservices {
 
   getPages(payload) {
-    console.log('store.getters.token url',store.getters.token)
     return instance.get(ApiConfig.getPages,{params: {...payload}})
   }
   addPages(payload) {
-      console.log("Added material", payload)
     return instance.post(ApiConfig.addPages, payload)
   }
   editPages(payload) {

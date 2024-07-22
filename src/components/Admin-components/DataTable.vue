@@ -1,45 +1,31 @@
 <template>
     <div class="flex justify-between px-1 mb-2">
-      <div v-if="bulkOption" class="flex">
-        <Select
-          cusClass="h-[38px] border-boxdark"
-          :options="bulkOption"
-          showfield="text"
-          valueField="value"
-          label="Bulk Options"
-          v-model="actionSelected"
-        />
-        <Button class="px-2 py-2 m-auto" @click="applyBulkAction">Apply</Button>
-      </div>
-      <div class="flex ml-auto">
-        <TextInput
-          v-if="isSearchAble"
-          type="text"
-          class="block bg-white mr-2 h-[40px] w-full"
-          placeholder="Search"
-          v-model="search"
-        />
-        <Button @click="openModal" class="px-2 py-2">Add Materials</Button>
-      </div>
-    </div>
-    <div class="bg-white">
-      <Vue3Datatable
-        skin="bh-table-striped bh-table-hover"
-        :hasCheckbox="hasCheckbox"
-        :loading="loading"
-        :rows="filteredRows"
-        :columns="cols"
-        :paginationInfo="paginationInfo"
-        :showNumbersCount="3"
-        class="next-prev-pagination"
-        :cloneHeaderInFooter="true"
-        rowClass=""
-        :search="search"
-      >
-        <template v-for="col in cols" v-if="col?.slot" v-slot:[col.field]="{ row }">
-          <slot :name="col.field" :row="row" />
-        </template>
-      </Vue3Datatable>
+      <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+    :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
+    :rows="props.data" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
+      <template #name="data">
+        <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
+          {{ data.value.name }}
+          <!-- <div v-if="isRowHovered(data.value)">overed</div> -->
+        </div>
+      </template>
+      <template #image="data">
+        <img :src="$filePath(data.value.image)" alt="Material Image" style="max-width: 50px; max-height: 50px" />
+      </template>
+      <template #actions="data">
+        <div class="flex gap-3">
+          <div @click="() => {router.push({ name: 'materials-edit', params: { id: data.value.id } }) }" id="edit svg">
+            <EditSvg />
+          </div>
+          <div id="delete svg" @click="() => { material_id = data.value; openDeleteModal(); }">
+            <DeleteSvg />
+          </div>
+          <!-- <Button :onClick="editModal" bg_th_color="bg-[#2271b1] text-white px-3 py-2" class="m-0 py-1 px-2" @click="()=>{editData=data.value}">Edit</Button>
+        <Button  class="m-0 px-2" :onClick="openDeleteModal" bg_th_color="bg-red border-red text-white" @click="()=>{material_id=data.value}">Delete</Button> -->
+
+        </div>
+      </template>
+    </vue3-datatable>
     </div>
   </template>
   
@@ -50,7 +36,8 @@
   import TextInput from '@/components/Admin-components/form-components/TextInput.vue';
   import Select from '@/components/Admin-components/form-components/Select.vue';
   import Button from '@/components/Admin-components/Buttons/Button.vue';
-  
+
+  const props= defineProps(['data'])
   const bulkOption = ref([]);
   const isSearchAble = ref(false);
   const loading = ref(false);

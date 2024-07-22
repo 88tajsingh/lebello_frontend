@@ -5,6 +5,7 @@
       v-bind="$attrs"
       v-model="selectedOption"
       :class="cusClass"
+      :disabled="disabled"
       @change="handleChange"
     >
       <!-- <option :value="selectedOption=== null ? null : ''" >{{ label }}</option> -->
@@ -45,6 +46,10 @@ const props = defineProps({
     default: ''
   },
   defaultZero: {
+    type: Boolean,
+    default: false
+  },
+  disabled: {
     type: Boolean,
     default: false
   },

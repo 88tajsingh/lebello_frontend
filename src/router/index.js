@@ -239,7 +239,14 @@ const router = createRouter({
         {
           path: '/domains',
           name: 'Domains',
-          component:()=> import('../views/Admin/Domains/Index.vue'),
+          component:()=> import('../views/Admin/General-Settings/Domains/Index.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+        {
+          path: '/currency',
+          name: 'Currency',
+          component:()=> import('../views/Admin/General-Settings/Currency/Index.vue'),
           meta: { requiresAuth: true },
           props:true,
         },

@@ -257,7 +257,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <Checkbox :nexted=true :dropdown="true" valueField="id" showField="contract_name"
                                     :checkedData='form.contract_type' :data="contractType"
-                                    @checked-items="handleContractType" />
+                                    @checked-items="(checked)=>{form.contract_type = checked }" />
                             </div>
                         </Accordion>
                     </div>
@@ -266,7 +266,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <Checkbox :nexted=true :checkedData='form.contract_location' :dropdown="true"
                                     valueField="id" showField="contract_location" :data="contractLocation"
-                                    @checked-items="handleContractLocation" />
+                                    @checked-items="(checked)=>form.contract_location=checked" />
                             </div>
                         </Accordion>
                     </div>
@@ -399,7 +399,7 @@ const iswithBg = ref(false)
 const contractType = ref([]);
 const contractLocation = ref([]);
 const loading = ref(false)
-const form = ref({ status: '0', simple_fields: '0', contract_home_page_slide: false, });
+const form = ref({ status: '', simple_fields: 0 });
 
 // images variables 
 const featureData = ref({
@@ -453,23 +453,7 @@ const handleSliderImageFiles = (data) => {
     form.value.contract_slider_image = object.media_ids[0]
 }
 
-
-// const handleFiles = (data) => {
-//     close();
-//     selectedFiles.value = data
-//     const media_titles = data.map(item => item.title);
-//     mediaName.value = media_titles.join(', ');
-//     const media_ids = data.map(item => item.id);
-//     form.value.featured_image = media_ids[0];
-//     console.log('in form ', selectedFiles.value)
-// }
-
 const handleSubmit = () => {
-    form.value = {
-        ...form.value,
-        contract_home_page_slide: form.value.contract_home_page_slide ? 1 : 0,
-        featured_option: form.value.featured_option ? 1 : 0,
-    }
     delete form.value?.domain;
     if (validateForm()) {
         if (props.id !== null)
@@ -496,15 +480,6 @@ const props = defineProps({
 });
 const options = [{ name: 'Inherit from parent (No parent found)', value: 0 },
 { name: 'Contract Logo', value: 1 }]
-
-const id = ref(props.id || null)
-
-const handleContractType = (checkedItems) => {
-    form.value = { ...form.value, contract_type: checkedItems }
-};
-const handleContractLocation = (checkedItems) => {
-    form.value = { ...form.value, contract_location: checkedItems }
-};
 
 // api calls 
 const handleGetContract = async (payload) => {
@@ -550,7 +525,6 @@ const handleEditContract = async (payload) => {
     }
 }
 
-
 // contractLoctionTree sorting 
 const contractLoctionTree = async () => {
     contractLocation.value = await contractLoctionTreeList()
@@ -563,9 +537,8 @@ const contractTypeTree = async () => {
 }
 
 onMounted(() => {
-    console.log("id vlaiue ", props.id)
-    if (id.value !== undefined && id.value !== null && id.value !== '') {
-        handleGetContract({ id: id.value });
+    if (props.id !== undefined && props.id !== null && props.id !== '') {
+        handleGetContract({ id: props.id });
     }
     contractLoctionTree();
     contractTypeTree();

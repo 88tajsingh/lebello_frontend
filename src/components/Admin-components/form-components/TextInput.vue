@@ -1,12 +1,17 @@
 <script setup>
 import InputLabel from './InputLabel.vue';
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed,watch,defineEmits } from 'vue';
 import { clearError } from '@/helper/functions';
+import SingleCheck from './SingleCheck.vue';
 
 const props = defineProps({
   label: String,
   errMessage: String,
   placeholder: String,
+  id: {
+    type: String,
+    default: 'id',
+  },
   isTextarea: {
     type: Boolean,
     default: false,
@@ -15,11 +20,15 @@ const props = defineProps({
     type: Number,
     default: 3,
   },
+  hasCheckBox: {
+    type: Boolean,
+    default: false,
+  },
   errors: { Object }
 });
 // const handleInput = (event) => {
 //   const input = event.target.name
-//   console.log(" running " + input)
+//   console.log(" running " + JSON.stringify({...event.target}))
 //   clearError(props.errors, event.target.name);
 // };
 
@@ -34,12 +43,16 @@ const textareaClass = computed(() => ({
   'border-stroke dark:border-form-strokedark dark:bg-form-input': !props.errMessage,
   'border-red': props.errMessage,
 }));
+
 const model = defineModel({
   type: String,
   default: '',
 });
 
+const emits = defineEmits(['update:checkValue'])
+
 const input = ref(null);
+const checked = ref(null);
 
 onMounted(() => {
   if (input.value.hasAttribute('autofocus')) {
@@ -47,17 +60,25 @@ onMounted(() => {
   }
 });
 
+watch(checked, (newChecked) => {
+  emits('update:checkValue', newChecked);
+});
+
 defineExpose({ focus: () => input.value.focus() });
 </script>
 
 <template>
   <InputLabel :for="props.label"> {{ props.label }}</InputLabel>
-  <div v-if="isTextarea" class="m-0 p-0 border-0">
-    <textarea :class="textareaClass" v-model="model" ref="input" :rows="rows" :placeholder="placeholder"
+  <div v-if="isTextarea" class="m-0 p-0 border-0 flex ">
+    <SingleCheck v-if="hasCheckBox" :id="`${id}textbox`" label=""
+    v-model:modelValue="checked"></SingleCheck>
+    <textarea :id="`${id}textbox`" :class="textareaClass" v-model="model" ref="input" :rows="rows" :placeholder="placeholder"
       v-bind="$attrs" />
   </div>
-  <div v-else class="relative m-0 p-0 border-0">
-    <input :class="inputClass" v-model="model" ref="input" @input="handleInput" :placeholder="placeholder"
+  <div v-else class="relative m-0 p-0 border-0 flex">
+    <SingleCheck v-if="hasCheckBox" :id="`${id}textbox`" label=""
+    v-model:modelValue="checked"></SingleCheck>
+    <input :id="`${id}textbox`" :class="inputClass" v-model="model" ref="input" @input="handleInput" :placeholder="placeholder"
       v-bind="$attrs" />
     <span class="absolute right-4 mt-2">
       <slot></slot>
