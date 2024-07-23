@@ -101,7 +101,9 @@ import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
 import materialsServices from '@/services/MaterialsServices'
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const router = useRouter();
 const bulkActionSelected = ref(null)
 const search = ref('')
@@ -226,8 +228,9 @@ const handleBulkActions = async () => {
 
 const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
-  const id = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = id.id
+  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  domain_id.value = defaultDomain.id
+  store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
@@ -238,6 +241,11 @@ onMounted(() => {
 watch(
     () => domain_id.value,
     () => {
+     
+      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
+      store.dispatch('setDomain', defaultDomain[0]);
+      console.log(defaultDomain , domain_id.value)
+   
       handleGetMaterials({limit:10,page:1,domain_id:domain_id.value});
     }
 );

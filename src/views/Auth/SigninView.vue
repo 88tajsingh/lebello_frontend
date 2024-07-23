@@ -9,9 +9,9 @@ import LoginService from '@/services/LoginServices';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-const pageTitle = ref('Sign In')
 const store = useStore();
 const router = useRouter();
+const pageTitle = ref('Sign In')
 
 // variables 
 const errors = ref({

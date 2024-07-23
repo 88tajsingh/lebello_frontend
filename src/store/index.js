@@ -6,12 +6,15 @@ export default new Vuex.Store({
     user: JSON.parse(localStorage.getItem('user')) ,
     editData: '',
     passData: null,
+    domain : '',
   },
   getters: {
     token: state => state.token,
     user: state => state.user,
     editData: state => state.editData,
-    getParam: state => state.param
+    getParam: state => state.param,
+    getDomain: state => state.domain,
+    
 
   },
   mutations: {
@@ -39,7 +42,11 @@ export default new Vuex.Store({
     },
     setParam(state, param) {
       state.passData = param;
-    }
+    },
+    setDomain(state, domain) {
+      state.domain = domain;
+      console.log('setting domain', state.domain)
+    },
   },
   actions: {
     login({ commit }, { token, user }) {
@@ -58,7 +65,11 @@ export default new Vuex.Store({
     },
     setParam({ commit }, param) {
       commit('setParam', param);
-    }
+    },
+    setDomain({ commit }, domain) {
+      console.log(' entering domain')
+      commit('setDomain', domain);
+    },
   },
   modules: {},
 });

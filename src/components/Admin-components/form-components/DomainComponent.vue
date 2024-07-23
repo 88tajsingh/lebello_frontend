@@ -26,7 +26,9 @@
 <script setup>
 import { defineProps, defineEmits, ref, onMounted, watch } from 'vue';
 import CommonServices from '@/services/CommonServices';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const emit = defineEmits(['customChange']);
 const DropData = ref([]);
 const domain_id = ref(null);
@@ -65,9 +67,9 @@ const handleGetDomains = async () => {
   try {
     const res = await CommonServices.getDomains();
     if (res.status === 200 && res.data.success === true) {
-      domainsArray.value = [res.data.data[0]]
       emit('customChange', res.data.data[0].id);
-      selectedDomain.value = res.data.data[0].id
+      selectedDomain.value = store.getters.getDomain
+      domain_id.value =  selectedDomain.value.id
       DropData.value = res.data.data;
     }
   } catch (e) {
