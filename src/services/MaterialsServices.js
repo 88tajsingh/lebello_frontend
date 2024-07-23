@@ -23,8 +23,8 @@ class LoginService {
   taxonomySorting(payload) {
     return instance.post(ApiConfig.taxonomySort, payload)
   }
-  MaterialTreeList() {
-    return instance.get(ApiConfig.getMaterialTeeeList)
+  MaterialTreeList(payload) {
+    return instance.get(ApiConfig.getMaterialTeeeList,{params: {...payload}})
   }
   // deleteMaterial(payload) {
   //   return instance.get(`${ApiConfig.deleteMaterial}/id=${payload.id}`)

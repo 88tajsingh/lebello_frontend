@@ -4,12 +4,15 @@ export default new Vuex.Store({
   state: {
     token: localStorage.getItem('token') ,
     user: JSON.parse(localStorage.getItem('user')) ,
-    editData: ''
+    editData: '',
+    passData: null,
   },
   getters: {
     token: state => state.token,
     user: state => state.user,
     editData: state => state.editData,
+    getParam: state => state.param
+
   },
   mutations: {
     setToken(state, token) {
@@ -34,6 +37,9 @@ export default new Vuex.Store({
     setStatus(state, status) {
       state.status = status;
     },
+    setParam(state, param) {
+      state.passData = param;
+    }
   },
   actions: {
     login({ commit }, { token, user }) {
@@ -50,6 +56,9 @@ export default new Vuex.Store({
     editData({ commit }, {data  }) {
       commit('setEditData', data);
     },
+    setParam({ commit }, param) {
+      commit('setParam', param);
+    }
   },
   modules: {},
 });

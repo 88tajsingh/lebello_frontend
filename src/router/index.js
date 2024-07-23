@@ -122,7 +122,7 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/materials-edit/:id',
+          path: '/materials-edit/:id/:domain',
           name: 'materials-edit',
           component:()=> import('../views/Admin/Materials/AddAndEdit.vue'),
           props:true,

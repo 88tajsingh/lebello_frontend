@@ -1,4 +1,4 @@
-<template>
+<template>{{param}}
     <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`"   >
     <form @submit.prevent="handleSubmit">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
@@ -164,19 +164,24 @@ import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
 import _ from 'lodash';
 import { clearError,showToast } from '@/helper/functions'
-import { onMounted, ref, watch, } from 'vue'
+import { onMounted, ref, watch, computed} from 'vue'
 import { trueFalse, colors, } from '@/json/data'
 import { defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
 const router = useRouter();
+const store = useStore();
 
 // const props = defineProps(['id']);
 const IsOpen = ref(false)
 const MaterialTreeListData = ref([])
 const loading = ref(false)
-const props = defineProps(['id'])
+const props = defineProps(['id','domain'])
 const id = ref(props.id || null)
+const PreviousDomain = ref(null)
+const masterId = ref(null)
+
 const form = ref({
     parent_material: 0,
     display_material_option:null,
@@ -185,6 +190,9 @@ const form = ref({
     single_color:null,
     show_new_badge_2021:null
 })
+
+const param = computed(() => store.getters.getParam);
+console.log('prams get ',param)
 const mediaName = ref( 'Select Media' || form.image)
 const selectedFiles = ref(form.value.image)
 
@@ -224,7 +232,7 @@ const handleSubmit = async () => {
         if (validateForm()) {
             // emit('handleApi', { ...form.value });
             if(id.value !== null ) 
-            handleEditMaterials( { ...form.value })
+            handleEditMaterials( )
             else
             handleAddMaterials( { ...form.value })
         }
@@ -245,8 +253,8 @@ const handleFiles = (data) => {
     form.value.media_id = media_ids[0];
 }
 // api for get patents child json parent material listing 
-const materialTree = async () => {
-  MaterialTreeListData.value = await MaterialTreeList()
+const materialTree = async (payload) => {
+  MaterialTreeListData.value = await MaterialTreeList(payload)
 }
 // get material
 const handleGetMaterialsById = async (payload) => {
@@ -257,6 +265,8 @@ const handleGetMaterialsById = async (payload) => {
         if (res.status === 200 && res.data.success === true) {
           if (res.data.data && res.data.data.length > 0) {
             form.value = res.data.data[0]
+            PreviousDomain.value = form.value.domain_id
+            masterId.value = form.value.master_material_id
             loading.value = false
           }
         }
@@ -287,9 +297,16 @@ const handleAddMaterials = async (payload) => {
 };
 
 const handleEditMaterials = async (payload) => {
+    if(form.domain_id !== PreviousDomain){
+        delete form.value.id
+        form.value = {...form.value, master_material_id:masterId}
+    }
+
+    form.value = {...form.value, master_material_id:masterId}
+
   loading.value = true;
   try {
-    const res = await MaterialsServices.editMaterial(payload);
+    const res = await MaterialsServices.editMaterial({...form.value});
     console.log("res.status", res.status);
     if (res.status === 200) {
       showToast(res.data.message, 'success');
@@ -308,11 +325,24 @@ const handleEditMaterials = async (payload) => {
 
 onMounted(()=>{
     if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        handleGetMaterialsById({id:props.id});
+        handleGetMaterialsById({id:props.id,domain_id:props.domain});
+        form.domain_id = props.domain;
     }
-    materialTree();
-
-
 })
+
+watch(
+    () => form.value.domain_id,
+    () => {
+        if(form.value.domain_id)
+        materialTree({domain_id:form.value.domain_id});
+    }
+);
+
+watch(
+    () => form.value.domain_id,
+    () => {
+        handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId })
+    }
+);
 </script>
 

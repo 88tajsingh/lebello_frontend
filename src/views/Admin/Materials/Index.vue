@@ -1,4 +1,5 @@
 <template>
+  <!-- <div class="ml-96"><Languages/></div> -->
   <PageHeader> Material</PageHeader>
   <div class="flex  content-between justify-between   mb-2">
     <div class="flex">
@@ -26,7 +27,7 @@
       </template>
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click="() => {router.push({ name: 'materials-edit', params: { id: data.value.id } }) }" id="edit svg">
+          <div @click="() => { router.push({ name: 'materials-edit', params: { id: data.value.id , domain: data.value.domain_id} }) }" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => { material_id = data.value; openDeleteModal(); }">
@@ -85,6 +86,7 @@
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue'
 import { ref, onMounted } from 'vue'
+import Languages  from '@/components/Languages.vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import DataTable from '@/components/Admin-components/DataTable.vue'
@@ -217,15 +219,10 @@ const handleBulkActions = async () => {
   }
 };
 
-
 onMounted(() => {
   handleGetMaterials({limit:10,page:1});
+  
 }
 );
 </script>
 
-<style scoped>
-.bh-pagesize {
-  width: 72px !important;
-}
-</style>

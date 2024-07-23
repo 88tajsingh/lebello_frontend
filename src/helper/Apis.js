@@ -17,9 +17,9 @@ export const logout = async () => {
     }
   };
 
-export const MaterialTreeList = async () => {
+export const MaterialTreeList = async (payload) => {
     try {
-      const res = await MaterialsServices.MaterialTreeList();
+      const res = await MaterialsServices.MaterialTreeList(payload);
       if (res.status === 200) {
         return  res.data.data;
       } 
