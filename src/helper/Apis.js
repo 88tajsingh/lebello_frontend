@@ -69,4 +69,15 @@ export const getAllCurrenciesList = async () => {
       console.log("getAllCurrenciesList err", err);
     }
   };
+
+export const getDomins = async () => {
+    try {
+      const res = await CommonServices.getDomains();
+      if (res.status === 200) {
+        return  res.data.data;
+      } 
+    } catch (err) {
+      console.log("getDomins err", err);
+    }
+  };
   

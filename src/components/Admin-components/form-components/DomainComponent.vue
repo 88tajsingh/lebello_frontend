@@ -11,7 +11,7 @@
     <div class="flex flex-wrap">
       <div v-for="(item, index) in domainsArray" @click="emitItemClick(item.id)" :key="index" class="badge py-1 border border-black relative bg-blue-500 px-2 rounded-lg flex items-center mb-2 mr-2 cursor-pointer" :class="{'border-primary bg-primary text-gray':selectedDomain == item.id}">
         {{ item.name }} ({{ item.country.code }})
-        <button v-if="domainsArray.length > 1" type="button" @click.stop="removeItem(index)" class="ml-4 hover:text-red-500 focus:outline-none">
+        <button v-if="index!== 0" type="button" @click.stop="removeItem(index)" class="ml-4 hover:text-red-500 focus:outline-none">
           <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="10" :stroke="selectedDomain == item.id ? '#EFF4FB' : '#1C274C'" stroke-width="1.5"></circle>
             <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" :stroke="selectedDomain == item.id ? '#EFF4FB' : '#1C274C'" stroke-width="1.5" stroke-linecap="round"></path>
