@@ -68,7 +68,7 @@ const handleGetDomains = async () => {
     const res = await CommonServices.getDomains();
     if (res.status === 200 && res.data.success === true) {
       emit('customChange', res.data.data[0].id);
-      selectedDomain.value = store.getters.getDomain
+      selectedDomain.value = store.getters.getDomain || res.data.data[0]
       domain_id.value =  selectedDomain.value.id
       DropData.value = res.data.data;
     }

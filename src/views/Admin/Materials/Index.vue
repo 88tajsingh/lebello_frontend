@@ -165,6 +165,7 @@ const changePage =(page) => {
 }
 // get materials function
 const handleGetMaterials = async (payload) => {
+  
   dataTableLoding.value = true;
   try {
     await materialsServices.getMaterials(payload)
@@ -173,6 +174,10 @@ const handleGetMaterials = async (payload) => {
           if (res.data.data && res.data.data.length > 0) {
             data.value = res.data.data
             totalRows.value= res.data.total_records
+          }
+          else{
+            data.value = res.data.data
+            totalRows.value= 0;
           }
           dataTableLoding.value = false;
         }

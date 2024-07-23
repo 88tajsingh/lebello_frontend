@@ -5,7 +5,7 @@ export default new Vuex.Store({
     token: localStorage.getItem('token') ,
     user: JSON.parse(localStorage.getItem('user')) ,
     editData: '',
-    passData: null,
+    param: null,
     domain : '',
   },
   getters: {
@@ -45,7 +45,6 @@ export default new Vuex.Store({
     },
     setDomain(state, domain) {
       state.domain = domain;
-      console.log('setting domain', state.domain)
     },
   },
   actions: {
@@ -67,7 +66,6 @@ export default new Vuex.Store({
       commit('setParam', param);
     },
     setDomain({ commit }, domain) {
-      console.log(' entering domain')
       commit('setDomain', domain);
     },
   },
