@@ -335,7 +335,8 @@ watch(
     () => {
         if(form.value.domain_id)
         materialTree({domain_id:form.value.domain_id});
-        handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId })
+        if(masterId.value )
+        handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId.value })
     }
 );
 
