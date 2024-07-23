@@ -331,12 +331,21 @@ onMounted(()=>{
 })
 
 watch(
+    () => props.domain,
+    () => {
+        if(form.value.domain_id)
+        materialTree({domain_id:form.value.domain_id});
+        // if(masterId.value )
+        // handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId.value })
+    }
+);
+watch(
     () => form.value.domain_id,
     () => {
         if(form.value.domain_id)
         materialTree({domain_id:form.value.domain_id});
-        if(masterId.value )
-        handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId.value })
+        // if(masterId.value )
+        // handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId.value })
     }
 );
 

@@ -6,6 +6,9 @@
       <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
         label="Bulk Options" v-model="bulkActionSelected" />
       <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+      <div class="w-52">
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+      </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
       <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -112,6 +115,7 @@ const cols = ref([
   { field: 'actions', title: 'Actions' },
 ])
 const getDominsList = ref([])
+const domain_id = ref('')
 const material_id = ref('')
 const dataTableLoding = ref(false)
 const loading = ref(false)
@@ -120,6 +124,7 @@ const data = ref([])
 const datatable = ref('')
 const  totalRows = ref('')
 const actionsFlag = ref(null)
+const passDomainId = ref(null)
 
 // const modalIsOpen = ref(false)
 // const editIsOpen = ref(false)
@@ -221,8 +226,8 @@ const handleBulkActions = async () => {
 
 const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
-  getDominsList.value = getDominsList.value[0].id;
-  console.log( ' getDominsList.value',getDominsList.value)
+  const id = getDominsList.value.filter(site => site.default === 1)[0];
+  domain_id.value = id.id
 }
 
 onMounted(() => {
@@ -231,9 +236,9 @@ onMounted(() => {
 );
 
 watch(
-    () => getDominsList.value,
+    () => domain_id.value,
     () => {
-      handleGetMaterials({limit:10,page:1,domain_id:getDominsList.value});
+      handleGetMaterials({limit:10,page:1,domain_id:domain_id.value});
     }
 );
 </script>
