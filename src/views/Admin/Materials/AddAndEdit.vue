@@ -335,14 +335,9 @@ watch(
     () => {
         if(form.value.domain_id)
         materialTree({domain_id:form.value.domain_id});
-    }
-);
-
-watch(
-    () => form.value.domain_id,
-    () => {
         handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId })
     }
 );
+
 </script>
 

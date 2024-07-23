@@ -68,7 +68,7 @@
 </DataTable> -->
   <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen">
     <!-- <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen"> -->
-    <AddAndEdit @handleApi='handleAddMaterials' formHeader="Add Material" :materialTree='MaterialTreeListData' />
+    <AddAndEdit @handleApi='handleAddMaterials' formHeader="Add Material" :materialTree='getDominsList' />
   </PopupModal>
   <PopupModal modalTitle="Edit Materials" v-model:isOpen="editIsOpen">
     <AddAndEdit :material='editData' @handleApi="handleEditMaterials" />
@@ -85,14 +85,14 @@
 
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,watch } from 'vue'
 import Languages  from '@/components/Languages.vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import DataTable from '@/components/Admin-components/DataTable.vue'
 import AddAndEdit from './AddAndEdit.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { MaterialTreeList } from '@/helper/Apis'
+import { getDomins } from '@/helper/Apis'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
@@ -111,7 +111,7 @@ const cols = ref([
   { field: 'count', title: 'Count' },
   { field: 'actions', title: 'Actions' },
 ])
-const MaterialTreeListData = ref([])
+const getDominsList = ref([])
 const material_id = ref('')
 const dataTableLoding = ref(false)
 const loading = ref(false)
@@ -219,10 +219,22 @@ const handleBulkActions = async () => {
   }
 };
 
-onMounted(() => {
-  handleGetMaterials({limit:10,page:1});
-  
+const getDomainList = async (payload) => {
+  getDominsList.value = await getDomins(payload)
+  getDominsList.value = getDominsList.value[0].id;
+  console.log( ' getDominsList.value',getDominsList.value)
 }
+
+onMounted(() => {
+  getDomainList();
+}
+);
+
+watch(
+    () => getDominsList.value,
+    () => {
+      handleGetMaterials({limit:10,page:1,domain_id:getDominsList.value});
+    }
 );
 </script>
 
