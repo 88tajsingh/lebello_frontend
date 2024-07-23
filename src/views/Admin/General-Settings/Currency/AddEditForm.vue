@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="handleSubmit">{{ form }}
+    <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-3 gap-2">
             <div class="flex flex-col ">
                 <InputLabel for="Country" value="From Country" />
@@ -15,7 +15,7 @@
             </div>
 
             <div class="flex flex-col">
-                <TextInput type="number" label="Exchange Rate *" class="block mr-2 h-[40px] w-full"
+                <TextInput type="text" label="Exchange Rate *" class="block mr-2 h-[40px] w-full"
                     v-model="form.exchange_rate" />
             </div>
             <div class="flex flex-col ">
@@ -45,7 +45,7 @@
     </form>
 </template>
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch,onMounted } from 'vue';
 import { defineEmits } from 'vue';
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import store from '@/store';
@@ -57,7 +57,8 @@ const props = defineProps({
     },
     exchangeData: {
         type: Object,
-        default: { from_currency: null, to_currency: null, exchange_rate: 0, exchange_rateFixed: '' },
+        default: { from_currency: null, to_currency: null,
+        exchange_rate: 0, exchange_rateFixed: '' },
     },
     allCurrencies: {
         type: Array,
@@ -83,9 +84,17 @@ const validateForm = () => {
 
 const handleSubmit = async () => {
     // if (validateForm()) {
-    emit('handleApi', {
-        exchange_rates: [
-            {
+    let payload=null ;
+    if(form.value.id){
+      payload = { 
+                id: form.value.id,  
+                from_currency: form.value.from_currency,
+                to_currency: form.value.to_currency,
+                exchange_rate: form.value.exchange_rate,
+            }
+    }else{
+       payload ={ exchange_rates: [
+            {   
                 from_currency: form.value.from_currency,
                 to_currency: form.value.to_currency,
                 exchange_rate: form.value.exchange_rate,
@@ -95,8 +104,9 @@ const handleSubmit = async () => {
                 to_currency: form.value.from_currency,
                 exchange_rate: form.value.exchange_rateFixed,
             },
-        ]
-    });
+        ]}
+    }
+    emit('handleApi', {...payload});
     // }
 };
 
@@ -110,5 +120,14 @@ watch(
         }
     }
 );
+
+onMounted(() => {
+    const { exchange_rate } = form.value;
+    if (exchange_rate !== 0) {
+        form.value.exchange_rateFixed = (1 / exchange_rate).toFixed(3);
+    } else {
+        form.value.exchange_rateFixed = '';
+    }
+});
 
 </script>

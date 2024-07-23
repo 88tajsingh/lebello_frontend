@@ -6,9 +6,9 @@
                 <div class="col-span-8">
                     <Accordion :open="true" header="Title *">
                     <div class="px-7">
-                        <TextInput type="text" hasCheckBox id="addTitle" class="block mr-2 h-[40px] w-full" label="" placeholder="Add title"
+                        <TextInput type="text"  id="addTitle" class="block mr-2 h-[40px] w-full" label="" placeholder="Add title"
                             v-model="form.title" :errMessage="errors.title" :errors="errors"     
-                             @update:checkValue="form.isTitle = $event"
+                             @update:checkValue="form.isTitle = $event" hasCheckBox
                             :class="{ 'border-red': errors.title }" />
                            
                     </div>

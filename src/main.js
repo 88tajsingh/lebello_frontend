@@ -3,6 +3,7 @@ import './assets/css/satoshi.css'
 import './assets/css/style.css'
 import "@bhplugin/vue3-datatable/dist/style.css";
 import { createApp } from 'vue'
+import { createI18n } from 'vue-i18n'
 import VueApexCharts from 'vue3-apexcharts'
 import App from './App.vue'
 import { createPinia } from 'pinia'
@@ -33,6 +34,7 @@ import RadioButton from '@/components/Admin-components/form-components/RadioButt
 import Toast from 'vue-toastification';
 import _ from 'lodash';
 import 'vue-toastification/dist/index.css';
+import { en,es,fr,de,it,zh,ja,ru,ko,pt } from './json/Languages';
 
 const options = {
     position: "top-right",
@@ -49,7 +51,26 @@ const options = {
     pauseOnFocusLoss: true
   };
 
+  const i18n = createI18n({
+    legacy: false,
+    locale: 'en', 
+    fallbackLocale: 'en', 
+    messages: {
+      en,
+      fr,
+      es,
+      de,
+      it,
+      zh,
+      ja,
+      ru,
+      ko,
+      pt
+    }
+  });
+
 const app = createApp(App)
+app.use(i18n)
 app.use(apiPlugin)
 app.use(HelpersPlugin)
 app.use(Toast, options);

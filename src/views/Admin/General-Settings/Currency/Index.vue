@@ -46,7 +46,7 @@
       <AddEditForm @handleApi="handleAddDomain"  :allCurrencies="allCurrencies"/>
     </PopupModal>
     <PopupModal modalTitle="Edit Pages" custonClasses="w-[800px] h-[400px]" v-model:isOpen="editIsOpen">
-      <AddEditForm :exchangeData="editData" @handleApi="handleEditPages" />
+      <AddEditForm :allCurrencies="allCurrencies" :exchangeData="editData" @handleApi="handleEditPages" />
     </PopupModal>                               
     <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteDomain">
       Do you want to delete?
@@ -117,7 +117,6 @@
     const res = await CommonServices.getExchangeRates();
     if (res.status === 200 && res.data.success) {
         rows.value = res.data.data;
-        console.log("get entering", rows.value)
     //   totalRows.value = res.data.total_records;
     }
   } catch (e) {
@@ -130,7 +129,7 @@
 const handleDeleteDomain = async () => {
   try {
     loading.value = true;
-    const res = await CommonServices.deleteDomains({ id: editData.value });
+    const res = await CommonServices.deleteExchangeRates({ id: editData.value });
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
       rows.value = rows.value.filter(item => item.id !== editData.value)
@@ -149,10 +148,9 @@ const handleDeleteDomain = async () => {
 const handleAddDomain = async (payload) => {
   try {
     loading.value = true;
-    const res = await CommonServices.addDomains(payload);
+    const res = await CommonServices.addExchangeRates(payload);
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
-      router.push('/domains');
       modalIsOpen.value=false;
       handleGetDomains(pagination.value);
     } else {
@@ -166,26 +164,26 @@ const handleAddDomain = async (payload) => {
   }
 };
 
-//   const handleEditPages = async (payload) => {
-//     try {
-//       loading.value = true;
-//       const res = await CommonServices.editPages(payload);
-//       if (res.status === 200 && res.data.success === true) {
-//         loading.value = false;
-//         showToast(' Edit Page sucessfully','success')
-//         router.push('/pages')
-//       }
-//       if (res.status_code === 400) {
-//         loading.value = false;
-//         showToast('Somthing went wrong','error')
+  const handleEditPages = async (payload) => {
+    try {
+      loading.value = true;
+      const res = await CommonServices.editExchangeRates(payload);
+      if (res.status === 200 && res.data.success === true) {
+        loading.value = false;
+        showToast(' Edit Page sucessfully','success')
+        editIsOpen.value=false;
+      }
+      if (res.status_code === 400) {
+        loading.value = false;
+        showToast('Somthing went wrong','error')
   
-//         console.error('Error while editing pages:', res.message);
-//       }
-//     } catch (e) {
-//       loading.value = false;
-//       console.error('Error while editing pages:', e);
-//     }
-//   };
+        console.error('Error while editing pages:', res.message);
+      }
+    } catch (e) {
+      loading.value = false;
+      console.error('Error while editing pages:', e);
+    }
+  };
 
 const getAllCurrencies = async () => {
   allCurrencies.value = await getAllCurrenciesList()
