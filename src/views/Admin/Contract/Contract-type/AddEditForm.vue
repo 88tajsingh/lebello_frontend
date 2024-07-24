@@ -90,7 +90,9 @@ import { showToast } from '@/helper/functions'
 import { onMounted, ref, watch, } from 'vue'
 import { defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const router = useRouter();
 const contractTypeTreeListData = ref([])
 const loading = ref(false)
@@ -99,7 +101,8 @@ const props = defineProps({
         type: String,
     }
 })
-
+const PreviousDomain = ref(null)
+const masterId = ref(null)
 const id = ref(props.id || null)
 const form = ref({ parent_contract_type:0})
 const errors = ref({})
@@ -131,8 +134,8 @@ const handleSubmit = async () => {
 
 
 // api for get patents child json parent contract listing 
-const contractTreeList = async () => {
-    contractTypeTreeListData.value = await contractTypeTreeList()
+const contractTreeList = async (payload) => {
+    contractTypeTreeListData.value = await contractTypeTreeList(payload)
 }
 // get contract type
 const handleGetContractTypeById = async (payload) => {
@@ -144,6 +147,8 @@ const handleGetContractTypeById = async (payload) => {
                     if (res.data.data && res.data.data.length > 0) {
                         form.value = res.data.data[0]
                         loading.value = false
+                        PreviousDomain.value = form.value.domain_id;
+                        masterId.value = form.value.master_material_id;  
                     }
                 }
             }).catch((res) => {
@@ -179,8 +184,15 @@ const handleAddContractType = async (payload) => {
 // edit material function
 const handleEditContractType = async (payload) => {
     loading.value = true;
+    console.log(form.value.domain_id !== PreviousDomain.value , form.value.domain_id ,PreviousDomain.value)
+    if (form.value.domain_id !== PreviousDomain.value) {
+    delete form.value.id;
+  }else{
+      // clone existing  in other domain 
+        form.value = { ...form.value, master_material_id: masterId.value };
+  }
     try {
-        await ContractServices.editContractType(payload)
+        await ContractServices.editContractType({...form.value})
             .then(res => {
                 if (res && res.status === 200) {
                     showToast('Edit Contract Type sucessfully', 'success')
@@ -197,12 +209,21 @@ const handleEditContractType = async (payload) => {
     }
 }
 
-onMounted(() => {
-    if (props.id !== undefined && props.id !== null && props.id !== '') {
-        handleGetContractTypeById({ id: props.id });
+onMounted(()=>{
+    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
+        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
+        handleGetContractTypeById({id:props.id,domain_id:store.getters.getDomain.id});
+        form.value.domain_id = store.getters.getDomain.id
     }
-    contractTreeList();
 })
+
+watch(
+    () => form.value.domain_id,
+    () => {
+        contractTreeList({domain_id:store.getters.getDomain.id});
+         }
+);
+
 </script>
 
 <style>

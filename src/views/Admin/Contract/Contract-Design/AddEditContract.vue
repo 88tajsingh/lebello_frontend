@@ -1,5 +1,4 @@
 <template>
-
     <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -379,7 +378,7 @@
 <script setup>
 import router from '@/router';
 import { defineEmits } from 'vue';
-import { ref, onMounted } from "vue";
+import { ref, onMounted,watch } from "vue";
 import { handleFiles } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import ContractServices from '@/services/ContractServices';
@@ -392,6 +391,9 @@ import DatePicker from '@/components/Admin-components/form-components/DatePicker
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps } from '@/json/data';
+import { useStore } from 'vuex';
+
+const store = useStore();
 
 const emit = defineEmits(['handleApi']);
 const errors = ref({})
@@ -400,6 +402,8 @@ const contractType = ref([]);
 const contractLocation = ref([]);
 const loading = ref(false)
 const form = ref({ status: '', simple_fields: 0 });
+const PreviousDomain = ref(null)
+const masterId = ref(null)
 
 // images variables 
 const featureData = ref({
@@ -488,8 +492,8 @@ const handleGetContract = async (payload) => {
         if (res.status === 200 && res.data.success) {
             if (res.data.data?.length > 0) {
                 form.value = res.data.data[0]
-                console.log(res.data.data)
-            }
+                PreviousDomain.value = form.value.domain_id;
+                masterId.value = form.value.master_material_id;            }
         }
     } catch (e) {
         console.error('Error while getting contract:', e);
@@ -512,8 +516,16 @@ const handleAddContract = async (payload) => {
 
 const handleEditContract = async (payload) => {
     loading.value = true;
+
+    if (form.value.domain_id !== PreviousDomain.value) {
+    delete form.value.id;
+  }else{
+      // clone existing  in other domain 
+        form.value = { ...form.value, master_material_id: masterId.value };
+  }
+
     try {
-        const res = await ContractServices.editNewContract(payload);
+        const res = await ContractServices.editNewContract({...form.value});
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/Contract-Design');
@@ -526,24 +538,41 @@ const handleEditContract = async (payload) => {
 }
 
 // contractLoctionTree sorting 
-const contractLoctionTree = async () => {
-    contractLocation.value = await contractLoctionTreeList()
+const contractLoctionTree = async (payload) => {
+    contractLocation.value = await contractLoctionTreeList(payload)
     loading.value = false;
 }
 // contractLoctionTree sorting 
-const contractTypeTree = async () => {
-    contractType.value = await contractTypeTreeList()
+const contractTypeTree = async (payload) => {
+    contractType.value = await contractTypeTreeList(payload)
     loading.value = false;
 }
 
-onMounted(() => {
-    if (props.id !== undefined && props.id !== null && props.id !== '') {
-        handleGetContract({ id: props.id });
+// onMounted(() => {
+//     if (props.id !== undefined && props.id !== null && props.id !== '') {
+//         handleGetContract({ id: props.id });
+//     }
+//     contractLoctionTree();
+//     contractTypeTree();
+// }
+// );
+onMounted(()=>{
+    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
+        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
+        handleGetContract({id:props.id,domain_id:store.getters.getDomain.id});
+        form.value.domain_id = store.getters.getDomain.id
     }
-    contractLoctionTree();
-    contractTypeTree();
-}
+})
+
+watch(
+    () => form.value.domain_id,
+    () => {
+        contractLoctionTree({domain_id:store.getters.getDomain.id});
+        contractTypeTree({domain_id:store.getters.getDomain.id});
+         }
 );
+
+
 </script>
 <style scoped>
 input[type="number"]::-webkit-outer-spin-button,

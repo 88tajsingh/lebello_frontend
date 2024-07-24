@@ -56,16 +56,21 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import { contractLoctionTreeList } from '@/helper/Apis'
 import ContractServices from '@/services/ContractServices'
 import { clearError,showToast } from '@/helper/functions'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const router = useRouter();
+
 const MaterialTreeListData = ref([])
 const loading = ref(false)
 const props = defineProps(['id'])
 const id = ref(props.id || null)
 const form = ref({ parent_contract_location:0})
 const errors = ref({})
+const PreviousDomain = ref(null)
+const masterId = ref(null)
 
 const validateForm = () => {
     let isValid = true
@@ -92,7 +97,7 @@ const handleSubmit = async () => {
     }
 }
 // api for get patents child json parent material listing 
-const materialTree = async () => {
+const contractLoctionTree = async () => {
   MaterialTreeListData.value = await contractLoctionTreeList()
 }
 // get material
@@ -103,6 +108,8 @@ const handleGetLocationById = async (payload) => {
     if (res.status === 200 && res.data.success) {
       if (res.data.data?.length > 0) {
         form.value = res.data.data[0];
+        PreviousDomain.value = form.value.domain_id;
+        masterId.value = form.value.master_material_id;     
       }
     }
   } catch (error) {
@@ -132,6 +139,12 @@ const handleAddContractLocation = async (payload) => {
 
 const handleEditContractLocation = async (payload) => {
   loading.value = true;
+  if (form.value.domain_id !== PreviousDomain.value) {
+    delete form.value.id;
+  }else{
+      // clone existing  in other domain 
+        form.value = { ...form.value, master_material_id: masterId.value };
+  }
   try {
     const res = await ContractServices.editContractLocation(payload);
     if (res.status === 200) {
@@ -147,10 +160,24 @@ const handleEditContractLocation = async (payload) => {
   }
 }
 
+// onMounted(()=>{
+//     if(props.id !== undefined && props.id !== null && props.id !== '' ) {
+//         handleGetLocationById({id:props.id});
+//     }
+//     contractLoctionTree();
+// })
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== '' ) {
-        handleGetLocationById({id:props.id});
+    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
+        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
+        handleGetLocationById({id:props.id,domain_id:store.getters.getDomain.id});
+        form.value.domain_id = store.getters.getDomain.id
     }
-    materialTree();
 })
+
+watch(
+    () => form.value.domain_id,
+    () => {
+        contractLoctionTree({domain_id:store.getters.getDomain.id});
+         }
+);
 </script>

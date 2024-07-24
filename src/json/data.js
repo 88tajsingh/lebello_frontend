@@ -237,3 +237,22 @@ export const swatchCols = [
   { field: 'slug', title: 'Slug' },
   { field: 'actions', title: 'Actions' },
 ]
+
+export const ContractCols = [
+  { field: 'title', title: 'Contract Title', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'status' },
+  { field: 'actions', title: 'Actions' }
+]
+
+export  const ContractLocationCols = [
+  { field: 'contract_location', title: 'Contract Location', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'actions', title: 'Actions' }
+]
+export const contractTypeCols = [
+  { field: 'contract_name', title: 'contract_name', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'actions', title: 'Actions' }
+]

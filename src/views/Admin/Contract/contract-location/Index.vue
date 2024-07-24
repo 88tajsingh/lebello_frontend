@@ -4,6 +4,9 @@
       <div class="flex">
         <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
         <Button class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
+        <div class="w-52">
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+      </div>
       </div>
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -13,7 +16,7 @@
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
+      :rows="rows" :columns="ContractLocationCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
@@ -53,11 +56,13 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted,watch } from 'vue';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import ContractServices from '@/services/ContractServices';
   import { useRouter } from 'vue-router';
-  import { showToast } from '@/helper/functions';
+  import { showToast  } from '@/helper/functions';
+  import { getDomins } from '@/helper/Apis';
+  import { ContractLocationCols } from '@/json/data';
   import store from '@/store';
 
   
@@ -67,12 +72,8 @@
   const search = ref('');
   const datatable = ref(null);
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-  const cols = ref([
-    { field: 'contract_location', title: 'Contract Location', slot: true },
-    { field: 'slug', title: 'Slug', filter: true },
-    { field: 'description', title: 'Description' },
-    { field: 'actions', title: 'Actions' }
-  ]);
+  const getDominsList = ref([])
+  const domain_id = ref('')
   const getLoading = ref(false);
   const editData = ref({});
   const rows = ref([]);
@@ -177,11 +178,25 @@ const handleBulkActions = async () => {
   }
 };
 
+  const getDomainList = async (payload) => {
+  getDominsList.value = await getDomins(payload)
+  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  domain_id.value = defaultDomain.id
+  store.dispatch('setDomain', defaultDomain);
+}
 
-  
-  onMounted(() => {
-    handleGetContractLocation({limit:10, page:1});
-    // navigateToRoute();
-  });
+onMounted(() => {
+  getDomainList();
+}
+);
+
+watch(
+    () => domain_id.value,
+    () => {
+      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
+      store.dispatch('setDomain', defaultDomain[0]);
+      handleGetContractLocation({limit:10,page:1,domain_id:domain_id.value});
+    }
+);
   </script>
   

@@ -27,9 +27,9 @@ export const MaterialTreeList = async (payload) => {
       console.log("MaterialTreeList err", err);
     }
   };
-export const contractTypeTreeList = async () => {
+export const contractTypeTreeList = async (payload) => {
     try {
-      const res = await ContractServices.getAllContractType();
+      const res = await ContractServices.getAllContractType(payload);
       if (res.status === 200) {
         return  res.data.data;
       } 
@@ -37,9 +37,9 @@ export const contractTypeTreeList = async () => {
       console.log("contractTypeTreeList err", err);
     }
   };
-export const contractLoctionTreeList = async () => {
+export const contractLoctionTreeList = async (payload) => {
     try {
-      const res = await ContractServices.getAllContractLocation();
+      const res = await ContractServices.getAllContractLocation(payload);
       if (res.status === 200) {
         return  res.data.data ||[];
       } 
@@ -48,9 +48,9 @@ export const contractLoctionTreeList = async () => {
     }
   };
 
-export const getAllCountries = async () => {
+export const getAllCountries = async (payload) => {
     try {
-      const res = await CommonServices.allCountrys();
+      const res = await CommonServices.allCountrys(payload);
       if (res.status === 200) {
         return  res.data.data ||[];
       } 
@@ -59,9 +59,9 @@ export const getAllCountries = async () => {
     }
   };
   
-export const getAllCurrenciesList = async () => {
+export const getAllCurrenciesList = async (payload) => {
     try {
-      const res = await CommonServices.getAllCurrencies();
+      const res = await CommonServices.getAllCurrencies(payload);
       if (res.status === 200) {
         return  res.data.data ||[];
       } 

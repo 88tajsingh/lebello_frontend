@@ -27,8 +27,8 @@ class ContractDesignService {
   getContractType(payload) {
     return instance.get(ApiConfig.getContract,{params: {...payload}})
   }
-  getAllContractType() {
-    return instance.get(ApiConfig.getContractTreeList)
+  getAllContractType(payload) {
+    return instance.get(ApiConfig.getContractTreeList,{params: {...payload}})
   }
 
   addContractType(payload) {
@@ -55,8 +55,8 @@ class ContractDesignService {
   getContractLocation(payload) {
     return instance.get(ApiConfig.getContractLocation,{params: {...payload}})
   }
-  getAllContractLocation() {
-    return instance.get(ApiConfig.getContractLocationTreeList)
+  getAllContractLocation(payload) {
+    return instance.get(ApiConfig.getContractLocationTreeList ,{params: {...payload}})
   }
 
   addContractLocation(payload) {

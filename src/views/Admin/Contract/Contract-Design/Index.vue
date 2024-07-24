@@ -4,6 +4,9 @@
       <div class="flex">
         <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="actionSelected" />
         <Button class="px-2 py-2 m-auto">Apply</Button>
+        <div class="w-52">
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+      </div>
       </div>
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -14,7 +17,7 @@
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
+      :rows="rows" :columns="ContractCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
@@ -51,24 +54,23 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted,watch } from 'vue';
+  import { getDomins } from '@/helper/Apis';
   import { useRouter } from 'vue-router';
+  import { ContractCols } from '@/json/data';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import ContractServices from '@/services/ContractServices';
   import { showToast } from '@/helper/functions';
+  import { useStore } from 'vuex';
 
-  
+  const store = useStore();  
   const router = useRouter();
   const actionSelected = ref(null);
   const loading = ref(false);
   const search = ref('');
+  const getDominsList = ref([])
+  const domain_id = ref('')
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-  const cols = ref([
-    { field: 'title', title: 'Contract Title', slot: true },
-    { field: 'slug', title: 'Slug', filter: true },
-    { field: 'status', title: 'status' },
-    { field: 'actions', title: 'Actions' }
-  ]);
   const getLoading = ref(false);
   const editData = ref({});
   const rows = ref([]);
@@ -117,13 +119,16 @@
       };
   
   // api calls
- const handleGetContract = async (payload) => {
+  const handleGetContract = async (payload) => {
+  getLoading.value = true;
   try {
-    getLoading.value = true;
     const res = await ContractServices.getNewContract(payload);
     if (res.status === 200 && res.data.success) {
       rows.value = res.data.data;
       totalRows.value = res.data.total_records;
+    }else {
+      rows.value = [];
+      totalRows.value = 0;
     }
   } catch (error) {
     console.error('Error while fetching contracts:', error);
@@ -133,14 +138,11 @@
 };
 
 const handleDeleteContract = async () => {
+  loading.value = true;
   try {
-    loading.value = true;
     const res = await ContractServices.deleteNewContract({ id: editData.value });
     if (res.status === 200 && res.data.success) {
-      showToast(res.data.message,'success')
-      rows.value = rows.value.filter(item => item.id !== editData.value)
-      editData.value = null;
-      deleteModalIsOpen.value = false;
+      handleDeleteSuccess(res.data.message);
     }
   } catch (error) {
     console.error('Error while deleting contract:', error);
@@ -149,9 +151,32 @@ const handleDeleteContract = async () => {
   }
 };
 
-  onMounted(() => {
-    handleGetContract({limit:10, page:1});
-    // navigateToRoute();
-  });
+const handleDeleteSuccess = (message) => {
+  showToast(message, 'success');
+  rows.value = rows.value.filter(item => item.id !== editData.value);
+  editData.value = null;
+  deleteModalIsOpen.value = false;
+};
+
+  const getDomainList = async (payload) => {
+  getDominsList.value = await getDomins(payload)
+  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  domain_id.value = defaultDomain.id
+  store.dispatch('setDomain', defaultDomain);
+}
+
+onMounted(() => {
+  getDomainList();
+}
+);
+
+watch(
+    () => domain_id.value,
+    () => {
+      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
+      store.dispatch('setDomain', defaultDomain[0]);
+      handleGetContract({limit:10,page:1,domain_id:domain_id.value});
+    }
+);
   </script>
   
