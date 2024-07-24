@@ -17,7 +17,7 @@
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="ContractCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
+      :rows="rows" :columns="ContractCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
@@ -40,13 +40,6 @@
         </template>
       </vue3-datatable>
     </div>
-  
-    <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
-      <AddEditForm @handleApi="handleAddPages" />
-    </PopupModal>
-    <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
-      <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
-    </PopupModal>
     <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteContract">
       Do you want to delete?
     </DeleteModal>

@@ -19,9 +19,12 @@
   
   const props = defineProps({
     modelValue: String,
-    value: String,
     name: String,
     label: String,
+    value: {
+      type: [String,Number],
+      default: 'inline-flex items-center'
+    },
     labelClass: {
       type: String,
       default: 'inline-flex items-center'

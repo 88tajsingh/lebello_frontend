@@ -14,7 +14,7 @@
         <!-- :totalRows="totalRows" :isServerMode="true" -->
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="false":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="cols" :loading="dataTableLoding"   :pageSize="10" :search="search" @change="changePages">
+      :rows="rows" :columns="cols" :loading="getLoading"   :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}

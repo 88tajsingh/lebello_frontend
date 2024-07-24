@@ -1,6 +1,6 @@
 <template>
   <DefaultCard :cardTitle="id ? `Edit Pages` : `Add Pages`">
-    <DomainComponent :domains="items" @customChange="(id)=> form.domain_id = id"></DomainComponent>
+    <DomainComponent  @customChange="(id)=> form.domain_id = id"></DomainComponent>
     <form @submit.prevent="handleSubmit">
       <div class="p-6.5 grid grid-cols-2 gap-2">
 
@@ -178,15 +178,13 @@ const libraryImages = ref({
   mediaName:'select Feature Media' ,
   selectedImage :[] || from.feature_image ,
 })
-const data = JSON.stringify(store.getters);
-console.log('data in vuex: ' + data)
 const id = props.id
 const errors = ref({});
 const featureSelects = ref([]);
 const SliderSelects = ref([]);
 const IsOpen = ref(false)
 const isOpenSlider = ref(false)
-const form = ref({ gallery: [],password:'',});
+const form = ref({ gallery: [],password:'',page_description:''});
 const loading = ref(false)
 const masterId = ref(null)
 const PreviousDomain = ref(null)

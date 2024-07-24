@@ -13,7 +13,7 @@
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="false":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
+      :rows="rows" :columns="cols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
@@ -66,6 +66,7 @@
   const router = useRouter();
   const actionSelected = ref(null);
   const loading = ref(false);
+  const getLoading = ref(false);
   const search = ref('');
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
   const cols = ref([
@@ -74,7 +75,6 @@
     { field: 'status', title: 'Status' },
     { field: 'actions', title: 'Actions' }
   ]);
-  const getLoading = ref(false);
   const editData = ref({});
   const rows = ref([]);
   const allCountries = ref([]);

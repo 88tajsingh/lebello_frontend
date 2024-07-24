@@ -1,6 +1,6 @@
 <template>{{ form }}
     <DefaultCard :cardTitle="id ? `Edit Swatches` : `Add Swatches`">
-        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
+        <DomainComponent @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -439,7 +439,7 @@ const selectedFiles = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
-const form = ref({ status: null,description:' ' ,material_template:0,materials:[]});
+const form = ref({ status: null,description:' ' ,material_template:false,materials:[]});
 const props = defineProps({id:{type:Number,default:null}});
 const PreviousDomain = ref(null);
 const masterId = ref(null);

@@ -69,21 +69,10 @@
         </div>
               </template>
 </DataTable> -->
-  <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen">
-    <!-- <PopupModal modalTitle="Add Materials" v-model:isOpen="modalIsOpen"> -->
-    <AddAndEdit @handleApi='handleAddMaterials' formHeader="Add Material" :materialTree='getDominsList' />
-  </PopupModal>
-  <PopupModal modalTitle="Edit Materials" v-model:isOpen="editIsOpen">
-    <AddAndEdit :material='editData' @handleApi="handleEditMaterials" />
-  </PopupModal>
-
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteMaterials">
     Do you want to delete ?
   </DeleteModal>
-
-
   <Loader :isLoading="loading" :fullPage="true" />
-
 </template>
 
 <script setup>

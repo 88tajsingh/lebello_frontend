@@ -46,7 +46,7 @@
 
   const form = ref({ status:null,country_id:null});
   const errors = ref({});
-  const domainStatus =[{name:'Active',value:1},{name:'inactive',value:0}] 
+  const domainStatus =[{name:'Active',value:1},{name:'Inactive',value:0}] 
  
 
   const validateForm = () => {

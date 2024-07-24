@@ -1,6 +1,5 @@
 <template>
   <div class="text-[#555] text-sans">
-    <transition-group type="transition" :name="'flip-list'">
       <draggable class="dragArea list-group w-full" v-model="localList"
                  :component-data="{
                    tag: 'ul',
@@ -10,14 +9,17 @@
                  @change="log"
                  @start="dragStart"
                  @end="dragEnd"
+                 childField="children"
       >
         <div v-for="(group, groupIndex) in list" :key="groupIndex" class="group">
           <div class="bg-white text-san border mt-1 py-2 px-3 text-[13px]" :class="Classes">
             {{ group[parentfield] }}
+
           </div>
           <draggable class="list-group w-full" v-model="group.children" @change="log"
              @start="dragStart"
                  @end="dragEnd"
+                 childField="children"
           >
             <div class="list-group-item text-sans bg-white border ml-4 mt-1 py-2 px-3 text-[13px]"
                  v-for="(element, elementIndex) in group.children"
@@ -28,7 +30,7 @@
           </draggable>
         </div>
       </draggable>
-    </transition-group>
+    
   </div>
 </template>
 <script>
@@ -46,7 +48,7 @@ export default defineComponent({
     },
     Classes: {
       type: String,
-      required: true,
+      required: false,
     },
     parentfield: {
       type: String,
@@ -54,7 +56,7 @@ export default defineComponent({
     },
     childField: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   data() {

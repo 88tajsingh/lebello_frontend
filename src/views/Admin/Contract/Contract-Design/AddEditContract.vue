@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
-        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
+        <DomainComponent  @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -190,8 +190,8 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                                        label="Select an option" v-model="form.status" />
+                                    <Select :options="trueFalse" showfield="name" class="w-full"  valueField="value" label="Select Parent Material"
+                                    v-model="form.status" />
                                 </div>
                                 <div class="col-span-1 w-full">
                                     <input-label for="parentOrder" value="Visibility" />
@@ -302,8 +302,8 @@
                     <div class="mt-5">
                         <Accordion :open="true" header="Simple Fields">
                             <div class="mt-2 px-6 flex h-auto">
-                                <Select :options="options" showfield="name" class="w-full" valueField="value"
-                                    label="None " v-model="form.simple_fields" />
+                                    <Select :options="options" showfield="name" class="w-full" :defaultZero='true' valueField="value" label="Select Parent Material"
+                                    v-model="form.simple_fields" />
                             </div>
                         </Accordion>
                     </div>
@@ -401,7 +401,7 @@ const iswithBg = ref(false)
 const contractType = ref([]);
 const contractLocation = ref([]);
 const loading = ref(false)
-const form = ref({ status: '', simple_fields: 0 });
+const form = ref({ status: '', simple_fields:false,description:'' });
 const PreviousDomain = ref(null)
 const masterId = ref(null)
 

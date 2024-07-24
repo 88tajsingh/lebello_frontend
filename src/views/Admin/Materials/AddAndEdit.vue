@@ -1,7 +1,7 @@
-<template>{{param}}
+<template>
     <DefaultCard  :cardTitle="id ? `Edit Material` : `Add Material`"   >
     <form @submit.prevent="handleSubmit">
-        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
+        <DomainComponent  @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <div class="p-6.5 grid grid-cols-2 gap-6">
             <div class="flex flex-col ">
                 <InputLabel for="Name" value="Name" />
@@ -126,7 +126,7 @@
             <div class="flex flex-col w-full">
                 <InputLabel for="Description" value="Description" />
                 <TextInput type="text" class="block mr-2  w-full"
-                    :class="{ 'border-red-500': errors.description }" placeholder="" :isTextarea="true" rows="4"
+                    :class="{ 'border-red-500': errors.description }" placeholder="" :isTextarea="true" :rows="4"
                     v-model="form.description" :errMessage="errors.description"
                     @update:model="clearError(errors, 'description')" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
