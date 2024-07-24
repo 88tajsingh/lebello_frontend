@@ -97,8 +97,8 @@ const handleSubmit = async () => {
     }
 }
 // api for get patents child json parent material listing 
-const contractLoctionTree = async () => {
-  MaterialTreeListData.value = await contractLoctionTreeList()
+const contractLoctionTree = async (payload) => {
+  MaterialTreeListData.value = await contractLoctionTreeList(payload)
 }
 // get material
 const handleGetLocationById = async (payload) => {
@@ -146,7 +146,7 @@ const handleEditContractLocation = async (payload) => {
         form.value = { ...form.value, master_material_id: masterId.value };
   }
   try {
-    const res = await ContractServices.editContractLocation(payload);
+    const res = await ContractServices.editContractLocation({...form.value});
     if (res.status === 200) {
       showToast(res.data.message, 'success');
       router.push('/contract-location');
