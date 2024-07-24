@@ -18,7 +18,7 @@
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
     :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="data" :columns="cols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
+    :rows="data" :columns="materialCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -89,13 +89,12 @@
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue'
 import { ref, onMounted,watch } from 'vue'
-import Languages  from '@/components/Languages.vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
-import DataTable from '@/components/Admin-components/DataTable.vue'
 import AddAndEdit from './AddAndEdit.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
+import { materialCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
@@ -108,14 +107,6 @@ const router = useRouter();
 const bulkActionSelected = ref(null)
 const search = ref('')
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
-const cols = ref([
-  { field: 'image', title: 'Image', slot: true },
-  { field: 'name', title: 'Name', filter: true },
-  { field: 'description', title: 'Description' },
-  { field: 'slug', title: 'Slug' },
-  { field: 'count', title: 'Count' },
-  { field: 'actions', title: 'Actions' },
-])
 const getDominsList = ref([])
 const domain_id = ref('')
 const material_id = ref('')
@@ -246,11 +237,9 @@ onMounted(() => {
 watch(
     () => domain_id.value,
     () => {
-     
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
       console.log(defaultDomain , domain_id.value)
-   
       handleGetMaterials({limit:10,page:1,domain_id:domain_id.value});
     }
 );

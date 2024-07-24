@@ -5,6 +5,9 @@
       <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="actionSelected" />
       <Button class="px-2 py-2 m-auto">Apply</Button>
     </div> -->
+    <div class="w-52">
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+      </div>
     <div class="flex ml-auto">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
       <Button @click="() => {router.push({ name:'pages-add'}) }" class="px-2 py-2">Add Pages</Button>
@@ -50,8 +53,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,watch } from 'vue';
 import { showToast } from '@/helper/functions'
+import { getDomins } from '@/helper/Apis';
 import AddEditForm from './AddEditForm.vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PagesServices from '@/services/PagesServices';
@@ -61,6 +65,10 @@ import store from '@/store';
 const router = useRouter();
 // const actionSelected = ref(null);
 // const bulkOption = [{ text: 'Delete', value: 'Delete' }];
+
+const getDominsList = ref([]);
+const domain_id=ref(null);
+
 const loading = ref(false);
 const search = ref('');
 const getLoading = ref(false);
@@ -131,7 +139,24 @@ const handleDeletePages = async () => {
   }
 };
 
+const getDomainList = async (payload) => {
+  getDominsList.value = await getDomins(payload)
+  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  domain_id.value = defaultDomain.id
+  store.dispatch('setDomain', defaultDomain);
+}
 onMounted(() => {
-  handleGetPages({page:1});
-});
+  getDomainList();
+}
+);
+
+watch(
+    () => domain_id.value,
+    () => {
+      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
+      store.dispatch('setDomain', defaultDomain[0]);
+      console.log(defaultDomain , domain_id.value)
+      handleGetPages({limit:10,page:1,domain_id:domain_id.value});
+    }
+);
 </script>

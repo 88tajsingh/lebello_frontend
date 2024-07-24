@@ -1,4 +1,4 @@
-import instance from './instance'
+import instance from './MediaInstance'
 import ApiConfig from '@/config/apiConfig'
 
 class MediaAndFoldersService {

@@ -2,14 +2,17 @@ export const trueFalse = [
   { name: 'No', value: 0 },
   { name: 'Yes', value: 1 }
 ]
+
 export const withBgWithoutBg = [
   { label: 'Without BG', value: 0 },
   { label: 'BG Color', value: 1 }
 ]
+
 export const statusData = [
   { name: 'Draft', value:'draft' },
   { name: 'Pending review', value: 'pending review' }
 ]
+
 export const oldNewContract = [
   { label:'Old Contract Design', value:'Old Contract Design' },
   { label:'New Contract Design', value:'New Contract Design' }
@@ -216,3 +219,21 @@ export const  PublishOptions = [
 ]
 
 export const capsNOCaps=[{label:'Caps',value:'Caps'},{label:'No Caps',value:'No Caps'}]
+
+
+// cols all tables 
+export const materialCols = [
+  { field: 'image', title: 'Image', slot: true },
+  { field: 'name', title: 'Name', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'slug', title: 'Slug' },
+  { field: 'count', title: 'Count' },
+  { field: 'actions', title: 'Actions' },
+]
+
+export const swatchCols = [
+  { field: 'src', title: 'Thumbs', slot: true },
+  { field: 'title', title: 'Title', filter: true },
+  { field: 'slug', title: 'Slug' },
+  { field: 'actions', title: 'Actions' },
+]

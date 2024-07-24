@@ -170,8 +170,8 @@ import { defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
-const router = useRouter();
 const store = useStore();
+const router = useRouter();
 
 // const props = defineProps(['id']);
 const IsOpen = ref(false)
@@ -191,8 +191,6 @@ const form = ref({
     show_new_badge_2021:null
 })
 
-const param = computed(() => store.getters.getParam);
-console.log('prams get ',param)
 const mediaName = ref( 'Select Media' || form.image)
 const selectedFiles = ref(form.value.image)
 
@@ -258,25 +256,23 @@ const materialTree = async (payload) => {
 }
 // get material
 const handleGetMaterialsById = async (payload) => {
-    loading.value = true
+  loading.value = true;
   try {
-    await MaterialsServices.getMaterials(payload)
-      .then(res => {
-        if (res.status === 200 && res.data.success === true) {
-          if (res.data.data && res.data.data.length > 0) {
-            form.value = res.data.data[0]
-            PreviousDomain.value = form.value.domain_id
-            masterId.value = form.value.master_material_id
-            loading.value = false
-          }
-        }
-      }).catch((res) => {
-        console.log("error", res)
-      });
+    const res = await MaterialsServices.getMaterials(payload);
+    if (res.status === 200 && res.data.success) {
+      const data = res.data.data;
+      if (data && data.length > 0) {
+        form.value = data[0];
+        PreviousDomain.value = form.value.domain_id;
+        masterId.value = form.value.master_material_id;
+      }
+    }
   } catch (e) {
-    console.error('Error while log in:', e);
-  } 
-}
+    console.error("Error while fetching materials:", e);
+  } finally {
+    loading.value = false;
+  }
+};
 
 const handleAddMaterials = async (payload) => {
   loading.value = true;
@@ -285,68 +281,55 @@ const handleAddMaterials = async (payload) => {
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
       router.push('/materials');
-    }
-     else if (res.status_code === 400) {
+    } else if (res.status === 400) {
       showToast(res.message, 'error');
     }
   } catch (e) {
+    console.error("Error while adding material:", e);
     showToast('An error occurred', 'error');
   } finally {
     loading.value = false;
   }
 };
 
-const handleEditMaterials = async (payload) => {
-    if(form.domain_id !== PreviousDomain){
-        delete form.value.id
-        form.value = {...form.value, master_material_id:masterId}
-    }
-
-    form.value = {...form.value, master_material_id:masterId}
-
+const handleEditMaterials = async () => {
+    // for edit existing  
+  if (form.value.domain_id !== PreviousDomain.value) {
+    delete form.value.id;
+  }
+// clone existing  in other domain 
+  form.value = { ...form.value, master_material_id: masterId.value };
   loading.value = true;
+
   try {
-    const res = await MaterialsServices.editMaterial({...form.value});
-    console.log("res.status", res.status);
-    if (res.status === 200) {
+    const res = await MaterialsServices.editMaterial(form.value);
+    if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
       router.push('/materials');
     } else if (res.status === 400) {
-      showToast('res.data.message', 'error');
+      showToast(res.data.message, 'error');
     }
   } catch (e) {
-    console.error('Error while editing material:', e);
+    console.error("Error while editing material:", e);
     showToast(e.response?.data?.message || 'An error occurred', 'error');
   } finally {
     loading.value = false;
   }
 };
 
-
 onMounted(()=>{
     if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        handleGetMaterialsById({id:props.id,domain_id:props.domain});
-        form.domain_id = props.domain;
+        handleGetMaterialsById({id:props.id,domain_id:store.getters.getDomain.id});
+        form.value.domain_id = store.getters.getDomain.id
+        materialTree({domain_id:store.getters.getDomain.id});
     }
 })
 
 watch(
-    () => props.domain,
-    () => {
-        if(form.value.domain_id)
-        materialTree({domain_id:form.value.domain_id});
-        // if(masterId.value )
-        // handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId.value })
-    }
-);
-watch(
     () => form.value.domain_id,
     () => {
-        if(form.value.domain_id)
         materialTree({domain_id:form.value.domain_id});
-        // if(masterId.value )
-        // handleGetMaterialsById({domain_id:form.value.domain_id ,master_material_id:masterId.value })
-    }
+         }
 );
 
 </script>

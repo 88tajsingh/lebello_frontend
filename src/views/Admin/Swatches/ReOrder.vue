@@ -28,45 +28,42 @@ const loading = ref(false);
 const handleGetSwatches = async () => {
   loading.value = true;
   try {
-    await SwatchesServices.getSwatches()
-      .then(res => {
-        if (res.status === 200 && res.data.success === true) {
-          if (res.data.data && res.data.data.length > 0) {
-            list.value = res.data.data
-            loading.value = false;
-          }
-          if (res.status === 400 ) {
-            showToast(' Somthing went wrong','error')
-              materialTree();
-              loading.value = false;
-         }
-        }
-      }).catch((res) => {
-        console.log("error", res)
-      });
-  } catch (e) {
-    console.error('Error while log in:', e);
+    const res = await SwatchesServices.getSwatches();
+    if (res.status === 200 && res.data.success) {
+      if (res.data.data && res.data.data.length > 0) {
+        list.value = res.data.data;
+      } else {
+        showToast('No swatches found', 'info');
+      }
+    } else if (res.status === 400) {
+      showToast('Something went wrong', 'error');
+      materialTree();
+    }
+  } catch (error) {
+    console.error('Error fetching swatches:', error);
+    showToast('Error fetching swatches', 'error');
+  } finally {
     loading.value = false;
   }
 }
 
-// Swatches sorting api call 
 const handleSortSwatches = async () => {
-    let id = sortedData.value.map(item => item.id)
+  const id = sortedData.value.map(item => item.id);
+  loading.value = true;
   try {
-        loading.value = true;
-    await  SwatchesServices.swatchesSorting({key:'swatches',data:id})
-        .then(res => {
-          if (res.status === 200 && res.data.success === true) {
-              loading.value = false;
-              sortedData.value = [];
-              showToast(' Sorting data sucessfully','success')
-         }
-        })  
-    } catch (e) {
-      console.error('Error while log in:', e);
-    } 
+    const res = await SwatchesServices.swatchesSorting({ key: 'swatches', data: id });
+    if (res.status === 200 && res.data.success) {
+      sortedData.value = [];
+      showToast('Sorting data successfully', 'success');
+    }
+  } catch (error) {
+    console.error('Error sorting swatches:', error);
+    showToast('Error sorting swatches', 'error');
+  } finally {
+    loading.value = false;
+  }
 }
+
 
 onMounted(() =>{ 
     handleGetSwatches();

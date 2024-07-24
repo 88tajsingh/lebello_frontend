@@ -188,6 +188,9 @@ const IsOpen = ref(false)
 const isOpenSlider = ref(false)
 const form = ref({ gallery: [],password:'',});
 const loading = ref(false)
+const masterId = ref(null)
+const PreviousDomain = ref(null)
+
 
 
 const close = () => {
@@ -249,6 +252,8 @@ const handleGetPages = async (payload) => {
     const res = await PagesServices.getPages(payload);
     if (res.status === 200 && res.data.success) {
       form.value = res.data.data[0];
+      PreviousDomain.value = form.value.domain_id;
+      masterId.value = form.value.master_material_id;
     }
   } catch (e) {
     showToast(e, 'error');
@@ -275,8 +280,15 @@ const handleAddPages = async (payload) => {
 };
 
 const handleEditPages = async () => {
-  delete form.value.domain;
   loading.value = true;
+  if (form.value.domain_id !== PreviousDomain.value) {
+    delete form.value.id;
+    // delete form.value.domain;
+  }else{
+// clone existing  in other domain 
+  form.value = { ...form.value, master_material_id: masterId.value };
+  }
+  
   try {
     const res = await PagesServices.editPages(form.value);
     if (res.status === 200 && res.data.success) {
@@ -292,10 +304,16 @@ const handleEditPages = async () => {
   }
 };
 
-onMounted(() => {
-  if (props.id !== undefined && props.id !== null && props.id !== '') {
-    const payload = { id: props.id }
-    handleGetPages(payload);
-  }
-});
+// onMounted(() => {
+//   if (props.id !== undefined && props.id !== null && props.id !== '') {
+//     const payload = { id: props.id }
+//     handleGetPages(payload);
+//   }
+// });
+onMounted(()=>{
+    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
+      handleGetPages({id:props.id,domain_id:store.getters.getDomain.id});
+        form.value.domain_id = store.getters.getDomain.id
+    }
+})
 </script>

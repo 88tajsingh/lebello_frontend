@@ -1,4 +1,4 @@
-<template>
+<template>{{ form }}
     <DefaultCard :cardTitle="id ? `Edit Swatches` : `Add Swatches`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -305,7 +305,7 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Materials Template">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <div class=" m-auto ">
+                                <div class=" m-auto ">{{typeof form.material_template}}
                                     <singleCheckBox id="material_template" label="Use New Material Template"
                                         v-model:modelValue="form.material_template"></singleCheckBox>
                                 </div>
@@ -420,7 +420,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import Accordion from "@/components/Admin-components/Accordion.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted,watch } from "vue";
 import SwatchesServices from '@/services/SwatchesServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { defineEmits } from 'vue';
@@ -428,7 +428,9 @@ import { MaterialTreeList } from '@/helper/Apis';
 import router from '@/router';
 import { showToast } from '@/helper/functions'
 import { PublishOptions, statusData } from '@/json/data';
+import { useStore } from 'vuex';
 
+const store = useStore();
 const emit = defineEmits(['handleApi']);
 
 const errors = ref({})
@@ -437,8 +439,10 @@ const selectedFiles = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
-const form = ref({ status: null,description:' ' });
+const form = ref({ status: null,description:' ' ,material_template:0,materials:[]});
 const props = defineProps({id:{type:Number,default:null}});
+const PreviousDomain = ref(null);
+const masterId = ref(null);
 
 const close = () => {
     IsOpen.value = false;
@@ -489,6 +493,8 @@ const handleGetSwatches = async (payload) => {
                     ...res.data.data[0], 
                     material_template: res.data.data[0].material_template === 1 
                 };
+                PreviousDomain.value = form.value.domain_id;
+                masterId.value = form.value.master_swatch_id;
             }
         }
     } catch (error) {
@@ -514,10 +520,21 @@ const handleAddSwatches = async (payload) => {
     }
 }
 
-const handleEditSwatches = async (payload) => {
-    loading.value = true;
+const handleEditSwatches = async () => {
+    // for edit existing  
+    
+    if (form.value.domain_id !== PreviousDomain.value) {
+         delete form.value.id;
+         console.log(form.value)
+     }
+     else{
+         // clone existing  in other domain .
+         form.value = { ...form.value, master_swatch_id: masterId.value };
+     }
+ 
+  loading.value = true;
     try {
-        const res = await SwatchesServices.editSwatches(payload);
+        const res = await SwatchesServices.editSwatches(form.value);
         if (res.status === 200 && res.data.success) {
             showToast('Swatches edited successfully', 'success');
             router.push('/swatches');
@@ -532,16 +549,25 @@ const handleEditSwatches = async (payload) => {
     }
 }
 
-const materialTree = async () => {
-    MaterialTreeListData.value = await MaterialTreeList()
+const materialTree = async (payload) => {
+    MaterialTreeListData.value = await MaterialTreeList(payload)
 }
 
-onMounted(() => {
-    if (props.id !== undefined && props.id !== null && props.id !== '') {
-        handleGetSwatches({ id: props.id });
+onMounted(()=>{
+    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
+        handleGetSwatches({id:props.id,domain_id:store.getters.getDomain.id});
+        form.value.domain_id = store.getters.getDomain.id
+        materialTree({domain_id:store.getters.getDomain.id});
     }
-    materialTree();
-});
+})
+
+watch(
+    () => form.value.domain_id,
+    () => {
+        materialTree({domain_id:form.value.domain_id});
+        }
+);
+
 </script>
 
 <style>

@@ -15,9 +15,9 @@
   import { ref, defineProps, defineEmits, watch,computed } from 'vue';
   
   const props = defineProps({
-    id: { type: String, required: true },
+    id: { type: String, required: false },
     label: { type: String, default: '' },
-    modelValue: { type: [Boolean,Number], default: false }
+    modelValue: { type: Boolean, default: false}
   });
   
   const emit = defineEmits(['update:modelValue']);
@@ -25,7 +25,7 @@
   const isChecked = ref(props.modelValue);
   
   watch(() => props.modelValue, (newValue) => {
-    isChecked.value = newValue;
+    isChecked.value = newValue 
   });
 
   const booleanModelValue = computed({
@@ -39,8 +39,8 @@
 
   
   const onChange = () => {
-    const value = isChecked.value ? 1 : 0;
-    emit('update:modelValue', value);
+    // const value = isChecked.value ? 1 : 0;
+    emit('update:modelValue', isChecked);
   };
   </script>
   
