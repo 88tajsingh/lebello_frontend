@@ -1,16 +1,19 @@
 <template>
-  {{ store.getters.getDomain.id}}
     <PageHeader> Taxonomy Order </PageHeader>
+    <div class="w-52 ml-auto">
+            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+    </div>
     <Dreagable v-model:list="MaterialTreeListData" parentfield="name" childField="name" @update:list="handleListUpdate">
     </Dreagable>
-    <div v-if="!MaterialTreeListData"> No data here </div>
+    <div v-if="MaterialTreeListData.length === 0"> No Data Found </div>
     <Button @click="handleSortMaterials" :disabled="sortedData.length===0" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class="text-sm ml-auto px-3 py-1">
         Save
     </Button>
     <Loader :isLoading="loading" :fullPage="true"/>
 </template>
 <script setup>
-import { ref,onMounted } from 'vue'
+import { ref,onMounted,watch } from 'vue'
+import { getDomins } from '@/helper/Apis'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
@@ -21,6 +24,9 @@ import { useStore } from 'vuex';
 const store = useStore();
 const sortedData = ref([])
 const MaterialTreeListData = ref([])
+const getDominsList = ref([])
+  const domain_id = ref('')
+  const SelectedOption = ref(0)
 
 function handleListUpdate(updatedList) {
     sortedData.value = updatedList
@@ -42,8 +48,7 @@ const handleSortMaterials = async () => {
   }));
   loading.value = true;
   try { 
-    const res = await CommonServices.taxonomySorting({ key: 'contract_location', data: id });
-
+    const res = await CommonServices.taxonomySorting({ key: 'material', data: id,domain_id:domain_id.value });
     if (res.status === 200 && res.data.success) {
       showToast('Sorting data successfully', 'success');
     } else if (res.status === 400) {
@@ -58,10 +63,25 @@ const handleSortMaterials = async () => {
   }
 }
 
-
-onMounted(() =>{ 
-  materialTree({domain_id:store.getters.getDomain.id});
-  loading.value = true;
+const getDomainList = async (payload) => {
+  getDominsList.value = await getDomins(payload)
+  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  domain_id.value = defaultDomain.id
+  store.dispatch('setDomain', defaultDomain);
 }
+onMounted(() => {
+    // contractLoctionTree({domain_id:store.getters.getDomain});
+    getDomainList();
+    // loading.value = true;
+});
+
+// watch(SelectedOption, handleChange);
+watch(
+    () => domain_id.value,
+    () => {
+      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
+      store.dispatch('setDomain', defaultDomain[0]);
+      materialTree({domain_id:domain_id.value});
+    }
 );
 </script>

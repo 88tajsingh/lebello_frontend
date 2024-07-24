@@ -128,7 +128,7 @@
       totalRows.value = res.data.total_records;
     }else {
       rows.value = [];
-      totalRows.value = 0;
+      totalRows.value = 0
     }
   } catch (error) {
     console.error('Error while fetching contracts:', error);

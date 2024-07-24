@@ -1,8 +1,13 @@
 <template>
     <PageHeader> Taxonomy Order </PageHeader>
-    <div class="flex gap-6">
-        <RadioButton v-for="option in taxonomyBtn" :key="option.value" name="Visibility" :value="option.value"
+    <div class="flex items-center justify-between">
+        <div class="flex gap-6">
+            <RadioButton v-for="option in taxonomyBtn" :key="option.value" name="Visibility" :value="option.value"
             :label="option.label" :modelValue="SelectedOption" @update:modelValue="SelectedOption = $event" />
+        </div>
+        <div class="w-52">
+            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+        </div>
     </div>
     <Dreagable v-if="SelectedOption === 0" v-model:list="contractTreeData" parentfield="contract_location"
         childField="contract_location" @update:list="handleListUpdate">
@@ -20,13 +25,16 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
-import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
+import { contractLoctionTreeList, contractTypeTreeList,getDomins } from '@/helper/Apis'
 import CommonServices from '@/services/CommonServices'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
+  import store from '@/store';
 
 const sortedData = ref([])
+const getDominsList = ref([])
+  const domain_id = ref('')
 const contractTreeData = ref([])
 const SelectedOption = ref(0)
 const taxonomyBtn = ref([
@@ -41,23 +49,23 @@ function handleListUpdate(updatedList) {
 const handleChange = () => {
     console.log('handle change ', SelectedOption.value)
     if (SelectedOption.value === 0) {
-        contractLoctionTree();
+        contractLoctionTree({domain_id:domain_id.value});
     }
     else {
-        contractTypeTree();
+        contractTypeTree({domain_id:domain_id.value});
     }
 }
 
 // contractLoctionTree sorting 
-const contractLoctionTree = async () => {
+const contractLoctionTree = async (payload) => {
     loading.value = true;
-    contractTreeData.value = await contractLoctionTreeList()
+    contractTreeData.value = await contractLoctionTreeList(payload)
     loading.value = false;
 }
 // contractLoctionTree sorting 
-const contractTypeTree = async () => {
+const contractTypeTree = async (payload) => {
     loading.value = true;
-    contractTreeData.value = await contractTypeTreeList()
+    contractTreeData.value = await contractTypeTreeList(payload)
     loading.value = false;
 }
 
@@ -71,8 +79,7 @@ const handleSortMaterials = async () => {
     try {
         const key = SelectedOption.value === 1 ? 'contract_type' : 'contract_location'
         loading.value = true;
-        console.log(id, key)
-        await CommonServices.taxonomySorting({ key: key, data: id })
+        await CommonServices.taxonomySorting({ key: key, data: id , domain_id:domain_id.value })
             .then(res => {
                 if (res.status === 200 && res.data.success === true) {
                     showToast(' Sorting data sucessfully', 'success')
@@ -90,11 +97,26 @@ const handleSortMaterials = async () => {
     }
 }
 
+const getDomainList = async (payload) => {
+  getDominsList.value = await getDomins(payload)
+  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  domain_id.value = defaultDomain.id
+  store.dispatch('setDomain', defaultDomain);
+}
+
 onMounted(() => {
-    contractLoctionTree();
-    loading.value = true;
+    // contractLoctionTree({domain_id:store.getters.getDomain});
+    getDomainList();
+    // loading.value = true;
 });
 
 watch(SelectedOption, handleChange);
-
+watch(
+    () => domain_id.value,
+    () => {
+      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
+      store.dispatch('setDomain', defaultDomain[0]);
+      contractLoctionTree({domain_id:domain_id.value});
+    }
+);
 </script>

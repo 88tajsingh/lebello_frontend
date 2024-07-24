@@ -6,7 +6,7 @@ export default new Vuex.Store({
     user: JSON.parse(localStorage.getItem('user')) ,
     editData: '',
     param: null,
-    domain : '',
+    domain : JSON.parse(localStorage.getItem('domain')),
   },
   getters: {
     token: state => state.token,
@@ -44,6 +44,7 @@ export default new Vuex.Store({
       state.passData = param;
     },
     setDomain(state, domain) {
+      localStorage.removeItem('domain');
       state.domain = domain;
     },
   },
