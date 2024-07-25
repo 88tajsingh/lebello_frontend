@@ -220,6 +220,118 @@ export const  PublishOptions = [
 
 export const capsNOCaps=[{label:'Caps',value:'Caps'},{label:'No Caps',value:'No Caps'}]
 
+export const productData = [
+  {
+    category: "4L Chair",
+    products: [
+      { id: "12392", name: "4L Criss W" },
+      { id: "10123", name: "4L Arrow Chair" },
+      { id: "6793", name: "4L Sungita Chair" },
+      { id: "6705", name: "4L Pixie Chair" },
+      { id: "2978", name: "4L Net Chair" },
+      { id: "1606", name: "4L Chair" },
+      { id: "1254", name: "4L Arms" },
+      { id: "732", name: "4L Lift" },
+      { id: "402", name: "4L Criss W" }
+    ]
+  },
+  {
+    category: "4L Lounger Series",
+    products: [
+      { id: "6698", name: "4L Lounger Classic" },
+      { id: "5517", name: "4L Lounger" }
+    ]
+  },
+  {
+    category: "4L Pixie Series",
+    products: [
+      { id: "12503", name: "4L Pixie Arms Chair" },
+      { id: "10123", name: "4L Arrow Chair" },
+      { id: "6705", name: "4L Pixie Chair" }
+    ]
+  },
+  {
+    category: "4L Series",
+    products: [
+      { id: "12503", name: "4L Pixie Arms Chair" },
+      { id: "10423", name: "4L X Lounger Chaise" },
+      { id: "10123", name: "4L Arrow Chair" },
+      { id: "6793", name: "4L Sungita Chair" },
+      { id: "6705", name: "4L Pixie Chair" },
+      { id: "6698", name: "4L Lounger Classic" },
+      { id: "5517", name: "4L Lounger" },
+      { id: "3879", name: "4L Teak Stools" },
+      { id: "2978", name: "4L Net Chair" },
+      { id: "2015", name: "4L X Lounger Chaise" }
+    ]
+  },
+  {
+    category: "4L Stools",
+    products: [
+      { id: "3879", name: "4L Teak Stools" },
+      { id: "1359", name: "4L Stool" },
+      { id: "1358", name: "4L Backrest Stool" }
+    ]
+  },
+  {
+    category: "4L Sungita Series",
+    products: [
+      { id: "6793", name: "4L Sungita Chair" }
+    ]
+  },
+  {
+    category: "4LX Series",
+    products: [
+      { id: "10423", name: "4L X Lounger Chaise" },
+      { id: "2015", name: "4L X Lounger Chaise" },
+      { id: "2014", name: "4L X Lounger Single" },
+      { id: "1781", name: "4L X Lounger Double" },
+      { id: "1356", name: "4L X Chair" }
+    ]
+  },
+  {
+    category: "B Chair",
+    products: [
+      { id: "8628", name: "B Chair" },
+      { id: "702", name: "B Chair" }
+    ]
+  },
+  {
+    category: "Carpet Series",
+    products: [
+      { id: "3880", name: "Hex 6 Carpet" },
+      { id: "4131", name: "Diagonal Carpet" },
+      { id: "3977", name: "Pully Carpet" }
+    ]
+  },
+  {
+    category: "Chair 6 Classic",
+    products: [
+      { id: "13552", name: "Chair 6 Classic" }
+    ]
+  },
+  {
+    category: "Chair 6 Rock & L",
+    products: [
+      { id: "5542", name: "Chair 6 Lounge" },
+      { id: "5515", name: "Chair 6 Rock" },
+      { id: "754", name: "Chair 6 Rock" },
+      { id: "380", name: "Chair 6 Lounge" }
+    ]
+  },
+  {
+    category: "Chair 6 Series",
+    products: [
+      { id: "8827", name: "Club 6" },
+      { id: "8849", name: "Club 6 Sofa" },
+      { id: "8864", name: "Club 6 Coffee T" },
+      { id: "13552", name: "Chair 6 Classic" },
+      { id: "10414", name: "Chair 6® Open" },
+      { id: "5542", name: "Chair 6 Lounge" }
+    ]
+  }
+];
+
 
 // cols all tables 
 export const materialCols = [
@@ -247,6 +359,24 @@ export const ContractCols = [
 
 export  const ContractLocationCols = [
   { field: 'contract_location', title: 'Contract Location', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'actions', title: 'Actions' }
+]
+export  const productContractCols = [
+  { field: 'name', title: 'Contract Location', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'actions', title: 'Actions' }
+]
+export  const productTypeCols = [
+  { field: 'name', title: 'Product Name', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'actions', title: 'Actions' }
+]
+export  const productCategoryTypeCols = [
+  { field: 'name', title: 'Product Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
   { field: 'actions', title: 'Actions' }

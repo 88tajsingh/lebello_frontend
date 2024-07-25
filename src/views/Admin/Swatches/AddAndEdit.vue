@@ -305,7 +305,7 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Materials Template">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <div class=" m-auto ">{{typeof form.material_template}}
+                                <div class=" m-auto ">
                                     <singleCheckBox id="material_template" label="Use New Material Template"
                                         v-model:modelValue="form.material_template"></singleCheckBox>
                                 </div>
@@ -345,7 +345,7 @@
                                 <InputLabel for="Featured_image" value="Featured_image" />
                                 <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
                                     mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
+                                <div  class=" mt-3 flex overflow-x-auto">
                                     <img :src="$filePath(form.featured_image_url || 'text')"
                                         class="inline-block w-auto h-34 mr-4" :alt="form.title">
                                 </div>

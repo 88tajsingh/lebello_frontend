@@ -1,106 +1,139 @@
-
 const ApiConfig = {
+  register: '/register',
+  login: '/login',
+  logout: '/logout',
+  updateProfile: '/update-profile',
+  forgetPassword: '/reset/password/email',
+  updatePassword: '/update-password',
 
-    
-    
-    
-    register:'/register',
-    login: '/login',
-    logout: '/logout',
-    updateProfile: '/update-profile',
-    forgetPassword: '/reset/password/email',
-    updatePassword: '/update-password',
+  // materials config
+  getMaterial: '/material-list',
+  addMaterial: '/create-material',
+  editMaterial: '/edit-material',
+  deleteMaterial: '/delete-material',
+  materialStatus: 'update-material-status',
+  getMaterialTeeeList: '/get-material-tree-list',
+  materialSorting: '/sort-data',
+  taxonomySort: '/add-taxanomy-order',
+  bulkDeleteMaterial: '/mterial-bulk-delete',
 
-    // materials config
-    getMaterial :'/material-list',
-    addMaterial :'/create-material',
-    editMaterial :'/edit-material',
-    deleteMaterial :'/delete-material',
-    materialStatus: 'update-material-status',
-    getMaterialTeeeList:'/get-material-tree-list',
-    materialSorting:'/sort-data',
-    taxonomySort:'/add-taxanomy-order',
-    bulkDeleteMaterial:'/mterial-bulk-delete',
+  // swatches config
+  getSwatches: '/get-swatches',
+  addSwatches: '/add-swatches',
+  editSwatches: '/update-swatches',
+  deleteSwatches: '/delete-swatches',
+  swatchesSorting: '/sort-data',
+  bulkDeleteSwatches: '/bulk-swatches-delete',
+  // materialStatus: 'update-material-status',
 
+  // folders
+  getFolder: '/get-folders',
+  getFolderChild: '/get-folder-child',
+  addFolder: '/add-folder',
+  editFolder: '/update-folder',
+  deleteFolder: '/delete-folder',
 
-    // swatches config
-    getSwatches :'/get-swatches',
-    addSwatches :'/add-swatches',
-    editSwatches:'/update-swatches',
-    deleteSwatches :'/delete-swatches',
-    swatchesSorting:'/sort-data',
-    bulkDeleteSwatches :'/bulk-swatches-delete',
-    // materialStatus: 'update-material-status',
-    
-    // folders 
-    getFolder:'/get-folders',
-    getFolderChild:'/get-folder-child',
-    addFolder:'/add-folder',
-    editFolder:'/update-folder',
-    deleteFolder:'/delete-folder',
-    
-    // media 
-    getMedia:'/get-media',
-    getMediaChild:'/get-media-items',
-    addMedia:'/add-media',
-    editMedia:'/update-media',
-    deleteMedia:'/delete-media',
-    
-    // pages 
-    getPages :'/pages-list',
-    addPages :'/add-pages',
-    editPages:'/update-pages',
-    deletePages :'/delete-pages',
-    PagesSorting:'/sort-data',
-    // bulkDeletePages :'/bulk-Pages-delete',
+  // media
+  getMedia: '/get-media',
+  getMediaChild: '/get-media-items',
+  addMedia: '/add-media',
+  editMedia: '/update-media',
+  deleteMedia: '/delete-media',
 
-    // contract design 
-    getNewContract :'/get-contract-design',
-    addNewContract :'/add-contract-design',
-    editNewContract:'/update-contract-design',
-    deleteNewContract :'/delete-contract-design',
-    bulkNewContract :'/bulk-delete-contract-design',
+  // pages
+  getPages: '/pages-list',
+  addPages: '/add-pages',
+  editPages: '/update-pages',
+  deletePages: '/delete-pages',
+  PagesSorting: '/sort-data',
+  // bulkDeletePages :'/bulk-Pages-delete',
 
-     // Contract Type Tree List 
-     getContract :'/get-contract-type',
-     addContract :'/add-contract-type',
-     editContract :'/update-contract-type',
-     deleteContract :'/delete-contract-type',
-     getContractTreeList:'/get-contract-tree-type',
-     bulkDeletecontract:'/delete-bulk-contract-type',
-     contractTaxonomySort:'/add-taxanomy-order',
+  // contract design
+  getNewContract: '/get-contract-design',
+  addNewContract: '/add-contract-design',
+  editNewContract: '/update-contract-design',
+  deleteNewContract: '/delete-contract-design',
+  bulkNewContract: '/bulk-delete-contract-design',
 
-     // Contract location Tree List 
-     getContractLocation :'/get-contract-location',
-     addContractLocation :'/add-contract-location',
-     editContractLocation :'/update-contract-location',
-     deleteContractLocation :'/delete-contract-location',
-     bulkDeleteLocation:'/bulk-delete-contract-location',
-     getContractLocationTreeList:'/get-contract-location-tree-list',
-     contractLocationTaxonomySort:'/add-taxanomy-order',
-     
-     // domain
-     getDomains :'/domain-list',
-     addDomains :'/add-domain',
-     deleteDomains :'/delete-domain',
+  // Contract Type Tree List
+  getContract: '/get-contract-type',
+  addContract: '/add-contract-type',
+  editContract: '/update-contract-type',
+  deleteContract: '/delete-contract-type',
+  getContractTreeList: '/get-contract-tree-type',
+  bulkDeletecontract: '/delete-bulk-contract-type',
+  contractTaxonomySort: '/add-taxanomy-order',
 
-    //  countries
-    getAllCountries:'/get-countries',
-    getCountries:'/get-country-list',
+  // Contract location Tree List
+  getContractLocation: '/get-contract-location',
+  addContractLocation: '/add-contract-location',
+  editContractLocation: '/update-contract-location',
+  deleteContractLocation: '/delete-contract-location',
+  bulkDeleteLocation: '/bulk-delete-contract-location',
+  getContractLocationTreeList: '/get-contract-location-tree-list',
+  contractLocationTaxonomySort: '/add-taxanomy-order',
 
-    // Currencies
-    getCurrenciesList:'/get-currency-list',
-    getAllCurrencies:'/get-currencies',
+  // domain
+  getDomains: '/domain-list',
+  addDomains: '/add-domain',
+  deleteDomains: '/delete-domain',
 
-    //exchange rates
-    getExchangeRatesList:'/get-exchange-rate',
-    addExchangeRates:'/add-exchange-rate',
-    editExchangeRates:'/update-exchange-rate',
-    deleteExchangeRates:'/delete-exchange-rate',
+  //  countries
+  getAllCountries: '/get-countries',
+  getCountries: '/get-country-list',
 
+  // Currencies
+  getCurrenciesList: '/get-currency-list',
+  getAllCurrencies: '/get-currencies',
 
+  //exchange rates
+  getExchangeRatesList: '/get-exchange-rate',
+  addExchangeRates: '/add-exchange-rate',
+  editExchangeRates: '/update-exchange-rate',
+  deleteExchangeRates: '/delete-exchange-rate',
 
-    };
-  
-  export default ApiConfig;
-  
+  // --------------------------------------   Products   ----------------------------------------------------
+  // products types
+  getProductType: '/get-product-type',
+  addProductType: '/add-product-type',
+  editProductType: '/update-product-type',
+  deleteProductType: '/delete-product-type',
+  bulkDeleteProductType: '/bulk-delete-product-type',
+  getProductTypeTreeList: '/product-type-tree-list',
+
+  // products types
+  getProductCategoryType: '/get-product-category-type',
+  addProductCategoryType: '/add-product-category-type',
+  editProductCategoryType: '/update-product-category-type',
+  deleteProductCategoryType: '/delete-product-category-type',
+  bulkDeleteProductCategoryType: '/bulk-delete-product-category-type',
+  getProductCategoryTypeTreeList: '/product-category-type-tree-list',
+
+  // products Contract
+  getProductContract: '/get-contract-list',
+  addProductContract: '/add-contract',
+  editProductContract: '/update-contract',
+  deleteProductContract: '/delete-contract',
+  bulkDeleteProductContract: '/delete-bulk-contract',
+  getProductContractTree: '/get-contract-tree-list',
+
+  // products Series
+  getProductContract: '/get-product-series',
+  addProductContract: '/add-product-series',
+  editProductContract: '/update-product-series',
+  deleteProductContract: '/delete-product-series',
+  bulkDeleteProductContract: '/delete-bulk-product-series',
+  getProductContractTree: '/get-product-series-tree-list',
+
+  // ---------------------------------------  store  -------------------------------------
+  // store category
+
+  getStoreCategory: '/get-store-category',
+  addStoreCategory: '/add-store-category',
+  editStoreCategory: '/update-store-category',
+  deleteStoreCategory: '/delete-store-category',
+  bulkDeleteStoreCategory: '/bulk-delete-store-category',
+  getProductStoreCategory: '/get-store-category-tree-list'
+}
+
+export default ApiConfig

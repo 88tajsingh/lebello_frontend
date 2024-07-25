@@ -1,6 +1,8 @@
 import CommonServices from "@/services/CommonServices";
 import MaterialsServices from "@/services/MaterialsServices";
 import ContractServices from "@/services/ContractServices";
+import ProductServices from "@/services/ProductServices";
+import StoreServices from "@/services/StoreServices";
 import store from "@/store";
 import router from "@/router";
 
@@ -81,3 +83,44 @@ export const getDomins = async () => {
     }
   };
   
+  export const getProductTypeTree = async (payload) => {
+    try {
+      const res = await ProductServices.getProductTypeTreeList(payload);
+      if (res.status === 200) {
+        return  res.data.data || [];
+      } 
+    } catch (err) {
+      console.log("getProductTypeTreeList err", err);
+    }
+  };
+  export const getProductContractTypeTree = async (payload) => {
+    try {
+      const res = await ProductServices.getProductCategoryTypeTreeList(payload);
+      if (res.status === 200) {
+        return  res.data.data || [];
+      } 
+    } catch (err) {
+      console.log("getProductCategoryTypeTreeList err", err);
+    }
+  };
+  export const getStoreCategoryTree = async (payload) => {
+    try {
+      const res = await StoreServices.getStoreCategoryTreeList(payload);
+      if (res.status === 200) {
+        return  res.data.data || [];
+      } 
+    } catch (err) {
+      console.log("getProductCategoryTypeTreeList err", err);
+    }
+  };
+
+  export const getProductContractTree = async (payload) => {
+    try {
+      const res = await ProductServices.getProductContractTreeList(payload);
+      if (res.status === 200) {
+        return  res.data.data || [];
+      } 
+    } catch (err) {
+      console.log("getProductCategoryTypeTreeList err", err);
+    }
+  };

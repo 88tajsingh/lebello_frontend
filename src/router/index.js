@@ -250,6 +250,109 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props:true,
         },
+
+        // -------------------------------- products path ---------------------------------------------
+        {
+          path: '/product-contract',
+          name: 'Product-contract',
+          component:()=> import('../views/Admin/Products/Contract/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-contract-add',
+          name: 'Product-contract-add',
+          component:()=> import('../views/Admin/Products/Contract/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-contract-edit/:id',
+          name: 'Product-contract-edit',
+          component:()=> import('../views/Admin/Products/Contract/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+
+        {
+          path: '/product-type',
+          name: 'Product-type',
+          component:()=> import('../views/Admin/Products/Type/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-type-add',
+          name: 'Product-type-add',
+          component:()=> import('../views/Admin/Products/Type/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-type-edit/:id',
+          name: 'Product-type-edit',
+          component:()=> import('../views/Admin/Products/Type/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+
+        {
+          path: '/product-category-type',
+          name: 'Product-category-type',
+          component:()=> import('../views/Admin/Products/Category-Type/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-category-type-add',
+          name: 'Product-category-type-add',
+          component:()=> import('../views/Admin/Products/Category-Type/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-category-type-edit/:id',
+          name: 'Product-category-type-edit',
+          component:()=> import('../views/Admin/Products/Category-Type/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+
+        {
+          path: '/product-series',
+          name: 'product-series-type',
+          component:()=> import('../views/Admin/Products/Series/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-series-add',
+          name: 'product-series-add',
+          component:()=> import('../views/Admin/Products/Series/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-series-edit/:id',
+          name: 'product-series-edit',
+          component:()=> import('../views/Admin/Products/Series/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+
+        // store 
+        {
+          path: '/store-category',
+          name: 'Store-category',
+          component:()=> import('../views/Admin/Store/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/store-category-add',
+          name: 'Store-category-add',
+          component:()=> import('../views/Admin/Store/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/store-category-edit/:id',
+          name: 'Store-category-edit',
+          component:()=> import('../views/Admin/Store/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+
       ]
     }
   ]

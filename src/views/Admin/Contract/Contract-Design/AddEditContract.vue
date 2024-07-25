@@ -95,6 +95,10 @@
                     </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Featured Products ">
+                            <div class="w-52 ml-auto mr-5">
+                                <Select :options="statusData" showfield="name" class="w-full" valueField="value"
+                                label="Select an option" v-model="form.status" />
+                            </div>
                             <div class=" px-6  h-auto ">
 
                             </div>
@@ -391,7 +395,7 @@ import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
-import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps } from '@/json/data';
+import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps,productData } from '@/json/data';
 import { useStore } from 'vuex';
 
 const store = useStore();
