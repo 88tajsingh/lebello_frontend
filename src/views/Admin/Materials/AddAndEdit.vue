@@ -117,6 +117,7 @@
             </div>
             <div class="flex flex-col w-full">
                 <InputLabel for="Featured_image" value="Featured_image" />
+                
                 <!-- <ImageUpload2 @file-selected="form.media_id = $event"
                     :accepted-formats="['jpg', 'jpeg', 'png']" /> -->
                 <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{ mediaName }}
@@ -135,11 +136,13 @@
             </div>
             <div class="flex flex-col w-full">
                 <div class=" mt-3 flex overflow-x-auto">
-                    <img v-if="form.image" :src="$filePath(form.image)"
+                    {{  }}
+                    <img v-if="selectedFiles" :src="$filePath(selectedFiles)"
                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                 </div>
             </div>
         </div>
+        
         <button type="submit"
             class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
             Submit
@@ -193,7 +196,7 @@ const form = ref({
 
 const mediaName = ref( 'Select Media' || form.image)
 const selectedFiles = ref(form.value.image)
-
+console.log('selectedFiles',selectedFiles)
 const errors = ref({})
 
 const emit = defineEmits(['handleApi']);
@@ -241,8 +244,10 @@ const handleSubmit = async () => {
 
 const handleFiles = (data) => {
     close();
+    console.log(data[0].file_url)
     // if(singleFile.value === true)
-    selectedFiles.value = data
+    selectedFiles.value = data[0].file_url;
+    
     const media_titles = data.map(item => item.title);
     mediaName.value = media_titles.join(', ');
 
@@ -263,6 +268,8 @@ const handleGetMaterialsById = async (payload) => {
       const data = res.data.data;
       if (data && data.length > 0) {
         form.value = data[0];
+        selectedFiles.value = form.value.image;
+        mediaName.value= form.value.image;
         PreviousDomain.value = form.value.domain_id;
         masterId.value = form.value.master_material_id;
       }

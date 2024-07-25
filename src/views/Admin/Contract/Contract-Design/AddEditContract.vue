@@ -84,6 +84,7 @@
                                     @click="() => contractLogoData.isOpen = true"> {{
                                         contractLogoData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
+                                 
                                     <img v-for="file in contractLogoData.images" :key="file"
                                         :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file.alternative_text || 'image'">
@@ -443,6 +444,7 @@ const handleGalleryFiles = (data) => {
     form.value.gallery = object.media_ids
 }
 const handleContractLogoFiles = (data) => {
+    console.log(data)
     const object = handleFiles(data);
     contractLogoData.value.isOpen = false
     contractLogoData.value.images = data;
@@ -493,7 +495,16 @@ const handleGetContract = async (payload) => {
             if (res.data.data?.length > 0) {
                 form.value = res.data.data[0]
                 PreviousDomain.value = form.value.domain_id;
-                masterId.value = form.value.master_material_id;            }
+                masterId.value = form.value.master_material_id;  
+                featureData.value.images = [form.value.featured_image_url]
+                featureData.value.mediaName = form.value.featured_image_url
+                contractLogoData.value.images = [form.value.contract_logo_url]
+                contractLogoData.value.mediaName = form.value.contract_logo_url
+                sliderImageData.value.images = [form.value.contract_slider_image_url]
+                sliderImageData.value.mediaName = form.value.contract_slider_image_url
+                galleryData.value.images = [form.value.gallery_urls]
+                // galleryData.value.mediaName = form.value.gallery_urls
+            }
         }
     } catch (e) {
         console.error('Error while getting contract:', e);

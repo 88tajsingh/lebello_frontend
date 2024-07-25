@@ -72,7 +72,7 @@ const getDomainList = async (payload) => {
 onMounted(() => {
     // contractLoctionTree({domain_id:store.getters.getDomain});
     getDomainList();
-    // loading.value = true;
+    loading.value = true;
 });
 
 // watch(SelectedOption, handleChange);

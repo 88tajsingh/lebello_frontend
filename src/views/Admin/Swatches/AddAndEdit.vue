@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="id ? `Edit Swatches` : `Add Swatches`">
         <DomainComponent @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -8,8 +8,8 @@
                     <div class="px-7">
                         <TextInput type="text"  id="addTitle" class="block mr-2 h-[40px] w-full" label="" placeholder="Add title"
                             v-model="form.title" :errMessage="errors.title" :errors="errors"     
-                             @update:checkValue="form.isTitle = $event" hasCheckBox
                             :class="{ 'border-red': errors.title }" />
+                            <!-- @update:checkValue="form.isTitle = $event" hasCheckBox -->
                            
                     </div>
                     </Accordion>
@@ -450,11 +450,13 @@ const close = () => {
 const handleFiles = (data) => {
     close();
     selectedFiles.value = data
+    form.value.featured_image_url =  data[0].file_url
+    mediaName.value= data[0].file_url;
     const media_titles = data.map(item => item.title);
     mediaName.value = media_titles.join(', ');
     const media_ids = data.map(item => item.id);
     form.value.featured_image = media_ids[0];
-    console.log('in form ', selectedFiles.value)
+    console.log('in form ', selectedFiles.value ,form.value.featured_image , media_ids[0])
 }
 
 const handleSubmit = () => {
@@ -495,6 +497,7 @@ const handleGetSwatches = async (payload) => {
                 };
                 PreviousDomain.value = form.value.domain_id;
                 masterId.value = form.value.master_swatch_id;
+                mediaName.value = form.value.featured_image_url
             }
         }
     } catch (error) {

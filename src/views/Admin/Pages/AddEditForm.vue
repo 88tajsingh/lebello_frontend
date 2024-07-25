@@ -1,5 +1,5 @@
 <template>
-  <DefaultCard :cardTitle="id ? `Edit Pages` : `Add Pages`">
+  <DefaultCard :cardTitle="id ? `Edit Pages` : `Add Pages`"> 
     <DomainComponent  @customChange="(id)=> form.domain_id = id"></DomainComponent>
     <form @submit.prevent="handleSubmit">
       <div class="p-6.5 grid grid-cols-2 gap-2">
@@ -252,6 +252,7 @@ const handleGetPages = async (payload) => {
       form.value = res.data.data[0];
       PreviousDomain.value = form.value.domain_id;
       masterId.value = form.value.master_material_id;
+      SliderSelects.value=form.value.gallery_urls
     }
   } catch (e) {
     showToast(e, 'error');

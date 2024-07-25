@@ -1,5 +1,5 @@
 <template>
-    <PageHeader> All Contract </PageHeader>
+    <PageHeader> Contract Location </PageHeader>
     <div class="flex content-between justify-between px-1 mb-2">
       <div class="flex">
         <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
@@ -16,7 +16,7 @@
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="ContractLocationCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
+      :rows="rows" :columns="ContractLocationCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}

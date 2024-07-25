@@ -18,7 +18,7 @@
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
     :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="rows" :columns="contractTypeCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
+    :rows="rows" :columns="contractTypeCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
      
       <template #actions="data">
         <div class="flex gap-3">
@@ -119,59 +119,58 @@ const navigateToRoute = () => {
 
 // api calls
 const handleGetContractType = async (payload) => {
+  getLoading.value = true;
   try {
-    getLoading.value = true;
     const res = await ContractServices.getContractType(payload);
-    if (res.status === 200 && res.data.success === true) {
+    if (res.status === 200 && res.data.success) {
       rows.value = res.data.data;
-      getLoading.value = false;
-      totalRows.value= res.data.total_records
+      totalRows.value = res.data.total_records;
     }
   } catch (e) {
-    console.error('Error while pages get:', e);
+    console.error('Error while getting contract types:', e);
+  } finally {
+    getLoading.value = false;
   }
 };
-  
+
 const handleDeleteContractType = async () => {
+  loading.value = true;
   try {
-    loading.value = true;
-    console.log("editData.value",editData.value)
     const res = await ContractServices.deleteContractType({ id: editData.value });
-    if (res.status === 200 && res.data.success === true) {
-      loading.value = false;
-      showToast(res.data.message, 'success')
-      rows.value = rows.value.filter(item => item.id !== editData.value)
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      rows.value = rows.value.filter(item => item.id !== editData.value);
       deleteModalIsOpen.value = false;
       editData.value = null;
     }
   } catch (e) {
-    console.error('Error while deleting pages:', e);
+    console.error('Error while deleting contract type:', e);
+  } finally {
+    loading.value = false;
   }
 };
-// bulk delete
+
 const handleBulkActions = async () => {
+  if (bulkActionSelected.value !== 'Delete') return;
+  
   const selected = datatable.value.getSelectedRows();
-  let id = selected.map(item => item.id)
-  console.log('run bulk delete',id,bulkActionSelected.value)
-  if (bulkActionSelected.value === 'Delete') {
-    loading.value = true;
-    try {
-      await ContractServices.BulkDeleteContractType({ 'id': id })
-        .then(res => {
-          if (res && res.status === 200 && res.data.success === true) {
-            rows.value = res.data.data
-            console.log('enter 200 status: ' + res.status)
-            showToast(' Bulk Delete sucessfully', 'success')
-            handleGetContractType();
-            loading.value = false;
-          }
-        })
-    } catch (e) {
-      loading.value = false;
-      console.error('Error while log in:', e);
+  const ids = selected.map(item => item.id);
+  
+  loading.value = true;
+  try {
+    const res = await ContractServices.BulkDeleteContractType({ id: ids });
+    if (res.status === 200 && res.data.success) {
+      rows.value = res.data.data;
+      showToast('Bulk delete successfully', 'success');
+      await handleGetContractType();
     }
+  } catch (e) {
+    console.error('Error during bulk delete:', e);
+  } finally {
+    loading.value = false;
   }
 };
+
 
 
 const getDomainList = async (payload) => {
