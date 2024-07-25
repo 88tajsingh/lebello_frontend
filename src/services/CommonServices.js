@@ -59,5 +59,23 @@ class LoginService {
   deleteExchangeRates(payload) {
     return instance.delete(ApiConfig.deleteExchangeRates, {params: {...payload}})
   }
+
+  // Tags
+  getTags(payload) {
+    return instance.get(ApiConfig.getTags, { params: { ...payload } })
+  }
+  addTags(payload) {
+    return instance.post(ApiConfig.addTags, payload)
+  }
+  editTags(payload) {
+    return instance.put(ApiConfig.editTags, payload)
+  }
+  deleteTags(payload) {
+    return instance.delete(ApiConfig.deleteTags, { params: { ...payload } })
+  }
+  BulkDeleteTags(payload) {
+    return instance.post(ApiConfig.bulkDeleteTags, payload)
+  }
+
 }
 export default new LoginService()

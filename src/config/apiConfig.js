@@ -92,6 +92,13 @@ const ApiConfig = {
   editExchangeRates: '/update-exchange-rate',
   deleteExchangeRates: '/delete-exchange-rate',
 
+    // Tags
+    getTags: '/get-tags',
+    addTags: '/add-tag',
+    editTags: '/update-tag',
+    deleteTags: '/delete-tag',
+    bulkDeleteTags: '/bulk-delete-tag',
+
   // --------------------------------------   Products   ----------------------------------------------------
   // products types
   getProductType: '/get-product-type',

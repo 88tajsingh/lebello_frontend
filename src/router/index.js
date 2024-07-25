@@ -251,6 +251,26 @@ const router = createRouter({
           props:true,
         },
 
+        {
+          path: '/tags',
+          name: 'Tags',
+          component:()=> import('../views/Admin/Tags/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/tags-add',
+          name: 'Tags-add',
+          component:()=> import('../views/Admin/Tags/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/tags-edit/:id',
+          name: 'Tags-edit',
+          component:()=> import('../views/Admin/Tags/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
+
         // -------------------------------- products path ---------------------------------------------
         {
           path: '/product-contract',
@@ -332,7 +352,7 @@ const router = createRouter({
           props:true,
         },
 
-        // store 
+        // ----------------------------------- store  -----------------------------------------
         {
           path: '/store-category',
           name: 'Store-category',
