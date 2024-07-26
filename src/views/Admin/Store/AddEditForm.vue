@@ -1,5 +1,5 @@
 <template>
-    <DefaultCard  :cardTitle="id ? `Edit Product Type ` : `Add Product Type`">
+    <DefaultCard  :cardTitle="id ? `Edit Store Category ` : `Add Store Category`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -34,8 +34,8 @@
                     />
             </div>
             <div class="flex flex-col ">
-                <InputLabel for="Parent Material" value="Parent Product Contract " />
-                <Select :options="storeCategoryTree" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select Location"
+                <InputLabel for="Parent Material" value="Parent Store Category " />
+                <Select :options="storeCategoryTree" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select "
                     v-model="form.parent_store_catgory" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop

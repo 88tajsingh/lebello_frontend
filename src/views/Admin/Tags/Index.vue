@@ -16,7 +16,7 @@
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="productTypeCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
+      :rows="rows" :columns="tagsCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
@@ -62,7 +62,7 @@
   import { useRouter } from 'vue-router';
   import { showToast  } from '@/helper/functions';
   import { getDomins } from '@/helper/Apis';
-  import { productTypeCols } from '@/json/data';
+  import { tagsCols } from '@/json/data';
   import store from '@/store';
 
   

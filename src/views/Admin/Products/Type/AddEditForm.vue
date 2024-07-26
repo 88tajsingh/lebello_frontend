@@ -34,8 +34,8 @@
                     />
             </div>
             <div class="flex flex-col ">
-                <InputLabel for="Parent Material" value="Parent Product Contract " />
-                <Select :options="MaterialTreeListData" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select Location"
+                <InputLabel for="Parent Material" value="Parent Product Type " />
+                <Select :options="MaterialTreeListData" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select "
                     v-model="form.parent_product_type" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
