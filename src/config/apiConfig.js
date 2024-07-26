@@ -140,7 +140,17 @@ const ApiConfig = {
   editStoreCategory: '/update-store-category',
   deleteStoreCategory: '/delete-store-category',
   bulkDeleteStoreCategory: '/bulk-delete-store-category',
-  getProductStoreCategory: '/get-store-category-tree-list'
+  getProductStoreCategory: '/get-store-category-tree-list',
+
+  // -------------------------------- Project ---------------------------------------------
+  // Project category
+  getProjectCategory: '/get-project-category',
+  addProjectCategory: '/add-project-category',
+  editProjectCategory: '/update-project-category',
+  deleteProjectCategory: '/delete-project-category',
+  bulkDeleteProjectCategory: '/bulk-delete-project-category',
+  getProductProjectCategory: '/get-project-category-tree-list',
+  getProjectCategorytree: '/get-project-category-tree-list',
 }
 
 export default ApiConfig

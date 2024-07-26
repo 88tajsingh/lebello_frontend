@@ -356,6 +356,13 @@ export const productSeriesCols = [
   { field: 'slug', title: 'Slug' },
   { field: 'actions', title: 'Actions' },
 ]
+export const proectCategoryCols = [
+ 
+  { field: 'name', title: 'Name', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'slug', title: 'Slug' },
+  { field: 'actions', title: 'Actions' },
+]
 
 export const swatchCols = [
   { field: 'src', title: 'Thumbs', slot: true },

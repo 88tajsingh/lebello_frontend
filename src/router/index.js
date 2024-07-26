@@ -379,6 +379,33 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props:true,
         },
+      // ----------------------------------- Project -----------------------------------------
+      {
+        path: '/project-category',
+        name: 'Project-category',
+        component:()=> import('../views/Admin/Project/Category/Index.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/project-category-add',
+        name: 'Project-category-add',
+        component:()=> import('../views/Admin/Project/Category/AddEditForm.vue'),
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/project-category-edit/:id',
+        name: 'Project-category-edit',
+        component:()=> import('../views/Admin/Project/Category/AddEditForm.vue'),
+        meta: { requiresAuth: true },
+        props:true,
+      },
+      {
+        path: '/project-taxonomy',
+        name: 'Project-taxonomy',
+        component:()=> import('../views/Admin/Project/TaxonomyOrder.vue'),
+        meta: { requiresAuth: true },
+        props:true,
+      },
 
       ]
     }

@@ -5,6 +5,7 @@ import ProductServices from "@/services/ProductServices";
 import StoreServices from "@/services/StoreServices";
 import store from "@/store";
 import router from "@/router";
+import ProjectServices from "@/services/ProjectServices";
 
 export const logout = async () => {
     try {
@@ -127,6 +128,16 @@ export const getDomins = async () => {
   export const getProductContractTree = async (payload) => {
     try {
       const res = await ProductServices.getProductContractTreeList(payload);
+      if (res.status === 200) {
+        return  res.data.data || [];
+      } 
+    } catch (err) {
+      console.log("getProductCategoryTypeTreeList err", err);
+    }
+  };
+  export const getProjectCategoryTree = async (payload) => {
+    try {
+      const res = await ProjectServices.getProjectCategoryTree(payload);
       if (res.status === 200) {
         return  res.data.data || [];
       } 
