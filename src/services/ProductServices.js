@@ -77,7 +77,7 @@ class ProductService {
     return instance.post(ApiConfig.addProductSeries, payload)
   }
   editProductSeries(payload) {
-    return instance.put(ApiConfig.editProductSeries, payload)
+    return instance.post(ApiConfig.editProductSeries, payload)
   }
   deleteProductSeries(payload) {
     return instance.delete(ApiConfig.deleteProductSeries, { params: { ...payload } })

@@ -96,7 +96,7 @@ const handleSubmit = async () => {
         console.error('Error material add edit :', e)
     }
 }
-// api for get patents child json parent material listing 
+// api for get patents child json parent  listing 
 const ProductContractTree = async (payload) => {
   MaterialTreeListData.value = await getProductContractTree(payload)
 }

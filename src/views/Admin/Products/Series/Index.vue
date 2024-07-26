@@ -12,13 +12,13 @@
     </div>
     <div class="flex rounded-lg bg-transparent">
       <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name: 'materials-add'}) }"class="px-2 py-2 m-auto whitespace-nowrap">Add Materials</Button>
+      <Button @click="() => {router.push({ name: 'product-series-add'}) }"class="px-2 py-2 m-auto whitespace-nowrap">Add Materials</Button>
     </div>  
   </div>
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
     :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="data" :columns="materialCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
+    :rows="data" :columns="productSeriesCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -26,50 +26,23 @@
         </div>
       </template>
       <template #image="data">
-        <img :src="$filePath(data.value.image)" alt="Material Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="$filePath(data.value.featured_image_url)" alt="Product Series Image" style="max-width: 50px; max-height: 50px" />
       </template>
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'materials-edit', params: { id: data.value.id , domain: data.value.domain_id} }) }" id="edit svg">
+          <div @click="() => { router.push({ name: 'product-series-edit', params: { id: data.value.id , domain: data.value.domain_id} }) }" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => { material_id = data.value; openDeleteModal(); }">
             <DeleteSvg />
           </div>
-          <!-- <Button :onClick="editModal" bg_th_color="bg-[#2271b1] text-white px-3 py-2" class="m-0 py-1 px-2" @click="()=>{editData=data.value}">Edit</Button>
-        <Button  class="m-0 px-2" :onClick="openDeleteModal" bg_th_color="bg-red border-red text-white" @click="()=>{material_id=data.value}">Delete</Button> -->
-
         </div>
       </template>
+x
     </vue3-datatable>
   </div>
-  <!-- <DataTable  :bulkOption='bulkOption' :isSearchAble='true' :loading='false' :hasCheckbox='true' :rows='rows' 
-    :cols='cols' AddBtnName='Add Materials' material
-  >
-  <template #name="data">
-      <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
-        {{ data.value.name }}
-        <div v-if="isRowHovered(data.value)">overed</div>
-      </div>
-    </template>
-    <template v-slot:image="{ row }">
-      <img :src="row.image" alt="Material Image" style="width: 50px; height: 50px;" />
-    </template>
-    <template #actions="data">
-                <div class="flex">
-                  <Button :onclick="openModal"bg_th_color="bg-[#2271b1] text-white px-3 py-2" class="m-0 py-1 px-2" @click="viewUser(data.value)">Edit</Button>
-                    <Button Button :onclick="openModal" class="m-0  px-2" @click="deleteUser(data.value)"
-                    bg_th_color="bg-red border-red text-white "
-                    >Delete</Button>
-                </div>
-            </template>
-            <template v-for="col in tableColumns" v-if="col.slot" v-slot:[col.field]="{ row }">
-              <div v-if="col.field === 'image'">
-          <img :src="row.image" alt="Material Image" style="max-width: 100px;">
-        </div>
-              </template>
-</DataTable> -->
-  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteMaterials">
+  
+  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteProductSeries">
     Do you want to delete ?
   </DeleteModal>
   <Loader :isLoading="loading" :fullPage="true" />
@@ -82,18 +55,21 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { materialCols } from '@/json/data'
+import { productSeriesCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
-import materialsServices from '@/services/MaterialsServices'
+import ProductServices from '@/services/ProductServices'
 import { useRouter } from 'vue-router';
+import SingleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import { useStore } from 'vuex';
 
+const checked = ref(false);
 const store = useStore();
 const router = useRouter();
 const bulkActionSelected = ref(null)
 const search = ref('')
+const show_in_menu = ref('')
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
 const material_id = ref('')
 const dataTableLoding = ref(false)
@@ -105,20 +81,6 @@ const  totalRows = ref('')
 const actionsFlag = ref(null)
 const getDominsList = ref([])
 const domain_id = ref('')
-
-// const modalIsOpen = ref(false)
-// const editIsOpen = ref(false)
-
-// const openModal = () => {
-//   modalIsOpen.value = true
-// }
-// const editModal = () => {
-//   editIsOpen.value = true;
-// }
-// const editCloseModal = () => {
-//   editIsOpen.value = false;
-//   console.log('run close modal');
-// }
 
 const handleMouseEnter = (data) => {
   actionsFlag.value = data.value.name
@@ -139,14 +101,19 @@ const openDeleteModal = () => {
 
 const changePage =(page) => {
   const payload = {limit:page.pagesize,page:page.current_page}
-  handleGetMaterials(payload);
+  handleGetProductSeries(payload);
 }
+
+function handleCheckboxChange(event) {
+  console.log('Checkbox state changed:', event.target.checked);
+}
+
 // get materials function
-const handleGetMaterials = async (payload) => {
+const handleGetProductSeries = async (payload) => {
   
   dataTableLoding.value = true;
   try {
-    await materialsServices.getMaterials(payload)
+    await ProductServices.getProductSeries(payload)
       .then(res => {
         if (res.status === 200 && res.data.success === true) {
           if (res.data.data && res.data.data.length > 0) {
@@ -169,11 +136,36 @@ const handleGetMaterials = async (payload) => {
     dataTableLoding.value = false;
   }
 }
+
+const handleEditProductSeries = async (payload) => {
+  loading.value = true;
+  if (form.value.domain_id !== PreviousDomain.value) {
+    delete form.value.id;
+  }else{
+      // clone existing  in other domain 
+        form.value = { ...form.value, master_material_id: masterId.value };
+  }
+  delete form.value?.featured_image_url;
+  try {
+    const res = await ProductServices.editProductSeries({...form.value});
+    if (res.status === 200) {
+      showToast(res.data.message, 'success');
+      router.push('/product-series');
+    } else if (res.status === 400) {
+      showToast(res.data.message, 'error');
+    }
+  } catch (error) {
+    console.error('Error editing location:', error);
+  } finally {
+    loading.value = false;
+  }
+}
+
 // delete material
-const handleDeleteMaterials = async () => {
+const handleDeleteProductSeries = async () => {
   loading.value = true;
   try {
-    const res = await materialsServices.deleteMaterial({ id: material_id.value.id });
+    const res = await ProductServices.deleteProductSeries({ id: material_id.value.id });
     if (res.status === 200) {
       showToast(res.data.message, 'success');
       data.value = data.value.filter(item => item.id !== material_id.value.id)
@@ -195,11 +187,10 @@ const handleBulkActions = async () => {
   if (bulkActionSelected.value === 'delete') {
     loading.value = true;
     try {
-      const res = await materialsServices.BulkDeleteMaterial({ id: ids });
+      const res = await ProductServices.BulkDeleteProductSeries({ id: ids });
       if (res.status === 200 && res.data.success) {
-        rows.value = res.data.data;
         showToast(res.data.message, 'success');
-        handleGetMaterials();
+        await handleGetProductSeries();
       }
     } catch (e) {
       console.error('Error while performing bulk delete:', e);
@@ -226,8 +217,7 @@ watch(
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      console.log(defaultDomain , domain_id.value)
-      handleGetMaterials({limit:10,page:1,domain_id:domain_id.value});
+      handleGetProductSeries({limit:10,page:1,domain_id:domain_id.value});
     }
 );
 </script>

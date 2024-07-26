@@ -125,12 +125,12 @@ const ApiConfig = {
   getProductContractTree: '/get-contract-tree-list',
 
   // products Series
-  getProductContract: '/get-product-series',
-  addProductContract: '/add-product-series',
-  editProductContract: '/update-product-series',
-  deleteProductContract: '/delete-product-series',
-  bulkDeleteProductContract: '/delete-bulk-product-series',
-  getProductContractTree: '/get-product-series-tree-list',
+  getProductSeries: '/get-product-series',
+  addProductSeries: '/add-product-series',
+  editProductSeries: '/update-product-series',
+  deleteProductSeries: '/delete-product-series',
+  bulkDeleteProductSeries: '/delete-bulk-product-series',
+  getProductSeriesTree: '/get-product-series-tree-list',
 
   // ---------------------------------------  store  -------------------------------------
   // store category

@@ -351,6 +351,13 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props:true,
         },
+        {
+          path: '/product-taxonomyOrder',
+          name: 'Product-taxonomyOrder',
+          component:()=> import('../views/Admin/Products/TaxonomyOrder.vue'),
+          meta: { requiresAuth: true },
+          props:true,
+        },
 
         // ----------------------------------- store  -----------------------------------------
         {

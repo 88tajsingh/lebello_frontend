@@ -93,6 +93,16 @@ export const getDomins = async () => {
       console.log("getProductTypeTreeList err", err);
     }
   };
+  export const getProductSeriesTree = async (payload) => {
+    try {
+      const res = await ProductServices.getProductSeriesTreeList(payload);
+      if (res.status === 200) {
+        return  res.data.data || [];
+      } 
+    } catch (err) {
+      console.log("getProductTypeTreeList err", err);
+    }
+  };
   export const getProductContractTypeTree = async (payload) => {
     try {
       const res = await ProductServices.getProductCategoryTypeTreeList(payload);

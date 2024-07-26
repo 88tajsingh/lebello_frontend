@@ -20,6 +20,7 @@ import EditSvg  from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg  from '@/components/Admin-components/svg/DeleteSvg.vue'
 import Loader from '@/components/Admin-components/Loader.vue';
 import {Tabs, Tab} from 'vue3-tabs-component';
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import ColorInput from '@/components/Admin-components/form-components/ColorInput.vue'
 import SingleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
@@ -32,11 +33,8 @@ import DeleteModal from './components/Admin-components/Modals/DeleteModal.vue';
 import DatePicker from  '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import Toast from 'vue-toastification';
-
 import _ from 'lodash';
-
 import 'vue-toastification/dist/index.css';
-import { en,es,fr,de,it,zh,ja,ru,ko,pt } from './json/Languages';
 
 const options = {
     position: "top-right",
@@ -53,26 +51,7 @@ const options = {
     pauseOnFocusLoss: true
   };
 
-  const i18n = createI18n({
-    legacy: false,
-    locale: 'en', 
-    fallbackLocale: 'en', 
-    messages: {
-      en,
-      fr,
-      es,
-      de,
-      it,
-      zh,
-      ja,
-      ru,
-      ko,
-      pt
-    }
-  });
-
 const app = createApp(App)
-app.use(i18n)
 app.use(apiPlugin)
 app.use(HelpersPlugin)
 app.use(Toast, options);
@@ -95,6 +74,7 @@ app.component('PopupModal', PopupModal);
 app.component('DatePicker', DatePicker);
 app.component('PageHeader', PageHeader);
 app.component('InputError', InputError);
+app.component('GetLibrary', GetLibrary);
 app.component('InputLabel', InputLabel);
 app.config.globalProperties.$lodash = _;
 app.component('DeleteModal', DeleteModal);

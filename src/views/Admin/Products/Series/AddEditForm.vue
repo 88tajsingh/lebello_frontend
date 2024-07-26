@@ -1,5 +1,5 @@
 <template>
-    <DefaultCard  :cardTitle="id ? `Edit Product Type ` : `Add Product Type`">
+    <DefaultCard  :cardTitle="id ? `Edit Product Series ` : `Add Product Series`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -33,14 +33,58 @@
                     v-model="form.sub_title" 
                     />
             </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2  w-full"
+                label="Seo Title Tag"
+                     placeholder="" 
+                    v-model="form.seo_title_tag" 
+                    />
+            </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2  w-full"
+                label="Seo Meta Keyword Tag"
+                     placeholder="" 
+                    v-model="form.seo_meta_keyword_tag" 
+                    />
+            </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2  w-full"
+                label="Trade Mark Label"
+                     placeholder="" 
+                    v-model="form.trade_mark_label" 
+                    />
+            </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2  w-full"
+                label="Label"
+                     placeholder="" 
+                    v-model="form.label" 
+                    />
+            </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2  w-full"
+                label="Menu Label"
+                     placeholder="" 
+                    v-model="form.menu_label" 
+                    />
+
+            </div>
+            <div class="">
+                 <ColorPicker  label="Text Color" v-model="form.label_background_color" />
+             </div>
             <div class="flex flex-col ">
-                <InputLabel for="Parent Material" value="Parent Product Contract " />
-                <Select :options="MaterialTreeListData" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select Location"
-                    v-model="form.parent_product_type" />
+                <InputLabel for="Parent Material" value="Parent Product Series " />
+                <Select :options="MaterialTreeListData" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select Product Series"
+                    v-model="form.parent_product_series" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
                     and Big Band.
                 </p>
+            </div>
+            <div class="flex flex-col ">
+                <InputLabel for="DisplayO" value="Display On Home And Series Page Option " />
+                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value" label="Select Material Options"
+                    v-model="form.display_on_home" />
             </div>
        
             <div class="flex flex-col w-full">
@@ -53,9 +97,35 @@
                     The description is not prominent by default; however, some themes may show it.
                 </p>
             </div>
-           
-           
-        </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2  w-full"
+                label="Seo Meta Description Tag"
+                     placeholder="" :isTextarea="true" rows="4"
+                    v-model="form.seo_meta_description_tag" 
+                    />
+                <p class="text-sm text-[#646970] text-[11.5px]">
+                    The description is not prominent by default; however, some themes may show it.
+                </p>
+            </div>
+            <div class="flex flex-col w-full ">
+                                <singleCheckBox id="FeaturedOption" label="Show in New Menu" v-model:modelValue="form.show_in_menu"></singleCheckBox>
+                                <singleCheckBox id="FeaturedOption" label="Show in Collection 19 Menu" v-model:modelValue="form.show_in_yearly_collection"></singleCheckBox>
+                              </div>
+                              <div class="flex flex-col w-full  ">
+                                
+                                <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
+                                <div class="py-2  rounded-lg px-2 border border-stroke"
+                                    @click="() => featureData.isOpen = true"> {{
+                                        featureData.mediaName }}</div>
+                                <div class=" mt-3 flex overflow-x-auto">
+                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                </div>
+                                <InputError class="mt-2" :message="errors?.featured_image" />
+                           
+                                
+                              </div>
+                            </div>
         <button type="submit"
             class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
            {{ id ? `Update ` : `Submit` }}
@@ -63,17 +133,22 @@
     </form>
 </DefaultCard>
     <Loader :isLoading="loading" :fullPage="true" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
+            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+    </popupModal>
 </template>
 
 <script setup>
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import { getProductTypeTree } from '@/helper/Apis'
+import { getProductSeriesTree } from '@/helper/Apis'
 import ProductServices from '@/services/ProductServices'
-import { clearError,showToast } from '@/helper/functions'
+import { clearError,showToast,handleFiles } from '@/helper/functions'
 import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import { trueFalse } from '@/json/data'
 
 const store = useStore();
 const router = useRouter();
@@ -82,10 +157,25 @@ const MaterialTreeListData = ref([])
 const loading = ref(false)
 const props = defineProps(['id'])
 const id = ref(props.id || null)
-const form = ref({ parent_contract_location:0})
+const form = ref({ parent_product_series:0})
 const errors = ref({})
 const PreviousDomain = ref(null)
 const masterId = ref(null)
+
+// images variables 
+const featureData = ref({
+    isOpen: false,
+    mediaName: 'feature Image',
+    images: []
+})
+
+const handleFeatureFiles = (data) => {
+    const object = handleFiles(data);
+    featureData.value.isOpen = false
+    featureData.value.images = data;
+    featureData.value.mediaName = object.mediaName;
+    form.value.featured_image = object.media_ids[0]
+}
 
 const validateForm = () => {
     let isValid = true
@@ -103,28 +193,30 @@ const handleSubmit = async () => {
         if (validateForm()) {
             // emit('handleApi', { ...form.value });
             if(id.value !== null ) 
-            handleEditProductType( { ...form.value })
+            handleEditProductSeries( { ...form.value })
             else
-            handleAddProductType( { ...form.value })
+            handleAddProductSeries( { ...form.value })
         }
     } catch (e) {
         console.error('Error material add edit :', e)
     }
 }
 // api for get patents child json parent material listing 
-const handleProductTypeTree = async (payload) => {
-  MaterialTreeListData.value = await getProductTypeTree(payload)
+const handleProductSeriesTree = async (payload) => {
+  MaterialTreeListData.value = await getProductSeriesTree(payload)
 }
 // get material
-const handleGetProductTypeById = async (payload) => {
+const handleGetProductSeriesById = async (payload) => {
   loading.value = true;
   try {
-    const res = await ProductServices.getProductType(payload);
+    const res = await ProductServices.getProductSeries(payload);
     if (res.status === 200 && res.data.success) {
       if (res.data.data?.length > 0) {
         form.value = res.data.data[0];
         PreviousDomain.value = form.value.domain_id;
-        masterId.value = form.value.master_material_id;     
+        masterId.value = form.value.master_material_id; 
+        featureData.value.images = [form.value.featured_image_url]
+        featureData.value.mediaName = form.value.featured_image_url
       }
     }
   } catch (error) {
@@ -134,15 +226,15 @@ const handleGetProductTypeById = async (payload) => {
   }
 }
 
-const handleAddProductType = async (payload) => {
+const handleAddProductSeries = async (payload) => {
   loading.value = true;
   try {
-    const res = await ProductServices.addProductType(payload);
+    const res = await ProductServices.addProductSeries(payload);
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
-      router.push('/product-type');
+      router.push('/product-series');
     } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
+      showToas(res.data.message, 'error');
     }
   } catch (error) {
     showToast('Something went wrong', 'error');
@@ -152,7 +244,7 @@ const handleAddProductType = async (payload) => {
   }
 }
 
-const handleEditProductType = async (payload) => {
+const handleEditProductSeries = async (payload) => {
   loading.value = true;
   if (form.value.domain_id !== PreviousDomain.value) {
     delete form.value.id;
@@ -160,11 +252,12 @@ const handleEditProductType = async (payload) => {
       // clone existing  in other domain 
         form.value = { ...form.value, master_material_id: masterId.value };
   }
+  delete form.value?.featured_image_url;
   try {
-    const res = await ProductServices.editProductType({...form.value});
+    const res = await ProductServices.editProductSeries({...form.value});
     if (res.status === 200) {
       showToast(res.data.message, 'success');
-      router.push('/product-type');
+      router.push('/product-series');
     } else if (res.status === 400) {
       showToast(res.data.message, 'error');
     }
@@ -178,7 +271,7 @@ const handleEditProductType = async (payload) => {
 onMounted(()=>{
     if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
         console.log("store.getters.getDomain.id",store.getters.getDomain.id)
-        handleGetProductTypeById({id:props.id,domain_id:store.getters.getDomain.id});
+        handleGetProductSeriesById({id:props.id,domain_id:store.getters.getDomain.id});
         form.value.domain_id = store.getters.getDomain.id
     }
 })
@@ -186,7 +279,7 @@ onMounted(()=>{
 watch(
     () => form.value.domain_id,
     () => {
-        handleProductTypeTree({domain_id:form.value.domain_id});
+        handleProductSeriesTree({domain_id:form.value.domain_id});
          }
 );
 </script>

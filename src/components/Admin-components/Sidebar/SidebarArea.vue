@@ -115,7 +115,11 @@ const menuGroups = ref([
           {
             label: 'Product Series',
             route: '/product-series'
-          }
+          },
+          {
+            label: 'Taxonomy Order',
+            route: '/product-taxonomyOrder'
+          },
         ]
       },
       {

@@ -332,6 +332,13 @@ export const productData = [
   }
 ];
 
+export const productTaxonomy = [
+  {name: "Materials" , value:'material' }, 
+  {name: "Contracts " , value:'contract' }, 
+  {name: "Product Types " , value:'product_type' }, 
+  {name: "Product Series " , value:'product_series' }, 
+  {name: "Product Category Type " , value:'product_category_type' }, 
+]
 
 // cols all tables 
 export const materialCols = [
@@ -340,6 +347,13 @@ export const materialCols = [
   { field: 'description', title: 'Description' },
   { field: 'slug', title: 'Slug' },
   { field: 'count', title: 'Count' },
+  { field: 'actions', title: 'Actions' },
+]
+export const productSeriesCols = [
+  { field: 'image', title: 'Image', slot: true },
+  { field: 'name', title: 'Name', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'slug', title: 'Slug' },
   { field: 'actions', title: 'Actions' },
 ]
 
