@@ -92,12 +92,12 @@ const ApiConfig = {
   editExchangeRates: '/update-exchange-rate',
   deleteExchangeRates: '/delete-exchange-rate',
 
-    // Tags
-    getTags: '/get-tags',
-    addTags: '/add-tag',
-    editTags: '/update-tag',
-    deleteTags: '/delete-tag',
-    bulkDeleteTags: '/bulk-delete-tag',
+  // Tags
+  getTags: '/get-tags',
+  addTags: '/add-tag',
+  editTags: '/update-tag',
+  deleteTags: '/delete-tag',
+  bulkDeleteTags: '/bulk-delete-tag',
 
   // --------------------------------------   Products   ----------------------------------------------------
   // products types
@@ -143,6 +143,12 @@ const ApiConfig = {
   getProductStoreCategory: '/get-store-category-tree-list',
 
   // -------------------------------- Project ---------------------------------------------
+  // Projects
+  getProjects: '/get-project-list',
+  addProjects: '/add-project',
+  editProjects: '/update-project',
+  deleteProjects: '/delete-project',
+  bulkDeleteProjects: '/bulk-delete-project',
   // Project category
   getProjectCategory: '/get-project-category',
   addProjectCategory: '/add-project-category',
@@ -150,7 +156,7 @@ const ApiConfig = {
   deleteProjectCategory: '/delete-project-category',
   bulkDeleteProjectCategory: '/bulk-delete-project-category',
   getProductProjectCategory: '/get-project-category-tree-list',
-  getProjectCategorytree: '/get-project-category-tree-list',
+  getProjectCategorytree: '/get-project-category-tree-list'
 }
 
 export default ApiConfig
