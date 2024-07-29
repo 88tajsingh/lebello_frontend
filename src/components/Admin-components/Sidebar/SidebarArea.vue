@@ -129,6 +129,10 @@ const menuGroups = ref([
         route: '',
         children: [
           {
+            label: 'Projects',
+            route: '/projects'
+          },
+          {
             label: 'Project Category',
             route: '/Project-category'
           },
