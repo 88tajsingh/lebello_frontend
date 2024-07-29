@@ -85,7 +85,7 @@
             My Contacts
           </router-link>
         </li>
-        <li>
+        <!-- <li>
           <router-link
             to="/pages/settings"
             class="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
@@ -109,7 +109,7 @@
             </svg>
             Account Settings
           </router-link>
-        </li>
+        </li> -->
       </ul>
       <button @click="logout()"
         class="flex items-center gap-3.5 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"

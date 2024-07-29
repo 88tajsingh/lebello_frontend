@@ -269,6 +269,39 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props: true
         },
+        {
+          path: '/designer',
+          name: 'Designer',
+          component: () => import('../views/Admin/Designer/Add-Designer/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/designer-add',
+          name: 'Designer-add',
+          component: () => import('../views/Admin/Designer/Add-Designer/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/designer-edit/:id',
+          name: 'Designer-edit',
+          component: () => import('../views/Admin/Designer/Add-Designer/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props: true
+        },
+        {
+          path: '/designer-taxonomyOrder',
+          name: 'designer-TaxonomyOrder',
+          component: () => import('../views/Admin/Designer/TaxonomyOrder.vue'),
+          meta: { requiresAuth: true },
+          props: true
+        },
+        {
+          path: '/designer-reOrder',
+          name: 'designer-ReOrder',
+          component: () => import('../views/Admin/Designer/ReOrder.vue'),
+          meta: { requiresAuth: true },
+          props: true
+        },
 
         // -------------------------------- products path ---------------------------------------------
         {
@@ -382,20 +415,20 @@ const router = createRouter({
         {
           path: '/projects',
           name: 'projects',
-          component: () => import('../views/Admin/Project/Index.vue'),
+          component: () => import('../views/Admin/Project/Add/Index.vue'),
           meta: { requiresAuth: true },
           props: true
         },
         {
           path: '/project-add',
           name: 'Project-add',
-          component: () => import('../views/Admin/Project/AddEditForm.vue'),
+          component: () => import('../views/Admin/Project/Add/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
         {
           path: '/project-edit/:id',
           name: 'Project-edit',
-          component: () => import('../views/Admin/Project/AddEditForm.vue'),
+          component: () => import('../views/Admin/Project/Add/AddEditForm.vue'),
           meta: { requiresAuth: true },
           props: true
         },

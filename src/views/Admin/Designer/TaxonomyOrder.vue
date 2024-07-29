@@ -1,5 +1,5 @@
 <template>
-    <PageHeader> Product Taxonomy Order </PageHeader>
+    <PageHeader> Designer Taxonomy Order </PageHeader>
     <div class="flex items-center justify-end gap-2">
         
         <div class="w-52">
@@ -9,7 +9,7 @@
         </div>
         <div class="w-52">
             <Label class="ml-1">Select Taxonomy</Label>
-            <Select :options="productTaxonomy" showfield="name" class="w-full" valueField="value"
+            <Select :options="designerTaxonomy" showfield="name" class="w-full" valueField="value"
                 label="Select Taxonomy" v-model="key" />
         </div>
     </div>
@@ -29,7 +29,7 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import {getDomins,getProductContractTree,getProductSeriesTree,getProductCategoryTypeTree,MaterialTreeList, getProductTypeTree} from '@/helper/Apis'
 import CommonServices from '@/services/CommonServices'
-import { productTaxonomy } from '@/json/data'
+import { designerTaxonomy } from '@/json/data'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import store from '@/store'
@@ -38,7 +38,7 @@ const sortedData = ref([])
 const getDominsList = ref([])
 const domain_id = ref('')
 const treeData = ref([])
-const key = ref('material')
+const key = ref('product_type')
 const loading = ref(false)
 
 function handleListUpdate(updatedList) {
@@ -48,44 +48,17 @@ function handleListUpdate(updatedList) {
 const handleChange = () => {
     console.log('key', key.value)
     loading.value = true
-    if (key.value === 'material') {
-        materialTree({ domain_id: domain_id.value })
-    } else if (key.value === 'contract') {
-        ProductContractTree({ domain_id: domain_id.value })
-    } else if (key.value === 'product_type') {
+     if (key.value === 'product_type') {
         handleProductTypeTree({ domain_id: domain_id.value })
-    } else if (key.value === 'product_series') {
-        handleProductSeriesTree({ domain_id: domain_id.value })
     } else if (key.value === 'product_category_type') {
         getProductCategoryTypeTreeList({ domain_id: domain_id.value })
     }
-}
-
-// material
-const materialTree = async (payload) => { 
-    loading.value = true
-    treeData.value = await MaterialTreeList(payload)
-    loading.value = false
 }
 
 // ContractType
 const getProductCategoryTypeTreeList = async (payload) => {
     loading.value = true
     treeData.value = await getProductCategoryTypeTree(payload)
-    loading.value = false
-}
-
-// Contract
-const ProductContractTree = async (payload) => {
-    loading.value = true
-    treeData.value = await getProductContractTree(payload)
-    loading.value = false
-}
-
-// ProductSeries
-const handleProductSeriesTree = async (payload) => {
-    loading.value = true
-    treeData.value = await getProductSeriesTree(payload)
     loading.value = false
 }
 
@@ -97,7 +70,7 @@ const handleProductTypeTree = async (payload) => {
 }
 
 
-// material sorting api call
+//  sorting api call
 const handleSorting = async () => {
     let id = sortedData.value.map((item) => ({
         id: item.id,
@@ -145,6 +118,6 @@ watch(domain_id, () => {
         (site) => site.id == domain_id.value
     )
     store.dispatch('setDomain', defaultDomain[0])
-    materialTree({ domain_id: domain_id.value })
+    handleProductTypeTree({ domain_id: domain_id.value })
 })
 </script>

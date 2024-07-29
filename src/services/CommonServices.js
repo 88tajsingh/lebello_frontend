@@ -1,7 +1,7 @@
 import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 
-class LoginService {
+class CommonServices {
 
   logout() {
     return instance.post(ApiConfig.logout)
@@ -78,4 +78,4 @@ class LoginService {
   }
 
 }
-export default new LoginService()
+export default new CommonServices()

@@ -573,17 +573,17 @@ const contractTypeTree = async (payload) => {
 // );
 onMounted(()=>{
     if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
-        handleGetContract({id:props.id,domain_id:store.getters.getDomain.id});
-        form.value.domain_id = store.getters.getDomain.id
+        console.log("store.getters.getDomain.id",store.getters?.getDomain?.id)
+        handleGetContract({id:props.id,domain_id:store.getters?.getDomain?.id});
+        form.value.domain_id = store.getters?.getDomain.id
     }
 })
 
 watch(
     () => form.value.domain_id,
     () => {
-        contractLoctionTree({domain_id:store.getters.getDomain.id});
-        contractTypeTree({domain_id:store.getters.getDomain.id});
+        contractLoctionTree({domain_id:store.getters?.getDomain?.id});
+        contractTypeTree({domain_id:store.getters?.getDomain?.id});
          }
 );
 

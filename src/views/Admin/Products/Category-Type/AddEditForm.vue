@@ -53,7 +53,7 @@
 <script setup>
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import { getProductContractTypeTree } from '@/helper/Apis'
+import { getProductCategoryTypeTree } from '@/helper/Apis'
 import { clearError,showToast } from '@/helper/functions'
 import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
@@ -98,7 +98,7 @@ const handleSubmit = async () => {
 }
 // api for get patents child json parent material listing 
 const getProductContractTypeTreeList = async (payload) => {
-  MaterialTreeListData.value = await getProductContractTypeTree(payload)
+  MaterialTreeListData.value = await getProductCategoryTypeTree(payload)
 }
 // get material
 const handleGetProductCategoryTypeById = async (payload) => {

@@ -116,10 +116,10 @@
   const changePages =(page) => {
     console.log("page changed", page)
     const payload = {limit:page.pagesize,page:page.current_page}
-    getProductContractTypeTree(payload);
+    getProductCategoryTypeTree(payload);
   }
   // api calls
-  const getProductContractTypeTree = async (payload) => {
+  const getProductCategoryTypeTree = async (payload) => {
   getLoading.value = true;
   try {
     const res = await ProductServices.getProductCategoryType(payload);
@@ -165,7 +165,7 @@ const handleBulkActions = async () => {
       const res = await ProductServices.BulkDeleteProductCategoryType({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await getProductContractTypeTree();
+        await getProductCategoryTypeTree();
       }
       else if (res.status === 400){
         showToast(res.data.message, 'error');
@@ -195,7 +195,7 @@ watch(
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      getProductContractTypeTree({limit:10,page:1,domain_id:domain_id.value});
+      getProductCategoryTypeTree({limit:10,page:1,domain_id:domain_id.value});
     }
 );
   </script>

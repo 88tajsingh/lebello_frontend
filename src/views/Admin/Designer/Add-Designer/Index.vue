@@ -1,6 +1,6 @@
 <template>
     <!-- <div class="ml-96"><Languages/></div> -->
-    <PageHeader> Projects</PageHeader>
+    <PageHeader> Designer </PageHeader>
     <div class="flex  content-between justify-between   mb-2">
         <div class="flex">
             <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
@@ -14,9 +14,9 @@
         <div class="flex rounded-lg bg-transparent">
             <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
                 v-model="search" />
-            <Button @click="() => { router.push({ name: 'Project-add' }) }"
+            <Button @click="() => { router.push({ name: 'Designer-add' }) }"
                 class="px-2 py-2 m-auto whitespace-nowrap">Add
-                Projects</Button>
+                Designer</Button>
         </div>
     </div>
     <div class="bg-white rounded-[20px]">
@@ -30,7 +30,7 @@
 
             <template #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'Project-edit', params: { id: data.value.id, domain: data.value.domain_id } }) }"
+                    <div @click="() => { router.push({ name: 'Designer-edit', params: { id: data.value.id, domain: data.value.domain_id } }) }"
                         id="edit svg">
                         <EditSvg />
                     </div>
@@ -43,7 +43,7 @@
         </vue3-datatable>
     </div>
 
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteProjects">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteDesigner">
         Do you want to delete ?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -55,7 +55,7 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomins } from '@/helper/Apis'
+import { getDomins, } from '@/helper/Apis'
 import { projectsCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
@@ -63,6 +63,7 @@ import Button from '@/components/Admin-components/Buttons/Button.vue'
 import ProjectServices from '@/services/ProjectServices'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
+import DesignerServices from '@/services/DesignerServices'
 
 const checked = ref(false);
 const store = useStore();
@@ -101,19 +102,19 @@ const openDeleteModal = () => {
 
 const changePage = (page) => {
     const payload = { limit: page.pagesize, page: page.current_page }
-    handleGetProjects(payload);
+    handleGetDesigner(payload);
 }
 
 function handleCheckboxChange(event) {
     console.log('Checkbox state changed:', event.target.checked);
 }
 
-// get materials function
-const handleGetProjects = async (payload) => {
+// get  function
+const handleGetDesigner = async (payload) => {
 
     dataTableLoding.value = true;
     try {
-        await ProjectServices.getProjects(payload)
+        await DesignerServices.getDesigners(payload)
             .then(res => {
                 if (res.status === 200 && res.data.success === true) {
                     if (res.data.data && res.data.data.length > 0) {
@@ -138,10 +139,10 @@ const handleGetProjects = async (payload) => {
 }
 
 // delete material
-const handleDeleteProjects = async () => {
+const handleDeleteDesigner = async () => {
     loading.value = true;
     try {
-        const res = await ProjectServices.deleteProjects({ id: project_id.value.id });
+        const res = await DesignerServices.deleteDesigners({ id: project_id.value.id });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
             data.value = data.value.filter(item => item.id !== project_id.value.id)
@@ -163,10 +164,10 @@ const handleBulkActions = async () => {
     if (bulkActionSelected.value === 'delete') {
         loading.value = true;
         try {
-            const res = await ProjectServices.bulkDeleteProjectCategory({ id: ids });
+            const res = await DesignerServices.bulkDeleteDesigners({ id: ids });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
-                await handleGetProjects();
+                await handleGetDesigner();
             }
         } catch (e) {
             console.error('Error while performing bulk delete:', e);
@@ -193,7 +194,7 @@ watch(
     () => {
         const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
         store.dispatch('setDomain', defaultDomain[0]);
-        handleGetProjects({ limit: 10, page: 1, domain_id: domain_id.value });
+        handleGetDesigner({ limit: 10, page: 1, domain_id: domain_id.value });
     }
 );
 </script>

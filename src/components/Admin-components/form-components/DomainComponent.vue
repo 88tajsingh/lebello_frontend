@@ -69,10 +69,11 @@ const emitItemClick = (item) => {
 const handleGetDomains = async () => {
   try {
     const res = await CommonServices.getDomains();
-    if (res.status === 200 && res.data.success === true) {
-      selectedDomain.value = store.getters.getDomain || res.data.data[0]
-      domain_id.value =  selectedDomain.value.id
+    if (res.status === 200 && res.data.success) {
       DropData.value = res.data.data;
+      const defaultDomain = DropData.value.filter(site => site.default === 1)[0];
+      selectedDomain.value = store.getters.getDomain || defaultDomain
+      domain_id.value =  selectedDomain.value.id
       emit('customChange', domain_id.value);
     }
   } catch (e) {
@@ -86,6 +87,7 @@ onMounted(() => {
 
 watch(domain_id, () => {
   handleAddTabs();
+  
 });
 </script>
 

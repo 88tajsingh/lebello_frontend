@@ -1,7 +1,7 @@
 import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 
-class LoginService {
+class MaterialServices {
 
   getMaterials(payload) {
     return instance.get(ApiConfig.getMaterial,{params: {...payload}})
@@ -31,4 +31,4 @@ class LoginService {
   // }
 }
 
-export default new LoginService()
+export default new MaterialServices()

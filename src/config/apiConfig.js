@@ -99,6 +99,13 @@ const ApiConfig = {
   deleteTags: '/delete-tag',
   bulkDeleteTags: '/bulk-delete-tag',
 
+  // Designer
+  getDesigners: '/get-designers',
+  addDesigners: '/add-designer',
+  editDesigners: '/update-designer',
+  deleteDesigners: '/delete-designer',
+  bulkDeleteDesigners: '/bulk-delete-designer',
+
   // --------------------------------------   Products   ----------------------------------------------------
   // products types
   getProductType: '/get-product-type',

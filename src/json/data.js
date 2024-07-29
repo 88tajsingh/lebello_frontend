@@ -336,6 +336,10 @@ export const productTaxonomy = [
   { name: 'Product Series ', value: 'product_series' },
   { name: 'Product Category Type ', value: 'product_category_type' }
 ]
+export const designerTaxonomy = [
+  { name: 'Product Types ', value: 'product_type' },
+  { name: 'Product Category Type ', value: 'product_category_type' }
+]
 
 // cols all tables
 export const materialCols = [

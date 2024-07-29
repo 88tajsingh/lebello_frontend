@@ -1,14 +1,39 @@
-<template>
-    <DefaultCard :cardTitle="id ? `Edit Projects` : `Add New Project`">
+<template>{{ form }}
+    <DefaultCard :cardTitle="id ? `Edit Designer` : `Add New Designer`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
-                    <div>
-                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title" placeholder="Add title"
+                    <Accordion :open="true" header="Fileds">
+                    <div class="px-6">
+                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *" placeholder="Add title"
                             v-model="form.title" :errMessage="errors.title" :errors="errors" />
-                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug" placeholder="slug"
-                            v-model="form.slug" :errMessage="errors.slug" />
+                      
+                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug" placeholder="slug"
+                            v-model="form.slug"  />
+
+                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Url" placeholder=""
+                            v-model="form.product_url" />
+
+                            <div class="mr-2 mt-5 h-auto ">
+                                <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
+                                <div class="py-2 rounded-lg px-2 border border-stroke"
+                                    @click="() => productData.isOpen = true"> {{
+                                        productData.mediaName }}</div>
+                                <div class=" mt-3 flex overflow-x-auto">
+                                    <img v-for="file in productData.images" :key="file" :src="$filePath(file.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                </div>
+                                <InputError class="mt-2" :message="errors?.featured_image" />
+                            </div>
+                    </div>
+                    </Accordion>
+                    <div class="mt-5">
+                        <Accordion :open="true" header="Description">
+                            <div class="px-5 pt-2">
+                                    <TinyMCE v-model="form.description" />
+                            </div>
+                        </Accordion>
                     </div>
 
                 </div>
@@ -19,19 +44,17 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                                        label="Select Parent Material" v-model="form.status" />
+                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
+                                        label="Select " v-model="form.status" />
                                 </div>
                                 <div class="col-span-1 w-full">
-                                    <input-label for="parentOrder" value="Visibility" />
-                                    <div class="flex items-center  gap-2">
-                                        <RadioButton v-for="option in PublishOptions" :key="option.value"
-                                            name="Visibility" :value="option.value" :label="option.label"
-                                            :modelValue="form.visibility"
-                                            @update:modelValue="form.visibility = $event" />
-                                    </div>
-                                    <div v-if="form.visibility === 'Password protected'" class="">
-                                        <TextInput type="password" class="block mr-2 w-full" v-model="form.password"
+                                    <div class="flex flex-col ">
+                                    <InputLabel for="Visibility" value="Visibility" />
+                                    <Select :options="PublishOptions" showfield="label" class="w-full" valueField="value"
+                                        label="Select " v-model="form.visibility" />
+                                </div>
+                                    <div v-if="form.visibility === 'Password protected'" class="mt-2">
+                                        <TextInput type="password" label="Password" class="block mr-2 w-full" v-model="form.password"
                                             placeholder="Password" />
                                     </div>
                                 </div>
@@ -48,15 +71,30 @@
                             </Button>
                         </div>
                     </Accordion>
-
-
-
                     <div class="mt-3 ">
-                        <Accordion :open="true" header="Categories">
+                        <Accordion :open="true" header="Tags">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :checkedData='form.project_categories' :dropdown="true"
-                                    valueField="id" showField="name" :data="projectCategories"
-                                    @checked-items="(checked) => form.project_categories = checked" />
+                                <Checkbox :nexted=true :checkedData='form.tags' :dropdown="true"
+                                    valueField="id" showField="name" :data="productType"
+                                    @checked-items="(checked) => form.tags = checked" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-3 ">
+                        <Accordion :open="true" header="Product Category Type">
+                            <div class="mt-2 px-6 flex h-auto ">
+                                <Checkbox :nexted=true :checkedData='form.product_category_types' :dropdown="true"
+                                    valueField="id" showField="name" :data="ProductCategory"
+                                    @checked-items="(checked) => form.product_category_types = checked" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-3 ">
+                        <Accordion :open="true" header="Product Type">
+                            <div class="mt-2 px-6 flex h-auto ">
+                                <Checkbox :nexted=true :checkedData='form.product_types' :dropdown="true"
+                                    valueField="id" showField="name" :data="productType"
+                                    @checked-items="(checked) => form.product_types = checked" />
                             </div>
                         </Accordion>
                     </div>
@@ -84,6 +122,10 @@
         <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
             :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
     </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="productData.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="productData.images" :singleFile="true"
+            :closeModal="() => { productData.isOpen = false }" :selectedFiles="handlePropductFiles" />
+    </popupModal>
 
 
     <Loader :isLoading="loading" :fullPage="true" />
@@ -94,24 +136,24 @@ import { defineEmits } from 'vue';
 import { ref, onMounted, watch } from "vue";
 import { handleFiles } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
-import ProjectServices from '@/services/ProjectServices';
+import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import { getProjectCategoryTree, } from '@/helper/Apis'
+import { getProductCategoryTypeTree,getProductTypeTree } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import { PublishOptions, trueFalse } from '@/json/data';
+import DesignerServices from '@/services/DesignerServices';
+import { PublishOptions, statusData } from '@/json/data';
 import { useStore } from 'vuex';
 
 const store = useStore();
 
 const emit = defineEmits(['handleApi']);
 const errors = ref({})
-const Projects = ref([]);
-const projectCategories = ref([]);
+const ProductCategory = ref([]);
+const productType = ref([]);
 const loading = ref(false)
-const form = ref({ status: '' });
+const form = ref({ status: '',visibility:'' });
 const PreviousDomain = ref(null)
 const masterId = ref(null)
 
@@ -122,14 +164,27 @@ const featureData = ref({
     images: []
 })
 
+const productData = ref({
+    isOpen: false,
+    mediaName: 'Upload Product Image ',
+    images: []
+})
+
 
 // images functions 
 const handleFeatureFiles = (data) => {
     const object = handleFiles(data);
     featureData.value.isOpen = false
     featureData.value.images = data;
-    featureData.value.mediaName = object.mediaName;
+    featureData.value.mediaName = object.mediaName;         
     form.value.featured_image = object.media_ids[0]
+}
+const handlePropductFiles = (data) => {
+    const object = handleFiles(data);
+    productData.value.isOpen = false
+    productData.value.images = data;
+    productData.value.mediaName = object.mediaName;
+    form.value.product_image = object.media_ids[0]
 }
 
 
@@ -137,9 +192,9 @@ const handleSubmit = () => {
     delete form.value?.domain;
     if (validateForm()) {
         if (props.id !== null)
-            handleEditProject({ ...form.value })
+            handleEditDesigner({ ...form.value })
         else
-            handleAddProject({ ...form.value })
+            handleAddDesigner({ ...form.value })
     }
 }
 
@@ -160,9 +215,9 @@ const props = defineProps({
 });
 
 // api calls 
-const handleGetProjects = async (payload) => {
+const handleGetDesigner = async (payload) => {
     try {
-        const res = await ProjectServices.getProjects(payload);
+        const res = await DesignerServices.getDesigners(payload);
         if (res.status === 200 && res.data.success) {
             if (res.data.data?.length > 0) {
                 form.value = res.data.data[0]
@@ -175,13 +230,13 @@ const handleGetProjects = async (payload) => {
     }
 }
 
-const handleAddProject = async (payload) => {
+const handleAddDesigner = async (payload) => {
     try {
-        const res = await ProjectServices.addProjects(payload);
+        const res = await DesignerServices.addDesigners(payload);
         console.log(res);
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
-            router.push('/projects');
+            router.push('/designer');
         }
     } catch (e) {
         console.error('Error while adding Project:', e);
@@ -190,7 +245,7 @@ const handleAddProject = async (payload) => {
     }
 }
 
-const handleEditProject = async (payload) => {
+const handleEditDesigner = async (payload) => {
     loading.value = true;
 
     if (form.value.domain_id !== PreviousDomain.value) {
@@ -200,10 +255,10 @@ const handleEditProject = async (payload) => {
         form.value = { ...form.value, master_project_id: masterId.value };
     }
     try {
-        const res = await ProjectServices.editProjects({ ...form.value });
+        const res = await DesignerServices.editDesigners({ ...form.value });
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
-            router.push('/projects');
+            router.push('/designer');
         }
     } catch (e) {
         console.error('Error while editing Project:', e);
@@ -212,29 +267,29 @@ const handleEditProject = async (payload) => {
     }
 }
 
-// projectCategoryTree sorting 
-const projectCategoryTree = async (payload) => {
-    projectCategories.value = await getProjectCategoryTree(payload)
+// productCategoryTree sorting 
+const productCategoryTree = async (payload) => {
+    productType.value = await getProductTypeTree(payload)
     loading.value = false;
 }
-// projectCategoryTree sorting 
-const projectTree = async (payload) => {
-    Projects.value = await getProjectCategoryTree(payload)
+// productCategoryTree sorting 
+const productTree = async (payload) => {
+    ProductCategory.value = await getProductCategoryTypeTree(payload)
     loading.value = false;
 }
 
 // onMounted(() => {
 //     if (props.id !== undefined && props.id !== null && props.id !== '') {
-//         handleGetProjects({ id: props.id });
+//         handleGetDesigner({ id: props.id });
 //     }
-//     projectCategoryTree();
-//     projectTree();
+//     productCategoryTree();
+//     productTree();
 // }
 // );
 onMounted(() => {
     if (props.id !== undefined && props.id !== null && props.id !== ' ') {
         console.log("store.getters.getDomain.id", store.getters.getDomain.id)
-        handleGetProjects({ id: props.id, domain_id: store.getters.getDomain.id });
+        handleGetDesigner({ id: props.id, domain_id: store.getters.getDomain.id });
         form.value.domain_id = store.getters.getDomain.id
     }
 })
@@ -242,8 +297,8 @@ onMounted(() => {
 watch(
     () => form.value.domain_id,
     () => {
-        projectCategoryTree({ domain_id: store.getters.getDomain.id });
-        projectTree({ domain_id: store.getters.getDomain.id });
+        productCategoryTree({ domain_id: store.getters.getDomain.id });
+        productTree({ domain_id: store.getters.getDomain.id });
     }
 );
 

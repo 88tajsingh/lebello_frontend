@@ -1,6 +1,7 @@
 import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 class ProjectServices {
+  
   getProjectCategory(payload) {
     return instance.get(ApiConfig.getProjectCategory, { params: { ...payload } })
   }

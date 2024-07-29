@@ -168,8 +168,8 @@ const handleEditContractLocation = async (payload) => {
 // })
 onMounted(()=>{
     if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
-        handleGetLocationById({id:props.id,domain_id:store.getters.getDomain.id});
+        console.log("store.getters.getDomain.id",store.getters?.getDomain?.id)
+        handleGetLocationById({id:props.id,domain_id:store.getters?.getDomain?.id});
         form.value.domain_id = store.getters.getDomain.id
     }
 })
@@ -177,7 +177,7 @@ onMounted(()=>{
 watch(
     () => form.value.domain_id,
     () => {
-        ProductContractTree({domain_id:form.value.domain_id});
+        ProductContractTree({domain_id:form.value?.domain_id});
          }
 );
 </script>
