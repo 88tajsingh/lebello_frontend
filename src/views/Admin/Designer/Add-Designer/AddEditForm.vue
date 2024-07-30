@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="id ? `Edit Designer` : `Add New Designer`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -75,7 +75,7 @@
                         <Accordion :open="true" header="Tags">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <Checkbox :nexted=true :checkedData='form.tags' :dropdown="true"
-                                    valueField="id" showField="name" :data="productType"
+                                    valueField="id" showField="name" :data="TagsData"
                                     @checked-items="(checked) => form.tags = checked" />
                             </div>
                         </Accordion>
@@ -145,12 +145,14 @@ import DatePicker from '@/components/Admin-components/form-components/DatePicker
 import DesignerServices from '@/services/DesignerServices';
 import { PublishOptions, statusData } from '@/json/data';
 import { useStore } from 'vuex';
+import CommonServices from '@/services/CommonServices';
 
 const store = useStore();
 
 const emit = defineEmits(['handleApi']);
 const errors = ref({})
 const ProductCategory = ref([]);
+const TagsData = ref([]);
 const productType = ref([]);
 const loading = ref(false)
 const form = ref({ status: '',visibility:'' });
@@ -222,13 +224,31 @@ const handleGetDesigner = async (payload) => {
             if (res.data.data?.length > 0) {
                 form.value = res.data.data[0]
                 PreviousDomain.value = form.value.domain_id;
-                masterId.value = form.value.master_project_id;
+                masterId.value = form.value.master_project_id;  
+                featureData.value.images = [form.value.featured_image_url]
+                featureData.value.mediaName = form.value.featured_image_url
+                productData.value.images = [form.value.product_image_url]
+                productData.value.mediaName = form.value.product_image_url
             }
         }
     } catch (e) {
         console.error('Error while getting Project:', e);
     }
 }
+
+const handleGetTags = async (payload) => {
+//   getLoading.value = true;
+  try {
+    const res = await CommonServices.getTags(payload);
+    if (res.status === 200 && res.data.success) {
+      TagsData.value = res.data.data;
+    }
+  } catch (e) {
+    console.error('Error while getTags:', e);
+  } finally {
+    // getLoading.value = false;
+  }
+};
 
 const handleAddDesigner = async (payload) => {
     try {
@@ -245,9 +265,10 @@ const handleAddDesigner = async (payload) => {
     }
 }
 
-const handleEditDesigner = async (payload) => {
+const handleEditDesigner = async () => {
     loading.value = true;
-
+        delete form.value.featured_image_url;
+        delete form.value.product_image_url;
     if (form.value.domain_id !== PreviousDomain.value) {
         delete form.value.id;
     } else {
@@ -297,6 +318,7 @@ onMounted(() => {
 watch(
     () => form.value.domain_id,
     () => {
+        handleGetTags({domain_id: store.getters.getDomain.id})
         productCategoryTree({ domain_id: store.getters.getDomain.id });
         productTree({ domain_id: store.getters.getDomain.id });
     }

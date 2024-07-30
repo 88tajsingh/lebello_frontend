@@ -1,6 +1,6 @@
 <template>
     <!-- <div class="ml-96"><Languages/></div> -->
-    <PageHeader> Designer </PageHeader>
+    <PageHeader> Dealers</PageHeader>
     <div class="flex  content-between justify-between   mb-2">
         <div class="flex">
             <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
@@ -14,23 +14,22 @@
         <div class="flex rounded-lg bg-transparent">
             <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
                 v-model="search" />
-            <Button @click="() => { router.push({ name: 'Designer-add' }) }"
+            <Button @click="() => { router.push({ name: 'Dealer-add' }); store.dispatch('clearEditData'); }"
                 class="px-2 py-2 m-auto whitespace-nowrap">Add
-                Designer</Button>
+                Projects</Button>
         </div>
     </div>
     <div class="bg-white rounded-[20px]">
         <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-            :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="designerCols"
+            :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="dealersCols"
             :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
             @change="changePage">
-            <template #name="data">
-
+            <template #featured_image_url="data">
+                <img :src="$filePath(data.value.featured_image_url)" alt="Material Image" style="max-width: 50px; max-height: 50px" />
             </template>
-
             <template #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'Designer-edit', params: { id: data.value.id, domain: data.value.domain_id } }) }"
+                    <div @click="() => { router.push({ name: 'Dealer-edit'}); store.dispatch('setEdit', data.value) }"
                         id="edit svg">
                         <EditSvg />
                     </div>
@@ -43,7 +42,7 @@
         </vue3-datatable>
     </div>
 
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteDesigner">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteProjects">
         Do you want to delete ?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -55,15 +54,15 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomins, } from '@/helper/Apis'
-import { designerCols } from '@/json/data'
+import { getDomins } from '@/helper/Apis'
+import { dealersCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
 import ProjectServices from '@/services/ProjectServices'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import DesignerServices from '@/services/DesignerServices'
+import DealersServices from '@/services/DealersServices'
 
 const checked = ref(false);
 const store = useStore();
@@ -102,19 +101,19 @@ const openDeleteModal = () => {
 
 const changePage = (page) => {
     const payload = { limit: page.pagesize, page: page.current_page }
-    handleGetDesigner(payload);
+    handleGetDealers(payload);
 }
 
 function handleCheckboxChange(event) {
     console.log('Checkbox state changed:', event.target.checked);
 }
 
-// get  function
-const handleGetDesigner = async (payload) => {
+// get materials function
+const handleGetDealers = async (payload) => {
 
     dataTableLoding.value = true;
     try {
-        await DesignerServices.getDesigners(payload)
+        await DealersServices.getDealer(payload)
             .then(res => {
                 if (res.status === 200 && res.data.success === true) {
                     if (res.data.data && res.data.data.length > 0) {
@@ -139,10 +138,10 @@ const handleGetDesigner = async (payload) => {
 }
 
 // delete material
-const handleDeleteDesigner = async () => {
+const handleDeleteProjects = async () => {
     loading.value = true;
     try {
-        const res = await DesignerServices.deleteDesigners({ id: project_id.value.id });
+        const res = await DealersServices.deleteDealer({ id: project_id.value.id });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
             data.value = data.value.filter(item => item.id !== project_id.value.id)
@@ -164,10 +163,10 @@ const handleBulkActions = async () => {
     if (bulkActionSelected.value === 'delete') {
         loading.value = true;
         try {
-            const res = await DesignerServices.bulkDeleteDesigners({ id: ids });
+            const res = await DealersServices.BulkDeleteDealer({ id: ids });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
-                await handleGetDesigner();
+                await handleGetDealers();
             }
         } catch (e) {
             console.error('Error while performing bulk delete:', e);
@@ -194,7 +193,7 @@ watch(
     () => {
         const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
         store.dispatch('setDomain', defaultDomain[0]);
-        handleGetDesigner({ limit: 10, page: 1, domain_id: domain_id.value });
+        handleGetDealers({ limit: 10, page: 1, domain_id: domain_id.value });
     }
 );
 </script>

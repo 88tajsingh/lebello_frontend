@@ -302,6 +302,25 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props: true
         },
+        {
+          path: '/dealer',
+          name: 'Dealer',
+          component: () => import('../views/Admin/Dealers/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/dealer-add',
+          name: 'Dealer-add',
+          component: () => import('../views/Admin/Dealers/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/dealer-edit/',
+          name: 'Dealer-edit',
+          component: () => import('../views/Admin/Dealers/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+      
+        },
 
         // -------------------------------- products path ---------------------------------------------
         {
@@ -464,6 +483,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  
   const token = store.getters.token || localStorage.getItem('token')
   if (to.name === 'login' && isAuthenticated(token)) {
     next('/dashboard')

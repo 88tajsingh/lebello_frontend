@@ -24,6 +24,7 @@
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "core-js": "^3.6.5",
+    "custom-electron-titlebar": "^4.2.8",
     "dayjs": "^1.11.11",
     "dotenv": "^16.4.5",
     "flowbite": "^2.3.0",

@@ -5,15 +5,15 @@ export default new Vuex.Store({
     token: localStorage.getItem('token') ,
     user: JSON.parse(localStorage.getItem('user')) ,
     editData: '',
-    param: null,
+    edit: '',
     domain : JSON.parse(localStorage.getItem('domain')) || '',
   },
   getters: {
     token: state => state.token,
     user: state => state.user,
     editData: state => state.editData,
-    getParam: state => state.param,
     getDomain: state => state.domain,
+    editData: state => state.edit,
     
 
   },
@@ -40,12 +40,16 @@ export default new Vuex.Store({
     setStatus(state, status) {
       state.status = status;
     },
-    setParam(state, param) {
-      state.passData = param;
-    },
+   
     setDomain(state, domain) {
       localStorage.setItem('domain', JSON.stringify(domain));
       state.domain = domain;
+    },
+    setEdit(state, data) {
+      state.edit = data;
+    },
+    clearEdit(state) {
+      state.edit = null;
     },
   },
   actions: {
@@ -63,11 +67,14 @@ export default new Vuex.Store({
     editData({ commit }, {data  }) {
       commit('setEditData', data);
     },
-    setParam({ commit }, param) {
-      commit('setParam', param);
-    },
     setDomain({ commit }, domain) {
       commit('setDomain', domain);
+    },
+    setEdit({ commit }, data) {
+      commit('setEdit', data);
+    },
+    clearEditData({ commit }) {
+      commit('clearEdit');
     },
   },
   modules: {},

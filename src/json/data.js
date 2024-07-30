@@ -12,6 +12,14 @@ export const statusData = [
   { name: 'Draft', value: 'draft' },
   { name: 'Pending review', value: 'pending review' }
 ]
+export const TemplateVersion = [
+  { name: 'First Version (OLD)', value: 'First Version (OLD)' },
+  { name: 'Latest Version (LATEST)', value: 'Latest Version (LATEST)' }
+]
+export const dealerTerritory = [
+  { name: 'United States', value: 'United States' },
+  { name: 'Non United States', value: 'Non United States' }
+]
 
 export const oldNewContract = [
   { label: 'Old Contract Design', value: 'Old Contract Design' },
@@ -403,9 +411,20 @@ export const tagsCols = [
   { field: 'actions', title: 'Actions' }
 ]
 export const projectsCols = [
+  { field: 'featured_image_url', title: 'Thimbs', slot: true },
   { field: 'title', title: 'Projet Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'Status' },
+  { field: 'actions', title: 'Actions' }
+]
+export const designerCols = [
+  { field: 'title', title: 'Title', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'actions', title: 'Actions' }
+]
+export const dealersCols = [
+  { field: 'title', title: 'Title', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 
