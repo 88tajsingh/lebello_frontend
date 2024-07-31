@@ -439,3 +439,9 @@ export const contractTypeCols = [
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
+
+export const companyCols = [
+  { field: 'title', title: 'Title', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'actions', title: 'Actions' }
+]

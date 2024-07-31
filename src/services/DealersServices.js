@@ -19,7 +19,7 @@ class DealerServices {
   }
 
   BulkDeleteDealer(payload) {
-    return instance.post(ApiConfig.bulkDealer, payload)
+    return instance.post(ApiConfig.bulkDeleteDealer, payload)
   }
 
 }

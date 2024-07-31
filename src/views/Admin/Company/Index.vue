@@ -1,6 +1,6 @@
 <template>
     <!-- <div class="ml-96"><Languages/></div> -->
-    <PageHeader> Dealers</PageHeader>
+    <PageHeader> Company</PageHeader>
     <div class="flex  content-between justify-between   mb-2">
         <div class="flex">
             <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
@@ -14,14 +14,14 @@
         <div class="flex rounded-lg bg-transparent">
             <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
                 v-model="search" />
-            <Button @click="() => { router.push({ name: 'Dealer-add' }); store.dispatch('clearEditData'); }"
+            <Button @click="() => { router.push({ name: 'add-company' }); store.dispatch('clearEditData'); }"
                 class="px-2 py-2 m-auto whitespace-nowrap">Add
-                Dealers</Button>
+                Company</Button>
         </div>
     </div>
     <div class="bg-white rounded-[20px]">
         <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-            :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="dealersCols"
+            :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="companyCols"
             :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
             @change="changePage">
             <template #featured_image_url="data">
@@ -30,11 +30,11 @@
             </template>
             <template #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'Dealer-edit', params: { id: data.value.id } }); store.dispatch('setEdit', data.value) }"
+                    <div @click="() => { router.push({ name: 'edit-company', params: { id: data.value.id } }); store.dispatch('setEdit', data.value) }"
                         id="edit svg">
                         <EditSvg />
                     </div>
-                    <div id="delete svg" @click="() => { project_id = data.value; openDeleteModal(); }">
+                    <div id="delete svg" @click="() => { company_id = data.value; openDeleteModal(); }">
                         <DeleteSvg />
                     </div>
                 </div>
@@ -43,7 +43,7 @@
         </vue3-datatable>
     </div>
 
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteProjects">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteCompany">
         Do you want to delete ?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -56,58 +56,42 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { dealersCols } from '@/json/data'
+import { companyCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import DealersServices from '@/services/DealersServices'
+import CompanyServices from '@/services/CompanyServices'
 
-const checked = ref(false);
 const store = useStore();
 const router = useRouter();
 const bulkActionSelected = ref(null)
 const search = ref('')
-const show_in_menu = ref('')
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
-const project_id = ref('')
+const company_id = ref('')
 const dataTableLoding = ref(false)
 const loading = ref(false)
-const editData = ref({})
 const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')
-const actionsFlag = ref(null)
 const getDominsList = ref([])
 const domain_id = ref('')
-
-
-
-const isRowHovered = (value) => {
-    return actionsFlag.value === value.name
-}
-
 const deleteModalIsOpen = ref(false);
 const openDeleteModal = () => {
     deleteModalIsOpen.value = true;
 };
-
 const changePage = (page) => {
     const payload = { limit: page.pagesize, page: page.current_page }
-    handleGetDealers(payload);
-}
-
-function handleCheckboxChange(event) {
-    console.log('Checkbox state changed:', event.target.checked);
+    handleGetCompany(payload);
 }
 
 // get materials function
-const handleGetDealers = async (payload) => {
+const handleGetCompany = async (payload) => {
 
     dataTableLoding.value = true;
     try {
-        await DealersServices.getDealer(payload)
+        await CompanyServices.getCompany(payload)
             .then(res => {
                 if (res.status === 200 && res.data.success === true) {
                     if (res.data.data && res.data.data.length > 0) {
@@ -131,20 +115,20 @@ const handleGetDealers = async (payload) => {
     }
 }
 
-// delete material
-const handleDeleteProjects = async () => {
+// delete company
+const handleDeleteCompany = async () => {
     loading.value = true;
     try {
-        const res = await DealersServices.deleteDealer({ id: project_id.value.id });
+        const res = await CompanyServices.deleteCompany({ id: company_id.value.id });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
-            data.value = data.value.filter(item => item.id !== project_id.value.id)
+            data.value = data.value.filter(item => item.id !== company_id.value.id)
             deleteModalIsOpen.value = false;
         } else if (res.status === 400) {
             showToast(res.message, 'error');
         }
     } catch (e) {
-        console.error('Error while deleting material:', e);
+        console.error('Error while deleting Comapnies:', e);
     } finally {
         loading.value = false;
     }
@@ -157,10 +141,10 @@ const handleBulkActions = async () => {
     if (bulkActionSelected.value === 'delete') {
         loading.value = true;
         try {
-            const res = await DealersServices.BulkDeleteDealer({ id: ids });
+            const res = await CompanyServices.bulkDeleteCompany({ id: ids });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
-                await handleGetDealers({ limit: 10, page: 1, domain_id: domain_id.value });
+                await handleGetCompany({ limit: 10, page: 1, domain_id: domain_id.value });
             }
         } catch (e) {
             console.error('Error while performing bulk delete:', e);
@@ -187,7 +171,7 @@ watch(
     () => {
         const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
         store.dispatch('setDomain', defaultDomain[0]);
-        handleGetDealers({ limit: 10, page: 1, domain_id: domain_id.value });
+        handleGetCompany({ limit: 10, page: 1, domain_id: domain_id.value });
     }
 );
 </script>

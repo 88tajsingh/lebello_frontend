@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Dealer` : `Add New Dealer`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -63,7 +63,8 @@
                                 <div class="col-span-2 w-full border border-gray rounded-lg">
                                     <div class="mt-2 ml-3  ">
                                         <div class=" flex flex-wrap">
-                                            <div class="relative p-1" v-for="(slide, index) in night_banner_images.images"
+                                            <div class="relative p-1"
+                                                v-for="(slide, index) in night_banner_images.images"
                                                 :key="`slide-${index}`">
                                                 <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
                                                     :src="$filePath(slide.file_url)">
@@ -105,7 +106,8 @@
 
                                 <div class="mt-2">
                                     <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
-                                        class="block w-[180px] mr-2 " v-model="form.bubble_info" placeholder="" label="Buble info"  />
+                                        class="block w-[180px] mr-2 " v-model="form.bubble_info" placeholder=""
+                                        label="Buble info" />
                                     <span>Most search engines use a maximum of 160 chars for the description.
                                     </span>
                                 </div>
@@ -232,8 +234,8 @@
                                 </div>
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Dealer Territory" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full"
-                                        valueField="value" label="Select " v-model="form.territory" />
+                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                        label="Select " v-model="form.territory" />
                                     <span>Select one territory. If none selected it will not be displayed on the
                                         list.</span>
                                 </div>
@@ -254,33 +256,35 @@
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Time Zone"
                                         placeholder="" v-model="form.timezone" />
                                 </div>
-                                <div class="mr-2 mt-3  h-auto "> 
+                                <div class="mr-2 mt-3  h-auto ">
                                     <div class="  h-auto ">
-                                <InputLabel for="company_logo" value="Company Logo" />
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => company_logo.isOpen = true"> {{
-                                        company_logo.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in company_logo.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                        <InputLabel for="company_logo" value="Company Logo" />
+                                        <div class="py-2 rounded-lg px-2 border border-stroke"
+                                            @click="() => company_logo.isOpen = true"> {{
+                                                company_logo.mediaName }}</div>
+                                        <div class=" mt-3 flex overflow-x-auto">
+                                            <img v-for="file in company_logo.images" :key="file"
+                                                :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
+                                                :alt="file.alternative_text || 'image'">
+                                        </div>
+                                        <InputError class="mt-2" :message="errors?.featured_image" />
+                                    </div>
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
-                            </div>
-                                </div>
-                                <div class="mr-2 mt-3  h-auto "> 
+                                <div class="mr-2 mt-3  h-auto ">
                                     <div class="  h-auto ">
-                                <InputLabel for="thumb_image" value="Dealer thumb image" />
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => thumb_image.isOpen = true"> {{
-                                        thumb_image.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in thumb_image.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                        <InputLabel for="thumb_image" value="Dealer thumb image" />
+                                        <div class="py-2 rounded-lg px-2 border border-stroke"
+                                            @click="() => thumb_image.isOpen = true"> {{
+                                                thumb_image.mediaName }}</div>
+                                        <div class=" mt-3 flex overflow-x-auto">
+                                            <img v-for="file in thumb_image.images" :key="file"
+                                                :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
+                                                :alt="file.alternative_text || 'image'">
+                                        </div>
+                                        <InputError class="mt-2" :message="errors?.featured_image" />
+                                    </div>
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
-                            </div>
-                                </div>
-                               
+
                             </div>
                         </Accordion>
                     </div>
@@ -298,12 +302,14 @@
             :closeModal="() => { thumb_image.isOpen = false }" :selectedFiles="handlethumbnilFiles" />
     </popupModal>
 
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="day_banner_images.isOpen">
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="day_banner_images.isOpen">
         <GetLibrary btnName="select File" :getFlag="true" :selected="day_banner_images.images" :singleFile="false"
             :closeModal="() => { day_banner_images.isOpen = false }" :selectedFiles="handleDayBannerFiles" />
     </popupModal>
 
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="night_banner_images.isOpen">
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="night_banner_images.isOpen">
         <GetLibrary btnName="select File" :getFlag="true" :selected="night_banner_images.images" :singleFile="false"
             :closeModal="() => { night_banner_images.isOpen = false }" :selectedFiles="handleNightBannerFiles" />
     </popupModal>
@@ -317,26 +323,19 @@ import { ref, onMounted, watch } from "vue";
 import { handleFiles } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
-import ProjectServices from '@/services/ProjectServices';
+import DealersServices from '@/services/DealersServices';
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import { getProjectCategoryTree, } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { PublishOptions, statusData, dealerTerritory, TemplateVersion, trueFalse } from '@/json/data';
 import { useStore } from 'vuex';
-
 const store = useStore();
-
 const emit = defineEmits(['handleApi']);
 const errors = ref({})
-const Projects = ref([]);
-const projectCategories = ref([]);
 const loading = ref(false)
 const form = ref(store.getters.editData || { status: '', visibility: '', dealer_page_template: 'First Version (OLD)' });
 const PreviousDomain = ref(null)
-const masterId = ref(null)
 
 // images variables 
 const company_logo = ref({
@@ -360,8 +359,6 @@ const night_banner_images = ref({
     mediaName: 'feature Image',
     images: []
 })
-
-
 // images functions 
 const handleFeatureFiles = (data) => {
     const object = handleFiles(data);
@@ -399,11 +396,14 @@ const handleNightBannerFiles = (data) => {
 
 const handleSubmit = () => {
     delete form.value?.domain;
+    console.log(store.getters.editData)
     if (validateForm()) {
-        if (props.id !== null)
-            handleEditProject({ ...form.value })
-        else
-            handleAddProject({ ...form.value })
+        if (store.getters.editData === null) {
+            handleAddDealers({ ...form.value })
+        }
+        else {
+            handleEditDealers({ ...form.value })
+        }
     }
 }
 
@@ -416,84 +416,45 @@ const validateForm = () => {
     }
     return isValid
 }
-const props = defineProps({
-    id: {
-        type: String,
-        default: null,
-    }
-});
 
-const handleAddProject = async (payload) => {
+const handleAddDealers = async (payload) => {
     try {
-        const res = await ProjectServices.addProjects(payload);
+        const res = await DealersServices.addDealer(payload);
         console.log(res);
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
-            router.push('/projects');
+            router.push('/dealer');
         }
     } catch (e) {
-        console.error('Error while adding Project:', e);
+        console.error('Error while adding Dealers:', e);
     } finally {
         loading.value = false;
     }
 }
 
-const handleEditProject = async (payload) => {
+const handleEditDealers = async (payload) => {
     loading.value = true;
 
     if (form.value.domain_id !== PreviousDomain.value) {
         delete form.value.id;
-    } else {
-        // clone existing  in other domain 
-        form.value = { ...form.value, master_project_id: masterId.value };
     }
     try {
-        const res = await ProjectServices.editProjects({ ...form.value });
+        const res = await DealersServices.editDealer({ ...form.value });
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
-            router.push('/projects');
+            router.push('/dealer');
         }
     } catch (e) {
-        console.error('Error while editing Project:', e);
+        console.error('Error while editing Dealers:', e);
     } finally {
         loading.value = false;
     }
 }
 
-// projectCategoryTree sorting 
-const projectCategoryTree = async (payload) => {
-    projectCategories.value = await getProjectCategoryTree(payload)
-    loading.value = false;
-}
-// projectCategoryTree sorting 
-const projectTree = async (payload) => {
-    Projects.value = await getProjectCategoryTree(payload)
-    loading.value = false;
-}
 
-// onMounted(() => {
-//     if (props.id !== undefined && props.id !== null && props.id !== '') {
-//         handleGetProjects({ id: props.id });
-//     }
-//     projectCategoryTree();
-//     projectTree();
-// }
-// );
 onMounted(() => {
-    if (props.id !== undefined && props.id !== null && props.id !== ' ') {
-        console.log("store.getters.getDomain.id", store.getters.getDomain.id)
-        // handleGetProjects({ id: props.id, domain_id: store.getters.getDomain.id });
-        form.value.domain_id = store.getters.getDomain.id
-    }
+    PreviousDomain.value = store.getters.getDomain.id
 })
-
-watch(
-    () => form.value.domain_id,
-    () => {
-        projectCategoryTree({ domain_id: store.getters.getDomain.id });
-        projectTree({ domain_id: store.getters.getDomain.id });
-    }
-);
 
 
 </script>
