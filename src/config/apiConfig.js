@@ -170,7 +170,14 @@ const ApiConfig = {
   deleteProjectCategory: '/delete-project-category',
   bulkDeleteProjectCategory: '/bulk-delete-project-category',
   getProductProjectCategory: '/get-project-category-tree-list',
-  getProjectCategorytree: '/get-project-category-tree-list'
+  getProjectCategorytree: '/get-project-category-tree-list',
+
+  //Company
+  getCompany: '/get-company',
+  addCompany: '/add-company',
+  editCompany: 'update-company',
+  deleteCompany: 'delete-company',
+  bulkDeleteCompany: 'bulk-delete-company'
 }
 
 export default ApiConfig

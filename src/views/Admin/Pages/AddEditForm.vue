@@ -11,8 +11,8 @@
         </div>
         <div class="flex flex-col">
           <input-label for="page_title" value="Page Slug" />
-          <TextInput type="text" class="block mr-2 h-[40px] w-full" v-model="form.page_slug"
-            :errMessage="errors.page_slug" />
+          <TextInput type="text" class="block mr-2 h-[40px] w-full" v-model="form.slug"
+            :errMessage="errors.slug" />
         </div>
         <div class="flex flex-col">
           <input-label for="seo_title" value="SEO Title" />

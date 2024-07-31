@@ -1,17 +1,18 @@
-<template>
-    <DefaultCard :cardTitle="id ? `Edit Projects` : `Add New Project`">
+<template>{{ form }}
+    <DefaultCard :cardTitle="form.id ? `Edit Projects` : `Add New Project`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <Accordion :open="true" header="Fileds">
-                    <div class="px-6">
-                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *" placeholder="Add title"
-                            v-model="form.title" :errMessage="errors.title" :errors="errors" />
-                      
+                        <div class="px-6">
+                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
+                                placeholder="Add title" v-model="form.title" :errMessage="errors.title"
+                                :errors="errors" />
+
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug" placeholder="slug"
-                            v-model="form.slug" :errMessage="errors.slug" />
-                    </div>
+                                v-model="form.slug" :errMessage="errors.slug" />
+                        </div>
                     </Accordion>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Categories">
@@ -36,13 +37,13 @@
                                 </div>
                                 <div class="col-span-1 w-full">
                                     <div class="flex flex-col ">
-                                    <InputLabel for="Visibility" value="Visibility" />
-                                    <Select :options="PublishOptions" showfield="label" class="w-full" valueField="value"
-                                        label="Select " v-model="form.visibility" />
-                                </div>
+                                        <InputLabel for="Visibility" value="Visibility" />
+                                        <Select :options="PublishOptions" showfield="label" class="w-full"
+                                            valueField="value" label="Select " v-model="form.visibility" />
+                                    </div>
                                     <div v-if="form.visibility === 'Password protected'" class="mt-2">
-                                        <TextInput type="password" label="Password" class="block mr-2 w-full" v-model="form.password"
-                                            placeholder="Password" />
+                                        <TextInput type="password" label="Password" class="block mr-2 w-full"
+                                            v-model="form.password" placeholder="Password" />
                                     </div>
                                 </div>
                                 <div class="col-span-1 w-full">
@@ -109,9 +110,8 @@ const errors = ref({})
 const Projects = ref([]);
 const projectCategories = ref([]);
 const loading = ref(false)
-const form = ref({ status: '' });
+const form = ref(store.getters.editData || { status: '' });
 const PreviousDomain = ref(null)
-const masterId = ref(null)
 
 // images variables 
 const featureData = ref({
@@ -134,10 +134,12 @@ const handleFeatureFiles = (data) => {
 const handleSubmit = () => {
     delete form.value?.domain;
     if (validateForm()) {
-        if (props.id !== null)
-            handleEditProject({ ...form.value })
-        else
+        if (store.getters.editData === null) {
             handleAddProject({ ...form.value })
+        }
+        else {
+            handleEditProject({ ...form.value })
+        }
     }
 }
 
@@ -149,28 +151,6 @@ const validateForm = () => {
         isValid = false
     }
     return isValid
-}
-const props = defineProps({
-    id: {
-        type: String,
-        default: null,
-    }
-});
-
-// api calls 
-const handleGetProjects = async (payload) => {
-    try {
-        const res = await ProjectServices.getProjects(payload);
-        if (res.status === 200 && res.data.success) {
-            if (res.data.data?.length > 0) {
-                form.value = res.data.data[0]
-                PreviousDomain.value = form.value.domain_id;
-                masterId.value = form.value.master_project_id;
-            }
-        }
-    } catch (e) {
-        console.error('Error while getting Project:', e);
-    }
 }
 
 const handleAddProject = async (payload) => {
@@ -193,12 +173,10 @@ const handleEditProject = async (payload) => {
 
     if (form.value.domain_id !== PreviousDomain.value) {
         delete form.value.id;
-    } else {
-        // clone existing  in other domain 
-        form.value = { ...form.value, master_project_id: masterId.value };
     }
     try {
-        const res = await ProjectServices.editProjects({ ...form.value });
+        const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
+        const res = await ProjectServices.editProjects({ ...refinedPayload });
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/projects');
@@ -221,29 +199,12 @@ const projectTree = async (payload) => {
     loading.value = false;
 }
 
-// onMounted(() => {
-//     if (props.id !== undefined && props.id !== null && props.id !== '') {
-//         handleGetProjects({ id: props.id });
-//     }
-//     projectCategoryTree();
-//     projectTree();
-// }
-// );
 onMounted(() => {
-    if (props.id !== undefined && props.id !== null && props.id !== ' ') {
-        console.log("store.getters.getDomain.id", store.getters.getDomain.id)
-        handleGetProjects({ id: props.id, domain_id: store.getters.getDomain.id });
-        form.value.domain_id = store.getters.getDomain.id
-    }
+    PreviousDomain.value = store.getters.getDomain.id;
+    projectCategoryTree({ domain_id: store.getters.getDomain.id });
+    projectTree({ domain_id: store.getters.getDomain.id });
 })
 
-watch(
-    () => form.value.domain_id,
-    () => {
-        projectCategoryTree({ domain_id: store.getters.getDomain.id });
-        projectTree({ domain_id: store.getters.getDomain.id });
-    }
-);
 
 
 </script>
