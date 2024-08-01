@@ -177,7 +177,14 @@ const ApiConfig = {
   addCompany: '/add-company',
   editCompany: 'update-company',
   deleteCompany: 'delete-company',
-  bulkDeleteCompany: 'bulk-delete-company'
+  bulkDeleteCompany: 'bulk-delete-company',
+
+  // Material SLider
+  getMaterialSliders: '/get-material-slider',
+  addMaterialSlider: '/add-material-slider',
+  editMaterialSlider: '/update-material-slider',
+  deleteMaterialSlider: '/delete-material-slider',
+  bulkDeleteMaterialSlider: '/bulk-delete-material-slider',
 }
 
 export default ApiConfig
