@@ -495,7 +495,27 @@ const router = createRouter({
           component: () => import('../views/Admin/Project/TaxonomyOrder.vue'),
           meta: { requiresAuth: true },
           props: true
-        }
+        },
+        // ----------------------------------- Material Slider  -----------------------------------------
+        {
+          path: '/material-slider',
+          name: 'material-slider',
+          component: () => import('../views/Admin/MaterialSlider/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/material-slider-add',
+          name: 'material-slider-add',
+          component: () => import('../views/Admin/MaterialSlider/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/material-slider-edit/:id',
+          name: 'material-slider-edit',
+          component: () => import('../views/Admin/MaterialSlider/AddEditForm.vue'),
+          meta: { requiresAuth: true },
+          props: true
+        },
       ]
     }
   ]
