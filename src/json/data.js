@@ -440,7 +440,14 @@ export const contractTypeCols = [
   { field: 'actions', title: 'Actions' }
 ]
 
+export const materialSlidersCols = [
+  { field: 'featured_image_url', title: 'Thumbs', slot: true },
+  { field: 'title', title: 'Title', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'actions', title: 'Actions' }
+]
 export const companyCols = [
+  { field: 'featured_image_url', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'actions', title: 'Actions' }
