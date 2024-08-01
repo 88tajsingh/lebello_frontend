@@ -20,9 +20,9 @@
     </div>
     <div class="bg-white rounded-[20px]">
         <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-            :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="companyCols"
-            :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
-            @change="changePage">
+            :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data"
+            :columns="materialSlidersCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true"
+            :pageSize="10" :search="search" @change="changePage">
             <template #featured_image_url="data">
                 <img :src="$filePath(data.value.featured_image_url)" alt="Material Image"
                     style="max-width: 50px; max-height: 50px" />
@@ -56,7 +56,7 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { companyCols } from '@/json/data'
+import { materialSlidersCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
