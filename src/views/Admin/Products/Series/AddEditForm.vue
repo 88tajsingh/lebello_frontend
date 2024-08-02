@@ -1,5 +1,5 @@
-<template>
-    <DefaultCard  :cardTitle="id ? `Edit Product Series ` : `Add Product Series`">
+<template>{{ form }}
+    <DefaultCard  :cardTitle="form.id ? `Edit Product Series ` : `Add Product Series`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -74,7 +74,7 @@
              </div>
             <div class="flex flex-col ">
                 <InputLabel for="Parent Material" value="Parent Product Series " />
-                <Select :options="MaterialTreeListData" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select"
+                <Select :options="ProductSeriesList" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select"
                     v-model="form.parent_product_series" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
@@ -118,7 +118,7 @@
                                     @click="() => featureData.isOpen = true"> {{
                                         featureData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file.file_url)"
+                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
@@ -143,6 +143,7 @@
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getProductSeriesTree } from '@/helper/Apis'
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import ProductServices from '@/services/ProductServices'
 import { clearError,showToast,handleFiles } from '@/helper/functions'
 import { onMounted, ref,watch } from 'vue'
@@ -152,15 +153,11 @@ import { trueFalse } from '@/json/data'
 
 const store = useStore();
 const router = useRouter();
-
-const MaterialTreeListData = ref([])
+const ProductSeriesList = ref([])
 const loading = ref(false)
-const props = defineProps(['id'])
-const id = ref(props.id || null)
-const form = ref({ parent_product_series:0})
+const form = ref(store.getters.editData || { parent_product_series:0})
 const errors = ref({})
 const PreviousDomain = ref(null)
-const masterId = ref(null)
 
 // images variables 
 const featureData = ref({
@@ -189,41 +186,23 @@ const validateForm = () => {
 }
 
 const handleSubmit = async () => {
-    try {
-        if (validateForm()) {
-            // emit('handleApi', { ...form.value });
-            if(id.value !== null ) 
-            handleEditProductSeries( { ...form.value })
-            else
-            handleAddProductSeries( { ...form.value })
+  if (validateForm()) {
+            if (store.getters.editData === null) {
+                handleAddProductSeries({ ...form.value })
+            }
+            else {
+                
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, featured_image_url,updated_at, ...refinedPayload } = form.value;
+                handleEditProductSeries({ ...refinedPayload })
+            }
         }
-    } catch (e) {
-        console.error('Error material add edit :', e)
-    }
 }
-// api for get patents child json parent material listing 
+// api for get patents child json parent  listing 
 const handleProductSeriesTree = async (payload) => {
-  MaterialTreeListData.value = await getProductSeriesTree(payload)
-}
-// get material
-const handleGetProductSeriesById = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await ProductServices.getProductSeries(payload);
-    if (res.status === 200 && res.data.success) {
-      if (res.data.data?.length > 0) {
-        form.value = res.data.data[0];
-        PreviousDomain.value = form.value.domain_id;
-        masterId.value = form.value.master_material_id; 
-        featureData.value.images = [form.value.featured_image_url]
-        featureData.value.mediaName = form.value.featured_image_url
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching location:', error);
-  } finally {
-    loading.value = false;
-  }
+  ProductSeriesList.value = await getProductSeriesTree(payload)
 }
 
 const handleAddProductSeries = async (payload) => {
@@ -246,15 +225,8 @@ const handleAddProductSeries = async (payload) => {
 
 const handleEditProductSeries = async (payload) => {
   loading.value = true;
-  if (form.value.domain_id !== PreviousDomain.value) {
-    delete form.value.id;
-  }else{
-      // clone existing  in other domain 
-        form.value = { ...form.value, master_material_id: masterId.value };
-  }
-  delete form.value?.featured_image_url;
   try {
-    const res = await ProductServices.editProductSeries({...form.value});
+    const res = await ProductServices.editProductSeries(payload);
     if (res.status === 200) {
       showToast(res.data.message, 'success');
       router.push('/product-series');
@@ -269,11 +241,10 @@ const handleEditProductSeries = async (payload) => {
 }
 
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
-        handleGetProductSeriesById({id:props.id,domain_id:store.getters.getDomain.id});
-        form.value.domain_id = store.getters.getDomain.id
-    }
+  PreviousDomain.value = store.getters.getDomain.id
+  if(store.getters.editData){
+  featureData.value.images = [store.getters.editData.featured_image_url]
+  featureData.value.mediaName = store.getters.editData.featured_image_url}
 })
 
 watch(

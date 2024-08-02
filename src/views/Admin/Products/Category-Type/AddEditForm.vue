@@ -1,5 +1,5 @@
 <template>
-    <DefaultCard  :cardTitle="id ? `Edit Product Contract Type ` : `Add Product Contract Type`">
+    <DefaultCard  :cardTitle="form.id ? `Edit Product Contract Type ` : `Add Product Contract Type`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -21,7 +21,7 @@
             </div>
             <div class="flex flex-col ">
                 <InputLabel for="Parent Material" value="Parent Product Category " />
-                <Select :options="MaterialTreeListData" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select "
+                <Select :options="getProductCategoryList" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select "
                     v-model="form.parent_product_category_type" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
@@ -63,11 +63,11 @@ import ProductServices from '@/services/ProductServices'
 const store = useStore();
 const router = useRouter();
 
-const MaterialTreeListData = ref([])
+const getProductCategoryList = ref([])
 const loading = ref(false)
 const props = defineProps(['id'])
 const id = ref(props.id || null)
-const form = ref({ parent_contract_location:0})
+const form = ref(store.getters.editData ||{ parent_contract_location:0})
 const errors = ref({})
 const PreviousDomain = ref(null)
 const masterId = ref(null)
@@ -84,40 +84,25 @@ const validateForm = () => {
 }
 
 const handleSubmit = async () => {
-    try {
-        if (validateForm()) {
-            // emit('handleApi', { ...form.value });
-            if(id.value !== null ) 
-            handleEditProductContractType( { ...form.value })
-            else
-            handleAddProductContractType( { ...form.value })
+  if (validateForm()) {
+            if (store.getters.editData === null) {
+                handleAddProductContractType({ ...form.value })
+            }
+            else {
+                
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
+                handleEditProductContractType({ ...refinedPayload })
+            }
         }
-    } catch (e) {
-        console.error('Error material add edit :', e)
-    }
 }
-// api for get patents child json parent material listing 
+// api for get patents child json parent  listing 
 const getProductContractTypeTreeList = async (payload) => {
-  MaterialTreeListData.value = await getProductCategoryTypeTree(payload)
+  getProductCategoryList.value = await getProductCategoryTypeTree(payload)
 }
-// get material
-const handleGetProductCategoryTypeById = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await ProductServices.getProductCategoryType(payload);
-    if (res.status === 200 && res.data.success) {
-      if (res.data.data?.length > 0) {
-        form.value = res.data.data[0];
-        PreviousDomain.value = form.value.domain_id;
-        masterId.value = form.value.master_material_id;     
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching location:', error);
-  } finally {
-    loading.value = false;
-  }
-}
+
 
 const handleAddProductContractType = async (payload) => {
   loading.value = true;
@@ -139,14 +124,8 @@ const handleAddProductContractType = async (payload) => {
 
 const handleEditProductContractType = async (payload) => {
   loading.value = true;
-  if (form.value.domain_id !== PreviousDomain.value) {
-    delete form.value.id;
-  }else{
-      // clone existing  in other domain 
-        form.value = { ...form.value, master_material_id: masterId.value };
-  }
   try {
-    const res = await ProductServices.editProductCategoryType({...form.value});
+    const res = await ProductServices.editProductCategoryType(payload);
     if (res.status === 200) {
       showToast(res.data.message, 'success');
       router.push('/product-category-type');
@@ -160,18 +139,8 @@ const handleEditProductContractType = async (payload) => {
   }
 }
 
-// onMounted(()=>{
-//     if(props.id !== undefined && props.id !== null && props.id !== '' ) {
-//         handleGetProductCategoryTypeById({id:props.id});
-//     }
-//     contractLoctionTree();
-// })
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
-        handleGetProductCategoryTypeById({id:props.id,domain_id:store.getters.getDomain.id});
-        form.value.domain_id = store.getters.getDomain.id
-    }
+  PreviousDomain.value = store.getters.getDomain.id
 })
 
 watch(

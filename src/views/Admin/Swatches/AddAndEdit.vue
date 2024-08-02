@@ -1,61 +1,22 @@
 <template>
-    <DefaultCard :cardTitle="id ? `Edit Swatches` : `Add Swatches`">
-        <DomainComponent @customChange="(id)=>form.domain_id = id"></DomainComponent>
+    <DefaultCard :cardTitle="store.getters.editData ? `Edit Swatches` : `Add Swatches`">
+        <DomainComponent @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <Accordion :open="true" header="Title *">
-                    <div class="px-7">
-                        <TextInput type="text"  id="addTitle" class="block mr-2 h-[40px] w-full" label="" placeholder="Add title"
-                            v-model="form.title" :errMessage="errors.title" :errors="errors"     
-                            :class="{ 'border-red': errors.title }" />
+                        <div class="px-7">
+                            <TextInput type="text" id="addTitle" class="block mr-2 h-[40px] w-full" label=""
+                                placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
+                                :class="{ 'border-red': errors.title }" />
                             <!-- @update:checkValue="form.isTitle = $event" hasCheckBox -->
-                           
-                    </div>
+
+                        </div>
                     </Accordion>
                     <div class="mt-5">
                         <Accordion :open="true" header="Description">
                             <div class="px-5     pt-2">
-                                <div class="mb-2">
-                                    <!-- <Button type="">
-                                        <span class="flex">
-                                            <svg class="text-black hover:text-white" fill="text-textColor2" width="20px"
-                                                height="20px" viewBox="0 0 1920 1920"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                </g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M101.002 1230.637V377.955c557.71-147.638 1076.312-35.47 1214.45 0v395.924l101.053-30.316V302.165l-35.671-11.014c-26.274-8.287-651.588-197.154-1349.154 1.313L-.05 305.197v1001.23l35.671 10.913c17.28 5.457 295.781 89.533 682.206 89.533 122.173 0 255.866-10.004 394.712-31.933v-101.255c-476.362 77.811-890.476-12.025-1011.537-43.048M1919.91 789.31v693.524c-.101 103.074-82.257 186.846-183.31 186.846-91.856 0-167.343-69.524-180.58-159.46-1.415-9.095-2.729-18.19-2.729-27.689 0-103.074 82.156-187.048 183.31-187.048 16.673 0 32.539 2.93 47.899 7.275 12.025 3.234 23.545 7.882 34.357 13.541V924.62l-39.814 11.824-362.577 107.317-27.89 8.186v579.94c0 2.83-.708 5.458-.81 8.186-4.243 99.234-84.176 178.964-182.601 178.964-101.154 0-183.31-83.975-183.31-187.15 0-68.513 36.682-128.033 90.645-160.572 27.385-16.471 58.711-26.577 92.665-26.577 29.81 0 57.499 7.983 82.358 20.817V976.46l27.89-8.185 101.053-29.911 360.96-106.813 142.484-42.24ZM527.515 480.635l560.842 329.835-560.842 329.735v-659.57Zm101.053 176.64v306.29L888.98 810.47 628.568 657.275ZM1736.6 1568.628c-38.097 0-68.817-27.689-78.114-64.674-1.82-6.973-4.143-13.743-4.143-21.423 0-47.394 36.884-85.996 82.257-85.996 18.896 0 35.671 7.781 49.515 19.1 19.504 15.763 32.741 39.309 32.741 66.896 0 47.495-36.884 86.097-82.256 86.097Zm-531.436 149.356c-45.373 0-82.257-38.603-82.257-86.097 0-47.495 36.884-86.097 82.257-86.097 45.372 0 82.358 38.602 82.358 86.097 0 47.494-36.986 86.097-82.358 86.097Z"
-                                                        fill-rule="evenodd"></path>
-                                                </g>
-                                            </svg>
-                                            <span class="ml-1">
-                                                Add Media
-                                            </span>
-                                        </span>
-                                    </Button> -->
-                                    <!-- <Button type="" class="ml-0">
-                                        <span class="flex">
-                                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="#0a4b78"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round">
-                                                </g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M16.2857 20C19.4416 20 22 17.4717 22 14.3529C22 11.8811 20.393 9.78024 18.1551 9.01498C17.8371 6.19371 15.4159 4 12.4762 4C9.32028 4 6.7619 6.52827 6.7619 9.64706C6.7619 10.3369 6.88706 10.9978 7.11616 11.6089C6.8475 11.5567 6.56983 11.5294 6.28571 11.5294C3.91878 11.5294 2 13.4256 2 15.7647C2 18.1038 3.91878 20 6.28571 20H16.2857Z"
-                                                        fill="text-textColor2"></path>
-                                                </g>
-                                            </svg> <span class="ml-1">
-                                                Add Weather
-                                            </span>
-                                        </span>
-                                    </Button> -->
-                                </div>
+
                                 <div class="px-2">
                                     <TinyMCE v-model="form.description" />
                                 </div>
@@ -108,34 +69,24 @@
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text" class="block w-[180px] mr-2 "
-                                    v-model="form.seo_meta_description" placeholder="Meta Description"
-                                    label="Meta Description" :message="errors.seo_meta_description" />
+                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
+                                    class="block w-[180px] mr-2 " v-model="form.seo_meta_description"
+                                    placeholder="Meta Description" label="Meta Description"
+                                    :message="errors.seo_meta_description" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id="seo_meta_keywords" :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
-                                    v-model="form.seo_meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
+                                <TextInput id="seo_meta_keywords" :isTextarea="true" :='4' type="text"
+                                    class="block w-[180px] mr-2 " v-model="form.seo_meta_keywords"
+                                    placeholder="Meta Keywords" label="Meta Keywords"
                                     :message="errors.seo_meta_keywords" />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-5">
-                        <!-- <Accordion :open="true" header="Image Overlay">
-                        <div class="flex ">
-                            <div class="w-1/6 py-auto ml-3 mt-3  ">
-                                Image Upload
-                            </div>
-                            <div class="w-5/6 mx-2 my-2">
-                                <ImageUpload2 @file-selected="handleImage_Overlay"
-                                    :accepted-formats="['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx']" />
-                                <InputError class="mt-2" :message="errors.material_image_overlay" />
 
-                            </div>
-                        </div>
-                    </Accordion> -->
                     </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Slug">
@@ -162,137 +113,30 @@
                                     </Button>
                                 </div>
                             </div>
-                            <!-- <div id="wraper status">
-                                <div>
-                                    <span class="text-sm flex items-center m-auto">
-                                        <svg fill="#000000" height="15px" width="15px" version="1.1" id="Layer_1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512"
-                                            xml:space="preserve">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                            </g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <g>
-                                                    <g>
-                                                        <path
-                                                            d="M256,0c-70.592,0-128,57.408-128,128c0,63.296,46.229,115.861,106.667,126.08v236.587 c0,11.776,9.536,21.333,21.333,21.333c11.797,0,21.333-9.557,21.333-21.333V254.08C337.771,243.861,384,191.296,384,128 C384,57.408,326.592,0,256,0z M234.667,128c-11.776,0-21.333-9.557-21.333-21.333s9.557-21.333,21.333-21.333 S256,94.891,256,106.667S246.443,128,234.667,128z">
-                                                        </path>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </svg>
-                                        <span class="ml-1">
-                                            Status:
-                                            <strong class="text-gray-600"> Draft</strong>
-                                        </span>
-                                        <Button v-if="!showHidePublish?.Status" type=""
-                                            @click="showHidePublish.Status = !showHidePublish?.Status"
-                                            class="ml-2 text-sm border-none underline">
-                                            Edit
-                                        </Button>
-                                    </span>
-                                </div>
-                                <div v-if="showHidePublish.Status">
-                                    <Dropdown :options="menuItems" @optionSelected="handleOptionSelected" />
-                                    <LinkBtn click="route('add.swatches')" class=" " buttonText="ok" />
-                                    <Button type="" @click="showHidePublish.Status = !showHidePublish.Status"
-                                        class="ml-2 text-sm border-none underline">
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </div> -->
-                            <!-- <div id="wraper Visibility">
-                                <div>
-                                    <span class="text-sm flex items-center m-auto">
-                                        <svg width="15px" height="15px" viewBox="0 0 16 16" version="1.1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" fill="text-gray-700">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                            </g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <path fill="#444"
-                                                    d="M8 3.9c-6.7 0-8 5.1-8 5.1s2.2 4.1 7.9 4.1 8.1-4 8.1-4-1.3-5.2-8-5.2zM5.3 5.4c0.5-0.3 1.3-0.3 1.3-0.3s-0.5 0.9-0.5 1.6c0 0.7 0.2 1.1 0.2 1.1l-1.1 0.2c0 0-0.3-0.5-0.3-1.2 0-0.8 0.4-1.4 0.4-1.4zM7.9 12.1c-4.1 0-6.2-2.3-6.8-3.2 0.3-0.7 1.1-2.2 3.1-3.2-0.1 0.4-0.2 0.8-0.2 1.3 0 2.2 1.8 4 4 4s4-1.8 4-4c0-0.5-0.1-0.9-0.2-1.3 2 0.9 2.8 2.5 3.1 3.2-0.7 0.9-2.8 3.2-7 3.2z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                        <span class="ml-1">
-                                            Visibility:
-                                            <strong class="text-gray-600"> Public</strong>
-                                        </span>
-                                        <Button v-if="!showHidePublish.Visibility" type=""
-                                            @click="showHidePublish.Visibility = !showHidePublish.Visibility"
-                                            class="ml-2 text-sm border-none underline">
-                                            Edit
-                                        </Button></span>
-                                </div>
-                                <div v-if="showHidePublish.Visibility">
-                                    <RadioBtn :options="options" :onChange="handleOptionChange"
-                                        class="flex flex-col mb-1" />
-                                    <LinkBtn click="route('add.swatches')" class=" " :buttonText="'ok'" />
-                                    <Button type="" @click="showHidePublish.Visibility = !showHidePublish.Visibility"
-                                        class="ml-2 text-sm border-none underline">
-                                        Cancel</Button>
-                                </div>
-                            </div> -->
-
-                            <!-- <div id="wraper Publish ">
-                                <div>
-                                    <span class="text-sm flex items-center m-auto">
-                                        <svg width="18px" height="18px" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                            </g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <path
-                                                    d="M3 9H21M7 3V5M17 3V5M6 12H8M11 12H13M16 12H18M6 15H8M11 15H13M16 15H18M6 18H8M11 18H13M16 18H18M6.2 21H17.8C18.9201 21 19.4802 21 19.908 20.782C20.2843 20.5903 20.5903 20.2843 20.782 19.908C21 19.4802 21 18.9201 21 17.8V8.2C21 7.07989 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V17.8C3 18.9201 3 19.4802 3.21799 19.908C3.40973 20.2843 3.71569 20.5903 4.09202 20.782C4.51984 21 5.07989 21 6.2 21Z"
-                                                    stroke="#000000" stroke-width="2" stroke-linecap="round"></path>
-                                            </g>
-                                        </svg> <span class="ml-1">
-                                            Publish :
-                                            <strong class="text-gray-600"> immediately</strong>
-                                        </span>
-                                        <Button v-if="!showHidePublish.Publish" type=""
-                                            @click="showHidePublish.Publish = !showHidePublish.Publish"
-                                            class="ml-2 text-sm border-none underline">
-                                            Edit</Button>
-                                    </span>
-                                </div>
-                                <div v-if="showHidePublish.Publish">
-                                    <Dropdown :options="menuItems" @optionSelected="handleOptionSelected" />
-                                    <LinkBtn click="route('add.swatches')" class=" " :buttonText="'ok'" />
-                                    <Button type="" @click="showHidePublish.Publish = !showHidePublish.Publish"
-                                        class="ml-2 text-sm border-none underline">Cancel</Button>
-                                </div>
-                            </div> -->
                             <div class="px-2">
-                            <div>
-                                <InputLabel for="status" value="Status" />
-                                <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                    label="Select an option" v-model="form.status" />
-                            </div>
-                            <div class="col-span-1 w-full mt-2 ">
-                                <input-label for="parentOrder" value="Visibility" />
-                                <div class="flex items-center  gap-2">
-                                    <RadioButton v-for="option in PublishOptions" :key="option.value" name="Visibility"
-                                        :value="option.value" :label="option.label" :modelValue="form.visibility"
-                                        @update:modelValue="form.visibility = $event" />
+                                <div>
+                                    <InputLabel for="status" value="Status" />
+                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
+                                        label="Select an option" v-model="form.status" />
                                 </div>
-                                <div v-if="form.visibility === 'Password protected'" class="">
-                                    <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
-                                        placeholder="Password" />
+                                <div class="col-span-1 w-full mt-2 ">
+                                    <input-label for="parentOrder" value="Visibility" />
+                                    <div class="flex items-center  gap-2">
+                                        <RadioButton v-for="option in PublishOptions" :key="option.value"
+                                            name="Visibility" :value="option.value" :label="option.label"
+                                            :modelValue="form.visibility"
+                                            @update:modelValue="form.visibility = $event" />
+                                    </div>
+                                    <div v-if="form.visibility === 'Password protected'" class="">
+                                        <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
+                                            placeholder="Password" />
+                                    </div>
+                                </div>
+                                <div class="col-span-1 w-full">
+                                    <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
+                                        dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
                                 </div>
                             </div>
-                            <div class="col-span-1 w-full">
-                                <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
-                                    dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
-                            </div>
-                        </div>
 
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
@@ -316,8 +160,9 @@
                         <Accordion :open="true" header="Materials">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">
-                                    <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true" valueField="id" showField="name"
-                                        :data="MaterialTreeListData" @checked-items="handleCheckedItems" />
+                                    <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true"
+                                        valueField="id" showField="name" :data="MaterialTreeListData"
+                                        @checked-items="handleCheckedItems" />
                                     <!-- <div v-else>sdfsdf</div> -->
                                 </div>
                             </div>
@@ -345,7 +190,7 @@
                                 <InputLabel for="Featured_image" value="Featured_image" />
                                 <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
                                     mediaName }}</div>
-                                <div  class=" mt-3 flex overflow-x-auto">
+                                <div class=" mt-3 flex overflow-x-auto">
                                     <img :src="$filePath(form.featured_image_url || 'text')"
                                         class="inline-block w-auto h-34 mr-4" :alt="form.title">
                                 </div>
@@ -353,94 +198,41 @@
                             </div>
                         </Accordion>
                     </div>
-                    <!-- Teaser -->
-                    <!-- <div class="mt-5">
-                        <Accordion :open="true" header="Description">
-                            <div class="mt-2 px-6 flex h-auto">
-                                <div class="w-2/6">Material teaser text</div>
-                                <div class="w-4/6">
-                                    <Button type="">
-                                        <span class="flex">
-                                            <svg fill="#000000" width="20px" height="20px" viewBox="0 0 1920 1920"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M101.002 1230.637V377.955c557.71-147.638 1076.312-35.47 1214.45 0v395.924l101.053-30.316V302.165l-35.671-11.014c-26.274-8.287-651.588-197.154-1349.154 1.313L-.05 305.197v1001.23l35.671 10.913c17.28 5.457 295.781 89.533 682.206 89.533 122.173 0 255.866-10.004 394.712-31.933v-101.255c-476.362 77.811-890.476-12.025-1011.537-43.048M1919.91 789.31v693.524c-.101 103.074-82.257 186.846-183.31 186.846-91.856 0-167.343-69.524-180.58-159.46-1.415-9.095-2.729-18.19-2.729-27.689 0-103.074 82.156-187.048 183.31-187.048 16.673 0 32.539 2.93 47.899 7.275 12.025 3.234 23.545 7.882 34.357 13.541V924.62l-39.814 11.824-362.577 107.317-27.89 8.186v579.94c0 2.83-.708 5.458-.81 8.186-4.243 99.234-84.176 178.964-182.601 178.964-101.154 0-183.31-83.975-183.31-187.15 0-68.513 36.682-128.033 90.645-160.572 27.385-16.471 58.711-26.577 92.665-26.577 29.81 0 57.499 7.983 82.358 20.817V976.46l27.89-8.185 101.053-29.911 360.96-106.813 142.484-42.24ZM527.515 480.635l560.842 329.835-560.842 329.735v-659.57Zm101.053 176.64v306.29L888.98 810.47 628.568 657.275ZM1736.6 1568.628c-38.097 0-68.817-27.689-78.114-64.674-1.82-6.973-4.143-13.743-4.143-21.423 0-47.394 36.884-85.996 82.257-85.996 18.896 0 35.671 7.781 49.515 19.1 19.504 15.763 32.741 39.309 32.741 66.896 0 47.495-36.884 86.097-82.256 86.097Zm-531.436 149.356c-45.373 0-82.257-38.603-82.257-86.097 0-47.495 36.884-86.097 82.257-86.097 45.372 0 82.358 38.602 82.358 86.097 0 47.494-36.986 86.097-82.358 86.097Z"
-                                                        fill-rule="evenodd"></path>
-                                                </g>
-                                            </svg>
-                                            <span class="ml-1">
-                                                Add Media
-                                            </span>
-                                        </span>
-                                    </Button>
-                                    <Button type="">
-                                        <span class="flex">
-                                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                    stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path
-                                                        d="M16.2857 20C19.4416 20 22 17.4717 22 14.3529C22 11.8811 20.393 9.78024 18.1551 9.01498C17.8371 6.19371 15.4159 4 12.4762 4C9.32028 4 6.7619 6.52827 6.7619 9.64706C6.7619 10.3369 6.88706 10.9978 7.11616 11.6089C6.8475 11.5567 6.56983 11.5294 6.28571 11.5294C3.91878 11.5294 2 13.4256 2 15.7647C2 18.1038 3.91878 20 6.28571 20H16.2857Z"
-                                                        fill="#1C274C"></path>
-                                                </g>
-                                            </svg> <span class="ml-1">
-                                                Add Weather
-                                            </span>
-                                        </span>
-                                    </Button>
-                                    <TinyMCE v-model="form.description" />
-                                    <p class="text-sm text-gray-600 my-2"> The material term id. This is generated from
-                                        material
-                                        taxonomy. Please do not make any changes here. </p>
-                                </div>
-                            </div>
-                        </Accordion>
-                    </div> -->
                 </div>
             </div>
 
         </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary  btnName="Select file" :getFlag="true" :selected="selectedFiles" :singleFile="true" :closeModal="close"
-            :selectedFiles="handleFiles" />
+        <GetLibrary btnName="Select file" :getFlag="true" :selected="selectedFiles" :singleFile="true"
+            :closeModal="close" :selectedFiles="handleFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
-
 </template>
+
 <script setup>
-import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
-import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
-import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import Accordion from "@/components/Admin-components/Accordion.vue";
-import { ref, onMounted,watch } from "vue";
+import router from '@/router';
+import { useStore } from 'vuex';
+import { ref, onMounted, watch } from "vue";
+import { showToast } from '@/helper/functions'
+import { MaterialTreeList } from '@/helper/Apis';
+import { PublishOptions, statusData } from '@/json/data';
 import SwatchesServices from '@/services/SwatchesServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
-import { defineEmits } from 'vue';
-import { MaterialTreeList } from '@/helper/Apis';
-import router from '@/router';
-import { showToast } from '@/helper/functions'
-import { PublishOptions, statusData } from '@/json/data';
-import { useStore } from 'vuex';
+import Accordion from "@/components/Admin-components/Accordion.vue";
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
+import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
+import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
+import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 
 const store = useStore();
-const emit = defineEmits(['handleApi']);
-
 const errors = ref({})
 const mediaName = ref('select Feature Media')
 const selectedFiles = ref([])
 const MaterialTreeListData = ref([]);
 const IsOpen = ref(false)
 const loading = ref(false)
-const form = ref({ status: null,description:' ' ,material_template:false,materials:[]});
-const props = defineProps({id:{type:Number,default:null}});
+const form = ref(store.getters.editData || { status: null, description: ' ', material_template: false, materials: [] });
 const PreviousDomain = ref(null);
 const masterId = ref(null);
 
@@ -450,23 +242,31 @@ const close = () => {
 const handleFiles = (data) => {
     close();
     selectedFiles.value = data
-    form.value.featured_image_url =  data[0].file_url
-    mediaName.value= data[0].file_url;
+    form.value.featured_image_url = data[0].file_url
+    mediaName.value = data[0].file_url;
     const media_titles = data.map(item => item.title);
     mediaName.value = media_titles.join(', ');
     const media_ids = data.map(item => item.id);
     form.value.featured_image = media_ids[0];
-    console.log('in form ', selectedFiles.value ,form.value.featured_image , media_ids[0])
 }
 
 const handleSubmit = () => {
-    const payload= {...form.value, material_template:form.value.material_template == true ? 1:0}
+    try {
+        if (validateForm()) {
+            if (store.getters.editData === null) {
+                handleAddSwatches({ ...form.value })
+            }
+            else {
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
 
-    if (validateForm()) {
-        if (props.id !== null)
-            handleEditSwatches(payload)
-        else
-            handleAddSwatches(payload)
+                handleEditSwatches({ ...refinedPayload })
+            }
+        }
+    } catch (e) {
+        console.error('Error Swatch Validation :', e)
     }
 }
 
@@ -481,30 +281,10 @@ const validateForm = () => {
 }
 
 const handleCheckedItems = (checkedItems) => {
-    console.log('Received checked items in parent:', checkedItems);
     form.value = { ...form.value, materials: checkedItems }
 };
 
 // API calls 
-const handleGetSwatches = async (payload) => {
-    try {
-        const res = await SwatchesServices.getSwatches(payload);
-        if (res.status === 200 && res.data.success) {
-            if (res.data.data && res.data.data.length > 0) {
-                form.value = { 
-                    ...res.data.data[0], 
-                    material_template: res.data.data[0].material_template === 1 
-                };
-                PreviousDomain.value = form.value.domain_id;
-                masterId.value = form.value.master_swatch_id;
-                mediaName.value = form.value.featured_image_url
-            }
-        }
-    } catch (error) {
-        console.error('Error fetching swatches:', error);
-    }
-}
-
 const handleAddSwatches = async (payload) => {
     loading.value = true;
     try {
@@ -523,23 +303,13 @@ const handleAddSwatches = async (payload) => {
     }
 }
 
-const handleEditSwatches = async () => {
-    // for edit existing  
-    
-    if (form.value.domain_id !== PreviousDomain.value) {
-         delete form.value.id;
-         console.log(form.value)
-     }
-     else{
-         // clone existing  in other domain .
-         form.value = { ...form.value, master_swatch_id: masterId.value };
-     }
- 
-  loading.value = true;
+const handleEditSwatches = async (payload) => {
+    loading.value = true;
     try {
-        const res = await SwatchesServices.editSwatches(form.value);
+        const res = await SwatchesServices.editSwatches(payload);
         if (res.status === 200 && res.data.success) {
             showToast('Swatches edited successfully', 'success');
+            store.dispatch('clearEditData')
             router.push('/swatches');
         } else {
             showToast('Something went wrong', 'error');
@@ -556,19 +326,16 @@ const materialTree = async (payload) => {
     MaterialTreeListData.value = await MaterialTreeList(payload)
 }
 
-onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        handleGetSwatches({id:props.id,domain_id:store.getters.getDomain.id});
-        form.value.domain_id = store.getters.getDomain.id
-        materialTree({domain_id:store.getters.getDomain.id});
-    }
+onMounted(() => {
+    PreviousDomain.value = store.getters.getDomain.id
+    materialTree({ domain_id: store.getters.getDomain.id });
 })
 
 watch(
     () => form.value.domain_id,
     () => {
-        materialTree({domain_id:form.value.domain_id});
-        }
+        materialTree({ domain_id: form.value.domain_id });
+    }
 );
 
 </script>

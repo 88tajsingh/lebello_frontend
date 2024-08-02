@@ -10,7 +10,7 @@
       </div>
     <div class="flex ml-auto">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name:'pages-add'}) }" class="px-2 py-2">Add Pages</Button>
+      <Button @click="() => {router.push({ name:'pages-form'});store.dispatch('clearEditData'); }" class="px-2 py-2">Add Pages</Button>
       
     </div>
   </div>
@@ -29,7 +29,7 @@
       </template>
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click="() => {router.push({ name:'pages-edit',params: { id: data.value.id }}); store.dispatch('editData',data.value ); }" id="edit svg">
+          <div @click="() => { router.push({ name: 'pages-form' }); store.dispatch('setEdit', data.value); }" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="openDeleteModal(data.value)">
@@ -68,8 +68,6 @@ const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
 const actionsFlag = ref(null);
-const modalIsOpen = ref(false);
-const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
 const  totalRows = ref('')
 const cols = ref([
@@ -148,7 +146,6 @@ watch(
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      console.log(defaultDomain , domain_id.value)
       handleGetPages({limit:10,page:1,domain_id:domain_id.value});
     }
 );

@@ -402,6 +402,9 @@ const handleSubmit = () => {
             handleAddDealers({ ...form.value })
         }
         else {
+            if (form.value.domain_id !== PreviousDomain.value) {
+                delete form.value.id;
+            }
             handleEditDealers({ ...form.value })
         }
     }
@@ -434,12 +437,8 @@ const handleAddDealers = async (payload) => {
 
 const handleEditDealers = async (payload) => {
     loading.value = true;
-
-    if (form.value.domain_id !== PreviousDomain.value) {
-        delete form.value.id;
-    }
     try {
-        const res = await DealersServices.editDealer({ ...form.value });
+        const res = await DealersServices.editDealer(payload);
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/dealer');

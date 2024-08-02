@@ -11,7 +11,7 @@
     </div>
     <div class="flex">
       <TextInput type="text" class="block bg-white rounded-lg mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name: 'swatches-add'}) }" class="px-2 py-2 m-auto whitespace-nowrap"> Add Swatches </Button>
+      <Button @click="() => {router.push({ name: 'swatches-add'});store.dispatch('clearEditData'); }" class="px-2 py-2 m-auto whitespace-nowrap"> Add Swatches </Button>
     </div>
   </div>
   <div class="bg-white rounded-[20px]">
@@ -29,7 +29,7 @@
       </template>
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click="() => {router.push({ name: 'swatches-edit', params: { id: data.value.id } }) }" id="edit svg">
+          <div @click="() => {router.push({ name: 'swatches-edit'});store.dispatch('setEdit', data.value) }" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => { swatch_id = { id: data.value.id }; deleteModal(); }">
@@ -181,7 +181,6 @@ watch(
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      console.log(defaultDomain , domain_id.value)
       handleGetSwatches({limit:10,page:1,domain_id:domain_id.value});
     }
 );

@@ -1,5 +1,5 @@
-<template>
-  <DefaultCard :cardTitle="id ? `Edit Pages` : `Add Pages`"> 
+<template>{{ store.getters.editData  }}
+  <DefaultCard :cardTitle="store.getters.editData ? `Edit Pages` : `Add Pages`"> 
     <DomainComponent  @customChange="(id)=> form.domain_id = id"></DomainComponent>
     <form @submit.prevent="handleSubmit">
       <div class="p-6.5 grid grid-cols-2 gap-2">
@@ -164,12 +164,7 @@ import store from '@/store';
 import { showToast } from '@/helper/functions'
 import { PublishOptions,trueFalse } from '@/json/data';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
-const props = defineProps({
-  id: {
-    type: String,
-    default: null,
-  }
-});
+
 const featurImage = ref({
   mediaName:'select Feature Media' ,
   selectedImage :[] || from.feature_image ,
@@ -178,15 +173,13 @@ const libraryImages = ref({
   mediaName:'select Feature Media' ,
   selectedImage :[] || from.feature_image ,
 })
-const id = props.id
 const errors = ref({});
 const featureSelects = ref([]);
 const SliderSelects = ref([]);
 const IsOpen = ref(false)
 const isOpenSlider = ref(false)
-const form = ref({ gallery: [],password:'',page_description:''});
+const form = ref(store.getters.editData || { gallery: [],password:'',page_description:''});
 const loading = ref(false)
-const masterId = ref(null)
 const PreviousDomain = ref(null)
 
 
@@ -198,7 +191,6 @@ const isSliderClose = () => {
   isOpenSlider.value = false;
 }
 const handleRemoveImage = (slide) => {
-    console.log("slide: " + slide.id)
     const index = SliderSelects.value.findIndex(item => item.id === slide.id);
         if (index !== -1) {
           SliderSelects.value.splice(index, 1);
@@ -213,7 +205,6 @@ const handleFeatureFiles = (data) => {
 }
 const handleLibrary = (data) => {
   isSliderClose();
-  console.log(data)
   SliderSelects.value = data;
   const object = handleFiles(data)
   libraryImages.value.mediaName= object.mediaName;
@@ -232,35 +223,25 @@ const validateForm = () => {
 };
 
 const handleSubmit = async () => {
-  if (validateForm()) {
-    if (props.id !== null) {
-      handleEditPages({ ...form.value })
+  try {
+        if (validateForm()) {
+            if (store.getters.editData === null) {
+                handleAddPages({ ...form.value })
+            }
+            else {
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
+                handleEditPages({ ...refinedPayload })
+            }
+        }
+    } catch (e) {
+        console.error('Error material add edit :', e)
     }
-    else {
-      handleAddPages({ ...form.value })
-    }
-
-  }
 };
 
 // api calls
-const handleGetPages = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await PagesServices.getPages(payload);
-    if (res.status === 200 && res.data.success) {
-      form.value = res.data.data[0];
-      PreviousDomain.value = form.value.domain_id;
-      masterId.value = form.value.master_material_id;
-      SliderSelects.value=form.value.gallery_urls
-    }
-  } catch (e) {
-    showToast(e, 'error');
-  } finally {
-    loading.value = false;
-  }
-};
-
 const handleAddPages = async (payload) => {
   loading.value = true;
   try {
@@ -278,20 +259,13 @@ const handleAddPages = async (payload) => {
   }
 };
 
-const handleEditPages = async () => {
+const handleEditPages = async (payload) => {
   loading.value = true;
-  if (form.value.domain_id !== PreviousDomain.value) {
-    delete form.value.id;
-    // delete form.value.domain;
-  }else{
-// clone existing  in other domain 
-  form.value = { ...form.value, master_material_id: masterId.value };
-  }
-  
   try {
-    const res = await PagesServices.editPages(form.value);
+    const res = await PagesServices.editPages(payload);
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
+      store.dispatch('clearEditData')
       router.push('/pages');
     } else if (res.data.status_code === 400) {
       showToast('Something went wrong', 'error');
@@ -303,16 +277,10 @@ const handleEditPages = async () => {
   }
 };
 
-// onMounted(() => {
-//   if (props.id !== undefined && props.id !== null && props.id !== '') {
-//     const payload = { id: props.id }
-//     handleGetPages(payload);
-//   }
-// });
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-      handleGetPages({id:props.id,domain_id:store.getters.getDomain.id});
-        form.value.domain_id = store.getters.getDomain.id
-    }
+      PreviousDomain.value = store.getters.getDomain.id
+      if(store.getters.editData !== null) {
+        SliderSelects.value=store.getters.editData.gallery_urls
+      }
 })
 </script>

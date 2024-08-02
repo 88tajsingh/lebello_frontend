@@ -30,7 +30,7 @@
             </template>
             <template #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'Dealer-edit', params: { id: data.value.id } }); store.dispatch('setEdit', data.value) }"
+                    <div @click="() => { router.push({ name: 'Dealer-edit'}); store.dispatch('setEdit', data.value) }"
                         id="edit svg">
                         <EditSvg />
                     </div>

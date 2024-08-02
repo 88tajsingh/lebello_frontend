@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Projects` : `Add New Project`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -99,7 +99,6 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { getProjectCategoryTree, } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { PublishOptions, statusData } from '@/json/data';
 import { useStore } from 'vuex';
 
@@ -134,13 +133,18 @@ const handleFeatureFiles = (data) => {
 const handleSubmit = () => {
     delete form.value?.domain;
     if (validateForm()) {
-        if (store.getters.editData === null) {
-            handleAddProject({ ...form.value })
+            if (store.getters.editData === null) {
+                handleAddProject({ ...form.value })
+            }
+            else {
+                
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
+                handleEditProject({ ...refinedPayload })
+            }
         }
-        else {
-            handleEditProject({ ...form.value })
-        }
-    }
 }
 
 const validateForm = () => {
@@ -170,13 +174,8 @@ const handleAddProject = async (payload) => {
 
 const handleEditProject = async (payload) => {
     loading.value = true;
-
-    if (form.value.domain_id !== PreviousDomain.value) {
-        delete form.value.id;
-    }
     try {
-        const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-        const res = await ProjectServices.editProjects({ ...refinedPayload });
+        const res = await ProjectServices.editProjects(payload);
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/projects');

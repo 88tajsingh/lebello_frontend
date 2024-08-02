@@ -12,7 +12,7 @@
     </div>
     <div class="flex rounded-lg bg-transparent">
       <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name: 'product-series-add'}) }"class="px-2 py-2 m-auto whitespace-nowrap">Add Materials</Button>
+      <Button @click="() => {router.push({ name: 'product-series-from'});store.dispatch('clearEditData'); }"class="px-2 py-2 m-auto whitespace-nowrap">Add Materials</Button>
     </div>  
   </div>
   <div class="bg-white rounded-[20px]">
@@ -30,7 +30,7 @@
       </template>
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'product-series-edit', params: { id: data.value.id , domain: data.value.domain_id} }) }" id="edit svg">
+          <div @click="() => { router.push({name: 'product-series-from'});store.dispatch('setEdit', data.value); }" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => { material_id = data.value; openDeleteModal(); }">

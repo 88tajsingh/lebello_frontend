@@ -1,5 +1,5 @@
 <template>
-    <DefaultCard :cardTitle="id ? `Edit Contract` : `Add New Contract`">
+    <DefaultCard :cardTitle="form.id ? `Edit Contract` : `Add New Contract`">
         <DomainComponent  @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
@@ -100,7 +100,6 @@
                                 label="Select an option" v-model="form.status" />
                             </div>
                             <div class=" px-6  h-auto ">
-
                             </div>
                         </Accordion>
                     </div>
@@ -109,114 +108,7 @@
 
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
-                        <div class="px-1 py-3">
-                            <!-- <div class="flex justify-between mb-2">
-                                <LinkBtn :buttonText="'Preview'" />
-                                <Button type="submit" class=" text-sm ml-auto px-2">
-                                    Save Draft
-                                </Button>
-                            </div>
-                            <div id="wraper status">
-                                <div>
-                                    <span class="text-sm flex items-center m-auto">
-                                        <svg fill="#000000" height="15px" width="15px" version="1.1" id="Layer_1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512"
-                                            xml:space="preserve">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                            </g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <g>
-                                                    <g>
-                                                        <path
-                                                            d="M256,0c-70.592,0-128,57.408-128,128c0,63.296,46.229,115.861,106.667,126.08v236.587 c0,11.776,9.536,21.333,21.333,21.333c11.797,0,21.333-9.557,21.333-21.333V254.08C337.771,243.861,384,191.296,384,128 C384,57.408,326.592,0,256,0z M234.667,128c-11.776,0-21.333-9.557-21.333-21.333s9.557-21.333,21.333-21.333 S256,94.891,256,106.667S246.443,128,234.667,128z">
-                                                        </path>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </svg>
-                                        <span class="ml-1">
-                                            Status:
-                                            <strong class="text-gray-600"> Draft</strong>
-                                        </span>
-                                        <Button v-if="!showHidePublish?.Status" type=""
-                                            @click="showHidePublish.Status = !showHidePublish?.Status"
-                                            class="ml-2 text-sm border-none underline">
-                                            Edit
-                                        </Button>
-                                    </span>
-                                </div>
-                                <div v-if="showHidePublish.Status">
-                                    <Dropdown :options="menuItems" @optionSelected="handleOptionSelected" />
-                                    <LinkBtn click="route('add.swatches')" class=" " buttonText="ok" />
-                                    <Button type="" @click="showHidePublish.Status = !showHidePublish.Status"
-                                        class="ml-2 text-sm border-none underline">
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </div>
-                            <div id="wraper Visibility">
-                                <div>
-                                    <span class="text-sm flex items-center m-auto">
-                                        <svg width="15px" height="15px" viewBox="0 0 16 16" version="1.1"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            xmlns:xlink="http://www.w3.org/1999/xlink" fill="text-gray-700">
-                                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round"
-                                                stroke-linejoin="round">
-                                            </g>
-                                            <g id="SVGRepo_iconCarrier">
-                                                <path fill="#444"
-                                                    d="M8 3.9c-6.7 0-8 5.1-8 5.1s2.2 4.1 7.9 4.1 8.1-4 8.1-4-1.3-5.2-8-5.2zM5.3 5.4c0.5-0.3 1.3-0.3 1.3-0.3s-0.5 0.9-0.5 1.6c0 0.7 0.2 1.1 0.2 1.1l-1.1 0.2c0 0-0.3-0.5-0.3-1.2 0-0.8 0.4-1.4 0.4-1.4zM7.9 12.1c-4.1 0-6.2-2.3-6.8-3.2 0.3-0.7 1.1-2.2 3.1-3.2-0.1 0.4-0.2 0.8-0.2 1.3 0 2.2 1.8 4 4 4s4-1.8 4-4c0-0.5-0.1-0.9-0.2-1.3 2 0.9 2.8 2.5 3.1 3.2-0.7 0.9-2.8 3.2-7 3.2z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                        <span class="ml-1">
-                                            Visibility:
-                                            <strong class="text-gray-600"> Public</strong>
-                                        </span>
-                                        <Button v-if="!showHidePublish.Visibility" type=""
-                                            @click="showHidePublish.Visibility = !showHidePublish.Visibility"
-                                            class="ml-2 text-sm border-none underline">
-                                            Edit
-                                        </Button></span>
-                                </div>
-                                <div v-if="showHidePublish.Visibility">
-                                    <RadioBtn :options="options" :onChange="handleOptionChange"
-                                        class="flex flex-col mb-1" />
-                                    <LinkBtn click="route('add.swatches')" class=" " :buttonText="'ok'" />
-                                    <Button type="" @click="showHidePublish.Visibility = !showHidePublish.Visibility"
-                                        class="ml-2 text-sm border-none underline">
-                                        Cancel</Button>
-                                </div>
-                            </div> -->
-                            <div class="px-4">
-                                <div class="flex flex-col ">
-                                    <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full"  valueField="value" label="Select Parent Material"
-                                    v-model="form.status" />
-                                </div>
-                                <div class="col-span-1 w-full">
-                                    <input-label for="parentOrder" value="Visibility" />
-                                    <div class="flex items-center  gap-2">
-                                        <RadioButton v-for="option in PublishOptions" :key="option.value"
-                                            name="Visibility" :value="option.value" :label="option.label"
-                                            :modelValue="form.visibility"
-                                            @update:modelValue="form.visibility = $event" />
-                                    </div>
-                                    <div v-if="form.visibility === 'Password protected'" class="">
-                                        <TextInput type="password" class="block mr-2 w-full" v-model="form.password"
-                                            placeholder="Password" />
-                                    </div>
-                                </div>
-                                <div class="col-span-1 w-full">
-                                    <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
-                                        dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
-                                </div>
-                            </div>
-                        </div>
+                     
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
@@ -406,9 +298,8 @@ const iswithBg = ref(false)
 const contractType = ref([]);
 const contractLocation = ref([]);
 const loading = ref(false)
-const form = ref({ status: '', simple_fields:false,description:'' });
+const form = ref(store.getters.editData ||{ status: '', simple_fields:false,description:'' });
 const PreviousDomain = ref(null)
-const masterId = ref(null)
 
 // images variables 
 const featureData = ref({
@@ -465,11 +356,22 @@ const handleSliderImageFiles = (data) => {
 
 const handleSubmit = () => {
     delete form.value?.domain;
-    if (validateForm()) {
-        if (props.id !== null)
-            handleEditContract({ ...form.value })
-        else
-            handleAddContract({ ...form.value })
+    try {
+        if (validateForm()) {
+            if (store.getters.editData === null) {
+                handleAddContract({ ...form.value })
+            }
+            else {
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, updated_at, featured_image_url,contract_logo_url,
+                    contract_slider_image_url, ...refinedPayload } = form.value;
+                handleEditContract({ ...refinedPayload })
+            }
+        }
+    } catch (e) {
+        console.error('Error contract design add edit :', e)
     }
 }
 
@@ -482,39 +384,11 @@ const validateForm = () => {
     }
     return isValid
 }
-const props = defineProps({
-    id: {
-        type: String,
-        default: null,
-    }
-});
+
 const options = [{ name: 'Inherit from parent (No parent found)', value: 0 },
-{ name: 'Contract Logo', value: 1 }]
+                    { name: 'Contract Logo', value: 1 }]
 
 // api calls 
-const handleGetContract = async (payload) => {
-    try {
-        const res = await ContractServices.getNewContract(payload);
-        if (res.status === 200 && res.data.success) {
-            if (res.data.data?.length > 0) {
-                form.value = res.data.data[0]
-                PreviousDomain.value = form.value.domain_id;
-                masterId.value = form.value.master_material_id;  
-                featureData.value.images = [form.value.featured_image_url]
-                featureData.value.mediaName = form.value.featured_image_url
-                contractLogoData.value.images = [form.value.contract_logo_url]
-                contractLogoData.value.mediaName = form.value.contract_logo_url
-                sliderImageData.value.images = [form.value.contract_slider_image_url]
-                sliderImageData.value.mediaName = form.value.contract_slider_image_url
-                galleryData.value.images = [form.value.gallery_urls]
-                // galleryData.value.mediaName = form.value.gallery_urls
-            }
-        }
-    } catch (e) {
-        console.error('Error while getting contract:', e);
-    }
-}
-
 const handleAddContract = async (payload) => {
     try {
         const res = await ContractServices.addNewContract(payload);
@@ -531,16 +405,8 @@ const handleAddContract = async (payload) => {
 
 const handleEditContract = async (payload) => {
     loading.value = true;
-
-    if (form.value.domain_id !== PreviousDomain.value) {
-    delete form.value.id;
-  }else{
-      // clone existing  in other domain 
-        form.value = { ...form.value, master_material_id: masterId.value };
-  }
-
     try {
-        const res = await ContractServices.editNewContract({...form.value});
+        const res = await ContractServices.editNewContract(payload);
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/Contract-Design');
@@ -563,19 +429,17 @@ const contractTypeTree = async (payload) => {
     loading.value = false;
 }
 
-// onMounted(() => {
-//     if (props.id !== undefined && props.id !== null && props.id !== '') {
-//         handleGetContract({ id: props.id });
-//     }
-//     contractLoctionTree();
-//     contractTypeTree();
-// }
-// );
+
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        console.log("store.getters.getDomain.id",store.getters?.getDomain?.id)
-        handleGetContract({id:props.id,domain_id:store.getters?.getDomain?.id});
-        form.value.domain_id = store.getters?.getDomain.id
+    PreviousDomain.value = store.getters?.getDomain?.id;
+    if(store.getters.editData){
+     featureData.value.images = [store.getters.editData.featured_image_url]
+     featureData.value.mediaName = store.getters.editData.featured_image_url
+     contractLogoData.value.images = [store.getters.editData.contract_logo_url]
+     contractLogoData.value.mediaName = store.getters.editData.contract_logo_url
+     sliderImageData.value.images = [store.getters.editData.contract_slider_image_url]
+     sliderImageData.value.mediaName = store.getters.editData.contract_slider_image_url
+     galleryData.value.images = [store.getters.editData.gallery_urls]
     }
 })
 
@@ -584,7 +448,7 @@ watch(
     () => {
         contractLoctionTree({domain_id:store.getters?.getDomain?.id});
         contractTypeTree({domain_id:store.getters?.getDomain?.id});
-         }
+    }
 );
 
 

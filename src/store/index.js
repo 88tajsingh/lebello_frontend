@@ -1,81 +1,84 @@
-import Vuex from 'vuex'
+import Vuex from 'vuex';
 
 export default new Vuex.Store({
   state: {
-    token: localStorage.getItem('token'),
-    user: JSON.parse(localStorage.getItem('user')),
-    editData: '',
-    edit: JSON.parse(localStorage.getItem('edit')) || '',
-    domain: JSON.parse(localStorage.getItem('domain')) || ''
+    token: localStorage.getItem('token') || null,
+    user: safeJsonParse(localStorage.getItem('user')) || null,
+    editData: '', 
+    edit: safeJsonParse(localStorage.getItem('edit')) || null,
+    domain: safeJsonParse(localStorage.getItem('domain')) || null,
   },
   getters: {
     token: (state) => state.token,
     user: (state) => state.user,
-    editData: (state) => state.editData,
     getDomain: (state) => state.domain,
     editData: (state) => state.edit
   },
   mutations: {
     setToken(state, token) {
-      state.token = token
-      localStorage.setItem('token', token)
+      state.token = token;
+      localStorage.setItem('token', token);
     },
     clearToken(state) {
-      state.token = ''
-      localStorage.removeItem('token')
+      state.token = null;
+      localStorage.removeItem('token');
     },
     setUser(state, user) {
-      state.user = user
-      localStorage.setItem('user', JSON.stringify(user))
+      state.user = user;
+      localStorage.setItem('user', JSON.stringify(user));
     },
     setEditData(state, data) {
-      state.editData = data
+      state.editData = data;
     },
     clearUser(state) {
-      state.user = null
-      localStorage.removeItem('user')
+      state.user = null;
+      localStorage.removeItem('user');
     },
-    setStatus(state, status) {
-      state.status = status
-    },
-
     setDomain(state, domain) {
-      localStorage.setItem('domain', JSON.stringify(domain))
-      state.domain = domain
+      localStorage.setItem('domain', JSON.stringify(domain));
+      state.domain = domain;
     },
     setEdit(state, data) {
-      localStorage.setItem('edit', JSON.stringify(data))
-      state.edit = data
+      localStorage.setItem('edit', JSON.stringify(data));
+      state.edit = data;
     },
     clearEdit(state) {
-      state.edit = null
-      localStorage.removeItem('user')
+      state.edit = null;
+      localStorage.removeItem('edit');
     }
   },
   actions: {
     login({ commit }, { token, user }) {
-      commit('setToken', token)
-      commit('setUser', user)
+      commit('setToken', token);
+      commit('setUser', user);
     },
     logout({ commit }) {
-      commit('clearToken')
-      commit('clearUser')
+      commit('clearToken');
+      commit('clearUser');
     },
-    userUpdate({ commit }) {
-      commit('setUser', user)
+    userUpdate({ commit }, user) {
+      commit('setUser', user);
     },
-    editData({ commit }, { data }) {
-      commit('setEditData', data)
+    editData({ commit }, data) {
+      commit('setEditData', data);
     },
     setDomain({ commit }, domain) {
-      commit('setDomain', domain)
+      commit('setDomain', domain);
     },
     setEdit({ commit }, data) {
-      commit('setEdit', data)
+      commit('setEdit', data);
     },
     clearEditData({ commit }) {
-      commit('clearEdit')
+      commit('clearEdit');
     }
   },
   modules: {}
-})
+});
+
+function safeJsonParse(jsonString) {
+  try {
+    return JSON.parse(jsonString);
+  } catch (e) {
+    return null; 
+  }
+}

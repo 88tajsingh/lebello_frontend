@@ -11,7 +11,7 @@
     </div>
     <div class="flex">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push('/contract-type-add') }" class="px-2 py-2">Add Contract Type</Button>
+      <Button @click="() => {router.push({ name: 'Contract-type-form'});store.dispatch('clearEditData'); }" class="px-2 py-2">Add Contract Type</Button>
       
     </div>
   </div>
@@ -22,7 +22,7 @@
      
       <template #actions="data">
         <div class="flex gap-3">
-          <div @click="() =>router.push({ name:'Contract-type-edit',params: { id: data.value.id }}) " id="edit svg">
+          <div @click="() =>{router.push({ name:'Contract-type-form'}); store.dispatch('setEdit', data.value); }" id="edit svg">
             <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
             <EditSvg />
           </div>
@@ -69,7 +69,7 @@ const bulkPopup = ref(false);
 const search = ref('');
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDominsList = ref([])
-  const domain_id = ref('')
+const domain_id = ref('')
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);

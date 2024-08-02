@@ -1,5 +1,5 @@
 <template>
-    <DefaultCard  :cardTitle="id ? `Edit Store Category ` : `Add Store Category`">
+    <DefaultCard  :cardTitle="form.id ? `Edit Store Category ` : `Add Store Category`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -109,7 +109,6 @@
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getStoreCategoryTree } from '@/helper/Apis'
-import ProductServices from '@/services/ProductServices'
 import { clearError,showToast } from '@/helper/functions'
 import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
@@ -121,12 +120,9 @@ const router = useRouter();
 
 const storeCategoryTree = ref([])
 const loading = ref(false)
-const props = defineProps(['id'])
-const id = ref(props.id || null)
-const form = ref({ parent_store_catgory:0})
+const form = ref(store.getters.editData || { parent_store_catgory:0})
 const errors = ref({})
 const PreviousDomain = ref(null)
-const masterId = ref(null)
 
 const validateForm = () => {
     let isValid = true
@@ -140,39 +136,22 @@ const validateForm = () => {
 }
 
 const handleSubmit = async () => {
-    try {
-        if (validateForm()) {
-            // emit('handleApi', { ...form.value });
-            if(id.value !== null ) 
-            handleEditStoreCategory( { ...form.value })
-            else
-            handleAddStoreCategory( { ...form.value })
+  if (validateForm()) {
+            if (store.getters.editData === null) {
+                handleAddStoreCategory({ ...form.value })
+            }
+            else {    
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
+                handleEditStoreCategory({ ...refinedPayload })
+            }
         }
-    } catch (e) {
-        console.error('Error material add edit :', e)
-    }
 }
 // api for get patents child json parent material listing 
 const handleStoreCategoryTree = async (payload) => {
   storeCategoryTree.value = await getStoreCategoryTree(payload)
-}
-// get material
-const handleGetStoreCategoryById = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await StoreServices.getStoreCategory(payload);
-    if (res.status === 200 && res.data.success) {
-      if (res.data.data?.length > 0) {
-        form.value = res.data.data[0];
-        PreviousDomain.value = form.value.domain_id;
-        masterId.value = form.value.master_material_id;     
-      }
-    }
-  } catch (error) {
-    console.error('Error fetching location:', error);
-  } finally {
-    loading.value = false;
-  }
 }
 
 const handleAddStoreCategory = async (payload) => {
@@ -195,14 +174,8 @@ const handleAddStoreCategory = async (payload) => {
 
 const handleEditStoreCategory = async (payload) => {
   loading.value = true;
-  if (form.value.domain_id !== PreviousDomain.value) {
-    delete form.value.id;
-  }else{
-      // clone existing  in other domain 
-        form.value = { ...form.value, master_material_id: masterId.value };
-  }
   try {
-    const res = await StoreServices.editStoreCategory({...form.value});
+    const res = await StoreServices.editStoreCategory(payload);
     if (res.status === 200) {
       showToast(res.data.message, 'success');
       router.push('/store-category');
@@ -217,11 +190,7 @@ const handleEditStoreCategory = async (payload) => {
 }
 
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
-        handleGetStoreCategoryById({id:props.id,domain_id:store.getters.getDomain.id});
-        form.value.domain_id = store.getters.getDomain.id
-    }
+  PreviousDomain.value = store.getters.getDomain.id
 })
 
 watch(

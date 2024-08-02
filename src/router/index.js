@@ -102,7 +102,7 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/swatches/:id',
+          path: '/swatches-edit/',
           name: 'swatches-edit',
           component: () => import('../views/Admin/Swatches/AddAndEdit.vue'),
           meta: { requiresAuth: true },
@@ -115,19 +115,11 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/materials-add',
-          name: 'materials-add',
+          path: '/materials-form',
+          name: 'materials-form',
           component: () => import('../views/Admin/Materials/AddAndEdit.vue'),
           meta: { requiresAuth: true }
         },
-        {
-          path: '/materials-edit/:id/:domain',
-          name: 'materials-edit',
-          component: () => import('../views/Admin/Materials/AddAndEdit.vue'),
-          props: true,
-          meta: { requiresAuth: true }
-        },
-
         {
           path: '/navigation-order',
           name: 'NavigationOrder',
@@ -153,13 +145,13 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/pages-add',
-          name: 'pages-add',
+          path: '/pages-form',
+          name: 'pages-form',
           component: () => import('../views/Admin/Pages/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
         {
-          path: '/pages-edit/:id',
+          path: '/pages-edit/',
           name: 'pages-edit',
           component: () => import('../views/Admin/Pages/AddEditForm.vue'),
           props: true,
@@ -178,8 +170,8 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/contract-add',
-          name: 'Contract-add',
+          path: '/contract-form',
+          name: 'Contract-form',
           component: () => import('../views/Admin/Contract/Contract-Design/AddEditContract.vue'),
           meta: { requiresAuth: true }
         },
@@ -197,17 +189,10 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/contract-type-add',
-          name: 'Contract-type-add',
+          path: '/contract-type-form',
+          name: 'Contract-type-form',
           component: () => import('../views/Admin/Contract/Contract-type/AddEditForm.vue'),
           meta: { requiresAuth: true }
-        },
-        {
-          path: '/contract-type-edit/:id',
-          name: 'Contract-type-edit',
-          component: () => import('../views/Admin/Contract/Contract-type/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
         },
         {
           path: '/contract-location',
@@ -216,17 +201,10 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/contract-loaction-add',
-          name: 'Contract-location-add',
+          path: '/contract-loaction-form',
+          name: 'Contract-location-from',
           component: () => import('../views/Admin/Contract/contract-location/AddEditForm.vue'),
           meta: { requiresAuth: true }
-        },
-        {
-          path: '/contract-location-edit/:id',
-          name: 'Contract-location-edit',
-          component: () => import('../views/Admin/Contract/contract-location/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
         },
         {
           path: '/contract-taxonomy-order',
@@ -257,8 +235,8 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/tags-add',
-          name: 'Tags-add',
+          path: '/tags-form',
+          name: 'Tags-form',
           component: () => import('../views/Admin/Tags/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
@@ -315,7 +293,7 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/dealer-edit/:id',
+          path: '/dealer-edit/',
           name: 'Dealer-edit',
           component: () => import('../views/Admin/Dealers/AddEditForm.vue'),
           meta: { requiresAuth: true }
@@ -329,18 +307,11 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/add-company',
-          name: 'add-company',
+          path: '/company-form',
+          name: 'company-form',
           component: () => import('../views/Admin/Company/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
-        {
-          path: '/edit-company/:id',
-          name: 'edit-company',
-          component: () => import('../views/Admin/Company/AddEditForm.vue'),
-          meta: { requiresAuth: true }
-        },
-
         // -------------------------------- products path ---------------------------------------------
         {
           path: '/product-contract',
@@ -349,19 +320,11 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/product-contract-add',
-          name: 'Product-contract-add',
+          path: '/product-contract-from',
+          name: 'Product-contract-from',
           component: () => import('../views/Admin/Products/Contract/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
-        {
-          path: '/product-contract-edit/:id',
-          name: 'Product-contract-edit',
-          component: () => import('../views/Admin/Products/Contract/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
-        },
-
         {
           path: '/product-type',
           name: 'Product-type',
@@ -369,19 +332,11 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/product-type-add',
-          name: 'Product-type-add',
+          path: '/product-type-from',
+          name: 'Product-type-from',
           component: () => import('../views/Admin/Products/Type/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
-        {
-          path: '/product-type-edit/:id',
-          name: 'Product-type-edit',
-          component: () => import('../views/Admin/Products/Type/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
-        },
-
         {
           path: '/product-category-type',
           name: 'Product-category-type',
@@ -389,19 +344,11 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/product-category-type-add',
-          name: 'Product-category-type-add',
+          path: '/product-category-type-from',
+          name: 'Product-category-type-from',
           component: () => import('../views/Admin/Products/Category-Type/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
-        {
-          path: '/product-category-type-edit/:id',
-          name: 'Product-category-type-edit',
-          component: () => import('../views/Admin/Products/Category-Type/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
-        },
-
         {
           path: '/product-series',
           name: 'product-series-type',
@@ -409,17 +356,10 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/product-series-add',
-          name: 'product-series-add',
+          path: '/product-series-from',
+          name: 'product-series-from',
           component: () => import('../views/Admin/Products/Series/AddEditForm.vue'),
           meta: { requiresAuth: true }
-        },
-        {
-          path: '/product-series-edit/:id',
-          name: 'product-series-edit',
-          component: () => import('../views/Admin/Products/Series/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
         },
         {
           path: '/product-taxonomyOrder',
@@ -437,17 +377,10 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/store-category-add',
-          name: 'Store-category-add',
+          path: '/store-category-form',
+          name: 'Store-category-form',
           component: () => import('../views/Admin/Store/AddEditForm.vue'),
           meta: { requiresAuth: true }
-        },
-        {
-          path: '/store-category-edit/:id',
-          name: 'Store-category-edit',
-          component: () => import('../views/Admin/Store/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
         },
         // ----------------------------------- Project -----------------------------------------
         {
@@ -458,17 +391,10 @@ const router = createRouter({
           props: true
         },
         {
-          path: '/project-add',
-          name: 'Project-add',
+          path: '/project-form',
+          name: 'Project-form',
           component: () => import('../views/Admin/Project/Add/AddEditForm.vue'),
           meta: { requiresAuth: true }
-        },
-        {
-          path: '/project-edit/:id',
-          name: 'Project-edit',
-          component: () => import('../views/Admin/Project/Add/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
         },
         {
           path: '/project-category',
@@ -477,17 +403,10 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/project-category-add',
-          name: 'Project-category-add',
+          path: '/project-category-form',
+          name: 'Project-category-form',
           component: () => import('../views/Admin/Project/Category/AddEditForm.vue'),
           meta: { requiresAuth: true }
-        },
-        {
-          path: '/project-category-edit/:id',
-          name: 'Project-category-edit',
-          component: () => import('../views/Admin/Project/Category/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
         },
         {
           path: '/project-taxonomy',

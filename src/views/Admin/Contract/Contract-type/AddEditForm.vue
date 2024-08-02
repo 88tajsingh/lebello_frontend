@@ -1,5 +1,5 @@
 <template>
-    <DefaultCard :cardTitle="id ? `Edit Contract Type` : `Add Contract Type`">
+    <DefaultCard :cardTitle="form.id ? `Edit Contract Type` : `Add Contract Type`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
             <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -83,7 +83,6 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { contractTypeTreeList } from '@/helper/Apis'
 import ContractServices from '@/services/ContractServices'
-import MaterialsServices from '@/services/MaterialsServices'
 
 import _ from 'lodash';
 import { showToast } from '@/helper/functions'
@@ -94,18 +93,11 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter();
+const errors = ref({})
 const contractTypeTreeListData = ref([])
 const loading = ref(false)
-const props = defineProps({
-    id: {
-        type: String,
-    }
-})
 const PreviousDomain = ref(null)
-const masterId = ref(null)
-const id = ref(props.id || null)
-const form = ref({ parent_contract_type:0})
-const errors = ref({})
+const form = ref(store.getters.editData ||{ parent_contract_type:0})
 
 const validateForm = () => {
     let isValid = true
@@ -119,17 +111,18 @@ const validateForm = () => {
 }
 
 const handleSubmit = async () => {
-    console.log("object is submitted")
-    try {
-        if (validateForm()) {
-            if (id.value !== null)
-                handleEditContractType({ ...form.value })
-            else
+    if (validateForm()) {
+            if (store.getters.editData === null) {
                 handleAddContractType({ ...form.value })
+            }
+            else {         
+                if (form.value.domain_id !== PreviousDomain.value) {
+                    delete form.value.id;
+                }
+                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
+                handleEditContractType({ ...refinedPayload })
+            }
         }
-    } catch (e) {
-        console.error('Error material add edit :', e)
-    }
 }
 
 
@@ -137,31 +130,9 @@ const handleSubmit = async () => {
 const contractTreeList = async (payload) => {
     contractTypeTreeListData.value = await contractTypeTreeList(payload)
 }
-// get contract type
-const handleGetContractTypeById = async (payload) => {
-    loading.value = true
-    try {
-        await ContractServices.getContractType(payload)
-            .then(res => {
-                if (res.status === 200 && res.data.success === true) {
-                    if (res.data.data && res.data.data.length > 0) {
-                        form.value = res.data.data[0]
-                        loading.value = false
-                        PreviousDomain.value = form.value.domain_id;
-                        masterId.value = form.value.master_material_id;  
-                    }
-                }
-            }).catch((res) => {
-                console.log("error", res)
-            });
-    } catch (e) {
-        console.error('Error while log in:', e);
-    }
-}
 
 const handleAddContractType = async (payload) => {
     loading.value = true
-    console.log('in handleAddContractType ')
     try {
         loading.value = true;
         await ContractServices.addContractType(payload)
@@ -184,15 +155,9 @@ const handleAddContractType = async (payload) => {
 // edit material function
 const handleEditContractType = async (payload) => {
     loading.value = true;
-    console.log(form.value.domain_id !== PreviousDomain.value , form.value.domain_id ,PreviousDomain.value)
-    if (form.value.domain_id !== PreviousDomain.value) {
-    delete form.value.id;
-  }else{
-      // clone existing  in other domain 
-        form.value = { ...form.value, master_material_id: masterId.value };
-  }
+
     try {
-        await ContractServices.editContractType({...form.value})
+        await ContractServices.editContractType(payload)
             .then(res => {
                 if (res && res.status === 200) {
                     showToast('Edit Contract Type sucessfully', 'success')
@@ -210,57 +175,26 @@ const handleEditContractType = async (payload) => {
 }
 
 onMounted(()=>{
-    if(props.id !== undefined && props.id !== null && props.id !== ' ' ) {
-        console.log("store.getters.getDomain.id",store.getters.getDomain.id)
-        handleGetContractTypeById({id:props.id,domain_id:store.getters.getDomain.id});
-        form.value.domain_id = store.getters.getDomain.id
-    }
+    PreviousDomain.value = store.getters.getDomain.id;
+    contractTreeList({domain_id:store.getters.getDomain.id});
+
 })
 
 watch(
     () => form.value.domain_id,
     () => {
         contractTreeList({domain_id:store.getters.getDomain.id});
-         }
+    }
 );
 
 </script>
 
 <style>
-.e-ddl.e-input-group.e-control-wrapper .e-input {
-    font-size: 20px;
-    font-family: emoji;
-    color: #ab3243;
-    background: #000505;
-}
-
-.e-ddl.e-input-group.e-control-wrapper .e-input {
-    font-size: 20px;
-    font-family: emoji;
-    color: #ab3243;
-    background: #32a5ab;
-}
-
-.custom-file-upload {
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    transition: background-color 0.3s ease;
-}
-
-.custom-file-upload:hover {
-    background-color: #e2e2e2;
-}
-
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
 input[type='number'] {
     -moz-appearance: textfield;
     appearance: textfield;

@@ -11,9 +11,7 @@
                                 :errors="errors" />
                         </div>
                     </Accordion>
-
                 </div>
-
                 <div class="col-span-4">
                     <div class="mt-4">
                         <Accordion header="Publish" open="false">
@@ -157,14 +155,12 @@ const handleEditMaterialSlider = async (payload) => {
     if (form.value.domain_id !== PreviousDomain.value) {
         delete form.value.id;
     }
-    // Remove specific keys from the payload
     const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
     try {
-        console.log({ ...refinedPayload })
         const res = await MaterialSliderServices.editMaterialSlider({ ...refinedPayload });
         if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
             store.dispatch('clearEditData');
+            showToast(res.data.message, 'success');
             router.push('/material-slider');
         }
     } catch (e) {

@@ -10,7 +10,7 @@
       </div>
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-        <Button @click="() => {router.push({ name:'Contract-add'}) }" class="px-2 py-2">Add Contract</Button>
+        <Button @click="() => {router.push({ name:'Contract-form'});store.dispatch('clearEditData'); }" class="px-2 py-2">Add Contract</Button>
         
       </div>
     </div>
@@ -29,7 +29,7 @@
         </template>
         <template #actions="data">
           <div class="flex gap-3">
-            <div @click="() =>router.push({ name:'Contract-edit',params: { id: data.value.id }}) " id="edit svg">
+            <div @click="() =>{router.push({ name:'Contract-form'});store.dispatch('setEdit', data.value); }" id="edit svg">
               <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
               <EditSvg />
             </div>
