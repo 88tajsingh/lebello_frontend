@@ -21,8 +21,8 @@
                                     @click="() => productData.isOpen = true"> {{
                                         productData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in productData.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    <img v-for="file in productData.images" :key="file" :src="$filePath(file)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -106,8 +106,8 @@
                                     @click="() => featureData.isOpen = true"> {{
                                         featureData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -155,7 +155,7 @@ const ProductCategory = ref([]);
 const TagsData = ref([]);
 const productType = ref([]);
 const loading = ref(false)
-const form = ref({ status: '',visibility:'' });
+const form = ref({ status: '',visibility:'',tags:[] });
 const PreviousDomain = ref(null)
 const masterId = ref(null)
 
@@ -267,6 +267,15 @@ const handleAddDesigner = async (payload) => {
 
 const handleEditDesigner = async () => {
     loading.value = true;
+    if(form.value.tags == null) {
+        form.value = {...form.value , tags:[]}
+    }
+    if(form.value.product_types == null) {
+        form.value = {...form.value , product_types:[]}
+    }
+    if(form.value.product_category_types == null) {
+        form.value = {...form.value , product_category_types:[]}
+    }
         delete form.value.featured_image_url;
         delete form.value.product_image_url;
     if (form.value.domain_id !== PreviousDomain.value) {
