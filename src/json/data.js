@@ -404,6 +404,12 @@ export const productTypeCols = [
   { field: 'description', title: 'Description' },
   { field: 'actions', title: 'Actions' }
 ]
+export const StoreProductCols = [
+  { field: 'title', title: 'Title', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'actions', title: 'Actions' }
+]
 export const tagsCols = [
   { field: 'name', title: 'Tag Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },

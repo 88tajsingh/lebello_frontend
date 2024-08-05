@@ -23,6 +23,23 @@ class StoreService {
     return instance.post(ApiConfig.bulkDeleteStoreCategory, payload)
   }
 
+  // product 
+  getStoreProduct(payload) {
+    return instance.get(ApiConfig.getStoreProduct, { params: { ...payload } })
+  }
+  addStoreProduct(payload) {
+    return instance.post(ApiConfig.addStoreProduct, payload)
+  }
+  editStoreProduct(payload) {
+    return instance.put(ApiConfig.editStoreProduct, payload)
+  }
+  deleteStoreProduct(payload) {
+    return instance.delete(ApiConfig.deleteStoreProduct, { params: { ...payload } })
+  }
+  BulkDeleteStoreProduct(payload) {
+    return instance.post(ApiConfig.bulkDeleteStoreProduct, payload)
+  }
+
  
 }
 

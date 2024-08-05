@@ -148,13 +148,19 @@ const ApiConfig = {
 
   // ---------------------------------------  store  -------------------------------------
   // store category
-
   getStoreCategory: '/get-store-category',
   addStoreCategory: '/add-store-category',
   editStoreCategory: '/update-store-category',
   deleteStoreCategory: '/delete-store-category',
   bulkDeleteStoreCategory: '/bulk-delete-store-category',
   getProductStoreCategory: '/get-store-category-tree-list',
+
+  // store Product
+  getStoreProduct: '/get-store-product',
+  addStoreProduct: '/add-store-product',
+  editStoreProduct: '/update-store-product',
+  deleteStoreProduct: '/delete-store-product',
+  bulkDeleteStoreProduct: '/bulk-delete-store-product',
 
   // -------------------------------- Project ---------------------------------------------
   // Projects

@@ -1,7 +1,7 @@
 <script setup>
-import DefaultAuthCard from '@/components/template-components/Auths/DefaultAuthCard.vue'
+import DefaultAuthCard from '@/components/Admin-components/DefaultCard.vue'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
-import BreadcrumbDefault from '@/components/template-components/Breadcrumbs/BreadcrumbDefault.vue'
+// import BreadcrumbDefault from '@/components/template-components/Breadcrumbs/BreadcrumbDefault.vue'
 import DefaultLayout from '@/Layouts/GuestLayout.vue'
 import { ref } from 'vue'
 import { showToast } from '@/helper/functions'
@@ -77,16 +77,26 @@ const handleLogin = async () => {
 
 <template>
   <DefaultLayout>
-    <!-- Breadcrumb Start -->
-    <!-- <BreadcrumbDefault :pageTitle="pageTitle" /> -->
-    <!-- Breadcrumb End -->
-    <div class="m-auto mt-4">   
-    <DefaultAuthCard subtitle="" title="Sign In to Lebello">
-      <form @submit.prevent="handleLogin">
+      <div class="m-auto w-full ">     
+    <div class="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+    <div class="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+        <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
+            <div class="">
+              <h1 class="text-2xl text-center mx-auto xl:text-3xl font-extrabold">
+                    Lebello Global
+                </h1>
+            </div>
+            <div class=" mt-12  border  flex flex-col ">
+                <h1 class="text-2xl mx-auto xl:text-3xl font-extrabold">
+                    Sign in
+                </h1>
+                <form @submit.prevent="handleLogin">
+                  <div class="w-full">
         <TextInput
             name="email"
             type="email"
             label="Email"
+            class="w-full border border-black"
             :errMessage="errors.email"
             v-model="form.email"
             placeholder="email"
@@ -147,8 +157,17 @@ const handleLogin = async () => {
             class="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 font-medium text-white transition hover:bg-opacity-90"
           />
         </div>        
+      </div>
       </form>
-    </DefaultAuthCard>
+            </div>
+        </div>
+        <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
+            <div class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
+                style="background-image: url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg');">
+            </div>
+        </div>
+    </div>
+</div>
   </div>
   </DefaultLayout>
 </template>

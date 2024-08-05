@@ -16,11 +16,7 @@
                     <div class="mt-5">
                         <Accordion :open="true" header="Description">
                             <div class="px-5     pt-2">
-
-                                <div class="px-2">
-                                    <TinyMCE v-model="form.description" />
-                                </div>
-                                <InputError class="mt-2" :message="errors?.description" />
+                                <TinyMCE v-model="form.description" />
                                 <span class="text-sm pl-2">Put Material Description.</span>
                             </div>
                         </Accordion>

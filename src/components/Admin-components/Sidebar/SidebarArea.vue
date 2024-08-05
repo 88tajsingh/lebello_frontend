@@ -192,10 +192,16 @@ const menuGroups = ref([
         label: 'Store',
         route: '',
         children: [
+	   {
+            label: 'Store Product',
+            route: '/store-product'
+          },
           {
             label: 'Store Category',
             route: '/store-category'
-          }
+          },
+
+
         ]
       },
 

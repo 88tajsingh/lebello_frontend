@@ -373,13 +373,25 @@ const router = createRouter({
         {
           path: '/store-category',
           name: 'Store-category',
-          component: () => import('../views/Admin/Store/Index.vue'),
+          component: () => import('../views/Admin/Store/Category/Index.vue'),
           meta: { requiresAuth: true }
         },
         {
           path: '/store-category-form',
           name: 'Store-category-form',
-          component: () => import('../views/Admin/Store/AddEditForm.vue'),
+          component: () => import('../views/Admin/Store/Category/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/store-product',
+          name: 'Store-product',
+          component: () => import('../views/Admin/Store/Product/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/store-product-form',
+          name: 'Store-product-form',
+          component: () => import('../views/Admin/Store/Product/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
         // ----------------------------------- Project -----------------------------------------
