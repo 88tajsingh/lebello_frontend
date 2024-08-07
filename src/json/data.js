@@ -12,6 +12,13 @@ export const statusData = [
   { name: 'Draft', value: 'draft' },
   { name: 'Pending review', value: 'pending review' }
 ]
+export const productOptionsType = [
+  { name: 'Material', value: 'material' },
+  { name: 'Custome', value: 'custome' },
+  { name: 'Custome with Price ', value: 'custome with price' },
+  { name: 'Cushion ', value: 'cushion' },
+
+]
 export const TemplateVersion = [
   { name: 'First Version (OLD)', value: 'First Version (OLD)' },
   { name: 'Latest Version (LATEST)', value: 'Latest Version (LATEST)' }

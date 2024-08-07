@@ -3,6 +3,7 @@ import MaterialsServices from "@/services/MaterialsServices";
 import ContractServices from "@/services/ContractServices";
 import ProductServices from "@/services/ProductServices";
 import StoreServices from "@/services/StoreServices";
+import PostServices from "@/services/PostServices";
 import store from "@/store";
 import router from "@/router";
 import ProjectServices from "@/services/ProjectServices";
@@ -138,6 +139,17 @@ export const getDomins = async () => {
   export const getProjectCategoryTree = async (payload) => {
     try {
       const res = await ProjectServices.getProjectCategoryTree(payload);
+      if (res.status === 200) {
+        return  res.data.data || [];
+      } 
+    } catch (err) {
+      console.log("getProductCategoryTypeTreeList err", err);
+    }
+  };
+
+  export const getPostCategoryTree = async (payload) => {
+    try {
+      const res = await PostServices.getPostCategoryTreeList(payload);
       if (res.status === 200) {
         return  res.data.data || [];
       } 

@@ -178,6 +178,27 @@ const ApiConfig = {
   getProductProjectCategory: '/get-project-category-tree-list',
   getProjectCategorytree: '/get-project-category-tree-list',
 
+
+  // ------------------------------------- Post --------------------------------
+   // post
+   getPost: '/get-post',
+   addPost: '/add-post',
+   editPost: '/update-post',
+   deletePost: '/delete-post',
+   bulkDeletePost: '/bulk-delete-post',
+  
+  // Post categories
+  getPostCategory: '/post-category-list',
+  addPostCategory: '/add-post-category',
+  editPostCategory: '/update-post-category',
+  deletePostCategory: '/delete-post-category',
+  bulkDeletePostCategory: '/bulk-delete-post-category',
+  getPostCategoryTree: '/post-category-tree-list',
+
+ 
+
+
+
   //Company
   getCompany: '/get-company',
   addCompany: '/add-company',

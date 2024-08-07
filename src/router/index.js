@@ -369,6 +369,32 @@ const router = createRouter({
           props: true
         },
 
+        //---------------------------------- post ------------------------------------------
+        {
+          path: '/post',
+          name: 'Post',
+          component: () => import('../views/Admin/Post/Add/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/post-form',
+          name: 'Post-form',
+          component: () => import('../views/Admin/Post/Add/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/post-category',
+          name: 'Post-category',
+          component: () => import('../views/Admin/Post/Category/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/post-category-form',
+          name: 'Post-category-form',
+          component: () => import('../views/Admin/Post/Category/AddEditForm.vue'),
+          meta: { requiresAuth: true }
+        },
+
         // ----------------------------------- store  -----------------------------------------
         {
           path: '/store-category',

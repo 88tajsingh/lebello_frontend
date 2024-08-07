@@ -1,4 +1,4 @@
-<template>{{form}}
+<template>{{ form }}
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -120,60 +120,80 @@
                                     <TextInput type="text" class="block mr-2 w-full" label="Shipping Description"
                                         :isTextarea="true" :rows="3" v-model="form.shipping_description" />
                                 </div>
-                         <div class="border border-stroke rounded-lg px-4 mt-4 mr-2">
+                                <div class="border border-stroke rounded-lg px-4 mt-4 mr-2">
                                     <div class="mt-4"> <span>Product Option </span> </div>
-                                    <div v-for="(item, index) in form.product_option" :key="index"> 
-                                    <hr class=" text-rose-400" />                                  
-                                    <div class="mt-2" >
-                                        <TextInput type="text" class="block mr-2 w-full" label="Sku Number"
-                                            v-model="item.sku_number" />
-                                    </div>
+                                    <div v-for="(item, index) in form.product_option" :key="index">
+                                        <hr class=" text-rose-400" />
+                                        <div class="mt-2">
+                                            <TextInput type="text" class="block mr-2 w-full" label="Sku Number"
+                                                v-model="item.sku_number" />
+                                        </div>
 
-                                    <div class="mt-2">
-                                        <TextInput type="text" class="block mr-2 w-full" label="Shipping Price"
-                                            v-model="item.shipping_price" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <TextInput type="text" class="block mr-2 w-full" label="Name"
-                                            v-model="item.name" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <TextInput type="text" class="block mr-2 w-full" label="Sub Title"
-                                            v-model="item.sub_title" />
-                                    </div>
-                                    <div class="mt-2">
-                                        <TextInput type="text" class="block mr-2 w-full" label="Price"
-                                            v-model="item.price" />
-                                    </div>
-                                    <div>
-                                        <InputLabel for=" Option_type" value=" Option type" />
-                                        <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                            label="Select an option" v-model="item.status" />
-                                    </div>
+                                        <div class="mt-2">
+                                            <TextInput type="text" class="block mr-2 w-full" label="Shipping Price"
+                                                v-model="item.shipping_price" />
+                                        </div>
+                                        <div class="mt-2">
+                                            <TextInput type="text" class="block mr-2 w-full" label="Name"
+                                                v-model="item.name" />
+                                        </div>
+                                        <div class="mt-2">
+                                            <TextInput type="text" class="block mr-2 w-full" label="Sub Title"
+                                                v-model="item.sub_title" />
+                                        </div>
+                                        <div class="mt-2">
+                                            <TextInput type="text" class="block mr-2 w-full" label="Price"
+                                                v-model="item.price" />
+                                        </div>
+                                        <div>
+                                            <InputLabel for=" Option_type" value=" Option type" />
+                                            <Select :options="productOptionsType" showfield="name" class="w-full"
+                                                valueField="value" label="Select an option"
+                                                v-model="item.productSelectedOptions" />
+                                        </div>
 
-                                    <div class='mt-3 border border-stroke p-4 rounded-lg'>
-                                        <InputLabel for=" Material_Option" value=" Material Option" />
-                                        <Checkbox :nexted=true :checkedData='item.project_categories' :dropdown="true"
-                                            valueField="id" showField="name" :data="projectCategories"
-                                            @checked-items="(checked) => item.project_categories = checked" />
-                                    </div>
-                                    <div class="mt-5  ">
-                                        <singleCheckBox id="checked"
-                                            label="If checked, this variation will be exported while exporting products."
-                                            v-model:modelValue="item.export_field"></singleCheckBox>
-                                    </div>
-                                  <button @click="removeFormItem(index)" type="button"
+                                        <div v-if="item.productSelectedOptions == 'material'"
+                                            class='mt-3 border border-stroke p-4 rounded-lg'>
+                                            <InputLabel for=" Material_Option" value=" Material Option" />
+                                            <Checkbox :nexted=true :checkedData='item.project_categories'
+                                                :dropdown="true" valueField="id" showField="name"
+                                                :data="MaterialTreeListData"
+                                                @checked-items="(checked) => item.material = checked" />
+                                        </div>
+                                        <div v-else-if="item.productSelectedOptions == 'custome'"
+                                            class='mt-3 border border-stroke p-4 rounded-lg'>
+                                            <TextInput type="text" class="block mr-2 w-full" label="New Custom"
+                                                :isTextarea="true" :rows="3" v-model="item.new_custom" />
+                                        </div>
+                                        <div v-else-if="item.productSelectedOptions == 'custome with price'"
+                                            class='mt-3 border border-stroke p-4 rounded-lg'>
+                                            <TextInput type="text" class="block mr-2 w-full" label="Custome With Price"
+                                                :isTextarea="true" :rows="3" v-model="item.custome_with_price" />
+                                        </div>
+                                        <div v-else-if="item.productSelectedOptions == 'cushion'"
+                                            class='mt-3 border border-stroke p-4 rounded-lg'>
+                                            <TextInput type="text" class="block mr-2 w-full" label="New Cushion"
+                                                :isTextarea="true" :rows="3" v-model="item.cushion" />
+                                        </div>
+
+
+                                        <div class="mt-5  ">
+                                            <singleCheckBox id="checked"
+                                                label="If checked, this variation will be exported while exporting products."
+                                                v-model:modelValue="item.export_field"></singleCheckBox>
+                                        </div>
+                                        <button @click="removeFormItem(index)" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-danger  font-medium text-gray hover:bg-opacity-90">
                                             Remove
                                         </button>
 
-                                    <hr v-if="index < formItems.length - 1" class="my-4"/>
+                                        <hr v-if="index < formItems.length - 1" class="my-4" />
 
-                                </div>
-                                <button @click="addFormItem" type="button"
-                                            class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
-                                            Add
-                                        </button>
+                                    </div>
+                                    <button @click="addFormItem" type="button"
+                                        class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
+                                        Add
+                                    </button>
                                 </div>
                             </div>
                         </Accordion>
@@ -181,8 +201,22 @@
                     <div class="mt-3">
                         <Accordion :open="true" header="Simple Fields">
                             <div class="px-5     pt-2">
-                                <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                            label="Select an option" v-model="form.simple_field" />
+                                <Select :options="productOptionsType" showfield="name" class="w-full" valueField="value"
+                                    label="Select an option" v-model="form.simple_field" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-3">
+                        <Accordion :open="true" header="Material Swatches">
+                            <div class="flex mx-4 px-2 border border-stroke">
+                                <div class="w-1/2 border-r border-stroke">
+                                    Swatches
+                                    <hr/>
+                                </div>
+                                <div class="w-1/2 ml-2">
+                                    Material
+                                    <hr/>
+                                </div>
                             </div>
                         </Accordion>
                     </div>
@@ -190,34 +224,37 @@
                         <Accordion :open="true" header="Product Label">
                             <div class="px-5     pt-2">
                                 <TextInput type="text" class="block mr-2 w-full" label="Text Label"
-                                            v-model="form.product_label" />
+                                    v-model="form.product_label" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3">
                         <Accordion :open="true" header="Downloadable Files">
                             <div class="col-span-2  w-full border border-gray rounded-lg">
-          <div class="mt-2 ml-3  ">
-          <div class=" flex flex-wrap">
-            <div class="relative p-1" v-for="(slide, index) in Downloadable.images" :key="`slide-${index}`">
-              <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]" :src="$filePath(slide.file_url)">
-              <div @click="()=>handleRemoveDownloadable(slide)" class=" absolute top-2 right-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="size-6">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-          <button @click="()=> Downloadable.isOpen=true" type="button"
-            class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
-            Gallery
-          </button>
-        </div>
-          <div>
-          </div>
-        </div>
+                                <div class="mt-2 ml-3  ">
+                                    <div class=" flex flex-wrap">
+                                        <div class="relative p-1" v-for="(slide, index) in Downloadable.images"
+                                            :key="`slide-${index}`">
+                                            <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
+                                                :src="$filePath(slide.file_url)">
+                                            <div @click="() => handleRemoveDownloadable(slide)"
+                                                class=" absolute top-2 right-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button @click="() => Downloadable.isOpen = true" type="button"
+                                        class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
+                                        Gallery
+                                    </button>
+                                </div>
+                                <div>
+                                </div>
+                            </div>
                         </Accordion>
                     </div>
                     <div class="mt-3">
@@ -225,23 +262,20 @@
 
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                   />
+                                    v-model="form.seo_title" placeholder="Title Tag" label="Title Tag" />
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
                                     class="block w-[180px] mr-2 " v-model="form.seo_description"
-                                    placeholder="Meta Description" label="Meta Description"
-                                    />
+                                    placeholder="Meta Description" label="Meta Description" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_meta_keywords" :isTextarea="true" :='4' type="text"
                                     class="block w-[180px] mr-2 " v-model="form.seo_keywords"
-                                    placeholder="Meta Keywords" label="Meta Keywords"
-                                   />
+                                    placeholder="Meta Keywords" label="Meta Keywords" />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
@@ -251,29 +285,28 @@
                             <div v-for="(item, index) in form.product_specs" :key="index">
                                 <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                     <TextInput id="seo_title" type="text" class="block mr-2 h-[33px]"
-                                    v-model="item.seo_title" placeholder="" label="Specs Name"
-                                    />
+                                        v-model="item.seo_title" placeholder="" label="Specs Name" />
                                 </div>
                                 <div class="mt-3 px-7">
                                     <InputLabel for=" Specs_Description" value="Specs Description" />
                                     <TinyMCE v-model="item.description" />
                                 </div>
                                 <div class="mt-3">
-                                <div class="px-6  h-auto ">
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() =>{productsSpecsIndex=index ; featureData.isOpen = true;   }"> {{
-                                        featureData.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
-                                </div>
-                                </div>
+                                    <div class="px-6  h-auto ">
+                                        <div class="py-2 rounded-lg px-2 border border-stroke"
+                                            @click="() => { productsSpecsIndex = index; Specs_Img.isOpen = true; }"> {{
+                                                Specs_Img.mediaName }}</div>
+                                        <div class=" mt-3 flex overflow-x-auto">
+                                            <img :src="$filePath(Specs_Img.images[index]?.file_url)"
+                                                class="inline-block w-auto h-34 mr-4" alt="image">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <button @click="product_specs" type="button"
-                                            class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
-                                            Add
-                                        </button>
+                                class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
+                                Add
+                            </button>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
@@ -287,15 +320,15 @@
                     </div>
 
                 </div>
-
+                <!-- right side  -->
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                        label="Select " v-model="form.status" />
+                                    <Select :options="productOptionsType" showfield="name" class="w-full"
+                                        valueField="value" label="Select " v-model="form.status" />
                                 </div>
                                 <div class="col-span-1 w-full">
                                     <div class="flex flex-col ">
@@ -324,9 +357,16 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Tags">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :checkedData='form.tags' :dropdown="true"
-                                    valueField="id" showField="name" :data="TagsData"
+                                <Checkbox :nexted=true :checkedData='form.tags' :dropdown="true" valueField="id"
+                                    showField="name" :data="TagsData"
                                     @checked-items="(checked) => form.tags = checked" />
+                            </div>
+                        </Accordion>
+                        <Accordion :open="true" header="Store Categories">
+                            <div class="mt-2 px-6 flex h-auto ">
+                                <Checkbox :nexted=true :checkedData='form.store_categories' :dropdown="true"
+                                    valueField="id" showField="name" :data="storeCategoryTree"
+                                    @checked-items="(checked) => form.store_categories = checked" />
                             </div>
                         </Accordion>
                     </div>
@@ -347,10 +387,10 @@
                         <Accordion :open="true" header="Gallery">
                             <div class="px-6  h-auto ">
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
+                                    @click="() => galleryData.isOpen = true"> {{
+                                        galleryData.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file)"
+                                    <img v-for="file in galleryData.images" :key="file" :src="$filePath(file)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
                                 </div>
                             </div>
@@ -366,11 +406,20 @@
             :closeModal="isSliderClose" :selectedFiles="handleSlider" />
     </popupModal>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="Downloadable.isOpen">
-        <GetLibrary btnName="Select files" :getFlag="true" :selected="Downloadable.images" :singleFile="false" :closeModal="isDownloadableClose" :selectedFiles="handleDownloadable" />
+        <GetLibrary btnName="Select files" :getFlag="true" :selected="Downloadable.images" :singleFile="false"
+            :closeModal="isDownloadableClose" :selectedFiles="handleDownloadable" />
+    </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="Specs_Img.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="Specs_Img.images" :singleFile="true"
+            :closeModal="() => { Specs_Img.isOpen = false }" :selectedFiles="handleSpecs_Img" />
     </popupModal>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
         <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
             :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+    </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="galleryData.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="galleryData.images" :singleFile="true"
+            :closeModal="() => { galleryData.isOpen = false }" :selectedFiles="handleGalleryFiles" />
     </popupModal>
 
 
@@ -380,8 +429,9 @@
 import router from '@/router';
 import { defineEmits } from 'vue';
 import { ref, onMounted, watch } from "vue";
-import { showToast , handleFiles } from '@/helper/functions'
-import { PublishOptions, statusData } from '@/json/data';
+import { showToast, handleFiles } from '@/helper/functions'
+import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
+import { PublishOptions, productOptionsType } from '@/json/data';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
@@ -397,34 +447,46 @@ const store = useStore();
 
 const emit = defineEmits(['handleApi']);
 const errors = ref({})
-const Projects = ref([]);
-const   productsSpecsIndex = ref(0);
+const MaterialTreeListData = ref([]);
+const storeCategoryTree = ref([]);
+const productsSpecsIndex = ref(0);
 
 const projectCategories = ref([]);
 const loading = ref(false)
 const TagsData = ref([]);
-const form = ref(store.getters.editData || { status: '', featured: false,product_option:[],product_specs:[] });
+const form = ref(store.getters.editData || { status: '', featured: false, product_option: [], product_specs: [] });
 const SliderSelects = ref([]);
-const isOpenSlider= ref(false);
+const isOpenSlider = ref(false);
 const PreviousDomain = ref(null)
 const formItems = ref([
-  {
-    sku_number: '',
-    shipping_price: '',
-    name: '',
-    sub_title: '',
-    price: '',
-    status: null,
-    project_categories: [],
-    export_field: false
-  }
+    {
+        sku_number: '',
+        shipping_price: '',
+        name: '',
+        sub_title: '',
+        price: '',
+        productSelectedOptions: 'material',
+        material: '',
+        project_categories: [],
+        export_field: false
+    }
 ]);
 
 
 // images variables 
+const Specs_Img = ref({
+    isOpen: false,
+    mediaName: 'Image',
+    images: []
+})
 const featureData = ref({
     isOpen: false,
-    mediaName: 'feature Image',
+    mediaName: 'Image',
+    images: []
+})
+const galleryData = ref({
+    isOpen: false,
+    mediaName: 'Image',
     images: []
 })
 
@@ -442,13 +504,29 @@ const Downloadable = ref({
 
 
 // images functions 
+const handleSpecs_Img = (data) => {
+    const object = handleFiles(data);
+    Specs_Img.value.isOpen = false
+    Specs_Img.value.images = data;
+    Specs_Img.value.mediaName = object.mediaName;
+    console.log(productsSpecsIndex.value)
+    form.value.product_specs[productsSpecsIndex.value].image = object.media_ids[0]
+}
 const handleFeatureFiles = (data) => {
     const object = handleFiles(data);
     featureData.value.isOpen = false
     featureData.value.images = data;
     featureData.value.mediaName = object.mediaName;
     console.log(productsSpecsIndex.value)
-    form.value.product_specs[productsSpecsIndex.value].image = object.media_ids[0]
+    form.value.featured_image = object.media_ids[0]
+}
+const handleGalleryFiles = (data) => {
+    const object = handleFiles(data);
+    galleryData.value.isOpen = false
+    galleryData.value.images = data;
+    galleryData.value.mediaName = object.mediaName;
+    console.log(productsSpecsIndex.value)
+    form.value.gallery = object.media_ids
 }
 
 
@@ -468,10 +546,10 @@ const isSliderClose = () => {
 }
 // remove slider 
 const handleRemoveImage = (slide) => {
-    const index =  slider.value.images.findIndex(item => item.id === slide.id);
+    const index = slider.value.images.findIndex(item => item.id === slide.id);
     if (index !== -1) {
         slider.value.images.splice(index, 1);
-        form.value.slider =  slider.value.images.map(item => item.id)
+        form.value.slider = slider.value.images.map(item => item.id)
     }
 }
 
@@ -491,10 +569,10 @@ const isDownloadableClose = () => {
 }
 // Downloadable REMOVE
 const handleRemoveDownloadable = (slide) => {
-    const index =  Downloadable.value.images.findIndex(item => item.id === slide.id);
+    const index = Downloadable.value.images.findIndex(item => item.id === slide.id);
     if (index !== -1) {
         Downloadable.value.images.splice(index, 1);
-        form.value.downloadable_files =  Downloadable.value.images.map(item => item.id)
+        form.value.downloadable_files = Downloadable.value.images.map(item => item.id)
     }
 }
 
@@ -502,27 +580,27 @@ const handleRemoveDownloadable = (slide) => {
 
 
 function addFormItem() {
-  form.value.product_option.push({
-    sku_number: '',
-    shipping_price: '',
-    name: '',
-    sub_title: '',
-    price: '',
-    status: null,
-    project_categories: [],
-    export_field: false
-  });
+    form.value.product_option.push({
+        sku_number: '',
+        shipping_price: '',
+        name: '',
+        sub_title: '',
+        price: '',
+        status: null,
+        project_categories: [],
+        export_field: false
+    });
 }
 
 function removeFormItem(index) {
     form.value.product_option.splice(index, 1);
 }
 function product_specs() {
-  form.value.product_specs.push({
-    seo_title: '',
-    description: '',
-    image:'',
-  });
+    form.value.product_specs.push({
+        seo_title: '',
+        description: '',
+        image: '',
+    });
 }
 
 function removeproduct_specs(index) {
@@ -558,17 +636,17 @@ const validateForm = () => {
 }
 
 const handleGetTags = async (payload) => {
-//   getLoading.value = true;
-  try {
-    const res = await CommonServices.getTags(payload);
-    if (res.status === 200 && res.data.success) {
-      TagsData.value = res.data.data;
+    //   getLoading.value = true;
+    try {
+        const res = await CommonServices.getTags(payload);
+        if (res.status === 200 && res.data.success) {
+            TagsData.value = res.data.data;
+        }
+    } catch (e) {
+        console.error('Error while getTags:', e);
+    } finally {
+        // getLoading.value = false;
     }
-  } catch (e) {
-    console.error('Error while getTags:', e);
-  } finally {
-    // getLoading.value = false;
-  }
 };
 
 const handleAddStoreProduct = async (payload) => {
@@ -600,10 +678,19 @@ const handleEditStoreProduct = async (payload) => {
     }
 }
 
+const materialTree = async (payload) => {
+    MaterialTreeListData.value = await MaterialTreeList(payload)
+}
+
+const handleStoreCategoryTree = async (payload) => {
+    storeCategoryTree.value = await getStoreCategoryTree(payload)
+}
 onMounted(() => {
     PreviousDomain.value = store.getters.getDomain.id;
     SliderSelects.value = store.getters.editData?.slider_urls
     handleGetTags({ domain_id: store.getters.getDomain.id })
+    materialTree({ domain_id: store.getters.getDomain.id })
+    handleStoreCategoryTree({ domain_id: store.getters.getDomain.id })
 })
 
 

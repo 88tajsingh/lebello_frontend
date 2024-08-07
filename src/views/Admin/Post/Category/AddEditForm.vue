@@ -1,5 +1,5 @@
 <template>
-    <DefaultCard  :cardTitle="form.id ? `Edit Store Category ` : `Add Store Category`">
+    <DefaultCard  :cardTitle="form.id ? `Edit Post Category ` : `Add Post Category`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -19,24 +19,10 @@
                     letters, numbers, and hyphens.
                 </p>
             </div>
-            <div class="flex flex-col w-full mt-6">
-                <TextInput type="text" class="block mr-2  w-full"
-                label="Category Page Title Tag %category_name%"
-                     placeholder="" 
-                    v-model="form.category_page_title" 
-                    />
-            </div>
-            <div class="flex flex-col w-full ">
-                <TextInput type="text" class="block mr-2  w-full"
-                label="Product Page Title %category_name% %product_name% %product_price%"
-                     placeholder="" 
-                    v-model="form.product_page_title" 
-                    />
-            </div>
             <div class="flex flex-col ">
-                <InputLabel for="Parent Material" value="Parent Store Category " />
-                <Select :options="storeCategoryTree" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select "
-                    v-model="form.parent_store_catgory" />
+                <InputLabel for="Parent Material" value="Parent Post Category " />
+                <Select :options="postCategory" :defaultZero='true' showfield="name" class="w-full" valueField="id" label="Select "
+                    v-model="form.parent_post_category" />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
                     and Big Band.
@@ -52,49 +38,7 @@
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     The description is not prominent by default; however, some themes may show it.
                 </p>
-            </div>
-            <div class="flex flex-col w-full">
-                <TextInput type="text" class="block mr-2  w-full"
-                label="Category Page Description %category_name%"
-                     placeholder="" :isTextarea="true" rows="4"
-                    v-model="form.category_page_description" 
-                    />
-                <p class="text-sm text-[#646970] text-[11.5px]">
-                    The description is not prominent by default; however, some themes may show it.
-                </p>
-            </div>
-            <div class="flex flex-col w-full">
-                <TextInput type="text" class="block mr-2  w-full"
-                label="Product Page Description %category_name% %product_name% %product_price%"
-                     placeholder="" :isTextarea="true" rows="4"
-                    v-model="form.product_page_description" 
-                    />
-                <p class="text-sm text-[#646970] text-[11.5px]">
-                    The description is not prominent by default; however, some themes may show it.
-                </p>
-            </div>
-            <div class="flex flex-col w-full">
-                <TextInput type="text" class="block mr-2  w-full"
-                label="Product Page Keywords %category_name% %product_name% %product_price%"
-                     placeholder="" :isTextarea="true" rows="4"
-                    v-model="form.product_page_keyword" 
-                    />
-                <p class="text-sm text-[#646970] text-[11.5px]">
-                    The description is not prominent by default; however, some themes may show it.
-                </p>
-            </div>
-            <div class="flex flex-col w-full">
-                <TextInput type="text" class="block mr-2  w-full"
-                label="Category Page Keywords %category_name%"
-                     placeholder="" :isTextarea="true" rows="4"
-                    v-model="form.category_page_keyword" 
-                    />
-                <p class="text-sm text-[#646970] text-[11.5px]">
-                    The description is not prominent by default; however, some themes may show it.
-                </p>
-            </div>
-           
-           
+            </div>          
         </div>
         <button type="submit"
             class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
@@ -108,19 +52,19 @@
 <script setup>
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import { getStoreCategoryTree } from '@/helper/Apis'
+import { getPostCategoryTree } from '@/helper/Apis'
 import { clearError,showToast } from '@/helper/functions'
 import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import StoreServices from '@/services/StoreServices'
+import PostServices from '@/services/PostServices'
 
 const store = useStore();
 const router = useRouter();
 
-const storeCategoryTree = ref([])
+const postCategory = ref([])
 const loading = ref(false)
-const form = ref(store.getters.editData || { parent_store_catgory:0})
+const form = ref({...store.getters.editData,parent_post_category:store.getters.editData?.parent_post_category ? store.getters.editData?.parent_post_category :0} || { parent_post_category:0})
 const errors = ref({})
 const PreviousDomain = ref(null)
 
@@ -138,29 +82,29 @@ const validateForm = () => {
 const handleSubmit = async () => {
   if (validateForm()) {
             if (store.getters.editData === null) {
-                handleAddStoreCategory({ ...form.value })
+                handleAddPostCategory({ ...form.value })
             }
             else {    
                 if (form.value.domain_id !== PreviousDomain.value) {
                     delete form.value.id;
                 }
                 const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-                handleEditStoreCategory({ ...refinedPayload })
+                handleEditPostCategory({ ...refinedPayload })
             }
         }
 }
 // api for get patents child json parent  listing 
-const handleStoreCategoryTree = async (payload) => {
-  storeCategoryTree.value = await getStoreCategoryTree(payload)
+const handlePostCategoryTree = async (payload) => {
+  postCategory.value = await getPostCategoryTree(payload)
 }
 
-const handleAddStoreCategory = async (payload) => {
+const handleAddPostCategory = async (payload) => {
   loading.value = true;
   try {
-    const res = await StoreServices.addStoreCategory(payload);
+    const res = await PostServices.addPostCategory(payload);
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
-      router.push('/store-category');
+      router.push('/post-category');
     } else if (res.status === 400) {
       showToast(res.data.message, 'error');
     }
@@ -172,13 +116,13 @@ const handleAddStoreCategory = async (payload) => {
   }
 }
 
-const handleEditStoreCategory = async (payload) => {
+const handleEditPostCategory = async (payload) => {
   loading.value = true;
   try {
-    const res = await StoreServices.editStoreCategory(payload);
+    const res = await PostServices.editPostCategory(payload);
     if (res.status === 200) {
       showToast(res.data.message, 'success');
-      router.push('/store-category');
+      router.push('/post-category');
     } else if (res.status === 400) {
       showToast(res.data.message, 'error');
     }
@@ -191,12 +135,14 @@ const handleEditStoreCategory = async (payload) => {
 
 onMounted(()=>{
   PreviousDomain.value = store.getters.getDomain.id
+  handlePostCategoryTree({domain_id:store.getters.getDomain.id})
+  
 })
 
 watch(
     () => form.value.domain_id,
     () => {
-        handleStoreCategoryTree({domain_id:form.value.domain_id});
+        handlePostCategoryTree({domain_id:form.value.domain_id});
          }
 );
 </script>
