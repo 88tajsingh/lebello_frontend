@@ -70,7 +70,6 @@ export async function checkAndRefreshToken() {
     currentDateLocal,
     "seconds"
   );
-  console.log(differenceInSeconds)
   
   if (
     token &&
