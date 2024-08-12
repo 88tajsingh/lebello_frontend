@@ -5,7 +5,6 @@ import { ref } from "vue";
 const key = import.meta.env.VITE_APP_TINY_MCE
 const model = defineModel({
     type: String,
-    required: true,
 });
 const content = ref('')
 

@@ -8,8 +8,8 @@ import { showToast } from '@/helper/functions'
 import LoginService from '@/services/LoginServices';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-
 const store = useStore();
+
 const router = useRouter();
 const pageTitle = ref('Sign In')
 
@@ -52,11 +52,13 @@ const handleLogin = async () => {
         .then(res => {
           if (res.status === 200) {
             const token = res.data.data.access_token
+            const expiresAt = res.data.data.expires_at
             const user = res.data.data.user_data
+            console.log(res.data.data.expires_at)
             showToast(' Login sucessfully','success')
             // console.log(res.data.data.access_token)
-            store.dispatch('login', { token, user });
-            localStorage.setItem('token', token);
+            store.dispatch('login', { token, user,expiresAt });
+            // localStorage.setItem('token', token);
             processing.value = false;       
             router.push('/admin');
          }
@@ -96,6 +98,7 @@ const handleLogin = async () => {
             name="email"
             type="email"
             label="Email"
+            id='email'
             class="w-full border border-black"
             :errMessage="errors.email"
             v-model="form.email"
@@ -124,6 +127,7 @@ const handleLogin = async () => {
             name="password"
             type="password"
             label="Passowrd"
+            id="password"
             :errMessage="errors.password"
             v-model="form.password"
             placeholder="6+ Characters, 1 Capital letter"

@@ -72,13 +72,13 @@ defineExpose({ focus: () => input.value.focus() });
   <div v-if="isTextarea" class="m-0 p-0 border-0 flex ">
     <SingleCheck v-if="hasCheckBox" :id="`${id}textbox`" label=""
     v-model:modelValue="checked"></SingleCheck>
-    <textarea :id="`${id}textbox`" :class="textareaClass" v-model="model" ref="input" :rows="rows" :placeholder="placeholder"
+    <textarea :id="`${id} ${label}`" :class="textareaClass" v-model="model" ref="input" :rows="rows" :placeholder="placeholder"
       v-bind="$attrs" />
   </div>
   <div v-else class="relative m-0 p-0 border-0 flex">
     <SingleCheck v-if="hasCheckBox" :id="`${id}textbox`" label=""
     v-model:modelValue="checked"></SingleCheck>
-    <input :id="`${id}textbox`" :class="inputClass" v-model="model" ref="input" @input="handleInput" :placeholder="placeholder"
+    <input :id="`${id} ${label}`" :class="inputClass" v-model="model" ref="input" @input="handleInput" :placeholder="placeholder"
       v-bind="$attrs" />
     <span class="absolute right-4 mt-2">
       <slot></slot>

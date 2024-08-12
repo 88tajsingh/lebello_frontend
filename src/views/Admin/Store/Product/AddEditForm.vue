@@ -208,16 +208,54 @@
                     </div>
                     <div class="mt-3">
                         <Accordion :open="true" header="Material Swatches">
-                            <div class="flex mx-4 px-2 border border-stroke">
-                                <div class="w-1/2 border-r border-stroke">
-                                    Swatches
-                                    <hr/>
+                            <div class="bg-white px-4">
+                                <div class="flex ">
+                                    <div class="w-1/2 px-1">SWATCHES</div>
+                                    <div class="w-1/2 px-1">MATERIALS</div>
                                 </div>
-                                <div class="w-1/2 ml-2">
-                                    Material
-                                    <hr/>
-                                </div>
-                            </div>
+      <div class="flex h-[200px] overflow-y-auto">
+        <!-- Left Panel -->
+        <div class="w-1/2 border-r ">
+          <ul>
+            <li v-for="item in materialSwatchesList" :key="item.id" class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
+              :class="{'bg-gray opacity-80': isSelected(item)}" @click="toggleSwatchSelection(item)">
+              <span  class="text-[#2272B1]">{{ item.title }}</span>
+              <span class="text-[10px] text-Black666">SWATCHES <span></span> </span>
+            </li>
+          </ul>
+        </div>
+        <!-- Right Panel -->
+        <div class="w-1/2 pl-4">
+          <div v-if="selectedSwatches.length">
+            <div v-for="item in selectedSwatches" :key="item.id" class="mb-4">
+                <div class="flex justify-between">
+                    <h4 class="text-[#2272B1]">{{ item.title }}</h4>
+                    <span class="text-[12px]"> SWATACHES</span>
+                </div>
+              <ul>
+                <li v-for="material in item.materials_data" :key="material.id" class="flex items-center mb-2">
+                  <div class="flex w-full justify-between">
+                    <span>
+                        <input 
+                        type="checkbox" 
+                        id="material-{{ material.id }}" 
+                        class="mr-2"
+                        @change="handleCheckboxChange(material.id, $event)">
+                        <label :for="'material-'+ material.id" class="text-[#2272B1]">{{ material.name }}</label>
+                    </span>
+                    <span class="text-[10px]">MATERIAL</span>
+                    </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div v-else>
+            <p class="text-gray-500">No swatches selected</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
                         </Accordion>
                     </div>
                     <div class="mt-3">
@@ -428,10 +466,10 @@
 <script setup>
 import router from '@/router';
 import { defineEmits } from 'vue';
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch,computed } from "vue";
 import { showToast, handleFiles } from '@/helper/functions'
 import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
-import { PublishOptions, productOptionsType } from '@/json/data';
+import { PublishOptions, productOptionsType, swatches } from '@/json/data';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
@@ -454,10 +492,12 @@ const productsSpecsIndex = ref(0);
 const projectCategories = ref([]);
 const loading = ref(false)
 const TagsData = ref([]);
+const materialSwatchesList = ref([]);
 const form = ref(store.getters.editData || { status: '', featured: false, product_option: [], product_specs: [] });
 const SliderSelects = ref([]);
 const isOpenSlider = ref(false);
 const PreviousDomain = ref(null)
+
 const formItems = ref([
     {
         sku_number: '',
@@ -576,6 +616,59 @@ const handleRemoveDownloadable = (slide) => {
     }
 }
 
+// swathces materials list functions 
+const selectedSwatches = ref([]);
+const selectedSwatchIds = ref([]);
+const selectedMaterialIds = ref([]);
+
+const toggleSwatchSelection = (item) => {
+  const index = selectedSwatches.value.findIndex(swatch => swatch.id === item.id);
+  
+  // If the swatch is not in the selection, add it
+  if (index === -1) {
+    selectedSwatches.value.push(item);
+    selectedSwatchIds.value.push(item.master_swatch_id);
+  }
+//    else {
+//     // Remove the swatch only if there is more than one swatch selected
+//     if (selectedSwatches.value.length > 1) {
+//       selectedSwatches.value.splice(index, 1);
+//       const swatchIdIndex = selectedSwatchIds.value.indexOf(item.master_swatch_id);
+//       if (swatchIdIndex !== -1) {
+//         selectedSwatchIds.value.splice(swatchIdIndex, 1);
+//       }
+      
+//       // Remove materials associated with this swatch
+//       item.materials_data.forEach(material => {
+//         const materialIndex = selectedMaterialIds.value.indexOf(material.id);
+//         if (materialIndex !== -1) {
+//           selectedMaterialIds.value.splice(materialIndex, 1);
+//         }
+//       });
+//     }
+//   }
+  
+  console.log('Selected Swatches:', selectedSwatches.value);
+  console.log('Selected Swatch IDs:', selectedSwatchIds.value);
+}
+
+const isSelected = (item) => {
+  return selectedSwatches.value.some(selected => selected.id === item.id);
+};
+
+const handleCheckboxChange = (materialId, event) => {
+  if (event.target.checked) {
+    selectedMaterialIds.value.push(materialId);
+  } else {
+    const index = selectedMaterialIds.value.indexOf(materialId);
+    if (index !== -1) {
+      selectedMaterialIds.value.splice(index, 1);
+    }
+  }
+  console.log('Selected Materials:', selectedMaterialIds.value);
+};
+// end swatch material functions 
+
 
 
 
@@ -611,10 +704,14 @@ function removeproduct_specs(index) {
 
 const handleSubmit = () => {
     delete form.value?.domain;
+    // material_swatches
     if (validateForm()) {
         if (store.getters.editData === null) {
-            handleAddStoreProduct({ ...form.value })
-        }
+            handleAddStoreProduct({ ...form.value,
+                material_swatches:[{material:selectedMaterialIds.value},
+                {swatches:selectedSwatchIds.value}
+                ] })
+        }   
         else {
             if (form.value.domain_id !== PreviousDomain.value) {
                 delete form.value.id;
@@ -648,13 +745,26 @@ const handleGetTags = async (payload) => {
         // getLoading.value = false;
     }
 };
+const handleGetSwatchesMaterial = async (payload) => {
+    //   getLoading.value = true;
+    try {
+        const res = await CommonServices.getSwatchesMaterialList(payload);
+        if (res.status === 200 && res.data.success) {
+            materialSwatchesList.value = res.data.data;
+        }
+    } catch (e) {
+        console.error('Error while getTags:', e);
+    } finally {
+        // getLoading.value = false;
+    }
+};
 
 const handleAddStoreProduct = async (payload) => {
     try {
         const res = await StoreServices.addStoreProduct(payload);
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
-            router.push('/store-product-form');
+            router.push('/store-product');
         }
     } catch (e) {
         console.error('Error while adding store Product:', e);
@@ -669,7 +779,7 @@ const handleEditStoreProduct = async (payload) => {
         const res = await StoreServices.editStoreProduct(payload);
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
-            router.push('/store-product-form');
+            router.push('/store-product');
         }
     } catch (e) {
         console.error('Error while editing Store product:', e);
@@ -691,6 +801,7 @@ onMounted(() => {
     handleGetTags({ domain_id: store.getters.getDomain.id })
     materialTree({ domain_id: store.getters.getDomain.id })
     handleStoreCategoryTree({ domain_id: store.getters.getDomain.id })
+    handleGetSwatchesMaterial({ domain_id:store.getters.getDomain.id })
 })
 
 

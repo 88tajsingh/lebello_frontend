@@ -108,7 +108,30 @@
 
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
-                     
+                        <div class="px-1 py-3">
+                            <div class="px-4">
+                                <div class="flex flex-col ">
+                                    <InputLabel for="status" value="Status" />
+                                    <Select :options="trueFalse" showfield="name" class="w-full"
+                                        valueField="value" label="Select " v-model="form.status" />
+                                </div>
+                                <div class="col-span-1 w-full">
+                                    <div class="flex flex-col ">
+                                        <InputLabel for="Visibility" value="Visibility" />
+                                        <Select :options="PublishOptions" showfield="label" class="w-full"
+                                            valueField="value" label="Select " v-model="form.visibility" />
+                                    </div>
+                                    <div v-if="form.visibility === 'Password protected'" class="mt-2">
+                                        <TextInput type="password" label="Password" class="block mr-2 w-full"
+                                            v-model="form.password" placeholder="Password" />
+                                    </div>
+                                </div>
+                                <div class="col-span-1 w-full">
+                                    <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
+                                        dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
@@ -116,6 +139,7 @@
                             </Button>
                         </div>
                     </Accordion>
+                
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Information">
                             <div class="px-6 h-auto ">
@@ -298,7 +322,7 @@ const iswithBg = ref(false)
 const contractType = ref([]);
 const contractLocation = ref([]);
 const loading = ref(false)
-const form = ref(store.getters.editData ||{ status: '', simple_fields:false,description:'' });
+const form = ref(store.getters.editData ||{ status: '', simple_fields:false,description:'',visibility:'' });
 const PreviousDomain = ref(null)
 
 // images variables 

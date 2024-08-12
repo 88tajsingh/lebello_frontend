@@ -162,10 +162,10 @@ const handleBulkActions = async () => {
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
-      const res = await PostServices.BulkDeletePostCategory({ id: ids });
+      const res = await PostServices.BulkDeletePost({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetPostCategory();
+        await handleGetPostCategory({domain_id:domain_id.value});
       }
       else if (res.status === 400){
         showToast(res.data.message, 'error');

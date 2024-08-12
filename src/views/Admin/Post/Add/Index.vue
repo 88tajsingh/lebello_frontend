@@ -1,5 +1,5 @@
 <template>
-    <PageHeader> Store Category </PageHeader>
+    <PageHeader> Post </PageHeader>
     <div class="flex content-between justify-between px-1 mb-2">
       <div class="flex">
         <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
@@ -10,13 +10,13 @@
       </div>    
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-        <Button @click="() => {router.push({ name: 'Store-category-form'}); store.dispatch('clearEditData'); }" class="px-2 py-2">Add Store Category</Button>  
+        <Button @click="() => {router.push({ name: 'Post-form'}); store.dispatch('clearEditData'); }" class="px-2 py-2">Add Post</Button>  
       </div>
     </div>
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="productTypeCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
+      :rows="rows" :columns="PostCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
@@ -28,7 +28,7 @@
         </template>
         <template #actions="data">
           <div class="flex gap-3">
-            <div @click="() =>{router.push({ name: 'Store-category-form'}); store.dispatch('setEdit', data.value);  }" id="edit svg">
+            <div @click="() =>{router.push({ name: 'Post-form'}); store.dispatch('setEdit', data.value);  }" id="edit svg">
               <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
               <EditSvg />
             </div>
@@ -46,7 +46,7 @@
     <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
       <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
     </PopupModal>
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteStoreCategory">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeletePost">
       Do you want to delete?
     </DeleteModal>
     <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Material'" @delete="handleBulkActions()">
@@ -58,11 +58,11 @@
   <script setup>
   import { ref, onMounted,watch } from 'vue';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
-  import StoreServices from '@/services/StoreServices';
+  import PostServices from '@/services/PostServices';
   import { useRouter } from 'vue-router';
   import { showToast  } from '@/helper/functions';
   import { getDomins } from '@/helper/Apis';
-  import { productTypeCols } from '@/json/data';
+  import { PostCols } from '@/json/data';
   import store from '@/store';
 
   
@@ -116,13 +116,13 @@
   const changePages =(page) => {
     console.log("page changed", page)
     const payload = {limit:page.pagesize,page:page.current_page}
-    handleGetStoreCategory(payload);
+    handleGetPost(payload);
   }
   // api calls
-  const handleGetStoreCategory = async (payload) => {
+  const handleGetPost = async (payload) => {
   getLoading.value = true;
   try {
-    const res = await StoreServices.getStoreCategory(payload);
+    const res = await PostServices.getPost(payload);
     if (res.status === 200 && res.data.success) {
       rows.value = res.data.data;
       totalRows.value = res.data.total_records;
@@ -134,10 +134,10 @@
   }
 };
 
-const handleDeleteStoreCategory = async () => {
+const handleDeletePost = async () => {
   loading.value = true;
   try {
-    const res = await StoreServices.deleteStoreCategory({ id: editData.value });
+    const res = await PostServices.deletePost({ id: editData.value });
     if (res.status === 200 && res.data.success) {
       rows.value = rows.value.filter(item => item.id !== editData.value)
       showToast(res.data.message, 'success');
@@ -162,10 +162,10 @@ const handleBulkActions = async () => {
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
-      const res = await StoreServices.BulkDeleteStoreCategory({ id: ids });
+      const res = await PostServices.BulkDeletePost({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetStoreCategory();
+        await handleGetPost({domain_id:domain_id.value});
       }
       else if (res.status === 400){
         showToast(res.data.message, 'error');
@@ -195,7 +195,7 @@ watch(
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      handleGetStoreCategory({limit:10,page:1,domain_id:domain_id.value});
+      handleGetPost({limit:10,page:1,domain_id:domain_id.value});
     }
 );
   </script>

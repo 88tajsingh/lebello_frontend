@@ -1,10 +1,12 @@
 const ApiConfig = {
   register: '/register',
   login: '/login',
+  refreshToken: '/refresh-token',
   logout: '/logout',
   updateProfile: '/update-profile',
   forgetPassword: '/reset/password/email',
   updatePassword: '/update-password',
+  getSwatchesMaterialList: '/get-swatches-material-list',
 
   // materials config
   getMaterial: '/material-list',
@@ -212,6 +214,13 @@ const ApiConfig = {
   editMaterialSlider: '/update-material-slider',
   deleteMaterialSlider: '/delete-material-slider',
   bulkDeleteMaterialSlider: '/bulk-delete-material-slider',
+
+  // Home SLider
+  getHomeSlider: '/get-home-slider',
+  addHomeSlider: '/add-home-slider',
+  editHomeSlider: '/update-home-slider',
+  deleteHomeSlider: '/delete-home-slider',
+  bulkDeleteHomeSlider: '/bulk-delete-home-slider',
 }
 
 export default ApiConfig

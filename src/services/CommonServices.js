@@ -76,6 +76,9 @@ class CommonServices {
   BulkDeleteTags(payload) {
     return instance.post(ApiConfig.bulkDeleteTags, payload)
   }
+  getSwatchesMaterialList(payload) {
+    return instance.get(ApiConfig.getSwatchesMaterialList, { params: { ...payload } })
+  }
 
 }
 export default new CommonServices()

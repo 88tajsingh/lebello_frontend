@@ -1,8 +1,10 @@
+import LoginServices from '@/services/LoginServices';
 import Vuex from 'vuex';
 
 export default new Vuex.Store({
   state: {
     token: localStorage.getItem('token') || null,
+    expiresAt: localStorage.getItem('expiresAt')|| null,
     user: safeJsonParse(localStorage.getItem('user')) || null,
     editData: '', 
     edit: safeJsonParse(localStorage.getItem('edit')) || null,
@@ -12,16 +14,22 @@ export default new Vuex.Store({
     token: (state) => state.token,
     user: (state) => state.user,
     getDomain: (state) => state.domain,
-    editData: (state) => state.edit
+    editData: (state) => state.edit,
+    isTokenExpired(state) {
+      return state.expiresAt;
+    }
   },
   mutations: {
-    setToken(state, token) {
+    setToken(state, { token, expiresAt }) {
       state.token = token;
+      state.expiresAt = expiresAt;
+      localStorage.setItem('expiresAt', expiresAt);
       localStorage.setItem('token', token);
     },
     clearToken(state) {
       state.token = null;
       localStorage.removeItem('token');
+      localStorage.removeItem('expiresAt');
     },
     setUser(state, user) {
       state.user = user;
@@ -48,9 +56,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    login({ commit }, { token, user }) {
-      commit('setToken', token);
-      commit('setUser', user);
+    login({ commit }, { token, user, expiresAt }) {
+      commit('setToken', { token, expiresAt }); 
+      commit('setUser', user); 
+    },
+    refreshToken({ commit }, { token, expiresAt }) {
+      commit('setToken', { token, expiresAt }); 
     },
     logout({ commit }) {
       commit('clearToken');
@@ -70,6 +81,9 @@ export default new Vuex.Store({
     },
     clearEditData({ commit }) {
       commit('clearEdit');
+    },
+    clearToken({commit}){
+      commit('clearToken');
     }
   },
   modules: {}

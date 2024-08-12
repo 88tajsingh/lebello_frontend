@@ -18,7 +18,7 @@
   import { defineProps, defineEmits } from 'vue'
   
   const props = defineProps({
-    modelValue: String,
+    modelValue: [String,Boolean],
     name: String,
     label: String,
     value: {

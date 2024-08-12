@@ -17,7 +17,7 @@ class PostService {
     return instance.delete(ApiConfig.deletePost, { params: { ...payload } })
   }
   BulkDeletePost(payload) {
-    return instance.post(ApiConfig.bulkDeletePostCategory, payload)
+    return instance.post(ApiConfig.bulkDeletePost, payload)
   }
 
   // Post Category

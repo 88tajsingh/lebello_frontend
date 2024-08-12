@@ -8,6 +8,9 @@ class LoginService {
   login(payload) {
     return instance.post(ApiConfig.login, payload)
   }
+  refreshToken(payload) {
+    return instance.post(ApiConfig.refreshToken, payload)
+  }
   logout(payload) {
     return instance.post(ApiConfig.logout , payload)
   }

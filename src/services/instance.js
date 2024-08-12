@@ -1,6 +1,8 @@
 import axios from 'axios';
 import store from '@/store';
 import router from '@/router';
+import { checkAndRefreshToken } from '@/helper/functions';
+import LoginServices from './LoginServices';
 
 const baseURL = import.meta.env.VITE_BASE_URL
 const instance = axios.create({
@@ -13,25 +15,27 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-  (config) => {
-    const token = store.getters.token || localStorage.getItem('token'); 
+  async (config) => {
+    let token = store.getters.token || localStorage.getItem('token');
+    // if( token )
+      // checkAndRefreshToken();
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`; 
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
-    
-    // console.log("request time", config)
+
     return config;
   },
   (error) => {
-    // console.log("request time", error)
-
     return Promise.reject(error);
   }
 );
 
 instance.interceptors.response.use(
-  (response) => {
+  async (response) => {
     // console.log("res time", response)
+    const token = store.getters.token;
+    // if( token )
+   
     return response;
   },
   (error) => {

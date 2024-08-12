@@ -365,6 +365,16 @@ export const materialCols = [
   { field: 'count', title: 'Count' },
   { field: 'actions', title: 'Actions' }
 ]
+
+export const bulkOptions = [
+  { text: 'Delete', value: 'delete' }
+]
+export const sliderCols = [
+  { field: 'featured_image_url', title: 'Image', slot: true },
+  { field: 'title', title: 'Title', filter: true },
+  { field: 'slug', title: 'Slug' },
+  { field: 'actions', title: 'Actions' }
+]
 export const productSeriesCols = [
   { field: 'image', title: 'Image', slot: true },
   { field: 'name', title: 'Name', filter: true },
@@ -407,6 +417,12 @@ export const productContractCols = [
 ]
 export const productTypeCols = [
   { field: 'name', title: 'Product Name', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'description', title: 'Description' },
+  { field: 'actions', title: 'Actions' }
+]
+export const PostCols = [
+  { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
   { field: 'actions', title: 'Actions' }

@@ -2,7 +2,9 @@
 import HeaderArea from "@/components/Admin-components/Header/HeaderArea.vue";
 import SidebarArea from "@/components/Admin-components/Sidebar/SidebarArea.vue";
 import { RouterView } from 'vue-router'
+import { checkAndRefreshToken } from "@/helper/functions";
 
+setInterval(checkAndRefreshToken, 50000)
 </script>
 <template>
     <div class="flex h-screen overflow-hidden bg-[#f0f0f1]">

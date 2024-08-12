@@ -453,7 +453,20 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props: true
         },
-        // ----------------------------------- Material Slider  -----------------------------------------
+        // ---------------------------------------------- home slider --------------------------------
+        {
+          path: '/home-slider',
+          name: 'home-slider',
+          component: () => import('../views/Admin/Home-Slider/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/home-slider-form',
+          name: 'home-slider-form',
+          component: () => import('../views/Admin/Home-Slider/AddEditContract.vue'),
+          meta: { requiresAuth: true }
+        },
+        // ---home-slider-------------------------------- Material Slider  -----------------------------------------
         {
           path: '/material-slider',
           name: 'material-slider',

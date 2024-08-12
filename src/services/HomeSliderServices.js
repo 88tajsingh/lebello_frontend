@@ -1,0 +1,26 @@
+import instance from './instance'
+import ApiConfig from '@/config/apiConfig'
+
+class HomeSliderServices {
+
+  getHomeSlider(payload) {
+    return instance.get(ApiConfig.getHomeSlider,{params: {...payload}})
+  }
+  addHomeSlider(payload) {
+    return instance.post(ApiConfig.addHomeSlider, payload)
+  }
+  editHomeSlider(payload) {
+    return instance.post(ApiConfig.editHomeSlider, payload)
+  }
+ 
+  deleteHomeSlider(payload) {
+    return instance.delete(ApiConfig.deleteHomeSlider, {params: {...payload}})
+  }
+
+  BulkDeleteHomeSlider(payload) {
+    return instance.post(ApiConfig.bulkDeleteHomeSlider, payload)
+  }
+  
+}
+
+export default new HomeSliderServices()
