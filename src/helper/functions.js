@@ -56,7 +56,7 @@ export const showToast = (message, type, tostPosition) => {
 // refresh token before expire token
 export async function checkAndRefreshToken() {
 
-  const REFRESH_BEFORE_EXPIRATION = 110;
+  const REFRESH_BEFORE_EXPIRATION = 150; // in seconds
   const expirationDateStr = store.getters["isTokenExpired"];
   const token = store.getters.token;
 
