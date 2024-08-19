@@ -83,110 +83,73 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { contractTypeTreeList } from '@/helper/Apis'
 import ContractServices from '@/services/ContractServices'
-
 import _ from 'lodash';
 import { showToast } from '@/helper/functions'
 import { onMounted, ref, watch, } from 'vue'
-import { defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+// Reactive state
 const store = useStore();
 const router = useRouter();
-const errors = ref({})
-const contractTypeTreeListData = ref([])
-const loading = ref(false)
-const PreviousDomain = ref(null)
-const form = ref(store.getters.editData ||{ parent_contract_type:0})
+const errors = ref({});
+const loading = ref(false);
+const form = ref(store.getters.editData || { parent_contract_type: 0 });
+const PreviousDomain = ref(null);
+const contractTypeTreeListData = ref([]);
 
+// Validate form data
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-
+    errors.value = {};
     if (!form.value.contract_name) {
-        errors.value.contract_name = 'Name is required'
-        isValid = false
+        errors.value.contract_name = 'Name is required';
+        return false;
     }
-    return isValid
-}
+    return true;
+};
 
+// Submit form data (add or edit contract type)
 const handleSubmit = async () => {
-    if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddContractType({ ...form.value })
-            }
-            else {         
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-                handleEditContractType({ ...refinedPayload })
-            }
-        }
-}
-
-
-// api for get patents child json parent contract listing 
-const contractTreeList = async (payload) => {
-    contractTypeTreeListData.value = await contractTypeTreeList(payload)
-}
-
-const handleAddContractType = async (payload) => {
-    loading.value = true
-    try {
-        loading.value = true;
-        await ContractServices.addContractType(payload)
-            .then(res => {
-                if (res.status === 200 && res.data.success === true) {
-                    showToast('Add contract sucessfully', 'success')
-                    router.push('/contract-type')
-                    loading.value = false;
-                    // handleGetMaterials();   
-                }
-                if (res && res.status === 400) {
-                    showToast(res.data.data.error, 'error')
-                    loading.value = false
-                }
-            })
-    } catch (e) {
-        console.error('Error while log in:', e);
-    }
-}
-// edit material function
-const handleEditContractType = async (payload) => {
+    if (!validateForm()) return;
     loading.value = true;
-
+    
+    // Prepare payload for API call
+    const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
+    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
+    
     try {
-        await ContractServices.editContractType(payload)
-            .then(res => {
-                if (res && res.status === 200) {
-                    showToast('Edit Contract Type sucessfully', 'success')
-                    loading.value = false
-                    router.push('/contract-type')
-                }
-                if (res && res.status === 400) {
-                    showToast('Somthing went wrong', 'error')
-                    loading.value = false
-                }
-            })
+        const service = store.getters.editData ? ContractServices.editContractType : ContractServices.addContractType;
+        const res = await service(payload);
+
+        if (res.status === 200 && res.data.success) {
+            showToast(store.getters.editData ? 'Edit Contract Type successfully' : 'Add contract successfully', 'success');
+            router.push('/contract-type');
+        } else if (res.status === 400) {
+            showToast(res.data.data.error || 'Something went wrong', 'error');
+        }
     } catch (e) {
-        console.error('Error while log in:', e);
+        console.error('Error:', e);
+        showToast('An error occurred', 'error');
+    } finally {
+        loading.value = false;
     }
-}
+};
 
-onMounted(()=>{
+// Fetch contract type tree list
+const fetchContractTreeList = async (domainId) => {
+    contractTypeTreeListData.value = await contractTypeTreeList({ domain_id: domainId });
+};
+
+// Set PreviousDomain and fetch initial data on component mount
+onMounted(() => {
     PreviousDomain.value = store.getters.getDomain.id;
-    contractTreeList({domain_id:store.getters.getDomain.id});
+    fetchContractTreeList(PreviousDomain.value);
+});
 
-})
-
-watch(
-    () => form.value.domain_id,
-    () => {
-        contractTreeList({domain_id:store.getters.getDomain.id});
-    }
-);
-
+// Watch for changes to domain_id in form and update contract type tree list
+watch(() => form.value.domain_id, (newValue) => {
+    fetchContractTreeList(newValue);
+});
 </script>
 
 <style>

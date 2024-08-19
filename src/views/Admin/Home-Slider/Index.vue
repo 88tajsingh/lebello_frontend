@@ -96,7 +96,7 @@ const handleGetHomeSlider = async (payload) => {
   }
 }
 
-// delte single record
+// delete single record
 const handleDeleteHomeSlider = async () => {
   try {
     const { status, data } = await HomeSliderServices.deleteHomeSlider({ id: material_id.value.id })

@@ -98,6 +98,7 @@ const ApiConfig = {
   getTags: '/get-tags',
   addTags: '/add-tag',
   editTags: '/update-tag',
+  globalUpdateTags: '/gobal-tag-update',
   deleteTags: '/delete-tag',
   bulkDeleteTags: '/bulk-delete-tag',
 

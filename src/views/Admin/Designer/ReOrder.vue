@@ -65,30 +65,6 @@ try {
     loading.value = false;
 }
 }
-
-const handleGetSwatches = async (payload) => {
-  list.value=[]
-  loading.value = true;
-  try {
-    const res = await SwatchesServices.getSwatches(payload);
-    if (res.status === 200 && res.data.success) {
-      if (res.data.data && res.data.data.length > 0) {
-        list.value = res.data.data;
-      } else {
-        showToast('No swatches found', 'info');
-      }
-    } else if (res.status === 400) {
-      showToast('Something went wrong', 'error');
-      materialTree();
-    }
-  } catch (error) {
-    console.error('Error fetching swatches:', error);
-    showToast('Error fetching swatches', 'error');
-  } finally {
-    loading.value = false;
-  }
-}
-
 const handleSortSwatches = async () => {
   const id = sortedData.value.map(item => item.id);
   loading.value = true;

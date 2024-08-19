@@ -106,97 +106,87 @@
 </template>
 
 <script setup>
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+import { onMounted, ref,watch } from 'vue'
+import { getStoreCategoryTree } from '@/helper/Apis'
+import StoreServices from '@/services/StoreServices'
+import { clearError,showToast } from '@/helper/functions'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import { getStoreCategoryTree } from '@/helper/Apis'
-import { clearError,showToast } from '@/helper/functions'
-import { onMounted, ref,watch } from 'vue'
-import { useRouter } from 'vue-router';
-import { useStore } from 'vuex';
-import StoreServices from '@/services/StoreServices'
 
-const store = useStore();
-const router = useRouter();
+// Store and Router
+const store = useStore()
+const router = useRouter()
 
-const storeCategoryTree = ref([])
-const loading = ref(false)
-const form = ref(store.getters.editData || { parent_store_catgory:0})
+// Reactive State
 const errors = ref({})
+const loading = ref(false)
+const form = ref({
+  ...store.getters.editData,
+  parent_store_catgory: store.getters.editData?.parent_store_catgory ?? 0
+})
 const PreviousDomain = ref(null)
+const storeCategoryTree = ref([])
 
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-
-    if (!form.value.name) {
-        errors.value.name = 'Name is required'
-        isValid = false
-    }
-    return isValid
+  errors.value = {}
+  if (!form.value.name) {
+    errors.value.name = 'Name is required'
+    return false
+  }
+  return true
 }
 
+// Submit Handler
 const handleSubmit = async () => {
   if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddStoreCategory({ ...form.value })
-            }
-            else {    
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-                handleEditStoreCategory({ ...refinedPayload })
-            }
-        }
-}
-// api for get patents child json parent  listing 
-const handleStoreCategoryTree = async (payload) => {
-  storeCategoryTree.value = await getStoreCategoryTree(payload)
-}
-
-const handleAddStoreCategory = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await StoreServices.addStoreCategory(payload);
-    if (res.status === 200 && res.data.success) {
-      showToast(res.data.message, 'success');
-      router.push('/store-category');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
+    loading.value = true
+    try {
+      if (form.value.domain_id !== PreviousDomain.value) {
+        delete form.value.id
+      }
+      const { deleted_at, created_at, updated_at, ...payload } = form.value
+      const action = store.getters.editData ? StoreServices.editStoreCategory : StoreServices.addStoreCategory
+      const { status, data } = await action(payload)
+      if (status === 200 && data.success) {
+        showToast(data.message, 'success')
+        store.dispatch('clearEditData')
+        router.push('/store-category')
+      } else if (status === 400) {
+        showToast(data.message, 'error')
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error')
+      console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} store category:`, error)
+    } finally {
+      loading.value = false
     }
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error('Error adding location:', error);
-  } finally {
-    loading.value = false;
   }
 }
 
-const handleEditStoreCategory = async (payload) => {
-  loading.value = true;
+// Fetch Store Category Tree
+const handleStoreCategoryTree = async (domainId) => {
   try {
-    const res = await StoreServices.editStoreCategory(payload);
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/store-category');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
+    storeCategoryTree.value = await getStoreCategoryTree({ domain_id: domainId })
   } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
+    console.error('Error fetching store category tree:', error)
   }
 }
 
-onMounted(()=>{
+// Lifecycle Hooks
+onMounted(() => {
   PreviousDomain.value = store.getters.getDomain.id
+  handleStoreCategoryTree(store.getters.getDomain.id)
 })
 
+// Watchers
 watch(
-    () => form.value.domain_id,
-    () => {
-        handleStoreCategoryTree({domain_id:form.value.domain_id});
-         }
-);
+  () => form.value.domain_id,
+  (newDomainId) => {
+    handleStoreCategoryTree(newDomainId)
+    form.value.parent_store_catgory = 0
+  }
+)
 </script>

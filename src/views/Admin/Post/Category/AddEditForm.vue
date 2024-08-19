@@ -59,90 +59,78 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import PostServices from '@/services/PostServices'
 
+// Store and Router
 const store = useStore();
 const router = useRouter();
 
-const postCategory = ref([])
-const loading = ref(false)
-const form = ref({...store.getters.editData,parent_post_category:store.getters.editData?.parent_post_category ? store.getters.editData?.parent_post_category :0} || { parent_post_category:0})
-const errors = ref({})
-const PreviousDomain = ref(null)
+// Reactive State
+const errors = ref({});
+const loading = ref(false);
+const form = ref({
+  ...store.getters.editData,
+  parent_post_category: store.getters.editData?.parent_post_category ?? 0
+});
+const PreviousDomain = ref(null);
+const postCategory = ref([]);
 
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+  errors.value = {};
+  if (!form.value.name) {
+    errors.value.name = 'Name is required';
+    return false;
+  }
+  return true;
+};
 
-    if (!form.value.name) {
-        errors.value.name = 'Name is required'
-        isValid = false
-    }
-    return isValid
-}
-
+// Submit Handler
 const handleSubmit = async () => {
   if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddPostCategory({ ...form.value })
-            }
-            else {    
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-                handleEditPostCategory({ ...refinedPayload })
-            }
-        }
-}
-// api for get patents child json parent  listing 
-const handlePostCategoryTree = async (payload) => {
-  postCategory.value = await getPostCategoryTree(payload)
-}
+    loading.value = true;
+    try {
+      if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
+      const { deleted_at, created_at, updated_at, ...payload } = form.value;
 
-const handleAddPostCategory = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await PostServices.addPostCategory(payload);
-    if (res.status === 200 && res.data.success) {
-      showToast(res.data.message, 'success');
-      router.push('/post-category');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
+      const action = store.getters.editData ? PostServices.editPostCategory : PostServices.addPostCategory;
+      if (form.value.domain_id !== PreviousDomain.value) {
+        delete form.value.id;
+      }
+      const { status, data } = await action(payload);
+      if (status === 200 && data.success) {
+        showToast(data.message, 'success');
+        router.push('/post-category');
+      } else if (status === 400) {
+        showToast(data.message, 'error');
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error');
+      console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} post category:`, error);
+    } finally {
+      loading.value = false;
     }
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error('Error adding location:', error);
-  } finally {
-    loading.value = false;
   }
-}
+};
 
-const handleEditPostCategory = async (payload) => {
-  loading.value = true;
+// Fetch Post Category Tree
+const fetchPostCategoryTree = async (domainId) => {
   try {
-    const res = await PostServices.editPostCategory(payload);
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/post-category');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
+    postCategory.value = await getPostCategoryTree({ domain_id: domainId });
   } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
+    console.error('Error fetching post category tree:', error);
   }
-}
+};
 
-onMounted(()=>{
-  PreviousDomain.value = store.getters.getDomain.id
-  handlePostCategoryTree({domain_id:store.getters.getDomain.id})
-  
-})
+// Lifecycle Hooks
+onMounted(() => {
+  PreviousDomain.value = store.getters.getDomain.id;
+  fetchPostCategoryTree(store.getters.getDomain.id);
+});
 
+// Watchers
 watch(
-    () => form.value.domain_id,
-    () => {
-        handlePostCategoryTree({domain_id:form.value.domain_id});
-         }
+  () => form.value.domain_id,
+  (newDomainId) => {
+    fetchPostCategoryTree(newDomainId);
+  }
 );
 </script>

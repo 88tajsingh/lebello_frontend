@@ -68,7 +68,10 @@ class CommonServices {
     return instance.post(ApiConfig.addTags, payload)
   }
   editTags(payload) {
-    return instance.put(ApiConfig.editTags, payload)
+    return instance.post(ApiConfig.editTags, payload)
+  }
+  globalUpdateTags(payload) {
+    return instance.post(ApiConfig.globalUpdateTags, payload)
   }
   deleteTags(payload) {
     return instance.delete(ApiConfig.deleteTags, { params: { ...payload } })

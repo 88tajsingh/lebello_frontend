@@ -39,17 +39,10 @@
         </template>
       </vue3-datatable>
     </div>
-  
-    <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
-      <AddEditForm @handleApi="handleAddPages" />
-    </PopupModal>
-    <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
-      <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
-    </PopupModal>
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteContractLocation">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Contract Location'" @delete="handleDeleteContractLocation">
       Do you want to delete?
     </DeleteModal>
-    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Material'" @delete="handleBulkActions()">
+    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete multiple Contract Location'" @delete="handleBulkActions()">
     Do you want to delete ?
   </DeleteModal>
     <!-- <Loader :isLoading="loading" :fullPage="true" /> -->

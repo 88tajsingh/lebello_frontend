@@ -64,13 +64,12 @@
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
+                                    @click="() => imageData.featured_image.IsOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
                     </div>
@@ -79,19 +78,18 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
-            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.IsOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
     </popupModal>
 
 
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
 import { ref, onMounted, watch } from "vue";
-import { handleFiles } from '@/helper/functions';
+import { handleFileUpdate } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import ProjectServices from '@/services/ProjectServices';
 import Accordion from "@/components/Admin-components/Accordion.vue";
@@ -101,121 +99,88 @@ import { getProjectCategoryTree, } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import { PublishOptions, statusData } from '@/json/data';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
+// Store and Router
 const store = useStore();
+const router = useRouter();
 
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
-const Projects = ref([]);
+// Reactive State
+const errors = ref({});
+const loading = ref(false);
+const form = ref({ 
+    ...store.getters.editData, 
+    status: '', 
+    project_categories: [] 
+});
+const PreviousDomain = ref(null);
 const projectCategories = ref([]);
-const loading = ref(false)
-const form = ref(store.getters.editData || { status: '' });
-const PreviousDomain = ref(null)
-
-// images variables 
-const featureData = ref({
-    isOpen: false,
-    mediaName: 'feature Image',
-    images: []
+const imageData = ref({
+    featured_image: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
 })
 
-
-// images functions 
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featureData.value.isOpen = false
-    featureData.value.images = data;
-    featureData.value.mediaName = object.mediaName;
-    form.value.featured_image = object.media_ids[0]
-}
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
 
 
-const handleSubmit = () => {
+// Form Validation
+const validateForm = () => {
+    errors.value = {};
+    if (!form.value.title) {
+        errors.value.title = 'Title is required';
+        return false;
+    }
+    return true;
+};
+
+// Submit Handler
+const handleSubmit = async () => {
     delete form.value?.domain;
     if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddProject({ ...form.value })
+        loading.value = true;
+        try {
+            const action = store.getters.editData ? ProjectServices.editProjects : ProjectServices.addProjects;
+            if (form.value.domain_id !== PreviousDomain.value) {
+                delete form.value.id;
             }
-            else {
-                
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-                handleEditProject({ ...refinedPayload })
+            const { deleted_at, created_at,featured_image_url, updated_at, ...payload } = form.value;
+            const { status, data } = await action(payload);
+            if (status === 200 && data.success) {
+                showToast(data.message, 'success');
+                router.push('/projects');
+            } else if (status === 400) {
+                showToast(data.message, 'error');
             }
+        } catch (error) {
+            showToast('Something went wrong', 'error');
+            console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} project:`, error);
+        } finally {
+            loading.value = false;
         }
-}
-
-const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-    if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
     }
-    return isValid
-}
+};
 
-const handleAddProject = async (payload) => {
+// Fetch Project Category Tree
+const fetchProjectCategoryTree = async (domainId) => {
     try {
-        const res = await ProjectServices.addProjects(payload);
-        console.log(res);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/projects');
-        }
-    } catch (e) {
-        console.error('Error while adding Project:', e);
-    } finally {
-        loading.value = false;
+        projectCategories.value = await getProjectCategoryTree({ domain_id: domainId });
+    } catch (error) {
+        console.error('Error fetching project category tree:', error);
     }
-}
+};
 
-const handleEditProject = async (payload) => {
-    loading.value = true;
-    try {
-        const res = await ProjectServices.editProjects(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/projects');
-        }
-    } catch (e) {
-        console.error('Error while editing Project:', e);
-    } finally {
-        loading.value = false;
-    }
-}
-
-// projectCategoryTree sorting 
-const projectCategoryTree = async (payload) => {
-    projectCategories.value = await getProjectCategoryTree(payload)
-    loading.value = false;
-}
-// projectCategoryTree sorting 
-const projectTree = async (payload) => {
-    Projects.value = await getProjectCategoryTree(payload)
-    loading.value = false;
-}
-
+// Lifecycle Hooks
 onMounted(() => {
     PreviousDomain.value = store.getters.getDomain.id;
-    projectCategoryTree({ domain_id: store.getters.getDomain.id });
-    projectTree({ domain_id: store.getters.getDomain.id });
-})
+    fetchProjectCategoryTree(PreviousDomain.value);
+    imageData.value.featured_image.images= [{file_url:store.getters.editData.featured_image_url}]
+});
 
-
-
+// Watchers
+watch(
+    () => form.value.domain_id,
+    (newDomainId) => {
+        fetchProjectCategoryTree(newDomainId);
+        form.value.project_categories = [];
+    }
+);
 </script>
-<style scoped>
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-</style>

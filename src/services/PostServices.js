@@ -11,7 +11,7 @@ class PostService {
     return instance.post(ApiConfig.addPost, payload)
   }
   editPost(payload) {
-    return instance.put(ApiConfig.editPost, payload)
+    return instance.post(ApiConfig.editPost, payload)
   }
   deletePost(payload) {
     return instance.delete(ApiConfig.deletePost, { params: { ...payload } })

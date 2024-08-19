@@ -5,9 +5,9 @@
         <div class="flex">
             <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
                 label="Bulk Options" v-model="bulkActionSelected" />
-            <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+            <Button class="px-2 py-2 m-auto" @click="()=>deleteMulModalIsOpen=true">Apply</Button>
             <div class="w-52">
-                <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain"
+                <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="Select Domain"
                     v-model="domain_id" />
             </div>
         </div>
@@ -34,7 +34,7 @@
                         id="edit svg">
                         <EditSvg />
                     </div>
-                    <div id="delete svg" @click="() => { company_id = data.value; openDeleteModal(); }">
+                    <div id="delete svg" @click="() => { company_id = data.value; deleteModalIsOpen = true; }">
                         <DeleteSvg />
                     </div>
                 </div>
@@ -43,7 +43,11 @@
         </vue3-datatable>
     </div>
 
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteCompany">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Company'" @delete="handleDeleteCompany">
+        Do you want to delete ?
+    </DeleteModal>
+
+    <DeleteModal v-model:isOpen="deleteMulModalIsOpen" :modalTitle="'Delete Multiple Company'" @delete="handleBulkActions">
         Do you want to delete ?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -64,77 +68,64 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import CompanyServices from '@/services/CompanyServices'
 
+// Store and Router
 const store = useStore();
 const router = useRouter();
-const bulkActionSelected = ref(null)
-const search = ref('')
-const bulkOption = [{ text: 'Delete', value: 'delete' }]
-const company_id = ref('')
-const dataTableLoding = ref(false)
-const loading = ref(false)
-const data = ref([])
-const datatable = ref('')
-const totalRows = ref('')
-const getDominsList = ref([])
-const domain_id = ref('')
+
+// Reactive state
+const bulkActionSelected = ref(null);
+const search = ref('');
+const bulkOption = [{ text: 'Delete', value: 'delete' }];
+const company_id = ref('');
+const dataTableLoading = ref(false);
+const loading = ref(false);
+const data = ref([]);
+const datatable = ref('');
+const totalRows = ref('');
+const getDomainsList = ref([]);
+const domain_id = ref('');
 const deleteModalIsOpen = ref(false);
-const openDeleteModal = () => {
-    deleteModalIsOpen.value = true;
-};
-const changePage = (page) => {
-    const payload = { limit: page.pagesize, page: page.current_page }
-    handleGetCompany(payload);
-}
+const deleteMulModalIsOpen = ref(false);
 
-// get materials function
+// Open Delete Modals
+const openDeleteModal = () => deleteModalIsOpen.value = true;
+
+// Fetch Companies Data
 const handleGetCompany = async (payload) => {
-
-    dataTableLoding.value = true;
+    dataTableLoading.value = true;
     try {
-        await CompanyServices.getCompany(payload)
-            .then(res => {
-                if (res.status === 200 && res.data.success === true) {
-                    if (res.data.data && res.data.data.length > 0) {
-                        data.value = res.data.data
-                        totalRows.value = res.data.total_records
-                    }
-                    else {
-                        data.value = res.data.data
-                        totalRows.value = 0;
-                    }
-                    dataTableLoding.value = false;
-                }
-            }).catch((res) => {
-                console.log("error", res)
-            });
+        const res = await CompanyServices.getCompany(payload);
+        if (res.status === 200 && res.data.success) {
+            data.value = res.data.data || [];
+            totalRows.value = res.data.total_records || 0;
+        }
     } catch (e) {
-        console.error('Error while log in:', e);
-        dataTableLoding.value = false;
+        console.error('Error fetching company data:', e);
     } finally {
-        dataTableLoding.value = false;
+        dataTableLoading.value = false;
     }
-}
+};
 
-// delete company
+// Delete Company
 const handleDeleteCompany = async () => {
     loading.value = true;
     try {
-        const res = await CompanyServices.deleteCompany({ id: company_id.value.id });
+        const res = await CompanyServices.deleteCompany({ id: company_id.value });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
-            data.value = data.value.filter(item => item.id !== company_id.value.id)
+            data.value = data.value.filter(item => item.id !== company_id.value);
             deleteModalIsOpen.value = false;
         } else if (res.status === 400) {
             showToast(res.message, 'error');
         }
     } catch (e) {
-        console.error('Error while deleting Comapnies:', e);
+        console.error('Error while deleting company:', e);
     } finally {
         loading.value = false;
     }
 };
 
-// Bulk Delete 
+// Bulk Delete Companies
 const handleBulkActions = async () => {
     const selected = datatable.value.getSelectedRows();
     const ids = selected.map(item => item.id);
@@ -147,31 +138,35 @@ const handleBulkActions = async () => {
                 await handleGetCompany({ limit: 10, page: 1, domain_id: domain_id.value });
             }
         } catch (e) {
-            console.error('Error while performing bulk delete:', e);
+            console.error('Error performing bulk delete:', e);
         } finally {
             loading.value = false;
         }
     }
 };
 
-const getDomainList = async (payload) => {
-    getDominsList.value = await getDomins(payload)
-    const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-    domain_id.value = defaultDomain.id
-    store.dispatch('setDomain', defaultDomain);
-}
+// Fetch Domains List
+const getDomainList = async () => {
+    try {
+        getDomainsList.value = await getDomins();
+        const defaultDomain = getDomainsList.value.find(site => site.default === 1);
+        domain_id.value = defaultDomain.id;
+        store.dispatch('setDomain', defaultDomain);
+    } catch (e) {
+        console.error('Error fetching domain list:', e);
+    }
+};
 
-onMounted(() => {
-    getDomainList();
-}
-);
+// Initialize and Watchers
+onMounted(() => getDomainList());
 
 watch(
     () => domain_id.value,
     () => {
-        const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
-        store.dispatch('setDomain', defaultDomain[0]);
+        const selectedDomain = getDomainsList.value.find(site => site.id == domain_id.value);
+        store.dispatch('setDomain', selectedDomain);
         handleGetCompany({ limit: 10, page: 1, domain_id: domain_id.value });
     }
 );
+
 </script>

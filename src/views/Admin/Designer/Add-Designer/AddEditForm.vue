@@ -16,15 +16,13 @@
                             v-model="form.product_url" />
 
                             <div class="mr-2 mt-5 h-auto ">
-                                <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => productData.isOpen = true"> {{
-                                        productData.mediaName }}</div>
+                                    @click="() => imageData.product_image.isOpen = true"> {{
+                                        imageData.product_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in productData.images" :key="file" :src="$filePath(file)"
+                                    <img v-for="file in imageData.product_image.images" :key="file" :src="$filePath(file)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                     </div>
                     </Accordion>
@@ -103,10 +101,10 @@
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
+                                    @click="() => imageData.featured_image.isOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file)"
+                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
@@ -118,23 +116,33 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
-            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
-    </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="productData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="productData.images" :singleFile="true"
-            :closeModal="() => { productData.isOpen = false }" :selectedFiles="handlePropductFiles" />
-    </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.isOpen">
+    <GetLibrary
+      btnName="Select File"
+      :getFlag="true"
+      :selected="imageData.featured_image.images"
+      :singleFile="false" 
+      :closeModal="() => { imageData.featured_image.isOpen = false; }"
+      :selectedFiles="handleFeatureFiles"
+    />
+  </popupModal>
 
-
+  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.product_image.isOpen">
+    <GetLibrary
+      btnName="Select File"
+      :getFlag="true"
+      :selected="imageData.product_image.images"
+      :singleFile="false" 
+      :closeModal="() => { imageData.product_image.isOpen = false; }"
+      :selectedFiles="handleProductFiles"
+    />
+  </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
 import { ref, onMounted, watch } from "vue";
-import { handleFiles } from '@/helper/functions';
+import { handleFileUpdate } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
@@ -145,196 +153,118 @@ import DatePicker from '@/components/Admin-components/form-components/DatePicker
 import DesignerServices from '@/services/DesignerServices';
 import { PublishOptions, statusData } from '@/json/data';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
 
+// store and router
+const router = useRouter();
 const store = useStore();
 
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
+// Reactive state
+const errors = ref({});
+const loading = ref(false);
+const form = ref(store.getters.editData||{
+    status: '',
+    visibility: '',
+    tags: [],
+    domain_id: store.getters.getDomain?.id || null,
+    featured_image: '',
+    product_image: '',
+    product_types: [],
+    product_category_types: []
+});
+const PreviousDomain = ref(null);
 const ProductCategory = ref([]);
 const TagsData = ref([]);
 const productType = ref([]);
-const loading = ref(false)
-const form = ref({ status: '',visibility:'',tags:[] });
-const PreviousDomain = ref(null)
-const masterId = ref(null)
 
-// images variables 
-const featureData = ref({
-    isOpen: false,
-    mediaName: 'feature Image',
-    images: []
-})
-
-const productData = ref({
-    isOpen: false,
-    mediaName: 'Upload Product Image ',
-    images: []
-})
-
-
-// images functions 
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featureData.value.isOpen = false
-    featureData.value.images = data;
-    featureData.value.mediaName = object.mediaName;         
-    form.value.featured_image = object.media_ids[0]
-}
-const handlePropductFiles = (data) => {
-    const object = handleFiles(data);
-    productData.value.isOpen = false
-    productData.value.images = data;
-    productData.value.mediaName = object.mediaName;
-    form.value.product_image = object.media_ids[0]
-}
-
-
-const handleSubmit = () => {
-    delete form.value?.domain;
-    if (validateForm()) {
-        if (props.id !== null)
-            handleEditDesigner({ ...form.value })
-        else
-            handleAddDesigner({ ...form.value })
-    }
-}
-
-const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-    if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
-    }
-    return isValid
-}
-const props = defineProps({
-    id: {
-        type: String,
-        default: null,
-    }
+// Image data for various categories
+const imageData = ref({
+    featured_image : { isOpen: false, mediaName: 'Feature Image', images: [] },
+    product_image : { isOpen: false, mediaName: 'Upload Product Image', images: [] }
 });
 
-// api calls 
-const handleGetDesigner = async (payload) => {
-    try {
-        const res = await DesignerServices.getDesigners(payload);
-        if (res.status === 200 && res.data.success) {
-            if (res.data.data?.length > 0) {
-                form.value = res.data.data[0]
-                PreviousDomain.value = form.value.domain_id;
-                masterId.value = form.value.master_project_id;  
-                featureData.value.images = [form.value.featured_image_url]
-                featureData.value.mediaName = form.value.featured_image_url
-                productData.value.images = [form.value.product_image_url]
-                productData.value.mediaName = form.value.product_image_url
-            }
-        }
-    } catch (e) {
-        console.error('Error while getting Project:', e);
-    }
+// Handlers for file updates
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleProductFiles = (data) => {handleFileUpdate('product_image', data, false, imageData, form);
+console.log(imageData.value.product_image.images)
 }
 
-const handleGetTags = async (payload) => {
-//   getLoading.value = true;
-  try {
-    const res = await CommonServices.getTags(payload);
-    if (res.status === 200 && res.data.success) {
-      TagsData.value = res.data.data;
+
+// Validate form fields
+const validateForm = () => {
+    errors.value = {};
+    if (!form.value.title) {
+        errors.value.title = 'Title is required';
+        return false;
     }
-  } catch (e) {
-    console.error('Error while getTags:', e);
-  } finally {
-    // getLoading.value = false;
-  }
+    return true;
 };
 
-const handleAddDesigner = async (payload) => {
-    try {
-        const res = await DesignerServices.addDesigners(payload);
-        console.log(res);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/designer');
-        }
-    } catch (e) {
-        console.error('Error while adding Project:', e);
-    } finally {
-        loading.value = false;
-    }
-}
+// Handle form submission (add or edit designer)
+const handleSubmit = async () => {
+    if (!validateForm()) return;
 
-const handleEditDesigner = async () => {
     loading.value = true;
-    if(form.value.tags == null) {
-        form.value = {...form.value , tags:[]}
-    }
-    if(form.value.product_types == null) {
-        form.value = {...form.value , product_types:[]}
-    }
-    if(form.value.product_category_types == null) {
-        form.value = {...form.value , product_category_types:[]}
-    }
-        delete form.value.featured_image_url;
-        delete form.value.product_image_url;
-    if (form.value.domain_id !== PreviousDomain.value) {
-        delete form.value.id;
-    } else {
-        // clone existing  in other domain 
-        form.value = { ...form.value, master_project_id: masterId.value };
-    }
+    const { featured_image_url, product_image_url, ...payload } = form.value;
+    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
+
     try {
-        const res = await DesignerServices.editDesigners({ ...form.value });
+        const service = store.getters.editData ? DesignerServices.editDesigners : 
+        DesignerServices.addDesigners;
+        const res = await service(payload);
+
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/designer');
         }
     } catch (e) {
-        console.error('Error while editing Project:', e);
+        console.error('Error:', e);
     } finally {
         loading.value = false;
     }
-}
+};
 
-// productCategoryTree sorting 
-const productCategoryTree = async (payload) => {
-    productType.value = await getProductTypeTree(payload)
-    loading.value = false;
-}
-// productCategoryTree sorting 
-const productTree = async (payload) => {
-    ProductCategory.value = await getProductCategoryTypeTree(payload)
-    loading.value = false;
-}
+// Fetch product and category data
+const fetchProductData = async () => {
+    ProductCategory.value = await getProductCategoryTypeTree({ domain_id: store.getters.getDomain?.id });
+    productType.value = await getProductTypeTree({ domain_id: store.getters.getDomain?.id });
+};
 
-// onMounted(() => {
-//     if (props.id !== undefined && props.id !== null && props.id !== '') {
-//         handleGetDesigner({ id: props.id });
-//     }
-//     productCategoryTree();
-//     productTree();
-// }
-// );
+// Fetch tags data
+const fetchTagsData = async () => {
+    try {
+        const res = await CommonServices.getTags({ domain_id: store.getters.getDomain?.id });
+        if (res.status === 200 && res.data.success) {
+            TagsData.value = res.data.data;
+        }
+    } catch (e) {
+        console.error('Error while getting tags:', e);
+    }
+};
+
+// Initialize component state
 onMounted(() => {
-    if (props.id !== undefined && props.id !== null && props.id !== ' ') {
-        console.log("store.getters.getDomain.id", store.getters.getDomain.id)
-        handleGetDesigner({ id: props.id, domain_id: store.getters.getDomain.id });
-        form.value.domain_id = store.getters.getDomain.id
+    PreviousDomain.value = store.getters.getDomain?.id;
+
+    if (store.getters.editData) {
+        imageData.value.featured_image.images = [store?.getters?.editData?.featured_image_url]|| [];
+        imageData.value.featured_image.mediaName = store?.getters.editData?.featured_image_url || 'Feature Image';
+        imageData.value.product_image.images = [store.getters.editData?.product_image_url] || [];
+        imageData.value.product_image.mediaName = store.getters.editData?.product_image_url || 'Product Image';
     }
-})
+    
+    fetchProductData();
+    fetchTagsData();
+});
 
-watch(
-    () => form.value.domain_id,
-    () => {
-        handleGetTags({domain_id: store.getters.getDomain.id})
-        productCategoryTree({ domain_id: store.getters.getDomain.id });
-        productTree({ domain_id: store.getters.getDomain.id });
-    }
-);
-
-
+// Watch for domain_id changes to update product and category data
+watch(() => form.value.domain_id, () => {
+    fetchTagsData();
+    fetchProductData();
+});
 </script>
+
 <style scoped>
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

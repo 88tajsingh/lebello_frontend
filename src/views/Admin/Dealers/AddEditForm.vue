@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Dealer` : `Add New Dealer`">
-        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
+        <DomainComponent  @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -31,7 +31,7 @@
                                 <div class="col-span-2 w-full border border-gray rounded-lg">
                                     <div class="mt-2 ml-3  ">
                                         <div class=" flex flex-wrap">
-                                            <div class="relative p-1" v-for="(slide, index) in day_banner_images.images"
+                                            <div class="relative p-1" v-for="(slide, index) in imageData.day_banner_images.images"
                                                 :key="`slide-${index}`">
                                                 <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
                                                     :src="$filePath(slide.file_url)">
@@ -46,7 +46,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button @click="() => day_banner_images.isOpen = true" type="button"
+                                        <button @click="() => imageData.day_banner_images.isOpen = true" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
                                             Gallery
                                         </button>
@@ -64,7 +64,7 @@
                                     <div class="mt-2 ml-3  ">
                                         <div class=" flex flex-wrap">
                                             <div class="relative p-1"
-                                                v-for="(slide, index) in night_banner_images.images"
+                                                v-for="(slide, index) in imageData.night_banner_images.images"
                                                 :key="`slide-${index}`">
                                                 <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
                                                     :src="$filePath(slide.file_url)">
@@ -79,7 +79,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button @click="() => night_banner_images.isOpen = true" type="button"
+                                        <button @click="() => imageData.night_banner_images.isOpen = true" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
                                             Gallery
                                         </button>
@@ -260,12 +260,12 @@
                                     <div class="  h-auto ">
                                         <InputLabel for="company_logo" value="Company Logo" />
                                         <div class="py-2 rounded-lg px-2 border border-stroke"
-                                            @click="() => company_logo.isOpen = true"> {{
-                                                company_logo.mediaName }}</div>
+                                            @click="() => imageData.company_logo.isOpen = true"> {{
+                                                imageData.company_logo.mediaName }}</div>
                                         <div class=" mt-3 flex overflow-x-auto">
-                                            <img v-for="file in company_logo.images" :key="file"
+                                            <img v-for="file in imageData.company_logo.images" :key="file"
                                                 :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                                :alt="file.alternative_text || 'image'">
+                                                :alt="file?.alternative_text || 'image'">
                                         </div>
                                         <InputError class="mt-2" :message="errors?.featured_image" />
                                     </div>
@@ -274,12 +274,12 @@
                                     <div class="  h-auto ">
                                         <InputLabel for="thumb_image" value="Dealer thumb image" />
                                         <div class="py-2 rounded-lg px-2 border border-stroke"
-                                            @click="() => thumb_image.isOpen = true"> {{
-                                                thumb_image.mediaName }}</div>
+                                            @click="() => imageData.thumb_image.isOpen = true"> {{
+                                                imageData.thumb_image.mediaName }}</div>
                                         <div class=" mt-3 flex overflow-x-auto">
-                                            <img v-for="file in thumb_image.images" :key="file"
+                                            <img v-for="file in imageData.thumb_image.images" :key="file"
                                                 :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                                :alt="file.alternative_text || 'image'">
+                                                :alt="file?.alternative_text || 'image'">
                                         </div>
                                         <InputError class="mt-2" :message="errors?.featured_image" />
                                     </div>
@@ -292,35 +292,41 @@
             </div>
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="company_logo.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="company_logo.images" :singleFile="true"
-            :closeModal="() => { company_logo.isOpen = false }" :selectedFiles="handleFeatureFiles" />
-    </popupModal>
-
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="thumb_image.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="thumb_image.images" :singleFile="true"
-            :closeModal="() => { thumb_image.isOpen = false }" :selectedFiles="handlethumbnilFiles" />
-    </popupModal>
-
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="day_banner_images.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="day_banner_images.images" :singleFile="false"
-            :closeModal="() => { day_banner_images.isOpen = false }" :selectedFiles="handleDayBannerFiles" />
+        v-model:isOpen="imageData.company_logo.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.company_logo.images" :singleFile="true"
+            :closeModal="() => closeModal('company_logo')" :selectedFiles="handleCompanyLogoFiles" />
     </popupModal>
 
+    <!-- Thumb Image Modal -->
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="night_banner_images.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="night_banner_images.images" :singleFile="false"
-            :closeModal="() => { night_banner_images.isOpen = false }" :selectedFiles="handleNightBannerFiles" />
+        v-model:isOpen="imageData.thumb_image.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.thumb_image.images" :singleFile="true"
+            :closeModal="() => closeModal('thumb_image')" :selectedFiles="handleThumbImageFiles" />
+    </popupModal>
+
+    <!-- Day Banner Images Modal -->
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.day_banner_images.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.day_banner_images.images"
+            :singleFile="false" :closeModal="() => closeModal('day_banner_images')"
+            :selectedFiles="handleDayBannerFiles" />
+    </popupModal>
+
+    <!-- Night Banner Images Modal -->
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.night_banner_images.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.night_banner_images.images"
+            :singleFile="false" :closeModal="() => closeModal('night_banner_images')"
+            :selectedFiles="handleNightBannerFiles" />
     </popupModal>
 
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
 import { ref, onMounted, watch } from "vue";
-import { handleFiles } from '@/helper/functions';
+import { handleFileUpdate } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import DealersServices from '@/services/DealersServices';
@@ -330,142 +336,70 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import { PublishOptions, statusData, dealerTerritory, TemplateVersion, trueFalse } from '@/json/data';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+// store and router
 const store = useStore();
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
-const loading = ref(false)
-const form = ref(store.getters.editData || { status: '', visibility: '', dealer_page_template: 'First Version (OLD)' });
-const PreviousDomain = ref(null)
+const router = useRouter();
 
-// images variables 
-const company_logo = ref({
-    isOpen: false,
-    mediaName: 'Company Logo',
-    images: []
-})
-const thumb_image = ref({
-    isOpen: false,
-    mediaName: 'Dealer thumb image',
-    images: []
-})
+// reactive state
+const errors = ref({});
+const loading = ref(false);
+const form = ref(store.getters.editData || {
+    status: '',
+    visibility: '',
+    dealer_page_template: 'First Version (OLD)'
+});
+const PreviousDomain = ref(null);
 
-const day_banner_images = ref({
-    isOpen: false,
-    mediaName: 'feature Image',
-    images: []
-})
-const night_banner_images = ref({
-    isOpen: false,
-    mediaName: 'feature Image',
-    images: []
-})
-// images functions 
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    company_logo.value.isOpen = false
-    company_logo.value.images = data;
-    company_logo.value.mediaName = object.mediaName;
-    form.value.company_logo = object.media_ids[0]
-}
+// Image Data Object
+const imageData = ref({
+    company_logo: { isOpen: false, mediaName: 'Company Logo', images: [] },
+    thumb_image: { isOpen: false, mediaName: 'Dealer Thumb Image', images: [] },
+    day_banner_images: { isOpen: false, mediaName: 'Day Banner Image', images: [] },
+    night_banner_images: { isOpen: false, mediaName: 'Night Banner Image', images: [] }
+});
 
-const handlethumbnilFiles = (data) => {
-    console.log(data)
-    const object = handleFiles(data);
-    thumb_image.value.isOpen = false
-    thumb_image.value.images = data;
-    thumb_image.value.mediaName = object.mediaName;
-    form.value.thumb_image = object.media_ids[0]
-}
+// Image Handlers  and true  for multiple file  and for  single file false 
+const handleCompanyLogoFiles = (data) => handleFileUpdate('company_logo', data, false, imageData, form);
+const handleThumbImageFiles = (data) => handleFileUpdate('thumb_image', data,false, imageData, form);
+const handleDayBannerFiles = (data) => handleFileUpdate('day_banner_images', data, true,imageData, form);
+const handleNightBannerFiles = (data) => handleFileUpdate('night_banner_images', data, true,imageData, form);
 
-const handleDayBannerFiles = (data) => {
-    const object = handleFiles(data);
-    day_banner_images.value.isOpen = false
-    day_banner_images.value.images = data;
-    day_banner_images.value.mediaName = object.mediaName;
-    form.value.day_banner_images = object.media_ids
-}
-
-const handleNightBannerFiles = (data) => {
-    const object = handleFiles(data);
-    night_banner_images.value.isOpen = false
-    night_banner_images.value.images = data;
-    night_banner_images.value.mediaName = object.mediaName;
-    form.value.night_banner_images = object.media_ids
-}
-
-
-const handleSubmit = () => {
-    delete form.value?.domain;
-    console.log(store.getters.editData)
-    if (validateForm()) {
-        if (store.getters.editData === null) {
-            handleAddDealers({ ...form.value })
-        }
-        else {
-            if (form.value.domain_id !== PreviousDomain.value) {
-                delete form.value.id;
-            }
-            handleEditDealers({ ...form.value })
-        }
-    }
-}
-
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+    errors.value = {};
     if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
+        errors.value.title = 'Title is required';
+        return false;
     }
-    return isValid
-}
+    return true;
+};
 
-const handleAddDealers = async (payload) => {
-    try {
-        const res = await DealersServices.addDealer(payload);
-        console.log(res);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/dealer');
+// Submit Handler
+const handleSubmit = async () => {
+    delete form.value?.domain;
+    if (validateForm()) {
+        loading.value = true;
+        try {
+            const action = store.getters.editData ? DealersServices.editDealer: DealersServices.addDealer;
+            if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
+            const res = await action({ ...form.value });
+            if (res.status === 200 && res.data.success) {
+                showToast(res.data.message, 'success');
+                router.push('/dealer');
+            }
+        } catch (e) {
+            console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} Dealers:`, e);
+        } finally {
+            loading.value = false;
         }
-    } catch (e) {
-        console.error('Error while adding Dealers:', e);
-    } finally {
-        loading.value = false;
     }
-}
+};
 
-const handleEditDealers = async (payload) => {
-    loading.value = true;
-    try {
-        const res = await DealersServices.editDealer(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/dealer');
-        }
-    } catch (e) {
-        console.error('Error while editing Dealers:', e);
-    } finally {
-        loading.value = false;
-    }
-}
-
-
+// Lifecycle Hooks
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id
-})
-
+    PreviousDomain.value = store.getters.getDomain.id;
+});
 
 </script>
-<style scoped>
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-</style>

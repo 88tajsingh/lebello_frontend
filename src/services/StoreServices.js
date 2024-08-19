@@ -31,7 +31,7 @@ class StoreService {
     return instance.post(ApiConfig.addStoreProduct, payload)
   }
   editStoreProduct(payload) {
-    return instance.put(ApiConfig.editStoreProduct, payload)
+    return instance.post(ApiConfig.editStoreProduct, payload)
   }
   deleteStoreProduct(payload) {
     return instance.delete(ApiConfig.deleteStoreProduct, { params: { ...payload } })

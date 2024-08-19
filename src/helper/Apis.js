@@ -4,9 +4,13 @@ import ContractServices from "@/services/ContractServices";
 import ProductServices from "@/services/ProductServices";
 import StoreServices from "@/services/StoreServices";
 import PostServices from "@/services/PostServices";
+import { showToast } from "./functions";
 import store from "@/store";
+// import { useRouter } from "vue-router";
 import router from "@/router";
 import ProjectServices from "@/services/ProjectServices";
+
+// const router = useRouter();
 
 export const logout = async () => {
     try {
@@ -155,5 +159,71 @@ export const getDomins = async () => {
       } 
     } catch (err) {
       console.log("getProductCategoryTypeTreeList err", err);
+    }
+  };
+
+  
+  /** 
+ * Makes an API call using the provided service and payload.
+ * @param {Function} service - The API service function to call (e.g., CommonServices.editTags).
+ * @param {Object} payload - The data to send with the API request.
+ * @param {string} [route] - Optional. The route to navigate to upon successful response.
+ * @param {Ref<boolean>} [loading] - Optional. A ref that controls the loading state; set to false in the finally block.
+ * 
+ */
+  export const commonApiCalls = async (service,payload,route,loading) => {
+    try {
+      const res = await service(payload);
+  
+      if (res.status === 200) {
+        route &&showToast(res.data.message, 'success')
+        route && router.push(`/${route}`)
+      } else if (res.status === 400) {
+        showToast(res.data.message, 'error')
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error')
+      console.error('Error:', error)
+    } finally {
+     if(loading) loading.value = false
+    }
+  };
+
+    /** 
+ * Makes an API call using the provided service and payload.
+ * @param {Function} service - The API service function to call (e.g., CommonServices.editTags).
+ * @param {Object} payload - The data to send with the API request.
+ * @param {Ref<boolean>} [loading] - Optional. A ref that controls the loading state; set to false in the finally block.
+ * 
+ */
+    export const commonDeleteCall = async (service,payload,loading) => {
+      try {
+        const res = await service(payload);
+    
+        if (res.status === 200) {
+          showToast(res.data.message, 'success')
+        } else if (res.status === 400) {
+          showToast(res.data.message, 'error')
+        }
+      } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error('Error:', error)
+      } finally {
+       if(loading) loading.value = false
+      }
+    };
+
+ export const commonGetCalls = async (payload,getLoading) => {
+    if(getLoading) getLoading.value = true;
+    try {
+      const res = await CommonServices.getTags(payload);
+      if (res.status === 200 && res.data.success) {
+       return   res.data.data[0];
+      }
+    } catch (e) {
+      showToast('Something went wrong', 'error')
+      console.error('Error while getting contract locations:', e);
+    } finally {
+      if(getLoading) getLoading.value = false;
     }
   };

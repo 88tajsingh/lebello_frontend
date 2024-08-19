@@ -182,35 +182,39 @@
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Featured image">
-                            <div class="my-5 px-6  h-auto ">
-                                <InputLabel for="Featured_image" value="Featured_image" />
-                                <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{
-                                    mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img :src="$filePath(form.featured_image_url || 'text')"
-                                        class="inline-block w-auto h-34 mr-4" :alt="form.title">
-                                </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
-                            </div>
-                        </Accordion>
+        <div class="my-5 px-6 h-auto">
+            <InputLabel for="Featured_image" value="Featured_image" />
+            <div class="py-2 rounded-lg px-2 border border-stroke"
+                                    @click="() => imageData.featured_image.IsOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
+            <div class="mt-3 flex overflow-x-auto">
+                <img 
+                    :src="$filePath(imageData.featured_image?.images[0]?.file_url)"
+                    class="inline-block w-auto h-34 mr-4"
+                    :alt="form.title"
+                />
+            </div>
+        </div>
+    </Accordion>
                     </div>
                 </div>
             </div>
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="Select file" :getFlag="true" :selected="selectedFiles" :singleFile="true"
-            :closeModal="close" :selectedFiles="handleFiles" />
+
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.IsOpen">
+        <GetLibrary btnName="Select file" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="()=>imageData.featured_image.IsOpen=false" :selectedFiles="handleFeatureFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
 <script setup>
-import router from '@/router';
+import { useRouter } from 'vue-router'; 
 import { useStore } from 'vuex';
 import { ref, onMounted, watch } from "vue";
-import { showToast } from '@/helper/functions'
+import { showToast,handleFileUpdate  } from '@/helper/functions'
 import { MaterialTreeList } from '@/helper/Apis';
 import { PublishOptions, statusData } from '@/json/data';
 import SwatchesServices from '@/services/SwatchesServices';
@@ -221,116 +225,82 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 
+// Store and Router
 const store = useStore();
-const errors = ref({})
-const mediaName = ref('select Feature Media')
-const selectedFiles = ref([])
-const MaterialTreeListData = ref([]);
-const IsOpen = ref(false)
-const loading = ref(false)
+const router = useRouter();
+
+// Reactive State
+const errors = ref({});
+const loading = ref(false);
 const form = ref(store.getters.editData || { status: null, description: ' ', material_template: false, materials: [] });
 const PreviousDomain = ref(null);
-const masterId = ref(null);
+const MaterialTreeListData = ref([]);
+const imageData = ref({
+    featured_image: { IsOpen: false, mediaName: ' Feature Media', images: [] }
+});
 
-const close = () => {
-    IsOpen.value = false;
-}
-const handleFiles = (data) => {
-    close();
-    selectedFiles.value = data
-    form.value.featured_image_url = data[0].file_url
-    mediaName.value = data[0].file_url;
-    const media_titles = data.map(item => item.title);
-    mediaName.value = media_titles.join(', ');
-    const media_ids = data.map(item => item.id);
-    form.value.featured_image = media_ids[0];
-}
+// Image Handlers
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
 
-const handleSubmit = () => {
-    try {
-        if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddSwatches({ ...form.value })
-            }
-            else {
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-
-                handleEditSwatches({ ...refinedPayload })
-            }
-        }
-    } catch (e) {
-        console.error('Error Swatch Validation :', e)
-    }
-}
-
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+    errors.value = {};
     if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
+        errors.value.title = 'Title is required';
+        return false;
     }
-    return isValid
-}
+    return true;
+};
 
 const handleCheckedItems = (checkedItems) => {
     form.value = { ...form.value, materials: checkedItems }
 };
 
-// API calls 
-const handleAddSwatches = async (payload) => {
-    loading.value = true;
-    try {
-        const res = await SwatchesServices.addSwatches(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast('Swatches added successfully', 'success');
-            router.push('/swatches');
-        } else {
+// Submit Handler
+const handleSubmit = async () => {
+    if (validateForm()) {
+        loading.value = true;
+        try {
+            const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
+            if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
+            const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
+            const { status, data } = await action(payload);
+            if (status === 200 && data.success) {
+                showToast(`Swatches ${store.getters.editData ? 'edited' : 'added'} successfully`, 'success');
+                store.dispatch('clearEditData');
+                router.push('/swatches');
+            } else {
+                showToast('Something went wrong', 'error');
+            }
+        } catch (e) {
+            console.error(`Error ${store.getters.editData ? 'editing' : 'adding'} swatches:`, e);
             showToast('Something went wrong', 'error');
+        } finally {
+            loading.value = false;
         }
-    } catch (error) {
-        console.error('Error adding swatches:', error);
-        showToast('Something went wrong', 'error');
-    } finally {
-        loading.value = false;
     }
-}
+};
 
-const handleEditSwatches = async (payload) => {
-    loading.value = true;
+// Fetch Initial Data
+const fetchMaterialTreeData = async () => {
     try {
-        const res = await SwatchesServices.editSwatches(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast('Swatches edited successfully', 'success');
-            store.dispatch('clearEditData')
-            router.push('/swatches');
-        } else {
-            showToast('Something went wrong', 'error');
-        }
-    } catch (error) {
-        console.error('Error editing swatches:', error);
-        showToast('Something went wrong', 'error');
-    } finally {
-        loading.value = false;
+        const domainId = store.getters.getDomain.id;
+        MaterialTreeListData.value = await MaterialTreeList({ domain_id: domainId });
+    } catch (e) {
+        console.error('Error fetching material tree data:', e);
     }
-}
+};
 
-const materialTree = async (payload) => {
-    MaterialTreeListData.value = await MaterialTreeList(payload)
-}
-
+// Lifecycle Hooks
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id
-    materialTree({ domain_id: store.getters.getDomain.id });
-})
+    PreviousDomain.value = store.getters.getDomain.id;
+    fetchMaterialTreeData();
+});
 
 watch(
     () => form.value.domain_id,
     () => {
-        materialTree({ domain_id: form.value.domain_id });
+        fetchMaterialTreeData();
     }
 );
 

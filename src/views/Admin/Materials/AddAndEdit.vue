@@ -123,9 +123,10 @@
 
                     <!-- <ImageUpload2 @file-selected="form.media_id = $event"
                     :accepted-formats="['jpg', 'jpeg', 'png']" /> -->
-                    <div class="py-2 rounded-lg px-2 border border-stroke" @click="() => IsOpen = true"> {{ mediaName }}
-                    </div>
-                    <InputError class="mt-2" :message="errors?.media_id" />
+
+                    <div class="py-2 rounded-lg px-2 border border-stroke"
+                        @click="() => imageData.media_id.isOpen = true"> {{
+                            imageData.media_id.mediaName }}</div>
                 </div>
                 <div class="flex flex-col w-full">
                     <InputLabel for="Description" value="Description" />
@@ -137,10 +138,11 @@
                     </p>
                 </div>
                 <div class="flex flex-col w-full">
-                    <div class=" mt-3 flex overflow-x-auto">
-                        {{ }}
-                        <img v-if="selectedFiles" :src="$filePath(selectedFiles)" class="inline-block w-auto h-34 mr-4"
-                            :alt="file?.alternative_text || 'image'">
+                    <div class="mt-3 flex overflow-x-auto">
+                       
+                        <img v-if="imageData.media_id.images?.length" :src="$filePath(imageData.media_id.images[0].file_url)"
+                            class="inline-block w-auto h-34 mr-4"
+                            :alt="imageData.media_id.images[0]?.alternative_text || 'image'">
                     </div>
                 </div>
             </div>
@@ -151,38 +153,37 @@
             </button>
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="IsOpen">
-        <GetLibrary btnName="Select file" :getFlag="true" :selected="selectedFiles" :singleFile="true"
-            :closeModal="close" :selectedFiles="handleFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.media_id.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.media_id.images" :singleFile="false"
+            :closeModal="() => { imageData.media_id.isOpen = false; }" :selectedFiles="handleFiles" />
     </popupModal>
+
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
 <script setup>
+import _ from 'lodash';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
-// import TextInput from '@/components/Admin-components/TextInput.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import MultiSelect from '@/components/Admin-components/form-components/MultiSelect.vue'
 import InputError from '@/components/Admin-components/form-components/InputError.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
-import _ from 'lodash';
-import { clearError, showToast } from '@/helper/functions'
+import { clearError, showToast, handleFileUpdate } from '@/helper/functions'
 import { onMounted, ref, watch, } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
-import { defineEmits } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+// Store and router
 const store = useStore();
 const router = useRouter();
-const IsOpen = ref(false)
-const MaterialTreeListData = ref([])
-const loading = ref(false)
-const props = defineProps(['id', 'domain'])
-const PreviousDomain = ref(null)
 
+// Reactive state
+const errors = ref({});
+const loading = ref(false);
 const form = ref(store.getters.editData || {
     parent_material: 0,
     display_material_option: null,
@@ -191,103 +192,83 @@ const form = ref(store.getters.editData || {
     single_color: null,
     show_new_badge_2021: null
 });
+const PreviousDomain = ref(store.getters.getDomain?.id || null);
+const MaterialTreeListData = ref([]);
+// Close the modal
+const closeModal = () => {
+    imageData.value.media_id.isOpen = false;
+};
+// Image data for various categories
+const imageData = ref({
+    media_id: { isOpen: false, mediaName: 'Feature Image', images: [] },
+});
 
-const mediaName = ref('Select Media' || form.image)
-const selectedFiles = ref(form.value.image)
-const errors = ref({})
-
-const close = () => {
-    IsOpen.value = false;
-}
-
-const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-
-    if (!form.value.name) {
-        errors.value.name = 'Name is required'
-        isValid = false
-    }
-    return isValid
-}
-
-const handleSubmit = async () => {
-        if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddMaterials({ ...form.value })
-            }
-            else {
-                
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-                handleEditMaterials({ ...refinedPayload })
-            }
-        }
-}
-
+// Handlers for file updates
 const handleFiles = (data) => {
-    close();
-    selectedFiles.value = data[0].file_url;
-    const media_titles = data.map(item => item.title);
-    mediaName.value = media_titles.join(', ');
+    handleFileUpdate('media_id ', data, false, imageData, form);
+    console.log()
+    imageData.value.media_id.isOpen = false
+};
 
-    // mediaName.value=data[0].title   
-    const media_ids = data.map(item => item.id);
-    form.value.media_id = media_ids[0];
-}
-// api for get patents child json parent material listing 
-const materialTree = async (payload) => {
-    MaterialTreeListData.value = await MaterialTreeList(payload)
-}
+// Validate form fields
+const validateForm = () => {
+    errors.value = {};
+    if (!form.value.name) {
+        errors.value.name = 'Name is required';
+        return false;
+    }
+    return true;
+};
 
-const handleAddMaterials = async (payload) => {
+// Handle form submission (add or edit materials)
+const handleSubmit = async () => {
+    if (!validateForm()) return;
+
     loading.value = true;
+    const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
+
+    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
+
     try {
-        const res = await MaterialsServices.addMaterial(payload);
+        const service = store.getters.editData ? MaterialsServices.editMaterial : MaterialsServices.addMaterial;
+        const res = await service(payload);
+
+        console.log(res.message)
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/materials');
-        } else if (res.status === 400) {
+        } else if (res.status_code === 400) {
             showToast(res.message, 'error');
         }
     } catch (e) {
-        console.error("Error while adding material:", e);
-        showToast('An error occurred', 'error');
+        console.error('Error:', e);
+        showToast(e.response?.message, 'error');
     } finally {
         loading.value = false;
     }
 };
 
-const handleEditMaterials = async (payload) => {
-    loading.value = true;
+// Fetch material tree data
+const materialTree = async (payload) => {
     try {
-        const res = await MaterialsServices.editMaterial(payload);
-        if (res.status === 200 && res.data.success) {
-            store.dispatch('clearEditData')
-            showToast(res.data.message, 'success');
-            router.push('/materials');
-        } else if (res.status === 400) {
-            showToast(res.data.message, 'error');
-        }
+        MaterialTreeListData.value = await MaterialTreeList(payload);
     } catch (e) {
-        console.error("Error while editing material:", e);
-        showToast(e.response?.data?.message || 'An error occurred', 'error');
-    } finally {
-        loading.value = false;
+        console.error('Error fetching material tree:', e);
     }
 };
 
+// Initialize component state
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id
-})
-
-watch(
-    () => form.value.domain_id,
-    () => {
-        materialTree({ domain_id: form.value.domain_id });
+    if (store.getters.editData) {
+        imageData.value.media_id.mediaName = store.getters.editData?.featured_image_url || 'Select Media';
+        imageData.value.media_id.images = store.getters.editData?.featured_image_url;
     }
-);
+    materialTree({ domain_id: store.getters.getDomain?.id });
+});
+
+// Watch for domain_id changes to update material tree data
+watch(() => form.value.domain_id, () => {
+    materialTree({ domain_id: form.value.domain_id });
+});
 
 </script>

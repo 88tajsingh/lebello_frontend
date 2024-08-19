@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Post` : `Add New Post`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -19,10 +19,10 @@
                                 <TinyMCE v-model="form.description" />
                             </div>
                         </Accordion>
-                    </div>       
+                    </div>
                     <div class="mt-3">
                         <Accordion :open="true" header="Seo Options">
-                            
+
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.seo_title" placeholder="Title Tag" label="Title Tag" />
@@ -46,12 +46,12 @@
                     <div class="mt-3">
                         <Accordion :open="true" header="News Options">
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
-                                    <ColorPicker v-model="form.title_background_color" label='Title Background'/>
-                                   
-                                </div>
+                                <ColorPicker v-model="form.title_background_color" label='Title Background' />
+
+                            </div>
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
-                                    <ColorPicker v-model="form.title_color" label='Title Color'/>
-                                </div>
+                                <ColorPicker v-model="form.title_color" label='Title Color' />
+                            </div>
                         </Accordion>
                     </div>
                 </div>
@@ -62,8 +62,8 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full"
-                                        valueField="value" label="Select " v-model="form.status" />
+                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                        label="Select " v-model="form.status" />
                                 </div>
                                 <div class="col-span-1 w-full">
                                     <div class="flex flex-col ">
@@ -92,15 +92,15 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Post Settings">
                             <div class="mt-2 px-6  h-auto ">
-                                    <singleCheckBox id="FeaturedOption" label="Stick to the top of the blog"
-                                        v-model:modelValue="form.stick_to_top_of_blog">
-                                    </singleCheckBox>
-                                    <singleCheckBox id="FeaturedOption" label="Pending review"
-                                        v-model:modelValue="form.pending_review">
-                                    </singleCheckBox>
-                                </div>
+                                <singleCheckBox id="FeaturedOption" label="Stick to the top of the blog"
+                                    v-model:modelValue="form.stick_to_top_of_blog">
+                                </singleCheckBox>
+                                <singleCheckBox id="FeaturedOption" label="Pending review"
+                                    v-model:modelValue="form.pending_review">
+                                </singleCheckBox>
+                            </div>
                         </Accordion>
-                        </div>
+                    </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Tags">
                             <div class="mt-2 px-6 flex h-auto ">
@@ -109,8 +109,8 @@
                                     @checked-items="(checked) => form.tags = checked" />
                             </div>
                         </Accordion>
-                        </div>
-                        <div class="mt-3">
+                    </div>
+                    <div class="mt-3">
                         <Accordion :open="true" header="Post Categories">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <Checkbox :nexted=true :checkedData='form.store_categories' :dropdown="true"
@@ -121,51 +121,64 @@
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Excerpt">
-                                <div class="px-6 mt-3 items-center text-gray-600 text-sm">
+                            <div class="px-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id="Write_excerpt" :isTextarea="true" :rows=4 type="text"
-                                    class="block w-[180px] mr-2 " v-model="form.excerpt"
-                                    placeholder="Meta Description" label="Write an excerpt (optional)" />
+                                    class="block w-[180px] mr-2 " v-model="form.excerpt" placeholder="Meta Description"
+                                    label="Write an excerpt (optional)" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
                         </Accordion>
-                        </div>
+                    </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Discussion">
                             <div class="mt-2 px-6  h-auto ">
-                                    <singleCheckBox id="FeaturedOption" label="Allow comments"
-                                        v-model:modelValue="form.allow_comments">
-                                    </singleCheckBox>
-                                    <singleCheckBox id="FeaturedOption" label="Allow pingbacks & trackbacks"
-                                        v-model:modelValue="form.allow_pingbacks">
-                                    </singleCheckBox>
-                                </div>
+                                <singleCheckBox id="FeaturedOption" label="Allow comments"
+                                    v-model:modelValue="form.allow_comments">
+                                </singleCheckBox>
+                                <singleCheckBox id="FeaturedOption" label="Allow pingbacks & trackbacks"
+                                    v-model:modelValue="form.allow_pingbacks">
+                                </singleCheckBox>
+                            </div>
                         </Accordion>
-                        </div>
+                    </div>
                     <div class="mt-4 ">
                         <Accordion :open="true" header="Featured image">
                             <div class="px-6  h-auto ">
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
+                                    @click="() => imageData.featured_image.IsOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    <img
+      v-for="file in imageData.featured_image.images"
+      :key="file"
+      :src="$filePath(file.file_url)"
+      class="inline-block w-auto h-34 mr-4"
+      :alt="file?.alternative_text || 'image'"
+    />
                                 </div>
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-4 ">
                         <Accordion :open="true" header="Gallery">
-                            <div class="px-6  h-auto ">
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => galleryData.isOpen = true"> {{
-                                        galleryData.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in galleryData.images" :key="file" :src="$filePath(file)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
-                                </div>
-                            </div>
+                            <div class="px-6 h-auto">
+    <div 
+      class="py-2 rounded-lg px-2 border border-stroke"
+      @click="() => imageData.gallery.IsOpen = true"
+    >
+      {{ imageData.gallery.mediaName }}
+    </div>
+    <div class="mt-3 flex overflow-x-auto">
+      <img
+        v-for="file in imageData.gallery.images"
+        :key="file"
+        :src="$filePath(file.file_url)"
+        class="inline-block w-auto h-34 mr-4"
+        :alt="file.alternative_text || 'image'"
+      />
+    </div>
+  </div>
                         </Accordion>
                     </div>
                 </div>
@@ -173,158 +186,123 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
-            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.featured_image.IsOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
     </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="galleryData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="galleryData.images" :singleFile="true"
-            :closeModal="() => { galleryData.isOpen = false }" :selectedFiles="handleGalleryFiles" />
+
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.gallery.IsOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.gallery.images" :singleFile="false"
+            :closeModal="() => { imageData.gallery.IsOpen = false }" :selectedFiles="handleGalleryFiles" />
     </popupModal>
 
 
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from "vue-router";
 import { ref, onMounted, watch } from "vue";
-import { showToast, handleFiles, } from '@/helper/functions'
 import { getPostCategoryTree } from '@/helper/Apis';
-import { PublishOptions, productOptionsType,trueFalse } from '@/json/data';
+import CommonServices from '@/services/CommonServices';
+import { showToast, handleFileUpdate, } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
+import { PublishOptions, productOptionsType, trueFalse } from '@/json/data';
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
-import { useStore } from 'vuex';
-import CommonServices from '@/services/CommonServices';
 import PostServices from '@/services/PostServices';
 
+// Store and Router
 const store = useStore();
+const router = useRouter();
 
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
+// Reactive State
+const errors = ref({});
+const loading = ref(false);
+const form = ref(store.getters.editData || { status: '', visibility: '' });
+const PreviousDomain = ref(null);
 const postCategoryTree = ref([]);
-const productsSpecsIndex = ref(0);
-const loading = ref(false)
 const TagsData = ref([]);
-const form = ref(store.getters.editData || { status: '',visibility:'' });
-const SliderSelects = ref([]);
-const PreviousDomain = ref(null)
 
-const featureData = ref({
-    isOpen: false,
-    mediaName: 'Image',
-    images: []
-})
-const galleryData = ref({
-    isOpen: false,
-    mediaName: 'Image',
-    images: []
+const imageData = ref({
+    featured_image: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
+    gallery: { IsOpen: false, mediaName: 'Select gallery files', images: [] }
 })
 
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featureData.value.isOpen = false
-    featureData.value.images = data;
-    featureData.value.mediaName = object.mediaName;
-    console.log(productsSpecsIndex.value)
-    form.value.featured_image = object.media_ids[0]
-}
-const handleGalleryFiles = (data) => {
-    const object = handleFiles(data);
-    galleryData.value.isOpen = false
-    galleryData.value.images = data;
-    galleryData.value.mediaName = object.mediaName;
-    form.value.gallery = object.media_ids
-}
+// Image Handlers
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
 
-
-const handleSubmit = () => {
-    delete form.value?.domain;
-    if (validateForm()) {
-        if (store.getters.editData === null) {
-            handleAddPost({ ...form.value })
-        }
-        else {
-            if (form.value.domain_id !== PreviousDomain.value) {
-                delete form.value.id;
-            }
-            const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-            handleEditPost({ ...refinedPayload })
-        }
+// remove image form gallery
+const handleRemoveImage = (slide) => {
+    const index = imageData.value.gallery.images.findIndex(item => item.id === slide.id);
+    console.log(index)
+    if (index !== -1) {
+        imageData.value.gallery.images.splice(index, 1);
+        form.value.gallery.splice(index, 1);
     }
 }
 
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+    errors.value = {};
     if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
+        errors.value.title = 'Title is required';
+        return false;
     }
-    return isValid
-}
+    return true;
+};
 
-const handleGetTags = async (payload) => {
-    //   getLoading.value = true;
-    try {
-        const res = await CommonServices.getTags(payload);
-        if (res.status === 200 && res.data.success) {
-            TagsData.value = res.data.data;
+// Submit Handler
+const handleSubmit = async () => {
+    if (validateForm()) {
+        loading.value = true;
+        try {
+            const action = store.getters.editData ? PostServices.editPost : PostServices.addPost;
+            if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
+            const {featured_image_url,gallery_urls,deleted_at, created_at, updated_at, ...payload} = form.value
+            const { status, data } = await action(payload);
+            if (status === 200 && data.success) {
+                showToast(data.message, 'success');
+                router.push('/post');
+            }
+        } catch (e) {
+            console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} post:`, e);
+        } finally {
+            loading.value = false;
         }
-    } catch (e) {
-        console.error('Error while getTags:', e);
-    } finally {
-        // getLoading.value = false;
     }
 };
 
-const handleAddPost = async (payload) => {
+// Fetch Tags and Post Category Tree
+const fetchInitialData = async () => {
     try {
-        const res = await PostServices.addPost(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/post');
-        }
+        const domainId = store.getters.getDomain.id;
+        const [{ status: tagStatus, data: tagData }, { status: categoryStatus, data: categoryData }] = await Promise.all([
+            CommonServices.getTags({ domain_id: domainId }),
+            getPostCategoryTree({ domain_id: domainId })
+        ]);
+        if (tagStatus === 200 && tagData.success) TagsData.value = tagData.data;
+        if (categoryStatus === 200) postCategoryTree.value = categoryData;
     } catch (e) {
-        console.error('Error while adding store Product:', e);
-    } finally {
-        loading.value = false;
+        console.error('Error fetching initial data:', e);
     }
-}
+};
 
-const handleEditPost = async (payload) => {
-    loading.value = true;
-    try {
-        const res = await PostServices.editStoreProduct(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/post');
-        }
-    } catch (e) {
-        console.error('Error while editing Store product:', e);
-    } finally {
-        loading.value = false;
-    }
-}
-
-const handlePostCategoryTree = async (payload) => {
-    postCategoryTree.value = await getPostCategoryTree(payload)
-}
+// Lifecycle Hooks
 onMounted(() => {
     PreviousDomain.value = store.getters.getDomain.id;
-    SliderSelects.value = store.getters.editData?.slider_urls
-    handleGetTags({ domain_id: store.getters.getDomain.id })
-    handlePostCategoryTree({ domain_id: store.getters.getDomain.id })
-})
-
-
-
+    fetchInitialData();
+});
 </script>
+
 <style scoped>
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

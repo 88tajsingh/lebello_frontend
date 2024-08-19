@@ -14,7 +14,7 @@
         <div class="flex rounded-lg bg-transparent">
             <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
                 v-model="search" />
-            <Button @click="() => { router.push({ name: 'Designer-add' }) }"
+            <Button @click="() => { router.push({ name: 'Designer-form' }); store.dispatch('clearEditData'); }"
                 class="px-2 py-2 m-auto whitespace-nowrap">Add
                 Designer</Button>
         </div>
@@ -30,7 +30,7 @@
 
             <template #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'Designer-edit', params: { id: data.value.id, domain: data.value.domain_id } }) }"
+                    <div @click="() => { router.push({ name: 'Designer-form'});store.dispatch('setEdit', data.value);}"
                         id="edit svg">
                         <EditSvg />
                     </div>

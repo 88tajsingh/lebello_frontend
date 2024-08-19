@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Home Slider` : `Add Home Slider`">
         <DomainComponent @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -75,13 +75,12 @@
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
+                                    @click="() => imageData.featured_image.isOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file?.file_url)"
+                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
                     </div>
@@ -135,8 +134,8 @@
                                 <div class="mt-3  flex h-auto">
                                     <div class="  h-auto w-full ">
                                          <div class="py-2 rounded-lg px-2 w-full border border-stroke"
-                                           @click="() => vdoData.isOpen = true"> {{
-                                          vdoData.mediaName }}</div>
+                                           @click="() => imageData.slider_video_source.isOpen = true"> {{
+                                          imageData.slider_video_source.mediaName }}</div>
                                 </div>
                                 </div>
                             </div>
@@ -147,21 +146,21 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
-            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.isOpen = false }" :selectedFiles="handleFeatureFiles" />
     </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="vdoData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="vdoData.images" :singleFile="true"
-            :closeModal="() => { vdoData.isOpen = false }" :selectedFiles="handleVideoFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.slider_video_source.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.slider_video_source.images" :singleFile="true"
+            :closeModal="() => { imageData.slider_video_source.isOpen = false }" :selectedFiles="handleVideoFiles" />
     </popupModal>
 
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
 import { ref, onMounted, watch } from "vue";
-import { handleFiles } from '@/helper/functions';
+import { handleFileUpdate  } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import HomeSliderServices from '@/services/HomeSliderServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
@@ -172,15 +171,16 @@ import DatePicker from '@/components/Admin-components/form-components/DatePicker
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { PublishOptions, trueFalse, withBgWithoutBg, capsNOCaps } from '@/json/data';
 import { useStore } from 'vuex';
+import { useRouter } from "vue-router";
 
-// Vuex store
+// Setup router and store
+const router = useRouter();
 const store = useStore();
 
-// State variables
+// Reactive state
 const errors = ref({});
-const iswithBg = ref(false);
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: '', slider_menu_color: '', visibility: '', });
+const form = ref(store.getters.editData || { status: '', slider_menu_color: '', visibility: '' });
 const PreviousDomain = ref(null);
 
 // Slider menu options
@@ -191,54 +191,17 @@ const sliderMenu = [
     { name: 'Gray', value: 'gray' },
 ];
 
-// Image and video data
-const featureData = ref({
-    isOpen: false,
-    mediaName: 'Feature Image',
-    images: []
-});
-const vdoData = ref({
-    isOpen: false,
-    mediaName: 'Upload Video MP4',
-    video: []
+// Image Data Object
+const imageData = ref({
+    featured_image: { isOpen: false, mediaName: 'Feature Image', images: [] },
+    slider_video_source : { isOpen: false, mediaName: 'Upload Video MP4', images: [] }
 });
 
-// Handle feature image files
-const handleFeatureFiles = (data) => {
-    const { mediaName, media_ids } = handleFiles(data);
-    featureData.value = { isOpen: false, images: data, mediaName };
-    form.value.featured_image = media_ids[0];
-};
+// Image Handlers  and true  for multiple file  and for  single file false 
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleVideoFiles = (data) => handleFileUpdate('slider_video_source', data,false, imageData, form);
 
-// Handle video files
-const handleVideoFiles = (data) => {
-    const { mediaName, media_ids } = handleFiles(data);
-    vdoData.value = { isOpen: false, images: data, mediaName };
-    form.value.slider_video_source = media_ids[0];
-};
-
-// Submit handler
-const handleSubmit = async () => {
-    delete form.value?.domain; 
-    if (!validateForm()) return; 
-    try {
-        const isEditing = !!store.getters.editData;
-        if (isEditing && form.value.domain_id !== PreviousDomain.value) {
-            delete form.value.id;
-        }
-        const payload = isEditing
-            ? (({ deleted_at, created_at, updated_at, featured_image_url, contract_logo_url, contract_slider_image_url, slider_video_source_url, ...rest }) => rest)(form.value)
-            : { ...form.value };
-
-        const action = isEditing ? handleEditHomeSlider : handleAddHomeSlider;
-        await action(payload);
-    } catch (e) {
-        console.error('Error while handling submit:', e);
-    }
-};
-
-
-// Validate form
+// Validate form fields
 const validateForm = () => {
     errors.value = {};
     if (!form.value.title) {
@@ -248,52 +211,50 @@ const validateForm = () => {
     return true;
 };
 
-// Add new slider
-const handleAddHomeSlider = async (payload) => {
-    try {
-        const res = await HomeSliderServices.addHomeSlider(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/home-slider');
-        }
-    } catch (e) {
-        console.error('Error adding slider:', e);
-    } finally {
-        loading.value = false;
-    }
-};
-
-// Edit existing slider
-const handleEditHomeSlider = async (payload) => {
+// Submit form (add or edit slider)
+const handleSubmit = async () => {
+    if (!validateForm()) return; // Validate form fields
+    delete form.value?.featured_image_url
+    delete form.value?.slider_video_source_url
+    
     loading.value = true;
     try {
-        const res = await HomeSliderServices.editHomeSlider(payload);
+        // Determine if editing or adding a new slider
+        const isEditing = !!store.getters.editData;
+        if (isEditing && form.value.domain_id !== PreviousDomain.value) {
+            delete form.value.id;
+        }
+        const {created_at,deleted_at,updated_at, ...payload } = form.value
+        const action = isEditing ? HomeSliderServices.editHomeSlider : HomeSliderServices.addHomeSlider;
+        const res = await action(payload);
+
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/home-slider');
         }
     } catch (e) {
-        console.error('Error editing slider:', e);
+        console.error('Error:', e);
     } finally {
         loading.value = false;
     }
 };
 
-// On component mount
+// Initialize component state
 onMounted(() => {
-    PreviousDomain.value = store.getters?.getDomain?.id;
+    PreviousDomain.value = store.getters.getDomain?.id;
     if (store.getters.editData) {
-        featureData.value = {
-            images: [store.getters.editData.featured_image_url],
-            mediaName: store.getters.editData.featured_image_url
-        };
-        vdoData.value = {
-            images: [store.getters.editData.slider_video_source_url],
-            mediaName: store.getters.editData.slider_video_source_url
-        };
+        const { featured_image_url, slider_video_source_url } = store.getters.editData;
+        imageData.value.featured_image.value = { images: [featured_image_url], mediaName: featured_image_url };
+        imageData.value.slider_video_source.value = { images: [slider_video_source_url], mediaName: slider_video_source_url };
     }
 });
+
+// Watch for domain_id changes
+watch(() => form.value.domain_id, async () => {
+    // Perform necessary actions when domain_id changes
+});
 </script>
+
 <style scoped>
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
