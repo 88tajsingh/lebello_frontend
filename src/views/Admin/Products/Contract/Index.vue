@@ -10,7 +10,7 @@
       </div>    
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-        <Button @click="() => {router.push({name:'Product-contract-from'});store.dispatch('clearEditData'); }" class="px-2 py-2">Add Product Contract</Button>  
+        <Button @click="() => {router.push({name:'Product-contract-from'}); store.dispatch('clearEditData'); }" class="px-2 py-2">Add Product Contract</Button>  
       </div>
     </div>
     <div class="bg-white rounded-[20px]">

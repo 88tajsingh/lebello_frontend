@@ -453,24 +453,7 @@ const handleGetMediaChild = async (payload) => {
         console.error('Error while folder get:', e)
     }
 }
-// const handleGetMedia = async () => {
-//     try {
-//         loading.value = true
-//         await FolderServices.GetMedia()
-//             .then((res) => {
-//                 if (res.status === 200 && res.data.success === true) {
-//                     console.log('folders: ' + res.data)
-//                     mediaData.value = res.data.data
-//                     loading.value = false
-//                 }
-//             })
-//             .catch((e) => {
-//                 console.error('Error while folder get:', e)
-//             })
-//     } catch (e) {
-//         console.error('Error while folder get:', e)
-//     }
-// }
+
 const handleAddMedia = async () => {
     try {
         loading.value = true
@@ -512,7 +495,7 @@ const handleEditMedia = async () => {
                 if (res.status === 200) {
                     loading.value = false
                     closeMediaModal();
-                    showToast(' Edit file sucessfully','success')
+                    showToast('Edit file sucessfully','success')
                     // if (SelectedFolder.value.parent > 0) {
                     //     handleGetChildFolders(parent_id)
                     // } else {

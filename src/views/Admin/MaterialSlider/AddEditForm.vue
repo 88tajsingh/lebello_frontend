@@ -1,4 +1,4 @@
-<template>
+<template>{{ form }}
     <DefaultCard :cardTitle="form.id ? `Edit Material Slider` : `Add Material Slider`">
         <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -54,14 +54,13 @@
                             <div class="  h-auto ">
                                 <InputLabel for="featured_image" value="Featured Image" />
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featured_image.isOpen = true"> {{
-                                        featured_image.mediaName }}</div>
+                                    @click="() => imageData.featured_image.isOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featured_image.images" :key="file"
+                                    <img v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file.alternative_text || 'image'">
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </div>
                     </div>
@@ -70,9 +69,9 @@
             </div>
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featured_image.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featured_image.images" :singleFile="true"
-            :closeModal="() => { featured_image.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.isOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.isOpen = false }" :selectedFiles="handleFeaturedImageFiles" />
     </popupModal>
 
 
@@ -80,100 +79,73 @@
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import { ref, onMounted, watch } from "vue";
-import { handleFiles } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
-import MaterialSliderServices from '@/services/MaterialSliderServices.js';
+import { handleFileUpdate } from '@/helper/functions';
+import { PublishOptions,statusData} from '@/json/data';
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
+import MaterialSliderServices from '@/services/MaterialSliderServices.js';
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import { PublishOptions, statusData, dealerTerritory, TemplateVersion, trueFalse } from '@/json/data';
-import { useStore } from 'vuex';
+
+// store and router
 const store = useStore();
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
-const loading = ref(false)
-const form = ref(store.getters.editData || { status: '', visibility: '', });
-const PreviousDomain = ref(null)
-// images variables 
-const featured_image = ref({
-    isOpen: false,
-    mediaName: 'Featured Image',
-    images: []
-})
+const router = useRouter();
+
+// reactive state
+const errors = ref({});
+const loading = ref(false);
+const form = ref(store.getters.editData || { status: '', visibility: '' });
+const PreviousDomain = ref(null);
 
 
-// images functions 
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featured_image.value.isOpen = false
-    featured_image.value.images = data;
-    featured_image.value.mediaName = object.mediaName;
-    form.value.featured_image = object.media_ids[0]
-}
+const imageData = ref({
+    featured_image : { isOpen: false, mediaName: 'Featured Image', images: [] },
+});
+
+const handleFeaturedImageFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
 
 
-const handleSubmit = () => {
+// Form Validation
+const validateForm = () => {
+    errors.value = {};
+    if (!form.value.title) {
+        errors.value.title = 'Title is required';
+        return false;
+    }
+    return true;
+};
+
+// Submit Handler
+const handleSubmit = async () => {
     delete form.value?.domain;
     if (validateForm()) {
-        if (store.getters.editData === null)
-            handleAddMaterialSlider({ ...form.value })
-        else
-            handleEditMaterialSlider({ ...form.value })
-    }
-}
-const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-    if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
-    }
-    return isValid
-}
-const handleAddMaterialSlider = async (payload) => {
-    try {
-        const res = await MaterialSliderServices.addMaterialSlider(payload);
-        console.log(res);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/material-slider');
+        loading.value = true;
+        try {
+            const action = store.getters.editData ? MaterialSliderServices.editMaterialSlider : MaterialSliderServices.addMaterialSlider;
+            if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
+            const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
+            const res = await action({ ...refinedPayload });
+            if (res.status === 200 && res.data.success) {
+                showToast(res.data.message, 'success');
+                router.push('/material-slider');
+            }
+        } catch (e) {
+            console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} Material Sliders:`, e);
+        } finally {
+            loading.value = false;
         }
-    } catch (e) {
-        console.error('Error while adding  Material Sliders:', e);
-    } finally {
-        loading.value = false;
-    }
-}
-
-
-const handleEditMaterialSlider = async (payload) => {
-    loading.value = true;
-    if (form.value.domain_id !== PreviousDomain.value) {
-        delete form.value.id;
-    }
-    const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-    try {
-        const res = await MaterialSliderServices.editMaterialSlider({ ...refinedPayload });
-        if (res.status === 200 && res.data.success) {
-            store.dispatch('clearEditData');
-            showToast(res.data.message, 'success');
-            router.push('/material-slider');
-        }
-    } catch (e) {
-        console.error('Error while editing Material Sliders:', e);
-    } finally {
-        loading.value = false;
     }
 };
 
-
+// Lifecycle Hooks
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id
-})
+    PreviousDomain.value = store.getters.getDomain.id;
+    // imageData.value.featured_image=
+});
 </script>
 <style scoped>
 input[type="number"]::-webkit-outer-spin-button,

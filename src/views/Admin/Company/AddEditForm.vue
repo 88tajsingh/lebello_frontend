@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Company` : `Add New Company`">
-        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
+        <DomainComponent @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -124,10 +124,9 @@
 
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { handleFiles } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
@@ -136,93 +135,73 @@ import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import { PublishOptions, statusData, dealerTerritory, TemplateVersion, trueFalse } from '@/json/data';
+import { PublishOptions, statusData } from '@/json/data';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+
+// store and router
+const router = useRouter();
 const store = useStore();
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
-const loading = ref(false)
-const form = ref(store.getters.editData || { status: '', visibility: '', });
-const PreviousDomain = ref(null)
-// images variables 
+// Reactive state
+const errors = ref({});
+const loading = ref(false);
+const form = ref(store.getters.editData || { status: '', visibility: '' });
+const PreviousDomain = ref(null);
+
+// State for featured image handling
 const featured_image = ref({
     isOpen: false,
     mediaName: 'Featured Image',
     images: []
-})
+});
 
-
-// images functions 
+// Handle file selection and update state
 const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featured_image.value.isOpen = false
-    featured_image.value.images = data;
-    featured_image.value.mediaName = object.mediaName;
-    form.value.featured_image = object.media_ids[0]
-}
+    const { media_ids, mediaName } = handleFiles(data);
+    featured_image.value = { isOpen: false, mediaName, images: data };
+    form.value.featured_image = media_ids[0];
+};
 
-
-const handleSubmit = () => {
-    delete form.value?.domain;
-    if (validateForm()) {
-        if (store.getters.editData === null)
-            handleAddCompany({ ...form.value })
-        else
-            handleEditCompany({ ...form.value })
-    }
-}
+// Validate form data
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+    errors.value = {};
     if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
+        errors.value.title = 'Title is required';
+        return false;
     }
-    return isValid
-}
-const handleAddCompany = async (payload) => {
-    try {
-        const res = await CompanyServices.addCompany(payload);
-        console.log(res);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/company');
-        }
-    } catch (e) {
-        console.error('Error while adding Company:', e);
-    } finally {
-        loading.value = false;
-    }
-}
+    return true;
+};
 
-
-const handleEditCompany = async (payload) => {
+// Submit form data (add or edit company)
+const handleSubmit = async () => {
+    if (!validateForm()) return;
     loading.value = true;
-    if (form.value.domain_id !== PreviousDomain.value) {
-        delete form.value.id;
-    }
-    // Remove specific keys from the payload
-    const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
+    const {featured_image_url,...payload} = form.value;
+    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
+
     try {
-        console.log({ ...refinedPayload })
-        const res = await CompanyServices.editCompany({ ...refinedPayload });
+        const service = store.getters.editData ? CompanyServices.editCompany : CompanyServices.addCompany;
+        const res = await service(payload);
+
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             store.dispatch('clearEditData');
             router.push('/company');
         }
     } catch (e) {
-        console.error('Error while editing Company:', e);
+        console.error('Error:', e);
     } finally {
         loading.value = false;
     }
 };
 
-
+// Set PreviousDomain on component mount
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id
-})
+    PreviousDomain.value = store.getters.getDomain.id;
+    featured_image.value.images= store.getters.editData?.featured_image_url;
+});
 </script>
+
 <style scoped>
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

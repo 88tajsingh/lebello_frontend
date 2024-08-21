@@ -14,10 +14,19 @@ class ProductService {
     return instance.post(ApiConfig.addProductType, payload)
   }
   editProductType(payload) {
-    return instance.put(ApiConfig.editProductType, payload)
+    return instance.post(ApiConfig.editProductType, payload)
+  }
+  masterSlugUpdateProductType(payload) {
+    return instance.post(ApiConfig.masterSlugUpdateProductType, payload)
+  }
+  globalUpdateProductType(payload) {
+    return instance.post(ApiConfig.globalUpdateProductType, payload)
   }
   deleteProductType(payload) {
     return instance.delete(ApiConfig.deleteProductType, { params: { ...payload } })
+  }
+  mastetrDeleteProductType(payload) {
+    return instance.post(ApiConfig.mastetrDeleteProductType,payload)
   }
   BulkDeleteProductType(payload) {
     return instance.post(ApiConfig.bulkDeleteProductType, payload)

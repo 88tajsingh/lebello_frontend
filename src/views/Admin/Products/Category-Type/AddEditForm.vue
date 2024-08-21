@@ -1,4 +1,4 @@
-<template>
+<template>{{ form }}
     <DefaultCard  :cardTitle="form.id ? `Edit Product Contract Type ` : `Add Product Contract Type`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
@@ -60,93 +60,75 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import ProductServices from '@/services/ProductServices'
 
-const store = useStore();
-const router = useRouter();
+// Store and Router
+const store = useStore()
+const router = useRouter()
 
-const getProductCategoryList = ref([])
-const loading = ref(false)
-const props = defineProps(['id'])
-const id = ref(props.id || null)
-const form = ref(store.getters.editData ||{ parent_contract_location:0})
+// Reactive State
 const errors = ref({})
+const loading = ref(false)
+const form = ref({
+  ...store.getters.editData,
+  parent_product_category_type: store.getters.editData?.parent_product_category_type ?? 0
+})
 const PreviousDomain = ref(null)
-const masterId = ref(null)
+const getProductCategoryList = ref([])
 
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-
-    if (!form.value.name) {
-        errors.value.name = 'Name is required'
-        isValid = false
-    }
-    return isValid
+  errors.value = {}
+  if (!form.value.name) {
+    errors.value.name = 'Name is required'
+    return false
+  }
+  return true
 }
 
+// Submit Handler
 const handleSubmit = async () => {
   if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddProductContractType({ ...form.value })
-            }
-            else {
-                
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-                handleEditProductContractType({ ...refinedPayload })
-            }
-        }
-}
-// api for get patents child json parent  listing 
-const getProductContractTypeTreeList = async (payload) => {
-  getProductCategoryList.value = await getProductCategoryTypeTree(payload)
-}
+    loading.value = true
+    try {
+      if (form.value.domain_id !== PreviousDomain.value) delete form.value.id
+      const { deleted_at, created_at, updated_at, ...payload } = form.value
 
-
-const handleAddProductContractType = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await ProductServices.addProductCategoryType(payload);
-    if (res.status === 200 && res.data.success) {
-      showToast(res.data.message, 'success');
-      router.push('/product-category-type');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
+      const action = store.getters.editData ? ProductServices.editProductCategoryType : ProductServices.addProductCategoryType
+      const { status, data } = await action(payload)
+      if (status === 200 && data.success) {
+        showToast(data.message, 'success')
+        router.push('/product-category-type')
+      } else if (status === 400) {
+        showToast(data.message, 'error')
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error')
+      console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product category type:`, error)
+    } finally {
+      loading.value = false
     }
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error('Error adding location:', error);
-  } finally {
-    loading.value = false;
   }
 }
 
-const handleEditProductContractType = async (payload) => {
-  loading.value = true;
+// Fetch Product Category Type Tree
+const fetchProductCategoryTypeTree = async (domainId) => {
   try {
-    const res = await ProductServices.editProductCategoryType(payload);
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/product-category-type');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
+    getProductCategoryList.value = await getProductCategoryTypeTree({ domain_id: domainId })
   } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
+    console.error('Error fetching product category type tree:', error)
   }
 }
 
-onMounted(()=>{
+// Lifecycle Hooks
+onMounted(() => {
   PreviousDomain.value = store.getters.getDomain.id
+  fetchProductCategoryTypeTree(store.getters.getDomain.id)
 })
 
+// Watchers
 watch(
-    () => form.value.domain_id,
-    () => {
-      getProductContractTypeTreeList({domain_id:form.value.domain_id});
-         }
-);
+  () => form.value.domain_id,
+  (newDomainId) => {
+    fetchProductCategoryTypeTree(newDomainId)
+  }
+)
 </script>

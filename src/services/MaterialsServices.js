@@ -12,6 +12,15 @@ class MaterialServices {
   editMaterial(payload) {
     return instance.post(ApiConfig.editMaterial, payload)
   }
+  masterMaterialSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterMaterialSlugUpdate, payload)
+  }
+  globalMaterialUpdate(payload) {
+    return instance.post(ApiConfig.globalMaterialUpdate, payload)
+  }
+  deleteMasterMaterial(payload) {
+    return instance.post(ApiConfig.deleteMasterMaterial, payload)
+  }
  
   deleteMaterial(payload) {
     return instance.delete(ApiConfig.deleteMaterial, {params: {...payload}})

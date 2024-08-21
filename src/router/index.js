@@ -254,17 +254,10 @@ const router = createRouter({
           meta: { requiresAuth: true }
         },
         {
-          path: '/designer-add',
-          name: 'Designer-add',
+          path: '/designer-form',
+          name: 'Designer-form',
           component: () => import('../views/Admin/Designer/Add-Designer/AddEditForm.vue'),
           meta: { requiresAuth: true }
-        },
-        {
-          path: '/designer-edit/:id',
-          name: 'Designer-edit',
-          component: () => import('../views/Admin/Designer/Add-Designer/AddEditForm.vue'),
-          meta: { requiresAuth: true },
-          props: true
         },
         {
           path: '/designer-taxonomyOrder',

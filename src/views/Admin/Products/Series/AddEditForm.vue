@@ -115,11 +115,11 @@
                                 
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
                                 <div class="py-2  rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
+                                    @click="() => imageData.featured_image.IsOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                            
@@ -133,9 +133,9 @@
     </form>
 </DefaultCard>
     <Loader :isLoading="loading" :fullPage="true" />
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
-            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.IsOpen">
+        <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
     </popupModal>
 </template>
 
@@ -145,112 +145,95 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import { getProductSeriesTree } from '@/helper/Apis'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import ProductServices from '@/services/ProductServices'
-import { clearError,showToast,handleFiles } from '@/helper/functions'
+import { clearError,showToast,handleFileUpdate } from '@/helper/functions'
 import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { trueFalse } from '@/json/data'
 
-const store = useStore();
-const router = useRouter();
+// Store and Router
+const store = useStore()
+const router = useRouter()
+
+// Reactive State
+const form = ref({
+  ...store.getters.editData,
+  parent_product_series: store.getters.editData?.parent_product_series ?? 0
+})
+const PreviousDomain = ref(store.getters.getDomain.id)
 const ProductSeriesList = ref([])
 const loading = ref(false)
-const form = ref(store.getters.editData || { parent_product_series:0})
 const errors = ref({})
-const PreviousDomain = ref(null)
-
-// images variables 
-const featureData = ref({
-    isOpen: false,
-    mediaName: 'feature Image',
-    images: []
+const imageData = ref({
+    featured_image: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
 })
 
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featureData.value.isOpen = false
-    featureData.value.images = data;
-    featureData.value.mediaName = object.mediaName;
-    form.value.featured_image = object.media_ids[0]
-}
+// Image Handlers
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
 
+
+
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-
-    if (!form.value.name) {
-        errors.value.name = 'Name is required'
-        isValid = false
-    }
-    return isValid
+  errors.value = {}
+  if (!form.value.name) {
+    errors.value.name = 'Name is required'
+    return false
+  }
+  return true
 }
-
+// Submit Handler
 const handleSubmit = async () => {
-  if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddProductSeries({ ...form.value })
-            }
-            else {
-                
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, featured_image_url,updated_at, ...refinedPayload } = form.value;
-                handleEditProductSeries({ ...refinedPayload })
-            }
-        }
-}
-// api for get patents child json parent  listing 
-const handleProductSeriesTree = async (payload) => {
-  ProductSeriesList.value = await getProductSeriesTree(payload)
-}
+  if (!validateForm()) return
 
-const handleAddProductSeries = async (payload) => {
-  loading.value = true;
+  loading.value = true
   try {
-    const res = await ProductServices.addProductSeries(payload);
-    if (res.status === 200 && res.data.success) {
-      showToast(res.data.message, 'success');
-      router.push('/product-series');
-    } else if (res.status === 400) {
-      showToas(res.data.message, 'error');
+      if (form.value.domain_id !== PreviousDomain.value) delete form.value.id
+      const { deleted_at, created_at, updated_at,featured_image_url,...payload } = form.value
+
+    const action = store.getters.editData ? ProductServices.editProductSeries : ProductServices.addProductSeries
+    const { status, data } = await action(payload)
+    if (status === 200 && data.success) {
+      showToast(data.message, 'success')
+      router.push('/product-series')
+    } else {
+      showToast(data.message, 'error')
     }
   } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error('Error adding location:', error);
+    showToast('Something went wrong', 'error')
+    console.error(`Error ${store.getters.editData ? 'editing' : 'adding'} product series:`, error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
-const handleEditProductSeries = async (payload) => {
-  loading.value = true;
+// Fetch Product Series Tree
+const fetchProductSeriesTree = async (domainId) => {
   try {
-    const res = await ProductServices.editProductSeries(payload);
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/product-series');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
+    ProductSeriesList.value = await getProductSeriesTree({ domain_id: domainId })
   } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
+    console.error('Error fetching product series tree:', error)
   }
 }
 
-onMounted(()=>{
-  PreviousDomain.value = store.getters.getDomain.id
-  if(store.getters.editData){
-  featureData.value.images = [store.getters.editData.featured_image_url]
-  featureData.value.mediaName = store.getters.editData.featured_image_url}
+// Lifecycle Hooks
+onMounted(() => {
+  if (store.getters.editData) {
+    console.log(store.getters.editData.featured_image_url)
+    imageData.value.featured_image = {
+      images: [{file_url:store.getters.editData.featured_image_url}],
+      mediaName: store.getters.editData.featured_image_url
+    }
+  }
+  fetchProductSeriesTree(PreviousDomain.value)
 })
 
+// Watchers
 watch(
-    () => form.value.domain_id,
-    () => {
-        handleProductSeriesTree({domain_id:form.value.domain_id});
-         }
-);
+  () => form.value.domain_id,
+  (newDomainId) => {
+    fetchProductSeriesTree(newDomainId)
+    form.value.parent_product_series = 0
+  }
+)
 </script>

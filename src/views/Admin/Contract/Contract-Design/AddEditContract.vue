@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Contract` : `Add New Contract`">
-        <DomainComponent  @customChange="(id) => form.domain_id = id"></DomainComponent>
+        <DomainComponent @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -37,9 +37,9 @@
                                 </span>
                             </div>
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text" class="block w-[180px] mr-2 "
-                                    v-model="form.seo_meta_keywords" placeholder="Meta Keywords"
-                                    label="Meta Keywords" />
+                                <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text"
+                                    class="block w-[180px] mr-2 " v-model="form.seo_meta_keywords"
+                                    placeholder="Meta Keywords" label="Meta Keywords" />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
@@ -58,19 +58,19 @@
                                 <TextInput id="TitleBackground" type="text" class="block w-full mr-2 mb-2 h-[33px]"
                                     v-model="form.contract_background_title" placeholder="" label="Title Background		
                           " />
-                          <ColorPicker v-model="form.contract_title_color" />
+                                <ColorPicker v-model="form.contract_title_color" />
                                 <TextInput id="LocationBackground	" type="text" class="block w-full mb-2 mr-2 h-[33px]"
                                     v-model="form.contract_location_background" placeholder="" label="Location Background			
                           " />
                                 <TextInput id="LocationColor" type="text" class="block w-full mr-2 mb-2 h-[33px]"
                                     v-model="form.contract_location_color" placeholder="" label="Location Color			
                           " />
-                          <InputLabel for="SliderImage" value="SliderImage" />
+                                <InputLabel for="SliderImage" value="SliderImage" />
                                 <div class="py-2 rounded-lg mb-2 px-2 border border-stroke"
-                                    @click="() => sliderImageData.isOpen = true"> {{
-                                        sliderImageData.mediaName }}</div>
-                                        <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in sliderImageData.images" :key="file"
+                                    @click="() => imageData.contract_slider_image.isOpen = true"> {{
+                                        imageData.contract_slider_image.mediaName }}</div>
+                                <div class=" mt-3 flex overflow-x-auto">
+                                    <img v-for="file in imageData.contract_slider_image.images" :key="file"
                                         :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file.alternative_text || 'image'">
                                 </div>
@@ -81,15 +81,14 @@
                         <Accordion open="false" header="Contract Logo">
                             <div class=" px-6  h-auto ">
                                 <div class="py-2 min-h-10 rounded-lg px-2 border border-stroke"
-                                    @click="() => contractLogoData.isOpen = true"> {{
-                                        contractLogoData.mediaName }}</div>
+                                    @click="() => imageData.contract_logo.isOpen = true"> {{
+                                        imageData.contract_logo.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                 
-                                    <img v-for="file in contractLogoData.images" :key="file"
+
+                                    <img v-for="file in  imageData.contract_logo.images" :key="file"
                                         :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file.alternative_text || 'image'">
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
                     </div>
@@ -97,7 +96,7 @@
                         <Accordion open="false" header="Featured Products ">
                             <div class="w-52 ml-auto mr-5">
                                 <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                label="Select an option" v-model="form.status" />
+                                    label="Select an option" v-model="form.status" />
                             </div>
                             <div class=" px-6  h-auto ">
                             </div>
@@ -112,8 +111,8 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full"
-                                        valueField="value" label="Select " v-model="form.status" />
+                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                        label="Select " v-model="form.status" />
                                 </div>
                                 <div class="col-span-1 w-full">
                                     <div class="flex flex-col ">
@@ -139,7 +138,7 @@
                             </Button>
                         </div>
                     </Accordion>
-                
+
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Contract Information">
                             <div class="px-6 h-auto ">
@@ -177,7 +176,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <Checkbox :nexted=true :dropdown="true" valueField="id" showField="contract_name"
                                     :checkedData='form.contract_type' :data="contractType"
-                                    @checked-items="(checked)=>{form.contract_type = checked }" />
+                                    @checked-items="(checked) => { form.contract_type = checked }" />
                             </div>
                         </Accordion>
                     </div>
@@ -186,7 +185,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <Checkbox :nexted=true :checkedData='form.contract_location' :dropdown="true"
                                     valueField="id" showField="contract_location" :data="contractLocation"
-                                    @checked-items="(checked)=>form.contract_location=checked" />
+                                    @checked-items="(checked) => form.contract_location = checked" />
                             </div>
                         </Accordion>
                     </div>
@@ -195,36 +194,37 @@
                             <div class="px-6  h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
+                                    @click="() => imageData.featured_image.isOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file.file_url)"
+                                    <img v-for="file in  imageData.featured_image.images" :key="file" :src="$filePath(file.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
                         <div class="mt-4">
-                        <Accordion :open="true" header="Gallery">
-                            <div class="px-6  h-auto ">
-                                <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => galleryData.isOpen = true"> {{
-                                        galleryData.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in galleryData.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                            <Accordion :open="true" header="Gallery">
+                                <div class="px-6  h-auto ">
+                                    <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
+                                    <div class="py-2 rounded-lg px-2 border border-stroke"
+                                        @click="() => imageData.gallery.isOpen = true"> {{
+                                            imageData.gallery.mediaName }}</div>
+                                    <div class=" mt-3 flex overflow-x-auto">
+                                        <img v-for="file in imageData.gallery.images" :key="file"
+                                            :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
+                                            :alt="file.alternative_text || 'image'">
+                                    </div>
+                                    <InputError class="mt-2" :message="errors?.featured_image" />
                                 </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
-                            </div>
-                        </Accordion>
-                    </div>
+                            </Accordion>
+                        </div>
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Simple Fields">
                             <div class="mt-2 px-6 flex h-auto">
-                                    <Select :options="options" showfield="name" class="w-full" :defaultZero='true' valueField="value" label="Select Parent Material"
-                                    v-model="form.simple_fields" />
+                                <Select :options="options" showfield="name" class="w-full" :defaultZero='true'
+                                    valueField="value" label="Select Parent Material" v-model="form.simple_fields" />
                             </div>
                         </Accordion>
                     </div>
@@ -238,12 +238,12 @@
                                             :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
                                     <div v-if="iswithBg" class="">
-                                        <ColorPicker  label="Select BG Color" v-model="form.contract_title_color" />
+                                        <ColorPicker label="Select BG Color" v-model="form.contract_title_color" />
                                     </div>
 
                                 </div>
                                 <div class="">
-                                    <ColorPicker  label="Text Color" v-model="form.sub_heading_text_color" />
+                                    <ColorPicker label="Text Color" v-model="form.sub_heading_text_color" />
                                 </div>
 
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
@@ -277,29 +277,41 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
-            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
-    </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="galleryData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="galleryData.images" :singleFile="false"
-            :closeModal="() => { galleryData.isOpen = false }" :selectedFiles="handleGalleryFiles" />
-    </popupModal>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="contractLogoData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="contractLogoData.images" :singleFile="true"
-            :closeModal="() => { contractLogoData.isOpen = false }" :selectedFiles="handleContractLogoFiles" />
+        v-model:isOpen="imageData.featured_image.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.isOpen = false }"
+            :selectedFiles="(data) => handleFileUpdate('featured_image', data)" />
     </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="sliderImageData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="sliderImageData.images" :singleFile="true"
-            :closeModal="() => { sliderImageData.isOpen = false }" :selectedFiles="handleSliderImageFiles" />
+
+    <!-- Gallery Image Modal -->
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.gallery.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.gallery.images" :singleFile="false"
+            :closeModal="() => { imageData.gallery.isOpen = false }"
+            :selectedFiles="(data) => handleFileUpdate('gallery', data)" />
+    </popupModal>
+
+    <!-- Contract Logo Modal -->
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.contract_logo.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.contract_logo.images" :singleFile="true"
+            :closeModal="() => { imageData.contract_logo.isOpen = false }"
+            :selectedFiles="(data) => handleFileUpdate('contract_logo', data)" />
+    </popupModal>
+
+    <!-- Slider Image Modal -->
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.contract_slider_image.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.contract_slider_image.images" :singleFile="true"
+            :closeModal="() => { imageData.contract_slider_image.isOpen = false }"
+            :selectedFiles="(data) => handleFileUpdate('contract_slider_image', data)" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
-import { ref, onMounted,watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { handleFiles } from '@/helper/functions';
 import { showToast } from '@/helper/functions'
 import ContractServices from '@/services/ContractServices';
@@ -311,172 +323,100 @@ import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
-import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps,productData } from '@/json/data';
+import { PublishOptions, trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps, productData } from '@/json/data';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
+// store and router
+const router = useRouter();
 const store = useStore();
 
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
-const iswithBg = ref(false)
-const contractType = ref([]);
+// Reactive state
+const errors = ref({});
+const loading = ref(false);
+const form = ref(store.getters.editData || { status: '', simple_fields: false, description: '', visibility: '' });
+const PreviousDomain = ref(null);
 const contractLocation = ref([]);
-const loading = ref(false)
-const form = ref(store.getters.editData ||{ status: '', simple_fields:false,description:'',visibility:'' });
-const PreviousDomain = ref(null)
+const contractType  = ref([]);
 
-// images variables 
-const featureData = ref({
-    isOpen: false,
-    mediaName: 'feature Image',
-    images: []
-})
-const galleryData = ref({
-    isOpen: false,
-    mediaName: 'gallery Image',
-    images: []
-})
-const contractLogoData = ref({
-    isOpen: false,
-    mediaName: 'Logo Image',
-    images: []
-})
-const sliderImageData = ref({
-    isOpen: false,
-    mediaName: 'Main Slider Image',
-    images: []
-})
 
-// images functions 
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featureData.value.isOpen = false
-    featureData.value.images = data;
-    featureData.value.mediaName = object.mediaName;
-    form.value.featured_image = object.media_ids[0]
-}
-const handleGalleryFiles = (data) => {
-    const object = handleFiles(data);
-    galleryData.value.isOpen = false
-    galleryData.value.images = data;
-    galleryData.value.mediaName = object.mediaName;
-    form.value.gallery = object.media_ids
-}
-const handleContractLogoFiles = (data) => {
-    console.log(data)
-    const object = handleFiles(data);
-    contractLogoData.value.isOpen = false
-    contractLogoData.value.images = data;
-    contractLogoData.value.mediaName = object.mediaName;
-    form.value.contract_logo = object.media_ids[0]
-}
-const handleSliderImageFiles = (data) => {
-    const object = handleFiles(data);
-    sliderImageData.value.isOpen = false
-    sliderImageData.value.images = data;
-    sliderImageData.value.mediaName = object.mediaName;
-    form.value.contract_slider_image = object.media_ids[0]
-}
+// Image data for various categories
+const imageData = ref({
+    featured_image: { isOpen: false, mediaName: 'Feature Image', images: [] },
+    gallery: { isOpen: false, mediaName: 'Gallery Image', images: [] },
+    contract_logo: { isOpen: false, mediaName: 'Logo Image', images: [] },
+    contract_slider_image: { isOpen: false, mediaName: 'Main Slider Image', images: [] }
+});
 
-const handleSubmit = () => {
-    delete form.value?.domain;
-    try {
-        if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddContract({ ...form.value })
-            }
-            else {
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, featured_image_url,contract_logo_url,
-                    contract_slider_image_url, ...refinedPayload } = form.value;
-                handleEditContract({ ...refinedPayload })
-            }
-        }
-    } catch (e) {
-        console.error('Error contract design add edit :', e)
-    }
-}
+// Handle file updates for different image types
+const handleFileUpdate = (type, data) => {
+    const { media_ids, mediaName } = handleFiles(data);
+    imageData.value[type] = { isOpen: false, mediaName, images: data };
+    form.value[`${type}`] = media_ids[0];
+};
 
+// Validate form fields
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+    errors.value = {};
     if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
+        errors.value.title = 'Title is required';
+        return false;
     }
-    return isValid
-}
+    return true;
+};
 
-const options = [{ name: 'Inherit from parent (No parent found)', value: 0 },
-                    { name: 'Contract Logo', value: 1 }]
+// Handle form submission (add or edit contract)
+const handleSubmit = async () => {
+    if (!validateForm()) return;
 
-// api calls 
-const handleAddContract = async (payload) => {
-    try {
-        const res = await ContractServices.addNewContract(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/Contract-Design');
-        }
-    } catch (e) {
-        console.error('Error while adding contract:', e);
-    } finally {
-        loading.value = false;
-    }
-}
-
-const handleEditContract = async (payload) => {
     loading.value = true;
+    const { featured_image_url, ...payload } = form.value;
+    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
+
     try {
-        const res = await ContractServices.editNewContract(payload);
+        const service = store.getters.editData ? ContractServices.editNewContract : ContractServices.addNewContract;
+        const res = await service(payload);
+
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             router.push('/Contract-Design');
         }
     } catch (e) {
-        console.error('Error while editing contract:', e);
+        console.error('Error:', e);
     } finally {
         loading.value = false;
     }
-}
+};
 
-// contractLoctionTree sorting 
-const contractLoctionTree = async (payload) => {
-    contractLocation.value = await contractLoctionTreeList(payload)
-    loading.value = false;
-}
-// contractLoctionTree sorting 
-const contractTypeTree = async (payload) => {
-    contractType.value = await contractTypeTreeList(payload)
-    loading.value = false;
-}
+// Fetch contract location and type data
+const fetchContractData = async () => {
+    contractLocation.value = await contractLoctionTreeList({ domain_id: store.getters.getDomain?.id });
+    contractType.value = await contractTypeTreeList({ domain_id: store.getters.getDomain?.id });
+};
 
+// Initialize component state
+onMounted(() => {
+    PreviousDomain.value = store.getters.getDomain?.id;
 
-onMounted(()=>{
-    PreviousDomain.value = store.getters?.getDomain?.id;
-    if(store.getters.editData){
-     featureData.value.images = [store.getters.editData.featured_image_url]
-     featureData.value.mediaName = store.getters.editData.featured_image_url
-     contractLogoData.value.images = [store.getters.editData.contract_logo_url]
-     contractLogoData.value.mediaName = store.getters.editData.contract_logo_url
-     sliderImageData.value.images = [store.getters.editData.contract_slider_image_url]
-     sliderImageData.value.mediaName = store.getters.editData.contract_slider_image_url
-     galleryData.value.images = [store.getters.editData.gallery_urls]
+    if (store.getters.editData) {
+        const { featured_image_url, contract_logo_url, contract_slider_image_url, gallery_urls } = store.getters.editData;
+        imageData.value.featured_image.images = [featured_image_url];
+        imageData.value.featured_image.mediaName = featured_image_url;
+        imageData.value.contract_logo.images = [contract_logo_url];
+        imageData.value.contract_logo.mediaName = contract_logo_url;
+        imageData.value.contract_slider_image.images = [contract_slider_image_url];
+        imageData.value.contract_slider_image.mediaName = contract_slider_image_url;
+        imageData.value.gallery.images = [gallery_urls];
     }
-})
+});
 
-watch(
-    () => form.value.domain_id,
-    () => {
-        contractLoctionTree({domain_id:store.getters?.getDomain?.id});
-        contractTypeTree({domain_id:store.getters?.getDomain?.id});
-    }
-);
+// Watch for domain_id changes to update contract data
+watch(() => form.value.domain_id, fetchContractData);
+
 
 
 </script>
+
 <style scoped>
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

@@ -26,7 +26,7 @@
         </div>
       </template>
       <template #image="data">
-        <img :src="$filePath(data.value.image)" alt="Material Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="$filePath(data.value?.media_data?.file_url)" alt="Material Image" style="max-width: 50px; max-height: 50px" />
       </template>
       <template #actions="data">
         <div class="flex gap-3">

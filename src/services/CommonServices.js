@@ -68,14 +68,24 @@ class CommonServices {
     return instance.post(ApiConfig.addTags, payload)
   }
   editTags(payload) {
-    return instance.put(ApiConfig.editTags, payload)
+    return instance.post(ApiConfig.editTags, payload)
+  }
+  globalUpdateTags(payload) {
+    return instance.post(ApiConfig.globalUpdateTags, payload)
   }
   deleteTags(payload) {
     return instance.delete(ApiConfig.deleteTags, { params: { ...payload } })
   }
+  masterSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterSlugUpdate, payload )
+  }
+  masterSlugDelete(payload) {
+    return instance.post(ApiConfig.masterSlugDelete, payload )
+  }
   BulkDeleteTags(payload) {
     return instance.post(ApiConfig.bulkDeleteTags, payload)
   }
+
   getSwatchesMaterialList(payload) {
     return instance.get(ApiConfig.getSwatchesMaterialList, { params: { ...payload } })
   }

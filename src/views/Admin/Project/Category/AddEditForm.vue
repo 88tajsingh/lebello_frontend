@@ -1,5 +1,5 @@
-<template>{{ form }}
-    <DefaultCard  :cardTitle="form.id ? `Edit Product Contract Type ` : `Add Product Contract Type`">
+<template>
+    <DefaultCard  :cardTitle="form.id ? `Edit Product Category Type ` : `Add Product Category Type`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -60,93 +60,78 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import ProjectServices from '@/services/ProjectServices'
 
+// Store and Router
 const store = useStore();
 const router = useRouter();
 
-const projectCategoryTree = ref([])
-const loading = ref(false)
-const form = ref(store.getters.editData || { parent_project_category:0})
-const errors = ref({})
-const PreviousDomain = ref(null)
+// Reactive State
+const errors = ref({});
+const loading = ref(false);
+const form = ref({
+  ...store.getters.editData,
+  parent_project_category: store.getters.editData?.parent_project_category ?? 0
+});
+const PreviousDomain = ref(null);
+const projectCategoryTree = ref([]);
 
+// Form Validation
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+  errors.value = {};
+  if (!form.value.name) {
+    errors.value.name = 'Name is required';
+    return false;
+  }
+  return true;
+};
 
-    if (!form.value.name) {
-        errors.value.name = 'Name is required'
-        isValid = false
-    }
-    return isValid
-}
-
+// Submit Handler
 const handleSubmit = async () => {
   if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddProjectCategory({ ...form.value })
-            }
-            else {
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-                handleEditProjectCategory({ ...refinedPayload })
-            }
-        }
-}
-// api for get patents child json parent material listing 
-const getProjectContractTreeList = async (payload) => {
-  projectCategoryTree.value = await getProjectCategoryTree(payload)
-}
-
-const handleAddProjectCategory = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await ProjectServices.addProjectCategory(payload);
-    if (res.status === 200 && res.data.success) {
-      showToast(res.data.message, 'success');
-      router.push('/Project-category');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
+    loading.value = true;
+    try {
+      if (form.value.domain_id !== PreviousDomain.value) {
+        delete form.value.id;
+      }
+      const { deleted_at, created_at, updated_at, ...payload } = form.value;
+      const action = store.getters.editData ? ProjectServices.editProjectCategory : ProjectServices.addProjectCategory;
+      const { status, data } = await action(payload);
+      if (status === 200 && data.success) {
+        showToast(data.message, 'success');
+        store.dispatch('clearEditData');
+        router.push('/Project-category');
+      } else if (status === 400) {
+        showToast(data.message, 'error');
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error');
+      console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} project category:`, error);
+    } finally {
+      loading.value = false;
     }
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error('Error adding location:', error);
-  } finally {
-    loading.value = false;
   }
-}
+};
 
-const handleEditProjectCategory = async (payload) => {
+// Fetch Project Category Tree
+const fetchProjectCategoryTree = async (domainId) => {
   try {
-    const res = await ProjectServices.editProjectCategory(payload);
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/Project-category');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
+    projectCategoryTree.value = await getProjectCategoryTree({ domain_id: domainId });
   } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
+    console.error('Error fetching project category tree:', error);
   }
-}
+};
 
-// onMounted(()=>{
-//     if(props.id !== undefined && props.id !== null && props.id !== '' ) {
-//         handleGetProjectCategoryById({id:props.id});
-//     }
-//     contractLoctionTree();
-// })
-onMounted(()=>{
-  PreviousDomain.value = store.getters.getDomain.id
-})
+// Lifecycle Hooks
+onMounted(() => {
+  PreviousDomain.value = store.getters.getDomain.id;
+  fetchProjectCategoryTree(store.getters.getDomain.id);
+});
 
+// Watchers
 watch(
-    () => form.value.domain_id,
-    () => {
-      getProjectContractTreeList({domain_id:form.value.domain_id});
-         }
+  () => form.value.domain_id,
+  (newDomainId) => {
+    fetchProjectCategoryTree(newDomainId);
+    form.value.parent_project_category = 0;
+  }
 );
 </script>

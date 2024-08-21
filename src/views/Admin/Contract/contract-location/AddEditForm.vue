@@ -1,4 +1,4 @@
-<template>
+<template>{{form}}
     <DefaultCard  :cardTitle="form.id ? `Edit Contract Location` : `Add Contract Location`">
         <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit">
@@ -60,88 +60,69 @@ import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+//store and router 
 const store = useStore();
 const router = useRouter();
-const contractLoction = ref([])
-const loading = ref(false)
-const props = defineProps(['id'])
-const form = ref(store.getters.editData ||{ parent_contract_location:0})
-const errors = ref({})
-const PreviousDomain = ref(null)
 
+// Reactive state
+const errors = ref({}); 
+const loading = ref(false);
+const form = ref(store.getters.editData || { parent_contract_location: 0 });
+const PreviousDomain = ref(null);
+const contractLoction = ref([]);
+
+// Validate form data
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+    errors.value = {};
     if (!form.value.contract_location) {
-        errors.value.contract_location = 'Name is required'
-        isValid = false
+        errors.value.contract_location = 'Name is required';
+        return false;
     }
-    return isValid
-}
+    return true;
+};
 
+// Submit form data (add or edit contract location)
 const handleSubmit = async () => {
-  if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddContractLocation({ ...form.value })
-            }
-            else {
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-                handleEditContractLocation({ ...refinedPayload })
-            }
+    if (!validateForm()) return;
+
+    loading.value = true;
+    const { featured_image_url, ...payload } = form.value;
+    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
+
+    try {
+        const service = store.getters.editData ? ContractServices.editContractLocation : ContractServices.addContractLocation;
+        const res = await service(payload);
+        console.log(res)
+        if (res.status === 200 && res.data.success) {
+            showToast(res.data.message, 'success');
+            router.push('/contract-location');
+        } else if (res.status === 400) {
+            showToast(res.data.message, 'error');
         }
-}
-// api for get patents child json parent material listing 
+    } catch (error) {
+        showToast('Something went wrong', 'error');
+        console.error('Error:', error);
+    } finally {
+        loading.value = false;
+    }
+};
+
+// Fetch contract location tree data
 const contractLoctionTree = async (payload) => {
-  contractLoction.value = await contractLoctionTreeList(payload)
-}
+    contractLoction.value = await contractLoctionTreeList(payload);
+};
 
-const handleAddContractLocation = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await ContractServices.addContractLocation(payload);
-    if (res.status === 200 && res.data.success) {
-      showToast(res.data.message, 'success');
-      router.push('/contract-location');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error('Error adding location:', error);
-  } finally {
-    loading.value = false;
-  }
-}
+// Initialize component
+onMounted(() => {
+    PreviousDomain.value = store.getters.getDomain.id;
+    contractLoctionTree({ domain_id: store.getters.getDomain.id });
+});
 
-const handleEditContractLocation = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await ContractServices.editContractLocation(payload);
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/contract-location');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
-  } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
-  }
-}
-
-onMounted(()=>{
-    PreviousDomain.value = store.getters.getDomain.id
-    contractLoctionTree({domain_id:store.getters.getDomain.id});
-})
-
+// Watch for changes in domain_id and refresh contract location tree
 watch(
     () => form.value.domain_id,
     () => {
-        contractLoctionTree({domain_id:store.getters.getDomain.id});
-         }
+        contractLoctionTree({ domain_id: store.getters.getDomain.id });
+    }
 );
 </script>

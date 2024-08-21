@@ -60,91 +60,80 @@ import { onMounted, ref,watch } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
+// Store and Router
 const store = useStore();
 const router = useRouter();
 
-const productContractList = ref([])
-const loading = ref(false)
-const props = defineProps(['id'])
-const form = ref(store.getters.editData ||{ parent_contract:0})
-const errors = ref({})
-const PreviousDomain = ref(null)
+// Reactive State
+const errors = ref({});
+const loading = ref(false);
+const form = ref({
+  ...store.getters.editData,
+  parent_contract: store.getters.editData?.parent_contract ?? 0
+});
+const PreviousDomain = ref(null);
+const productContractList = ref([]);
 
+/**
+ * Form Validation
+ */
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
+  errors.value = {};
+  if (!form.value.name) {
+    errors.value.name = 'Name is required';
+    return false;
+  }
+  return true;
+};
 
-    if (!form.value.name) {
-        errors.value.name = 'Name is required'
-        isValid = false
-    }
-    return isValid
-}
-
+// Submit Handler
 const handleSubmit = async () => {
   if (validateForm()) {
-            if (store.getters.editData === null) {
-                handleAddContractLocation({ ...form.value })
-            }
-            else {
-                if (form.value.domain_id !== PreviousDomain.value) {
-                    delete form.value.id;
-                }
-                const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-                handleEditContractLocation({ ...refinedPayload })
-            }
-        }
-}
-// api for get patents child json parent  listing 
-const ProductContractTree = async (payload) => {
-  productContractList.value = await getProductContractTree(payload)
-}
-
-const handleAddContractLocation = async (payload) => {
-  loading.value = true;
-  try {
-    const res = await ProductServices.addProductContract(payload);
-    if (res.status === 200 && res.data.success) {
-      showToast(res.data.message, 'success');
-      router.push('/product-contract');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
+    loading.value = true;
+    try {
+      if (form.value.domain_id !== PreviousDomain.value) {
+        delete form.value.id;
+      }
+      const { deleted_at, created_at, updated_at, ...payload } = form.value;
+      const action = store.getters.editData ? ProductServices.editProductContract : ProductServices.addProductContract;
+      const { status, data } = await action(payload);
+      if (status === 200 && data.success) {
+        showToast(data.message, 'success');
+        store.dispatch('clearEditData');
+        router.push('/product-contract');
+      } else if (status === 400) {
+        showToast(data.message, 'error');
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error');
+      console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product contract:`, error);
+    } finally {
+      loading.value = false;
     }
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error('Error adding location:', error);
-  } finally {
-    loading.value = false;
   }
-}
+};
 
-const handleEditContractLocation = async (payload) => {
-  loading.value = true;
+
+const fetchProductContractTree = async (domainId) => {
   try {
-    const res = await ProductServices.editProductContract(payload);
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/product-contract');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
+    productContractList.value = await getProductContractTree({ domain_id: domainId });
   } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
+    console.error('Error fetching product contract tree:', error);
   }
-}
+};
 
-onMounted(()=>{
-    PreviousDomain.value = store.getters.getDomain.id
-    ProductContractTree({domain_id:form.value?.domain_id});
+// Lifecycle Hooks
+onMounted(() => {
+  PreviousDomain.value = store.getters.getDomain.id;
+  fetchProductContractTree(store.getters.getDomain.id);
+});
 
-})
-
+// Watchers
 watch(
-    () => form.value.domain_id,
-    () => {
-        ProductContractTree({domain_id:form.value?.domain_id});
-         }
+  () => form.value.domain_id,
+  (newDomainId) => {
+    fetchProductContractTree(newDomainId);
+    form.value.parent_contract = 0;
+  }
 );
 </script>

@@ -1,7 +1,7 @@
 <template>
     <transition name="modal-fade">
       <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center py-2  bg-black bg-opacity-50 z-999999">
-        <div class="modal-container bg-white rounded-lg shadow-lg max-w-sm  max-h-sm w-[400] h-[200px] overflow-y-auto">
+        <div class="modal-container bg-white rounded-lg shadow-lg max-w-sm  max-h-sm w-[400] h-[220px] overflow-y-auto">
           <div class="modal-header flex justify-between items-center mt-4 ml-3 px-4 bg-gray-200 rounded-t-lg">
             <h3 class="text-lg font-semibold">{{ modalTitle }}</h3>
             <button @click="closeModal" class="text-gray-500 hover:text-gray-700 focus:outline-none">
@@ -33,7 +33,7 @@
     props: {
       modalTitle: String,
       isOpen: {
-        type: Boolean,
+        type: [Boolean,Number],
         required: true
       }
     },

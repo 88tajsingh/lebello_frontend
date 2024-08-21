@@ -1,6 +1,6 @@
 <template>{{ form }}
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
-        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
+        <DomainComponent  @customChange="(id) => form.domain_id = id"></DomainComponent>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -22,37 +22,30 @@
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="New Store Options">
-                            <div class="px-3">
-                                <div class="col-span-2 w-full border  border-gray rounded-lg">
-                                    <div class="mt-2 ml-3  ">
-                                        <input-label for="slides" value="Slider " />
-                                        <div class="text-gray-4 text-[13px]">Minimum Size 1600 x 700px</div>
-                                        <div class=" flex flex-wrap">
-                                            <div class="relative p-1" v-for="(slide, index) in slider.images"
-                                                :key="`slide-${index}`">
-                                                <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(slide.file_url)">
-                                                <div @click="() => handleRemoveImage(slide)"
-                                                    class=" absolute top-2 right-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button @click="() => isOpenSlider = true" type="button"
-                                            class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
-                                            Gallery
-                                        </button>
-                                    </div>
-                                    <div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Accordion>
+    <div class="px-3">
+        <div class="col-span-2 w-full border border-gray rounded-lg">
+            <div class="mt-2 ml-3">
+                <input-label for="slides" value="Slider" />
+                <div class="text-gray-4 text-[13px]">Minimum Size 1600 x 700px</div>
+                <div class="flex flex-wrap">
+                    <div class="relative p-1" v-for="(slide, index) in imageData.slider.images" :key="`slide-${index}`">
+                        <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]" :src="$filePath(slide.file_url)" />
+                        <div @click="() => handleRemoveImage(slide)" class="absolute top-2 right-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <button @click="() => imageData.slider.isOpen = true" type="button" class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
+                    Gallery
+                </button>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</Accordion>
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Store Options">
@@ -268,32 +261,28 @@
                     </div>
                     <div class="mt-3">
                         <Accordion :open="true" header="Downloadable Files">
-                            <div class="col-span-2  w-full border border-gray rounded-lg">
-                                <div class="mt-2 ml-3  ">
-                                    <div class=" flex flex-wrap">
-                                        <div class="relative p-1" v-for="(slide, index) in Downloadable.images"
-                                            :key="`slide-${index}`">
-                                            <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                :src="$filePath(slide.file_url)">
-                                            <div @click="() => handleRemoveDownloadable(slide)"
-                                                class=" absolute top-2 right-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button @click="() => Downloadable.isOpen = true" type="button"
-                                        class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
-                                        Gallery
-                                    </button>
-                                </div>
-                                <div>
-                                </div>
-                            </div>
-                        </Accordion>
+    <div class="col-span-2 w-full border border-gray rounded-lg">
+        <div class="mt-2 ml-3">
+            <div class="flex flex-wrap">
+                <div class="relative p-1" v-for="(file, index) in imageData.downloadable_files.images" :key="`file-${index}`">
+                    <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]" :src="$filePath(file.file_url)" />
+                    <div @click="() => handleRemoveDownloadable(file)" class="absolute top-2 right-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <button @click="() => imageData.downloadable_files.isOpen = true" type="button"
+                class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
+                Gallery
+            </button>
+        </div>
+        <div>
+        </div>
+    </div>
+</Accordion>
+
                     </div>
                     <div class="mt-3">
                         <Accordion :open="true" header="Seo Options">
@@ -332,12 +321,15 @@
                                 <div class="mt-3">
                                     <div class="px-6  h-auto ">
                                         <div class="py-2 rounded-lg px-2 border border-stroke"
-                                            @click="() => { productsSpecsIndex = index; Specs_Img.isOpen = true; }"> {{
-                                                Specs_Img.mediaName }}</div>
-                                        <div class=" mt-3 flex overflow-x-auto">
-                                            <img :src="$filePath(Specs_Img.images[index]?.file_url)"
-                                                class="inline-block w-auto h-34 mr-4" alt="image">
-                                        </div>
+    @click="() => { productsSpecsIndex = index; imageData.product_specs.isOpen = true; }">
+    {{ imageData.product_specs.mediaName }}
+</div>  
+<div class="mt-3 flex overflow-x-auto">
+    <img v-if="imageData.product_specs.images[index]" 
+        :src="$filePath(imageData.product_specs.images[index].file_url)"
+        class="inline-block w-auto h-34 mr-4" 
+        :alt="imageData.product_specs.images[index].alternative_text || 'image'">
+</div>
                                     </div>
                                 </div>
                             </div>
@@ -412,24 +404,27 @@
                         <Accordion :open="true" header="Featured image">
                             <div class="px-6  h-auto ">
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => featureData.isOpen = true"> {{
-                                        featureData.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featureData.images" :key="file" :src="$filePath(file)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
-                                </div>
+    @click="() => imageData.featured_image.isOpen = true">
+    {{ imageData.featured_image.mediaName }}
+</div>
+<div class="mt-3 flex overflow-x-auto">
+    <img v-for="file in imageData.featured_image.images" :key="file.file_url" :src="$filePath(file.file_url)"
+        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+</div>
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-4 ">
                         <Accordion :open="true" header="Gallery">
-                            <div class="px-6  h-auto ">
+                            <div class="px-6 h-auto">
                                 <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => galleryData.isOpen = true"> {{
-                                        galleryData.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in galleryData.images" :key="file" :src="$filePath(file)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file.alternative_text || 'image'">
+                                    @click="() => imageData.gallery.isOpen = true">
+                                    {{ imageData.gallery.mediaName }}
+                                </div>
+                                <div class="mt-3 flex overflow-x-auto">
+                                    <img v-for="file in imageData.gallery.images" :key="file"
+                                        :src="$filePath(file)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file.alternative_text || 'image'">
                                 </div>
                             </div>
                         </Accordion>
@@ -439,35 +434,37 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="isOpenSlider">
-        <GetLibrary btnName="Select files" :getFlag="true" :selected="slider.images" :singleFile="false"
-            :closeModal="isSliderClose" :selectedFiles="handleSlider" />
-    </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="Downloadable.isOpen">
-        <GetLibrary btnName="Select files" :getFlag="true" :selected="Downloadable.images" :singleFile="false"
-            :closeModal="isDownloadableClose" :selectedFiles="handleDownloadable" />
-    </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="Specs_Img.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="Specs_Img.images" :singleFile="true"
-            :closeModal="() => { Specs_Img.isOpen = false }" :selectedFiles="handleSpecs_Img" />
-    </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featureData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featureData.images" :singleFile="true"
-            :closeModal="() => { featureData.isOpen = false }" :selectedFiles="handleFeatureFiles" />
-    </popupModal>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="galleryData.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="galleryData.images" :singleFile="true"
-            :closeModal="() => { galleryData.isOpen = false }" :selectedFiles="handleGalleryFiles" />
-    </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.slider.isOpen">
+    <GetLibrary btnName="Select files" :getFlag="true" :selected="imageData.slider.images" :singleFile="false"
+        :closeModal="() => { imageData.slider.isOpen = false }" :selectedFiles="handleSlider" />
+</popupModal>
 
+<popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.downloadable_files.isOpen">
+    <GetLibrary btnName="Select files" :getFlag="true" :selected="imageData.downloadable_files.images" :singleFile="false"
+        :closeModal="() => { imageData.downloadable_files.isOpen = false }" :selectedFiles="handleDownloadable" />
+</popupModal>
+
+<popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.product_specs.isOpen">
+    <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.product_specs.images" :singleFile="true"
+        :closeModal="() => { imageData.product_specs.isOpen = false }" :selectedFiles="handleSpecs_Img" />
+</popupModal>
+
+<popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.isOpen">
+    <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+        :closeModal="() => { imageData.featured_image.isOpen = false }" :selectedFiles="handleFeatureFiles" />
+</popupModal>
+
+<popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.gallery.isOpen">
+    <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.gallery.images" :singleFile="true"
+        :closeModal="() => { imageData.gallery.isOpen = false }" :selectedFiles="handleGalleryFiles" />
+</popupModal>
 
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
+
 <script setup>
-import router from '@/router';
-import { defineEmits } from 'vue';
 import { ref, onMounted, watch,computed } from "vue";
-import { showToast, handleFiles } from '@/helper/functions'
+import { showToast, handleFileUpdate } from '@/helper/functions'
 import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
 import { PublishOptions, productOptionsType, swatches } from '@/json/data';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
@@ -478,344 +475,219 @@ import DatePicker from '@/components/Admin-components/form-components/DatePicker
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import { useStore } from 'vuex';
+import { useRouter } from "vue-router";
 import CommonServices from '@/services/CommonServices';
 import StoreServices from '@/services/StoreServices';
 
 const store = useStore();
+const router = useRouter();
 
-const emit = defineEmits(['handleApi']);
-const errors = ref({})
+// Reactive references
+const errors = ref({});
 const MaterialTreeListData = ref([]);
 const storeCategoryTree = ref([]);
 const productsSpecsIndex = ref(0);
 
 const projectCategories = ref([]);
-const loading = ref(false)
+const loading = ref(false);
 const TagsData = ref([]);
 const materialSwatchesList = ref([]);
 const form = ref(store.getters.editData || { status: '', featured: false, product_option: [], product_specs: [] });
 const SliderSelects = ref([]);
 const isOpenSlider = ref(false);
-const PreviousDomain = ref(null)
+const PreviousDomain = ref(null);
 
 const formItems = ref([
-    {
-        sku_number: '',
-        shipping_price: '',
-        name: '',
-        sub_title: '',
-        price: '',
-        productSelectedOptions: 'material',
-        material: '',
-        project_categories: [],
-        export_field: false
-    }
+  {
+    sku_number: '',
+    shipping_price: '',
+    name: '',
+    sub_title: '',
+    price: '',
+    productSelectedOptions: 'material',
+    material: '',
+    project_categories: [],
+    export_field: false
+  }
 ]);
 
-
-// images variables 
-const Specs_Img = ref({
-    isOpen: false,
-    mediaName: 'Image',
-    images: []
-})
-const featureData = ref({
-    isOpen: false,
-    mediaName: 'Image',
-    images: []
-})
-const galleryData = ref({
-    isOpen: false,
-    mediaName: 'Image',
-    images: []
-})
-
-const slider = ref({
-    isOpen: false,
-    mediaName: 'Slider',
-    images: []
-})
-
-const Downloadable = ref({
-    isOpen: false,
-    mediaName: 'Downloadable',
-    images: []
-})
-
-
-// images functions 
-const handleSpecs_Img = (data) => {
-    const object = handleFiles(data);
-    Specs_Img.value.isOpen = false
-    Specs_Img.value.images = data;
-    Specs_Img.value.mediaName = object.mediaName;
-    console.log(productsSpecsIndex.value)
-    form.value.product_specs[productsSpecsIndex.value].image = object.media_ids[0]
-}
-const handleFeatureFiles = (data) => {
-    const object = handleFiles(data);
-    featureData.value.isOpen = false
-    featureData.value.images = data;
-    featureData.value.mediaName = object.mediaName;
-    console.log(productsSpecsIndex.value)
-    form.value.featured_image = object.media_ids[0]
-}
-const handleGalleryFiles = (data) => {
-    const object = handleFiles(data);
-    galleryData.value.isOpen = false
-    galleryData.value.images = data;
-    galleryData.value.mediaName = object.mediaName;
-    console.log(productsSpecsIndex.value)
-    form.value.gallery = object.media_ids
+// Function to add a new form item
+function addFormItem() {
+  form.value.product_option.push(formItems.value);
 }
 
+// Object for handling different types of images
+const imageData = ref({
+  product_specs: { isOpen: false, mediaName: 'Image', images: [] },
+  featured_image: { isOpen: false, mediaName: 'Image', images: [] },
+  gallery: { isOpen: false, mediaName: 'Image', images: [] },
+  slider: { isOpen: false, mediaName: 'Slider', images: [] },
+  downloadable_files: { isOpen: false, mediaName: 'Downloadable', images: [] }
+});
 
+// Common handler for image updates
+const handleSpecs_Img = (data) => handleFileUpdate('product_specs', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
+const handleSlider = (data) => handleFileUpdate('slider', data, true, imageData, form);
+const handleDownloadable = (data) => handleFileUpdate('downloadable_files', data, true, imageData, form);
 
-// slider images 
-const handleSlider = (data) => {
-    const object = handleFiles(data);
-    isSliderClose();
-    slider.value.images = data;
-    slider.value.mediaName = object.mediaName;
-    form.value.slider = object.media_ids
-}
-
-// store  slider 
-const isSliderClose = () => {
-    isOpenSlider.value = false;
-}
-// remove slider 
+// Function to remove a specific image from the slider
 const handleRemoveImage = (slide) => {
-    const index = slider.value.images.findIndex(item => item.id === slide.id);
-    if (index !== -1) {
-        slider.value.images.splice(index, 1);
-        form.value.slider = slider.value.images.map(item => item.id)
-    }
-}
+  const index = imageData.value.slider.images.findIndex(item => item.id === slide.id);
+  if (index !== -1) {
+    imageData.value.slider.images.splice(index, 1);
+    form.value.slider = imageData.value.slider.images.map(item => item.id);
+  }
+};
 
-
-// images  Downloadable
-const handleDownloadable = (data) => {
-    const object = handleFiles(data);
-    isDownloadableClose();
-    Downloadable.value.images = data;
-    Downloadable.value.mediaName = object.mediaName;
-    form.value.downloadable_files = object.media_ids
-}
-
-//   Downloadable close 
-const isDownloadableClose = () => {
-    Downloadable.value.isOpen = false;
-}
-// Downloadable REMOVE
+// Function to remove a specific downloadable file
 const handleRemoveDownloadable = (slide) => {
-    const index = Downloadable.value.images.findIndex(item => item.id === slide.id);
-    if (index !== -1) {
-        Downloadable.value.images.splice(index, 1);
-        form.value.downloadable_files = Downloadable.value.images.map(item => item.id)
-    }
-}
+  const index = imageData.value.downloadable_files.images.findIndex(item => item.id === slide.id);
+  if (index !== -1) {
+    imageData.value.downloadable_files.images.splice(index, 1);
+    form.value.downloadable_files = imageData.value.downloadable_files.images.map(item => item.id);
+  }
+};
 
-// swathces materials list functions 
+// Swatches and materials functions
 const selectedSwatches = ref([]);
 const selectedSwatchIds = ref([]);
 const selectedMaterialIds = ref([]);
 
+// Function to toggle swatch selection
 const toggleSwatchSelection = (item) => {
-  const index = selectedSwatches.value.findIndex(swatch => swatch.id === item.id);
-  
-  // If the swatch is not in the selection, add it
-  if (index === -1) {
+  const isSelected = selectedSwatches.value.some(swatch => swatch.id === item.id);
+  if (!isSelected) {
     selectedSwatches.value.push(item);
     selectedSwatchIds.value.push(item.master_swatch_id);
   }
-//    else {
-//     // Remove the swatch only if there is more than one swatch selected
-//     if (selectedSwatches.value.length > 1) {
-//       selectedSwatches.value.splice(index, 1);
-//       const swatchIdIndex = selectedSwatchIds.value.indexOf(item.master_swatch_id);
-//       if (swatchIdIndex !== -1) {
-//         selectedSwatchIds.value.splice(swatchIdIndex, 1);
-//       }
-      
-//       // Remove materials associated with this swatch
-//       item.materials_data.forEach(material => {
-//         const materialIndex = selectedMaterialIds.value.indexOf(material.id);
-//         if (materialIndex !== -1) {
-//           selectedMaterialIds.value.splice(materialIndex, 1);
-//         }
-//       });
-//     }
-//   }
-  
-  console.log('Selected Swatches:', selectedSwatches.value);
-  console.log('Selected Swatch IDs:', selectedSwatchIds.value);
-}
-
-const isSelected = (item) => {
-  return selectedSwatches.value.some(selected => selected.id === item.id);
 };
 
+// Function to check if a swatch is selected
+const isSelected = (item) => 
+  selectedSwatches.value.some(swatch => swatch.id === item.id);
+
+// Function to handle material checkbox changes
 const handleCheckboxChange = (materialId, event) => {
-  if (event.target.checked) {
+  const { checked } = event.target;
+  if (checked) {
     selectedMaterialIds.value.push(materialId);
   } else {
-    const index = selectedMaterialIds.value.indexOf(materialId);
-    if (index !== -1) {
-      selectedMaterialIds.value.splice(index, 1);
-    }
+    selectedMaterialIds.value = selectedMaterialIds.value.filter(id => id !== materialId);
   }
   console.log('Selected Materials:', selectedMaterialIds.value);
 };
-// end swatch material functions 
 
-
-
-
-function addFormItem() {
-    form.value.product_option.push({
-        sku_number: '',
-        shipping_price: '',
-        name: '',
-        sub_title: '',
-        price: '',
-        status: null,
-        project_categories: [],
-        export_field: false
-    });
-}
-
+// Function to remove a form item at a specific index
 function removeFormItem(index) {
-    form.value.product_option.splice(index, 1);
+  form.value.product_option.splice(index, 1);
 }
+
+// Function to add a new product specification
 function product_specs() {
-    form.value.product_specs.push({
-        seo_title: '',
-        description: '',
-        image: '',
-    });
+  form.value.product_specs.push({
+    seo_title: '',
+    description: '',
+    image: '',
+  });
 }
 
+// Function to remove a product specification at a specific index
 function removeproduct_specs(index) {
-    form.value.product_option.splice(index, 1);
+  form.value.product_specs.splice(index, 1);
 }
 
-
-
-const handleSubmit = () => {
-    delete form.value?.domain;
-    // material_swatches
-    if (validateForm()) {
-        if (store.getters.editData === null) {
-            handleAddStoreProduct({ ...form.value,
-                material_swatches:[{material:selectedMaterialIds.value},
-                {swatches:selectedSwatchIds.value}
-                ] })
-        }   
-        else {
-            if (form.value.domain_id !== PreviousDomain.value) {
-                delete form.value.id;
-            }
-            const { deleted_at, created_at, updated_at, ...refinedPayload } = form.value;
-            handleEditStoreProduct({ ...refinedPayload })
-        }
-    }
-}
-
+// Function to validate form data
 const validateForm = () => {
-    let isValid = true
-    errors.value = {}
-    if (!form.value.title) {
-        errors.value.title = 'Title is required'
-        isValid = false
-    }
-    return isValid
-}
-
-const handleGetTags = async (payload) => {
-    //   getLoading.value = true;
-    try {
-        const res = await CommonServices.getTags(payload);
-        if (res.status === 200 && res.data.success) {
-            TagsData.value = res.data.data;
-        }
-    } catch (e) {
-        console.error('Error while getTags:', e);
-    } finally {
-        // getLoading.value = false;
-    }
-};
-const handleGetSwatchesMaterial = async (payload) => {
-    //   getLoading.value = true;
-    try {
-        const res = await CommonServices.getSwatchesMaterialList(payload);
-        if (res.status === 200 && res.data.success) {
-            materialSwatchesList.value = res.data.data;
-        }
-    } catch (e) {
-        console.error('Error while getTags:', e);
-    } finally {
-        // getLoading.value = false;
-    }
+  let isValid = true;
+  errors.value = {};
+  if (!form.value.title) {
+    errors.value.title = 'Title is required';
+    isValid = false;
+  }
+  return isValid;
 };
 
-const handleAddStoreProduct = async (payload) => {
-    try {
-        const res = await StoreServices.addStoreProduct(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/store-product');
-        }
-    } catch (e) {
-        console.error('Error while adding store Product:', e);
-    } finally {
-        loading.value = false;
-    }
-}
-
-const handleEditStoreProduct = async (payload) => {
+// Function to handle form submission
+const handleSubmit = async () => {
+  if (validateForm()) {
     loading.value = true;
     try {
-        const res = await StoreServices.editStoreProduct(payload);
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/store-product');
-        }
-    } catch (e) {
-        console.error('Error while editing Store product:', e);
+      if (form.value.domain_id !== PreviousDomain.value) {
+        delete form.value.id;
+      }
+
+      // Prepare payload by excluding unwanted fields
+      const { deleted_at, created_at, featured_image_url,downlaodable_urls, gallery_urls, slider_urls, downloadable_urls, updated_at, ...payload } = form.value;
+
+      payload.material_swatches = [
+        { material: selectedMaterialIds.value },
+        { swatches: selectedSwatchIds.value }
+      ];
+
+      const action = store.getters.editData ? StoreServices.editStoreProduct : StoreServices.addStoreProduct;
+      const { status, data } = await action(payload);
+
+      if (status === 200 && data.success) {
+        showToast(data.message, 'success');
+        store.dispatch('clearEditData');
+        router.push('/store-product');
+      } else if (status === 400) {
+        showToast(data.message, 'error');
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error');
+      console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} store product:`, error);
     } finally {
-        loading.value = false;
+      loading.value = false;
     }
-}
+  }
+};
 
-const materialTree = async (payload) => {
-    MaterialTreeListData.value = await MaterialTreeList(payload)
-}
+// Function to fetch all necessary data
+const handleFetchAllData = async (payload) => {
+  try {
+    await Promise.all([
+      CommonServices.getTags(payload).then(res => {
+        if (res.status === 200 && res.data.success) {
+          TagsData.value = res.data.data;
+        }
+      }).catch(e => console.error('Error while getTags:', e)),
 
-const handleStoreCategoryTree = async (payload) => {
-    storeCategoryTree.value = await getStoreCategoryTree(payload)
-}
+      CommonServices.getSwatchesMaterialList(payload).then(res => {
+        if (res.status === 200 && res.data.success) {
+          materialSwatchesList.value = res.data.data;
+        }
+      }).catch(e => console.error('Error while getSwatchesMaterialList:', e)),
+
+      MaterialTreeList(payload).then(data => {
+        MaterialTreeListData.value = data;
+      }).catch(e => console.error('Error while getMaterialTree:', e)),
+
+      getStoreCategoryTree(payload).then(data => {
+        storeCategoryTree.value = data;
+      }).catch(e => console.error('Error while getStoreCategoryTree:', e))
+    ]);
+  } catch (e) {
+    console.error('Error in handleFetchAllData:', e);
+  }
+};
+
+// Lifecycle hook to initialize data on component mount
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id;
-    SliderSelects.value = store.getters.editData?.slider_urls
-    handleGetTags({ domain_id: store.getters.getDomain.id })
-    materialTree({ domain_id: store.getters.getDomain.id })
-    handleStoreCategoryTree({ domain_id: store.getters.getDomain.id })
-    handleGetSwatchesMaterial({ domain_id:store.getters.getDomain.id })
-})
-
-
-
+  const domainId = store.getters.getDomain.id;
+  PreviousDomain.value = domainId;
+  SliderSelects.value = store.getters.editData?.slider_urls;
+  
+  // Initialize image on edit data
+  if(store.getters.editData){
+  imageData.value.gallery.images = store.getters.editData.gallery_urls;
+  imageData.value.slider.images = store.getters.editData.slider_urls;
+  imageData.value.downloadable_files.images = store.getters.editData.downloadable_urls;
+  imageData.value.featured_image.images = store.getters.editData.featured_image_url;
+  }
+  // Fetch all required data
+  handleFetchAllData({ domain_id: domainId });
+});
 </script>
-<style scoped>
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-</style>
