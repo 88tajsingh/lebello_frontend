@@ -143,6 +143,10 @@ const ApiConfig = {
   deleteProductCategoryType: '/delete-product-category-type',
   bulkDeleteProductCategoryType: '/bulk-delete-product-category-type',
   getProductCategoryTypeTreeList: '/product-category-type-tree-list',
+  productSlugUpdate: '/master-product-category-type-slug-update',
+  slugUpdateProductCategoryType: '/master-product-category-type-slug-update',
+  deleteMasterProductCategoryType: '/delete-master-product-category-type',
+  globalUpdateMasterProductCategoryType: '/global-product-category-type-update',
 
   // products Contract
   getProductContract: '/get-contract-list',

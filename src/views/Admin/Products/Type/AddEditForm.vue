@@ -100,11 +100,11 @@ const router = useRouter()
 // Reactive State
 const errors = ref({})
 const loading = ref(false)
-const checkedFields = ref({})
 const form = ref({
   ...store.getters.editData,
   parent_product_type: store.getters.editData?.parent_product_type ?? 0
 })
+const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 const getProductTypeList = ref([])
 
@@ -193,7 +193,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
   form.value.parent_product_type = 0;
 
   // Check if newDomainId is present in domains_data and fetch product type data if so
-  if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes()) {
+  if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
     fetchProductTypeData();
   } else {
     console.log('data not in array', form.value?.domains_data);

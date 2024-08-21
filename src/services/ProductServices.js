@@ -44,13 +44,22 @@ class ProductService {
     return instance.post(ApiConfig.addProductCategoryType, payload)
   }
   editProductCategoryType(payload) {
-    return instance.put(ApiConfig.editProductCategoryType, payload)
+    return instance.post(ApiConfig.editProductCategoryType, payload)
   }
   deleteProductCategoryType(payload) {
     return instance.delete(ApiConfig.deleteProductCategoryType, { params: { ...payload } })
   }
   BulkDeleteProductCategoryType(payload) {
     return instance.post(ApiConfig.bulkDeleteProductCategoryType, payload)
+  }
+  slugUpdateProductCategoryType(payload) {
+    return instance.post(ApiConfig.slugUpdateProductCategoryType, payload)
+  }
+  deleteMasterProductCategoryType(payload) {
+    return instance.post(ApiConfig.deleteMasterProductCategoryType, payload)
+  }
+  globalUpdateProductCategoryType(payload) {
+    return instance.post(ApiConfig.globalUpdateMasterProductCategoryType, payload)
   }
 
   // Product Contract 
