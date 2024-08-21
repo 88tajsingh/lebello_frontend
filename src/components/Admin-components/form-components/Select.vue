@@ -1,29 +1,38 @@
 <template>
-  <div class="">
+  <div class="flex">
+    <SingleCheck 
+      v-if="hasCheckBox" 
+      :id="`${label}-checkbox`" 
+      v-model:checked="checked" 
+      @change="handleCheckboxChange"
+    />
     <select 
       class="rounded-lg border bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
       v-bind="$attrs"
       v-model="selectedOption"
-      :class="cusClass"
+      :class="[cusClass]"
       :disabled="disabled"
-      @change="handleChange"
+      @change="handleSelectChange"
     >
-      <!-- <option :value="selectedOption=== null ? null : ''" >{{ label }}</option> -->
-      <option v-if="props.defaultZero === true" value='0' >{{ label }}</option>
-      <option v-else :value="selectedOption=== null ? null : '' "  >{{ label }}</option>
+      <!-- Optional placeholder option -->
+      <option v-if="defaultZero" value='0'>{{ label }}</option>
+      <option v-else :value="selectedOption === null ? null : ''">{{ label }}</option>
       <template v-for="option in options" :key="option[valueField]">
-                <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>                
-                <option v-if="option.children" v-for="child in option.children" :value="child[valueField]" :key="child[valueField]">
-                  &nbsp;&nbsp;&nbsp;{{ child[showfield] }}</option>
-            </template>
+        <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>
+        <template v-if="option.children">
+          <option v-for="child in option.children" :value="child[valueField]" :key="child[valueField]">
+            &nbsp;&nbsp;&nbsp;{{ child[showfield] }}
+          </option>
+        </template>
+      </template>
     </select>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, defineEmits, defineProps } from 'vue';
+import SingleCheck from './SingleCheck.vue';
 
-// Define props and emit setup
 const props = defineProps({
   options: {
     type: Array,
@@ -47,26 +56,41 @@ const props = defineProps({
   },
   defaultZero: {
     type: Boolean,
+    default: false
   },
   disabled: {
     type: Boolean,
     default: false
   },
   modelValue: {
-    type: [ Number, String], 
+    type: [Number, String], 
     default: 0
   },
+  hasCheckBox: {
+    type: Boolean,
+    default: false
+  }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'update:checkValue']);
 
 const selectedOption = ref(props.modelValue);
+const checked = ref(false);
 
 watch(() => props.modelValue, (newValue) => {
   selectedOption.value = newValue;
 });
 
-const handleChange = (event) => {
+const handleSelectChange = (event) => {
   emit('update:modelValue', event.target.value);
 };
+
+const handleCheckboxChange = (event) => {
+  checked.value = event.target.checked;
+  emit('update:checkValue', checked.value);
+};
+
+watch(checked, (newChecked) => {
+  emit('update:checkValue', newChecked);
+});
 </script>

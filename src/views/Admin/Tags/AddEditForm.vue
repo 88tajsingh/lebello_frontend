@@ -1,11 +1,24 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Tags` : `Add Tags`">
-    <DomainComponent :domains="form.domains_data" @domainArray="(ids) => { }"
-      @customChange="(id) => (form.domain_id = id)"
-      :deleteService="CommonServices.deleteTags"
-      >
-    
+    <DomainComponent @customChange="(id) => (form.domain_id = id)"
+      :deleteService="CommonServices.deleteTags" masterKey="master_tag_id"
+      :masterDeleteService="CommonServices.masterSlugDelete" routeTo="tags">
     </DomainComponent>
+    <template v-if="form.id" v-slot:header>
+      <form  class="flex  my-auto" @submit.prevent="updateSlug">
+        <TextInput
+        type="text"
+        class="block mr-2 h-[40px] w-full"
+        placeholder="Master Slug"
+        v-model="slugUpdate"
+        />
+        <button type="submit"
+        :disabled="slugUpdate===form.slug"
+        class="flex px-5 items-center justify-center rounded bg-primary text-[15px]  font-sm text-gray hover:bg-opacity-90">
+       Update Slug
+      </button>
+      </form>
+  </template>
 
     <form @submit.prevent="handleFormSubmit">
       <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -20,7 +33,7 @@
 
         <div class="flex flex-col">
           <TextInput type="text" class="block mr-2 h-[40px] w-full" placeholder="" v-model="form.slug"
-            :a="checkBoxFlag" @update:checkValue="(value) => { checkedFields.slug = value }" label="Slug" />
+           disabled="true"  label="Slug (Read only)" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The “slug” is the URL-friendly version of the name. It is usually all lowercase and
             contains only letters, numbers, and hyphens.
@@ -47,18 +60,20 @@
   <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
-
 <script setup>
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import CommonServices from '@/services/CommonServices'
 import { getGlobalUpdateData, validateForm, checkForGlobalUpdate } from '@/helper/functions'
-import { commonApiCalls, commonGetCalls } from '@/helper/Apis'
+import { commonApiCalls,  } from '@/helper/Apis'
+import { showToast } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import _ from 'lodash'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 // Access the Vuex store
 const store = useStore()
+const router = useRouter()
 
 // Reactive state variables
 const loading = ref(false)
@@ -66,21 +81,26 @@ const form = ref(store.getters.editData || {})
 const checkedFields = ref({})
 const checkBoxFlag = ref(form.value.id ? true :false)
 const errors = ref({})
-const PreviousDomain = ref(null)
+const slugUpdate = ref(form.value.slug)
 
 
 // Function to handle fetching and updating form data
 const handleGetTags = async () => {
-  try {
+  
+    try {
     const payload = { master_tag_id: form.value.master_tag_id, domain_id: form.value.domain_id }
-    const newData = await commonGetCalls(payload, loading)
-    if (newData) {
-      Object.assign(form.value, newData)
-      console.log("newData", newData)
+      const res = await CommonServices.getTags(payload);
+      if (res.status === 200 && res.data.success) {
+         const data= res.data.data[0];
+          store.dispatch('setEdit', data);
+           Object.assign(form.value, data)
+      }
+    } catch (e) {
+      showToast('Something went wrong', 'error')
+      console.error('Error while getting contract locations:', e);
+    } finally {
+      
     }
-  } catch (error) {
-    console.log(error)
-  }
 }
   
 // check the api calls if checked then call globalupdate else call handleAddEditApi
@@ -100,13 +120,26 @@ const handleAddEditApi = async () => {
   loading.value = true
   const { deleted_at, created_at, updated_at, domains_data, featured_image_url, ...payload } =
     form.value
-
-  if (payload.domain_id !== PreviousDomain.value) delete payload.id
-
+  if(!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
+  // if (payload.domain_id !== PreviousDomain.value) delete payload.id
   const service = store.getters.editData ? CommonServices.editTags : CommonServices.addTags
-
-  commonApiCalls(service, payload, 'tags', loading)
-
+  try {
+      const res = await service(payload);
+      if (res.status === 200) {
+        showToast(res.data.message, 'success')
+        router.push(`/tags`)
+      } else if (res.status === 400) {
+        showToast(res.data.message, 'error')
+      }
+      else {
+        showToast(res.data.message, 'error')
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error')
+      console.error('Error:', error)
+    } finally {
+      loading.value = false
+    }
   handleGlobalUpdate()
 }
 
@@ -122,10 +155,26 @@ const handleGlobalUpdate = async () => {
   }
 }
 
-// Initialize component: set previous domain ID
-onMounted(() => {
-  PreviousDomain.value = store.getters.getDomain.id
-})
+// master slug update
+const updateSlug = async () => {
+  loading.value = true
+    try {
+      const {master_tag_id} = form.value
+      const res = await CommonServices.masterSlugUpdate({master_tag_id,slug:slugUpdate.value});
+      if (res.status === 200) {
+        showToast(res.data.message, 'success')
+        const data= {...form.value,slug:slugUpdate.value}
+        handleGetTags();
+      } else if (res.status === 400) {
+        showToast(res.data.message, 'error')
+      }
+    } catch (error) {
+      showToast('Something went wrong', 'error')
+      console.error('Error:', error)
+    } finally {
+      loading.value = false
+    }
+  };
 
 // Watch for changes in domain_id and handle data fetch
 watch(

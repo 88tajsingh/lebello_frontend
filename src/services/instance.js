@@ -45,7 +45,7 @@ instance.interceptors.response.use(
       store.dispatch('logout');
       router.push('/login')
     }
-    return error.response.data;
+    return error.response;
     // return Promise.reject(error);
   }
 );

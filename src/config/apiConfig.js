@@ -16,6 +16,9 @@ const ApiConfig = {
   materialStatus: 'update-material-status',
   getMaterialTeeeList: '/get-material-tree-list',
   materialSorting: '/sort-data',
+  deleteMasterMaterial: '/delete-master-material',
+  masterMaterialSlugUpdate: '/master-material-slug-update',
+  globalMaterialUpdate: '/global-material-update',
   taxonomySort: '/add-taxanomy-order',
   bulkDeleteMaterial: '/mterial-bulk-delete',
 
@@ -48,6 +51,9 @@ const ApiConfig = {
   editPages: '/update-pages',
   deletePages: '/delete-pages',
   PagesSorting: '/sort-data',
+  globalPageUpdate: '/global-page-update',
+  deletePageMaster: '/delete-master-page',
+  masterPageSlugUpdate: '/master-page-slug-update',
   // bulkDeletePages :'/bulk-Pages-delete',
 
   // contract design
@@ -98,7 +104,9 @@ const ApiConfig = {
   getTags: '/get-tags',
   addTags: '/add-tag',
   editTags: '/update-tag',
-  globalUpdateTags: '/gobal-tag-update',
+  globalUpdateTags: '/global-tag-update',
+  masterSlugUpdate: '/master-tag-slug-update',
+  masterSlugDelete: '/delete-master-tag',
   deleteTags: '/delete-tag',
   bulkDeleteTags: '/bulk-delete-tag',
 
@@ -124,6 +132,9 @@ const ApiConfig = {
   deleteProductType: '/delete-product-type',
   bulkDeleteProductType: '/bulk-delete-product-type',
   getProductTypeTreeList: '/product-type-tree-list',
+  globalUpdateProductType: '/global-product-type-update',
+  mastetrDeleteProductType: '/delete-master-product-type',
+  masterSlugUpdateProductType: '/master-product-type-slug-update',
 
   // products types
   getProductCategoryType: '/get-product-category-type',

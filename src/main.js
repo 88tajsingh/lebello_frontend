@@ -20,14 +20,15 @@ import EditSvg  from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg  from '@/components/Admin-components/svg/DeleteSvg.vue'
 import Loader from '@/components/Admin-components/Loader.vue';
 import {Tabs, Tab} from 'vue3-tabs-component';
+import MasterSlugForm from './components/Admin-components/MasterSlugForm.vue';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import ColorInput from '@/components/Admin-components/form-components/ColorInput.vue'
-import SingleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Checkbox from '@/components/Admin-components/form-components/CheckBox.vue';
 import PopupModal from '@/components/Admin-components/Modals/PopupModal.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
+import SingleCheck from '@/components/Admin-components/form-components/SingleCheck.vue';
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import DeleteModal from './components/Admin-components/Modals/DeleteModal.vue';
 import DatePicker from  '@/components/Admin-components/form-components/DatePicker.vue'
@@ -69,6 +70,7 @@ app.component('EditSvg', EditSvg);
 app.component('Checkbox', Checkbox);
 app.component('DeleteSvg', DeleteSvg);
 app.component('ColorPicker', ColorInput);
+app.component('MasterSlugForm', MasterSlugForm);
 app.component('TextInput', TextInput);
 app.component('PopupModal', PopupModal);
 app.component('DatePicker', DatePicker);
@@ -79,7 +81,7 @@ app.component('InputLabel', InputLabel);
 app.config.globalProperties.$lodash = _;
 app.component('DeleteModal', DeleteModal);
 app.component('RadioButton', RadioButton);
-app.component('SingleCheckBox', SingleCheckBox);
+app.component('SingleCheck', SingleCheck);
 app.component('DomainComponent', DomainComponent);
 app.component('RouterLink', router.options.history.routerLink);
 app.mount('#app')

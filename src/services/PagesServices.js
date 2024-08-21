@@ -11,6 +11,15 @@ class Pageservices {
   editPages(payload) {
     return instance.post(ApiConfig.editPages, payload,)
   }
+  globalPageUpdate(payload) {
+    return instance.post(ApiConfig.globalPageUpdate, payload,)
+  }
+  deletePageMaster(payload) {
+    return instance.post(ApiConfig.deletePageMaster, payload,)
+  }
+  masterPageSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterPageSlugUpdate, payload,)
+  }
   deletePages(payload) {
     return instance.delete(ApiConfig.deletePages, {params: {...payload}})
   }

@@ -1,12 +1,23 @@
 <template>
     <DefaultCard :cardTitle="store.getters.editData ? `Edit Material` : `Add Material`">
+        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="MaterialsServices.deleteMaterial"
+            masterKey="master_material_id" :masterDeleteService="MaterialsServices.deleteMasterMaterial"
+            routeTo="materials" />
+        <template v-if="form.id" v-slot:header>
+            <MasterSlugForm
+        :form="form"
+        @update-slug="()=>fetchMaterialData()"
+        :SlugUpdateservices = 'MaterialsServices.masterMaterialSlugUpdate'
+        masteridKeyName='master_material_id'
+      />
+    </template>
         <form @submit.prevent="handleSubmit">
-            <DomainComponent @customChange="(id) => form.domain_id = id"></DomainComponent>
             <div class="p-6.5 grid grid-cols-2 gap-6">
                 <div class="flex flex-col ">
                     <InputLabel for="Name" value="Name" />
                     <TextInput type="text" class=" " :class="{ 'border-red': errors.name }" placeholder=""
-                        v-model="form.name" :errMessage="errors.name" @update:model="clearError('name')" />
+                        v-model="form.name" :errMessage="errors.name" @update:model="clearError('name')"
+                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The name is how it appears on your site.
                     </p>
@@ -14,7 +25,7 @@
                 <div class="flex flex-col ">
                     <InputLabel for="Slug" value="Slug" />
                     <TextInput type="text" class="block mr-2 h-[40px] w-full" :class="{ 'border-red-500': errors.slug }"
-                        placeholder="" v-model="form.slug" :errMessage="errors.slug"
+                        placeholder="" v-model="form.slug" :errMessage="errors.slug" disabled="true"
                         @update:model="clearError(errors, 'slug')" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
@@ -36,14 +47,17 @@
                 <div class="flex flex-col ">
                     <InputLabel for="Display in Material Options" value="Display in Material Options" />
                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                        label="Select Material Options" v-model="form.display_material_option" />
+                        label="Select Material Options" v-model="form.display_material_option"
+                        :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.display_material_option = value }" />
                     <InputError class="mt-2" :message="errors?.display_material_option" />
                 </div>
                 <div class="flex flex-col w-full">
                     <InputLabel for="Material Price" value="Material Price" />
                     <TextInput type="text" class="block mr-2 h-[40px] w-full"
                         :class="{ 'border-red-500': errors.material_price }" placeholder=""
-                        v-model="form.material_price" :errMessage="errors.material_price"
+                        v-model="form.material_price" :errMessage="errors.material_price" :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.material_price = value }"
                         @update:model="clearError(errors, 'material_price')" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
@@ -55,108 +69,110 @@
                     <InputLabel for="Yellow Banner Display On Material Images"
                         value="Yellow Banner Display On Material Images" />
                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                        label="Select an option" v-model="form.yellow_banner_material_image" />
-                    <InputError class="mt-2" :message="errors?.yellow_banner_material_image" />
+                        label="Select an option" v-model="form.yellow_banner_material_image" :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.yellow_banner_material_image = value }" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Show New Badge" value="Show New Badge" />
                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                        label="Select an option" v-model="form.show_new_badge" />
-                    <InputError class="mt-2" :message="errors?.show_new_badge" />
+                        label="Select an option" v-model="form.show_new_badge" :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.show_new_badge = value }" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Label" value="Label" />
                     <TextInput type="text" class="block mr-2 h-[40px] w-full"
                         :class="{ 'border-red-500': errors.label }" placeholder="" v-model="form.label"
+                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.label = value }"
                         :errMessage="errors.label" @update:model="clearError(errors, 'label')" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Material Code" value="Material Code" />
                     <TextInput type="text" class="block mr-2 h-[40px] w-full"
                         :class="{ 'border-red-500': errors.material_code }" placeholder="" v-model="form.material_code"
+                        :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.material_code = value }"
                         :errMessage="errors.material_code" @update:model="clearError(errors, 'material_code')" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Group Name" value="Group Name" />
                     <TextInput type="text" class="block mr-2 h-[40px] w-full"
                         :class="{ 'border-red-500': errors.group_name }" placeholder="" v-model="form.group_name"
+                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }"
                         :errMessage="errors.group_name" @update:model="clearError(errors, 'group_name')" />
                 </div>
                 <div class="flex flex-col mt-1">
-                    <InputLabel for="Label Background Color" value="Label Background Color" />
-                    <div class="flex gap-2">
-                        <TextInput type="color" class="block h-[40px] min-w-[200px] px-2 rounded-lg"
-                            :class="{ 'border-red': errors.label_background_color }" placeholder=""
-                            v-model="form.label_background_color" :errMessage="errors.label_background_color" />
-                        <TextInput type="text" class="block mr-2 h-[40px] min-w-[10px]"
-                            :class="{ 'border-red': errors.label_background_color }" placeholder=""
-                            v-model="form.label_background_color" />
-                    </div>
+                    <ColorPicker label="Label Background Color" v-model="form.label_background_color"
+                        :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.label_background_color = value }" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Trade Mark Label" value="Trade Mark Label" />
                     <TextInput type="text" class="block mr-2 h-[40px] w-full"
                         :class="{ 'border-red-500': errors.trade_mark_label }" placeholder=""
                         v-model="form.trade_mark_label" :errMessage="errors.trade_mark_label"
+                        :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.trade_mark_label = value }"
                         @update:model="clearError(errors, 'trade_mark_label')" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Show New Badge 2021" value="Show New Badge 2021" />
                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                        label="Select an option" v-model="form.show_new_badge_2021" />
+                        label="Select an option" v-model="form.show_new_badge_2021" :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.show_new_badge_2021 = value }" />
 
                     <InputError class="mt-2" :message="errors?.show_new_badge_2021" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Single Color" value="Single Color" />
                     <Select :options="colors" showfield="name" class="w-full" valueField="value" label="Select Color"
-                        v-model="form.single_color" />
-                    <InputError class="mt-2" :message="errors.single_color" />
+                        v-model="form.single_color" :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.single_color = value }" />
                 </div>
                 <div class="flex flex-col ">
                     <InputLabel for="Multiple Color" value="Multiple Color" />
-                    <MultiSelect v-model="form.multiple_color" :options="colors" placeHolder="Select multiple color" />
+                    <MultiSelect v-model="form.multiple_color" :options="colors" placeHolder="Select multiple color"
+                        :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.multiple_color = value }" />
                     <InputError class="mt-2" :message="errors?.multiple_color" />
                 </div>
                 <div class="flex flex-col w-full">
                     <InputLabel for="Featured_image" value="Featured_image" />
-
-                    <!-- <ImageUpload2 @file-selected="form.media_id = $event"
-                    :accepted-formats="['jpg', 'jpeg', 'png']" /> -->
-
-                    <div class="py-2 rounded-lg px-2 border border-stroke"
-                        @click="() => imageData.media_id.isOpen = true"> {{
-                            imageData.media_id.mediaName }}</div>
+                        <div class=" flex  w-full h-auto ">
+                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                            <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                @click="() => imageData.media_id.IsOpen = true"> {{
+                                    imageData.media_id.mediaName }}</div>
+                    </div>
                 </div>
                 <div class="flex flex-col w-full">
                     <InputLabel for="Description" value="Description" />
                     <TextInput type="text" class="block mr-2  w-full" :class="{ 'border-red-500': errors.description }"
                         placeholder="" :isTextarea="true" :rows="4" v-model="form.description"
-                        :errMessage="errors.description" @update:model="clearError(errors, 'description')" />
+                        :errMessage="errors.description" @update:model="clearError(errors, 'description')"
+                        :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.description = value }" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The description is not prominent by default; however, some themes may show it.
                     </p>
                 </div>
                 <div class="flex flex-col w-full">
-                    <div class="mt-3 flex overflow-x-auto">
-                       
-                        <img v-if="imageData.media_id.images?.length" :src="$filePath(imageData.media_id.images[0].file_url)"
-                            class="inline-block w-auto h-34 mr-4"
-                            :alt="imageData.media_id.images[0]?.alternative_text || 'image'">
+                    <div class=" mt-3 flex overflow-x-auto">
+                        <img v-for="file in imageData.media_id.images" :key="file" :src="$filePath(file?.file_url)"
+                            class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'" />
                     </div>
                 </div>
             </div>
 
             <button type="submit"
                 class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                Submit
+                {{ buttonText }}
             </button>
         </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.media_id.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.media_id.images" :singleFile="false"
-            :closeModal="() => { imageData.media_id.isOpen = false; }" :selectedFiles="handleFiles" />
+        v-model:isOpen="imageData.media_id.IsOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.media_id.images" :singleFile="true"
+            :closeModal="() => { imageData.media_id.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
     </popupModal>
 
     <Loader :isLoading="loading" :fullPage="true" />
@@ -164,6 +180,7 @@
 
 <script setup>
 import _ from 'lodash';
+import SingleCheck from '@/components/Admin-components/form-components/SingleCheck.vue';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import MultiSelect from '@/components/Admin-components/form-components/MultiSelect.vue'
@@ -171,8 +188,8 @@ import InputError from '@/components/Admin-components/form-components/InputError
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
-import { clearError, showToast, handleFileUpdate } from '@/helper/functions'
-import { onMounted, ref, watch, } from 'vue'
+import { clearError, showToast, handleFileUpdate, getGlobalUpdateData, validateForm } from '@/helper/functions'
+import { onMounted, ref, watch, computed } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -192,42 +209,31 @@ const form = ref(store.getters.editData || {
     single_color: null,
     show_new_badge_2021: null
 });
-const PreviousDomain = ref(store.getters.getDomain?.id || null);
+const checkedFields = ref({})
+const checkBoxFlag = ref(Boolean(form.value.id))
 const MaterialTreeListData = ref([]);
-// Close the modal
-const closeModal = () => {
-    imageData.value.media_id.isOpen = false;
-};
+
 // Image data for various categories
 const imageData = ref({
-    media_id: { isOpen: false, mediaName: 'Feature Image', images: [] },
-});
+    media_id: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
+})
 
-// Handlers for file updates
-const handleFiles = (data) => {
-    handleFileUpdate('media_id ', data, false, imageData, form);
-    console.log()
-    imageData.value.media_id.isOpen = false
-};
+const handleFeatureFiles = (data) => handleFileUpdate('media_id', data, false, imageData, form);
 
-// Validate form fields
-const validateForm = () => {
-    errors.value = {};
-    if (!form.value.name) {
-        errors.value.name = 'Name is required';
-        return false;
-    }
-    return true;
-};
+
+const handleSubmit = async () => {
+    console.log("called handleSubmit")
+    if (!validateForm('name', 'Name', form, errors)) return
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
+}
 
 // Handle form submission (add or edit materials)
-const handleSubmit = async () => {
-    if (!validateForm()) return;
+const handleAddEditApi = async () => {
 
     loading.value = true;
-    const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
-
-    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
+    const { deleted_at, created_at, updated_at, media_id_url, ...payload } = form.value;
+    if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
     try {
         const service = store.getters.editData ? MaterialsServices.editMaterial : MaterialsServices.addMaterial;
@@ -248,6 +254,45 @@ const handleSubmit = async () => {
     }
 };
 
+// Global Update Handler
+const handleGlobalUpdate = async () => {
+    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
+    if (_.isEmpty(globalUpdate)) return
+
+    const payload = {
+        master_material_id: form.value.master_material_id,
+        global_keys: globalUpdate
+    }
+
+    try {
+        const { status, data } = await MaterialsServices.globalMaterialUpdate(payload)
+        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
+        if (status === 200 && data.success) router.push('/materials')
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
+    } finally {
+        loading.value = false
+    }
+}
+
+
+// Fetch Perticular Domain Data
+const fetchMaterialData = async () => {
+    const payload = { master_material_id: form.value.master_material_id, domain_id: form.value.domain_id }
+    try {
+        const { status, data } = await MaterialsServices.getMaterials(payload)
+        if (status === 200 && data.success) {
+            const dataValue = data.data[0]
+            store.dispatch('setEdit', dataValue)
+            Object.assign(form.value, dataValue)
+        }
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error('Error while fetching data:', error)
+    }
+}
+
 // Fetch material tree data
 const materialTree = async (payload) => {
     try {
@@ -260,15 +305,29 @@ const materialTree = async (payload) => {
 // Initialize component state
 onMounted(() => {
     if (store.getters.editData) {
-        imageData.value.media_id.mediaName = store.getters.editData?.featured_image_url || 'Select Media';
-        imageData.value.media_id.images = store.getters.editData?.featured_image_url;
+        imageData.value.media_id.mediaName = store.getters?.editData?.media_data?.file_url || 'Select Media';
+        imageData.value.media_id.images = [store.getters?.editData?.media_data];
     }
     materialTree({ domain_id: store.getters.getDomain?.id });
 });
 
-// Watch for domain_id changes to update material tree data
-watch(() => form.value.domain_id, () => {
+watch(() => form.value.domain_id, (newDomainId) => {
+    // Fetch product type tree and reset parent product type
+    form.value.parent_material = 0
     materialTree({ domain_id: form.value.domain_id });
+
+    // Check if newDomainId is present in domains_data and fetch product type data if so
+    if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
+        fetchMaterialData();
+    } else {
+        console.log('data not in array', form.value?.domains_data);
+    }
 });
+
+
+// Computed Property
+const buttonText = computed(() => {
+    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+})
 
 </script>
