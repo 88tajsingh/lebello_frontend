@@ -34,7 +34,7 @@
       modalTitle: String,
       isOpen: {
         type: [Boolean,Number],
-        required: true
+        default: false,
       }
     },
     emits: ['update:isOpen', 'delete'],
@@ -48,6 +48,7 @@
       }
     }
   });
+  
   </script>
   
   <style scoped>

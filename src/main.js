@@ -34,7 +34,6 @@ import DeleteModal from './components/Admin-components/Modals/DeleteModal.vue';
 import DatePicker from  '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import Toast from 'vue-toastification';
-import _ from 'lodash';
 import 'vue-toastification/dist/index.css';
 
 const options = {
@@ -78,7 +77,6 @@ app.component('PageHeader', PageHeader);
 app.component('InputError', InputError);
 app.component('GetLibrary', GetLibrary);
 app.component('InputLabel', InputLabel);
-app.config.globalProperties.$lodash = _;
 app.component('DeleteModal', DeleteModal);
 app.component('RadioButton', RadioButton);
 app.component('SingleCheck', SingleCheck);

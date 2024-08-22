@@ -155,6 +155,9 @@ const ApiConfig = {
   deleteProductContract: '/delete-contract',
   bulkDeleteProductContract: '/delete-bulk-contract',
   getProductContractTree: '/get-contract-tree-list',
+  masterSlugProductContract: '/master-contract-slug-update',
+  globalUpdateProductContract: '/global-contract-update',
+  deleteMasterProductContract: '/delete-master-contract',
 
   // products Series
   getProductSeries: '/get-product-series',

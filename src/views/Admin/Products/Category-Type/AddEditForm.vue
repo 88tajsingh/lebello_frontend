@@ -1,6 +1,6 @@
-<template>{{ form }}
+<template>
     <DefaultCard  :cardTitle="form.id ? `Edit Product Contract Type ` : `Add Product Contract Type`">
-        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"
+        <DomainComponent @customChange="(id)=>form.domain_id = id"
           :deleteService="ProductServices.deleteProductCategoryType" masterKey="master_product_category_type_id"
           :masterDeleteService="ProductServices.deleteMasterProductCategoryType" routeTo="product-category-type"
           ></DomainComponent>
@@ -90,7 +90,6 @@ const form = ref({
 })
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
-const PreviousDomain = ref(null)
 const getProductCategoryList = ref([])
 
 
@@ -105,7 +104,7 @@ const handleSubmit = async () => {
 const handleAddEditApi = async () => {
     loading.value = true
     try {
-      const { deleted_at, created_at, updated_at, ...payload } = form.value
+      const { deleted_at, created_at,slug,domains_data,default_domain,default_master, updated_at, ...payload } = form.value
       if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
       const action = store.getters.editData ? ProductServices.editProductCategoryType : ProductServices.addProductCategoryType

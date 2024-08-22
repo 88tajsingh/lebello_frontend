@@ -75,10 +75,10 @@ const handleAddTabs = () => {
 };
 
 const handleDeleteData = (deleteIndex) => {
-  console.log(selectedDomain.value.id , formData.value?.default_domain[0])
-  if(formData.value.domains_data.includes(selectedDomain.value.id)){
+  if(formData.value?.domains_data.includes(selectedDomain.value.id)){
     index.value = deleteIndex;
-    if(selectedDomain.value.id === formData.value?.default_domain[0]){
+    console.log("selectedDomain.value.id,formData.value.default_domain",selectedDomain.value.id,formData.value.default_domain[0])
+    if(selectedDomain.value.id === formData.value.default_domain[0]){
       deleteMasterFlag.value = true;
     }
     else{
@@ -130,7 +130,7 @@ const masterDelete = async() => {
 
 
 const removeItem = (indexValue) => {
-  console.log(indexValue);
+  console.log('customChange', domainsArray.value[0].id);
   if (indexValue >= 0 && indexValue < domainsArray.value.length) {
     domainsArray.value.splice(indexValue, 1);
     if (domainsArray.value.length > 0) {
@@ -157,10 +157,10 @@ const emitArray = () => {
 
 const mapIdsToDomains = () => {
   // Ensure DropData and formData.value.domains_data are available
-  if (DropData.value.length === 0 || !formData.value.domains_data || formData.value.domains_data.length === 0) return;
+  if (DropData.value.length === 0 || !formData.value?.domains_data || formData.value?.domains_data.length === 0) return;
 
   // Map domain IDs to domain objects
-  const domains = formData.value.domains_data
+  const domains = formData.value?.domains_data
     .map(id => DropData.value.find(domain => domain.id === id))
     .filter(domain => domain !== undefined);
 

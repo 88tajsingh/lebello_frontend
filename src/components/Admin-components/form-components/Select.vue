@@ -6,17 +6,18 @@
       v-model:checked="checked" 
       @change="handleCheckboxChange"
     />
+    <div class="w-full">
     <select 
       class="rounded-lg border bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
       v-bind="$attrs"
       v-model="selectedOption"
-      :class="[cusClass]"
+      :class="[cusClass, { 'border-red': errorClass }]"
       :disabled="disabled"
       @change="handleSelectChange"
     >
-      <!-- Optional placeholder option -->
-      <option v-if="defaultZero" value='0'>{{ label }}</option>
+      <option v-if="defaultZero" value="0">{{ label }}</option>
       <option v-else :value="selectedOption === null ? null : ''">{{ label }}</option>
+      
       <template v-for="option in options" :key="option[valueField]">
         <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>
         <template v-if="option.children">
@@ -26,6 +27,10 @@
         </template>
       </template>
     </select>
+    <div v-show="errorClass">
+    <p class="text-sm ml-1 text-red">{{ errMessage }}</p>
+  </div>
+  </div>  
   </div>
 </template>
 
@@ -40,15 +45,15 @@ const props = defineProps({
   },
   showfield: {
     type: String,
-    required: true,
+    required: true
   },
   valueField: {
     type: String,
-    required: true,
+    required: true
   },
   label: {
     type: String,
-    required: true,
+    default: ''
   },
   cusClass: {
     type: String,
@@ -63,12 +68,19 @@ const props = defineProps({
     default: false
   },
   modelValue: {
-    type: [Number, String], 
+    type: [Number, String],
     default: 0
   },
   hasCheckBox: {
     type: Boolean,
     default: false
+  },
+  errorClass: {
+    type: Boolean,
+    default: false
+  },
+  errMessage: {
+    type: String,
   }
 });
 
@@ -94,3 +106,10 @@ watch(checked, (newChecked) => {
   emit('update:checkValue', newChecked);
 });
 </script>
+
+<style scoped>
+/* Ensure this class exists */
+.border-red {
+  border-color: red;
+}
+</style>

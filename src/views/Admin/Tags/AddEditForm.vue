@@ -118,7 +118,7 @@ const handleAddEditApi = async () => {
   if (!validateForm('name', 'Name', form, errors)) return
 
   loading.value = true
-  const { deleted_at, created_at, updated_at, domains_data, featured_image_url, ...payload } =
+  const { deleted_at, created_at, updated_at,domains_data,default_domain,default_master, featured_image_url, ...payload } =
     form.value
   if(!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
   // if (payload.domain_id !== PreviousDomain.value) delete payload.id
