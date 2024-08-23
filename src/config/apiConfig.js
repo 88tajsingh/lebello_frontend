@@ -62,6 +62,9 @@ const ApiConfig = {
   editNewContract: '/update-contract-design',
   deleteNewContract: '/delete-contract-design',
   bulkNewContract: '/bulk-delete-contract-design',
+  masterContractDesignSlugUpdate: '/master-contract-design-slug-update',
+  globalContractDesignUpdate: '/global-contract-design-update',
+  deleteMasterContractDesign: '/delete-master-contract-design',
 
   // Contract Type Tree List
   getContract: '/get-contract-type',
@@ -71,6 +74,9 @@ const ApiConfig = {
   getContractTreeList: '/get-contract-tree-type',
   bulkDeletecontract: '/delete-bulk-contract-type',
   contractTaxonomySort: '/add-taxanomy-order',
+  masterContractTypeSlugUpdate: '/master-contract-type-slug-update',
+  globalContractTypeUpdate: '/global-contract-type-update',
+  deleteMasterContractType: '/delete-master-contract-type',
 
   // Contract location Tree List
   getContractLocation: '/get-contract-location',
@@ -80,6 +86,9 @@ const ApiConfig = {
   bulkDeleteLocation: '/bulk-delete-contract-location',
   getContractLocationTreeList: '/get-contract-location-tree-list',
   contractLocationTaxonomySort: '/add-taxanomy-order',
+  masterContractLocationSlugUpdate: '/master-contract-location-slug-update',
+  globalContractLocationUpdate: '/global-contract-location-update',
+  deleteMasterContractLocation: '/delete-master-contract-location',
 
   // domain
   getDomains: '/domain-list',
@@ -155,6 +164,9 @@ const ApiConfig = {
   deleteProductContract: '/delete-contract',
   bulkDeleteProductContract: '/delete-bulk-contract',
   getProductContractTree: '/get-contract-tree-list',
+  masterSlugProductContract: '/master-contract-slug-update',
+  globalUpdateProductContract: '/global-contract-update',
+  deleteMasterProductContract: '/delete-master-contract',
 
   // products Series
   getProductSeries: '/get-product-series',
@@ -163,6 +175,9 @@ const ApiConfig = {
   deleteProductSeries: '/delete-product-series',
   bulkDeleteProductSeries: '/delete-bulk-product-series',
   getProductSeriesTree: '/get-product-series-tree-list',
+  masterProductSeriesSlugUpdate: '/master-product-series-slug-update',
+  globalProductSeriesUpdate: '/global-product-series-update',
+  deleteMasterProductSeries: '/delete-master-product-series',
 
   // ---------------------------------------  store  -------------------------------------
   // store category

@@ -230,29 +230,29 @@ const handleSubmit = async () => {
 
 // Handle form submission (add or edit materials)
 const handleAddEditApi = async () => {
-
-    loading.value = true;
-    const { deleted_at, created_at, updated_at, media_id_url, ...payload } = form.value;
-    if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
-
+    const { deleted_at, created_at, updated_at,domains_data,default_domain,default_master, media_id_url, ...payload } = form.value;
+    if (!form.value?.domains_data?.includes(form.value.domain_id)) {
+        delete payload.id;
+    }
+    const service = store.getters.editData ? MaterialsServices.editMaterial : MaterialsServices.addMaterial;
+    
     try {
-        const service = store.getters.editData ? MaterialsServices.editMaterial : MaterialsServices.addMaterial;
-        const res = await service(payload);
-
-        console.log(res.message)
-        if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
+        const { status, data } = await service(payload);
+        
+        if (status === 200 && data.success) {
+            showToast(data.message, 'success');
             router.push('/materials');
-        } else if (res.status_code === 400) {
-            showToast(res.message, 'error');
+        } else {
+            showToast(data.message, 'error');
         }
-    } catch (e) {
-        console.error('Error:', e);
-        showToast(e.response?.message, 'error');
+    } catch (error) {
+        showToast(data.message, 'error');
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} material:`, error);
     } finally {
         loading.value = false;
     }
 };
+
 
 // Global Update Handler
 const handleGlobalUpdate = async () => {
@@ -279,6 +279,7 @@ const handleGlobalUpdate = async () => {
 
 // Fetch Perticular Domain Data
 const fetchMaterialData = async () => {
+    loading.value = true
     const payload = { master_material_id: form.value.master_material_id, domain_id: form.value.domain_id }
     try {
         const { status, data } = await MaterialsServices.getMaterials(payload)
@@ -291,6 +292,9 @@ const fetchMaterialData = async () => {
         showToast('Something went wrong', 'error')
         console.error('Error while fetching data:', error)
     }
+    finally{
+    loading.value=false;
+  }
 }
 
 // Fetch material tree data

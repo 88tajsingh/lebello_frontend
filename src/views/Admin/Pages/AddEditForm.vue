@@ -230,7 +230,7 @@ const handleAddEditApi = async () => {
     loading.value = true;
     try {
       const action = store.getters.editData ? PagesServices.editPages : PagesServices.addPages;
-      const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
+      const { deleted_at, created_at,domains_data,default_domain,default_master, updated_at, featured_image_url, ...payload } = form.value;
       if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
       const res = await action(payload);
@@ -288,6 +288,9 @@ const fetchPagesData = async () => {
         console.error('Error while fetching data:', error)
         loading.value=false
     }
+    finally{
+    loading.value=false;
+  }
 }
 
 // Lifecycle Hooks

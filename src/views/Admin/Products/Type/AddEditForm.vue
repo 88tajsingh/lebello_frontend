@@ -119,7 +119,7 @@ const handleFormSubmit = async () => {
 const handleAddEditApi = async () => {
   loading.value = true
   try {
-    const { deleted_at, created_at, updated_at, ...payload } = form.value
+    const { deleted_at, created_at,domains_data,default_domain,default_master, updated_at, ...payload } = form.value
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
     const action = store.getters.editData ? ProductServices.editProductType : ProductServices.addProductType

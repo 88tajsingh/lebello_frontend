@@ -39,13 +39,6 @@
         </template>
       </vue3-datatable>
     </div>
-  
-    <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
-      <AddEditForm @handleApi="handleAddPages" />
-    </PopupModal>
-    <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
-      <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
-    </PopupModal>
     <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteContractLocation">
       Do you want to delete?
     </DeleteModal>
@@ -56,7 +49,7 @@
   </template>
   
   <script setup>
-  import { ref, onMounted,watch } from 'vue';
+  import { ref, onMounted,watch,computed } from 'vue';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import ContractServices from '@/services/ContractServices';
   import { useRouter } from 'vue-router';
@@ -89,17 +82,6 @@ import ProductServices from '@/services/ProductServices';
     deleteModalIsOpen.value = true;
     editData.value = data.id;
     console.log(data.id)
-  };
-  
-  const openModal = () => {
-    modalIsOpen.value = true;
-  };
-  
-  const editModal = (data) => {
-    console.log("data " ,data)
-    editData.value = { ...data.value };
-    // router.push({ name: 'EditPages', params: { id: data.value.id } });
-    editIsOpen.value=true;
   };
   
   const handleMouseEnter = (data) => {

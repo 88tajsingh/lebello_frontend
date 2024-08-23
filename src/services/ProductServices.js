@@ -74,13 +74,22 @@ class ProductService {
     return instance.post(ApiConfig.addProductContract, payload)
   }
   editProductContract(payload) {
-    return instance.put(ApiConfig.editProductContract, payload)
+    return instance.post(ApiConfig.editProductContract, payload)
   }
   deleteProductContract(payload) {
     return instance.delete(ApiConfig.deleteProductContract, { params: { ...payload } })
   }
   BulkDeleteProductContract(payload) {
     return instance.post(ApiConfig.bulkDeleteProductContract, payload)
+  }
+  deleteMasterProductContract(payload) {
+    return instance.post(ApiConfig.deleteMasterProductContract, payload)
+  }
+  globalUpdateProductContract(payload) {
+    return instance.post(ApiConfig.globalUpdateProductContract, payload)
+  }
+  masterSlugProductContract(payload) {
+    return instance.post(ApiConfig.masterSlugProductContract, payload)
   }
 
   // Product Series 
@@ -102,6 +111,15 @@ class ProductService {
   }
   BulkDeleteProductSeries(payload) {
     return instance.post(ApiConfig.bulkDeleteProductSeries, payload)
+  }
+  deleteMasterProductSeries(payload) {
+    return instance.post(ApiConfig.deleteMasterProductSeries, payload)
+  }
+  globalProductSeriesUpdate(payload) {
+    return instance.post(ApiConfig.globalProductSeriesUpdate, payload)
+  }
+  masterProductSeriesSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterProductSeriesSlugUpdate, payload)
   }
 }
 

@@ -20,8 +20,7 @@
       :rows="rows" :columns="ContractCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
-            {{ data.value.name }}
-            <!-- <div v-if="isRowHovered(data.value)">overed</div> -->
+            {{ data.value.status ? 'Yes' : 'No' }}
           </div>
         </template>
         <template #image="data">

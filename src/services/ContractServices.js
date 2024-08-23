@@ -22,6 +22,18 @@ class ContractDesignService {
     return instance.post(ApiConfig.bulkNewContract, payload)
   }
 
+  deleteMasterContractDesign(payload) {
+    return instance.post(ApiConfig.deleteMasterContractDesign, payload)
+  }
+  
+  globalContractDesignUpdate(payload) {
+    return instance.post(ApiConfig.globalContractDesignUpdate, payload)
+  }
+
+  masterContractDesignSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterContractDesignSlugUpdate, payload)
+  }
+
   // contract type services
 
   getContractType(payload) {
@@ -48,6 +60,17 @@ class ContractDesignService {
 
   BulkDeleteContractType(payload) {
     return instance.post(ApiConfig.bulkDeleteMaterial, payload)
+  }
+  
+  deleteMasterContractType(payload) {
+    return instance.post(ApiConfig.deleteMasterContractType, payload)
+  }
+
+  globalContractTypeUpdate(payload) {
+    return instance.post(ApiConfig.globalContractTypeUpdate, payload)
+  }
+  masterContractTypeSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterContractTypeSlugUpdate, payload)
   }
 
 
@@ -76,6 +99,17 @@ class ContractDesignService {
 
   BulkDeleteContractLocation(payload) {
     return instance.post(ApiConfig.bulkDeleteLocation, payload)
+  }
+
+  deleteMasterContractLocation(payload) {
+    return instance.post(ApiConfig.deleteMasterContractLocation, payload)
+  }
+
+  masterContractLocationSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterContractLocationSlugUpdate, payload)
+  }
+  globalContractLocationUpdate(payload) {
+    return instance.post(ApiConfig.globalContractLocationUpdate, payload)
   }
 }
 

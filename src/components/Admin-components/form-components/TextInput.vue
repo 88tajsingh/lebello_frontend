@@ -1,10 +1,33 @@
+<template>
+  <InputLabel :for="props.label"> {{ props.label }}</InputLabel>
+  <div v-if="isTextarea" class="m-0 p-0 border-0 flex">
+    <SingleCheck v-if="hasCheckBox" :id="`${id}${label}`" label=""
+      v-model:modelValue="checked"></SingleCheck>
+    <textarea :id="`${id} ${label}`" :class="textareaClass" v-model="model" ref="inputRef" :rows="rows" :placeholder="placeholder"
+      v-bind="$attrs" />
+  </div>
+  <div v-else class="relative m-0 p-0 border-0 flex">
+    <SingleCheck v-if="hasCheckBox" :id="`${id}textbox`" label=""
+      v-model:modelValue="checked"></SingleCheck>
+     
+    <input :id="`${id} ${label}`" :class="inputClass" v-model="model" ref="inputRef" :placeholder="placeholder"
+      v-bind="$attrs" />
+    <span class="absolute right-4 mt-2">
+      <slot></slot>
+    </span>
+  </div>
+  <div v-show="errMessage">
+    <p class="text-sm ml-4 text-red">{{ errMessage }}</p>
+  </div>
+</template>
+
 <script setup>
 import InputLabel from './InputLabel.vue';
 import { onMounted, ref, computed, watch, defineEmits, defineProps } from 'vue';
 import SingleCheck from './SingleCheck.vue';
 
 const props = defineProps({
-  modelValue: String,  
+  modelValue: String,
   label: String,
   errMessage: String,
   placeholder: String,
@@ -47,12 +70,12 @@ const textareaClass = computed(() => ({
 
 const model = ref(props.modelValue); 
 
-const input = ref(null);
+const inputRef = ref(null); // Changed from input to inputRef
 const checked = ref(false);  
 
 onMounted(() => {
-  if (input.value && input.value.hasAttribute('autofocus')) {
-    input.value.focus();
+  if (inputRef.value && inputRef.value.hasAttribute('autofocus')) {
+    inputRef.value.focus();
   }
 });
 
@@ -64,28 +87,5 @@ watch(checked, (newChecked) => {
   emits('update:checkValue', newChecked);
 });
 
-defineExpose({ focus: () => input.value.focus() });
+defineExpose({ focus: () => inputRef.value.focus() });
 </script>
-
-<template>
-  <InputLabel :for="props.label"> {{ props.label }}</InputLabel>
-  <div v-if="isTextarea" class="m-0 p-0 border-0 flex">
-    <SingleCheck v-if="hasCheckBox" :id="`${id}${label}`" label=""
-      v-model:modelValue="checked"></SingleCheck>
-    <textarea :id="`${id} ${label}`" :class="textareaClass" v-model="model" ref="input" :rows="rows" :placeholder="placeholder"
-      v-bind="$attrs" />
-  </div>
-  <div v-else class="relative m-0 p-0 border-0 flex">
-    <SingleCheck v-if="hasCheckBox" :id="`${id}textbox`" label=""
-      v-model:modelValue="checked"></SingleCheck>
-     
-    <input :id="`${id} ${label}`" :class="inputClass" v-model="model" ref="input" :placeholder="placeholder"
-      v-bind="$attrs" />
-    <span class="absolute right-4 mt-2">
-      <slot></slot>
-    </span>
-  </div>
-  <div v-show="errMessage">
-    <p class="text-sm ml-1 text-red">{{ errMessage }}</p>
-  </div>
-</template>

@@ -12,21 +12,15 @@
     </div>
     <div class="flex rounded-lg bg-transparent">
       <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name: 'product-series-from'});store.dispatch('clearEditData'); }"class="px-2 py-2 m-auto whitespace-nowrap">Add Materials</Button>
+      <Button @click="() => {router.push({ name: 'product-series-from'});store.dispatch('clearEditData'); }"class="px-2 py-2 m-auto whitespace-nowrap">Add Series</Button>
     </div>  
   </div>
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
     :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
     :rows="data" :columns="productSeriesCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
-      <template #name="data">
-        <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
-          {{ data.value.name }}
-          <!-- <div v-if="isRowHovered(data.value)">overed</div> -->
-        </div>
-      </template>
       <template #image="data">
-        <img :src="$filePath(data.value.featured_image_url)" alt="Product Series Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Product Series Image" style="max-width: 50px; max-height: 50px" />
       </template>
       <template #actions="data">
         <div class="flex gap-3">
