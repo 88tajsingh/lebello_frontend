@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
   <DefaultCard :cardTitle="form.id ? `Edit Product Contract` : `Add Product Contract`">
     <DomainComponent  @customChange="(id)=>form.domain_id = id"
       :deleteService="ProductServices.deleteProductContract" masterKey="master_contract_id"
@@ -33,7 +33,7 @@
           <InputLabel for="Parent Material" value="Parent Product Contract" />
           <!-- <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name" class="w-full" valueField="id"
             v-model="form.parent_contract" /> -->
-          <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name"
+          <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="contract_location"
           class="w-full" valueField="id" :errorClass="selectError" @update:modelValue="clearError('parent_contract')"
           errMessage="Should not be own parent" v-model="form.parent_contract" />
           
@@ -153,6 +153,7 @@ const handleGlobalUpdate = async () => {
 };
 
 const fetchProductContractData = async () => {
+  loading.value = true;
   const payload = { master_contract_id: form.value.master_contract_id, domain_id: form.value.domain_id };
   try {
     const { status, data } = await ProductServices.getProductContract(payload);
@@ -164,6 +165,9 @@ const fetchProductContractData = async () => {
   } catch (error) {
     showToast('Something went wrong', 'error');
     console.error('Error while fetching data:', error);
+  }
+  finally{
+    loading.value=false;
   }
 };
 

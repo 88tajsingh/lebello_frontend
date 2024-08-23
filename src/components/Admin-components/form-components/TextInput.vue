@@ -17,7 +17,7 @@
     </span>
   </div>
   <div v-show="errMessage">
-    <p class="text-sm ml-1 text-red">{{ errMessage }}</p>
+    <p class="text-sm ml-4 text-red">{{ errMessage }}</p>
   </div>
 </template>
 

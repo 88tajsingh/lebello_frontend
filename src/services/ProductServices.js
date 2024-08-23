@@ -112,6 +112,15 @@ class ProductService {
   BulkDeleteProductSeries(payload) {
     return instance.post(ApiConfig.bulkDeleteProductSeries, payload)
   }
+  deleteMasterProductSeries(payload) {
+    return instance.post(ApiConfig.deleteMasterProductSeries, payload)
+  }
+  globalProductSeriesUpdate(payload) {
+    return instance.post(ApiConfig.globalProductSeriesUpdate, payload)
+  }
+  masterProductSeriesSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterProductSeriesSlugUpdate, payload)
+  }
 }
 
 export default new ProductService()

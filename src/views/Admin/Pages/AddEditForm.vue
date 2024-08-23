@@ -288,6 +288,9 @@ const fetchPagesData = async () => {
         console.error('Error while fetching data:', error)
         loading.value=false
     }
+    finally{
+    loading.value=false;
+  }
 }
 
 // Lifecycle Hooks

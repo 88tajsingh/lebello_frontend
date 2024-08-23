@@ -146,8 +146,9 @@ const handleGlobalUpdate = async () => {
 }
 
 
-// Fetch Product category Type Data
+// Fetch get Data
 const fetchProductCategoryTypeData = async () => {
+  loading.value = true;
   const payload =  { master_product_category_type_id: form.value.master_product_category_type_id, domain_id: form.value.domain_id }
   console.log(payload)
   try {
@@ -160,6 +161,9 @@ const fetchProductCategoryTypeData = async () => {
   } catch (error) {
     showToast('Something went wrong', 'error')
     console.error('Error while fetching data:', error)
+  }
+  finally{
+    loading.value=false;
   }
 }
 

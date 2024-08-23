@@ -279,6 +279,7 @@ const handleGlobalUpdate = async () => {
 
 // Fetch Perticular Domain Data
 const fetchMaterialData = async () => {
+    loading.value = true
     const payload = { master_material_id: form.value.master_material_id, domain_id: form.value.domain_id }
     try {
         const { status, data } = await MaterialsServices.getMaterials(payload)
@@ -291,6 +292,9 @@ const fetchMaterialData = async () => {
         showToast('Something went wrong', 'error')
         console.error('Error while fetching data:', error)
     }
+    finally{
+    loading.value=false;
+  }
 }
 
 // Fetch material tree data

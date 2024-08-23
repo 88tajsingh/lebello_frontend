@@ -57,10 +57,10 @@ import ContractServices from '@/services/ContractServices';
 import { useRouter } from 'vue-router';
 import { contractTypeCols } from '@/json/data';
 import { showToast } from '@/helper/functions';
-import store from '@/store';
 import { getDomins } from '@/helper/Apis';
+import { useStore } from 'vuex';
 
-
+const store = useStore();
 const router = useRouter();
 const bulkActionSelected = ref(null)
 const loading = ref(false);

@@ -1,6 +1,8 @@
-<template>   
+<template> 
+
   <div class="flex ml-auto mt-2 gap-2 justify-end">
     <div class="w-52">
+     
       <Select :options="DropData" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
     </div>
   </div>
@@ -77,7 +79,6 @@ const handleAddTabs = () => {
 const handleDeleteData = (deleteIndex) => {
   if(formData.value?.domains_data.includes(selectedDomain.value.id)){
     index.value = deleteIndex;
-    console.log("selectedDomain.value.id,formData.value.default_domain",selectedDomain.value.id,formData.value.default_domain[0])
     if(selectedDomain.value.id === formData.value.default_domain[0]){
       deleteMasterFlag.value = true;
     }
@@ -110,6 +111,7 @@ const handleDelte = async () => {
       }
 };
 const masterDelete = async() => {
+  
   const payload = {
   id: formData.value.id,
   [props.masterKey]: formData.value[props.masterKey]
@@ -130,7 +132,6 @@ const masterDelete = async() => {
 
 
 const removeItem = (indexValue) => {
-  console.log('customChange', domainsArray.value[0].id);
   if (indexValue >= 0 && indexValue < domainsArray.value.length) {
     domainsArray.value.splice(indexValue, 1);
     if (domainsArray.value.length > 0) {
@@ -208,6 +209,14 @@ watch(
   () => domainsArray.value,
   () => {
     emitArray();
+  },
+  { immediate: true }
+);
+// Watch for changes in vuex
+watch(
+  () => store.getters?.editData?.id,
+  () => {
+    formData.value = store.getters.editData
   },
   { immediate: true }
 );
