@@ -1,186 +1,276 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Projects` : `Add New Project`">
-        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
+        {{ store.getters.editData }}
+        <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="ProjectServices.deleteProjects"
+            masterKey="master_project_id" :masterDeleteService="ProjectServices.deleteMasterProjects"
+            routeTo="projects" />
+        <template v-if="form.id" v-slot:header>
+            <MasterSlugForm :form="form" @update-slug="() => fetchMaterialData()"
+                :SlugUpdateservices="ProjectServices.masterProjectsSlugUpdate" masteridKeyName="master_project_id" />
+        </template>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
-            <div class="grid grid-cols-12 gap-4 mt-5 ">
+            <div class="grid grid-cols-12 gap-4 mt-5">
                 <div class="col-span-8">
                     <Accordion :open="true" header="Fileds">
                         <div class="px-6">
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
-                                placeholder="Add title" v-model="form.title" :errMessage="errors.title"
-                                :errors="errors" />
+                                placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
+                                :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
+                                    checkedFields.title = value
+                                }
+                                    " />
 
-                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug" placeholder="slug"
-                                v-model="form.slug" :errMessage="errors.slug" />
+                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug (Read Only)"
+                                placeholder="slug" v-model="form.slug" :errMessage="errors.slug" disabled />
                         </div>
                     </Accordion>
-                    <div class="mt-3 ">
+                    <div class="mt-3">
                         <Accordion :open="true" header="Categories">
-                            <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :checkedData='form.project_categories' :dropdown="true"
+                            <div class="mt-2 px-6 flex h-auto">
+                                <Checkbox :nexted="true" :checkedData="form.project_categories" :dropdown="true"
                                     valueField="id" showField="name" :data="projectCategories"
-                                    @checked-items="(checked) => form.project_categories = checked" />
+                                    @checked-items="(checked) => (form.project_categories = checked)" />
                             </div>
                         </Accordion>
                     </div>
-
                 </div>
 
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
                             <div class="px-4">
-                                <div class="flex flex-col ">
+                                <div class="flex flex-col">
                                     <InputLabel for="status" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                        label="Select " v-model="form.status" />
-                                </div>
-                                <div class="col-span-1 w-full">
-                                    <div class="flex flex-col ">
-                                        <InputLabel for="Visibility" value="Visibility" />
-                                        <Select :options="PublishOptions" showfield="label" class="w-full"
-                                            valueField="value" label="Select " v-model="form.visibility" />
-                                    </div>
-                                    <div v-if="form.visibility === 'Password protected'" class="mt-2">
-                                        <TextInput type="password" label="Password" class="block mr-2 w-full"
-                                            v-model="form.password" placeholder="Password" />
-                                    </div>
-                                </div>
-                                <div class="col-span-1 w-full">
-                                    <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
-                                        dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
+                                        label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => {
+                                            checkedFields.status = value
+                                        }
+                                            " />
                                 </div>
                             </div>
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                                class=" text-sm ml-auto px-3 py-2">
-                                Publish
+                                class="text-sm ml-auto px-3 py-2">
+                                {{ buttonText }}
                             </Button>
                         </div>
                     </Accordion>
-                    <div class="mt-4 ">
+                    <div class="mt-4">
                         <Accordion :open="true" header="Featured image">
-                            <div class="px-6  h-auto ">
+                            <div class="px-6 h-auto">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => imageData.featured_image.IsOpen = true"> {{
-                                        imageData.featured_image.mediaName }}</div>
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
+                                <div class="flex w-full h-auto">
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.featured_image">
+                                    </SingleCheck>
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => (imageData.featured_image.IsOpen = true)">
+                                        {{ imageData.featured_image.mediaName }}
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 flex overflow-x-auto">
+                                    <img v-if="imageData.featured_image.images[0]" v-for="file in imageData.featured_image.images" :key="file"
+                                        :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file?.alternative_text || 'image'" />
                                 </div>
                             </div>
                         </Accordion>
                     </div>
                 </div>
             </div>
-
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.IsOpen">
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.featured_image.IsOpen">
         <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
-            :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
+            :closeModal="() => {
+                imageData.featured_image.IsOpen = false
+            }
+                " :selectedFiles="handleFeatureFiles" />
     </popupModal>
-
 
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { handleFileUpdate } from '@/helper/functions';
-import { showToast } from '@/helper/functions'
-import ProjectServices from '@/services/ProjectServices';
-import Accordion from "@/components/Admin-components/Accordion.vue";
+import _ from 'lodash'
+import { ref, onMounted, watch, computed } from 'vue'
+import { handleFileUpdate } from '@/helper/functions'
+import { showToast, getGlobalUpdateData } from '@/helper/functions'
+import ProjectServices from '@/services/ProjectServices'
+import Accordion from '@/components/Admin-components/Accordion.vue'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import { getProjectCategoryTree, } from '@/helper/Apis'
+import { getProjectCategoryTree } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import { PublishOptions, statusData } from '@/json/data';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { PublishOptions, statusData } from '@/json/data'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 // Store and Router
-const store = useStore();
-const router = useRouter();
+const store = useStore()
+const router = useRouter()
 
 // Reactive State
-const errors = ref({});
-const loading = ref(false);
-const form = ref({ 
-    ...store.getters.editData, 
-    status: '', 
-    project_categories: [] 
-});
-const PreviousDomain = ref(null);
-const projectCategories = ref([]);
+const errors = ref({})
+const loading = ref(false)
+const form = ref({
+    ...store.getters.editData,
+    status: '',
+    project_categories: []
+})
+const checkedFields = ref({})
+const checkBoxFlag = ref(Boolean(form.value.id))
+const projectCategories = ref([])
 const imageData = ref({
-    featured_image: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
+    featured_image: { IsOpen: false, mediaName: 'Select Feature Media', images: [] }
 })
 
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
-
+const handleFeatureFiles = (data) =>
+    handleFileUpdate('featured_image', data, false, imageData, form)
 
 // Form Validation
 const validateForm = () => {
-    errors.value = {};
+    errors.value = {}
     if (!form.value.title) {
-        errors.value.title = 'Title is required';
-        return false;
+        errors.value.title = 'Title is required'
+        return false
     }
-    return true;
-};
+    return true
+}
+
+const handleSubmit = async () => {
+    validateForm()
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
+}
 
 // Submit Handler
-const handleSubmit = async () => {
-    delete form.value?.domain;
-    if (validateForm()) {
-        loading.value = true;
-        try {
-            const action = store.getters.editData ? ProjectServices.editProjects : ProjectServices.addProjects;
-            if (form.value.domain_id !== PreviousDomain.value) {
-                delete form.value.id;
-            }
-            const { deleted_at, created_at,featured_image_url, updated_at, ...payload } = form.value;
-            const { status, data } = await action(payload);
-            if (status === 200 && data.success) {
-                showToast(data.message, 'success');
-                router.push('/projects');
-            } else if (status === 400) {
-                showToast(data.message, 'error');
-            }
-        } catch (error) {
-            showToast('Something went wrong', 'error');
-            console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} project:`, error);
-        } finally {
-            loading.value = false;
+const handleAddEditApi = async () => {
+    delete form.value?.domain
+
+    loading.value = true
+    try {
+        const action = store.getters.editData
+            ? ProjectServices.editProjects
+            : ProjectServices.addProjects
+        const {
+            deleted_at,
+            created_at,
+            featured_image_url,
+            slug,
+            domains_data,
+            default_domain,
+            updated_at,
+            ...payload
+        } = form.value
+        if (!form.value?.domains_data?.includes(form.value.domain_id)) {
+            delete payload.id
         }
+        const { status, data } = await action(payload)
+        if (status === 200 && data.success) {
+            showToast(data.message, 'success')
+            router.push('/projects')
+        } else if (status === 400) {
+            showToast(data.message, 'error')
+        }
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} project:`, error)
+    } finally {
+        loading.value = false
     }
-};
+}
+
+// Global Update Handler
+const handleGlobalUpdate = async () => {
+    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
+    if (_.isEmpty(globalUpdate)) return
+
+    const payload = {
+        master_project_id: form.value.master_project_id,
+        global_keys: globalUpdate
+    }
+
+    try {
+        const { status, data } = await ProjectServices.globalProjectsUpdate(payload)
+        status === 200 && data.success
+            ? showToast(data.message, 'success')
+            : showToast(data.message, 'error')
+        if (status === 200 && data.success) router.push('/projects')
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error(
+            `Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`,
+            error
+        )
+    } finally {
+        loading.value = false
+    }
+}
+
+// Fetch Perticular Domain Data
+const fetchMaterialData = async () => {
+    loading.value = true
+    const payload = {
+        master_project_id: form.value.master_project_id,
+        domain_id: form.value.domain_id
+    }
+    try {
+        const { status, data } = await ProjectServices.getProjects(payload)
+        if (status === 200 && data.success) {
+            const dataValue = data.data[0]
+            store.dispatch('setEdit', dataValue)
+            Object.assign(form.value, dataValue)
+        }
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error('Error while fetching data:', error)
+    } finally {
+        loading.value = false
+    }
+}
 
 // Fetch Project Category Tree
 const fetchProjectCategoryTree = async (domainId) => {
     try {
-        projectCategories.value = await getProjectCategoryTree({ domain_id: domainId });
+        projectCategories.value = await getProjectCategoryTree({ domain_id: domainId })
     } catch (error) {
-        console.error('Error fetching project category tree:', error);
+        console.error('Error fetching project category tree:', error)
     }
-};
+}
 
 // Lifecycle Hooks
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id;
-    fetchProjectCategoryTree(PreviousDomain.value);
-    imageData.value.featured_image.images= [{file_url:store.getters.editData.featured_image_url}]
-});
+    fetchProjectCategoryTree(store.getters.getDomain.id)
+    imageData.value.featured_image.images = [store.getters.editData?.featured_image_url]
+    imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_url.file_url || 'Featured Image'
+})
 
-// Watchers
 watch(
     () => form.value.domain_id,
     (newDomainId) => {
-        fetchProjectCategoryTree(newDomainId);
-        form.value.project_categories = [];
+        // Fetch tree data
+        form.value.project_categories = []
+        fetchProjectCategoryTree({ domain_id: newDomainId })
+
+        // Check if newDomainId is present in domains_data and fetch
+        if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
+            fetchMaterialData()
+        } else {
+            console.log('data not in array', form.value?.domains_data)
+        }
     }
-);
+)
+
+// Computed Property
+const buttonText = computed(() => {
+    return Object.values(checkedFields.value).some(Boolean)
+        ? 'Global Update'
+        : form.value.id
+            ? 'Update'
+            : 'Submit'
+})
 </script>

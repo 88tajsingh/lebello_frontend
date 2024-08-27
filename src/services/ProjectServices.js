@@ -12,13 +12,22 @@ class ProjectServices {
     return instance.post(ApiConfig.addProjectCategory, payload)
   }
   editProjectCategory(payload) {
-    return instance.put(ApiConfig.editProjectCategory, payload)
+    return instance.post(ApiConfig.editProjectCategory, payload)
   }
   deleteProjectCategory(payload) {
     return instance.delete(ApiConfig.deleteProjectCategory, { params: { ...payload } })
   }
   bulkDeleteProjectCategory(payload) {
     return instance.post(ApiConfig.bulkDeleteProjectCategory, payload)
+  }
+  deleteMasterProjectsCategory(payload) {
+    return instance.post(ApiConfig.deleteMasterProjectsCategory, payload)
+  }
+  globalProjectsCategoryUpdate(payload) {
+    return instance.post(ApiConfig.globalProjectsCategoryUpdate, payload)
+  }
+  masterProjectCategorysSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterProjectCategorysSlugUpdate, payload)
   }
 
   // Project Variables
@@ -36,6 +45,15 @@ class ProjectServices {
   }
   bulkDeleteProjects(payload) {
     return instance.post(ApiConfig.bulkDeleteProjects, payload)
+  }
+  deleteMasterProjects(payload) {
+    return instance.post(ApiConfig.deleteMasterProjects, payload)
+  }
+  globalProjectsUpdate(payload) {
+    return instance.post(ApiConfig.globalProjectsUpdate, payload)
+  }
+  masterProjectsSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterProjectsSlugUpdate, payload)
   }
 }
 

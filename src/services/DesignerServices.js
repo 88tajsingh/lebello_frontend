@@ -16,6 +16,15 @@ class DesignerServices {
   bulkDeleteDesigners(payload) {
     return instance.post(ApiConfig.bulkDeleteDesigners, payload)
   }
+  masterDesignersSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterDesignersSlugUpdate, payload)
+  }
+  deleteMasterDesigners(payload) {
+    return instance.post(ApiConfig.deleteMasterDesigners, payload)
+  }
+  globalDesignersUpdate(payload) {
+    return instance.post(ApiConfig.globalDesignersUpdate, payload)
+  }
 
 }
 export default new DesignerServices()

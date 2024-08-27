@@ -171,13 +171,13 @@
 </template>
 
 <script setup>
+import _ from 'lodash';
 import { ref, onMounted,watch,computed } from 'vue';
 import { handleFileUpdate,validateForm,getGlobalUpdateData } from '@/helper/functions';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import TinyMCE from '@/components/Admin-components/TinyMCE.vue';
 import PagesServices from '@/services/PagesServices';
-import _ from 'lodash';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions'
@@ -211,14 +211,12 @@ const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, ima
 // remove image form gallery
 const handleRemoveImage = (slide) => {
     const index = imageData.value.gallery.images.findIndex(item => item.id === slide.id);
-    console.log(index)
         if (index !== -1) {
           imageData.value.gallery.images.splice(index, 1);
           form.value.gallery.splice(index, 1);}
 }
 
 const handleSubmit = async () => {
-    console.log("called handleSubmit")
     if (!validateForm('page_title', 'Page Title', form, errors)) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
@@ -296,7 +294,6 @@ const fetchPagesData = async () => {
 // Lifecycle Hooks
 onMounted(() => {
   if (store.getters.editData) {
-    console.log([store.getters?.editData])
         imageData.value.gallery.mediaName = store.getters?.editData?.gallery_urls?.file_url || 'Select Media';
         imageData.value.gallery.images = store.getters?.editData?.gallery_urls;
         imageData.value.featured_image.mediaName = store.getters?.editData?.featured_image_data?.file_url || 'Select Media';
@@ -304,7 +301,7 @@ onMounted(() => {
     }
 });
 
-// Check if domain_id is present in domains_data and fetch product type data if so
+// Check if domain_id is present in domains_data and fetch data if so
 watch(() => form.value.domain_id, (newDomainId) => {
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchPagesData();

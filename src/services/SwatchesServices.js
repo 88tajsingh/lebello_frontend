@@ -20,9 +20,16 @@ class Swatcheservices {
   swatchesSorting(payload) {
     return instance.post(ApiConfig.swatchesSorting,payload)
   }
-  // deleteMaterial(payload) {
-  //   return instance.get(`${ApiConfig.deleteMaterial}/id=${payload.id}`)
-  // }
+  deleteMasterSwatch(payload) {
+    return instance.post(ApiConfig.deleteMasterSwatch,payload)
+  }
+  globalSwatchDataUpdate(payload) {
+    return instance.post(ApiConfig.globalSwatchDataUpdate,payload)
+  }
+  masterSwatchesSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterSwatchesSlugUpdate,payload)
+  }
+ 
 }
 
 export default new Swatcheservices()

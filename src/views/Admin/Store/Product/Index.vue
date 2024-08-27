@@ -56,10 +56,10 @@
   import { showToast  } from '@/helper/functions';
   import { getDomins } from '@/helper/Apis';
   import { StoreProductCols } from '@/json/data';
-  import store from '@/store';
-
+  import { useStore } from 'vuex';
   
   const router = useRouter();
+  const store = useStore();
   const bulkActionSelected = ref(null)
   const loading = ref(false);
   const search = ref('');

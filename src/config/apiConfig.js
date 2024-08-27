@@ -29,7 +29,9 @@ const ApiConfig = {
   deleteSwatches: '/delete-swatches',
   swatchesSorting: '/sort-data',
   bulkDeleteSwatches: '/bulk-swatches-delete',
-  // materialStatus: 'update-material-status',
+  masterSwatchesSlugUpdate: '/master-swatch-slug-update',
+  globalSwatchDataUpdate: '/global-swatch-update',
+  deleteMasterSwatch: '/delete-master-swatch',
 
   // folders
   getFolder: '/get-folders',
@@ -125,6 +127,9 @@ const ApiConfig = {
   editDesigners: '/update-designer',
   deleteDesigners: '/delete-designer',
   bulkDeleteDesigners: '/bulk-delete-designer',
+  globalDesignersUpdate: '/global-designer-update',
+  deleteMasterDesigners: '/delete-master-designer',
+  masterDesignersSlugUpdate: '/master-designer-slug-update',
 
   // Dealers
   getDealer: '/get-dealers',
@@ -132,6 +137,9 @@ const ApiConfig = {
   editDealer: '/update-dealers',
   deleteDealer: '/delete-dealer',
   bulkDeleteDealer: '/bulk-delete-dealer',
+  masterSlugDealerUpdate: '/master-dealer-slug-update',
+  globalDealerUpdate: '/global-dealer-update',
+  deleteMasterDealer: '/delete-master-dealer',
 
   // --------------------------------------   Products   ----------------------------------------------------
   // products types
@@ -187,6 +195,9 @@ const ApiConfig = {
   deleteStoreCategory: '/delete-store-category',
   bulkDeleteStoreCategory: '/bulk-delete-store-category',
   getProductStoreCategory: '/get-store-category-tree-list',
+  deleteMasterProductCategory: '/delete-master-store-category',
+  globalProductCategoryUpdate: '/global-store-category-update',
+  masterProductCategorySlugUpdate: '/master-store-category-slug-update',
 
   // store Product
   getStoreProduct: '/get-store-product',
@@ -194,6 +205,9 @@ const ApiConfig = {
   editStoreProduct: '/update-store-product',
   deleteStoreProduct: '/delete-store-product',
   bulkDeleteStoreProduct: '/bulk-delete-store-product',
+  masterStoreProductSlugUpdate: '/master-store-product-slug-update',
+  globalStoreProductUpdate: '/global-store-product-update',
+  masterDeleteStoreProduct: '/delete-master-store-product',
 
   // -------------------------------- Project ---------------------------------------------
   // Projects
@@ -202,6 +216,10 @@ const ApiConfig = {
   editProjects: '/update-project',
   deleteProjects: '/delete-project',
   bulkDeleteProjects: '/bulk-delete-project',
+  masterProjectsSlugUpdate: '/master-project-slug-update',
+  globalProjectsUpdate: '/global-project-update',
+  deleteMasterProjects: '/delete-master-project',
+
   // Project category
   getProjectCategory: '/get-project-category',
   addProjectCategory: '/add-project-category',
@@ -210,7 +228,9 @@ const ApiConfig = {
   bulkDeleteProjectCategory: '/bulk-delete-project-category',
   getProductProjectCategory: '/get-project-category-tree-list',
   getProjectCategorytree: '/get-project-category-tree-list',
-
+  masterProjectCategorysSlugUpdate: '/master-project-category-slug-update',
+  globalProjectsCategoryUpdate: '/global-project-category-update',
+  deleteMasterProjectsCategory: '/delete-master-project-category',
 
   // ------------------------------------- Post --------------------------------
    // post
@@ -252,6 +272,9 @@ const ApiConfig = {
   editHomeSlider: '/update-home-slider',
   deleteHomeSlider: '/delete-home-slider',
   bulkDeleteHomeSlider: '/bulk-delete-home-slider',
+  masterHomeSliderSlugUpdate: '/master-home-slider-slug-update',
+  globalHomeSliderUpdate: '/global-home-slider-update',
+  DeleteMasterHomeSlider: '/delete-master-home-slider',
 }
 
 export default ApiConfig

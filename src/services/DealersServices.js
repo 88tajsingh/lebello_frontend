@@ -21,6 +21,15 @@ class DealerServices {
   BulkDeleteDealer(payload) {
     return instance.post(ApiConfig.bulkDeleteDealer, payload)
   }
+  deleteMasterDealer(payload) {
+    return instance.post(ApiConfig.deleteMasterDealer, payload)
+  }
+  globalDealerUpdate(payload) {
+    return instance.post(ApiConfig.globalDealerUpdate, payload)
+  }
+  masterSlugDealerUpdate(payload) {
+    return instance.post(ApiConfig.masterSlugDealerUpdate, payload)
+  }
 
 }
 export default new DealerServices()
