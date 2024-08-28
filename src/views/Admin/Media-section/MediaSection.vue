@@ -46,10 +46,10 @@
                         alt="Word Document" />
                     <!-- <img v-else-if="isExcel(media.file_url)" class="w-20 h-20" src="@/assets/Icons/msExcel.svg"
                         alt="Excel Document" /> -->
-                    <img v-else-if="isVideo(media.file_url)" class="w-20 h-20" src="@/assets/Icons/video.svg"
+                    <img v-else-if="isVideo(media?.file_url)" class="w-20 h-20" src="@/assets/Icons/video.svg"
                         alt="Video File" />
                     <span v-else>Unknown file format.</span>
-                    <span class="m-auto break-all text-[13px] text-wrap w-[20px]">{{ media.title }} </span>
+                    <span class="m-auto break-all text-[13px] text-wrap w-[20px]">{{ media?.title }} </span>
                     <div v-if="getFlag == false" class="m-auto absolute top-0 right-0 " @click.stop="() => {
                         mediaDeleteModal();
                         handleMediaData(media);

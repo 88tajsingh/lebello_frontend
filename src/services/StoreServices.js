@@ -2,7 +2,6 @@ import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 
 class StoreService {
-
   // product category
   getStoreCategory(payload) {
     return instance.get(ApiConfig.getStoreCategory, { params: { ...payload } })
@@ -14,7 +13,7 @@ class StoreService {
     return instance.post(ApiConfig.addStoreCategory, payload)
   }
   editStoreCategory(payload) {
-    return instance.put(ApiConfig.editStoreCategory, payload)
+    return instance.post(ApiConfig.editStoreCategory, payload)
   }
   deleteStoreCategory(payload) {
     return instance.delete(ApiConfig.deleteStoreCategory, { params: { ...payload } })
@@ -22,8 +21,17 @@ class StoreService {
   BulkDeleteStoreCategory(payload) {
     return instance.post(ApiConfig.bulkDeleteStoreCategory, payload)
   }
+  masterProductCategorySlugUpdate(payload) {
+    return instance.post(ApiConfig.masterProductCategorySlugUpdate, payload)
+  }
+  globalProductCategoryUpdate(payload) {
+    return instance.post(ApiConfig.globalProductCategoryUpdate, payload)
+  }
+  deleteMasterProductCategory(payload) {
+    return instance.post(ApiConfig.deleteMasterProductCategory, payload)
+  }
 
-  // product 
+  // product
   getStoreProduct(payload) {
     return instance.get(ApiConfig.getStoreProduct, { params: { ...payload } })
   }
@@ -39,8 +47,15 @@ class StoreService {
   BulkDeleteStoreProduct(payload) {
     return instance.post(ApiConfig.bulkDeleteStoreProduct, payload)
   }
-
- 
+  masterDeleteStoreProduct(payload) {
+    return instance.post(ApiConfig.masterDeleteStoreProduct, payload)
+  }
+  globalStoreProductUpdate(payload) {
+    return instance.post(ApiConfig.globalStoreProductUpdate, payload)
+  }
+  masterStoreProductSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterStoreProductSlugUpdate, payload)
+  }
 }
 
 export default new StoreService()

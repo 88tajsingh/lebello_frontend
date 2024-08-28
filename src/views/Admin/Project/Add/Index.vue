@@ -25,7 +25,7 @@
             :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
             @change="changePage">
             <template #featured_image_url="data">
-                <img :src="$filePath(data.value.featured_image_url)" alt="Material Image"
+                <img :src="$filePath(data.value.featured_image_url?.file_url)" alt="Material Image"
                     style="max-width: 50px; max-height: 50px" />
             </template>
 

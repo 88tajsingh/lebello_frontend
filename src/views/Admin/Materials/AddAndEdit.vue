@@ -16,7 +16,7 @@
                 <div class="flex flex-col ">
                     <InputLabel for="Name" value="Name" />
                     <TextInput type="text" class=" " :class="{ 'border-red': errors.name }" placeholder=""
-                        v-model="form.name" :errMessage="errors.name" @update:model="clearError('name')"
+                        v-model="form.name" :errMessage="errors.name" @update:modelValue="$clearError(errors,'name')"
                         :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The name is how it appears on your site.
@@ -157,7 +157,7 @@
                 </div>
                 <div class="flex flex-col w-full">
                     <div class=" mt-3 flex overflow-x-auto">
-                        <img v-for="file in imageData.media_id.images" :key="file" :src="$filePath(file?.file_url)"
+                        <img v-if="imageData.media_id.images[0]"v-for="file in imageData.media_id.images" :key="file" :src="$filePath(file?.file_url)"
                             class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'" />
                     </div>
                 </div>
@@ -188,7 +188,7 @@ import InputError from '@/components/Admin-components/form-components/InputError
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
-import { clearError, showToast, handleFileUpdate, getGlobalUpdateData, validateForm } from '@/helper/functions'
+import {showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
 import { useRouter } from 'vue-router';
@@ -222,8 +222,7 @@ const handleFeatureFiles = (data) => handleFileUpdate('media_id', data, false, i
 
 
 const handleSubmit = async () => {
-    console.log("called handleSubmit")
-    if (!validateForm('name', 'Name', form, errors)) return
+    validateForm() 
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
 }
@@ -316,11 +315,11 @@ onMounted(() => {
 });
 
 watch(() => form.value.domain_id, (newDomainId) => {
-    // Fetch product type tree and reset parent product type
+    // Fetch tree data
     form.value.parent_material = 0
     materialTree({ domain_id: form.value.domain_id });
 
-    // Check if newDomainId is present in domains_data and fetch product type data if so
+    // Check if newDomainId is present in domains_data and fetch 
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchMaterialData();
     } else {

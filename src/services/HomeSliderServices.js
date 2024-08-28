@@ -20,6 +20,15 @@ class HomeSliderServices {
   BulkDeleteHomeSlider(payload) {
     return instance.post(ApiConfig.bulkDeleteHomeSlider, payload)
   }
+  deleteMasterHomeSlider(payload) {
+    return instance.post(ApiConfig.DeleteMasterHomeSlider, payload)
+  }
+  globalHomeSliderUpdate(payload) {
+    return instance.post(ApiConfig.globalHomeSliderUpdate, payload)
+  }
+  masterHomeSliderSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterHomeSliderSlugUpdate, payload)
+  }
   
 }
 

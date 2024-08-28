@@ -1,35 +1,55 @@
 <template>
-    <DefaultCard :cardTitle="id ? `Edit Designer` : `Add New Designer`">
-        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
+    <DefaultCard :cardTitle="form.id ? `Edit Designer` : `Add New Designer`">
+
+        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="DesignerServices.deleteDesigners"
+            masterKey="master_designer_id" :masterDeleteService="DesignerServices.deleteMasterDesigners"
+            routeTo="designer" />
+
+        <template v-if="form.id" v-slot:header>
+            <MasterSlugForm :form="form" @update-slug="() => fetchDesignerData()"
+                :SlugUpdateservices='DesignerServices.masterDesignersSlugUpdate' masteridKeyName='master_designer_id' />
+        </template>
+
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
+
                     <Accordion :open="true" header="Fileds">
-                    <div class="px-6">
-                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *" placeholder="Add title"
-                            v-model="form.title" :errMessage="errors.title" :errors="errors" />
-                      
-                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug" placeholder="slug"
-                            v-model="form.slug"  />
+                        <div class="px-6">
+                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
+                                placeholder="Add title" v-model="form.title" :errMessage="errors.title"
+                                @update:modelValue="$clearError(errors, 'title')" :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="(value) => { checkedFields.title = value }" />
+
+                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug"
+                                placeholder="slug (Read Only)" v-model="form.slug" disabled="true" />
 
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Url" placeholder=""
-                            v-model="form.product_url" />
+                                v-model="form.product_url" :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="(value) => { checkedFields.product_url = value }" />
 
                             <div class="mr-2 mt-5 h-auto ">
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => imageData.product_image.isOpen = true"> {{
-                                        imageData.product_image.mediaName }}</div>
+                                <InputLabel for="Featured_image" value="Featured Image" />
+                                <div class=" flex  w-full h-auto ">
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => imageData.product_image.isOpen = true"> {{
+                                            imageData.product_image.mediaName }}</div>
+                                </div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in imageData.product_image.images" :key="file" :src="$filePath(file)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
+                                    <img v-if="imageData.product_image.images[0]"
+                                        v-for="file in imageData.product_image.images" :key="file"
+                                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file?.alternative_text || 'image'">
                                 </div>
                             </div>
-                    </div>
+                        </div>
                     </Accordion>
+
                     <div class="mt-5">
                         <Accordion :open="true" header="Description">
                             <div class="px-5 pt-2">
-                                    <TinyMCE v-model="form.description" />
+                                <TinyMCE v-model="form.description" />
                             </div>
                         </Accordion>
                     </div>
@@ -39,45 +59,36 @@
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
+
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                        label="Select " v-model="form.status" />
-                                </div>
-                                <div class="col-span-1 w-full">
-                                    <div class="flex flex-col ">
-                                    <InputLabel for="Visibility" value="Visibility" />
-                                    <Select :options="PublishOptions" showfield="label" class="w-full" valueField="value"
-                                        label="Select " v-model="form.visibility" />
-                                </div>
-                                    <div v-if="form.visibility === 'Password protected'" class="mt-2">
-                                        <TextInput type="password" label="Password" class="block mr-2 w-full" v-model="form.password"
-                                            placeholder="Password" />
-                                    </div>
-                                </div>
-                                <div class="col-span-1 w-full">
-                                    <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
-                                        dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
+                                        label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.status = value }" />
                                 </div>
                             </div>
+
                         </div>
+
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
-                                Publish
+                                {{ buttonText }}
                             </Button>
                         </div>
                     </Accordion>
+
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Tags">
                             <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :checkedData='form.tags' :dropdown="true"
-                                    valueField="id" showField="name" :data="TagsData"
+                                <Checkbox :nexted=true :checkedData='form.tags' :dropdown="true" valueField="id"
+                                    showField="name" :data="TagsData"
                                     @checked-items="(checked) => form.tags = checked" />
                             </div>
                         </Accordion>
                     </div>
+
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Product Category Type">
                             <div class="mt-2 px-6 flex h-auto ">
@@ -87,6 +98,7 @@
                             </div>
                         </Accordion>
                     </div>
+
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Product Type">
                             <div class="mt-2 px-6 flex h-auto ">
@@ -96,16 +108,22 @@
                             </div>
                         </Accordion>
                     </div>
+
                     <div class="mt-4 ">
                         <Accordion :open="true" header="Featured image">
                             <div class="px-6  h-auto ">
-                                <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => imageData.featured_image.isOpen = true"> {{
-                                        imageData.featured_image.mediaName }}</div>
+                                <InputLabel for="Featured_image" value="Featured_image" />
+                                <div class=" flex  w-full h-auto ">
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => imageData.featured_image.isOpen = true"> {{
+                                            imageData.featured_image.mediaName }}</div>
+                                </div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
+                                    <img v-if="imageData.featured_image.images[0]"
+                                        v-for="file in imageData.featured_image.images" :key="file"
+                                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file?.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -116,45 +134,38 @@
 
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.isOpen">
-    <GetLibrary
-      btnName="Select File"
-      :getFlag="true"
-      :selected="imageData.featured_image.images"
-      :singleFile="false" 
-      :closeModal="() => { imageData.featured_image.isOpen = false; }"
-      :selectedFiles="handleFeatureFiles"
-    />
-  </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.featured_image.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images"
+            :singleFile="false" :closeModal="() => { imageData.featured_image.isOpen = false; }"
+            :selectedFiles="handleFeatureFiles" />
+    </popupModal>
 
-  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.product_image.isOpen">
-    <GetLibrary
-      btnName="Select File"
-      :getFlag="true"
-      :selected="imageData.product_image.images"
-      :singleFile="false" 
-      :closeModal="() => { imageData.product_image.isOpen = false; }"
-      :selectedFiles="handleProductFiles"
-    />
-  </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.product_image.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.product_image.images" :singleFile="false"
+            :closeModal="() => { imageData.product_image.isOpen = false; }" :selectedFiles="handleProductFiles" />
+    </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import _ from 'lodash';
+import { ref, onMounted, watch, computed } from "vue";
 import { handleFileUpdate } from '@/helper/functions';
-import { showToast } from '@/helper/functions'
+import { showToast, getGlobalUpdateData } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import { getProductCategoryTypeTree,getProductTypeTree } from '@/helper/Apis'
+import { getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import DesignerServices from '@/services/DesignerServices';
 import { PublishOptions, statusData } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
+import DealersServices from '@/services/DealersServices';
 
 // store and router
 const router = useRouter();
@@ -163,7 +174,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData||{
+const form = ref(store.getters.editData || {
     status: '',
     visibility: '',
     tags: [],
@@ -173,22 +184,23 @@ const form = ref(store.getters.editData||{
     product_types: [],
     product_category_types: []
 });
-const PreviousDomain = ref(null);
 const ProductCategory = ref([]);
 const TagsData = ref([]);
 const productType = ref([]);
+const checkedFields = ref({})
+const checkBoxFlag = ref(Boolean(form.value.id))
 
 // Image data for various categories
 const imageData = ref({
-    featured_image : { isOpen: false, mediaName: 'Feature Image', images: [] },
-    product_image : { isOpen: false, mediaName: 'Upload Product Image', images: [] }
+    featured_image: { isOpen: false, mediaName: 'Feature Image', images: [] },
+    product_image: { isOpen: false, mediaName: 'Upload Product Image', images: [] }
 });
 
 // Handlers for file updates
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
-const handleProductFiles = (data) => {handleFileUpdate('product_image', data, false, imageData, form);
-console.log(imageData.value.product_image.images)
-}
+const handleProductFiles = (data) =>
+    handleFileUpdate('product_image', data, false, imageData, form);
+
 
 
 // Validate form fields
@@ -201,17 +213,24 @@ const validateForm = () => {
     return true;
 };
 
-// Handle form submission (add or edit designer)
 const handleSubmit = async () => {
     if (!validateForm()) return;
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
+}
+
+// Handle form submission (add or edit designer)
+const handleAddEditApi = async () => {
+
 
     loading.value = true;
-    const { featured_image_url, product_image_url, ...payload } = form.value;
-    if (payload.domain_id !== PreviousDomain.value) delete payload.id;
-
+    const { featured_image_url, slug, domains_data, featured_image_data, product_image_data, product_category_types_data, product_types_data, default_domain, tags_data, product_image_url, ...payload } = form.value;
+    if (!form.value?.domains_data?.includes(form.value.domain_id)) {
+        delete payload.id;
+    }
     try {
-        const service = store.getters.editData ? DesignerServices.editDesigners : 
-        DesignerServices.addDesigners;
+        const service = store.getters.editData ? DesignerServices.editDesigners :
+            DesignerServices.addDesigners;
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
@@ -224,6 +243,48 @@ const handleSubmit = async () => {
         loading.value = false;
     }
 };
+
+// Global Update Handler
+const handleGlobalUpdate = async () => {
+    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
+    if (_.isEmpty(globalUpdate)) return
+
+    const payload = {
+        master_designer_id: form.value.master_designer_id,
+        global_keys: globalUpdate
+    }
+
+    try {
+        const { status, data } = await DesignerServices.globalDesignersUpdate(payload)
+        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
+        if (status === 200 && data.success) router.push('/designer')
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
+    } finally {
+        loading.value = false
+    }
+}
+
+// Fetch Perticular Domain Data
+const fetchDesignerData = async () => {
+    loading.value = true
+    const payload = { master_designer_id: form.value.master_designer_id, domain_id: form.value.domain_id }
+    try {
+        const { status, data } = await DesignerServices.getDesigners(payload)
+        if (status === 200 && data.success) {
+            const dataValue = data.data[0]
+            store.dispatch('setEdit', dataValue)
+            Object.assign(form.value, dataValue)
+        }
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error('Error while fetching data:', error)
+    }
+    finally {
+        loading.value = false;
+    }
+}
 
 // Fetch product and category data
 const fetchProductData = async () => {
@@ -245,35 +306,35 @@ const fetchTagsData = async () => {
 
 // Initialize component state
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain?.id;
-
     if (store.getters.editData) {
-        imageData.value.featured_image.images = [store?.getters?.editData?.featured_image_url]|| [];
-        imageData.value.featured_image.mediaName = store?.getters.editData?.featured_image_url || 'Feature Image';
-        imageData.value.product_image.images = [store.getters.editData?.product_image_url] || [];
-        imageData.value.product_image.mediaName = store.getters.editData?.product_image_url || 'Product Image';
+        const { product_image_data, featured_image_data } = store.getters.editData;
+        imageData.value.featured_image.images = [featured_image_data] || [];
+        imageData.value.featured_image.mediaName = featured_image_data.file_url || 'Feature Image';
+        imageData.value.product_image.images = [product_image_data] || [];
+        imageData.value.product_image.mediaName = product_image_data?.file_url || 'Product Image';
     }
-    
     fetchProductData();
     fetchTagsData();
 });
 
 // Watch for domain_id changes to update product and category data
-watch(() => form.value.domain_id, () => {
+watch(() => form.value.domain_id, (newDomainId) => {
+    // Fetch tree data 
     fetchTagsData();
     fetchProductData();
+    // Check if newDomainId is present in domains_data and fetch 
+    if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
+        fetchDesignerData();
+    } else {
+        console.log('data not in array', form.value?.domains_data);
+    }
 });
+
+
+// Computed Property
+const buttonText = computed(() => {
+    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+})
 </script>
 
-<style scoped>
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-</style>
+<style scoped></style>

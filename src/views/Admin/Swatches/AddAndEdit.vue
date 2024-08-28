@@ -1,6 +1,12 @@
-<template>
+<template>{{ form }}
     <DefaultCard :cardTitle="store.getters.editData ? `Edit Swatches` : `Add Swatches`">
-        <DomainComponent @customChange="(id) => form.domain_id = id"></DomainComponent>
+        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="SwatchesServices.deleteSwatches"
+            masterKey="master_swatch_id" :masterDeleteService="SwatchesServices.deleteMasterSwatch" routeTo="swatches">
+        </DomainComponent>
+        <template v-if="form.id" v-slot:header>
+            <MasterSlugForm :form="form" @update-slug="() => fetchSwatchData()"
+                :SlugUpdateservices='SwatchesServices.masterSwatchesSlugUpdate' masteridKeyName='master_swatch_id' />
+        </template>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -8,16 +14,20 @@
                         <div class="px-7">
                             <TextInput type="text" id="addTitle" class="block mr-2 h-[40px] w-full" label=""
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
-                                :class="{ 'border-red': errors.title }" />
+                                :class="{ 'border-red': errors.title }" :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="(value) => { checkedFields.title = value }" />
                             <!-- @update:checkValue="form.isTitle = $event" hasCheckBox -->
 
                         </div>
                     </Accordion>
-                    <div class="mt-5">
+                    <div class="mt-5 ">
                         <Accordion :open="true" header="Description">
-                            <div class="px-5     pt-2">
-                                <TinyMCE v-model="form.description" />
-                                <span class="text-sm pl-2">Put Material Description.</span>
+                            <div class="px-3 pt-2 flex">
+                                <SingleCheck v-if="form.id" label="" v-model="checkedFields.description"></SingleCheck>
+                                <div class="w-full">
+                                    <TinyMCE v-model="form.description" />
+                                    <span class="text-sm pl-2">Put Material Description.</span>
+                                </div>
                             </div>
                         </Accordion>
                     </div>
@@ -26,7 +36,8 @@
                             <div class=" px-6">
                                 <TextInput id="trade_mark_label" type="text" class="block w-full mr-2 h-[33px]"
                                     v-model="form.trade_mark_label" placeholder="Trade Mark Label" label="
-                                " :message="errors?.trade_mark_label" />
+                                " :message="errors?.trade_mark_label" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.trade_mark_label = value }" />
                             </div>
                         </Accordion>
                     </div>
@@ -36,7 +47,8 @@
                                 <div class=" items-center text-gray-600 text-sm">
                                     <TextInput type="number" class="block w-[180px] mr-2 h-[33px]"
                                         v-model="form.material_term_key" placeholder="Term key" label="Term key"
-                                        :message="errors.material_term_key" />
+                                        :message="errors.material_term_key" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.material_term_key = value }" />
                                     <span>The material term id. This is generated from material taxonomy.
                                         Please do not make any changes here.
                                     </span>
@@ -45,13 +57,16 @@
                             <div class="px-6 items-center text-gray-600 text-sm">
                                 <TextInput id="material_item" type="number" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.material_item" placeholder="Material item" label="Material item"
-                                    :message="errors.material_item" />
+                                    :message="errors.material_item" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.material_item = value }" />
 
                                 <span>Put material taxonomy term id. Seperate with commas.</span>
                             </div>
                             <div class="px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id="material_group_name" type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.material_group_name" placeholder="Group Name" label="Group Name" />
+                                    v-model="form.material_group_name" placeholder="Group Name" label="Group Name"
+                                    :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.material_group_name = value }" />
                             </div>
                         </Accordion>
                     </div>
@@ -61,14 +76,16 @@
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                    :message="errors.seo_title" />
+                                    :message="errors.seo_title" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_title = value }" />
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
                                     class="block w-[180px] mr-2 " v-model="form.seo_meta_description"
                                     placeholder="Meta Description" label="Meta Description"
-                                    :message="errors.seo_meta_description" />
+                                    :message="errors.seo_meta_description" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_meta_description = value }" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
@@ -76,19 +93,19 @@
                                 <TextInput id="seo_meta_keywords" :isTextarea="true" :='4' type="text"
                                     class="block w-[180px] mr-2 " v-model="form.seo_meta_keywords"
                                     placeholder="Meta Keywords" label="Meta Keywords"
-                                    :message="errors.seo_meta_keywords" />
+                                    :message="errors.seo_meta_keywords" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_meta_keywords = value }" />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-5">
-
                     </div>
                     <div class="mt-5">
-                        <Accordion open="false" header="Slug">
+                        <Accordion open="false" header="Slug (Read Only)">
                             <div class="px-5 items-center text-gray-600 text-sm">
                                 <TextInput id="slug" :rows=4 type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.slug" placeholder="Slug" label="" :message="errors.slug" />
+                                    v-model="form.slug" placeholder="Slug " label="" :message="errors.slug" disabled />
                             </div>
                         </Accordion>
                     </div>
@@ -98,7 +115,7 @@
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
                             <div class="flex justify-between mb-2 px-2">
-                                <div>
+                                <!-- <div>
                                     <Button type="button" class=" text-sm ml-auto px-2 py-1">
                                         preview
                                     </Button>
@@ -107,38 +124,23 @@
                                     <Button type="submit" class=" text-sm ml-auto px-2 py-1">
                                         Save Draft
                                     </Button>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="px-2">
                                 <div>
                                     <InputLabel for="status" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                        label="Select an option" v-model="form.status" />
+                                        label="Select an option" v-model="form.status" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.status = value }" />
                                 </div>
-                                <div class="col-span-1 w-full mt-2 ">
-                                    <input-label for="parentOrder" value="Visibility" />
-                                    <div class="flex items-center  gap-2">
-                                        <RadioButton v-for="option in PublishOptions" :key="option.value"
-                                            name="Visibility" :value="option.value" :label="option.label"
-                                            :modelValue="form.visibility"
-                                            @update:modelValue="form.visibility = $event" />
-                                    </div>
-                                    <div v-if="form.visibility === 'Password protected'" class="">
-                                        <TextInput type="password" class="block mr-2 w-full" v-model="form.passowrd"
-                                            placeholder="Password" />
-                                    </div>
-                                </div>
-                                <div class="col-span-1 w-full">
-                                    <DatePicker v-model="form.publish" label="Publish Date" format="yyyy-mm-dd hh:mm:ss"
-                                        dayjsFormat='YYYY-MM-DD HH:mm:ss' :use12-hour="false" />
-                                </div>
+
                             </div>
 
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
-                                Publish
+                                {{ buttonText }}
                             </Button>
                         </div>
                     </Accordion>
@@ -176,26 +178,29 @@
                             <div class="my-5 px-6  h-auto ">
                                 <TextInput id="material_teaser_text" type="text" class="block w-full mr-2 h-[33px]"
                                     v-model="form.material_teaser_text" placeholder="" label="Material text overlay"
-                                    :message="errors.material_teaser_text" />
+                                    :message="errors.material_teaser_text" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.material_teaser_text = value }" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Featured image">
-        <div class="my-5 px-6 h-auto">
-            <InputLabel for="Featured_image" value="Featured_image" />
-            <div class="py-2 rounded-lg px-2 border border-stroke"
-                                    @click="() => imageData.featured_image.IsOpen = true"> {{
-                                        imageData.featured_image.mediaName }}</div>
-            <div class="mt-3 flex overflow-x-auto">
-                <img 
-                    :src="$filePath(imageData.featured_image?.images[0]?.file_url)"
-                    class="inline-block w-auto h-34 mr-4"
-                    :alt="form.title"
-                />
-            </div>
-        </div>
-    </Accordion>
+                            <div class="my-5 px-6 h-auto">
+                                <InputLabel for="Featured_image" value="Featured_image" />
+                                <div class=" flex  w-full h-auto ">
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.featured_image">
+                                    </SingleCheck>
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => imageData.featured_image.IsOpen = true"> {{
+                                            imageData.featured_image.mediaName }}</div>
+                                </div>
+                                <div class="mt-3 flex overflow-x-auto">
+                                    <img v-if="imageData.featured_image?.images[0]?.file_url"
+                                        :src="$filePath(imageData.featured_image?.images[0]?.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="form.title" />
+                                </div>
+                            </div>
+                        </Accordion>
                     </div>
                 </div>
             </div>
@@ -203,18 +208,20 @@
         </form>
     </DefaultCard>
 
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.featured_image.IsOpen">
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.featured_image.IsOpen">
         <GetLibrary btnName="Select file" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
-            :closeModal="()=>imageData.featured_image.IsOpen=false" :selectedFiles="handleFeatureFiles" />
+            :closeModal="() => imageData.featured_image.IsOpen = false" :selectedFiles="handleFeatureFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'; 
+import _ from 'lodash';
+import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
-import { ref, onMounted, watch } from "vue";
-import { showToast,handleFileUpdate  } from '@/helper/functions'
+import { ref, onMounted, watch, computed } from "vue";
+import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { MaterialTreeList } from '@/helper/Apis';
 import { PublishOptions, statusData } from '@/json/data';
 import SwatchesServices from '@/services/SwatchesServices';
@@ -233,8 +240,11 @@ const router = useRouter();
 const errors = ref({});
 const loading = ref(false);
 const form = ref(store.getters.editData || { status: null, description: ' ', material_template: false, materials: [] });
-const PreviousDomain = ref(null);
 const MaterialTreeListData = ref([]);
+const checkedFields = ref({})
+const checkBoxFlag = ref(Boolean(form.value.id))
+
+// image data
 const imageData = ref({
     featured_image: { IsOpen: false, mediaName: ' Feature Media', images: [] }
 });
@@ -256,14 +266,20 @@ const handleCheckedItems = (checkedItems) => {
     form.value = { ...form.value, materials: checkedItems }
 };
 
-// Submit Handler
 const handleSubmit = async () => {
+    if (!validateForm('page_title', 'Page Title', form, errors)) return
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
+}
+
+// Submit Handler
+const handleAddEditApi = async () => {
     if (validateForm()) {
         loading.value = true;
         try {
             const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
-            if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
             const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
+            if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
             const { status, data } = await action(payload);
             if (status === 200 && data.success) {
                 showToast(`Swatches ${store.getters.editData ? 'edited' : 'added'} successfully`, 'success');
@@ -281,6 +297,52 @@ const handleSubmit = async () => {
     }
 };
 
+// Global Update Handler
+const handleGlobalUpdate = async () => {
+    loading.value = true;
+    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
+    if (_.isEmpty(globalUpdate)) return
+
+    const payload = {
+        master_swatch_id: form.value.master_swatch_id,
+        global_keys: globalUpdate
+    }
+
+    try {
+        const { status, data } = await SwatchesServices.globalSwatchDataUpdate(payload)
+        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
+        if (status === 200 && data.success) router.push('/swatches')
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
+    } finally {
+        loading.value = false
+    }
+}
+
+
+// Fetch Perticular Domain Data
+const fetchSwatchData = async () => {
+    loading.value = true
+    const payload = { master_swatch_id: form.value.master_swatch_id, domain_id: form.value.domain_id }
+    try {
+        const { status, data } = await SwatchesServices.getSwatches(payload)
+        if (status === 200 && data.success) {
+            const dataValue = data.data[0]
+            store.dispatch('setEdit', dataValue)
+            Object.assign(form.value, dataValue)
+            loading.value = false
+        }
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error('Error while fetching data:', error)
+        loading.value = false
+    }
+    finally {
+        loading.value = false;
+    }
+}
+
 // Fetch Initial Data
 const fetchMaterialTreeData = async () => {
     try {
@@ -293,28 +355,28 @@ const fetchMaterialTreeData = async () => {
 
 // Lifecycle Hooks
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id;
     fetchMaterialTreeData();
+
+    if (store.getters.editData) {
+        imageData.value.featured_image.mediaName = store.getters?.editData?.featured_image_data?.file_url || 'Select Featured Image';
+        imageData.value.featured_image.images = [store.getters?.editData?.featured_image_data];
+    }
 });
 
-watch(
-    () => form.value.domain_id,
-    () => {
-        fetchMaterialTreeData();
+// Check if domain_id is present in domains_data and fetch  data if so
+watch(() => form.value.domain_id, (newDomainId) => {
+    fetchMaterialTreeData();
+    if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
+        fetchSwatchData();
+    } else {
+        console.log('data not in array', form.value?.domains_data);
     }
-);
+});
 
+// Computed Property
+const buttonText = computed(() => {
+    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+})
 </script>
 
-<style>
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-</style>
+<style></style>
