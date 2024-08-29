@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </template>
-            x
+            
         </vue3-datatable>
     </div>
 

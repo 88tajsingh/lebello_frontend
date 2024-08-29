@@ -44,7 +44,7 @@
     Do you want to delete?
   </DeleteModal>
 
-  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Material'" @delete="handleBulkActions()">
+  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Contract Type'" @delete="handleBulkActions()">
     Do you want to delete ?
   </DeleteModal>
   <!-- <Loader :isLoading="loading" :fullPage="true" /> -->

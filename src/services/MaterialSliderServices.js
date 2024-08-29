@@ -21,5 +21,14 @@ class MaterialSliderServices {
   bulkDeleteMaterialSlider(payload) {
     return instance.post(ApiConfig.bulkDeleteMaterialSlider, payload)
   }
+  masterDeleteMaterialSlider(payload) {
+    return instance.post(ApiConfig.masterDeleteMaterialSlider, payload)
+  }
+  globalMaterialSliderUpdate(payload) {
+    return instance.post(ApiConfig.globalMaterialSliderUpdate, payload)
+  }
+  masterMaterialSliderSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterMaterialSliderSlugUpdate, payload)
+  }
 }
 export default new MaterialSliderServices()

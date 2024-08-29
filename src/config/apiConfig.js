@@ -255,9 +255,12 @@ const ApiConfig = {
   //Company
   getCompany: '/get-company',
   addCompany: '/add-company',
-  editCompany: 'update-company',
-  deleteCompany: 'delete-company',
-  bulkDeleteCompany: 'bulk-delete-company',
+  editCompany: '/update-company',
+  deleteCompany: '/delete-company',
+  bulkDeleteCompany: '/bulk-delete-company',
+  masterCompanySlugUpdate: '/master-company-slug-update',
+  globalCompanyUpdate: '/global-company-update',
+  masterDeleteCompany: '/delete-master-company',
 
   // Material SLider
   getMaterialSliders: '/get-material-slider',
@@ -265,6 +268,9 @@ const ApiConfig = {
   editMaterialSlider: '/update-material-slider',
   deleteMaterialSlider: '/delete-material-slider',
   bulkDeleteMaterialSlider: '/bulk-delete-material-slider',
+  masterMaterialSliderSlugUpdate: '/master-material-slider-slug-update',
+  globalMaterialSliderUpdate: '/global-material-slider-update',
+  masterDeleteMaterialSlider: '/delete-master-material-slider',
 
   // Home SLider
   getHomeSlider: '/get-home-slider',

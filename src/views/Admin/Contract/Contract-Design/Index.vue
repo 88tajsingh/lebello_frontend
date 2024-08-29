@@ -39,7 +39,7 @@
         </template>
       </vue3-datatable>
     </div>
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteContract">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Contract Design'" @delete="handleDeleteContract">
       Do you want to delete?
     </DeleteModal>
     <!-- <Loader :isLoading="loading" :fullPage="true" /> -->

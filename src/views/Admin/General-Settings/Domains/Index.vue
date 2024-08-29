@@ -46,7 +46,7 @@
     <!-- <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
       <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
     </PopupModal> -->
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteDomain">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Domain'" @delete="handleDeleteDomain">
       Do you want to delete?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />

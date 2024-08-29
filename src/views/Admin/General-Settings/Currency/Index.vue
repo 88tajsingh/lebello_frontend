@@ -48,7 +48,7 @@
     <PopupModal modalTitle="Edit Pages" custonClasses="w-[800px] h-[400px]" v-model:isOpen="editIsOpen">
       <AddEditForm :allCurrencies="allCurrencies" :exchangeData="editData" @handleApi="handleEditPages" />
     </PopupModal>                               
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteDomain">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Currency'" @delete="handleDeleteDomain">
       Do you want to delete?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />

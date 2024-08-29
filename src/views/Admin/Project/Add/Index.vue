@@ -138,7 +138,7 @@ const handleGetProjects = async (payload) => {
     }
 }
 
-// delete material
+// delete 
 const handleDeleteProjects = async () => {
     loading.value = true;
     try {

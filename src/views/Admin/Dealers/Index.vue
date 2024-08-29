@@ -43,7 +43,7 @@
         </vue3-datatable>
     </div>
 
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Project'" @delete="handleDeleteProjects">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Dealer'" @delete="handleDeleteProjects">
         Do you want to delete ?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -131,7 +131,7 @@ const handleGetDealers = async (payload) => {
     }
 }
 
-// delete material
+// delete 
 const handleDeleteProjects = async () => {
     loading.value = true;
     try {
