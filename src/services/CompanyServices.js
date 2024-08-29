@@ -21,6 +21,18 @@ class CompanyServices {
   bulkDeleteCompany(payload) {
     return instance.post(ApiConfig.bulkDeleteCompany, payload)
   }
+  
+  masterDeleteCompany(payload) {
+    return instance.post(ApiConfig.masterDeleteCompany, payload)
+  }
+
+  globalCompanyUpdate(payload) {
+    return instance.post(ApiConfig.globalCompanyUpdate, payload)
+  }
+
+  masterCompanySlugUpdate(payload) {
+    return instance.post(ApiConfig.masterCompanySlugUpdate, payload)
+  }
 
 }
 export default new CompanyServices()

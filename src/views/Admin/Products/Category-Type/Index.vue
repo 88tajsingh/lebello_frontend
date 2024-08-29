@@ -46,10 +46,10 @@
     <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
       <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
     </PopupModal>
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteProductContractType">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Product Category Type'" @delete="handleDeleteProductContractType">
       Do you want to delete?
     </DeleteModal>
-    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Material'" @delete="handleBulkActions()">
+    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Product Category Type'" @delete="handleBulkActions()">
     Do you want to delete ?
   </DeleteModal>
     <!-- <Loader :isLoading="loading" :fullPage="true" /> -->

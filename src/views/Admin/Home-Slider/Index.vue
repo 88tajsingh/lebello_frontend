@@ -41,7 +41,7 @@
     </vue3-datatable>
   </div>
 
-  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Material'" @delete="handleDeleteHomeSlider">
+  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Home Slider'" @delete="handleDeleteHomeSlider">
     Do you want to delete ?
   </DeleteModal>
   <Loader :isLoading="loading" :fullPage="true" />

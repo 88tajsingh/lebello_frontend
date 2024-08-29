@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Projects` : `Add New Project`">
-        {{ store.getters.editData }}
+      
         <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="ProjectServices.deleteProjects"
             masterKey="master_project_id" :masterDeleteService="ProjectServices.deleteMasterProjects"
             routeTo="projects" />

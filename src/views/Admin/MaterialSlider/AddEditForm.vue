@@ -1,6 +1,16 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Material Slider` : `Add Material Slider`">
-        <DomainComponent :domains="items" @customChange="(id) => form.domain_id = id"></DomainComponent>
+        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="MaterialSliderServices.deleteMaterialSlider"
+            masterKey="master_material_slider_id" :masterDeleteService="MaterialSliderServices.masterDeleteMaterialSlider"
+            routeTo="store-product" />
+        <template v-if="form.id" v-slot:header>
+            <MasterSlugForm
+        :form="form"
+        @update-slug="()=>fetchMaterialSliderData()"
+        :SlugUpdateservices = 'MaterialSliderServices.masterMaterialSliderSlugUpdate'
+        masteridKeyName='master_material_slider_id'
+      />
+      </template>   
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -8,7 +18,12 @@
                         <div class="px-6">
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title"
+                                 :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.title = value }"
                                 :errors="errors" />
+                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug (Read Only)"
+                                placeholder="Add title" v-model="form.slug" :errMessage="errors.slug"
+                                 :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.slug = value }"
+                                :errors="errors"  disabled/>
                         </div>
                     </Accordion>
                 </div>
@@ -20,30 +35,15 @@
                                     <div class="flex flex-col ">
                                         <InputLabel for="status" value="Status" />
                                         <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                            label="Select " v-model="form.status" />
-                                    </div>
-                                    <div class="col-span-1 w-full">
-                                        <div class="flex flex-col ">
-                                            <InputLabel for="Visibility" value="Visibility" />
-                                            <Select :options="PublishOptions" showfield="label" class="w-full"
-                                                valueField="value" label="Select " v-model="form.visibility" />
-                                        </div>
-                                        <div v-if="form.visibility === 'Password protected'" class="mt-2">
-                                            <TextInput type="password" label="Password" class="block mr-2 w-full"
-                                                v-model="form.password" placeholder="Password" />
-                                        </div>
-                                    </div>
-                                    <div class="col-span-1 w-full">
-                                        <DatePicker v-model="form.publish" label="Publish Date"
-                                            format="yyyy-mm-dd hh:mm:ss" dayjsFormat='YYYY-MM-DD HH:mm:ss'
-                                            :use12-hour="false" />
+                                            label="Select " v-model="form.status"
+                                            :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.status = value }" />
                                     </div>
                                 </div>
                             </div>
                             <div class="bg-[#f6f7f7] flex py-3">
                                 <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                     class=" text-sm ml-auto px-3 py-2">
-                                    Publish
+                                    {{ buttonText }}
                                 </Button>
                             </div>
                         </Accordion>
@@ -53,9 +53,13 @@
                         <div class="mr-2 mt-3  h-auto ">
                             <div class="  h-auto ">
                                 <InputLabel for="featured_image" value="Featured Image" />
-                                <div class="py-2 rounded-lg px-2 border border-stroke"
+                                <div class=" flex  w-full h-auto ">
+                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                            <div class="py-2 rounded-lg  w-full px-2 border border-stroke"
                                     @click="() => imageData.featured_image.isOpen = true"> {{
                                         imageData.featured_image.mediaName }}</div>
+                        </div>
+                                
                                 <div class=" mt-3 flex overflow-x-auto">
                                     <img v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
@@ -64,7 +68,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </form>
@@ -79,17 +82,16 @@
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 <script setup>
+import _ from 'lodash';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { ref, onMounted, watch } from "vue";
-import { showToast } from '@/helper/functions'
-import { handleFileUpdate } from '@/helper/functions';
+import { ref, onMounted, watch,computed } from "vue";
+import {showToast, handleFileUpdate,getGlobalUpdateData } from '@/helper/functions';
 import { PublishOptions,statusData} from '@/json/data';
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import MaterialSliderServices from '@/services/MaterialSliderServices.js';
-import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 
 // store and router
 const store = useStore();
@@ -99,8 +101,8 @@ const router = useRouter();
 const errors = ref({});
 const loading = ref(false);
 const form = ref(store.getters.editData || { status: '', visibility: '' });
-const PreviousDomain = ref(null);
-
+const checkedFields = ref({})
+const checkBoxFlag = ref(Boolean(form.value.id))
 
 const imageData = ref({
     featured_image : { isOpen: false, mediaName: 'Featured Image', images: [] },
@@ -119,16 +121,24 @@ const validateForm = () => {
     return true;
 };
 
-// Submit Handler
 const handleSubmit = async () => {
+    if (!validateForm()) return
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
+}
+
+// Submit Handler
+const handleAddEditApi = async () => {
     delete form.value?.domain;
-    if (validateForm()) {
+    
         loading.value = true;
         try {
             const action = store.getters.editData ? MaterialSliderServices.editMaterialSlider : MaterialSliderServices.addMaterialSlider;
-            if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
-            const { deleted_at, created_at, updated_at, featured_image_url, ...refinedPayload } = form.value;
-            const res = await action({ ...refinedPayload });
+            const { deleted_at, created_at,slug,domains_data,default_domain,featured_image_url, updated_at, ...payload } = form.value;
+            if (!form.value?.domains_data?.includes(form.value.domain_id)) {
+                 delete payload.id;
+            }
+            const res = await action({ ...payload });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
                 router.push('/material-slider');
@@ -138,24 +148,77 @@ const handleSubmit = async () => {
         } finally {
             loading.value = false;
         }
-    }
+    
 };
+
+// Global Update Handler
+const handleGlobalUpdate = async () => {
+    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
+    if (_.isEmpty(globalUpdate)) return
+
+    const payload = {
+        master_material_slider_id: form.value.master_material_slider_id,
+        global_keys: globalUpdate
+    }
+
+    try {
+        const { status, data } = await MaterialSliderServices.globalMaterialSliderUpdate(payload)
+        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
+        if (status === 200 && data.success) router.push('/material-slider')
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
+    } finally {
+        loading.value = false
+    }
+}
+
+
+// Fetch Perticular Domain Data
+const fetchMaterialSliderData = async () => {
+    loading.value = true
+    const payload = { master_material_slider_id: form.value.master_material_slider_id, domain_id: form.value.domain_id }
+    try {
+        const { status, data } = await MaterialSliderServices.getMaterialSliders(payload)
+        if (status === 200 && data.success) {
+            const dataValue = data.data[0]
+            store.dispatch('setEdit', dataValue)
+            Object.assign(form.value, dataValue)
+        }
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error('Error while fetching data:', error)
+    }
+    finally{
+    loading.value=false;
+  }
+}
+
 
 // Lifecycle Hooks
 onMounted(() => {
-    PreviousDomain.value = store.getters.getDomain.id;
-    // imageData.value.featured_image=
+    if(store.getters.editData){
+        const {featured_image_url}=store.getters.editData;
+        imageData.value.featured_image.images=[featured_image_url]
+        imageData.value.featured_image.mediaName=featured_image_url.file_url
+    }
 });
+
+
+watch(() => form.value.domain_id, (newDomainId) => {
+    // Check if newDomainId is present in domains_data and fetch 
+    if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
+        fetchMaterialSliderData();
+    } else {
+        console.log('data not in array', form.value?.domains_data);
+    }
+});
+
+// Computed Property
+const buttonText = computed(() => {
+    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+})
 </script>
 <style scoped>
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
 
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
 </style>

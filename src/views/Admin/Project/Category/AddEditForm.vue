@@ -1,4 +1,4 @@
-<template>{{form}}
+<template>
     <DefaultCard  :cardTitle="form.id ? `Edit Product Category Type ` : `Add Product Category Type`">
       <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ProjectServices.deleteProjectCategory"
             masterKey="master_project_category_id" :masterDeleteService="ProjectServices.deleteMasterProjectsCategory"

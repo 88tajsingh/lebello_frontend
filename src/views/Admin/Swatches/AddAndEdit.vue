@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="store.getters.editData ? `Edit Swatches` : `Add Swatches`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="SwatchesServices.deleteSwatches"
             masterKey="master_swatch_id" :masterDeleteService="SwatchesServices.deleteMasterSwatch" routeTo="swatches">

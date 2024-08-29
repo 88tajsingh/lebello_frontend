@@ -2,7 +2,7 @@
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="StoreServices.deleteStoreProduct"
             masterKey="master_store_product_id" :masterDeleteService="StoreServices.masterDeleteStoreProduct"
-            routeTo="materials" />
+            routeTo="store-product" />
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm
         :form="form"
@@ -148,6 +148,7 @@
                                 </div>
                                 <div class="border border-stroke rounded-lg px-4 mt-4 mr-2">
                                     <div class="mt-4"> <span>Product Option </span> </div>
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_option"></SingleCheck>
                                     <div v-for="(item, index) in form.product_option" :key="index">
                                         <hr class=" text-rose-400" />
                                         <div class="mt-2">
@@ -419,7 +420,7 @@
                         <div class="px-1 py-3">
                                 <div class="flex flex-col px-4">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="productOptionsType" showfield="name" class="w-full"
+                                    <Select :options="trueFalse" showfield="name" class="w-full"
                                         valueField="value" label="Select " v-model="form.status"
                                         :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.status = value }"
                                         />
@@ -476,9 +477,7 @@
                                     {{ imageData.gallery.mediaName }}
                                 </div>
                         </div>
-                               
-                                <div class="mt-3 flex overflow-x-auto">
-                                    
+                                <div class="mt-3 flex overflow-x-auto">         
                                     <img v-if="imageData.gallery.images > 0" v-for="file in imageData.gallery.images" :key="file" :src="$filePath(file?.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
@@ -529,7 +528,7 @@ import _ from 'lodash';
 import { ref, onMounted, watch, computed } from "vue";
 import { showToast, handleFileUpdate,getGlobalUpdateData } from '@/helper/functions'
 import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
-import { PublishOptions, productOptionsType, swatches } from '@/json/data';
+import { PublishOptions, productOptionsType, swatches, trueFalse } from '@/json/data';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
@@ -556,11 +555,12 @@ const projectCategories = ref([]);
 const loading = ref(false);
 const TagsData = ref([]);
 const materialSwatchesList = ref([]);
-const form = ref(store.getters.editData || { status: '', featured: false, product_option: [], product_specs: [] });
+const form = ref(store.getters.editData ||
+ { status:1, featured: false, product_option: [], product_specs: [] });
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 
-const formItems = ref([
+const formItems = ref(
     {
         sku_number: '',
         shipping_price: '',
@@ -572,7 +572,7 @@ const formItems = ref([
         project_categories: [],
         export_field: false
     }
-]);
+);
 
 // Function to add a new form item
 function addFormItem() {
@@ -684,7 +684,7 @@ const handleAddEditApi = async () => {
         loading.value = true;
         try {
             // Prepare payload by excluding unwanted fields
-            const { deleted_at, created_at, featured_image_url, downlaodable_urls, gallery_urls, slider_urls, downloadable_urls, updated_at, ...payload } = form.value;
+            const { deleted_at, created_at, featured_image_data, downlaodable_urls, gallery_data, slider_data, downloadable_urls, updated_at, ...payload } = form.value;
             if (!form.value?.domains_data?.includes(form.value.domain_id)) {
                  delete payload.id;
             }
@@ -726,7 +726,7 @@ const handleGlobalUpdate = async () => {
     try {
         const { status, data } = await StoreServices.globalStoreProductUpdate(payload)
         status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/materials')
+        if (status === 200 && data.success) router.push('/store-product')
     } catch (error) {
         showToast('Something went wrong', 'error')
         console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
@@ -786,20 +786,20 @@ const handleFetchAllData = async (payload) => {
 };
 
 // Lifecycle hook to initialize data on component mount
-onMounted(() => {
+onMounted(() => {4
     const domainId = store.getters.getDomain.id;
     // Initialize image on edit data
     if (store.getters.editData) {
-        const {downlaodable_urls,slider_urls,gallery_urls,featured_image_url} = store.getters.editData;
-        console.log('set image on edit data',slider_urls)
-        imageData.value.gallery.images = gallery_urls || 'gallery';
-        imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ');
-        imageData.value.slider.images = slider_urls 
-        imageData.value.slider.mediaName = slider_urls?.map(item => item.file_url).join(', ')|| 'slider images';;
-        imageData.value.downloadable_files.images = store.getters.editData?.downloadable_urls 
-        imageData.value.downloadable_files.mediaName = downlaodable_urls?.map(item=>item.file_url).join(', ')|| 'Downloadable Images';
-        imageData.value.featured_image.images = [{file_url:featured_image_url}]
-        imageData.value.featured_image.mediaName = featured_image_url || "Featured Image"
+        const {downlaodable_urls,slider_data,gallery_data,featured_image_data} = store.getters.editData;
+        console.log('set image on edit data',slider_data)
+        imageData.value.gallery.images = gallery_data || 'gallery';
+        imageData.value.gallery.mediaName = gallery_data?.map(item => item?.file_url).join(', ') || 'gallery';
+        imageData.value.slider.images = slider_data 
+        imageData.value.slider.mediaName = slider_data?.map(item => item?.file_url).join(', ')|| 'slider images';;
+        imageData.value.downloadable_files.images = downlaodable_urls 
+        imageData.value.downloadable_files.mediaName = downlaodable_urls?.map(item=>item?.file_url).join(', ')|| 'Downloadable Images';
+        imageData.value.featured_image.images = [featured_image_data]
+        imageData.value.featured_image.mediaName = featured_image_data?.file_url || "Featured Image"
     }
     // Fetch all required data
     handleFetchAllData({ domain_id: domainId });
