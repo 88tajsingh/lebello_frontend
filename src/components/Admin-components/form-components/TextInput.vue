@@ -1,5 +1,5 @@
 <template>
-  <InputLabel :for="props.label"> {{ props.label }}</InputLabel>
+  <InputLabel :for="props.label" :class="{'ml-8': hasCheckBox, 'ml-1': !hasCheckBox}"> {{ props.label }}</InputLabel>
   <div v-if="isTextarea" class="m-0 p-0 border-0 flex">
     <SingleCheck v-if="hasCheckBox" :id="`${id}${label}`" label=""
       v-model:modelValue="checked"></SingleCheck>
@@ -17,7 +17,7 @@
     </span>
   </div>
   <div v-show="errMessage">
-    <p class="text-sm ml-4 text-red">{{ errMessage }}</p>
+    <p class="text-sm ml-1 text-red" :class="{'ml-8':hasCheckBox}">{{ errMessage }}</p>
   </div>
 </template>
 

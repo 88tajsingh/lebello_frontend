@@ -1,4 +1,5 @@
 <template>
+  <InputLabel :for="props.title" :class="{'ml-8': hasCheckBox, 'ml-1': !hasCheckBox}"> {{ props.title }}</InputLabel>
   <div class="flex">
     <SingleCheck 
       v-if="hasCheckBox" 
@@ -7,7 +8,7 @@
       @change="handleCheckboxChange"
     />
     <div class="w-full">
-    <select 
+      <select 
       class="rounded-lg border bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
       v-bind="$attrs"
       v-model="selectedOption"
@@ -37,6 +38,7 @@
 <script setup>
 import { ref, watch, defineEmits, defineProps } from 'vue';
 import SingleCheck from './SingleCheck.vue';
+import InputLabel from './InputLabel.vue';
 
 const props = defineProps({
   options: {
@@ -52,6 +54,10 @@ const props = defineProps({
     required: true
   },
   label: {
+    type: String,
+    default: ''
+  },
+  title: {
     type: String,
     default: ''
   },

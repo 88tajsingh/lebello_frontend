@@ -1,6 +1,6 @@
 <template>
     <div>
-        <InputLabel :for="props.label"> {{ props.label }}</InputLabel>
+        <InputLabel :for="props.label" :class="{'ml-8': hasCheckBox, 'ml-1': !hasCheckBox}"> {{ props.label }}</InputLabel>
         <div class="flex items-center space-x-2">
             <!-- SingleCheck Component -->
             <SingleCheck
@@ -24,7 +24,6 @@
                 @input="updateColor"
             />
             <Button
-                type="submit"
                 @click="clearColor"
                 bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                 class="text-sm ml-auto px-3 py-[5px]"
