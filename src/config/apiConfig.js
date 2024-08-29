@@ -239,6 +239,9 @@ const ApiConfig = {
    editPost: '/update-post',
    deletePost: '/delete-post',
    bulkDeletePost: '/bulk-delete-post',
+   masterPostSlugUpdate: '/master-post-slug-update',
+   globalPostUpdate: '/global-post-update',
+   masterDeletePost: '/delete-master-post',
   
   // Post categories
   getPostCategory: '/post-category-list',
@@ -247,9 +250,9 @@ const ApiConfig = {
   deletePostCategory: '/delete-post-category',
   bulkDeletePostCategory: '/bulk-delete-post-category',
   getPostCategoryTree: '/post-category-tree-list',
-
- 
-
+  masterPostCategorySlugUpdate: '/master-post-category-slug-update',
+  globalPostCategoryUpdate: '/global-post-category-update',
+  deleteMasterPostCategory: '/delete-master-post-category',
 
 
   //Company

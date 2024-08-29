@@ -1,19 +1,29 @@
-<template>
+<template>{{ form }}
     <DefaultCard  :cardTitle="form.id ? `Edit Post Category ` : `Add Post Category`">
-        <DomainComponent :domains="items" @customChange="(id)=>form.domain_id = id"></DomainComponent>
+      <DomainComponent  @customChange="(id)=>form.domain_id = id"
+      :deleteService="PostServices.deletePostCategory" masterKey="master_post_category_id"
+      :masterDeleteService="PostServices.deleteMasterPostCategory" routeTo="post-category"></DomainComponent>
+
+    <template v-if="form.id" v-slot:header>
+      <MasterSlugForm :form="form" @update-slug="fetchPostCategoryData"
+        :SlugUpdateservices="PostServices.masterPostCategorySlugUpdate" masteridKeyName="master_post_category_id" />
+    </template>
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
             <div class="flex flex-col ">
                 <TextInput type="text" class=" " :class="{ 'border-red': errors.name }"
                     placeholder="" v-model="form.name" :errMessage="errors.name"
-                    @update:model="clearError('name')" label="Name" />
+                    @update:modelValue="$clearError(errors,'name')" label="Name"
+                    :hasCheckBox="checkBoxFlag"
+            @update:checkValue="value => checkedFields.name = value"
+                    />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     The name is how it appears on your site.
                 </p>
             </div>
             <div class="flex flex-col ">
                 <TextInput type="text" class="block mr-2 h-[40px] w-full" 
-                    placeholder="" v-model="form.slug" label="Slug" />
+                    placeholder="" v-model="form.slug" label="Slug (Read Only)" disabled />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only
                     letters, numbers, and hyphens.
@@ -34,6 +44,8 @@
                 label="Description"
                      placeholder="" :isTextarea="true" rows="4"
                     v-model="form.description" 
+                    :hasCheckBox="checkBoxFlag"
+            @update:checkValue="value => checkedFields.description = value"
                     />
                 <p class="text-sm text-[#646970] text-[11.5px]">
                     The description is not prominent by default; however, some themes may show it.
@@ -42,7 +54,7 @@
         </div>
         <button type="submit"
             class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-           {{ id ? `Update ` : `Submit` }}
+            {{ buttonText }}
         </button>
     </form>
 </DefaultCard>
@@ -50,11 +62,12 @@
 </template>
 
 <script setup>
+import _ from 'lodash';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getPostCategoryTree } from '@/helper/Apis'
-import { clearError,showToast } from '@/helper/functions'
-import { onMounted, ref,watch } from 'vue'
+import { clearError,showToast,getGlobalUpdateData } from '@/helper/functions'
+import { onMounted, ref,watch,computed } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import PostServices from '@/services/PostServices'
@@ -72,6 +85,8 @@ const form = ref({
 });
 const PreviousDomain = ref(null);
 const postCategory = ref([]);
+const checkedFields = ref({});
+const checkBoxFlag = ref(Boolean(form.value.id));
 
 // Form Validation
 const validateForm = () => {
@@ -83,13 +98,19 @@ const validateForm = () => {
   return true;
 };
 
-// Submit Handler
 const handleSubmit = async () => {
+  if (!validateForm()) return;
+  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
+  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi();
+};
+
+// Submit Handler
+const handleAddEditApi = async () => {
   if (validateForm()) {
     loading.value = true;
     try {
-      if (form.value.domain_id !== PreviousDomain.value) delete form.value.id;
-      const { deleted_at, created_at, updated_at, ...payload } = form.value;
+      const { deleted_at, created_at,slug,domains_data,default_domain, updated_at, ...payload } = form.value;
+      if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
       const action = store.getters.editData ? PostServices.editPostCategory : PostServices.addPostCategory;
       if (form.value.domain_id !== PreviousDomain.value) {
@@ -111,6 +132,47 @@ const handleSubmit = async () => {
   }
 };
 
+const handleGlobalUpdate = async () => {
+  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value);
+  if (_.isEmpty(globalUpdate)) return;
+
+  const payload = {
+    master_post_category_id: form.value.master_post_category_id,
+    global_keys: globalUpdate
+  };
+
+  try {
+    const { status, data } = await PostServices.globalPostCategoryUpdate(payload);
+    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error');
+    if (status === 200 && data.success) router.push('/post-category');
+  } catch (error) {
+    showToast('Something went wrong', 'error');
+    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// fetch the data 
+const fetchPostCategoryData = async () => {
+  loading.value = true;
+  const payload = { master_post_category_id: form.value.master_post_category_id, domain_id: form.value.domain_id };
+  try {
+    const { status, data } = await PostServices.getPostCategory(payload);
+    if (status === 200 && data.success) {
+      const dataValue = data.data[0];
+      store.dispatch('setEdit', dataValue);
+      Object.assign(form.value, dataValue);
+    }
+  } catch (error) {
+    showToast('Something went wrong', 'error');
+    console.error('Error while fetching data:', error);
+  }
+  finally{
+    loading.value=false;
+  }
+};
+
 // Fetch Post Category Tree
 const fetchPostCategoryTree = async (domainId) => {
   try {
@@ -122,15 +184,29 @@ const fetchPostCategoryTree = async (domainId) => {
 
 // Lifecycle Hooks
 onMounted(() => {
-  PreviousDomain.value = store.getters.getDomain.id;
   fetchPostCategoryTree(store.getters.getDomain.id);
 });
 
-// Watchers
-watch(
-  () => form.value.domain_id,
-  (newDomainId) => {
-    fetchPostCategoryTree(newDomainId);
+
+// Watch for changes in domain_id 
+watch(() => form.value.domain_id, (newDomainId) => {
+  fetchPostCategoryTree(newDomainId);
+  form.value.parent_post_category = 0;
+  if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
+    fetchPostCategoryData();
   }
-);
+});
+
+// Watchers
+watch(() => form.value.parent_post_category, (newValue) => {
+  if(newValue == form.value.id)
+      selectError.value = true;
+  else
+  selectError.value = false;
+});
+
+// Computed Properties
+const buttonText = computed(() => {
+  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit');
+});
 </script>

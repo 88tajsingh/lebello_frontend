@@ -14,7 +14,7 @@
                         <div class="px-7">
                             <TextInput type="text" id="addTitle" class="block mr-2 h-[40px] w-full" label=""
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
-                                :class="{ 'border-red': errors.title }" :hasCheckBox="checkBoxFlag"
+                                @update:modelValue="$clearError(errors,'title')" :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="(value) => { checkedFields.title = value }" />
                             <!-- @update:checkValue="form.isTitle = $event" hasCheckBox -->
 
@@ -267,14 +267,14 @@ const handleCheckedItems = (checkedItems) => {
 };
 
 const handleSubmit = async () => {
-    if (!validateForm('page_title', 'Page Title', form, errors)) return
+    validateForm() 
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
 }
 
 // Submit Handler
 const handleAddEditApi = async () => {
-    if (validateForm()) {
+   
         loading.value = true;
         try {
             const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
@@ -294,7 +294,7 @@ const handleAddEditApi = async () => {
         } finally {
             loading.value = false;
         }
-    }
+    
 };
 
 // Global Update Handler

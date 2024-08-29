@@ -19,6 +19,15 @@ class PostService {
   BulkDeletePost(payload) {
     return instance.post(ApiConfig.bulkDeletePost, payload)
   }
+  masterDeletePost(payload) {
+    return instance.post(ApiConfig.masterDeletePost, payload)
+  }
+  globalPostUpdate(payload) {
+    return instance.post(ApiConfig.globalPostUpdate, payload)
+  }
+  masterPostSlugUpdate(payload) {
+    return instance.post(ApiConfig.masterPostSlugUpdate, payload)
+  }
 
   // Post Category
   getPostCategory(payload) {
@@ -38,6 +47,15 @@ class PostService {
   }
   BulkDeletePostCategory(payload) {
     return instance.post(ApiConfig.bulkDeletePostCategory, payload)
+  }
+  deleteMasterPostCategory(payload) {
+    return instance.post(ApiConfig.deleteMasterPostCategory, payload)
+  }
+  globalPostCategoryUpdate(payload) {
+    return instance.post(ApiConfig.globalPostCategoryUpdate, payload)
+  }
+  masterPostCategorySlugUpdate(payload) {
+    return instance.post(ApiConfig.masterPostCategorySlugUpdate, payload)
   }
 
  

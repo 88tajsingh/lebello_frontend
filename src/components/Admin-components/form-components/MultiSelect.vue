@@ -1,4 +1,5 @@
 <template>
+    <InputLabel :for="props.label" :class="{'ml-8': hasCheckBox, 'ml-1': !hasCheckBox}"> {{ props.label }}</InputLabel>
   <div class="flex w-full" ref="multiSelectRef">
     <!-- Checkbox -->
     <SingleCheck
@@ -48,6 +49,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, defineProps, defineEmits, watch } from 'vue';
 import SingleCheck from './SingleCheck.vue';
+import InputLabel from './InputLabel.vue';
 
 const props = defineProps({
   options: {
@@ -68,7 +70,7 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: 'Label'
+    default: ''
   }
 });
 
