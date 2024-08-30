@@ -288,7 +288,7 @@
                                     <div v-else>
                                         <p class="text-gray-500">No swatches selected</p>
                                     </div>
-                                </div>
+                                 </div>
                                     </div>
                                 </div>
                             </div>
@@ -628,8 +628,7 @@ const toggleSwatchSelection = (item) => {
 };
 
 // Function to check if a swatch is selected
-const isSelected = (item) =>
-    selectedSwatches.value.some(swatch => swatch.id === item.id);
+const isSelected = (item) =>selectedSwatches.value.some(swatch => swatch.id === item.id);
 
 // Function to handle material checkbox changes
 const handleCheckboxChange = (materialId, event) => {

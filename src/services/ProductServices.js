@@ -3,6 +3,32 @@ import ApiConfig from '@/config/apiConfig'
 
 class ProductService {
 
+  // product 
+  getProduct(payload) {
+  return instance.get(ApiConfig.getProduct, { params: { ...payload } })
+  }
+  addProduct(payload) {
+    return instance.post(ApiConfig.addProduct, payload)
+  }
+  editProduct(payload) {
+    return instance.post(ApiConfig.editProduct, payload)
+  }
+  deleteProduct(payload) {
+    return instance.delete(ApiConfig.deleteProduct, { params: { ...payload } })
+  }
+  BulkDeleteProduct(payload) {
+    return instance.post(ApiConfig.bulkDeleteProduct, payload)
+  }
+  masterSlugUpdateProduct(payload) {
+    return instance.post(ApiConfig.masterSlugUpdateProduct, payload)
+  }
+  globalUpdateProduct(payload) {
+    return instance.post(ApiConfig.globalUpdateProduct, payload)
+  }
+  mastetrDeleteProduct(payload) {
+    return instance.post(ApiConfig.mastetrDeleteProduct,payload)
+  }
+
   // product Types
   getProductType(payload) {
     return instance.get(ApiConfig.getProductType, { params: { ...payload } })

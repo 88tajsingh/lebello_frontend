@@ -142,6 +142,16 @@ const ApiConfig = {
   deleteMasterDealer: '/delete-master-dealer',
 
   // --------------------------------------   Products   ----------------------------------------------------
+  // products 
+  getProduct: '/get-products',
+  addProduct: '/add-product',
+  editProduct: '/update-product',
+  deleteProduct: '/delete-product',
+  bulkDeleteProduct: '/bulk-delete-product',
+  globalUpdateProduct: '/global-product-update',
+  mastetrDeleteProduct: '/delete-master-product',
+  masterSlugUpdateProduct: '/master-product-slug-update',
+
   // products types
   getProductType: '/get-product-type',
   addProductType: '/add-product-type',
