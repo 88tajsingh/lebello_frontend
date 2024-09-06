@@ -134,15 +134,11 @@ const validateForm = () => {
     return true;
 };
 
-const handleSubmit = async () => {
-  if (!validateForm()) return;
-  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi();
-};
-
 // Submit form data (add or edit contract type)
-const handleAddEditApi = async () => {
+const handleSubmit = async () => {
     if (!validateForm()) return;
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
+
     loading.value = true;
     
     // Prepare payload for API call
@@ -246,7 +242,7 @@ watch(() => form.value.parent_contract_type, (newValue) => {
 
 // Computed Properties
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit');
+  return (form.value.id ? 'Update' : 'Submit');
 });
 </script>
 

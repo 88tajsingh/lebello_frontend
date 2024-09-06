@@ -181,15 +181,17 @@ const validateForm = () => {
     return true;
 };
 
+// const handleSubmit = async () => {
+//     if (!validateForm()) return
+//     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+//     // hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
+// }
+
+// Submit form data (add or edit company)
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
 
-// Submit form data (add or edit company)
-const handleAddEditApi = async () => {
-   
     loading.value = true;
     const {slug,domains_data,default_domain,featured_image_url,...payload} = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
@@ -203,6 +205,10 @@ const handleAddEditApi = async () => {
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             store.dispatch('clearEditData');
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else
             router.push('/company');
         }
     } catch (e) {
@@ -272,7 +278,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 </script>
 
