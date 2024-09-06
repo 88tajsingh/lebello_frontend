@@ -7,7 +7,7 @@
                 label="Bulk Options" v-model="bulkActionSelected" />
             <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
             <div class="w-52">
-                <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain"
+                <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                     v-model="domain_id" />
             </div>
         </div>
