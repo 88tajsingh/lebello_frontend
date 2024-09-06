@@ -6,7 +6,7 @@
       <Button class="px-2 py-2 m-auto">Apply</Button>
     </div> -->
     <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
       </div>
     <div class="flex ml-auto">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
