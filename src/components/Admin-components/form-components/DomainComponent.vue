@@ -3,7 +3,7 @@
   <div class="flex ml-auto mt-2 gap-2 justify-end">
     <div class="w-52">
      
-      <Select :options="DropData" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+      <Select :options="DropData" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
     </div>
   </div>
   <div class="flex flex-wrap mt-2">

@@ -11,7 +11,7 @@
         Apply
       </Button>
       <div class="w-52">
-        <Select :options="domainList" showfield="name" class="w-full" valueField="id" label="Select Domain"
+        <Select :options="domainList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="selectedDomainId" />
       </div>
     </div>
@@ -30,7 +30,7 @@
       :hasCheckbox="true" :cloneHeaderInFooter="true" :stickyHeader="false" :rows="materials" :columns="materialCols"
       :loading="isDataLoading" :totalRows="totalRecords" :isServerMode="true" :pageSize="10" :search="searchQuery"
       @change="onPageChange">
-      
+
       <template #image="data">
         <img :src="$filePath(data.value?.media_data?.file_url)" alt="Material Image"
           style="max-width: 50px; max-height: 50px" />

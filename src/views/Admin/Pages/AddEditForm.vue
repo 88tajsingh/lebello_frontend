@@ -22,10 +22,14 @@
             :errMessage="errors.page_title"
             :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.page_title = value }" />
         </div>
-        <div class="flex flex-col">
+        <!-- <div class="flex flex-col">
           <input-label for="page_title" value="Page Slug" />
           <TextInput type="text" class="block mr-2 h-[40px] w-full" v-model="form.slug" :errMessage="errors.slug"
           />
+        </div> -->
+        <div class="flex flex-col">
+          <TextInput type="text" class="block mr-2 h-[40px] w-full" placeholder="" v-model="form.slug"
+           disabled="true"  label="Slug (Read only)" />
         </div>
         <div class="flex flex-col">
           <input-label for="seo_title" value="SEO Title" />

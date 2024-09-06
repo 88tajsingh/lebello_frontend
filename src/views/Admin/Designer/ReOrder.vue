@@ -1,7 +1,7 @@
 <template>
     <PageHeader>Designer - Re-Order</PageHeader>
     <div class="w-52 ml-auto">
-            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
     </div>
     <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="title" Classes="mt-3 border-[#ccc]">
     </Dreagable>
