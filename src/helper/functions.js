@@ -32,6 +32,7 @@ export const isChecked = (variable, id) => {
 // files path
 export const filePath = (fileUrl) => {
   // console.log(`${import.meta.env.VITE_FILES_PATH}${fileUrl}`)
+  console.log("fileUrl",fileUrl)
   if (fileUrl) return `${import.meta.env.VITE_FILES_PATH}${fileUrl}`;
   else return import.meta.env.VITE_DEFAULT_IMAGE;
 };

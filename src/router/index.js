@@ -307,6 +307,18 @@ const router = createRouter({
         },
         // -------------------------------- products path ---------------------------------------------
         {
+          path: '/product',
+          name: 'Product',
+          component: () => import('../views/Admin/Products/Add/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-from',
+          name: 'Product-from',
+          component: () => import('../views/Admin/Products/Add/AddEditContract.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
           path: '/product-contract',
           name: 'Product-contract',
           component: () => import('../views/Admin/Products/Contract/Index.vue'),

@@ -1,4 +1,5 @@
 <template>
+    {{ form }}
     <DefaultCard :cardTitle="form.id ? `Edit Company` : `Add New Company`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="CompanyServices.deleteCompany"
             masterKey="master_company_id" :masterDeleteService="CompanyServices.masterCompanySlugUpdate"
@@ -104,16 +105,16 @@
                             <div class="  h-auto ">
                                 <InputLabel for="featured_image" value="Featured Image" />
                                 <div class=" flex  w-full h-auto ">
-                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.featured_image"></SingleCheck>
                             <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                    @click="() => featured_image.isOpen = true"> {{
-                                        featured_image.mediaName }}</div>
+                                    @click="() => imageData.featured_image.IsOpen = true"> {{
+                                        imageData.featured_image.mediaName }}</div>
                         </div>
                                
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in featured_image.images" :key="file"
+                                    <img v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file.alternative_text || 'image'">
+                                        :alt="file?.alternative_text || 'image'">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -124,10 +125,11 @@
             </div>
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="featured_image.isOpen">
-        <GetLibrary btnName="select File" :getFlag="true" :selected="featured_image.images" :singleFile="true"
-            :closeModal="() => { featured_image.isOpen = false }" :selectedFiles="handleFeatureFiles" />
-    </popupModal>
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+    v-model:isOpen="imageData.featured_image.IsOpen">
+    <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+        :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
+</popupModal>
 
 
 
@@ -160,15 +162,11 @@ const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 
 // State for featured image handling
-const featured_image = ref({
-    isOpen: false,
-    mediaName: 'Featured Image',
-    images: []
-});
+const imageData = ref({
+    featured_image: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
+})
 
-// Handle file selection and update state
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
-
 
 // Validate form data
 const validateForm = () => {
@@ -180,15 +178,17 @@ const validateForm = () => {
     return true;
 };
 
+// const handleSubmit = async () => {
+//     if (!validateForm()) return
+//     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+//     // hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
+// }
+
+// Submit form data (add or edit company)
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
 
-// Submit form data (add or edit company)
-const handleAddEditApi = async () => {
-   
     loading.value = true;
     const {slug,domains_data,default_domain,featured_image_url,...payload} = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
@@ -202,6 +202,10 @@ const handleAddEditApi = async () => {
         if (res.status === 200 && res.data.success) {
             showToast(res.data.message, 'success');
             store.dispatch('clearEditData');
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else
             router.push('/company');
         }
     } catch (e) {
@@ -256,6 +260,7 @@ const fetchMaterialSliderData = async () => {
 
 // Set  on component mount
 onMounted(() => {
+    if(store.getters.editData)
     featured_image.value.images= store.getters.editData?.featured_image_url;
 });
 
@@ -271,7 +276,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 </script>
 

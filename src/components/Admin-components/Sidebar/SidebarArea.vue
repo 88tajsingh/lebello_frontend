@@ -138,6 +138,10 @@ const menuGroups = ref([
         route: '',
         children: [
           {
+            label: 'Add Product',
+            route: '/product'
+          },
+          {
             label: 'Product Contract',
             route: '/product-contract'
           },

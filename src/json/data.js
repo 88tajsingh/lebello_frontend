@@ -3,14 +3,34 @@ export const trueFalse = [
   { name: 'Yes', value: 1 }
 ]
 
+export const SimpleFieldsProduct = [
+  { name: 'Inherit from parent(no parent found)', value: 'Inherit from parent(no parent found)' },
+  { name: 'Product Spcs', value:'Product Spcs'  }
+]
+export const rightNavSettings = [
+  { name: 'Default', value: 'default' },
+  { name: 'Change', value:'change'  }
+]
+export const productTemplate = [
+  { name: 'First Version (OLD)', value: 'First Version (OLD)' },
+  { name: 'Second Version (NEW)', value:'Second Version (NEW)'  },
+  { name: 'Third Version (LATEST)', value:'Third Version (LATEST)'  },
+]
+export const darkLight = [
+  { name: 'Dark', value: 'dark' },
+  { name: 'Light', value:'light'  }
+]
+
 export const withBgWithoutBg = [
   { label: 'Without BG', value: 0 },
   { label: 'BG Color', value: 1 }
 ]
 
+
 export const statusData = [
-  { name: 'Draft', value: 'draft' },
-  { name: 'Pending review', value: 'pending review' }
+  { name: 'Draft', value: '1' },
+  { name: 'Pending Review', value: '2' },
+  { name: 'Publish', value: '3' }
 ]
 export const productOptionsType = [
   { name: 'Material', value: 'material' },
@@ -453,6 +473,13 @@ export const designerCols = [
 ]
 export const dealersCols = [
   { field: 'title', title: 'Title', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'actions', title: 'Actions' }
+]
+
+export const product = [
+  { field: 'featured_image_url', title: 'Thumbs', slot: true },
+  { field: 'title', title: 'Projet Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'actions', title: 'Actions' }
 ]

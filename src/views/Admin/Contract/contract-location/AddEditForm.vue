@@ -99,14 +99,11 @@ const validateForm = () => {
     return true;
 };
 
+// Submit form data (add or edit contract location)
 const handleSubmit = async () => {
   if (!validateForm()) return;
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi();
-};
 
-// Submit form data (add or edit contract location)
-const handleAddEditApi = async () => {
     loading.value = true;
     const { featured_image_url,slug, domains_data, default_domain, default_master, ...payload } = form.value;
     
@@ -116,8 +113,14 @@ const handleAddEditApi = async () => {
         const service = store.getters.editData ? ContractServices.editContractLocation : ContractServices.addContractLocation;
         const res = await service(payload);
         if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/contract-location');
+          
+          if(hasCheckedFields)
+          handleGlobalUpdate();
+        else{
+          showToast(res.data.message, 'success');
+          router.push('/contract-location');
+        }
+
         } else if (res.status === 400) {
             showToast(res.data.message, 'error');
         }
@@ -207,7 +210,7 @@ watch(() => form.value.parent_contract_location, (newValue) => {
 
 // Computed Properties
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit');
+  return  (form.value.id ? 'Update' : 'Submit');
 });
 
 </script>
