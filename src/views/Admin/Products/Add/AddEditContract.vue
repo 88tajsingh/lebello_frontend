@@ -7,7 +7,7 @@
         </DomainComponent>
         <!-- slug update  -->
         <template v-if="form.id" v-slot:header>
-            <MasterSlugForm :form="form" @update-slug="fetchDomainContractData"
+            <MasterSlugForm :form="form" @update-slug="fetchProductData"
                 :SlugUpdateservices="ProductServices.masterSlugUpdateProduct" masteridKeyName="master_product_id" />
         </template>
 
@@ -73,14 +73,14 @@
                     <div class="mt-5">
                         <Accordion :open="true" header="New Product Options">
                             <div class="my-3 mx-3">
+                                <!-- <SingleCheck v-if="form.id" label="" v-model="checkedFields.new_product_slider">
+                                </SingleCheck> -->
                                 <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Title"
                                     placeholder="Product Title" v-model="form.new_product_title"
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.new_product_title = value" />
                             </div>
                             <div class="flex col-span-2 px-4">
-                                <SingleCheck v-if="form.id" label="" v-model="checkedFields.new_product_slider">
-                                </SingleCheck>
                                 <div v-if="form.new_product_slider !== null"
                                     class="col-span-2 w-full border border-stroke rounded-lg">
                                     <div class="mt-2 mx-3  ">
@@ -306,6 +306,64 @@
                         </Accordion>
                     </div>
                     <div class="mt-3">
+                        <Accordion :open="true" header="Products Slider Heading">
+                            <div v-for="(item, index) in form.banner_slide" :key="index">
+                                <div class="mt-3">
+                                    <div class="px-6  h-auto ">
+                                        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                            @click="() => { productsSpecsIndex = index; imageData.video_source.isOpen = true; }">
+                                            {{ imageData.video_source?.mediaName }}
+                                        </div>
+                                        <div class="mt-3 flex overflow-x-auto">
+                                            <img v-if="imageData.video_source?.images[index]"
+                                                :src="$filePath(imageData.video_source?.images[index]?.file_url)"
+                                                class="inline-block w-auto h-34 mr-4"
+                                                :alt="imageData.video_source?.images[index]?.alternative_text || 'image'">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 px-6  h-auto">
+                                    <ColorPicker label="Text Color"
+                                        v-model="item.text_color" :hasCheckBox="checkBoxFlag"/>
+                                </div>
+                                <div class="mt-2 px-6  h-auto">
+                                    <ColorPicker label="Background Color" v-model="item.bg_color" />
+                                </div>
+                                <div class="flex flex-col px-7 ">
+                                    <InputLabel for="Memu Color" value="Memu Color" />
+                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                        label="Select Status" v-model="item.menu_color"  />
+                                </div>
+                                <div class=" px-5 my-4 items-center text-gray-600 text-sm">
+                                    <TextInput id="seo_title" type="text" class="block mr-2 h-[33px]"
+                                        v-model="item.transparent" placeholder="" label="Transprent %" />
+                                </div>   
+                                <div class="px-6  h-auto ">
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => { productsSpecsIndex = index; imageData.slide.isOpen = true; }">
+                                        {{ imageData.slide?.mediaName }}
+                                    </div>
+                                    <div class="mt-3 flex overflow-x-auto">
+                                        <img v-if="imageData.slide?.images[index]"
+                                            :src="$filePath(imageData.slide?.images[index]?.file_url)"
+                                            class="inline-block w-auto h-34 mr-4"
+                                            :alt="imageData.slide?.images[index]?.alternative_text || 'image'">
+                                    </div>
+                                </div>
+                                <div class="ml-auto">
+                                    <button @click="banner_slide_remove" type="button"
+                                    class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-red  font-medium text-gray hover:bg-opacity-90">
+                                    Remove 
+                                </button>                      
+                            </div>
+                            </div>
+                            <button @click="banner_slide" type="button"
+                                class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
+                                Add
+                            </button>
+                        </Accordion>
+                    </div>
+                    <div class="mt-3">
                         <Accordion :open="true" header="Downloadable Files">
                             <div class="flex pl-2">
                                 <SingleCheck v-if="form.id" label="" v-model="checkedFields.downloadable_files">
@@ -369,7 +427,7 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="statu1s" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select Status" v-model="form.status" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.status = value" />
                                 </div>
@@ -589,6 +647,21 @@
             :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
             :selectedFiles="handleProductSliderFiles" />
     </popupModal>
+    <!-- Products Slider Heading Video Source  -->
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.video_source.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.video_source.images"
+            :singleFile="true" :closeModal="() => { imageData.video_source.isOpen = false }"
+            :selectedFiles="handleVideoSource" />
+    </popupModal>
+
+    <!-- Products Slider Heading Slider -->
+    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+        v-model:isOpen="imageData.new_product_slider.isOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
+            :singleFile="true" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
+            :selectedFiles="handleProductSliderFiles" />
+    </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
@@ -603,7 +676,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import { trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
+import {statusData, trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
@@ -616,7 +689,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: '', simple_fields: false, description: '', contract_home_page_slide: 0, product_specs: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+const form = ref(store.getters.editData || {simple_field:null,featured_product:false, status:null,description: '', product_specs: [],banner_slide:[], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
@@ -639,7 +712,9 @@ const imageData = ref({
     contract_logo: { isOpen: false, mediaName: 'Logo Image', images: [] },
     new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
     downloadable_files: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
-    image: { isOpen: false, mediaName: 'Main Slider Image', images: [] }
+    image: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
+    video_source: { isOpen: false, mediaName: 'Add Video Source', images: [] },
+    slide : { isOpen: false, mediaName: 'Slider Image', images: [] },
 });
 
 // Handle file updates for different image types
@@ -652,6 +727,17 @@ const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_fil
 const handleImageFiles = (data) => handleFileUpdate('image', data, false, imageData, form);
 const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, false, imageData, form);
 const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, false, imageData, form);
+
+
+ const handleVideoSource = (data) => {
+  const media_titles = data.map((item) => item.title);
+  imageData.value.video_source.mediaName = media_titles.join(", ");
+  imageData.value.video_source.images = data;
+  imageData.value.video_source.isOpen=false;
+  const media_ids = data.map((item) => item.id);
+  form.value.banner_slide=media_ids;
+
+};
 
 // remove image form gallery
 const handleRemoveSliderImage = (slide) => {
@@ -721,6 +807,19 @@ function product_specs() {
         image: '',
     });
 }
+function banner_slide() {
+    form.value.banner_slide.push({
+        video_source: '',
+        text_color: '',
+        bg_color: '',
+        menu_color: '',
+        transparent: '',
+        slide:'',
+    });
+}
+function banner_slide_remove(index) {
+    form.value.banner_slide.splice(index,1)
+}
 
 const handleSubmit = async () => {
     console.log("called handleSubmit")
@@ -732,11 +831,11 @@ const handleSubmit = async () => {
 // Handle form submission (add or edit contract)
 const handleAddEditApi = async () => {
     loading.value = true;
-    const { featured_image_data, slug, domains_data, contract_logo_data, contract_slider_image_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
+    const {status, featured_image_data,featured_image_url,slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
     try {
-        const service = store.getters.editData ? ContractServices.editNewContract : ContractServices.addNewContract;
+        const service = store.getters.editData ? ProductServices.editProduct : ProductServices.addProduct;
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
@@ -773,7 +872,7 @@ const handleGlobalUpdate = async () => {
 }
 
 // Fetch Perticular Domain Data
-const fetchDomainContractData = async () => {
+const fetchProductData = async () => {
     loading.value = true
     const payload = { master_product_id: form.value.master_product_id, domain_id: form.value.domain_id }
     try {
@@ -793,7 +892,7 @@ const fetchDomainContractData = async () => {
 }
 
 // Fetch contract location and type data
-const fetchContractData = async (payload) => {
+const fetchNacessaryData = async (payload) => {
     productContractTree.value = await getProductContractTree(payload);
     productSeriesTree.value = await getProductSeriesTree(payload);
     productCategoryTypeTree.value = await getProductCategoryTypeTree(payload);
@@ -818,33 +917,31 @@ const fetchMaterialTreeData = async () => {
 
 // Initialize component state
 onMounted(() => {
-    if (store.getters.editData) {
-        const { featured_image_data, contract_logo_data, contract_slider_image_data, gallery_urls } = store.getters.editData;
-        console.log(contract_slider_image_data)
-        imageData.value.featured_image.images = [featured_image_data];
-        imageData.value.featured_image.mediaName = featured_image_data?.file_url || 'featured images';
-        imageData.value.contract_logo.images = [contract_logo_data];
-        imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
-        imageData.value.contract_slider_image.images = [contract_slider_image_data];
-        imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
-        imageData.value.gallery.images = gallery_urls;
-        imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
+    // if (store.getters.editData) {
+    //     const { featured_image_data, contract_logo_data, contract_slider_image_data, gallery_urls } = store.getters.editData;
+    //     console.log(contract_slider_image_data)
+    //     imageData.value.featured_image.images = [featured_image_data];
+    //     imageData.value.featured_image.mediaName = featured_image_data?.file_url || 'featured images';
+    //     imageData.value.contract_logo.images = [contract_logo_data];
+    //     imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
+    //     imageData.value.contract_slider_image.images = [contract_slider_image_data];
+    //     imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
+    //     imageData.value.gallery.images = gallery_urls;
+    //     imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
 
-    }
+    // }
     fetchMaterialTreeData();
 });
 
 // Watch for domain_id changes to update contract data
 watch(() => form.value.domain_id, (newDomainId) => {
     // Fetch product type tree and reset parent product type
-    fetchContractData({ domain_id: form.value.domain_id });
+    fetchNacessaryData({ domain_id: form.value.domain_id });
     fetchMaterialTreeData();
 
     // Check if newDomainId is present in domains_data and fetch product type data if so
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
-        fetchDomainContractData();
-    } else {
-        console.log('data not in array', form.value?.domains_data);
+        fetchProductData();
     }
 });
 watch(() => logo_right_nav.value, (newValue) => {

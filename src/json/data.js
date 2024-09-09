@@ -28,8 +28,9 @@ export const withBgWithoutBg = [
 
 
 export const statusData = [
-  { name: 'Draft', value: 'draft' },
-  { name: 'Pending review', value: 'pending review' }
+  { name: 'Draft', value: '1' },
+  { name: 'Pending Review', value: '2' },
+  { name: 'Publish', value: '3' }
 ]
 export const productOptionsType = [
   { name: 'Material', value: 'material' },
@@ -477,7 +478,7 @@ export const dealersCols = [
 ]
 
 export const product = [
-  { field: 'featured_image_url', title: 'Thimbs', slot: true },
+  { field: 'featured_image_url', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Projet Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'actions', title: 'Actions' }
