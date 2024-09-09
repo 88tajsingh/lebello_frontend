@@ -4,7 +4,7 @@
         
         <div class="w-52">
             <Label class="ml-1">Select Domain</Label>
-            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain"
+            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                 v-model="domain_id" />
         </div>
     </div>

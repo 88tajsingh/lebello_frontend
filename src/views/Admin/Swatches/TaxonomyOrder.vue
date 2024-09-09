@@ -1,7 +1,7 @@
 <template>
     <PageHeader> Taxonomy Order </PageHeader>
     <div class="w-52 ml-auto">
-            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
     </div>
     <Dreagable v-model:list="MaterialTreeListData" parentfield="name" childField="name" @update:list="handleListUpdate">
     </Dreagable>
