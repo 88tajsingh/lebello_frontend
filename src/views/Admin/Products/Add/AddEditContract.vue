@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
 
         <!-- domain select delete master delete  -->
@@ -675,7 +675,6 @@ import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
-import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import {statusData, trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
@@ -821,15 +820,11 @@ function banner_slide_remove(index) {
     form.value.banner_slide.splice(index,1)
 }
 
+// Handle form submission (add or edit contract)
 const handleSubmit = async () => {
-    console.log("called handleSubmit")
     if (!validateForm()) return;
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
 
-// Handle form submission (add or edit contract)
-const handleAddEditApi = async () => {
     loading.value = true;
     const {status, featured_image_data,featured_image_url,slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
@@ -839,8 +834,14 @@ const handleAddEditApi = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/product');
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+                showToast(res.data.message, 'success');
+                router.push('/product');
+            }
+            
         }
     } catch (e) {
         console.error('Error:', e);
@@ -860,7 +861,7 @@ const handleGlobalUpdate = async () => {
     }
 
     try {
-        const { status, data } = await ContractServices.globalContractDesignUpdate(payload)
+        const { status, data } = await ProductServices.globalUpdateProduct(payload)
         status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
         if (status === 200 && data.success) router.push('/product')
     } catch (error) {

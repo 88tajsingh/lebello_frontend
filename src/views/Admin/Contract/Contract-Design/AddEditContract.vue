@@ -155,7 +155,7 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="statu1s" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select Status" v-model="form.status" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.status = value" />
                                 </div>
@@ -388,7 +388,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import { trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps, productData } from '@/json/data';
+import { trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps, statusData } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -448,12 +448,13 @@ const handleSubmit = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
             if(hasCheckedFields){
                 handleGlobalUpdate();
             }
-            else
-            router.push('/Contract-Design');
+            else{
+                showToast(res.data.message, 'success');
+                router.push('/Contract-Design');
+            }
         
         }
     } catch (e) {

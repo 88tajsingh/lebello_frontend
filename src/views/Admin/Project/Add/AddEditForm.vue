@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Projects` : `Add New Project`">
-      
+
         <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="ProjectServices.deleteProjects"
             masterKey="master_project_id" :masterDeleteService="ProjectServices.deleteMasterProjects"
             routeTo="projects" />
@@ -71,7 +71,8 @@
                                 </div>
 
                                 <div class="mt-3 flex overflow-x-auto">
-                                    <img v-if="imageData.featured_image.images[0]" v-for="file in imageData.featured_image.images" :key="file"
+                                    <img v-if="imageData.featured_image.images[0]"
+                                        v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file?.alternative_text || 'image'" />
                                 </div>
@@ -141,16 +142,10 @@ const validateForm = () => {
     return true
 }
 
-const handleSubmit = async () => {
-    validateForm()
-    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
 // Submit Handler
-const handleAddEditApi = async () => {
-    delete form.value?.domain
-
+const handleSubmit = async () => {
+    if(!validateForm()) return
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     loading.value = true
     try {
         const action = store.getters.editData
@@ -171,8 +166,13 @@ const handleAddEditApi = async () => {
         }
         const { status, data } = await action(payload)
         if (status === 200 && data.success) {
-            showToast(data.message, 'success')
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+            showToast(data.message, 'success');
             router.push('/projects')
+        }
         } else if (status === 400) {
             showToast(data.message, 'error')
         }
@@ -244,9 +244,11 @@ const fetchProjectCategoryTree = async (domainId) => {
 
 // Lifecycle Hooks
 onMounted(() => {
-    fetchProjectCategoryTree(store.getters.getDomain.id)
-    imageData.value.featured_image.images = [store.getters.editData?.featured_image_url]
-    imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_url.file_url || 'Featured Image'
+    if (store.getters.editData) {
+        imageData.value.featured_image.images = [store.getters.editData?.featured_image_url]
+        imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_url?.file_url || 'Featured Image'
+        fetchProjectCategoryTree(store.getters.editData?.domain_id)
+    }
 })
 
 watch(
@@ -259,18 +261,12 @@ watch(
         // Check if newDomainId is present in domains_data and fetch
         if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
             fetchMaterialData()
-        } else {
-            console.log('data not in array', form.value?.domains_data)
         }
     }
 )
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean)
-        ? 'Global Update'
-        : form.value.id
-            ? 'Update'
-            : 'Submit'
+    return form.value.id ? 'Update': 'Submit'
 })
 </script>

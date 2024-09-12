@@ -6,9 +6,14 @@
       <Select cusClass="h-[40px] border-box" :options="bulkOptions" showfield="text" valueField="value"
         label="Bulk Options" v-model="bulkActionSelected" />
       <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
-      <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
-      </div>
+      <div class="max-w-52 mr-2">
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+            v-model="pagiantionData.domain_id" />
+    </div>
+    <div class="max-w-52">
+        <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+            v-model="pagiantionData.status" />
+    </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
       <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -27,6 +32,12 @@
       </template>
       <template #featured_image_url="data">
         <img :src="$filePath(data.value.featured_image_url)" alt="Material Image" style="max-width: 50px; max-height: 50px" />
+      </template>
+      <template #status="data">
+        <span v-if="data.value.status===1">Draft</span>
+        <span v-else-if="data.value.status===2">Pending Review</span>
+        <span v-else-if="data.value.status===3">Publish</span>
+        <span v-else>Status not selected</span>
       </template>
       <template #actions="data">
         <div class="flex gap-3">
@@ -54,7 +65,7 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { sliderCols,bulkOptions } from '@/json/data'
+import { sliderCols,bulkOptions,statusData } from '@/json/data'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import HomeSliderServices from '@/services/HomeSliderServices'
 import { useRouter } from 'vue-router';
@@ -69,6 +80,7 @@ const search = ref('')
 const material_id = ref('')
 const loading = ref(false)
 const dataTableLoding = ref(false)
+const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
 const data = ref([])
 const totalRows = ref(0)
 const datatable = ref(null)
@@ -102,7 +114,7 @@ const handleDeleteHomeSlider = async () => {
     const { status, data } = await HomeSliderServices.deleteHomeSlider({ id: material_id.value.id })
     if (status === 200) {
       showToast(data.message, 'success')
-      data.value = data.value.filter(item => item.id !== material_id.value.id)
+      data.value = data.value?.filter(item => item.id !== material_id.value.id)
       deleteModalIsOpen.value = false
     } else {
       showToast(data.message, 'error')
@@ -137,7 +149,7 @@ const getDomainList = async () => {
     const domains = await getDomins()
     getDominsList.value = domains
     const defaultDomain = domains.find(site => site.default === 1)
-    domain_id.value = defaultDomain.id
+    pagiantionData.value.domain_id = defaultDomain.id
     store.dispatch('setDomain', defaultDomain)
   } catch (error) {
     console.error('Error fetching domains:', error)
@@ -150,11 +162,17 @@ onMounted(() => {
 })
 
 watch(
-    () => domain_id.value,
+    () => pagiantionData.value.domain_id,
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      handleGetHomeSlider({limit:10,page:1,domain_id:domain_id.value});
+      handleGetHomeSlider(pagiantionData.value);
+    }
+);
+watch(
+    () => pagiantionData.value.status,
+    () => {
+      handleGetHomeSlider(pagiantionData.value);
     }
 );
 </script>

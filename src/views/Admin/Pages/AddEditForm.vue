@@ -220,14 +220,11 @@ const handleRemoveImage = (slide) => {
           form.value.gallery.splice(index, 1);}
 }
 
-const handleSubmit = async () => {
-    if (!validateForm('page_title', 'Page Title', form, errors)) return
-    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
 
 // Submit Handler
-const handleAddEditApi = async () => {
+const handleSubmit = async () => {
+  if (!validateForm('page_title', 'Page Title', form, errors)) return
+  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
   
     loading.value = true;
     try {
@@ -237,8 +234,14 @@ const handleAddEditApi = async () => {
 
       const res = await action(payload);
       if (res.status === 200 && res.data.success) {
-        showToast(res.data.message, 'success');
-        router.push('/pages');
+        if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+            showToast(res.data.message, 'success');
+            router.push('/pages');
+          }
+         
       } else {
         showToast(res.data.message || 'Something went wrong', 'error');
       }

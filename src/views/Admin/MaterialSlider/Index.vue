@@ -5,9 +5,13 @@
             <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
                 label="Bulk Options" v-model="bulkActionSelected" />
             <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
-            <div class="w-52">
+            <div class="max-w-52">
                 <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-                    v-model="domain_id" />
+                    v-model="pagiantionData.domain_id" />
+            </div>
+            <div class="max-w-52">
+                <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+                    v-model="pagiantionData.status" />
             </div>
         </div>
         <div class="flex rounded-lg bg-transparent">
@@ -27,6 +31,12 @@
                 <img :src="$filePath(data.value?.featured_image_url?.file_url)" alt="Material Image"
                     style="max-width: 50px; max-height: 50px" />
             </template>
+            <template #status="data">
+                <span v-if="data.value.status===1">Draft</span>
+                <span v-else-if="data.value.status===2">Pending Review</span>
+                <span v-else-if="data.value.status===3">Publish</span>
+                <span v-else>Status not selected</span>
+              </template>
             <template #actions="data">
                 <div class="flex gap-3">
                     <div @click="() => { router.push({ name: 'material-slider-edit', params: { id: data.value.id } }); store.dispatch('setEdit', data.value) }"
@@ -38,7 +48,7 @@
                     </div>
                 </div>
             </template>
-            x
+            
         </vue3-datatable>
     </div>
 
@@ -56,7 +66,7 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { materialSlidersCols } from '@/json/data'
+import { materialSlidersCols,statusData } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
@@ -70,6 +80,7 @@ const bulkActionSelected = ref(null)
 const search = ref('')
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
 const company_id = ref('')
+const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
 const dataTableLoding = ref(false)
 const loading = ref(false)
 const data = ref([])
@@ -157,7 +168,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
     getDominsList.value = await getDomins(payload)
     const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-    domain_id.value = defaultDomain.id
+    pagiantionData.value.domain_id = defaultDomain.id
     store.dispatch('setDomain', defaultDomain);
 }
 
@@ -167,11 +178,18 @@ onMounted(() => {
 );
 
 watch(
-    () => domain_id.value,
+    () => pagiantionData.value.domain_id,
     () => {
         const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
         store.dispatch('setDomain', defaultDomain[0]);
-        handleGetMaterialSlider({ limit: 10, page: 1, domain_id: domain_id.value });
+        handleGetMaterialSlider(pagiantionData.value);
+    }
+);
+
+watch(
+    () => pagiantionData.value.status,
+    () => {
+        handleGetMaterialSlider(pagiantionData.value);
     }
 );
 </script>

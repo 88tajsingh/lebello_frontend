@@ -63,7 +63,7 @@
       </div>
     </div>
     
-    <div v-if="props.data.length === 0" class="mt-2">
+    <div v-if="props?.data?.length === 0" class="mt-2">
       <p class="text-gray-800">No data Found</p>
     </div>
   </div>
