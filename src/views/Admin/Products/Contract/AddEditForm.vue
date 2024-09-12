@@ -101,13 +101,9 @@ const validateForm = () => {
 };
 
 const handleSubmit = async () => {
-  if (!validateForm()) return;
-  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi();
-};
-
-const handleAddEditApi = async () => {
   if (validateForm()) {
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
+
     loading.value = true;
     try {
       const { deleted_at, created_at, slug, domains_data, default_domain, default_master, updated_at, ...payload } = form.value;
@@ -116,9 +112,14 @@ const handleAddEditApi = async () => {
       const action = store.getters.editData ? ProductServices.editProductContract : ProductServices.addProductContract;
       const { status, data } = await action(payload);
       if (status === 200 && data.success) {
-        showToast(data.message, 'success');
-        store.dispatch('clearEditData');
-        router.push('/product-contract');
+        if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+              showToast(data.message, 'success');
+              store.dispatch('clearEditData');
+              router.push('/product-contract');
+            }
       } else if (status === 400) {
         showToast(data.message, 'error');
       }
@@ -191,7 +192,7 @@ const clearError = (field) => {
 
 // Lifecycle Hooks
 onMounted(() => {
-  fetchProductContractTree(store.getters.getDomain.id);
+  fetchProductContractTree(store.getters.getDomain?.id);
 });
 
 // Watchers
@@ -213,7 +214,7 @@ watch(() => form.value.parent_contract, (newValue) => {
 
 // Computed Properties
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit');
+  return (form.value.id ? 'Update' : 'Submit');
 });
 </script>
 

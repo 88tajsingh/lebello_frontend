@@ -92,16 +92,10 @@ const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 const getProductCategoryList = ref([])
 
-
-// Handle Form Submission
+// Submit Handler
 const handleSubmit = async () => {
   if (!validateForm('name', 'Name', form, errors)) return
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
-// Submit Handler
-const handleAddEditApi = async () => {
     loading.value = true
     try {
       const { deleted_at, created_at,slug,domains_data,default_domain,default_master, updated_at, ...payload } = form.value
@@ -110,8 +104,14 @@ const handleAddEditApi = async () => {
       const action = store.getters.editData ? ProductServices.editProductCategoryType : ProductServices.addProductCategoryType
       const { status, data } = await action(payload)
       if (status === 200 && data.success) {
-        showToast(data.message, 'success')
-        router.push('/product-category-type')
+        if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+              showToast(data.message, 'success')
+              router.push('/product-category-type')
+            }
+       
       } else if (status === 400) {
         showToast(data.message, 'error')
       }
@@ -178,7 +178,8 @@ const fetchProductCategoryTypeTree = async (domainId) => {
 
 // Lifecycle Hooks
 onMounted(() => {
-  fetchProductCategoryTypeTree(store.getters.getDomain.id)
+  if(store.getters.editData)
+  fetchProductCategoryTypeTree(store.getters.editData.domain_id)
 })
 
 watch(() => form.value.domain_id, (newDomainId) => {
@@ -196,6 +197,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+  return (form.value.id ? 'Update' : 'Submit')
 })
 </script>
