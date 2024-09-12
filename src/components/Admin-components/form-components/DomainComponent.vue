@@ -1,37 +1,38 @@
-<template> 
-
+<template>
   <div class="flex ml-auto mt-2 gap-2 justify-end">
     <div class="w-52">
-     
-      <Select :options="DropData" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
+
+      <Select :options="DropData" showfield="name" class="w-full" valueField="id" label="All Domain"
+        v-model="domain_id" />
     </div>
   </div>
   <div class="flex flex-wrap mt-2">
     <div class="flex flex-wrap">
-      <div v-for="(item, index) in domainsArray" 
-           @click="emitItemClick(item)" 
-           :key="item.id" 
-           class="badge py-1 border border-black relative bg-blue-500 px-2 rounded-lg flex items-center mb-2 mr-2 cursor-pointer" 
-           :class="{'border-primary bg-primary text-gray': item && selectedDomain && item.id === selectedDomain.id }">
-        {{ item.name }} ({{ item.country ? item.country.code : 'N/A' }}) {{formData&& formData?.default_domain[0] === item.id ?'*':''}}
-        <button
-                type="button" 
-                @click.stop="handleDeleteData(index)" 
-                class="ml-2 hover:text-red-500 focus:outline-none">
+      <div v-for="(item, index) in domainsArray" @click="emitItemClick(item)" :key="item.id"
+        class="badge py-1 border border-black relative bg-blue-500 px-2 rounded-lg flex items-center mb-2 mr-2 cursor-pointer"
+        :class="{ 'border-primary bg-primary text-gray': item && selectedDomain && item.id === selectedDomain.id }">
+        {{ item.name }} ({{ item.country ? item.country.code : 'N/A' }}) {{ formData?.default_domain?.length > 0 &&
+          formData?.default_domain[0] === item?.id ?'*':''}}
+        <button type="button" @click.stop="handleDeleteData(index)" class="ml-2 hover:text-red-500 focus:outline-none">
 
-          <svg v-if="selectedDomain.id === item.id" width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" :stroke="item && selectedDomain && item.id === selectedDomain.id ? '#EFF4FB' : '#1C274C'" stroke-width="1.5"></circle>
-            <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" :stroke="item && selectedDomain && item.id === selectedDomain.id ? '#EFF4FB' : '#1C274C'" stroke-width="1.5" stroke-linecap="round"></path>
+          <svg v-if="selectedDomain.id === item.id" width="20px" height="20px" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10"
+              :stroke="item && selectedDomain && item.id === selectedDomain.id ? '#EFF4FB' : '#1C274C'"
+              stroke-width="1.5"></circle>
+            <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5"
+              :stroke="item && selectedDomain && item.id === selectedDomain.id ? '#EFF4FB' : '#1C274C'"
+              stroke-width="1.5" stroke-linecap="round"></path>
           </svg>
         </button>
       </div>
     </div>
   </div>
-   <DeleteModal v-model:isOpen="deleteFlag" :modalTitle="'Delete '" @delete="handleDelte()">
+  <DeleteModal v-model:isOpen="deleteFlag" :modalTitle="'Delete '" @delete="handleDelte()">
     Do you want to delete ?
   </DeleteModal>
-   <DeleteModal v-model:isOpen="deleteMasterFlag" :modalTitle="'Master Delete'" @delete="masterDelete()">
-    While Deleting this the children and clones are also deleted   ?
+  <DeleteModal v-model:isOpen="deleteMasterFlag" :modalTitle="'Master Delete'" @delete="masterDelete()">
+    While Deleting this the children and clones are also deleted ?
   </DeleteModal>
 
 </template>
@@ -59,13 +60,13 @@ const props = defineProps({
     type: String,
     default: ' ',
   },
- 
+
   deleteService: {
     type: Function,
   },
-  masterKey: {type: String,},
-  masterDeleteService: {type: Function,},
-  routeTo: {type: String,},
+  masterKey: { type: String, },
+  masterDeleteService: { type: Function, },
+  routeTo: { type: String, },
 });
 
 
@@ -77,16 +78,17 @@ const handleAddTabs = () => {
 };
 
 const handleDeleteData = (deleteIndex) => {
-  if(formData.value?.domains_data.includes(selectedDomain.value.id)){
+  if (formData.value?.domains_data?.includes(selectedDomain.value.id)) {
     index.value = deleteIndex;
-    if(selectedDomain.value.id === formData.value.default_domain[0]){
+    if (selectedDomain.value.id === formData.value?.default_domain && formData.value?.default_domain[0]) {
       deleteMasterFlag.value = true;
     }
-    else{
+    else {
+      console.log("object")
       deleteFlag.value = true;
     }
   }
-  else{
+  else {
     removeItem(deleteIndex)
   }
 };
@@ -94,40 +96,40 @@ const handleDeleteData = (deleteIndex) => {
 const handleDelte = async () => {
   const payload = { id: formData.value.id };
   try {
-        const res = await props.deleteService(payload);
-    
-        if (res.status === 200) {
-          showToast(res.data.message, 'success')
-          // store.dispatch('setEdit', );
-          removeItem(index.value)
-        } else if (res.status === 400) {
-          showToast(res.data.message, 'error')
-        }
-      } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error('Error:', error)
-      } finally {
-      //  if(loading) loading.value = false
-      }
+    const res = await props.deleteService(payload);
+
+    if (res.status === 200) {
+      showToast(res.data.message, 'success')
+      // store.dispatch('setEdit', );
+      removeItem(index.value)
+    } else if (res.status === 400) {
+      showToast(res.data.message, 'error')
+    }
+  } catch (error) {
+    showToast('Something went wrong', 'error')
+    console.error('Error:', error)
+  } finally {
+    //  if(loading) loading.value = false
+  }
 };
-const masterDelete = async() => {
-  
+const masterDelete = async () => {
+
   const payload = {
-  id: formData.value.id,
-  [props.masterKey]: formData.value[props.masterKey]
-};  try {
-        const res = await props.masterDeleteService(payload);
-        if (res.status === 200) {
-          showToast(res.data.message, 'success')
-            router.push(`/${props.routeTo}`)
-        } else if (res.status === 400) {
-          showToast(res.data.message, 'error')
-        }
-      } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error('Error:', error)
-      } finally {
-      }
+    id: formData.value.id,
+    [props.masterKey]: formData.value[props.masterKey]
+  }; try {
+    const res = await props.masterDeleteService(payload);
+    if (res.status === 200) {
+      showToast(res.data.message, 'success')
+      router.push(`/${props.routeTo}`)
+    } else if (res.status === 400) {
+      showToast(res.data.message, 'error')
+    }
+  } catch (error) {
+    showToast('Something went wrong', 'error')
+    console.error('Error:', error)
+  } finally {
+  }
 }
 
 
@@ -137,7 +139,7 @@ const removeItem = (indexValue) => {
     if (domainsArray.value.length > 0) {
       emit('customChange', domainsArray.value[0].id);
       selectedDomain.value = domainsArray.value[0];
-    
+
     } else {
       emit('customChange', null);
       selectedDomain.value = null;
@@ -225,5 +227,3 @@ onMounted(() => {
   handleGetDomains();
 });
 </script>
-
-

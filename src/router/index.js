@@ -491,6 +491,19 @@ const router = createRouter({
           meta: { requiresAuth: true },
           props: true
         },
+        // ----------------------------------- GLOBAL SEO ROUTES  -----------------------------------------
+        {
+          path: '/global-seo',
+          name: 'global-seo',
+          component: () => import('../views/Admin/GlobalSeo/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/global-meta-tag-form',
+          name: 'global-meta-tag-form',
+          component: () => import('../views/Admin/GlobalSeo/AddEditGlobalMeta.vue'),
+          meta: { requiresAuth: true }
+        },
       ]
     }
   ]
