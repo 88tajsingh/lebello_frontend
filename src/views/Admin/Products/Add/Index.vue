@@ -1,5 +1,5 @@
 <template>
-    <PageHeader> Store Product </PageHeader>
+    <PageHeader> Product </PageHeader>
     <div class="flex content-between justify-between px-1 mb-2">
       <div class="flex">
         <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
@@ -14,21 +14,21 @@
       </div>    
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-        <Button @click="() => {router.push({ name: 'Store-product-form'}); store.dispatch('clearEditData'); }" class="px-2 py-2">Add Store Product</Button>  
+        <Button @click="() => {router.push({name: 'Product-from'}); store.dispatch('clearEditData'); }" class="px-2 py-2">Add Product </Button>  
       </div>
     </div>
     <div class="bg-white rounded-[20px]">
       <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
       :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-      :rows="rows" :columns="StoreProductCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
+      :rows="rows" :columns="product" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
         <template #name="data">
           <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
             {{ data.value.name }}
             <!-- <div v-if="isRowHovered(data.value)">overed</div> -->
           </div>
         </template>
-        <template #image="data">
-          <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        <template #featured_image_url="data">
+          <img :src="$filePath(data.value?.featured_image_url?.file_url)" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
         </template>
         <template #status="data">
           <span v-if="data.value.status===1">Draft</span>
@@ -38,7 +38,7 @@
         </template>
         <template #actions="data">
           <div class="flex gap-3">
-            <div @click="() =>{router.push({ name: 'Store-product-form'}); store.dispatch('setEdit', data.value);  }" id="edit svg">
+            <div @click="() =>{router.push({name: 'Product-from'});store.dispatch('setEdit', data.value); }" id="edit svg">
               <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
               <EditSvg />
             </div>
@@ -49,10 +49,17 @@
         </template>
       </vue3-datatable>
     </div>
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Store Product'" @delete="handleDeleteStoreProduct">
+  
+    <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
+      <AddEditForm @handleApi="handleAddPages" />
+    </PopupModal>
+    <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
+      <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
+    </PopupModal>
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Product '" @delete="handleDeleteProduct">
       Do you want to delete?
     </DeleteModal>
-    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Store Product'" @delete="handleBulkActions()">
+    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Multiple Product '" @delete="handleBulkActions()">
     Do you want to delete ?
   </DeleteModal>
     <!-- <Loader :isLoading="loading" :fullPage="true" /> -->
@@ -61,15 +68,15 @@
   <script setup>
   import { ref, onMounted,watch } from 'vue';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
-  import StoreServices from '@/services/StoreServices';
+  import ProductServices from '@/services/ProductServices';
   import { useRouter } from 'vue-router';
   import { showToast  } from '@/helper/functions';
   import { getDomins } from '@/helper/Apis';
-  import { StoreProductCols, } from '@/json/data';
-  import { useStore } from 'vuex';
+  import { product,statusData } from '@/json/data';
+  import store from '@/store';
+
   
   const router = useRouter();
-  const store = useStore();
   const bulkActionSelected = ref(null)
   const loading = ref(false);
   const search = ref('');
@@ -83,6 +90,8 @@
   const rows = ref([]);
   const actionsFlag = ref(null);
   const bulkPopup = ref(null);
+  const modalIsOpen = ref(false);
+  const editIsOpen = ref(false);
   const deleteModalIsOpen = ref(false);
   const  totalRows = ref('')
   
@@ -100,16 +109,17 @@
     actionsFlag.value = null;
   };
   
+
   const changePages =(page) => {
     const {pagesize,current_page} =page;
     pagiantionData.value={...pagiantionData.value,limit:pagesize,page:current_page}
-    handleGetStoreProduct(pagiantionData.value);
+    handleGetProduct(pagiantionData.value);
   }
   // api calls
-  const handleGetStoreProduct = async (payload) => {
+  const handleGetProduct = async (payload) => {
   getLoading.value = true;
   try {
-    const res = await StoreServices.getStoreProduct(payload);
+    const res = await ProductServices.getProduct(payload);
     if (res.status === 200 && res.data.success) {
       rows.value = res.data.data;
       totalRows.value = res.data.total_records;
@@ -121,10 +131,10 @@
   }
 };
 
-const handleDeleteStoreProduct = async () => {
+const handleDeleteProduct = async () => {
   loading.value = true;
   try {
-    const res = await StoreServices.deleteStoreProduct({ id: editData.value });
+    const res = await ProductServices.deleteProduct({ id: editData.value });
     if (res.status === 200 && res.data.success) {
       rows.value = rows.value.filter(item => item.id !== editData.value)
       showToast(res.data.message, 'success');
@@ -149,10 +159,10 @@ const handleBulkActions = async () => {
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
-      const res = await StoreServices.BulkDeleteStoreProduct({ id: ids });
+      const res = await ProductServices.BulkDeleteProduct({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetStoreProduct();
+        await handleGetProduct();
       }
       else if (res.status === 400){
         showToast(res.data.message, 'error');
@@ -182,13 +192,14 @@ watch(
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      handleGetStoreProduct(pagiantionData.value);
+      handleGetProduct(pagiantionData.value);
     }
 );
+
 watch(
     () => pagiantionData.value.status,
     () => {
-      handleGetStoreProduct(pagiantionData.value);
+      handleGetProduct(pagiantionData.value);
     }
 );
   </script>

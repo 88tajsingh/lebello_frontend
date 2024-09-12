@@ -307,6 +307,18 @@ const router = createRouter({
         },
         // -------------------------------- products path ---------------------------------------------
         {
+          path: '/product',
+          name: 'Product',
+          component: () => import('../views/Admin/Products/Add/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/product-from',
+          name: 'Product-from',
+          component: () => import('../views/Admin/Products/Add/AddEditContract.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
           path: '/product-contract',
           name: 'Product-contract',
           component: () => import('../views/Admin/Products/Contract/Index.vue'),
@@ -478,6 +490,19 @@ const router = createRouter({
           component: () => import('../views/Admin/MaterialSlider/AddEditForm.vue'),
           meta: { requiresAuth: true },
           props: true
+        },
+        // ----------------------------------- GLOBAL SEO ROUTES  -----------------------------------------
+        {
+          path: '/global-seo',
+          name: 'global-seo',
+          component: () => import('../views/Admin/GlobalSeo/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/global-meta-tag-form',
+          name: 'global-meta-tag-form',
+          component: () => import('../views/Admin/GlobalSeo/AddEditGlobalMeta.vue'),
+          meta: { requiresAuth: true }
         },
       ]
     }

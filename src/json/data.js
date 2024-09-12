@@ -3,21 +3,39 @@ export const trueFalse = [
   { name: 'Yes', value: 1 }
 ]
 
+export const SimpleFieldsProduct = [
+  { name: 'Inherit from parent(no parent found)', value: 'Inherit from parent(no parent found)' },
+  { name: 'Product Spcs', value: 'Product Spcs' }
+]
+export const rightNavSettings = [
+  { name: 'Default', value: 'default' },
+  { name: 'Change', value: 'change' }
+]
+export const productTemplate = [
+  { name: 'First Version (OLD)', value: 'First Version (OLD)' },
+  { name: 'Second Version (NEW)', value: 'Second Version (NEW)' },
+  { name: 'Third Version (LATEST)', value: 'Third Version (LATEST)' }
+]
+export const darkLight = [
+  { name: 'Dark', value: 'dark' },
+  { name: 'Light', value: 'light' }
+]
+
 export const withBgWithoutBg = [
   { label: 'Without BG', value: 0 },
   { label: 'BG Color', value: 1 }
 ]
 
 export const statusData = [
-  { name: 'Draft', value: 'draft' },
-  { name: 'Pending review', value: 'pending review' }
+  { name: 'Draft', value: '1' },
+  { name: 'Pending Review', value: '2' },
+  { name: 'Publish', value: '3' }
 ]
 export const productOptionsType = [
   { name: 'Material', value: 'material' },
   { name: 'Custome', value: 'custome' },
   { name: 'Custome with Price ', value: 'custome with price' },
-  { name: 'Cushion ', value: 'cushion' },
-
+  { name: 'Cushion ', value: 'cushion' }
 ]
 export const TemplateVersion = [
   { name: 'First Version (OLD)', value: 'First Version (OLD)' },
@@ -366,13 +384,12 @@ export const materialCols = [
   { field: 'actions', title: 'Actions' }
 ]
 
-export const bulkOptions = [
-  { text: 'Delete', value: 'delete' }
-]
+export const bulkOptions = [{ text: 'Delete', value: 'delete' }]
 export const sliderCols = [
   { field: 'featured_image_url', title: 'Image', slot: true },
   { field: 'title', title: 'Title', filter: true },
   { field: 'slug', title: 'Slug' },
+  { field: 'status', title: 'Status' },
   { field: 'actions', title: 'Actions' }
 ]
 export const productSeriesCols = [
@@ -423,14 +440,16 @@ export const productTypeCols = [
 ]
 export const PostCols = [
   { field: 'title', title: 'Title', slot: true },
-  { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 export const StoreProductCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'status', title: 'Status' },
   { field: 'actions', title: 'Actions' }
 ]
 export const tagsCols = [
@@ -449,11 +468,21 @@ export const projectsCols = [
 export const designerCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 export const dealersCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
+  { field: 'actions', title: 'Actions' }
+]
+
+export const product = [
+  { field: 'featured_image_url', title: 'Thumbs', slot: true },
+  { field: 'title', title: 'Projet Name', slot: true },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -473,11 +502,19 @@ export const materialSlidersCols = [
   { field: 'featured_image_url', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 export const companyCols = [
   { field: 'featured_image_url', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'actions', title: 'Actions' }
+]
+export const MetaTagCols = [
+  { field: 'key', title: 'Key', slot: true },
+  { field: 'meta_title', title: 'Meta Title' },
+  { field: 'meta_description', title: 'Meta Description', filter: true },
+  { field: 'meta_keywords', title: 'Meta Description', filter: true },
   { field: 'actions', title: 'Actions' }
 ]

@@ -142,6 +142,16 @@ const ApiConfig = {
   deleteMasterDealer: '/delete-master-dealer',
 
   // --------------------------------------   Products   ----------------------------------------------------
+  // products
+  getProduct: '/get-products',
+  addProduct: '/add-product',
+  editProduct: '/update-product',
+  deleteProduct: '/delete-product',
+  bulkDeleteProduct: '/bulk-delete-product',
+  globalUpdateProduct: '/global-product-update',
+  mastetrDeleteProduct: '/delete-master-product',
+  masterSlugUpdateProduct: '/master-product-slug-update',
+
   // products types
   getProductType: '/get-product-type',
   addProductType: '/add-product-type',
@@ -233,16 +243,16 @@ const ApiConfig = {
   deleteMasterProjectsCategory: '/delete-master-project-category',
 
   // ------------------------------------- Post --------------------------------
-   // post
-   getPost: '/get-post',
-   addPost: '/add-post',
-   editPost: '/update-post',
-   deletePost: '/delete-post',
-   bulkDeletePost: '/bulk-delete-post',
-   masterPostSlugUpdate: '/master-post-slug-update',
-   globalPostUpdate: '/global-post-update',
-   masterDeletePost: '/delete-master-post',
-  
+  // post
+  getPost: '/get-post',
+  addPost: '/add-post',
+  editPost: '/update-post',
+  deletePost: '/delete-post',
+  bulkDeletePost: '/bulk-delete-post',
+  masterPostSlugUpdate: '/master-post-slug-update',
+  globalPostUpdate: '/global-post-update',
+  masterDeletePost: '/delete-master-post',
+
   // Post categories
   getPostCategory: '/post-category-list',
   addPostCategory: '/add-post-category',
@@ -253,7 +263,6 @@ const ApiConfig = {
   masterPostCategorySlugUpdate: '/master-post-category-slug-update',
   globalPostCategoryUpdate: '/global-post-category-update',
   deleteMasterPostCategory: '/delete-master-post-category',
-
 
   //Company
   getCompany: '/get-company',
@@ -284,6 +293,13 @@ const ApiConfig = {
   masterHomeSliderSlugUpdate: '/master-home-slider-slug-update',
   globalHomeSliderUpdate: '/global-home-slider-update',
   DeleteMasterHomeSlider: '/delete-master-home-slider',
+
+  //Global Meta Tags
+  getMetaTags: '/get-meta-tags',
+  addMetaTags: '/add-meta-tag',
+  editMetaTags: '/add-meta-tag',
+  deleteMetaTags: '/delete-meta-tag',
+  bulkDeleteMetaTags: '/bulk-meta-tag-delete'
 }
 
 export default ApiConfig

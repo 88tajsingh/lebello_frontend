@@ -155,7 +155,7 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="statu1s" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select Status" v-model="form.status" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.status = value" />
                                 </div>
@@ -164,7 +164,7 @@
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
-                                Publish
+                                {{buttonText}}
                             </Button>
                         </div>
                     </Accordion>
@@ -388,7 +388,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import { trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps, productData } from '@/json/data';
+import { trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps, statusData } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -433,15 +433,12 @@ const validateForm = () => {
     return true;
 };
 
-const handleSubmit = async () => {
-    console.log("called handleSubmit")
-    if (!validateForm()) return;
-    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
+
 
 // Handle form submission (add or edit contract)
-const handleAddEditApi = async () => {
+const handleSubmit = async () => {
+    if (!validateForm()) return;
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     loading.value = true;
     const { featured_image_data, slug, domains_data, contract_logo_data, contract_slider_image_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
@@ -451,8 +448,14 @@ const handleAddEditApi = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
-            router.push('/Contract-Design');
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+                showToast(res.data.message, 'success');
+                router.push('/Contract-Design');
+            }
+        
         }
     } catch (e) {
         console.error('Error:', e);
@@ -539,4 +542,8 @@ watch(() => form.value.domain_id, (newDomainId) => {
         console.log('data not in array', form.value?.domains_data);
     }
 });
+// Computed Property
+const buttonText = computed(() => {
+    return (form.value.id ? 'Update' : 'Submit')
+})
 </script>

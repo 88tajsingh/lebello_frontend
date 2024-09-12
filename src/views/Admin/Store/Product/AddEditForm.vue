@@ -1,4 +1,4 @@
-<template>{{form}}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="StoreServices.deleteStoreProduct"
             masterKey="master_store_product_id" :masterDeleteService="StoreServices.masterDeleteStoreProduct"
@@ -288,7 +288,7 @@
                                     <div v-else>
                                         <p class="text-gray-500">No swatches selected</p>
                                     </div>
-                                </div>
+                                 </div>
                                     </div>
                                 </div>
                             </div>
@@ -420,7 +420,7 @@
                         <div class="px-1 py-3">
                                 <div class="flex flex-col px-4">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full"
+                                    <Select :options="statusData" showfield="name" class="w-full"
                                         valueField="value" label="Select " v-model="form.status"
                                         :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.status = value }"
                                         />
@@ -528,7 +528,7 @@ import _ from 'lodash';
 import { ref, onMounted, watch, computed } from "vue";
 import { showToast, handleFileUpdate,getGlobalUpdateData } from '@/helper/functions'
 import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
-import { PublishOptions, productOptionsType, swatches, trueFalse } from '@/json/data';
+import { PublishOptions, productOptionsType, statusData, trueFalse } from '@/json/data';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
@@ -628,8 +628,7 @@ const toggleSwatchSelection = (item) => {
 };
 
 // Function to check if a swatch is selected
-const isSelected = (item) =>
-    selectedSwatches.value.some(swatch => swatch.id === item.id);
+const isSelected = (item) =>selectedSwatches.value.some(swatch => swatch.id === item.id);
 
 // Function to handle material checkbox changes
 const handleCheckboxChange = (materialId, event) => {
@@ -684,7 +683,7 @@ const handleAddEditApi = async () => {
         loading.value = true;
         try {
             // Prepare payload by excluding unwanted fields
-            const { deleted_at, created_at, featured_image_data, downlaodable_urls, gallery_data, slider_data, downloadable_urls, updated_at, ...payload } = form.value;
+            const { deleted_at,slug,domains_data,default_domain, created_at, featured_image_data, downlaodable_urls, gallery_data, slider_data, downloadable_urls, updated_at, ...payload } = form.value;
             if (!form.value?.domains_data?.includes(form.value.domain_id)) {
                  delete payload.id;
             }
@@ -759,6 +758,7 @@ const fetchStoreProductData = async () => {
 // Function to fetch all necessary data
 const handleFetchAllData = async (payload) => {
     try {
+        console.log("payload ",payload)
         await Promise.all([
             CommonServices.getTags(payload).then(res => {
                 if (res.status === 200 && res.data.success) {
@@ -774,6 +774,7 @@ const handleFetchAllData = async (payload) => {
 
             MaterialTreeList(payload).then(data => {
                 MaterialTreeListData.value = data;
+                console.log(MaterialTreeListData.value)
             }).catch(e => console.error('Error while getMaterialTree:', e)),
 
             getStoreCategoryTree(payload).then(data => {
@@ -786,12 +787,11 @@ const handleFetchAllData = async (payload) => {
 };
 
 // Lifecycle hook to initialize data on component mount
-onMounted(() => {4
-    const domainId = store.getters.getDomain.id;
+onMounted(() => {
     // Initialize image on edit data
     if (store.getters.editData) {
+        const domainId = store.getters.editData?.domain_id;
         const {downlaodable_urls,slider_data,gallery_data,featured_image_data} = store.getters.editData;
-        console.log('set image on edit data',slider_data)
         imageData.value.gallery.images = gallery_data || 'gallery';
         imageData.value.gallery.mediaName = gallery_data?.map(item => item?.file_url).join(', ') || 'gallery';
         imageData.value.slider.images = slider_data 
@@ -800,9 +800,9 @@ onMounted(() => {4
         imageData.value.downloadable_files.mediaName = downlaodable_urls?.map(item=>item?.file_url).join(', ')|| 'Downloadable Images';
         imageData.value.featured_image.images = [featured_image_data]
         imageData.value.featured_image.mediaName = featured_image_data?.file_url || "Featured Image"
+        handleFetchAllData({ domain_id: domainId });
     }
     // Fetch all required data
-    handleFetchAllData({ domain_id: domainId });
 });
 
 watch(() => form.value.domain_id, (newDomainId) => {
@@ -819,6 +819,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return  (form.value.id ? 'Update' : 'Submit')
 })
 </script>

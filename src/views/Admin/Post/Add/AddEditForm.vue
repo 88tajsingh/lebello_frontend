@@ -77,7 +77,7 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => { checkedFields.status = value }" />
                                 </div>
@@ -159,7 +159,7 @@
                                 </div>
                                 <div class=" mt-3 flex overflow-x-auto">
                                     <img v-for="file in imageData.featured_image.images" :key="file"
-                                        :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file?.alternative_text || 'image'" />
                                 </div>
                             </div>
@@ -178,8 +178,8 @@
 
                                 <div class="mt-3 flex overflow-x-auto">
                                     <img v-for="file in imageData.gallery.images" :key="file"
-                                        :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file.alternative_text || 'image'" />
+                                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file?.alternative_text || 'image'" />
                                 </div>
                             </div>
                         </Accordion>
@@ -209,7 +209,7 @@
 import _ from 'lodash';
 import { useStore } from 'vuex';
 import { useRouter } from "vue-router";
-import {trueFalse } from '@/json/data';
+import {trueFalse,statusData } from '@/json/data';
 import PostServices from '@/services/PostServices';
 import { getPostCategoryTree } from '@/helper/Apis';
 import { ref, onMounted, watch, computed } from "vue";
@@ -229,7 +229,6 @@ const router = useRouter();
 const errors = ref({});
 const loading = ref(false);
 const form = ref(store.getters.editData || { status: '', visibility: '' });
-const PreviousDomain = ref(null);
 const postCategoryTree = ref([]);
 const TagsData = ref([]);
 const checkedFields = ref({})
@@ -264,27 +263,28 @@ const validateForm = () => {
     return true;
 };
 
-const handleSubmit = async () => {
-    if(validateForm()){
-        const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-        hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-    }
-}
-
 // Submit Handler
-const handleAddEditApi = async () => {
-    
+const handleSubmit = async () => {
+   
+    if(!validateForm()) return
+    const  hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+
         loading.value = true;
         try {
             const action = store.getters.editData ? PostServices.editPost : PostServices.addPost;
-            const { featured_image_url, gallery_urls, slug, domains_data, default_domain, deleted_at, created_at, updated_at, ...payload } = form.value
+            const { featured_image_url, gallery_urls, slug,gallery_data, domains_data, default_domain, deleted_at, created_at, updated_at, ...payload } = form.value
             if (!form.value?.domains_data?.includes(form.value.domain_id)) {
                 delete payload.id;
             }
             const { status, data } = await action(payload);
             if (status === 200 && data.success) {
+                if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
                 showToast(data.message, 'success');
                 router.push('/post');
+            }
             }
         } catch (e) {
             console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} post:`, e);
@@ -337,28 +337,30 @@ const fetchPostData = async () => {
 }
 
 // Fetch Tags and Post Category Tree
-const fetchInitialData = async () => {
+const fetchInitialData = async (payload) => {
+    // console.log("payload",payload)
     try {
-        const domainId = store.getters.getDomain.id;
-        const [{ status: tagStatus, data: tagData }, { status: categoryStatus, data: categoryData }] = await Promise.all([
-            CommonServices.getTags({ domain_id: domainId }),
-            getPostCategoryTree({ domain_id: domainId })
-        ]);
+        const [{ status: tagStatus, data: tagData },] = await Promise.all([
+            CommonServices.getTags(payload)]);4
         if (tagStatus === 200 && tagData.success) TagsData.value = tagData.data;
-        if (categoryStatus === 200) postCategoryTree.value = categoryData;
+
+        postCategoryTree.value = await getPostCategoryTree(payload)
     } catch (e) {
         console.error('Error fetching initial data:', e);
     }
+    
 };
 
 // Lifecycle Hooks
 // Initialize component state
 onMounted(() => {
-    // if (store.getters.editData) {
-    //     imageData.value.media_id.mediaName = store.getters?.editData?.media_data?.file_url || 'Select Media';
-    //     imageData.value.media_id.images = [store.getters?.editData?.media_data];
-    // }
-    fetchInitialData({ domain_id: store.getters.getDomain?.id });
+    if (store.getters.editData) {
+        imageData.value.featured_image.mediaName = store.getters?.editData?.featured_image_url?.file_url || 'Select Media';
+        imageData.value.featured_image.images = [store.getters?.editData?.featured_image_url];
+        imageData.value.gallery.mediaName = store.getters?.editData?.gallery_data?.map(item => item.file_url).join(',') || 'Select Gallery images';
+        imageData.value.gallery.images = store.getters?.editData?.gallery_data;
+        fetchInitialData({domain_id: store.getters.editData?.domain_id});
+    }
 });
 
 watch(() => form.value.domain_id, (newDomainId) => {
@@ -376,6 +378,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return  (form.value.id ? 'Update' : 'Submit')
 })
 </script>

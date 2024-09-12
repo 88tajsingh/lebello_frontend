@@ -33,7 +33,7 @@
           <InputLabel for="Parent Material" value="Parent Product Contract" />
           <!-- <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name" class="w-full" valueField="id"
             v-model="form.parent_contract" /> -->
-          <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="contract_location"
+          <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name"
           class="w-full" valueField="id" :errorClass="selectError" @update:modelValue="clearError('parent_contract')"
           errMessage="Should not be own parent" v-model="form.parent_contract" />
           

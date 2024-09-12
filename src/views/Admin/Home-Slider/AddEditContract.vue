@@ -9,7 +9,7 @@
             <MasterSlugForm
         :form="form"
         @update-slug="()=>fetchPagesData()"
-        :SlugUpdateservices = 'HomeSliderServices.masterHomeSliderSlugUpdate'
+        :SlugUpdateservices = "HomeSliderServices.masterHomeSliderSlugUpdate"
         masteridKeyName='master_home_slider_id'
       />
     </template>
@@ -59,7 +59,7 @@
                             <div class="px-4">
                                 <div class="flex flex-col ">
                                     <InputLabel for="status" value="Status" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.status" 
                                          :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.status = value }"
                                         />
@@ -75,17 +75,17 @@
                     </Accordion>
                     <div class="mt-4 ">
                         <Accordion :open="true" header="Featured image">
-                            <div class="px-6  h-auto ">
+                            <div class="px-6 h-auto ">
                                 <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                <div class=" flex  w-full h-auto ">
+                                <div class=" flex w-full h-auto ">
                             <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
-                            <div class="py-2 rounded-lg px-2 border border-stroke"
+                            <div class="py-2 rounded-lg w-full px-2 border border-stroke"
                                     @click="() => imageData.featured_image.isOpen = true"> {{
                                         imageData.featured_image.mediaName }}</div>
                     </div>
                                 
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file.file_url)"
+                                    <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file?.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
                             </div>
@@ -200,7 +200,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import { PublishOptions, trueFalse, withBgWithoutBg, capsNOCaps } from '@/json/data';
+import { PublishOptions, trueFalse, withBgWithoutBg, capsNOCaps,statusData } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from "vue-router";
 
@@ -244,31 +244,31 @@ const validateForm = () => {
     return true;
 };
 
-const handleSubmit = async () => {
-    validateForm(); 
-    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
 
 // Submit form (add or edit slider)
-const handleAddEditApi = async () => {
+const handleSubmit = async () => {
     if (!validateForm()) return; // Validate form fields
-    delete form.value?.featured_image_url
-    delete form.value?.slider_video_source_url
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+
     
     loading.value = true;
     try {
         // Determine if editing or adding a new slider
         const isEditing = !!store.getters.editData;
-        const {created_at,deleted_at,slug,domains_data,default_domain,featured_image_data,updated_at, ...payload } = form.value
+        const {created_at,deleted_at,slug,featured_image_url,slider_video_source_url,domains_data,default_domain,featured_image_data,updated_at, ...payload } = form.value
         if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
         const action = isEditing ? HomeSliderServices.editHomeSlider : HomeSliderServices.addHomeSlider;
         const res = await action(payload);
 
         if (res.status === 200 && res.data.success) {
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
             showToast(res.data.message, 'success');
             router.push('/home-slider');
+        }
         }
     } catch (e) {
         console.error('Error:', e);
@@ -327,9 +327,9 @@ onMounted(() => {
     if (store.getters.editData) {
         const { featured_image_data, slider_video_source_url } = store.getters.editData;
         imageData.value.featured_image.images = [featured_image_data];
-        imageData.value.featured_image.mediaName = featured_image_data.file_url || 'Featured Image';
+        imageData.value.featured_image.mediaName = featured_image_data?.file_url || 'Featured Image';
         imageData.value.slider_video_source.images = [slider_video_source_url] ;
-        imageData.value.slider_video_source.mediaName = slider_video_source_url.file_url || 'Slider Video Source';
+        imageData.value.slider_video_source.mediaName = slider_video_source_url?.file_url || 'Slider Video Source';
     }
 });
 
@@ -345,7 +345,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 </script>
 

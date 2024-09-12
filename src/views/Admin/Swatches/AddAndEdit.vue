@@ -346,7 +346,7 @@ const fetchSwatchData = async () => {
 // Fetch Initial Data
 const fetchMaterialTreeData = async () => {
     try {
-        const domainId = store.getters.getDomain.id;
+        const domainId =  form.value.domain_id || store.getters.getDomain.id;
         MaterialTreeListData.value = await MaterialTreeList({ domain_id: domainId });
     } catch (e) {
         console.error('Error fetching material tree data:', e);

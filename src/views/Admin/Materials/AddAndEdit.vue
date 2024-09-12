@@ -307,8 +307,8 @@ onMounted(() => {
     if (store.getters.editData) {
         imageData.value.media_id.mediaName = store.getters?.editData?.media_data?.file_url || 'Select Media';
         imageData.value.media_id.images = [store.getters?.editData?.media_data];
+        materialTree({ domain_id: store.getters.getDomain?.id });
     }
-    materialTree({ domain_id: store.getters.getDomain?.id });
 });
 
 watch(() => form.value.domain_id, (newDomainId) => {

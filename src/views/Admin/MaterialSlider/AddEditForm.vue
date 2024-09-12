@@ -62,8 +62,8 @@
                                 
                                 <div class=" mt-3 flex overflow-x-auto">
                                     <img v-for="file in imageData.featured_image.images" :key="file"
-                                        :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file.alternative_text || 'image'">
+                                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file?.alternative_text || 'image'">
                                 </div>
                             </div>
                         </div>
@@ -121,27 +121,27 @@ const validateForm = () => {
     return true;
 };
 
+// Submit Handler
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
-// Submit Handler
-const handleAddEditApi = async () => {
-    delete form.value?.domain;
     
         loading.value = true;
         try {
             const action = store.getters.editData ? MaterialSliderServices.editMaterialSlider : MaterialSliderServices.addMaterialSlider;
-            const { deleted_at, created_at,slug,domains_data,default_domain,featured_image_url, updated_at, ...payload } = form.value;
+            const { deleted_at,domain, created_at,slug,domains_data,default_domain,featured_image_url, updated_at, ...payload } = form.value;
             if (!form.value?.domains_data?.includes(form.value.domain_id)) {
                  delete payload.id;
             }
             const res = await action({ ...payload });
             if (res.status === 200 && res.data.success) {
+                if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
                 showToast(res.data.message, 'success');
                 router.push('/material-slider');
+            }
             }
         } catch (e) {
             console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} Material Sliders:`, e);
@@ -200,7 +200,7 @@ onMounted(() => {
     if(store.getters.editData){
         const {featured_image_url}=store.getters.editData;
         imageData.value.featured_image.images=[featured_image_url]
-        imageData.value.featured_image.mediaName=featured_image_url.file_url
+        imageData.value.featured_image.mediaName=featured_image_url?.file_url
     }
 });
 
@@ -216,7 +216,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return  (form.value.id ? 'Update' : 'Submit')
 })
 </script>
 <style scoped>

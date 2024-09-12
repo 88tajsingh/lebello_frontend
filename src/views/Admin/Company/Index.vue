@@ -6,9 +6,13 @@
             <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
                 label="Bulk Options" v-model="bulkActionSelected" />
             <Button class="px-2 py-2 m-auto" @click="()=>deleteMulModalIsOpen=true">Apply</Button>
-            <div class="w-52">
+            <div class="max-w-52">
                 <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-                    v-model="domain_id" />
+                    v-model="pagiantionData.domain_id" />
+            </div>
+            <div class="max-w-52">
+                <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+                    v-model="pagiantionData.status" />
             </div>
         </div>
         <div class="flex rounded-lg bg-transparent">
@@ -22,10 +26,11 @@
     <div class="bg-white rounded-[20px]">
         <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
             :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="companyCols"
-            :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
-            @change="changePage">
+            :loading="dataTableLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
+            @change="changeServer">
             <template #featured_image_url="data">
-                <img :src="$filePath(data.value.featured_image_url)" alt="Material Image"
+                {{ data.featured_image_data }}
+                <img :src="$filePath(data.value?.featured_image_data?.file_url)" alt="Material Image"
                     style="max-width: 50px; max-height: 50px" />
             </template>
             <template #actions="data">
@@ -60,7 +65,7 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { companyCols } from '@/json/data'
+import { companyCols,statusData } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
@@ -75,6 +80,7 @@ const router = useRouter();
 // Reactive state
 const bulkActionSelected = ref(null);
 const search = ref('');
+const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
 const bulkOption = [{ text: 'Delete', value: 'delete' }];
 const company_id = ref('');
 const dataTableLoading = ref(false);
@@ -83,12 +89,17 @@ const data = ref([]);
 const datatable = ref('');
 const totalRows = ref('');
 const getDomainsList = ref([]);
-const domain_id = ref('');
 const deleteModalIsOpen = ref(false);
 const deleteMulModalIsOpen = ref(false);
 
 // Open Delete Modals
 const openDeleteModal = () => deleteModalIsOpen.value = true;
+
+const changeServer =(page) => {
+    const {pagesize,current_page} =page;
+    pagiantionData.value={...pagiantionData.value,limit:pagesize,page:current_page}
+    handleGetCompany(pagiantionData.value);
+  }
 
 // Fetch Companies Data
 const handleGetCompany = async (payload) => {
@@ -135,7 +146,7 @@ const handleBulkActions = async () => {
             const res = await CompanyServices.bulkDeleteCompany({ id: ids });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
-                await handleGetCompany({ limit: 10, page: 1, domain_id: domain_id.value });
+                await handleGetCompany(pagiantionData.value);
             }
         } catch (e) {
             console.error('Error performing bulk delete:', e);
@@ -150,7 +161,7 @@ const getDomainList = async () => {
     try {
         getDomainsList.value = await getDomins();
         const defaultDomain = getDomainsList.value.find(site => site.default === 1);
-        domain_id.value = defaultDomain.id;
+        pagiantionData.value.domain_id = defaultDomain.id;
         store.dispatch('setDomain', defaultDomain);
     } catch (e) {
         console.error('Error fetching domain list:', e);
@@ -161,11 +172,18 @@ const getDomainList = async () => {
 onMounted(() => getDomainList());
 
 watch(
-    () => domain_id.value,
+    () => pagiantionData.value.domain_id,
     () => {
-        const selectedDomain = getDomainsList.value.find(site => site.id == domain_id.value);
+        const selectedDomain = getDomainsList.value.find(site => site.id == pagiantionData.value.domain_id);
         store.dispatch('setDomain', selectedDomain);
-        handleGetCompany({ limit: 10, page: 1, domain_id: domain_id.value });
+        handleGetCompany(pagiantionData.value);
+    }
+);
+
+watch(
+    () => pagiantionData.value.status,
+    () => {
+        handleGetCompany(pagiantionData.value);
     }
 );
 
