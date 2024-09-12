@@ -213,15 +213,10 @@ const validateForm = () => {
     return true;
 };
 
+// Handle form submission (add or edit designer)
 const handleSubmit = async () => {
     if (!validateForm()) return;
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
-// Handle form submission (add or edit designer)
-const handleAddEditApi = async () => {
-
 
     loading.value = true;
     const { featured_image_url, slug, domains_data, featured_image_data, product_image_data, product_category_types_data, product_types_data, default_domain, tags_data, product_image_url, ...payload } = form.value;
@@ -234,8 +229,13 @@ const handleAddEditApi = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
             showToast(res.data.message, 'success');
             router.push('/designer');
+        }
         }
     } catch (e) {
         console.error('Error:', e);
@@ -287,15 +287,16 @@ const fetchDesignerData = async () => {
 }
 
 // Fetch product and category data
-const fetchProductData = async () => {
-    ProductCategory.value = await getProductCategoryTypeTree({ domain_id: store.getters.getDomain?.id });
-    productType.value = await getProductTypeTree({ domain_id: store.getters.getDomain?.id });
+const fetchProductData = async (payload) => {
+    
+    ProductCategory.value = await getProductCategoryTypeTree(payload);
+    productType.value = await getProductTypeTree(payload);
 };
 
 // Fetch tags data
-const fetchTagsData = async () => {
+const fetchTagsData = async (payload) => {
     try {
-        const res = await CommonServices.getTags({ domain_id: store.getters.getDomain?.id });
+        const res = await CommonServices.getTags(payload);
         if (res.status === 200 && res.data.success) {
             TagsData.value = res.data.data;
         }
@@ -307,33 +308,32 @@ const fetchTagsData = async () => {
 // Initialize component state
 onMounted(() => {
     if (store.getters.editData) {
-        const { product_image_data, featured_image_data } = store.getters.editData;
+        const { product_image_data, featured_image_data } = store.getters?.editData;
         imageData.value.featured_image.images = [featured_image_data] || [];
-        imageData.value.featured_image.mediaName = featured_image_data.file_url || 'Feature Image';
+        imageData.value.featured_image.mediaName = featured_image_data?.file_url || 'Feature Image';
         imageData.value.product_image.images = [product_image_data] || [];
         imageData.value.product_image.mediaName = product_image_data?.file_url || 'Product Image';
+        fetchTagsData({ domain_id: store.getters.editData.domain_id });
+        fetchProductData({ domain_id: store.getters.editData.domain_id });
     }
-    fetchProductData();
-    fetchTagsData();
+    
 });
 
 // Watch for domain_id changes to update product and category data
 watch(() => form.value.domain_id, (newDomainId) => {
     // Fetch tree data 
-    fetchTagsData();
-    fetchProductData();
+    fetchTagsData({ domain_id: newDomainId });
+    fetchProductData({ domain_id: newDomainId });
     // Check if newDomainId is present in domains_data and fetch 
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
-        fetchDesignerData();
-    } else {
-        console.log('data not in array', form.value?.domains_data);
+        fetchDesignerData(newDomainId);
     }
 });
 
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return form.value.id ? 'Update' : 'Submit'
 })
 </script>
 

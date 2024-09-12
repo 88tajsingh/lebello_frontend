@@ -4,9 +4,13 @@
       <div class="flex">
         <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="actionSelected" />
         <Button class="px-2 py-2 m-auto">Apply</Button>
-        <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
+        <div class="max-w-52 mr-2">
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
       </div>
+      <div class="max-w-52">
+        <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+            v-model="pagiantionData.status" />
+    </div>
       </div>
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -25,6 +29,12 @@
         </template>
         <template #image="data">
           <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        </template>
+        <template #status="data">
+          <span v-if="data.value.status===1">Draft</span>
+          <span v-else-if="data.value.status===2">Pending Review</span>
+          <span v-else-if="data.value.status===3">Publish</span>
+          <span v-else>Status not selected</span>
         </template>
         <template #actions="data">
           <div class="flex gap-3">
@@ -49,7 +59,7 @@
   import { ref, onMounted,watch } from 'vue';
   import { getDomins } from '@/helper/Apis';
   import { useRouter } from 'vue-router';
-  import { ContractCols } from '@/json/data';
+  import { ContractCols,statusData } from '@/json/data';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import ContractServices from '@/services/ContractServices';
   import { showToast } from '@/helper/functions';
@@ -60,7 +70,9 @@
   const actionSelected = ref(null);
   const loading = ref(false);
   const search = ref('');
+  const status = ref('');
   const getDominsList = ref([])
+  const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
   const domain_id = ref('')
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
   const getLoading = ref(false);
@@ -102,13 +114,10 @@
   };
   
   const changeServer =(page) => {
-    console.log("page changed", page)
-    const payload = {limit:page.pagesize,page:page.current_page}
-    handleGetContract(payload);
+    const {pagesize,current_page} =page;
+    pagiantionData.value={...pagiantionData.value,limit:pagesize,page:current_page}
+    handleGetContract(pagiantionData.value);
   }
-  const navigateToRoute = () => {
-        router.push({ name: 'EditPages', params: { id: '1' } });
-      };
   
   // api calls
   const handleGetContract = async (payload) => {
@@ -153,7 +162,7 @@ const handleDeleteSuccess = (message) => {
   const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -163,11 +172,17 @@ onMounted(() => {
 );
 
 watch(
-    () => domain_id.value,
+    () => pagiantionData.value.domain_id,
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      handleGetContract({limit:10,page:1,domain_id:domain_id.value});
+      handleGetContract(pagiantionData.value);
+    }
+);
+watch(
+    () => pagiantionData.value.status,
+    () => {
+      handleGetContract(pagiantionData.value);
     }
 );
   </script>

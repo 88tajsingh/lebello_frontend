@@ -110,13 +110,13 @@
                                     @click="() => imageData.featured_image.IsOpen = true"> {{
                                         imageData.featured_image.mediaName }}</div>
                         </div>
-                               
-                                <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-for="file in imageData.featured_image.images" :key="file"
-                                        :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'">
-                                </div>
-                                <InputError class="mt-2" :message="errors?.featured_image" />
+                             
+                        <div class="flex flex-col w-full">
+                            <div class=" mt-3 flex overflow-x-auto">
+                                <img v-if="imageData.featured_image.images[0]"v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file?.file_url)"
+                                    class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'" />
+                            </div>
+                        </div>
                             </div>
                         </div>
                     </div>
@@ -190,7 +190,7 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
     loading.value = true;
-    const {slug,domains_data,default_domain,featured_image_url,...payload} = form.value;
+    const {slug,domains_data,featured_image_data,default_domain,featured_image_url,...payload} = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
                  delete payload.id;
             }
@@ -200,13 +200,14 @@ const handleSubmit = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
-            showToast(res.data.message, 'success');
             store.dispatch('clearEditData');
             if(hasCheckedFields){
                 handleGlobalUpdate();
             }
-            else
+            else{
+            showToast(res.data.message, 'success');
             router.push('/company');
+            }
         }
     } catch (e) {
         console.error('Error:', e);
@@ -260,8 +261,11 @@ const fetchMaterialSliderData = async () => {
 
 // Set  on component mount
 onMounted(() => {
-    if(store.getters.editData)
-    featured_image.value.images= store.getters.editData?.featured_image_url;
+    if(store.getters.editData){
+    imageData.value.featured_image.images= [store.getters.editData?.featured_image_data];
+    imageData.value.featured_image.mediaName= store.getters.editData?.featured_image_data.file_url;
+
+    }
 });
 
 

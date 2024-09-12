@@ -4,8 +4,12 @@
       <div class="flex">
         <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
         <Button class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
-        <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="Select Domain" v-model="domain_id" />
+        <div class="max-w-52 mr-2">
+          <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
+        </div>
+        <div class="max-w-52">
+          <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+              v-model="pagiantionData.status" />
       </div>
       </div>    
       <div class="flex">
@@ -25,6 +29,12 @@
         </template>
         <template #featured_image_url="data">
           <img :src="$filePath(data.value?.featured_image_url?.file_url)" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        </template>
+        <template #status="data">
+          <span v-if="data.value.status===1">Draft</span>
+          <span v-else-if="data.value.status===2">Pending Review</span>
+          <span v-else-if="data.value.status===3">Publish</span>
+          <span v-else>Status not selected</span>
         </template>
         <template #actions="data">
           <div class="flex gap-3">
@@ -62,7 +72,7 @@
   import { useRouter } from 'vue-router';
   import { showToast  } from '@/helper/functions';
   import { getDomins } from '@/helper/Apis';
-  import { product } from '@/json/data';
+  import { product,statusData } from '@/json/data';
   import store from '@/store';
 
   
@@ -71,6 +81,7 @@
   const loading = ref(false);
   const search = ref('');
   const datatable = ref(null);
+  const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
   const getDominsList = ref([])
   const domain_id = ref('')
@@ -90,17 +101,6 @@
     console.log(data.id)
   };
   
-  const openModal = () => {
-    modalIsOpen.value = true;
-  };
-  
-  const editModal = (data) => {
-    console.log("data " ,data)
-    editData.value = { ...data.value };
-    // router.push({ name: 'EditPages', params: { id: data.value.id } });
-    editIsOpen.value=true;
-  };
-  
   const handleMouseEnter = (data) => {
     actionsFlag.value = data.value.name;
   };
@@ -109,14 +109,11 @@
     actionsFlag.value = null;
   };
   
-  const isRowHovered = (value) => {
-    return actionsFlag.value === value.name;
-  };
-  
+
   const changePages =(page) => {
-    console.log("page changed", page)
-    const payload = {limit:page.pagesize,page:page.current_page}
-    handleGetProduct(payload);
+    const {pagesize,current_page} =page;
+    pagiantionData.value={...pagiantionData.value,limit:pagesize,page:current_page}
+    handleGetProduct(pagiantionData.value);
   }
   // api calls
   const handleGetProduct = async (payload) => {
@@ -181,7 +178,7 @@ const handleBulkActions = async () => {
   const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -191,11 +188,18 @@ onMounted(() => {
 );
 
 watch(
-    () => domain_id.value,
+    () => pagiantionData.value.domain_id,
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      handleGetProduct({limit:10,page:1,domain_id:domain_id.value});
+      handleGetProduct(pagiantionData.value);
+    }
+);
+
+watch(
+    () => pagiantionData.value.status,
+    () => {
+      handleGetProduct(pagiantionData.value);
     }
 );
   </script>

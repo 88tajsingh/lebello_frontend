@@ -49,6 +49,7 @@
 import { ref, onMounted,watch } from 'vue';
 import { showToast } from '@/helper/functions'
 import { getDomins } from '@/helper/Apis';
+import { statusData } from '@/json/data';
 import AddEditForm from './AddEditForm.vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PagesServices from '@/services/PagesServices';

@@ -449,13 +449,12 @@ const validateForm = () => {
     return true;
 };
 
+
+// Submit Handler
 const handleSubmit = async () => {
     if (!validateForm('page_title', 'Page Title', form, errors)) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-// Submit Handler
-const handleAddEditApi = async () => {
+
     delete form.value?.domain;
     
         loading.value = true;
@@ -465,8 +464,13 @@ const handleAddEditApi = async () => {
             if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
             const res = await action(payload);
             if (res.status === 200 && res.data.success) {
+                if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
                 showToast(res.data.message, 'success');
-                router.push('/dealer');9
+                router.push('/dealer');
+            }
             }
         } catch (e) {
             console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} Dealers:`, e);
@@ -543,7 +547,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 
 </script>

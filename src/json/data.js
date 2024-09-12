@@ -393,6 +393,7 @@ export const sliderCols = [
   { field: 'featured_image_url', title: 'Image', slot: true },
   { field: 'title', title: 'Title', filter: true },
   { field: 'slug', title: 'Slug' },
+  { field: 'status', title: 'Status' },
   { field: 'actions', title: 'Actions' }
 ]
 export const productSeriesCols = [
@@ -443,14 +444,16 @@ export const productTypeCols = [
 ]
 export const PostCols = [
   { field: 'title', title: 'Title', slot: true },
-  { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 export const StoreProductCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'status', title: 'Status' },
   { field: 'actions', title: 'Actions' }
 ]
 export const tagsCols = [
@@ -469,11 +472,13 @@ export const projectsCols = [
 export const designerCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 export const dealersCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -481,6 +486,7 @@ export const product = [
   { field: 'featured_image_url', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Projet Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -500,6 +506,7 @@ export const materialSlidersCols = [
   { field: 'featured_image_url', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'status', title: 'Status', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
 export const companyCols = [

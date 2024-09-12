@@ -187,13 +187,14 @@ const clearError = (field) => {
 
 // Initialize component
 onMounted(() => {
-    contractLoctionTree({ domain_id: store.getters.getDomain.id });
+    contractLoctionTree({ domain_id: store.getters.getDomain?.id });
+
 });
 
 
 // Watch for changes in domain_id and refresh contract location tree
 watch(() => form.value.domain_id, (newDomainId) => {
-    contractLoctionTree(newDomainId);
+    contractLoctionTree({domain_id:newDomainId});
   form.value.parent_contract_location = 0;
   if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
     fetchContractLocationData();
