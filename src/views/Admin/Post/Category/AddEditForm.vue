@@ -98,15 +98,10 @@ const validateForm = () => {
   return true;
 };
 
+// Submit Handler
 const handleSubmit = async () => {
   if (!validateForm()) return;
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi();
-};
-
-// Submit Handler
-const handleAddEditApi = async () => {
-  if (validateForm()) {
     loading.value = true;
     try {
       const { deleted_at, created_at,slug,domains_data,default_domain, updated_at, ...payload } = form.value;
@@ -118,8 +113,14 @@ const handleAddEditApi = async () => {
       }
       const { status, data } = await action(payload);
       if (status === 200 && data.success) {
-        showToast(data.message, 'success');
-        router.push('/post-category');
+        if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+              showToast(data.message, 'success');
+              router.push('/post-category');
+            }
+       
       } else if (status === 400) {
         showToast(data.message, 'error');
       }
@@ -129,7 +130,7 @@ const handleAddEditApi = async () => {
     } finally {
       loading.value = false;
     }
-  }
+  
 };
 
 const handleGlobalUpdate = async () => {
@@ -207,6 +208,6 @@ watch(() => form.value.parent_post_category, (newValue) => {
 
 // Computed Properties
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit');
+  return (form.value.id ? 'Update' : 'Submit');
 });
 </script>

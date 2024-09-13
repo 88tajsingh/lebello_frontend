@@ -671,15 +671,10 @@ const validateForm = () => {
     return isValid;
 };
 
+// Function to handle form submission
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
-// Function to handle form submission
-const handleAddEditApi = async () => {
-   
         loading.value = true;
         try {
             // Prepare payload by excluding unwanted fields
@@ -697,9 +692,15 @@ const handleAddEditApi = async () => {
             const { status, data } = await action(payload);
 
             if (status === 200 && data.success) {
+                if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
                 showToast(data.message, 'success');
                 store.dispatch('clearEditData');
                 router.push('/store-product');
+          }
+                
             } else if (status === 400) {
                 showToast(data.message, 'error');
             }

@@ -217,15 +217,11 @@ const validateForm = () => {
     return true;
 };
 
-const handleSubmit = async () => {
-    if(validateForm()) {
-        const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-        hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-    }
-}
-
 // Handle form submission (add or edit materials)
-const handleAddEditApi = async () => {
+const handleSubmit = async () => {
+    if(!validateForm()) return
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+
     const { deleted_at, created_at, updated_at,slug,domains_data,default_domain,default_master, media_id_url, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
         delete payload.id;
@@ -236,8 +232,13 @@ const handleAddEditApi = async () => {
         const { status, data } = await service(payload);
         
         if (status === 200 && data.success) {
+            if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
             showToast(data.message, 'success');
             router.push('/materials');
+        }
         } else {
             showToast(data.message, 'error');
         }
@@ -327,7 +328,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 
 </script>

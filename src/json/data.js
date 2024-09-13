@@ -410,6 +410,7 @@ export const swatchCols = [
   { field: 'src', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', filter: true },
   { field: 'slug', title: 'Slug' },
+  { field: 'status', title: 'Status' },
   { field: 'actions', title: 'Actions' }
 ]
 
