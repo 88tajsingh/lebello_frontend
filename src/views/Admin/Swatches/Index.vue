@@ -5,9 +5,13 @@
       <Select cusClass="h-[38px] border-boxdark	  " :options="SwatchesBulkOption" showfield="text" valueField="value"
         label="Bulk Options" v-model="bulkActionSelected" />
       <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
-      <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
+      <div class="max-w-52 mr-2">
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
       </div>
+      <div class="max-w-52">
+        <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+            v-model="pagiantionData.status" />
+    </div>
     </div>
     <div class="flex">
       <TextInput type="text" class="block bg-white rounded-lg mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -26,6 +30,12 @@
       </template>
       <template #src="data">
         <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Swatches Image" style="max-width: 50px; max-height: 50px" />
+      </template>
+      <template #status="data">
+        <span v-if="data.value.status===1">Draft</span>
+        <span v-else-if="data.value.status===2">Pending Review</span>
+        <span v-else-if="data.value.status===3">Publish</span>
+        <span v-else>Status not selected</span>
       </template>
       <template #actions="data">
         <div class="flex gap-3">
@@ -51,7 +61,7 @@
 
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue';
-import { SwatchesBulkOption,swatchCols } from '@/json/data.js'
+import { SwatchesBulkOption,swatchCols,statusData } from '@/json/data.js'
 import { getDomins } from '@/helper/Apis';
 import { showToast } from '@/helper/functions'
 import SwatchesServices from '@/services/SwatchesServices';
@@ -70,6 +80,7 @@ const domain_id=ref(null);
 const getDominsList = ref([]);
 const dataTableLoding = ref(false);
 const rows = ref([]);
+const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
 const loading = ref(false);
 const datatable = ref('')
 const bulkActionSelected = ref(null);
@@ -86,12 +97,11 @@ const handleMouseLeave = () => {
   actionsFlag.value = null
 }
 
-const isRowHovered = (value) => {
-  return actionsFlag.value === value.name
-}
 const changePage =(page) => {
-  const payload = {limit:page.pagesize,page:page.current_page}
-  handleGetSwatches(payload);
+  const {pagesize,current_page} =page;
+    pagiantionData.value={...pagiantionData.value,limit:pagesize,page:current_page}
+    handleGetSwatches(pagiantionData.value);
+  
 }
 // modal 
 const modalflag = ref({
@@ -167,7 +177,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -177,11 +187,17 @@ onMounted(() => {
 );
 
 watch(
-    () => domain_id.value,
+    () => pagiantionData.value.domain_id,
     () => {
       const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
-      handleGetSwatches({limit:10,page:1,domain_id:domain_id.value});
+      handleGetSwatches(pagiantionData.value);
+    }
+);
+watch(
+    () => pagiantionData.value.status,
+    () => {
+      handleGetSwatches(pagiantionData.value);
     }
 );
 

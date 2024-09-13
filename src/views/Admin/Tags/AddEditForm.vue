@@ -103,19 +103,12 @@ const handleGetTags = async () => {
     }
 }
   
-// check the api calls if checked then call globalupdate else call handleAddEditApi
-const handleFormSubmit = async () => {
-  const hasCheckedFields = Object.values(checkedFields.value).some(value => value)
-  if (hasCheckedFields) {
-    await handleGlobalUpdate()
-  } else {
-    await handleAddEditApi()
-  }
-}
+
 
 // Function to handle form submission (Add or Edit Tags)
-const handleAddEditApi = async () => {
+const handleFormSubmit = async () => {
   if (!validateForm('name', 'Name', form, errors)) return
+  const hasCheckedFields = Object.values(checkedFields.value).some(value => value)
 
   loading.value = true
   const { deleted_at, created_at, updated_at,domains_data,default_domain,default_master, featured_image_url, ...payload } =
@@ -126,8 +119,15 @@ const handleAddEditApi = async () => {
   try {
       const res = await service(payload);
       if (res.status === 200) {
-        showToast(res.data.message, 'success')
-        router.push(`/tags`)
+        if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+              showToast(res.data.message, 'success')
+              router.push(`/tags`)
+              store.dispatch('clearEditData');
+          }
+        
       } else if (res.status === 400) {
         showToast(res.data.message, 'error')
       }
@@ -140,7 +140,7 @@ const handleAddEditApi = async () => {
     } finally {
       loading.value = false
     }
-  handleGlobalUpdate()
+  
 }
 
 // Function to handle global updates based on checked fields

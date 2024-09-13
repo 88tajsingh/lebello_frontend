@@ -65,7 +65,7 @@
   import { useRouter } from 'vue-router';
   import { showToast  } from '@/helper/functions';
   import { getDomins } from '@/helper/Apis';
-  import { StoreProductCols, } from '@/json/data';
+  import { StoreProductCols, statusData} from '@/json/data';
   import { useStore } from 'vuex';
   
   const router = useRouter();

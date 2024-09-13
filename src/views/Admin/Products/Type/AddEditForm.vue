@@ -108,16 +108,11 @@ const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 const getProductTypeList = ref([])
 
-// Handle Form Submission
+// Submit Handler
 const handleFormSubmit = async () => {
+  loading.value = true
   if (!validateForm('name', 'Name', form, errors)) return
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
-// Submit Handler
-const handleAddEditApi = async () => {
-  loading.value = true
   try {
     const { deleted_at, created_at,domains_data,default_domain,default_master, updated_at, ...payload } = form.value
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
@@ -125,8 +120,17 @@ const handleAddEditApi = async () => {
     const action = store.getters.editData ? ProductServices.editProductType : ProductServices.addProductType
     const { status, data } = await action(payload)
     
-    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-    if (status === 200 && data.success) router.push('/product-type')
+    if(status === 200 && data.success){
+      if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+              store.dispatch('clearEditData');
+              showToast(data.message, 'success')
+              router.push('/product-type')
+            }
+      
+    }
   } catch (error) {
     showToast('Something went wrong', 'error')
     console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)

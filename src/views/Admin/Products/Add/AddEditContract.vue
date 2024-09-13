@@ -436,7 +436,7 @@
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
-                                Publish
+                                {{buttonText}}
                             </Button>
                         </div>
                     </Accordion>
@@ -950,4 +950,8 @@ watch(() => logo_right_nav.value, (newValue) => {
         form.value.logo_right_nav_settings = {};
     }
 });
+// Computed Property
+const buttonText = computed(() => {
+  return (form.value.id ? 'Update' : 'Submit')
+})
 </script>
