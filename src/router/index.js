@@ -504,6 +504,19 @@ const router = createRouter({
           component: () => import('../views/Admin/GlobalSeo/AddEditGlobalMeta.vue'),
           meta: { requiresAuth: true }
         },
+        // ----------------------------------- USERS ROUTES  -----------------------------------------
+        {
+          path: '/users',
+          name: 'users',
+          component: () => import('../views/Admin/User/Index.vue'),
+          meta: { requiresAuth: true }
+        },
+        {
+          path: '/user-form',
+          name: 'user-form',
+          component: () => import('../views/Admin/User/AddEditUser.vue'),
+          meta: { requiresAuth: true }
+        },
       ]
     }
   ]
