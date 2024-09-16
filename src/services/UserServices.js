@@ -12,7 +12,7 @@ class UserServices {
     return instance.post(ApiConfig.editUser, payload)
   }
   statusUser(payload) {
-    return instance.patch(ApiConfig.statusUser, { params: { ...payload } })
+    return instance.patch(ApiConfig.statusUser,payload )
   }
 }
 

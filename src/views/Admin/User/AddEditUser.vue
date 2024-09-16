@@ -19,12 +19,12 @@
                     <Select :options="roles" showfield="role" class="w-full" valueField="id" label="Select an option"
                         v-model="form.role_id" />
                 </div>
-                <div class="flex flex-col ">
+                <!-- <div class="flex flex-col ">
                     <InputLabel for="Status" value="Status" />
                     <Select :options="domainStatus" showfield="name" class="w-full" valueField="value"
                         label="Select Status" v-model="form.active" />
                     <InputError class="mt-2" :message="errors.status" />
-                </div>
+                </div> -->
                 <div class="flex flex-col">
                     <TextInput id="Password" type="Password" class="block w-full mr-2 h-[33px]" v-model="form.password"
                         placeholder="Password" label="Password
