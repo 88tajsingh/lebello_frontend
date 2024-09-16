@@ -2,8 +2,8 @@
     <PageHeader> Product </PageHeader>
     <div class="flex content-between justify-between px-1 mb-2">
       <div class="flex">
-        <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-        <Button class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
+        <Select v-if="permissions.write" cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+        <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
         <div class="max-w-52 mr-2">
           <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
         </div>
@@ -14,7 +14,7 @@
       </div>    
       <div class="flex">
         <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-        <Button @click="() => {router.push({name: 'Product-from'}); store.dispatch('clearEditData'); }" class="px-2 py-2">Add Product </Button>  
+        <Button v-if="permissions.write" @click="() => {router.push({name: 'Product-from'}); store.dispatch('clearEditData'); }" class="px-2 py-2">Add Product </Button>  
       </div>
     </div>
     <div class="bg-white rounded-[20px]">
@@ -36,7 +36,7 @@
           <span v-else-if="data.value.status===3">Publish</span>
           <span v-else>Status not selected</span>
         </template>
-        <template #actions="data">
+        <template v-if="permissions.write" #actions="data">
           <div class="flex gap-3">
             <div @click="() =>{router.push({name: 'Product-from'});store.dispatch('setEdit', data.value); }" id="edit svg">
               <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
@@ -81,6 +81,7 @@
   const loading = ref(false);
   const search = ref('');
   const datatable = ref(null);
+  const permissions =  store.getters.user.permissions;
   const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
   const getDominsList = ref([])

@@ -5,28 +5,23 @@
             masterKey="master_company_id" :masterDeleteService="CompanyServices.masterCompanySlugUpdate"
             routeTo="company" />
         <template v-if="form.id" v-slot:header>
-            <MasterSlugForm
-        :form="form"
-        @update-slug="()=>fetchMaterialSliderData()"
-        :SlugUpdateservices = 'CompanyServices.masterCompanySlugUpdate'
-        masteridKeyName='master_company_id'
-      />
-      </template>   
+            <MasterSlugForm :form="form" @update-slug="() => fetchMaterialSliderData()"
+                :SlugUpdateservices='CompanyServices.masterCompanySlugUpdate' masteridKeyName='master_company_id' />
+        </template>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <Accordion :open="true" header="Fileds">
                         <div class="px-6">
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
-                                placeholder="Add title" v-model="form.title" :errMessage="errors.title"
-                                :errors="errors" 
-                                :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.title = value }"/>
+                                placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
+                                :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="(value) => { checkedFields.title = value }" />
                         </div>
                         <div class="px-6 mt-3">
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug (Read Only)"
-                                placeholder="Add title" v-model="form.slug" :errMessage="errors.slug"
-                                :errors="errors"  disabled
-                                />
+                                placeholder="Add title" v-model="form.slug" :errMessage="errors.slug" :errors="errors"
+                                disabled />
                         </div>
                     </Accordion>
                     <div class="mt-3  ">
@@ -44,16 +39,16 @@
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                    :message="errors.seo_title" 
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_title = value }" />
+                                    :message="errors.seo_title" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_title = value }" />
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
                                     class="block w-[180px] mr-2 " v-model="form.meta_description"
                                     placeholder="Meta Description" label="Meta Description"
-                                    :message="errors.seo_meta_description"
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_meta_description = value }" />
+                                    :message="errors.seo_meta_description" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_meta_description = value }" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
@@ -61,8 +56,8 @@
                                 <TextInput id="seo_meta_keywords" :isTextarea="true" :rows=4 type="text"
                                     class="block w-[180px] mr-2 " v-model="form.meta_keywords"
                                     placeholder="Meta Keywords" label="Meta Keywords"
-                                    :message="errors.seo_meta_keywords"
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_meta_keywords = value }" />
+                                    :message="errors.seo_meta_keywords" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_meta_keywords = value }" />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
@@ -75,7 +70,9 @@
                             <div class="px-3">
                                 <div class="mt-3">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Sub title"
-                                        placeholder="Put the company sub title" v-model="form.sub_title":hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.sub_title = value }" />
+                                        placeholder="Put the company sub title" v-model="form.sub_title"
+                                        :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.sub_title = value }" />
                                 </div>
                             </div>
                         </Accordion>
@@ -87,7 +84,8 @@
                                     <div class="flex flex-col ">
                                         <InputLabel for="status" value="Status" />
                                         <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                            label="Select " v-model="form.status":hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.status = value }" />
+                                            label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.status = value }" />
                                     </div>
                                 </div>
                             </div>
@@ -105,18 +103,21 @@
                             <div class="  h-auto ">
                                 <InputLabel for="featured_image" value="Featured Image" />
                                 <div class=" flex  w-full h-auto ">
-                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.featured_image"></SingleCheck>
-                            <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                    @click="() => imageData.featured_image.IsOpen = true"> {{
-                                        imageData.featured_image.mediaName }}</div>
-                        </div>
-                             
-                        <div class="flex flex-col w-full">
-                            <div class=" mt-3 flex overflow-x-auto">
-                                <img v-if="imageData.featured_image.images[0]"v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file?.file_url)"
-                                    class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'" />
-                            </div>
-                        </div>
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.featured_image">
+                                    </SingleCheck>
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => imageData.featured_image.IsOpen = true"> {{
+                                            imageData.featured_image.mediaName }}</div>
+                                </div>
+
+                                <div class="flex flex-col w-full">
+                                    <div class=" mt-3 flex overflow-x-auto">
+                                        <img v-if="imageData.featured_image.images[0]"
+                                            v-for="file in imageData.featured_image.images" :key="file"
+                                            :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                            :alt="file?.alternative_text || 'image'" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -126,10 +127,10 @@
         </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-    v-model:isOpen="imageData.featured_image.IsOpen">
-    <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
-        :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
-</popupModal>
+        v-model:isOpen="imageData.featured_image.IsOpen">
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
+    </popupModal>
 
 
 
@@ -138,8 +139,8 @@
 
 <script setup>
 import _ from 'lodash';
-import { ref, onMounted,computed,watch } from "vue";
-import { showToast,handleFileUpdate,getGlobalUpdateData } from '@/helper/functions'
+import { ref, onMounted, computed, watch } from "vue";
+import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import CompanyServices from '@/services/CompanyServices';
 import Accordion from "@/components/Admin-components/Accordion.vue";
@@ -190,10 +191,10 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
     loading.value = true;
-    const {slug,domains_data,featured_image_data,default_domain,featured_image_url,...payload} = form.value;
+    const { slug, domains_data, featured_image_data, default_domain, featured_image_url, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
-                 delete payload.id;
-            }
+        delete payload.id;
+    }
 
     try {
         const service = store.getters.editData ? CompanyServices.editCompany : CompanyServices.addCompany;
@@ -201,12 +202,12 @@ const handleSubmit = async () => {
 
         if (res.status === 200 && res.data.success) {
             store.dispatch('clearEditData');
-            if(hasCheckedFields){
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
-            showToast(res.data.message, 'success');
-            router.push('/company');
+            else {
+                showToast(res.data.message, 'success');
+                router.push('/company');
             }
         }
     } catch (e) {
@@ -254,16 +255,16 @@ const fetchMaterialSliderData = async () => {
         showToast('Something went wrong', 'error')
         console.error('Error while fetching data:', error)
     }
-    finally{
-    loading.value=false;
-  }
+    finally {
+        loading.value = false;
+    }
 }
 
 // Set  on component mount
 onMounted(() => {
-    if(store.getters.editData){
-    imageData.value.featured_image.images= [store.getters.editData?.featured_image_data];
-    imageData.value.featured_image.mediaName= store.getters.editData?.featured_image_data.file_url;
+    if (store.getters.editData) {
+        imageData.value.featured_image.images = [store.getters.editData?.featured_image_data];
+        imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_data.file_url;
 
     }
 });
@@ -284,5 +285,4 @@ const buttonText = computed(() => {
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

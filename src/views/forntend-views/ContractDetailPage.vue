@@ -15,7 +15,7 @@
           <!--Carousel items-->
           <div class="relative w-full overflow-hidden after:clear-both after:block after:content-['']">
             <!--First item-->
-            <div v-for="(item, index) in carouselItems" :key="index" :class="[
+            - <div v-for="(item, index) in carouselItems" :key="index" :class="[
               'relative',
               'float-left',
               '-mr-[100%]',

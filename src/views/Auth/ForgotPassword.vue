@@ -22,15 +22,15 @@ const form = ref({
 });
 
 const validateForm = () => {
-        let isValid = true;
-        console.log("object")
-        errors.value = {};
-        if (!form.value.email) {
-            errors.value.email = 'field is required';
-            isValid = false;
-        }
-        return isValid;
-    };
+    let isValid = true;
+    console.log("object")
+    errors.value = {};
+    if (!form.value.email) {
+        errors.value.email = 'field is required';
+        isValid = false;
+    }
+    return isValid;
+};
 
 const handleForgetPassword = () => {
     try {
@@ -81,9 +81,10 @@ const handleForgetPassword = () => {
                     @update:model="$clearError(errors, 'email')" />
             </div>
             <div class="flex items-center justify-between mt-4">
-                <router-link to="/login"  class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Login 
-          </router-link>
+                <router-link to="/login"
+                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Login
+                </router-link>
                 <Button type="submit" class="ms-4" :class="{ 'opacity-25': processing }" :disabled="processing"
                     bg_th_color="bg-[#2271b1] text-white px-3 py-2">
                     Get New Password

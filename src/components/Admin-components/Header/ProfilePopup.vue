@@ -1,4 +1,4 @@
-<template>
+<template>{{ form }}
     <PopupModal modalTitle="Edit Profile" custonClasses="w-[400px] h-[500px]  z-99999 " v-model:isOpen="isopen">
         <div class="dark:bg-gray-700 bg-gray-200">
             <!-- {{ store.getters.user }} -->
@@ -25,7 +25,7 @@
                             <Button class="px-6 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 @click="handleProfileUpdate">
                                 Save</Button>
-                            <Button class="px-4 py-2 m-auto" @click="()=>{router.push('/admin')}">Cancel</Button>
+                            <Button class="px-4 py-2 m-auto" @click="() => { router.push('/admin') }">Cancel</Button>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
 import { ref } from 'vue'
 import store from '@/store'
 import router from '@/router'
-import { clearError } from '@/helper/functions'
+import { clearError, showToast } from '@/helper/functions'
 import CommonServices from '@/services/CommonServices'
 const errors = ref({})
 const props = defineProps()
@@ -79,25 +79,27 @@ const validateForm = () => {
 }
 
 const handleProfileUpdate = async () => {
-    processing.value = true; 
+    processing.value = true;
     try {
         if (validateForm()) {
-            console.log(form.value); 
-            
-            const res = await CommonServices.updateProfile({ ...form.value,});
-            
+
+            const res = await CommonServices.updateProfile(form.value);
+
             if (res.status === 200) {
-                store.dispatch('userUpdate', { ...form.value });
+                const { password, password_confirmation, ...data } = form.value
+                store.dispatch('userUpdate', data);
+                showToast(res.data.message, 'success');
                 router.push('/admin');
-                processing.value=false;
+                processing.value = false;
             } else if (res.status === 401) {
-               
+                showToast(res.data.message, 'error');
+                console.error('Error while updating profile:', res.data.message);
             }
         }
     } catch (e) {
         console.error('Error while updating profile:', e);
     } finally {
-        processing.value = false; 
+        processing.value = false;
     }
 };
 

@@ -4,10 +4,10 @@
   </div>
   <div class="relative ">
 
-  <div class="absolute  top-30 right-0 pr-3 self-center " ref="closeMenu2">
-        <SideMenu key="firstKey" :list="list" :handleSideMenu="handleSideMenu2" :isOpen="isOpenSidebarSlider2"
-          :mainSlider="false" :showDropDown="false" :showHeading="false" :downDropdown="true" />
-      </div>
+    <div class="absolute  top-30 right-0 pr-3 self-center " ref="closeMenu2">
+      <SideMenu key="firstKey" :list="list" :handleSideMenu="handleSideMenu2" :isOpen="isOpenSidebarSlider2"
+        :mainSlider="false" :showDropDown="false" :showHeading="false" :downDropdown="true" />
+    </div>
   </div>
   <div class="mx-20 mt-2">
     <div class="">
@@ -28,7 +28,7 @@
       </div>
     </div>
   </div>
-  
+
 </template>
 
 <script setup>

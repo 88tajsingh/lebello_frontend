@@ -2,44 +2,51 @@
   <PageHeader> Swatches</PageHeader>
   <div class="flex  content-between justify-between px-1 mb-2">
     <div class="flex">
-      <Select cusClass="h-[38px] border-boxdark	  " :options="SwatchesBulkOption" showfield="text" valueField="value"
-        label="Bulk Options" v-model="bulkActionSelected" />
-      <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+      <Select v-if="permissions.write" cusClass="h-[38px] border-boxdark	  " :options="SwatchesBulkOption"
+        showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
       <div class="max-w-52 mr-2">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+          v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
         <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-            v-model="pagiantionData.status" />
-    </div>
+          v-model="pagiantionData.status" />
+      </div>
     </div>
     <div class="flex">
-      <TextInput type="text" class="block bg-white rounded-lg mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name: 'swatches-add'});store.dispatch('clearEditData'); }" class="px-2 py-2 m-auto whitespace-nowrap"> Add Swatches </Button>
+      <TextInput type="text" class="block bg-white rounded-lg mr-2 h-[40px] w-full" placeholder="Search"
+        v-model="search" />
+      <Button v-if="permissions.write"
+        @click="() => { router.push({ name: 'swatches-add' }); store.dispatch('clearEditData'); }"
+        class="px-2 py-2 m-auto whitespace-nowrap"> Add Swatches </Button>
     </div>
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-    :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="rows" :columns="swatchCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
-    <template #name="data">
+    <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+      :hasCheckbox="true" :cloneHeaderInFooter="true" :stickyHeader="false" :rows="rows" :columns="swatchCols"
+      :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
+      @change="changePage">
+      <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
           <!-- <div v-if="isRowHovered(data.value)">overed</div> -->
         </div>
       </template>
       <template #src="data">
-        <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Swatches Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Swatches Image"
+          style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
-        <span v-if="data.value.status===1">Draft</span>
-        <span v-else-if="data.value.status===2">Pending Review</span>
-        <span v-else-if="data.value.status===3">Publish</span>
+        <span v-if="data.value.status === 1">Draft</span>
+        <span v-else-if="data.value.status === 2">Pending Review</span>
+        <span v-else-if="data.value.status === 3">Publish</span>
         <span v-else>Status not selected</span>
       </template>
-      <template #actions="data">
+      <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => {router.push({ name: 'swatches-edit'});store.dispatch('setEdit', data.value) }" id="edit svg">
+          <div @click="() => { router.push({ name: 'swatches-edit' }); store.dispatch('setEdit', data.value) }"
+            id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => { swatch_id = { id: data.value.id }; deleteModal(); }">
@@ -47,7 +54,7 @@
           </div>
         </div>
       </template>
-  </vue3-datatable>
+    </vue3-datatable>
   </div>
 
   <!-- popups modals -->
@@ -61,7 +68,7 @@
 
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue';
-import { SwatchesBulkOption,swatchCols,statusData } from '@/json/data.js'
+import { SwatchesBulkOption, swatchCols, statusData } from '@/json/data.js'
 import { getDomins } from '@/helper/Apis';
 import { showToast } from '@/helper/functions'
 import SwatchesServices from '@/services/SwatchesServices';
@@ -70,23 +77,23 @@ import Vue3Datatable from '@bhplugin/vue3-datatable'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Select from "@/components/Admin-components/form-components/Select.vue";
 import TextInput from "@/components/Admin-components/form-components/TextInput.vue";
-import { ref, onMounted,watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter();
-const domain_id=ref(null);
+const domain_id = ref(null);
 const getDominsList = ref([]);
 const dataTableLoding = ref(false);
 const rows = ref([]);
-const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
+const permissions = store.getters.user.permissions;
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const loading = ref(false);
 const datatable = ref('')
 const bulkActionSelected = ref(null);
 const search = ref('')
-const  totalRows = ref('')
-const imgKey=ref('')
+const totalRows = ref('')
 const actionsFlag = ref(null)
 
 const handleMouseEnter = (data) => {
@@ -97,11 +104,11 @@ const handleMouseLeave = () => {
   actionsFlag.value = null
 }
 
-const changePage =(page) => {
-  const {pagesize,current_page} =page;
-    pagiantionData.value={...pagiantionData.value,limit:pagesize,page:current_page}
-    handleGetSwatches(pagiantionData.value);
-  
+const changePage = (page) => {
+  const { pagesize, current_page } = page;
+  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
+  handleGetSwatches(pagiantionData.value);
+
 }
 // modal 
 const modalflag = ref({
@@ -121,7 +128,7 @@ const handleGetSwatches = async (payload) => {
       rows.value = res.data.data || [];
       totalRows.value = res.data.data ? res.data.total_records : 0;
     }
-    else{
+    else {
       rows.value = [];
       totalRows.value = 0;
     }
@@ -187,18 +194,18 @@ onMounted(() => {
 );
 
 watch(
-    () => pagiantionData.value.domain_id,
-    () => {
-      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
-      store.dispatch('setDomain', defaultDomain[0]);
-      handleGetSwatches(pagiantionData.value);
-    }
+  () => pagiantionData.value.domain_id,
+  () => {
+    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    store.dispatch('setDomain', defaultDomain[0]);
+    handleGetSwatches(pagiantionData.value);
+  }
 );
 watch(
-    () => pagiantionData.value.status,
-    () => {
-      handleGetSwatches(pagiantionData.value);
-    }
+  () => pagiantionData.value.status,
+  () => {
+    handleGetSwatches(pagiantionData.value);
+  }
 );
 
 </script>

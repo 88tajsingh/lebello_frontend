@@ -7,7 +7,8 @@
     <!-- menu icon  -->
     <div class="relative" ref="closeMenu">
       <div class="absolute top-24 right-0">
-        <v-card id="mySidenav" :dark="active" @click="active = true" :class="{ 'w-[230px] right-0 ': isOpen, 'w-[230px] right-[-250px] ': !isOpen }"
+        <v-card id="mySidenav" :dark="active" @click="active = true"
+          :class="{ 'w-[230px] right-0 ': isOpen, 'w-[230px] right-[-250px] ': !isOpen }"
           class="sidenav bg-[#ededed] text-graphik text-[14px] pb-2 z-50 absolute top-7 right-0 transition-all duration-1000 ease-in-out overflow-hidden">
           <div class=" ">
             <div class="flex border border-gray-400 items-center">
@@ -56,7 +57,7 @@
                         v-for="(sub, itemIndex) in item.subMenu" :key="itemIndex">
                         <a href="#" class="font-graphikLight text-[13px]">{{
                           sub.name
-                        }}</a>
+                          }}</a>
                       </li>
                     </ul>
                   </div>
@@ -97,7 +98,7 @@
             'transition-transform  duration-9000 ease-in-out transform scale-125':
               isHovered[index],
           }" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
-            <router-link to="/" >
+            <router-link to="/">
               <img class="aos-item" ref="element" :data-aos="animationType"
                 :data-aos-duration="getAnimationDuration(index)" :src="product?.image" :alt="product?.name" />
               <div :class="{

@@ -323,8 +323,8 @@
                                     </div>
                                 </div>
                                 <div class="mt-2 px-6  h-auto">
-                                    <ColorPicker label="Text Color"
-                                        v-model="item.text_color" :hasCheckBox="checkBoxFlag"/>
+                                    <ColorPicker label="Text Color" v-model="item.text_color"
+                                        :hasCheckBox="checkBoxFlag" />
                                 </div>
                                 <div class="mt-2 px-6  h-auto">
                                     <ColorPicker label="Background Color" v-model="item.bg_color" />
@@ -332,12 +332,12 @@
                                 <div class="flex flex-col px-7 ">
                                     <InputLabel for="Memu Color" value="Memu Color" />
                                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                                        label="Select Status" v-model="item.menu_color"  />
+                                        label="Select Status" v-model="item.menu_color" />
                                 </div>
                                 <div class=" px-5 my-4 items-center text-gray-600 text-sm">
                                     <TextInput id="seo_title" type="text" class="block mr-2 h-[33px]"
                                         v-model="item.transparent" placeholder="" label="Transprent %" />
-                                </div>   
+                                </div>
                                 <div class="px-6  h-auto ">
                                     <div class="py-2 rounded-lg w-full px-2 border border-stroke"
                                         @click="() => { productsSpecsIndex = index; imageData.slide.isOpen = true; }">
@@ -352,10 +352,10 @@
                                 </div>
                                 <div class="ml-auto">
                                     <button @click="banner_slide_remove" type="button"
-                                    class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-red  font-medium text-gray hover:bg-opacity-90">
-                                    Remove 
-                                </button>                      
-                            </div>
+                                        class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-red  font-medium text-gray hover:bg-opacity-90">
+                                        Remove
+                                    </button>
+                                </div>
                             </div>
                             <button @click="banner_slide" type="button"
                                 class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
@@ -436,7 +436,7 @@
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
-                                {{buttonText}}
+                                {{ buttonText }}
                             </Button>
                         </div>
                     </Accordion>
@@ -650,9 +650,8 @@
     <!-- Products Slider Heading Video Source  -->
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
         v-model:isOpen="imageData.video_source.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.video_source.images"
-            :singleFile="true" :closeModal="() => { imageData.video_source.isOpen = false }"
-            :selectedFiles="handleVideoSource" />
+        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.video_source.images" :singleFile="true"
+            :closeModal="() => { imageData.video_source.isOpen = false }" :selectedFiles="handleVideoSource" />
     </popupModal>
 
     <!-- Products Slider Heading Slider -->
@@ -675,7 +674,7 @@ import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
-import {statusData, trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
+import { statusData, trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
@@ -688,7 +687,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || {simple_field:null,featured_product:false, status:null,description: '', product_specs: [],banner_slide:[], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+const form = ref(store.getters.editData || { simple_field: null, featured_product: false, status: null, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
@@ -713,7 +712,7 @@ const imageData = ref({
     downloadable_files: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
     image: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
     video_source: { isOpen: false, mediaName: 'Add Video Source', images: [] },
-    slide : { isOpen: false, mediaName: 'Slider Image', images: [] },
+    slide: { isOpen: false, mediaName: 'Slider Image', images: [] },
 });
 
 // Handle file updates for different image types
@@ -728,13 +727,13 @@ const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data
 const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, false, imageData, form);
 
 
- const handleVideoSource = (data) => {
-  const media_titles = data.map((item) => item.title);
-  imageData.value.video_source.mediaName = media_titles.join(", ");
-  imageData.value.video_source.images = data;
-  imageData.value.video_source.isOpen=false;
-  const media_ids = data.map((item) => item.id);
-  form.value.banner_slide=media_ids;
+const handleVideoSource = (data) => {
+    const media_titles = data.map((item) => item.title);
+    imageData.value.video_source.mediaName = media_titles.join(", ");
+    imageData.value.video_source.images = data;
+    imageData.value.video_source.isOpen = false;
+    const media_ids = data.map((item) => item.id);
+    form.value.banner_slide = media_ids;
 
 };
 
@@ -813,11 +812,11 @@ function banner_slide() {
         bg_color: '',
         menu_color: '',
         transparent: '',
-        slide:'',
+        slide: '',
     });
 }
 function banner_slide_remove(index) {
-    form.value.banner_slide.splice(index,1)
+    form.value.banner_slide.splice(index, 1)
 }
 
 // Handle form submission (add or edit contract)
@@ -826,7 +825,7 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
     loading.value = true;
-    const {status, featured_image_data,featured_image_url,slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
+    const { status, featured_image_data, featured_image_url, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
     try {
@@ -834,14 +833,14 @@ const handleSubmit = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
-            if(hasCheckedFields){
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
+            else {
                 showToast(res.data.message, 'success');
                 router.push('/product');
             }
-            
+
         }
     } catch (e) {
         console.error('Error:', e);
@@ -952,6 +951,6 @@ watch(() => logo_right_nav.value, (newValue) => {
 });
 // Computed Property
 const buttonText = computed(() => {
-  return (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 </script>

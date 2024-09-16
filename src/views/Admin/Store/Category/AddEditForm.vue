@@ -15,8 +15,8 @@
           <TextInput type="text" class=" " :class="{ 'border-red': errors.name }" placeholder="" v-model="form.name"
             :errMessage="errors.name" @update:model="clearError('name')" label="Name" :hasCheckBox="checkBoxFlag"
             @update:checkValue="(value) => {
-                checkedFields.name = value
-              }
+              checkedFields.name = value
+            }
               " />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The name is how it appears on your site.
@@ -33,16 +33,16 @@
         <div class="flex flex-col w-full mt-6">
           <TextInput type="text" class="block mr-2 w-full" label="Category Page Title Tag %category_name%"
             placeholder="" v-model="form.category_page_title" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                checkedFields.category_page_title = value
-              }
+              checkedFields.category_page_title = value
+            }
               " />
         </div>
         <div class="flex flex-col w-full">
           <TextInput type="text" class="block mr-2 w-full"
             label="Product Page Title %category_name% %product_name% %product_price%" placeholder=""
             v-model="form.product_page_title" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                checkedFields.product_page_title = value
-              }
+              checkedFields.product_page_title = value
+            }
               " />
         </div>
         <div class="flex flex-col">
@@ -58,8 +58,8 @@
         <div class="flex flex-col w-full">
           <TextInput type="text" class="block mr-2 w-full" label="Description" placeholder="" :isTextarea="true"
             rows="4" v-model="form.description" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                checkedFields.description = value
-              }
+              checkedFields.description = value
+            }
               " />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -69,8 +69,8 @@
           <TextInput type="text" class="block mr-2 w-full" label="Category Page Description %category_name%"
             placeholder="" :isTextarea="true" rows="4" v-model="form.category_page_description"
             :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                checkedFields.category_page_description = value
-              }
+              checkedFields.category_page_description = value
+            }
               " />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -81,8 +81,8 @@
             label="Product Page Description %category_name% %product_name% %product_price%" placeholder=""
             :isTextarea="true" rows="4" v-model="form.product_page_description" :hasCheckBox="checkBoxFlag"
             @update:checkValue="(value) => {
-                checkedFields.product_page_description = value
-              }
+              checkedFields.product_page_description = value
+            }
               " />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -93,8 +93,8 @@
             label="Product Page Keywords %category_name% %product_name% %product_price%" placeholder=""
             :isTextarea="true" rows="4" v-model="form.product_page_keyword" :hasCheckBox="checkBoxFlag"
             @update:checkValue="(value) => {
-                checkedFields.product_page_keyword = value
-              }
+              checkedFields.product_page_keyword = value
+            }
               " />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -104,8 +104,8 @@
           <TextInput type="text" class="block mr-2 w-full" label="Category Page Keywords %category_name%" placeholder=""
             :isTextarea="true" rows="4" v-model="form.category_page_keyword" :hasCheckBox="checkBoxFlag"
             @update:checkValue="(value) => {
-                checkedFields.category_page_keyword = value
-              }
+              checkedFields.category_page_keyword = value
+            }
               " />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -174,15 +174,15 @@ const handleSubmit = async () => {
         : StoreServices.addStoreCategory
       const { status, data } = await action(payload)
       if (status === 200 && data.success) {
-        if(hasCheckedFields){
-                handleGlobalUpdate();
-            }
-            else{
-              showToast(data.message, 'success');
-              router.push('/store-category')
-              store.dispatch('clearEditData')
-          }
-        
+        if (hasCheckedFields) {
+          handleGlobalUpdate();
+        }
+        else {
+          showToast(data.message, 'success');
+          router.push('/store-category')
+          store.dispatch('clearEditData')
+        }
+
       } else if (status === 400) {
         showToast(data.message, 'error')
       }
@@ -277,8 +277,8 @@ watch(
 
 // Computed Property
 const buttonText = computed(() => {
-  return  form.value.id
-      ? 'Update'
-      : 'Submit'
+  return form.value.id
+    ? 'Update'
+    : 'Submit'
 })
 </script>

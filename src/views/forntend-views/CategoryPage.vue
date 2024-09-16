@@ -71,17 +71,15 @@
           <div class="group relative cursor-pointer">
             <div
               class="flex items-center justify-between hover:bg-[#000000CC] text-[13px] pr-6 bg-gray-100 text-[#4dc45c]"
-              :class="dropdownHoverColor ? 'bg-[#000000CC]' : '' " 
-              >
-              <a class="menu-hover font-graphik uppercase text-green text-[#4dc45c] mx-2 py-1" onClick="">
+              :class="dropdownHoverColor ? 'bg-[#000000CC]' : ''">
+              <a class="menu-hover font-graphik uppercase text-green  mx-2 py-1" onClick="">
                 Product Type
               </a>
               <ArrowSvg size="8px" initialRotation="left" :fillColor="arrowFillColor2" />
             </div>
-            <div
-              @mouseenter="dropdownHoverColor = true" @mouseleave="dropdownHoverColor = false"
+            <div @mouseenter="dropdownHoverColor = true" @mouseleave="dropdownHoverColor = false"
               class="invisible absolute bg-[#000000CC] z-50 flex w-full flex-col text-gray-800 shadow-xl group-hover:visible">
-              <a v-for="link in links" :key="link.url" :href="link.url" 
+              <a v-for="link in links" :key="link.url" :href="link.url"
                 class="block border-b text-[12px] border-[#000000AA] py-1 px-2 font-graphikLight text-white hover:text-green">
                 {{ link.name }}
               </a>

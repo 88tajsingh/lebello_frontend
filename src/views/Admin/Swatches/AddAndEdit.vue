@@ -14,7 +14,7 @@
                         <div class="px-7">
                             <TextInput type="text" id="addTitle" class="block mr-2 h-[40px] w-full" label=""
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
-                                @update:modelValue="$clearError(errors,'title')" :hasCheckBox="checkBoxFlag"
+                                @update:modelValue="$clearError(errors, 'title')" :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="(value) => { checkedFields.title = value }" />
                             <!-- @update:checkValue="form.isTitle = $event" hasCheckBox -->
 
@@ -268,34 +268,34 @@ const handleCheckedItems = (checkedItems) => {
 
 // Submit Handler
 const handleSubmit = async () => {
-   if(!validateForm()) return
-   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    if (!validateForm()) return
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
-        loading.value = true;
-        try {
-            const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
-            const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
-            if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
-            const { status, data } = await action(payload);
-            if (status === 200 && data.success) {
-                if(hasCheckedFields){
+    loading.value = true;
+    try {
+        const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
+        const { deleted_at, created_at, updated_at, featured_image_url, ...payload } = form.value;
+        if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
+        const { status, data } = await action(payload);
+        if (status === 200 && data.success) {
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
+            else {
                 showToast(data.message, 'success');
                 store.dispatch('clearEditData');
                 router.push('/swatches');
-          }
-            } else {
-                showToast('Something went wrong', 'error');
             }
-        } catch (e) {
-            console.error(`Error ${store.getters.editData ? 'editing' : 'adding'} swatches:`, e);
+        } else {
             showToast('Something went wrong', 'error');
-        } finally {
-            loading.value = false;
         }
-    
+    } catch (e) {
+        console.error(`Error ${store.getters.editData ? 'editing' : 'adding'} swatches:`, e);
+        showToast('Something went wrong', 'error');
+    } finally {
+        loading.value = false;
+    }
+
 };
 
 // Global Update Handler
@@ -347,7 +347,7 @@ const fetchSwatchData = async () => {
 // Fetch Initial Data
 const fetchMaterialTreeData = async () => {
     try {
-        const domainId =  form.value.domain_id || store.getters.getDomain.id;
+        const domainId = form.value.domain_id || store.getters.getDomain.id;
         MaterialTreeListData.value = await MaterialTreeList({ domain_id: domainId });
     } catch (e) {
         console.error('Error fetching material tree data:', e);

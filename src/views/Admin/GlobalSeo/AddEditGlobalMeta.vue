@@ -1,4 +1,4 @@
-<template> 
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Meta Tag` : `Add New Meta Tag`">
         <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="GlobalMetaTags.deleteMetaTags"
             routeTo="global-seo" />

@@ -1,14 +1,14 @@
+import LoginServices from '@/services/LoginServices';
 import Vuex from 'vuex';
-import { encryptData, decryptData,} from './EncriptDecript';
 
 export default new Vuex.Store({
   state: {
-    token: decryptData(localStorage.getItem(encryptData('token'))) || null,
-    expiresAt: decryptData(localStorage.getItem(encryptData('expiresAt'))) || null,
-    user: decryptData(localStorage.getItem(encryptData('user'))) || null,
-    editData: '',
-    edit: decryptData(localStorage.getItem(encryptData('edit'))) || null,
-    domain: decryptData(localStorage.getItem(encryptData('domain'))) || null,
+    token: localStorage.getItem('token') || null,
+    expiresAt: localStorage.getItem('expiresAt')|| null,
+    user: safeJsonParse(localStorage.getItem('user')) || null,
+    editData: '', 
+    edit: safeJsonParse(localStorage.getItem('edit')) || null,
+    domain: safeJsonParse(localStorage.getItem('domain')) || null,
   },
   getters: {
     token: (state) => state.token,
@@ -23,45 +23,45 @@ export default new Vuex.Store({
     setToken(state, { token, expiresAt }) {
       state.token = token;
       state.expiresAt = expiresAt;
-      localStorage.setItem(encryptData('expiresAt'), encryptData(expiresAt));
-      localStorage.setItem(encryptData('token'), encryptData(token));
+      localStorage.setItem('expiresAt', expiresAt);
+      localStorage.setItem('token', token);
     },
     clearToken(state) {
       state.token = null;
-      localStorage.removeItem(encryptData('token'));
-      localStorage.removeItem(encryptData('expiresAt'));
+      localStorage.removeItem('token');
+      localStorage.removeItem('expiresAt');
     },
     setUser(state, user) {
       state.user = user;
-      localStorage.setItem(encryptData('user'), encryptData(user));
+      localStorage.setItem('user', JSON.stringify(user));
     },
     setEditData(state, data) {
       state.editData = data;
     },
     clearUser(state) {
       state.user = null;
-      localStorage.removeItem(encryptData('user'));
+      localStorage.removeItem('user');
     },
     setDomain(state, domain) {
-      localStorage.setItem(encryptData('domain'), encryptData(domain));
+      localStorage.setItem('domain', JSON.stringify(domain));
       state.domain = domain;
     },
     setEdit(state, data) {
-      localStorage.setItem(encryptData('edit'), encryptData(data));
+      localStorage.setItem('edit', JSON.stringify(data));
       state.edit = data;
     },
     clearEdit(state) {
       state.edit = null;
-      localStorage.removeItem(encryptData('edit'));
+      localStorage.removeItem('edit');
     }
   },
   actions: {
     login({ commit }, { token, user, expiresAt }) {
-      commit('setToken', { token, expiresAt });
-      commit('setUser', user);
+      commit('setToken', { token, expiresAt }); 
+      commit('setUser', user); 
     },
     refreshToken({ commit }, { token, expiresAt }) {
-      commit('setToken', { token, expiresAt });
+      commit('setToken', { token, expiresAt }); 
     },
     logout({ commit }) {
       commit('clearToken');
@@ -82,9 +82,17 @@ export default new Vuex.Store({
     clearEditData({ commit }) {
       commit('clearEdit');
     },
-    clearToken({ commit }) {
+    clearToken({commit}){
       commit('clearToken');
     }
   },
   modules: {}
 });
+
+function safeJsonParse(jsonString) {
+  try {
+    return JSON.parse(jsonString);
+  } catch (e) {
+    return null; 
+  }
+}

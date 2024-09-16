@@ -2,7 +2,6 @@ import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 
 class CommonServices {
-
   logout() {
     return instance.post(ApiConfig.logout)
   }
@@ -11,15 +10,15 @@ class CommonServices {
   }
 
   updateProfile(payload) {
-    return instance.put(ApiConfig.updateProfile , null, payload)
+    return instance.put(ApiConfig.updateProfile, payload)
   }
 
-  // taxonomy 
+  // taxonomy
   taxonomySorting(payload) {
     return instance.post(ApiConfig.taxonomySort, payload)
   }
 
-  // countries 
+  // countries
   allCountrys(payload) {
     return instance.get(ApiConfig.getAllCountries, payload)
   }
@@ -35,10 +34,10 @@ class CommonServices {
     return instance.post(ApiConfig.addDomains, payload)
   }
   deleteDomains(payload) {
-    return instance.delete(ApiConfig.deleteDomains, {params: {...payload}})
+    return instance.delete(ApiConfig.deleteDomains, { params: { ...payload } })
   }
 
-  // Currencies 
+  // Currencies
   getAllCurrencies(payload) {
     return instance.get(ApiConfig.getAllCurrencies, payload)
   }
@@ -46,7 +45,7 @@ class CommonServices {
     return instance.get(ApiConfig.getCurrenciesList, payload)
   }
 
-  // exchange   rates 
+  // exchange   rates
   getExchangeRates() {
     return instance.get(ApiConfig.getExchangeRatesList)
   }
@@ -54,10 +53,10 @@ class CommonServices {
     return instance.post(ApiConfig.addExchangeRates, payload)
   }
   editExchangeRates(payload) {
-    return instance.post(ApiConfig.editExchangeRates, payload,)
+    return instance.post(ApiConfig.editExchangeRates, payload)
   }
   deleteExchangeRates(payload) {
-    return instance.delete(ApiConfig.deleteExchangeRates, {params: {...payload}})
+    return instance.delete(ApiConfig.deleteExchangeRates, { params: { ...payload } })
   }
 
   // Tags
@@ -77,10 +76,10 @@ class CommonServices {
     return instance.delete(ApiConfig.deleteTags, { params: { ...payload } })
   }
   masterSlugUpdate(payload) {
-    return instance.post(ApiConfig.masterSlugUpdate, payload )
+    return instance.post(ApiConfig.masterSlugUpdate, payload)
   }
   masterSlugDelete(payload) {
-    return instance.post(ApiConfig.masterSlugDelete, payload )
+    return instance.post(ApiConfig.masterSlugDelete, payload)
   }
   BulkDeleteTags(payload) {
     return instance.post(ApiConfig.bulkDeleteTags, payload)
@@ -89,7 +88,14 @@ class CommonServices {
   getSwatchesMaterialList(payload) {
     return instance.get(ApiConfig.getSwatchesMaterialList, { params: { ...payload } })
   }
+  getSideMenu(payload) {
+    return instance.get(ApiConfig.roleBasedModule, { params: payload })
+  }
   
 
+
+  getRoles() {
+    return instance.get(ApiConfig.getRole)
+  }
 }
 export default new CommonServices()

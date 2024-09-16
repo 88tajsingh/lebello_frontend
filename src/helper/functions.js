@@ -149,3 +149,7 @@ export const checkForGlobalUpdate = (form) => {
   }
   return _.every(value, propValue => propValue === false);
 };
+
+export const checkPermissions = (form) => {
+  console.log("tested")
+};

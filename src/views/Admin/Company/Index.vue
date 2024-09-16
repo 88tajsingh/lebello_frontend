@@ -1,12 +1,14 @@
 <template>
     <!-- <div class="ml-96"><Languages/></div> -->
     <PageHeader> Company</PageHeader>
-    <div class="flex  content-between justify-between   mb-2">
-        <div class="flex">
-            <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
-                label="Bulk Options" v-model="bulkActionSelected" />
-            <Button class="px-2 py-2 m-auto" @click="()=>deleteMulModalIsOpen=true">Apply</Button>
-            <div class="max-w-52">
+    <div class="flex  content-between justify-between mb-2">
+        <div class="flex ">
+            <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
+                valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+            <Button v-if="permissions.write" class="px-2 py-2 m-auto"
+                @click="() => deleteMulModalIsOpen = true">Apply</Button>
+
+            <div class="max-w-52 mr-2">
                 <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                     v-model="pagiantionData.domain_id" />
             </div>
@@ -18,7 +20,8 @@
         <div class="flex rounded-lg bg-transparent">
             <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
                 v-model="search" />
-            <Button @click="() => { router.push({ name: 'company-form' }); store.dispatch('clearEditData'); }"
+            <Button v-if="permissions.write"
+                @click="() => { router.push({ name: 'company-form' }); store.dispatch('clearEditData'); }"
                 class="px-2 py-2 m-auto whitespace-nowrap">Add
                 Company</Button>
         </div>
@@ -33,9 +36,9 @@
                 <img :src="$filePath(data.value?.featured_image_data?.file_url)" alt="Material Image"
                     style="max-width: 50px; max-height: 50px" />
             </template>
-            <template #actions="data">
+            <template v-if="permissions.write" #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'company-form'}); store.dispatch('setEdit', data.value) }"
+                    <div @click="() => { router.push({ name: 'company-form' }); store.dispatch('setEdit', data.value) }"
                         id="edit svg">
                         <EditSvg />
                     </div>
@@ -44,7 +47,7 @@
                     </div>
                 </div>
             </template>
-            
+
         </vue3-datatable>
     </div>
 
@@ -52,7 +55,8 @@
         Do you want to delete ?
     </DeleteModal>
 
-    <DeleteModal v-model:isOpen="deleteMulModalIsOpen" :modalTitle="'Delete Multiple Company'" @delete="handleBulkActions">
+    <DeleteModal v-model:isOpen="deleteMulModalIsOpen" :modalTitle="'Delete Multiple Company'"
+        @delete="handleBulkActions">
         Do you want to delete ?
     </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -65,7 +69,7 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { companyCols,statusData } from '@/json/data'
+import { companyCols, statusData } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
@@ -77,10 +81,13 @@ import CompanyServices from '@/services/CompanyServices'
 const store = useStore();
 const router = useRouter();
 
+
+
 // Reactive state
+const permissions = store.getters.user.permissions;
 const bulkActionSelected = ref(null);
 const search = ref('');
-const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const bulkOption = [{ text: 'Delete', value: 'delete' }];
 const company_id = ref('');
 const dataTableLoading = ref(false);
@@ -92,14 +99,15 @@ const getDomainsList = ref([]);
 const deleteModalIsOpen = ref(false);
 const deleteMulModalIsOpen = ref(false);
 
+
 // Open Delete Modals
 const openDeleteModal = () => deleteModalIsOpen.value = true;
 
-const changeServer =(page) => {
-    const {pagesize,current_page} =page;
-    pagiantionData.value={...pagiantionData.value,limit:pagesize,page:current_page}
+const changeServer = (page) => {
+    const { pagesize, current_page } = page;
+    pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
     handleGetCompany(pagiantionData.value);
-  }
+}
 
 // Fetch Companies Data
 const handleGetCompany = async (payload) => {

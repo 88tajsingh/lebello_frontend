@@ -10,7 +10,7 @@
       </div>
     <div class="flex ml-auto">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name:'pages-form'});store.dispatch('clearEditData'); }" class="px-2 py-2">Add Pages</Button>
+      <Button v-if="permissions.write" @click="() => {router.push({ name:'pages-form'});store.dispatch('clearEditData'); }" class="px-2 py-2">Add Pages</Button>
       
     </div>
   </div>
@@ -27,7 +27,7 @@
       <template #image="data">
         <img :src="data.value.image" alt="Pages Image" style="max-width: 50px; max-height: 50px" />
       </template>
-      <template #actions="data">
+      <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
           <div @click="() => { router.push({ name: 'pages-form' }); store.dispatch('setEdit', data.value); }" id="edit svg">
             <EditSvg />
@@ -49,8 +49,6 @@
 import { ref, onMounted,watch } from 'vue';
 import { showToast } from '@/helper/functions'
 import { getDomins } from '@/helper/Apis';
-import { statusData } from '@/json/data';
-import AddEditForm from './AddEditForm.vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PagesServices from '@/services/PagesServices';
 import { useRouter } from 'vue-router';
@@ -69,6 +67,7 @@ const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
 const actionsFlag = ref(null);
+const permissions =  store.getters.user.permissions;
 const deleteModalIsOpen = ref(false);
 const  totalRows = ref('')
 const cols = ref([

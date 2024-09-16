@@ -3,27 +3,31 @@
   <PageHeader> Home Slider</PageHeader>
   <div class="flex  content-between justify-between   mb-2">
     <div class="flex">
-      <Select cusClass="h-[40px] border-box" :options="bulkOptions" showfield="text" valueField="value"
-        label="Bulk Options" v-model="bulkActionSelected" />
-      <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+      <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOptions" showfield="text"
+        valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
       <div class="max-w-52 mr-2">
         <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-            v-model="pagiantionData.domain_id" />
-    </div>
-    <div class="max-w-52">
+          v-model="pagiantionData.domain_id" />
+      </div>
+      <div class="max-w-52">
         <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-            v-model="pagiantionData.status" />
-    </div>
+          v-model="pagiantionData.status" />
+      </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
-      <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name: 'home-slider-form'}); store.dispatch('clearEditData'); }"class="px-2 py-2 m-auto whitespace-nowrap">Add Home Slider</Button>
-    </div>  
+      <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
+        v-model="search" />
+      <Button v-if="permissions.write"
+        @click="() => { router.push({ name: 'home-slider-form' }); store.dispatch('clearEditData'); }"
+        class="px-2 py-2 m-auto whitespace-nowrap">Add Home Slider</Button>
+    </div>
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-    :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="data" :columns="sliderCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePage">
+    <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+      :hasCheckbox="true" :cloneHeaderInFooter="true" :stickyHeader="false" :rows="data" :columns="sliderCols"
+      :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
+      @change="changePage">
       <template #name="data">
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -31,17 +35,19 @@
         </div>
       </template>
       <template #featured_image_url="data">
-        <img :src="$filePath(data.value.featured_image_url)" alt="Material Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="$filePath(data.value.featured_image_url)" alt="Material Image"
+          style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
-        <span v-if="data.value.status===1">Draft</span>
-        <span v-else-if="data.value.status===2">Pending Review</span>
-        <span v-else-if="data.value.status===3">Publish</span>
+        <span v-if="data.value.status === 1">Draft</span>
+        <span v-else-if="data.value.status === 2">Pending Review</span>
+        <span v-else-if="data.value.status === 3">Publish</span>
         <span v-else>Status not selected</span>
       </template>
-      <template #actions="data">
+      <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'home-slider-form' }); store.dispatch('setEdit', data.value); }" id="edit svg">
+          <div @click="() => { router.push({ name: 'home-slider-form' }); store.dispatch('setEdit', data.value); }"
+            id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => { material_id = data.value; openDeleteModal(); }">
@@ -60,12 +66,12 @@
 
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue'
-import { ref, onMounted,watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { sliderCols,bulkOptions,statusData } from '@/json/data'
+import { sliderCols, bulkOptions, statusData } from '@/json/data'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import HomeSliderServices from '@/services/HomeSliderServices'
 import { useRouter } from 'vue-router';
@@ -80,7 +86,8 @@ const search = ref('')
 const material_id = ref('')
 const loading = ref(false)
 const dataTableLoding = ref(false)
-const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
+const permissions = store.getters.user.permissions;
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const data = ref([])
 const totalRows = ref(0)
 const datatable = ref(null)
@@ -99,7 +106,7 @@ const changePage = async (page) => {
 const handleGetHomeSlider = async (payload) => {
   try {
     const { status, data: responseData } = await HomeSliderServices.getHomeSlider(payload)
-    if (status === 200 ) {
+    if (status === 200) {
       data.value = responseData.data || []
       totalRows.value = responseData.total_records || 0
     }
@@ -162,17 +169,17 @@ onMounted(() => {
 })
 
 watch(
-    () => pagiantionData.value.domain_id,
-    () => {
-      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
-      store.dispatch('setDomain', defaultDomain[0]);
-      handleGetHomeSlider(pagiantionData.value);
-    }
+  () => pagiantionData.value.domain_id,
+  () => {
+    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    store.dispatch('setDomain', defaultDomain[0]);
+    handleGetHomeSlider(pagiantionData.value);
+  }
 );
 watch(
-    () => pagiantionData.value.status,
-    () => {
-      handleGetHomeSlider(pagiantionData.value);
-    }
+  () => pagiantionData.value.status,
+  () => {
+    handleGetHomeSlider(pagiantionData.value);
+  }
 );
 </script>
