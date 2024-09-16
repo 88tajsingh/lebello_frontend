@@ -150,8 +150,12 @@ const handleSubmit = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
-            showToast(store.getters.editData ? 'Edit Contract Type successfully' : 'Add contract successfully', 'success');
-            router.push('/contract-type');
+          if(hasCheckedFields)
+          handleGlobalUpdate();
+        else{
+          showToast(res.data.message, 'success');
+          router.push('/contract-type');
+        }
         } else if (res.status === 400) {
             showToast(res.data.data.error || 'Something went wrong', 'error');
         }

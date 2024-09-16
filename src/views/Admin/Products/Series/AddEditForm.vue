@@ -199,7 +199,6 @@ const form = ref({
   ...store.getters.editData,
   parent_product_series: store.getters.editData?.parent_product_series ?? 0
 })
-const PreviousDomain = ref(store.getters.getDomain.id)
 const ProductSeriesList = ref([])
 const loading = ref(false)
 const errors = ref({})
@@ -227,16 +226,10 @@ const validateForm = () => {
   return true
 }
 
-// Handle Form Submission
+// Submit Handler
 const handleSubmit = async () => {
   if (!validateForm()) return
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
-// Submit Handler
-const handleAddEditApi = async () => {
-  
   loading.value = true
   try {
       const { deleted_at, created_at,slug,updated_at,default_master,domains_data,default_domain,featured_image_data,...payload } = form.value
@@ -245,8 +238,15 @@ const handleAddEditApi = async () => {
     const action = store.getters.editData ? ProductServices.editProductSeries : ProductServices.addProductSeries
     const { status, data } = await action(payload)
     if (status === 200 && data.success) {
-      showToast(data.message, 'success')
-      router.push('/product-series')
+      if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+              store.dispatch('clearEditData');
+              showToast(data.message, 'success')
+              router.push('/product-series')
+            }
+      
     } else {
       showToast(data.message, 'error')
     }
@@ -346,6 +346,6 @@ watch(() => form.value.parent_contract, (newValue) => {
 
 // Computed Property
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+  return (form.value.id ? 'Update' : 'Submit')
 })
 </script>

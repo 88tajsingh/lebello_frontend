@@ -100,15 +100,10 @@ const validateForm = () => {
   return true;
 };
 
+// Submit Handler
 const handleSubmit = async () => {
     if (!validateForm('name', 'Name', form, errors)) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
-// Submit Handler
-const handleAddEditApi = async () => {
-  
     loading.value = true;
     try {
       const { deleted_at, created_at,slug,domains_data,default_domain, updated_at, ...payload } = form.value;
@@ -118,9 +113,15 @@ const handleAddEditApi = async () => {
       const action = store.getters.editData ? ProjectServices.editProjectCategory : ProjectServices.addProjectCategory;
       const { status, data } = await action(payload);
       if (status === 200 && data.success) {
-        showToast(data.message, 'success');
+        if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+                showToast(data.message, 'success');
         store.dispatch('clearEditData');
         router.push('/Project-category');
+        }
+       
       } else if (status === 400) {
         showToast(data.message, 'error');
       }

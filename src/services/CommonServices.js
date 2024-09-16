@@ -88,5 +88,7 @@ class CommonServices {
   getSwatchesMaterialList(payload) {
     return instance.get(ApiConfig.getSwatchesMaterialList, { params: { ...payload } })
   }
+  
+
 }
 export default new CommonServices()

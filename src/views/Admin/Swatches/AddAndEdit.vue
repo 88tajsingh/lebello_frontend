@@ -266,15 +266,11 @@ const handleCheckedItems = (checkedItems) => {
     form.value = { ...form.value, materials: checkedItems }
 };
 
-const handleSubmit = async () => {
-    validateForm() 
-    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-    hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
 // Submit Handler
-const handleAddEditApi = async () => {
-   
+const handleSubmit = async () => {
+   if(!validateForm()) return
+   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+
         loading.value = true;
         try {
             const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
@@ -282,9 +278,14 @@ const handleAddEditApi = async () => {
             if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
             const { status, data } = await action(payload);
             if (status === 200 && data.success) {
-                showToast(`Swatches ${store.getters.editData ? 'edited' : 'added'} successfully`, 'success');
+                if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+                showToast(data.message, 'success');
                 store.dispatch('clearEditData');
                 router.push('/swatches');
+          }
             } else {
                 showToast('Something went wrong', 'error');
             }
@@ -375,7 +376,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 </script>
 

@@ -158,15 +158,10 @@ const validateForm = () => {
   return true
 }
 
-const handleSubmit = async () => {
-  if (!validateForm()) return
-  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-  hasCheckedFields ? handleGlobalUpdate() : handleAddEditApi()
-}
-
 // Submit Handler
-const handleAddEditApi = async () => {
+const handleSubmit = async () => {
   if (validateForm()) {
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     loading.value = true
     try {
       const { deleted_at, created_at, slug, domains_data, default_domain, updated_at, ...payload } =
@@ -179,9 +174,15 @@ const handleAddEditApi = async () => {
         : StoreServices.addStoreCategory
       const { status, data } = await action(payload)
       if (status === 200 && data.success) {
-        showToast(data.message, 'success')
-        store.dispatch('clearEditData')
-        router.push('/store-category')
+        if(hasCheckedFields){
+                handleGlobalUpdate();
+            }
+            else{
+              showToast(data.message, 'success');
+              router.push('/store-category')
+              store.dispatch('clearEditData')
+          }
+        
       } else if (status === 400) {
         showToast(data.message, 'error')
       }
@@ -276,9 +277,7 @@ watch(
 
 // Computed Property
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean)
-    ? 'Global Update'
-    : form.value.id
+  return  form.value.id
       ? 'Update'
       : 'Submit'
 })
