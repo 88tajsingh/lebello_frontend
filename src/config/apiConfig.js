@@ -303,7 +303,16 @@ const ApiConfig = {
   addMetaTags: '/add-meta-tag',
   editMetaTags: '/add-meta-tag',
   deleteMetaTags: '/delete-meta-tag',
-  bulkDeleteMetaTags: '/bulk-meta-tag-delete'
+  bulkDeleteMetaTags: '/bulk-meta-tag-delete',
+
+  //User Routes
+  getUser: '/get-user-list',
+  addUser: '/add-user',
+  editUser: '/edit-user',
+  statusUser: '/active-user',
+
+  // Role API
+  getRole: '/role-list'
 }
 
 export default ApiConfig

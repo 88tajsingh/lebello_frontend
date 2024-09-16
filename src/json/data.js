@@ -519,3 +519,11 @@ export const MetaTagCols = [
   { field: 'meta_keywords', title: 'Meta Description', filter: true },
   { field: 'actions', title: 'Actions' }
 ]
+
+export const usersCols = [
+  { field: 'name', title: 'Name', slot: true },
+  { field: 'email', title: 'Email' },
+  { field: 'role', title: 'Role', filter: true },
+  { field: 'active', title: 'Status', filter: true },
+  { field: 'actions', title: 'Actions' }
+]
