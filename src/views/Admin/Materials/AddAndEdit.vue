@@ -4,29 +4,23 @@
             masterKey="master_material_id" :masterDeleteService="MaterialsServices.deleteMasterMaterial"
             routeTo="materials" />
         <template v-if="form.id" v-slot:header>
-            <MasterSlugForm
-        :form="form"
-        @update-slug="()=>fetchMaterialData()"
-        :SlugUpdateservices = 'MaterialsServices.masterMaterialSlugUpdate'
-        masteridKeyName='master_material_id'
-      />
-    </template>
+            <MasterSlugForm :form="form" @update-slug="() => fetchMaterialData()"
+                :SlugUpdateservices='MaterialsServices.masterMaterialSlugUpdate' masteridKeyName='master_material_id' />
+        </template>
         <form @submit.prevent="handleSubmit">
             <div class="p-6.5 grid grid-cols-2 gap-6">
                 <div class="flex flex-col ">
                     <TextInput type="text" class=" " label='Name' :class="{ 'border-red': errors.name }" placeholder=""
-                        v-model="form.name" :errMessage="errors.name" @update:modelValue="$clearError(errors,'name')"
+                        v-model="form.name" :errMessage="errors.name" @update:modelValue="$clearError(errors, 'name')"
                         :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }" />
-                    <p class="text-sm text-[#646970] text-[11.5px]"
-                    :class="{'ml-8':form.id}"
-                    >
+                    <p class="text-sm text-[#646970] text-[11.5px]" :class="{ 'ml-8': form.id }">
                         The name is how it appears on your site.
                     </p>
                 </div>
                 <div class="flex flex-col ">
-                    <TextInput type="text" label='Slug (Read Only)' disabled class="block mr-2 h-[40px] w-full" :class="{ 'border-red-500': errors.slug }"
-                        placeholder="" v-model="form.slug" :errMessage="errors.slug" 
-                        @update:model="clearError(errors, 'slug')" />
+                    <TextInput type="text" label='Slug (Read Only)' disabled class="block mr-2 h-[40px] w-full"
+                        :class="{ 'border-red-500': errors.slug }" placeholder="" v-model="form.slug"
+                        :errMessage="errors.slug" @update:model="clearError(errors, 'slug')" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
                         only
@@ -34,8 +28,9 @@
                     </p>
                 </div>
                 <div class="flex flex-col ">
-                    <Select :options="MaterialTreeListData" title="Parent Material" showfield="name" class="w-full" :defaultZero='true'
-                        valueField="id" label="Select Parent Material" v-model="form.parent_material" />
+                    <Select :options="MaterialTreeListData" title="Parent Material" showfield="name" class="w-full"
+                        :defaultZero='true' valueField="id" label="Select Parent Material"
+                        v-model="form.parent_material" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of
                         Bebop
@@ -44,8 +39,8 @@
                     <InputError class="mt-2" :message="errors?.parent_material" />
                 </div>
                 <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Display in Material Options" showfield="name" class="w-full" valueField="value"
-                        label="Select Material Options" v-model="form.display_material_option"
+                    <Select :options="trueFalse" title="Display in Material Options" showfield="name" class="w-full"
+                        valueField="value" label="Select Material Options" v-model="form.display_material_option"
                         :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.display_material_option = value }" />
                     <InputError class="mt-2" :message="errors?.display_material_option" />
@@ -56,20 +51,22 @@
                         v-model="form.material_price" :errMessage="errors.material_price" :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.material_price = value }"
                         @update:model="clearError(errors, 'material_price')" />
-                    <p class="text-sm text-[#646970] text-[11.5px]" :class="{'ml-8':form.id}">
+                    <p class="text-sm text-[#646970] text-[11.5px]" :class="{ 'ml-8': form.id }">
                         The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
                         only
                         letters, numbers, and hyphens.
                     </p>
                 </div>
                 <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Yellow Banner Display On Material Images" showfield="name" class="w-full" valueField="value"
-                        label="Select an option" v-model="form.yellow_banner_material_image" :hasCheckBox="checkBoxFlag"
+                    <Select :options="trueFalse" title="Yellow Banner Display On Material Images" showfield="name"
+                        class="w-full" valueField="value" label="Select an option"
+                        v-model="form.yellow_banner_material_image" :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.yellow_banner_material_image = value }" />
                 </div>
                 <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Show New Badge" showfield="name" class="w-full" valueField="value"
-                        label="Select an option" v-model="form.show_new_badge" :hasCheckBox="checkBoxFlag"
+                    <Select :options="trueFalse" title="Show New Badge" showfield="name" class="w-full"
+                        valueField="value" label="Select an option" v-model="form.show_new_badge"
+                        :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.show_new_badge = value }" />
                 </div>
                 <div class="flex flex-col ">
@@ -86,8 +83,7 @@
                         :errMessage="errors.material_code" @update:model="clearError(errors, 'material_code')" />
                 </div>
                 <div class="flex flex-col ">
-                    <TextInput type="text" class="block mr-2 h-[40px] w-full"
-                        label="Group Name"
+                    <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Group Name"
                         :class="{ 'border-red-500': errors.group_name }" placeholder="" v-model="form.group_name"
                         :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }"
                         :errMessage="errors.group_name" @update:model="clearError(errors, 'group_name')" />
@@ -106,37 +102,38 @@
                         @update:model="clearError(errors, 'trade_mark_label')" />
                 </div>
                 <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Show New Badge 2021" showfield="name" class="w-full" valueField="value"
-                        label="Select an option" v-model="form.show_new_badge_2021" :hasCheckBox="checkBoxFlag"
+                    <Select :options="trueFalse" title="Show New Badge 2021" showfield="name" class="w-full"
+                        valueField="value" label="Select an option" v-model="form.show_new_badge_2021"
+                        :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.show_new_badge_2021 = value }" />
 
                     <InputError class="mt-2" :message="errors?.show_new_badge_2021" />
                 </div>
                 <div class="flex flex-col ">
-                <Select :options="colors" title="Single Color" showfield="name" class="w-full" valueField="value" label="Select Color"
-                        v-model="form.single_color" :hasCheckBox="checkBoxFlag"
+                    <Select :options="colors" title="Single Color" showfield="name" class="w-full" valueField="value"
+                        label="Select Color" v-model="form.single_color" :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.single_color = value }" />
                 </div>
                 <div class="flex flex-col ">
-                    <MultiSelect v-model="form.multiple_color" label="Multiple Color" :options="colors" placeHolder="Select multiple color"
-                        :hasCheckBox="checkBoxFlag"
+                    <MultiSelect v-model="form.multiple_color" label="Multiple Color" :options="colors"
+                        placeHolder="Select multiple color" :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.multiple_color = value }" />
                     <InputError class="mt-2" :message="errors?.multiple_color" />
                 </div>
                 <div class="flex flex-col w-full">
-                    <InputLabel for="Featured_image" :class="{'ml-8':form.id}" value="Featured_image" />
-                        <div class=" flex  w-full h-auto ">
-                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
-                            <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                @click="() => imageData.media_id.IsOpen = true"> {{
-                                    imageData.media_id.mediaName }}</div>
+                    <InputLabel for="Featured_image" :class="{ 'ml-8': form.id }" value="Featured_image" />
+                    <div class=" flex  w-full h-auto ">
+                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                            @click="() => imageData.media_id.IsOpen = true"> {{
+                                imageData.media_id.mediaName }}</div>
                     </div>
                 </div>
                 <div class="flex flex-col w-full">
-                    <TextInput type="text" class="block mr-2  w-full" label='Description' :class="{ 'border-red-500': errors.description }"
-                        placeholder="" :isTextarea="true" :rows="4" v-model="form.description"
-                        :errMessage="errors.description" @update:model="clearError(errors, 'description')"
-                        :hasCheckBox="checkBoxFlag"
+                    <TextInput type="text" class="block mr-2  w-full" label='Description'
+                        :class="{ 'border-red-500': errors.description }" placeholder="" :isTextarea="true" :rows="4"
+                        v-model="form.description" :errMessage="errors.description"
+                        @update:model="clearError(errors, 'description')" :hasCheckBox="checkBoxFlag"
                         @update:checkValue="(value) => { checkedFields.description = value }" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The description is not prominent by default; however, some themes may show it.
@@ -144,8 +141,9 @@
                 </div>
                 <div class="flex flex-col w-full">
                     <div class=" mt-3 flex overflow-x-auto">
-                        <img v-if="imageData.media_id.images[0]"v-for="file in imageData.media_id.images" :key="file" :src="$filePath(file?.file_url)"
-                            class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'" />
+                        <img v-if="imageData.media_id.images[0]" v-for="file in imageData.media_id.images" :key="file"
+                            :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                            :alt="file?.alternative_text || 'image'" />
                     </div>
                 </div>
             </div>
@@ -175,7 +173,7 @@ import InputError from '@/components/Admin-components/form-components/InputError
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
-import {showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
+import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
 import { useRouter } from 'vue-router';
@@ -219,26 +217,26 @@ const validateForm = () => {
 
 // Handle form submission (add or edit materials)
 const handleSubmit = async () => {
-    if(!validateForm()) return
+    if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
-    const { deleted_at, created_at, updated_at,slug,domains_data,default_domain,default_master, media_id_url, ...payload } = form.value;
+    const { deleted_at, created_at, updated_at, slug, domains_data, default_domain, default_master, media_id_url, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
         delete payload.id;
     }
     const service = store.getters.editData ? MaterialsServices.editMaterial : MaterialsServices.addMaterial;
-    
+
     try {
         const { status, data } = await service(payload);
-        
+
         if (status === 200 && data.success) {
-            if(hasCheckedFields){
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
-            showToast(data.message, 'success');
-            router.push('/materials');
-        }
+            else {
+                showToast(data.message, 'success');
+                router.push('/materials');
+            }
         } else {
             showToast(data.message, 'error');
         }
@@ -289,9 +287,9 @@ const fetchMaterialData = async () => {
         showToast('Something went wrong', 'error')
         console.error('Error while fetching data:', error)
     }
-    finally{
-    loading.value=false;
-  }
+    finally {
+        loading.value = false;
+    }
 }
 
 // Fetch material tree data

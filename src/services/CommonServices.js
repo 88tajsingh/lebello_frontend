@@ -88,6 +88,11 @@ class CommonServices {
   getSwatchesMaterialList(payload) {
     return instance.get(ApiConfig.getSwatchesMaterialList, { params: { ...payload } })
   }
+  getSideMenu(payload) {
+    return instance.get(ApiConfig.roleBasedModule, { params: payload })
+  }
+  
+
 
   getRoles() {
     return instance.get(ApiConfig.getRole)

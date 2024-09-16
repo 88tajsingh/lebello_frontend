@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Contract` : `Add New Contract`">
-        
+
         <!-- domain select delete master delete  -->
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ContractServices.deleteNewContract"
             masterKey="master_contract_design_id" :masterDeleteService="ContractServices.deleteMasterContractDesign"
@@ -15,7 +15,7 @@
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
-                    
+
                     <div>
                         <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title" placeholder="Add title"
                             v-model="form.title" :errMessage="errors.title" :errors="errors" :hasCheckBox="checkBoxFlag"
@@ -71,12 +71,12 @@
                                 <div class=' mb-2'>
                                     <InputLabel for="ContractLogo" value="Show on Contract HomePage Slide" />
                                     <span>
-                                        Select  option to show this contract on contract home slide section.
+                                        Select option to show this contract on contract home slide section.
                                     </span>
                                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                                        label="Select an option" v-model="form.contract_home_page_slide" 
+                                        label="Select an option" v-model="form.contract_home_page_slide"
                                         :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.contract_home_page_slide = value"/>
+                                        @update:checkValue="value => checkedFields.contract_home_page_slide = value" />
                                 </div>
                                 <TextInput id="TitleBackground" type="text" class="block w-full mr-2 mb-2 h-[33px]"
                                     v-model="form.contract_background_title" placeholder="" label="Title Background		
@@ -164,7 +164,7 @@
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 class=" text-sm ml-auto px-3 py-2">
-                                {{buttonText}}
+                                {{ buttonText }}
                             </Button>
                         </div>
                     </Accordion>
@@ -204,12 +204,12 @@
                         <Accordion :open="true" header="Featured Option">
                             <div class="mt-2 px-6  h-auto ">
                                 <p>
-                                   Select an option yes, it will be displayed
+                                    Select an option yes, it will be displayed
                                     at the top of
                                     'Contract Design' page
                                 </p>
-                                <Select :options="trueFalse" showfield="name" class="w-full" valueField="value" label="Select an option"
-                                    v-model="form.featured_option" :hasCheckBox="checkBoxFlag"
+                                <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+                                    label="Select an option" v-model="form.featured_option" :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.featured_option = value" />
                             </div>
                         </Accordion>
@@ -317,8 +317,9 @@
                                         <SingleCheck v-if="form.id" label="" v-model="checkedFields.contract_design">
                                         </SingleCheck>
                                         <RadioButton v-for="option in capsNOCaps" :key="option.value" name="Visibility"
-                                        :value="option.value" :label="option.label" :modelValue="form.contract_design"
-                                        @update:modelValue="form.contract_design = $event" />
+                                            :value="option.value" :label="option.label"
+                                            :modelValue="form.contract_design"
+                                            @update:modelValue="form.contract_design = $event" />
                                     </div>
                                 </div>
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
@@ -400,7 +401,6 @@ const store = useStore();
 const errors = ref({});
 const loading = ref(false);
 const form = ref(store.getters.editData || { status: '', simple_fields: false, description: '', contract_home_page_slide: 0 });
-const PreviousDomain = ref(null);
 const contractLocation = ref([]);
 const contractType = ref([]);
 const checkedFields = ref({})
@@ -448,14 +448,14 @@ const handleSubmit = async () => {
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
-            if(hasCheckedFields){
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
+            else {
                 showToast(res.data.message, 'success');
                 router.push('/Contract-Design');
             }
-        
+
         }
     } catch (e) {
         console.error('Error:', e);
@@ -501,7 +501,7 @@ const fetchDomainContractData = async () => {
         showToast('Something went wrong', 'error')
         console.error('Error while fetching data:', error)
     }
-    finally{
+    finally {
         loading.value = false;
     }
 }

@@ -144,7 +144,7 @@ const validateForm = () => {
 
 // Submit Handler
 const handleSubmit = async () => {
-    if(!validateForm()) return
+    if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     loading.value = true
     try {
@@ -166,13 +166,13 @@ const handleSubmit = async () => {
         }
         const { status, data } = await action(payload)
         if (status === 200 && data.success) {
-            if(hasCheckedFields){
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
-            showToast(data.message, 'success');
-            router.push('/projects')
-        }
+            else {
+                showToast(data.message, 'success');
+                router.push('/projects')
+            }
         } else if (status === 400) {
             showToast(data.message, 'error')
         }
@@ -267,6 +267,6 @@ watch(
 
 // Computed Property
 const buttonText = computed(() => {
-    return form.value.id ? 'Update': 'Submit'
+    return form.value.id ? 'Update' : 'Submit'
 })
 </script>

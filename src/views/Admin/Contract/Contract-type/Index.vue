@@ -3,26 +3,33 @@
 
   <div class="flex content-between justify-between px-1 mb-2">
     <div class="flex">
-      <Select cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button class="px-2 py-2 m-auto"@click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
+      <Select v-if="permissions.write" cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text"
+        valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto"
+        @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+          v-model="domain_id" />
       </div>
     </div>
     <div class="flex">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
-      <Button @click="() => {router.push({ name: 'Contract-type-form'});store.dispatch('clearEditData'); }" class="px-2 py-2">Add Contract Type</Button>
-      
+      <Button v-if="permissions.write"
+        @click="() => { router.push({ name: 'Contract-type-form' }); store.dispatch('clearEditData'); }"
+        class="px-2 py-2">Add Contract Type</Button>
+
     </div>
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-    :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false"
-    :rows="rows" :columns="contractTypeCols" :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changeServer">
-     
-      <template #actions="data">
+    <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+      :hasCheckbox="true" :cloneHeaderInFooter="true" :stickyHeader="false" :rows="rows" :columns="contractTypeCols"
+      :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
+      @change="changeServer">
+
+      <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() =>{router.push({ name:'Contract-type-form'}); store.dispatch('setEdit', data.value); }" id="edit svg">
+          <div @click="() => { router.push({ name: 'Contract-type-form' }); store.dispatch('setEdit', data.value); }"
+            id="edit svg">
             <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
             <EditSvg />
           </div>
@@ -40,7 +47,8 @@
   <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
     <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
   </PopupModal>
-  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Contract Type'" @delete="handleDeleteContractType">
+  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Contract Type'"
+    @delete="handleDeleteContractType">
     Do you want to delete?
   </DeleteModal>
 
@@ -51,7 +59,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted,watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import ContractServices from '@/services/ContractServices';
 import { useRouter } from 'vue-router';
@@ -67,6 +75,7 @@ const loading = ref(false);
 const datatable = ref('')
 const bulkPopup = ref(false);
 const search = ref('');
+const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDominsList = ref([])
 const domain_id = ref('')
@@ -77,7 +86,7 @@ const actionsFlag = ref(null);
 const modalIsOpen = ref(false);
 const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
-const  totalRows = ref('')
+const totalRows = ref('')
 
 const openDeleteModal = (data) => {
   deleteModalIsOpen.value = true;
@@ -90,10 +99,10 @@ const openModal = () => {
 };
 
 const editModal = (data) => {
-  console.log("data " ,data)
+  console.log("data ", data)
   editData.value = { ...data.value };
   // router.push({ name: 'EditPages', params: { id: data.value.id } });
-  editIsOpen.value=true;
+  editIsOpen.value = true;
 };
 
 const handleMouseEnter = (data) => {
@@ -108,14 +117,14 @@ const isRowHovered = (value) => {
   return actionsFlag.value === value.name;
 };
 
-const changeServer =(page) => {
+const changeServer = (page) => {
   console.log("page changed", page)
-  const payload = {limit:page.pagesize,page:page.current_page}
+  const payload = { limit: page.pagesize, page: page.current_page }
   handleGetContractType(payload);
 }
 const navigateToRoute = () => {
-      router.push({ name: 'EditPages', params: { id: '1' } });
-    };
+  router.push({ name: 'EditPages', params: { id: '1' } });
+};
 
 // api calls
 const handleGetContractType = async (payload) => {
@@ -152,10 +161,10 @@ const handleDeleteContractType = async () => {
 
 const handleBulkActions = async () => {
   if (bulkActionSelected.value !== 'Delete') return;
-  
+
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
-  
+
   loading.value = true;
   try {
     const res = await ContractServices.BulkDeleteContractType({ id: ids });
@@ -186,11 +195,11 @@ onMounted(() => {
 );
 
 watch(
-    () => domain_id.value,
-    () => {
-      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
-      store.dispatch('setDomain', defaultDomain[0]);
-      handleGetContractType({limit:10,page:1,domain_id:domain_id.value});
-    }
+  () => domain_id.value,
+  () => {
+    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    store.dispatch('setDomain', defaultDomain[0]);
+    handleGetContractType({ limit: 10, page: 1, domain_id: domain_id.value });
+  }
 );
 </script>

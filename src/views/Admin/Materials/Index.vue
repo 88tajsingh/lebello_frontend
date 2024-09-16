@@ -5,9 +5,9 @@
   <!-- Actions and Filters -->
   <div class="flex content-between justify-between mb-2">
     <div class="flex">
-      <Select cusClass="h-[40px] border-box" :options="bulkOptions" showfield="text" valueField="value"
-        label="Bulk Options" v-model="bulkActionSelected" />
-      <Button class="px-2 py-2 m-auto" @click="applyBulkActions">
+      <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOptions" showfield="text"
+        valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="applyBulkActions">
         Apply
       </Button>
       <div class="w-52">
@@ -18,7 +18,7 @@
     <div class="flex rounded-lg bg-transparent">
       <TextInput type="text" class="block bg-white mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
         v-model="searchQuery" />
-      <Button @click="navigateToAddMaterial" class="px-2 py-2 m-auto whitespace-nowrap">
+      <Button v-if="permissions.write" @click="navigateToAddMaterial" class="px-2 py-2 m-auto whitespace-nowrap">
         Add Materials
       </Button>
     </div>
@@ -35,7 +35,7 @@
         <img :src="$filePath(data.value?.media_data?.file_url)" alt="Material Image"
           style="max-width: 50px; max-height: 50px" />
       </template>
-      <template #actions="data">
+      <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
           <div @click="editMaterial(data.value)" id="edit svg">
             <EditSvg />
@@ -78,6 +78,7 @@ const router = useRouter()
 // State variables
 const bulkActionSelected = ref(null)
 const searchQuery = ref('')
+const permissions = store.getters.user.permissions;
 const bulkOptions = [{ text: 'Delete', value: 'delete' }]
 const selectedMaterialId = ref(null)
 const isDataLoading = ref(false)

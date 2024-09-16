@@ -7,10 +7,11 @@
     <!-- menu icon  -->
     <div class="relative" ref="closeMenu">
       <div class="absolute top-24 right-0">
-        <v-card id="mySidenav" :dark="active" @click="active = true" :class="{ 'w-[230px] right-0  ': isOpen, 'w-[230px] right-[-250px]': !isOpen }"
+        <v-card id="mySidenav" :dark="active" @click="active = true"
+          :class="{ 'w-[230px] right-0  ': isOpen, 'w-[230px] right-[-250px]': !isOpen }"
           class="sidenav bg-[#ededed] text-graphik text-[14px] pb-2 z-50 absolute top-7 right-0 transition-all duration-10  00 overflow-hidden">
           <div class=" ">
-            <div class="flex border border-gray-400 items-center">
+            <diva class="flex border border-gray-400 items-center">
               <div class="sticky top-3 p-4 border-r border-gray-400">
                 <MenuSvg size="15px" fillColor="black" />
               </div>
@@ -19,7 +20,7 @@
                   <a href="https://www.lebello.com/product/" class="uppercase">Collection 2024</a>
                 </h3>
               </div>
-            </div>
+            </diva>
             <div id="" class="text-black">
               <div v-for="(item, index) in items" :key="index" class="border-0" :class="{
                 'rounded-t-lg': index === 0,
@@ -53,7 +54,7 @@
                         v-for="(sub, itemIndex) in item.subMenu" :key="itemIndex">
                         <a href="#" class="font-graphikLight text-[13px]">{{
                           sub.name
-                        }}</a>
+                          }}</a>
                       </li>
                     </ul>
                   </div>
@@ -182,121 +183,121 @@ const closeSideMenu = () => {
 };
 onClickOutside(closeMenu, closeSideMenu);
 
- const products = [
+const products = [
   {
-  id: 1,
-  name: "Sandbar Jax Bch | Springhill Suites By Marriott",
-  location: "Jacksonville Beach, FL",
-  link: "https://lebello.com/contract_design/springhill-suites/",
-  image:
-    "http://lebello.com/wp-content/uploads/thumbs/SpringhillSuites-JacksonvilleFL-350X234.png",
-},
-{
-  id: 2,
-  name: "Watt Plaza",
-  location: "Los Angeles, CA",
-  link: "https://lebello.com/contract_design/watt-plaza/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
-{
-  id: 2,
-  name: "Watt Plaza",
-  location: "Los Angeles, CA",
-  link: "https://lebello.com/contract_design/watt-plaza/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
-{
-  id: 2,
-  name: "Watt Plaza",
-  location: "Los Angeles, CA",
-  link: "https://lebello.com/contract_design/watt-plaza/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
-{
-  id: 2,
-  name: "Watt Plaza",
-  location: "Los Angeles, CA",
-  link: "https://lebello.com/contract_design/watt-plaza/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
-{
-  id: 2,
-  name: "Watt Plaza",
-  location: "Los Angeles, CA",
-  link: "https://lebello.com/contract_design/watt-plaza/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
-{
-  id: 1,
-  name: "Sandbar Jax Bch | Springhill Suites By Marriott",
-  location: "Jacksonville Beach, FL",
-  link: "https://lebello.com/contract_design/springhill-suites/",
-  image:
-    "http://lebello.com/wp-content/uploads/thumbs/SpringhillSuites-JacksonvilleFL-350X234.png",
-},
-{
-  id: 2,
-  name: "Watt Plaza",
-  location: "Los Angeles, CA",
-  link: "https://lebello.com/contract_design/watt-plaza/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
-{
-  id: 3,
-  name: "Ebbdunedin",
-  location: "EBB Bunded In , New Zealand",
-  link: "https://lebello.com/contract_design/ebbdunedin/",
-  image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
-},
+    id: 1,
+    name: "Sandbar Jax Bch | Springhill Suites By Marriott",
+    location: "Jacksonville Beach, FL",
+    link: "https://lebello.com/contract_design/springhill-suites/",
+    image:
+      "http://lebello.com/wp-content/uploads/thumbs/SpringhillSuites-JacksonvilleFL-350X234.png",
+  },
+  {
+    id: 2,
+    name: "Watt Plaza",
+    location: "Los Angeles, CA",
+    link: "https://lebello.com/contract_design/watt-plaza/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
+  {
+    id: 2,
+    name: "Watt Plaza",
+    location: "Los Angeles, CA",
+    link: "https://lebello.com/contract_design/watt-plaza/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
+  {
+    id: 2,
+    name: "Watt Plaza",
+    location: "Los Angeles, CA",
+    link: "https://lebello.com/contract_design/watt-plaza/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
+  {
+    id: 2,
+    name: "Watt Plaza",
+    location: "Los Angeles, CA",
+    link: "https://lebello.com/contract_design/watt-plaza/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
+  {
+    id: 2,
+    name: "Watt Plaza",
+    location: "Los Angeles, CA",
+    link: "https://lebello.com/contract_design/watt-plaza/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
+  {
+    id: 1,
+    name: "Sandbar Jax Bch | Springhill Suites By Marriott",
+    location: "Jacksonville Beach, FL",
+    link: "https://lebello.com/contract_design/springhill-suites/",
+    image:
+      "http://lebello.com/wp-content/uploads/thumbs/SpringhillSuites-JacksonvilleFL-350X234.png",
+  },
+  {
+    id: 2,
+    name: "Watt Plaza",
+    location: "Los Angeles, CA",
+    link: "https://lebello.com/contract_design/watt-plaza/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
+  {
+    id: 3,
+    name: "Ebbdunedin",
+    location: "EBB Bunded In , New Zealand",
+    link: "https://lebello.com/contract_design/ebbdunedin/",
+    image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png",
+  },
 ];
 const images = ref([
   {

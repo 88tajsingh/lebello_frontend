@@ -1,8 +1,8 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Product Contract` : `Add Product Contract`">
-    <DomainComponent  @customChange="(id)=>form.domain_id = id"
-      :deleteService="ProductServices.deleteProductContract" masterKey="master_contract_id"
-      :masterDeleteService="ProductServices.deleteMasterProductContract" routeTo="product-contract"></DomainComponent>
+    <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ProductServices.deleteProductContract"
+      masterKey="master_contract_id" :masterDeleteService="ProductServices.deleteMasterProductContract"
+      routeTo="product-contract"></DomainComponent>
 
     <template v-if="form.id" v-slot:header>
       <MasterSlugForm :form="form" @update-slug="fetchProductContractData"
@@ -34,9 +34,9 @@
           <!-- <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name" class="w-full" valueField="id"
             v-model="form.parent_contract" /> -->
           <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name"
-          class="w-full" valueField="id" :errorClass="selectError" @update:modelValue="clearError('parent_contract')"
-          errMessage="Should not be own parent" v-model="form.parent_contract" />
-          
+            class="w-full" valueField="id" :errorClass="selectError" @update:modelValue="clearError('parent_contract')"
+            errMessage="Should not be own parent" v-model="form.parent_contract" />
+
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big
             Band.
@@ -112,14 +112,14 @@ const handleSubmit = async () => {
       const action = store.getters.editData ? ProductServices.editProductContract : ProductServices.addProductContract;
       const { status, data } = await action(payload);
       if (status === 200 && data.success) {
-        if(hasCheckedFields){
-                handleGlobalUpdate();
-            }
-            else{
-              showToast(data.message, 'success');
-              store.dispatch('clearEditData');
-              router.push('/product-contract');
-            }
+        if (hasCheckedFields) {
+          handleGlobalUpdate();
+        }
+        else {
+          showToast(data.message, 'success');
+          store.dispatch('clearEditData');
+          router.push('/product-contract');
+        }
       } else if (status === 400) {
         showToast(data.message, 'error');
       }
@@ -167,8 +167,8 @@ const fetchProductContractData = async () => {
     showToast('Something went wrong', 'error');
     console.error('Error while fetching data:', error);
   }
-  finally{
-    loading.value=false;
+  finally {
+    loading.value = false;
   }
 };
 
@@ -206,10 +206,10 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Watchers
 watch(() => form.value.parent_contract, (newValue) => {
-  if(newValue == form.value.id)
-      selectError.value = true;
+  if (newValue == form.value.id)
+    selectError.value = true;
   else
-  selectError.value = false;
+    selectError.value = false;
 });
 
 // Computed Properties

@@ -209,7 +209,7 @@
 import _ from 'lodash';
 import { useStore } from 'vuex';
 import { useRouter } from "vue-router";
-import {trueFalse,statusData } from '@/json/data';
+import { trueFalse, statusData } from '@/json/data';
 import PostServices from '@/services/PostServices';
 import { getPostCategoryTree } from '@/helper/Apis';
 import { ref, onMounted, watch, computed } from "vue";
@@ -265,32 +265,32 @@ const validateForm = () => {
 
 // Submit Handler
 const handleSubmit = async () => {
-   
-    if(!validateForm()) return
-    const  hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
-        loading.value = true;
-        try {
-            const action = store.getters.editData ? PostServices.editPost : PostServices.addPost;
-            const { featured_image_url, gallery_urls, slug,gallery_data, domains_data, default_domain, deleted_at, created_at, updated_at, ...payload } = form.value
-            if (!form.value?.domains_data?.includes(form.value.domain_id)) {
-                delete payload.id;
-            }
-            const { status, data } = await action(payload);
-            if (status === 200 && data.success) {
-                if(hasCheckedFields){
+    if (!validateForm()) return
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+
+    loading.value = true;
+    try {
+        const action = store.getters.editData ? PostServices.editPost : PostServices.addPost;
+        const { featured_image_url, gallery_urls, slug, gallery_data, domains_data, default_domain, deleted_at, created_at, updated_at, ...payload } = form.value
+        if (!form.value?.domains_data?.includes(form.value.domain_id)) {
+            delete payload.id;
+        }
+        const { status, data } = await action(payload);
+        if (status === 200 && data.success) {
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
+            else {
                 showToast(data.message, 'success');
                 router.push('/post');
             }
-            }
-        } catch (e) {
-            console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} post:`, e);
-        } finally {
-            loading.value = false;
         }
+    } catch (e) {
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} post:`, e);
+    } finally {
+        loading.value = false;
+    }
 };
 
 // Global Update Handler
@@ -341,14 +341,14 @@ const fetchInitialData = async (payload) => {
     // console.log("payload",payload)
     try {
         const [{ status: tagStatus, data: tagData },] = await Promise.all([
-            CommonServices.getTags(payload)]);4
+            CommonServices.getTags(payload)]); 4
         if (tagStatus === 200 && tagData.success) TagsData.value = tagData.data;
 
         postCategoryTree.value = await getPostCategoryTree(payload)
     } catch (e) {
         console.error('Error fetching initial data:', e);
     }
-    
+
 };
 
 // Lifecycle Hooks
@@ -359,7 +359,7 @@ onMounted(() => {
         imageData.value.featured_image.images = [store.getters?.editData?.featured_image_url];
         imageData.value.gallery.mediaName = store.getters?.editData?.gallery_data?.map(item => item.file_url).join(',') || 'Select Gallery images';
         imageData.value.gallery.images = store.getters?.editData?.gallery_data;
-        fetchInitialData({domain_id: store.getters.editData?.domain_id});
+        fetchInitialData({ domain_id: store.getters.editData?.domain_id });
     }
 });
 
@@ -378,6 +378,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return  (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 </script>
