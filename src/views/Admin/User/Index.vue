@@ -2,7 +2,7 @@
     <PageHeader> User List </PageHeader>
     <div class="flex content-between justify-between px-1 mb-2">
 
-        <div class="flex">
+        <div class="flex ms-auto">
             <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
             <Button @click="() => { router.push({ name: 'user-form' }); store.dispatch('clearEditData'); }"
                 class="px-2 py-2">Add User</Button>
@@ -10,7 +10,7 @@
     </div>
     <div class="bg-white rounded-[20px]">
         <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-            :hasCheckbox="true" :cloneHeaderInFooter="true" :stickyHeader="false" :rows="rows" :columns="usersCols"
+            :cloneHeaderInFooter="true" :stickyHeader="false" :rows="rows" :columns="usersCols"
             :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
             @change="changePages">
             <template #image="data">
