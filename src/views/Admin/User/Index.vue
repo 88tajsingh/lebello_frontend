@@ -1,7 +1,7 @@
 <template>
     <PageHeader> User List </PageHeader>
     <div class="flex content-between justify-between px-1 mb-2">
-        
+
         <div class="flex">
             <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
             <Button @click="() => { router.push({ name: 'user-form' }); store.dispatch('clearEditData'); }"
@@ -43,13 +43,12 @@
     <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
         <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
     </PopupModal>
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Meta Tag '"
-        @delete="handleDeleteGlobalMetaTag">
-        Do you want to delete?
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Change Status '" @delete="handleStatusUser()">
+        Do you want to change the status?
     </DeleteModal>
-    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Meta Tag '" @delete="handleBulkActions()">
+    <!-- <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Change Status '" @delete="handleBulkActions()">
         Do you want to delete ?
-    </DeleteModal>
+    </DeleteModal> -->
     <!-- <Loader :isLoading="loading" :fullPage="true" /> -->
 </template>
 
@@ -119,25 +118,28 @@ const handleGetUserList = async (payload) => {
     }
 };
 
-// const handleDeleteGlobalMetaTag = async () => {
-//     loading.value = true;
-//     try {
-//         const res = await UserServices.deleteMetaTags({ id: editData.value });
-//         if (res.status === 200 && res.data.success) {
-//             rows.value = rows.value.filter(item => item.id !== editData.value)
-//             showToast(res.data.message, 'success');
-//             deleteModalIsOpen.value = false;
-//             editData.value = null;
-//         }
-//         else if (res.status === 400) {
-//             showToast(res.data.message, 'error');
-//         }
-//     } catch (e) {
-//         console.error('Error while deleting contract location:', e);
-//     } finally {
-//         loading.value = false;
-//     }
-// };
+const handleStatusUser = async () => {
+    loading.value = true;
+    try {
+
+        // const id = editData.value;
+        const res = await UserServices.statusUser({id:editData.value});
+        if (res.status === 200 && res.data.success) {
+            rows.value = rows.value.filter(item => item.id !== editData.value)
+            showToast(res.data.message, 'success');
+            deleteModalIsOpen.value = false;
+            editData.value = null;
+            handleGetUserList();
+        }
+        else if (res.status === 400) {
+            showToast(res.data.message, 'error');
+        }
+    } catch (e) {
+        console.error('Error while deleting contract location:', e);
+    } finally {
+        loading.value = false;
+    }
+};
 
 // Bulk delete
 
