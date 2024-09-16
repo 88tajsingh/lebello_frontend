@@ -2,9 +2,9 @@
     <PageHeader> Material Slider</PageHeader>
     <div class="flex  content-between justify-between   mb-2">
         <div class="flex">
-            <Select cusClass="h-[40px] border-box" :options="bulkOption" showfield="text" valueField="value"
-                label="Bulk Options" v-model="bulkActionSelected" />
-            <Button class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+            <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
+                valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+            <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
             <div class="max-w-52">
                 <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                     v-model="pagiantionData.domain_id" />
@@ -17,7 +17,8 @@
         <div class="flex rounded-lg bg-transparent">
             <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
                 v-model="search" />
-            <Button @click="() => { router.push({ name: 'material-slider-add' }); store.dispatch('clearEditData'); }"
+            <Button v-if="permissions.write"
+                @click="() => { router.push({ name: 'material-slider-add' }); store.dispatch('clearEditData'); }"
                 class="px-2 py-2 m-auto whitespace-nowrap">Add
                 Material Slider</Button>
         </div>
@@ -32,12 +33,12 @@
                     style="max-width: 50px; max-height: 50px" />
             </template>
             <template #status="data">
-                <span v-if="data.value.status===1">Draft</span>
-                <span v-else-if="data.value.status===2">Pending Review</span>
-                <span v-else-if="data.value.status===3">Publish</span>
+                <span v-if="data.value.status === 1">Draft</span>
+                <span v-else-if="data.value.status === 2">Pending Review</span>
+                <span v-else-if="data.value.status === 3">Publish</span>
                 <span v-else>Status not selected</span>
-              </template>
-            <template #actions="data">
+            </template>
+            <template v-if="permissions.write" #actions="data">
                 <div class="flex gap-3">
                     <div @click="() => { router.push({ name: 'material-slider-edit', params: { id: data.value.id } }); store.dispatch('setEdit', data.value) }"
                         id="edit svg">
@@ -48,7 +49,7 @@
                     </div>
                 </div>
             </template>
-            
+
         </vue3-datatable>
     </div>
 
@@ -66,7 +67,7 @@ import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomins } from '@/helper/Apis'
-import { materialSlidersCols,statusData } from '@/json/data'
+import { materialSlidersCols, statusData } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
@@ -76,13 +77,15 @@ import MaterialSliderServices from '@/services/MaterialSliderServices.js'
 
 const store = useStore();
 const router = useRouter();
-const bulkActionSelected = ref(null)
+
 const search = ref('')
-const bulkOption = [{ text: 'Delete', value: 'delete' }]
-const company_id = ref('')
-const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
-const dataTableLoding = ref(false)
 const loading = ref(false)
+const company_id = ref('')
+const dataTableLoding = ref(false)
+const bulkActionSelected = ref(null)
+const permissions = store.getters.user.permissions;
+const bulkOption = [{ text: 'Delete', value: 'delete' }]
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')

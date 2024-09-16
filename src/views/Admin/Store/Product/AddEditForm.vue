@@ -1,27 +1,24 @@
-<template>
+div<template>
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="StoreServices.deleteStoreProduct"
             masterKey="master_store_product_id" :masterDeleteService="StoreServices.masterDeleteStoreProduct"
             routeTo="store-product" />
         <template v-if="form.id" v-slot:header>
-            <MasterSlugForm
-        :form="form"
-        @update-slug="()=>fetchStoreProductData()"
-        :SlugUpdateservices = 'StoreServices.masterStoreProductSlugUpdate'
-        masteridKeyName='master_store_product_id'
-      />
-    </template>
-    <form @submit.prevent="handleSubmit" class="mb-5 m-5">
+            <MasterSlugForm :form="form" @update-slug="() => fetchStoreProductData()"
+                :SlugUpdateservices='StoreServices.masterStoreProductSlugUpdate'
+                masteridKeyName='master_store_product_id' />
+        </template>
+        <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
                     <Accordion :open="true" header="Title">
                         <div class="px-6">
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
-                                placeholder="Add title" v-model="form.title" :errMessage="errors.title"
-                                :errors="errors" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.title = value }" />
+                                placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
+                                :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="(value) => { checkedFields.title = value }" />
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug "
-                                placeholder="Add title" v-model="form.slug" :errMessage="errors.slug"
-                                disabled="true" />
+                                placeholder="Add title" v-model="form.slug" :errMessage="errors.slug" disabled="true" />
                         </div>
                     </Accordion>
                     <div class="mt-3">
@@ -41,7 +38,7 @@
                                         <input-label for="slides" value="Slider" />
                                         <div class="text-gray-4 text-[13px]">Minimum Size 1600 x 700px</div>
                                         <div class="flex flex-wrap">
-                                           
+
                                             <div class="relative p-1" v-for="(slide, index) in imageData.slider.images"
                                                 :key="`slide-${index}`">
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
@@ -73,13 +70,13 @@
                             <div class="px-6">
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Sub Title"
-                                        placeholder="" v-model="form.product_sub_title" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.product_sub_title = value }"/>
+                                        placeholder="" v-model="form.product_sub_title" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.product_sub_title = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Description Title"
-                                        placeholder="" v-model="form.product_description" 
-                                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.product_description = value }"
-                                        />
+                                        placeholder="" v-model="form.product_description" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.product_description = value }" />
                                 </div>
                                 <div class="mt-5  ">
                                     <singleCheckBox id="FeaturedOption" label="Has Predefind Values"
@@ -88,26 +85,24 @@
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Quick Ship"
-                                        placeholder="" v-model="form.product_quick_ship"
-                                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.product_quick_ship = value }"
-                                        />
+                                        placeholder="" v-model="form.product_quick_ship" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.product_quick_ship = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full"
-                                        label="Custom (Custom Order)" placeholder=""
-                                        v-model="form.product_custom_order":hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.product_custom_order = value }" />
+                                        label="Custom (Custom Order)" placeholder="" v-model="form.product_custom_order"
+                                        :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.product_custom_order = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Title"
-                                        placeholder="" v-model="form.product_title"
-                                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.product_title = value }"
-                                        />
+                                        placeholder="" v-model="form.product_title" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.product_title = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Sub Title"
-                                        placeholder="" v-model="form.sub_title" 
-                                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.sub_title = value }"
-                                        />
+                                        placeholder="" v-model="form.sub_title" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.sub_title = value }" />
                                 </div>
                                 <div class="mt-5  ">
                                     <singleCheckBox id="FeaturedOption" label="Featured"
@@ -116,39 +111,44 @@
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Featured Title"
-                                        placeholder="" v-model="form.featured_title":hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.featured_title = value }" />
+                                        placeholder="" v-model="form.featured_title" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.featured_title = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Featured Sub Title"
-                                        placeholder="" v-model="form.featured_sub_title":hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.featured_sub_title = value }" />
+                                        placeholder="" v-model="form.featured_sub_title" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.featured_sub_title = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product SKU
-                                    " placeholder="" v-model="form.product_sku" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.product_sku = value }"/>
+                                    " placeholder="" v-model="form.product_sku" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.product_sku = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Advertise Price"
-                                        placeholder="" v-model="form.advertise_price"
-                                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.advertise_price = value }"
-                                        />
+                                        placeholder="" v-model="form.advertise_price" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.advertise_price = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Shipping Price
-                                    " placeholder="" v-model="form.shipping_price" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.shipping_price = value }" />
+                                    " placeholder="" v-model="form.shipping_price" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.shipping_price = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Shipping Title
-                                    " placeholder="" v-model="form.shipping_title" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.shipping_title = value }"/>
+                                    " placeholder="" v-model="form.shipping_title" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.shipping_title = value }" />
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 w-full" label="Shipping Description"
                                         :isTextarea="true" :rows="3" v-model="form.shipping_description"
-                                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.shipping_description = value }"
-                                        />
+                                        :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="(value) => { checkedFields.shipping_description = value }" />
                                 </div>
                                 <div class="border border-stroke rounded-lg px-4 mt-4 mr-2">
                                     <div class="mt-4"> <span>Product Option </span> </div>
-                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_option"></SingleCheck>
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_option">
+                                    </SingleCheck>
                                     <div v-for="(item, index) in form.product_option" :key="index">
                                         <hr class=" text-rose-400" />
                                         <div class="mt-2">
@@ -214,7 +214,7 @@
                                             Remove
                                         </button>
 
-                                        <hr v-if="index < formItems.length - 1" class="my-4" />
+                                        <hr v-if="index <div formItems.length - 1" class="my-4" />
 
                                     </div>
 
@@ -230,9 +230,8 @@
                         <Accordion :open="true" header="Simple Fields">
                             <div class="px-5     pt-2">
                                 <Select :options="productOptionsType" showfield="name" class="w-full" valueField="value"
-                                    label="Select an option" v-model="form.simple_field" 
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.simple_field = value }"
-                                    />
+                                    label="Select an option" v-model="form.simple_field" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.simple_field = value }" />
                             </div>
                         </Accordion>
                     </div>
@@ -240,7 +239,8 @@
                         <Accordion :open="true" header="Material Swatches">
                             <div class="bg-white border-2   px-4">
                                 <div>
-                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.material_swatches"></SingleCheck>
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.material_swatches">
+                                    </SingleCheck>
                                 </div>
                                 <div>
                                     <div class="flex ">
@@ -252,43 +252,45 @@
                                         <div class="w-1/2 border-r ">
                                             <ul>
                                                 <li v-for="item in materialSwatchesList" :key="item.id"
-                                                class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
-                                                :class="{ 'bg-gray opacity-80': isSelected(item) }"
-                                                @click="toggleSwatchSelection(item)">
-                                                <span class="text-[#2272B1]">{{ item.title }}</span>
-                                                <span class="text-[10px] text-Black666">SWATCHES <span></span> </span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- Right Panel -->
-                                    <div class="w-1/2 pl-4">
-                                        <div v-if="selectedSwatches.length">
-                                            <div v-for="item in selectedSwatches" :key="item.id" class="mb-4">
-                                                <div class="flex justify-between">
-                                                    <h4 class="text-[#2272B1]">{{ item.title }}</h4>
-                                                    <span class="text-[12px]"> SWATACHES</span>
-                                                </div>
-                                                <ul>
-                                                    <li v-for="material in item.materials_data" :key="material.id"
-                                                    class="flex items-center mb-2">
-                                                    <div class="flex w-full justify-between">
-                                                        <span>
-                                                            <input type="checkbox" id="material-{{ material.id }}"
-                                                            class="mr-2"
-                                                            @change="handleCheckboxChange(material.id, $event)">
-                                                            <label :for="'material-' + material.id"
-                                                            class="text-[#2272B1]">{{ material.name }}</label>
-                                                        </span>
-                                                        <span class="text-[10px]">MATERIAL</span>
-                                                    </div>
+                                                    class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
+                                                    :class="{ 'bg-gray opacity-80': isSelected(item) }"
+                                                    @click="toggleSwatchSelection(item)">
+                                                    <span class="text-[#2272B1]">{{ item.title }}</span>
+                                                    <span class="text-[10px] text-Black666">SWATCHES <span></span>
+                                                    </span>
                                                 </li>
                                             </ul>
                                         </div>
-                                    </div>
-                                    <div v-else>
-                                        <p class="text-gray-500">No swatches selected</p>
-                                    </div>
-                                 </div>
+                                        <!-- Right Panel -->
+                                        <div class="w-1/2 pl-4">
+                                            <div v-if="selectedSwatches.length">
+                                                <div v-for="item in selectedSwatches" :key="item.id" class="mb-4">
+                                                    <div class="flex justify-between">
+                                                        <h4 class="text-[#2272B1]">{{ item.title }}</h4>
+                                                        <span class="text-[12px]"> SWATACHES</span>
+                                                    </div>
+                                                    <ul>
+                                                        <li v-for="material in item.materials_data" :key="material.id"
+                                                            class="flex items-center mb-2">
+                                                            <div class="flex w-full justify-between">
+                                                                <span>
+                                                                    <input type="checkbox"
+                                                                        id="material-{{ material.id }}" class="mr-2"
+                                                                        @change="handleCheckboxChange(material.id, $event)">
+                                                                    <label :for="'material-' + material.id"
+                                                                        class="text-[#2272B1]">{{ material.name
+                                                                        }}</label>
+                                                                </span>
+                                                                <span class="text-[10px]">MATERIAL</span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div v-else>
+                                                <p class="text-gray-500">No swatches selected</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -299,40 +301,42 @@
                         <Accordion :open="true" header="Product Label">
                             <div class="px-5     pt-2">
                                 <TextInput type="text" class="block mr-2 w-full" label="Text Label"
-                                    v-model="form.product_label"
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.product_label = value }" />
+                                    v-model="form.product_label" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.product_label = value }" />
                             </div>
                         </Accordion>
                     </div>
                     <div class="mt-3">
                         <Accordion :open="true" header="Downloadable Files">
                             <div class="flex pl-2">
-                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.downloadable_files"></SingleCheck>
-                            <div class="col-span-2 w-full border border-gray rounded-lg">
-                                <div class="mt-2 ml-3">
-                                    <div class="flex flex-wrap">
-                                        <div class="relative p-1"
-                                            v-for="(file, index) in imageData.downloadable_files.images"
-                                            :key="`file-${index}`">
-                                            <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                :src="$filePath(file.file_url)" />
-                                            <div @click="() => handleRemoveDownloadable(file)"
-                                                class="absolute top-2 right-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                </svg>
+                                <SingleCheck v-if="form.id" label="" v-model="checkedFields.downloadable_files">
+                                </SingleCheck>
+                                <div class="col-span-2 w-full border border-gray rounded-lg">
+                                    <div class="mt-2 ml-3">
+                                        <div class="flex flex-wrap">
+                                            <div class="relative p-1"
+                                                v-for="(file, index) in imageData.downloadable_files.images"
+                                                :key="`file-${index}`">
+                                                <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
+                                                    :src="$filePath(file.file_url)" />
+                                                <div @click="() => handleRemoveDownloadable(file)"
+                                                    class="absolute top-2 right-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="size-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
+                                        <button @click="() => imageData.downloadable_files.isOpen = true" type="button"
+                                            class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
+                                            Gallery
+                                        </button>
                                     </div>
-                                    <button @click="() => imageData.downloadable_files.isOpen = true" type="button"
-                                        class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
-                                        Gallery
-                                    </button>
                                 </div>
-                            </div>
-                                
+
                             </div>
                         </Accordion>
 
@@ -343,25 +347,23 @@
                             <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_title = value }"
-                                    />
+                                    :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_title = value }" />
                                 <span>Custom title tag.</span>
                             </div>
                             <div class="px-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
                                     class="block w-[180px] mr-2 " v-model="form.seo_description"
-                                    placeholder="Meta Description" label="Meta Description" 
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_description = value }"
-                                    />
+                                    placeholder="Meta Description" label="Meta Description" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_description = value }" />
                                 <span>Most search engines use a maximum of 160 chars for the description.
                                 </span>
                             </div>
                             <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
                                 <TextInput id="seo_meta_keywords" :isTextarea="true" :='4' type="text"
                                     class="block w-[180px] mr-2 " v-model="form.seo_keywords"
-                                    placeholder="Meta Keywords" label="Meta Keywords"
-                                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_keywords = value }"
-                                    />
+                                    placeholder="Meta Keywords" label="Meta Keywords" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.seo_keywords = value }" />
                                 <span>Seperate each term with comma.</span>
                             </div>
                         </Accordion>
@@ -371,9 +373,8 @@
                             <div v-for="(item, index) in form.product_specs" :key="index">
                                 <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
                                     <TextInput id="seo_title" type="text" class="block mr-2 h-[33px]"
-                                        v-model="item.seo_title" placeholder="" label="Specs Name"
-                                        />
-                                        <!-- :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_title = value }" -->
+                                        v-model="item.seo_title" placeholder="" label="Specs Name" />
+                                    <!-- :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.seo_title = value }" -->
                                 </div>
                                 <div class="mt-3 px-7">
                                     <InputLabel for=" Specs_Description" value="Specs Description" />
@@ -418,13 +419,12 @@
                 <div class="col-span-4">
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
-                                <div class="flex flex-col px-4">
-                                    <InputLabel for="status" value="Status" />
-                                    <Select :options="statusData" showfield="name" class="w-full"
-                                        valueField="value" label="Select " v-model="form.status"
-                                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.status = value }"
-                                        />
-                                </div>
+                            <div class="flex flex-col px-4">
+                                <InputLabel for="status" value="Status" />
+                                <Select :options="statusData" showfield="name" class="w-full" valueField="value"
+                                    label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.status = value }" />
+                            </div>
                         </div>
                         <div class="bg-[#f6f7f7] flex py-3">
                             <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
@@ -453,14 +453,15 @@
                         <Accordion :open="true" header="Featured image">
                             <div class="px-6  h-auto ">
                                 <div class=" flex  w-full h-auto ">
-                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
-                            <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                    @click="() => imageData.featured_image.isOpen = true">
-                                    {{ imageData.featured_image.mediaName }}
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => imageData.featured_image.isOpen = true">
+                                        {{ imageData.featured_image.mediaName }}
+                                    </div>
                                 </div>
-                        </div>
                                 <div class="mt-3 flex overflow-x-auto">
-                                    <img v-if="imageData.featured_image.images[0]" v-for="file in imageData.featured_image.images" :key="file?.file_url"
+                                    <img v-if="imageData.featured_image.images[0]"
+                                        v-for="file in imageData.featured_image.images" :key="file?.file_url"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file?.alternative_text || 'image'">
                                 </div>
@@ -471,14 +472,15 @@
                         <Accordion :open="true" header="Gallery">
                             <div class="px-6 h-auto">
                                 <div class=" flex  w-full h-auto ">
-                            <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
-                            <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                    @click="() => imageData.gallery.isOpen = true">
-                                    {{ imageData.gallery.mediaName }}
+                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                        @click="() => imageData.gallery.isOpen = true">
+                                        {{ imageData.gallery.mediaName }}
+                                    </div>
                                 </div>
-                        </div>
-                                <div class="mt-3 flex overflow-x-auto">         
-                                    <img v-if="imageData.gallery.images > 0" v-for="file in imageData.gallery.images" :key="file" :src="$filePath(file?.file_url)"
+                                <div class="mt-3 flex overflow-x-auto">
+                                    <img v-if="imageData.gallery.images > 0" v-for="file in imageData.gallery.images"
+                                        :key="file" :src="$filePath(file?.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
                                 </div>
                             </div>
@@ -526,7 +528,7 @@
 <script setup>
 import _ from 'lodash';
 import { ref, onMounted, watch, computed } from "vue";
-import { showToast, handleFileUpdate,getGlobalUpdateData } from '@/helper/functions'
+import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
 import { PublishOptions, productOptionsType, statusData, trueFalse } from '@/json/data';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
@@ -556,7 +558,7 @@ const loading = ref(false);
 const TagsData = ref([]);
 const materialSwatchesList = ref([]);
 const form = ref(store.getters.editData ||
- { status:1, featured: false, product_option: [], product_specs: [] });
+    { status: 1, featured: false, product_option: [], product_specs: [] });
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 
@@ -628,7 +630,7 @@ const toggleSwatchSelection = (item) => {
 };
 
 // Function to check if a swatch is selected
-const isSelected = (item) =>selectedSwatches.value.some(swatch => swatch.id === item.id);
+const isSelected = (item) => selectedSwatches.value.some(swatch => swatch.id === item.id);
 
 // Function to handle material checkbox changes
 const handleCheckboxChange = (materialId, event) => {
@@ -675,42 +677,42 @@ const validateForm = () => {
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-        loading.value = true;
-        try {
-            // Prepare payload by excluding unwanted fields
-            const { deleted_at,slug,domains_data,default_domain, created_at, featured_image_data, downlaodable_urls, gallery_data, slider_data, downloadable_urls, updated_at, ...payload } = form.value;
-            if (!form.value?.domains_data?.includes(form.value.domain_id)) {
-                 delete payload.id;
-            }
+    loading.value = true;
+    try {
+        // Prepare payload by excluding unwanted fields
+        const { deleted_at, slug, domains_data, default_domain, created_at, featured_image_data, downlaodable_urls, gallery_data, slider_data, downloadable_urls, updated_at, ...payload } = form.value;
+        if (!form.value?.domains_data?.includes(form.value.domain_id)) {
+            delete payload.id;
+        }
 
-            payload.material_swatches = [
-                { material: selectedMaterialIds.value },
-                { swatches: selectedSwatchIds.value }
-            ];
+        payload.material_swatches = [
+            { material: selectedMaterialIds.value },
+            { swatches: selectedSwatchIds.value }
+        ];
 
-            const action = store.getters.editData ? StoreServices.editStoreProduct : StoreServices.addStoreProduct;
-            const { status, data } = await action(payload);
+        const action = store.getters.editData ? StoreServices.editStoreProduct : StoreServices.addStoreProduct;
+        const { status, data } = await action(payload);
 
-            if (status === 200 && data.success) {
-                if(hasCheckedFields){
+        if (status === 200 && data.success) {
+            if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
-            else{
+            else {
                 showToast(data.message, 'success');
                 store.dispatch('clearEditData');
                 router.push('/store-product');
-          }
-                
-            } else if (status === 400) {
-                showToast(data.message, 'error');
             }
-        } catch (error) {
-            showToast('Something went wrong', 'error');
-            console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} store product:`, error);
-        } finally {
-            loading.value = false;
+
+        } else if (status === 400) {
+            showToast(data.message, 'error');
         }
-    
+    } catch (error) {
+        showToast('Something went wrong', 'error');
+        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} store product:`, error);
+    } finally {
+        loading.value = false;
+    }
+
 };
 
 // Global Update Handler
@@ -751,15 +753,15 @@ const fetchStoreProductData = async () => {
         showToast('Something went wrong', 'error')
         console.error('Error while fetching data:', error)
     }
-    finally{
-    loading.value=false;
-  }
+    finally {
+        loading.value = false;
+    }
 }
 
 // Function to fetch all necessary data
 const handleFetchAllData = async (payload) => {
     try {
-        console.log("payload ",payload)
+        console.log("payload ", payload)
         await Promise.all([
             CommonServices.getTags(payload).then(res => {
                 if (res.status === 200 && res.data.success) {
@@ -792,13 +794,13 @@ onMounted(() => {
     // Initialize image on edit data
     if (store.getters.editData) {
         const domainId = store.getters.editData?.domain_id;
-        const {downlaodable_urls,slider_data,gallery_data,featured_image_data} = store.getters.editData;
+        const { downlaodable_urls, slider_data, gallery_data, featured_image_data } = store.getters.editData;
         imageData.value.gallery.images = gallery_data || 'gallery';
         imageData.value.gallery.mediaName = gallery_data?.map(item => item?.file_url).join(', ') || 'gallery';
-        imageData.value.slider.images = slider_data 
-        imageData.value.slider.mediaName = slider_data?.map(item => item?.file_url).join(', ')|| 'slider images';;
-        imageData.value.downloadable_files.images = downlaodable_urls 
-        imageData.value.downloadable_files.mediaName = downlaodable_urls?.map(item=>item?.file_url).join(', ')|| 'Downloadable Images';
+        imageData.value.slider.images = slider_data
+        imageData.value.slider.mediaName = slider_data?.map(item => item?.file_url).join(', ') || 'slider images';;
+        imageData.value.downloadable_files.images = downlaodable_urls
+        imageData.value.downloadable_files.mediaName = downlaodable_urls?.map(item => item?.file_url).join(', ') || 'Downloadable Images';
         imageData.value.featured_image.images = [featured_image_data]
         imageData.value.featured_image.mediaName = featured_image_data?.file_url || "Featured Image"
         handleFetchAllData({ domain_id: domainId });
@@ -820,6 +822,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
 
 // Computed Property
 const buttonText = computed(() => {
-    return  (form.value.id ? 'Update' : 'Submit')
+    return (form.value.id ? 'Update' : 'Submit')
 })
 </script>

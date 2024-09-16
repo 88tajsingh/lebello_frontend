@@ -7,12 +7,14 @@
             <div class="my-2 flex p-auto">
                 <Breadcrumb :breadcrumbData="breadcrumbData" :handlePopFunction="handlePopFunction" />
             </div>
+            <div v-if="permissions.write">
             <div v-if="getFlag == false" class='my-auto'>
                 <Button class="px-2 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                     @click="openModal">
                     + Add Folder</Button>
                 <Button class="px-2 py-2 m-auto" @click="MediaModal">+ Add File</Button>
             </div>
+        </div>
         </div>
         <div class="flex flex-wrap gap-3">
             <div v-for="folder in folders" :key="folder" class="border border-gray text-center w-[80px] px-2">
@@ -22,6 +24,7 @@
                 }
                     " class="icon" style="color: #eabf62; height: 60px; width: 60px" />
                 <span class="m-auto mt-0 break-all text-[13px] text-wrap w-[20px]">{{ folder?.folder_name }}</span>
+                <div v-if="permissions.write">
                 <div v-if="getFlag == false" class="flex gap-1 py-1 pb-2 justify-center">
                     <EditSvg @click="() => {
                         handleFolderInfo(folder)
@@ -33,6 +36,7 @@
                         deleteModal()
                     }
                         " size="18px" />
+                </div>
                 </div>
             </div>
             <div v-for="(media, index) in mediaData" :key="mediaData.id"
@@ -50,6 +54,7 @@
                         alt="Video File" />
                     <span v-else>Unknown file format.</span>
                     <span class="m-auto break-all text-[13px] text-wrap w-[20px]">{{ media?.title }} </span>
+                 <div v-if="permissions.write">
                     <div v-if="getFlag == false" class="m-auto absolute top-0 right-0 " @click.stop="() => {
                         mediaDeleteModal();
                         handleMediaData(media);
@@ -60,6 +65,7 @@
                                 d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
                     </div>
+                </div>
                     <div v-if="getFlag == true" class="m-auto absolute top-0 right-0 ">
                         <input type="checkbox" :id="'media_' + media.id" :checked="isSelected(media)"
                             @change="toggleSelection(media)" />
@@ -131,10 +137,10 @@
             </div>
             <!-- <span v-if="mediaFIle"> Uploded File :- {{ mediaFIle.name }}</span> -->
             <div class="mt-3">
-                <Button class="px-2 py-1 mt-auto" bg_th_color=" mt-5 px-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
+                <Button v-if="permissions.write" class="px-2 py-1 mt-auto" bg_th_color=" mt-5 px-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                     @click="handleAddMedia">
                     Save </Button>
-                <Button class="px-2 py-1 mt-auto" @click="closeMediaModal"> Cancel</Button>
+                <Button v-if="permissions.write" class="px-2 py-1 mt-auto" @click="closeMediaModal"> Cancel</Button>
             </div>
         </div>
     </PopupModal>
@@ -173,11 +179,11 @@
                     <TextInput id="editDescription" type="text" :isTextarea="true" rows="4"
                         class="block w-[180px] mr-2 h-[33px]" v-model="editMediaData.description"
                         placeholder="Description" label="Description" :errMessage="errorMessage" />
-                    <Button class="px-6 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
+                    <Button v-if="permissions.write" class="px-6 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                         @click="handleEditMedia">
                         Save
                     </Button>
-                    <Button class="px-4 py-2 m-auto" @click="closeMediaModal">
+                    <Button v-if="permissions.write" class="px-4 py-2 m-auto" @click="closeMediaModal">
                         Cancel
                     </Button>
                 </div>
@@ -195,10 +201,12 @@
 import { FolderIcon } from '@heroicons/vue/20/solid'
 import { filePath } from '@/helper/functions'
 import { showToast } from '@/helper/functions'
+import { useStore } from 'vuex'
 import Breadcrumb from '@/components/Admin-components/Breadcrumb.vue'
 import FolderServices from '@/services/MediaAndFolderServices'
 import ImageUpload from '@/components/Admin-components/form-components/ImageUpload.vue'
 import { ref, onMounted, computed } from 'vue'
+
 
 const props = defineProps({
     getFlag: {
@@ -226,8 +234,10 @@ const props = defineProps({
 const loading = ref(false)
 const folders = ref([])
 const mediaData = ref([])
+const store = useStore();
 const SelectedFolder = ref({ id: 0 })
 const newFolder = ref()
+const permissions =  store.getters.user.permissions;
 const mediaFIle = ref()
 const errorMessage = ref()
 const breadcrumbData = ref([])

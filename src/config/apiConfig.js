@@ -8,6 +8,10 @@ const ApiConfig = {
   updatePassword: '/update-password',
   getSwatchesMaterialList: '/get-swatches-material-list',
 
+  getSideMen4u: '/module-list',
+  roleBasedModule:'/role-based-module-list',
+  addRoleBasedModule:'/add-specific-modules',
+
   // materials config
   getMaterial: '/material-list',
   addMaterial: '/create-material',

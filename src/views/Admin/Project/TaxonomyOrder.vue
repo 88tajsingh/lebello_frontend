@@ -1,18 +1,17 @@
 <template>
     <PageHeader> Product Taxonomy Order </PageHeader>
     <div class="flex items-center justify-end gap-2">
-        
+
         <div class="w-52">
             <Label class="ml-1">Select Domain</Label>
             <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                 v-model="domain_id" />
         </div>
     </div>
-    <Dreagable v-model:list="treeData" parentfield="name"
-        childField="name" @update:list="handleListUpdate">
+    <Dreagable v-model:list="treeData" parentfield="name" childField="name" @update:list="handleListUpdate">
     </Dreagable>
     <div v-if="treeData.length === 0"> No data here </div>
-    <Button @click="handleSorting" :disabled="sortedData.length === 0"
+    <Button v-if="permissions.write" @click="handleSorting" :disabled="sortedData.length === 0"
         bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class="text-sm ml-auto px-3 py-1">
         Save
     </Button>
@@ -22,7 +21,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
-import {getDomins,getProjectCategoryTree} from '@/helper/Apis'
+import { getDomins, getProjectCategoryTree } from '@/helper/Apis'
 import CommonServices from '@/services/CommonServices'
 import { productTaxonomy } from '@/json/data'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
@@ -35,6 +34,7 @@ const domain_id = ref('')
 const treeData = ref([])
 const key = ref('project_categories')
 const loading = ref(false)
+const permissions = store.getters.user.permissions;
 
 function handleListUpdate(updatedList) {
     sortedData.value = updatedList

@@ -1,19 +1,21 @@
 <template>
-    <PageHeader>Material - Re-Order</PageHeader>
-    <div class="w-52 ml-auto">
-            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="domain_id" />
-    </div>
-    <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="title" Classes="mt-3 border-[#ccc]">
-    </Dreagable>
-    <p v-if="list.length === 0">No Data Found</p>
-    <Button @click="handleSortSwatches" :disabled="sortedData.length===0" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class="text-sm ml-auto px-3 py-1">
-        Save
-    </Button>
-    <Loader :isLoading="loading" :fullPage="true"/>
+  <PageHeader>Material - Re-Order</PageHeader>
+  <div class="w-52 ml-auto">
+    <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+      v-model="domain_id" />
+  </div>
+  <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="title" Classes="mt-3 border-[#ccc]">
+  </Dreagable>
+  <p v-if="list.length === 0">No Data Found</p>
+  <Button v-if="permissions.write" @click="handleSortSwatches" :disabled="sortedData.length === 0"
+    bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" class="text-sm ml-auto px-3 py-1">
+    Save
+  </Button>
+  <Loader :isLoading="loading" :fullPage="true" />
 
 </template>
 <script setup>
-import { ref,onMounted,watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { showToast } from '@/helper/functions'
 import { getDomins } from '@/helper/Apis';
 import SwatchesServices from '@/services/SwatchesServices';
@@ -25,19 +27,19 @@ import store from '@/store';
 const sortedData = ref([])
 const list = ref([])
 const getDominsList = ref([])
-  const domain_id = ref('')
-  const SelectedOption = ref(0)
+const domain_id = ref('')
+const permissions = store.getters.user.permissions;
 
 function handleListUpdate(updatedList) {
-    console.log('Updated list in parent:', updatedList);
-    sortedData.value = updatedList;
-    console.log("sortedData", sortedData.value)
+  console.log('Updated list in parent:', updatedList);
+  sortedData.value = updatedList;
+  console.log("sortedData", sortedData.value)
 };
 
 const loading = ref(false);
 // get Swatches function
 const handleGetSwatches = async (payload) => {
-  list.value=[]
+  list.value = []
   loading.value = true;
   try {
     const res = await SwatchesServices.getSwatches(payload);
@@ -83,18 +85,18 @@ const getDomainList = async (payload) => {
   store.dispatch('setDomain', defaultDomain);
 }
 onMounted(() => {
-    // contractLoctionTree({domain_id:store.getters.getDomain});
-    getDomainList();
-    // loading.value = true;
+  // contractLoctionTree({domain_id:store.getters.getDomain});
+  getDomainList();
+  // loading.value = true;
 });
 
 // watch(SelectedOption, handleChange);
 watch(
-    () => domain_id.value,
-    () => {
-      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
-      store.dispatch('setDomain', defaultDomain[0]);
-      handleGetSwatches({domain_id:domain_id.value});
-    }
+  () => domain_id.value,
+  () => {
+    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    store.dispatch('setDomain', defaultDomain[0]);
+    handleGetSwatches({ domain_id: domain_id.value });
+  }
 );
 </script>

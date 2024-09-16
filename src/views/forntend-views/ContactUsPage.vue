@@ -75,7 +75,7 @@
                       :key="itemIndex">
                       <a href="#" class="font-graphikLight text-[13px]">{{
                         sub.name
-                        }}</a>
+                      }}</a>
                     </li>
                   </PerfectScrollbar>
                 </ul>

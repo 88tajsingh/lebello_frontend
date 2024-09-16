@@ -16,7 +16,7 @@ import ProductCatergory from '@/components/frontend-components/ProductCatergory.
 import FooterSection from '@/components/frontend-components/Footer-section.vue';
 import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue';
 import LogoSection from '@/components/frontend-components/Logo-section.vue';
-import { ref,  } from 'vue'
+import { ref, } from 'vue'
 
 
 const products = ref([

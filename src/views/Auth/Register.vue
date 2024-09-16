@@ -47,26 +47,26 @@ const validateForm = () => {
 
     return isValid;
 };
-const handleSubmit =async () => {
+const handleSubmit = async () => {
     try {
         if (validateForm()) {
             processing.value = true;
             const payload = { ...form.value };
-         await LoginServices.register(payload)
+            await LoginServices.register(payload)
                 .then(res => {
-                    console.log('res',res)
+                    console.log('res', res)
                     if (res.status === 200 && res?.data?.success === true) {
-                         router.push('/login');
+                        router.push('/login');
                         processing.value = false;
                     }
-                    
+
                 })
         }
     } catch (e) {
         if (res.status === 400) {
-                        console.log(res.data.message)
-                        processing.value = false;
-                    }
+            console.log(res.data.message)
+            processing.value = false;
+        }
         console.error('Error while register:', e);
         processing.value = false;
     } finally {
@@ -76,20 +76,21 @@ const handleSubmit =async () => {
 </script>
 
 <template>
-    
-        <div class="min-h-screen bg-gray-100 text-gray-900 flex justify-center overflow-hidden">
-            <div class="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
-                <div class="lg:w-1/2 xl:w-5/12 p-2 sm:p-2">
-                    <!-- <div>
+
+    <div class="min-h-screen bg-gray-100 text-gray-900 flex justify-center overflow-hidden">
+        <div
+            class="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1 overflow-hidden">
+            <div class="lg:w-1/2 xl:w-5/12 p-2 sm:p-2">
+                <!-- <div>
                 <img src="https://storage.googleapis.com/devitary-image-host.appspot.com/15846435184459982716-LogoMakr_7POjrN.png"
                     class="w-32 mx-auto" />
             </div> -->
-                    <div class=" flex flex-col items-center">
-                        <h1 class="text-2xl xl:text-3xl font-extrabold">
-                            Sign up
-                        </h1>
-                        <div class="w-full flex-1 mt-8">
-                            <!-- <div class="flex flex-col items-center">
+                <div class=" flex flex-col items-center">
+                    <h1 class="text-2xl xl:text-3xl font-extrabold">
+                        Sign up
+                    </h1>
+                    <div class="w-full flex-1 mt-8">
+                        <!-- <div class="flex flex-col items-center">
                         <button
                             class="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                             <div class="bg-white p-2 rounded-full">
@@ -127,18 +128,19 @@ const handleSubmit =async () => {
                         </button>
                     </div> -->
 
-                            <!-- <div class="my-12 border-b text-center">
+                        <!-- <div class="my-12 border-b text-center">
                         <div
                             class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
                             Or sign up with e-mail
                         </div>
                     </div> -->
-                    <form @submit.prevent="handleSubmit">
+                        <form @submit.prevent="handleSubmit">
                             <div class="mx-auto max-w-xs">
                                 <TextInput name="name" type="text" label=" Full Name" :errMessage="errors.name"
-                                    v-model="form.name" placeholder="Full Name" :class="{ 'border-red-500': errors.name }"
+                                    v-model="form.name" placeholder="Full Name"
+                                    :class="{ 'border-red-500': errors.name }"
                                     @update:model="$clearError(errors, 'name')">
-                                   
+
                                 </TextInput>
                                 <TextInput name="email" type="email" label="Email" :errMessage="errors.email"
                                     v-model="form.email" placeholder="email" :class="{ 'border-red-500': errors.email }"
@@ -171,8 +173,8 @@ const handleSubmit =async () => {
                                     </svg>
                                 </TextInput>
                                 <TextInput name="password_confirmation" type="password" label="Confirm Password"
-                                    :errMessage="errors.password_confirmation" v-model="form.password_confirmation" class=""
-                                    placeholder="6+ Characters, 1 Capital letter"
+                                    :errMessage="errors.password_confirmation" v-model="form.password_confirmation"
+                                    class="" placeholder="6+ Characters, 1 Capital letter"
                                     :class="{ 'border-red-500': errors.password_confirmation }"
                                     @update:model="$clearError(errors, 'password_confirmation')">
                                     <svg class="fill-current" width="22" height="22" viewBox="0 0 22 22" fill="none"
@@ -213,15 +215,15 @@ const handleSubmit =async () => {
                                 </p>
                             </div>
                         </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
-                    <div class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
-                        style="background-image: url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg');">
                     </div>
                 </div>
             </div>
+            <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
+                <div class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
+                    style="background-image: url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg');">
+                </div>
+            </div>
         </div>
-    
+    </div>
+
 </template>
