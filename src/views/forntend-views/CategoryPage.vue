@@ -72,7 +72,7 @@
             <div
               class="flex items-center justify-between hover:bg-[#000000CC] text-[13px] pr-6 bg-gray-100 text-[#4dc45c]"
               :class="dropdownHoverColor ? 'bg-[#000000CC]' : ''">
-              <a class="menu-hover font-graphik uppercase text-green text-[#4dc45c] mx-2 py-1" onClick="">
+              <a class="menu-hover font-graphik uppercase text-green  mx-2 py-1" onClick="">
                 Product Type
               </a>
               <ArrowSvg size="8px" initialRotation="left" :fillColor="arrowFillColor2" />

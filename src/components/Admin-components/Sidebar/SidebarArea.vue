@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/stores/sidebar'
-import { onClickOutside } from '@vueuse/core'
-import { ref } from 'vue'
+import { onClickOutside, useMounted } from '@vueuse/core'
+import { computed, onMounted, ref } from 'vue'
 import SidebarItem from './SidebarItem.vue'
+import CommonServices from '@/services/CommonServices';
+import { showToast } from '@/helper/functions';
+import { useStore } from 'vuex';
 
 const target = ref(null)
-
+const loading= ref(false)
+const store = useStore();
+const role_id=store.getters.user.role_id;
+const idsToFilter = ref<number[]>([]) 
 const sidebarStore = useSidebarStore()
 
 onClickOutside(target, () => {
@@ -352,6 +358,53 @@ const menuGroups = ref([
     ]
   }
 ])
+function filterChildren(children: any[], idsToFilter: number[]) {
+  return children
+    .filter(child => idsToFilter.includes(child.id) || (child.children && child.children.some(c => idsToFilter.includes(c.id))))
+    .map(child => ({
+      ...child,
+      children: filterChildren(child.children || [], idsToFilter) 
+    }));
+}
+
+function filterParents(data: any[], idsToFilter: number[]) {
+  return data
+    .map(parent => ({
+      ...parent,
+      menuItems: filterChildren(parent.menuItems || [], idsToFilter)
+    }))
+    .filter(parent => parent.menuItems.length > 0); 
+}
+
+// Create a computed property for filtered data
+const filteredData = computed(() => filterParents(menuGroups.value, idsToFilter.value));
+
+// Create a computed property for result
+const result = computed(() => ({
+  name: 'MENU',
+  menuItems: filteredData.value.flatMap(group => group.menuItems) 
+}));
+
+const setSidebar = async (payload: { role_id: number }) => {
+  loading.value = true;
+  
+  try {
+    const { status, data } = await CommonServices.getSideMenu(payload)
+    if (status === 200 && data.success) {
+      idsToFilter.value = data.data;
+      // Trigger computed properties to update
+    }
+  } catch (error) {
+    showToast('Something went wrong', 'error')
+    console.error('Error while fetching data:', error)
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  setSidebar({ role_id })
+})
 </script>
 
 <template>
@@ -385,7 +438,7 @@ const menuGroups = ref([
             <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">{{ menuGroup.name }}</h3>
 
             <ul class="mb-6 flex flex-col gap-1.5">
-              <SidebarItem v-for="(menuItem, index) in menuGroup.menuItems" :item="menuItem" :key="index"
+              <SidebarItem v-for="(menuItem, index) in result.menuItems" :item="menuItem" :key="index"
                 :index="index" />
             </ul>
           </div>
@@ -394,4 +447,5 @@ const menuGroups = ref([
       <!-- Sidebar Menu -->
     </div>
   </aside>
+  <Loader :isLoading="loading" :fullPage="true" />
 </template>
