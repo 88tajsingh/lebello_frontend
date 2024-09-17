@@ -18,7 +18,7 @@
             <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
                 v-model="search" />
             <Button v-if="permissions.write"
-                @click="() => { router.push({ name: 'material-slider-add' }); store.dispatch('clearEditData'); }"
+                @click="() => { router.push({ name: 'material-slider-form' }); store.dispatch('clearEditData'); }"
                 class="px-2 py-2 m-auto whitespace-nowrap">Add
                 Material Slider</Button>
         </div>
@@ -40,7 +40,7 @@
             </template>
             <template v-if="permissions.write" #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'material-slider-edit', params: { id: data.value.id } }); store.dispatch('setEdit', data.value) }"
+                    <div @click="() => { router.push({ name: 'material-slider-form'}); store.dispatch('setEdit', data.value) }"
                         id="edit svg">
                         <EditSvg />
                     </div>

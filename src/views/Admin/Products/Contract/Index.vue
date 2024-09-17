@@ -181,7 +181,6 @@ onMounted(() => {
   getDomainList();
 }
 );
-a
 watch(
   () => domain_id.value,
   () => {
