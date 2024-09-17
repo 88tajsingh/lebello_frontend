@@ -1,5 +1,4 @@
 <template>
-    {{ form }}
     <DefaultCard :cardTitle="form.id ? `Edit Company` : `Add New Company`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="CompanyServices.deleteCompany"
             masterKey="master_company_id" :masterDeleteService="CompanyServices.masterCompanySlugUpdate"

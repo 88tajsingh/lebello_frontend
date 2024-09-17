@@ -214,7 +214,7 @@ div<template>
                                             Remove
                                         </button>
 
-                                        <hr v-if="index <div formItems.length - 1" class="my-4" />
+                                        <!-- <hr v-if="index <div formItems.length - 1" class="my-4" /> -->
 
                                     </div>
 
