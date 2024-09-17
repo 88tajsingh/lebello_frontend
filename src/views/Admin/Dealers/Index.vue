@@ -3,82 +3,36 @@
   <PageHeader> Dealers</PageHeader>
   <div class="flex content-between justify-between mb-2">
     <div class="flex">
-      <Select
-        v-if="permissions.write"
-        cusClass="h-[40px] border-box"
-        :options="bulkOption"
-        showfield="text"
-        valueField="value"
-        label="Bulk Options"
-        v-model="bulkActionSelected"
-      />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()"
-        >Apply</Button
-      >
+      <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
+        valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
       <div class="max-w-52 ml-2">
-        <Select
-          :options="getDominsList"
-          showfield="name"
-          class="w-full"
-          valueField="id"
-          label="All Domain"
-          v-model="pagiantionData.domain_id"
-        />
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+          v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
-        <Select
-          :options="statusData"
-          showfield="name"
-          class="w-full"
-          valueField="value"
-          label="All Records"
-          v-model="pagiantionData.status"
-        />
+        <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+          v-model="pagiantionData.status" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
-      <TextInput
-        type="text"
-        class="block bg-white mr-2 rounded-lg h-[40px] w-full"
-        placeholder="Search"
-        v-model="search"
-      />
-      <Button
-        v-if="permissions.write"
-        @click="
-          () => {
-            router.push({ name: 'Dealer-add' })
-            store.dispatch('clearEditData')
-          }
-        "
-        class="px-2 py-2 m-auto whitespace-nowrap"
-        >Add Dealers</Button
-      >
+      <TextInput type="text" class="block bg-white mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
+        v-model="search" />
+      <Button v-if="permissions.write" @click="() => {
+          router.push({ name: 'Dealer-form' })
+          store.dispatch('clearEditData')
+        }
+        " class="px-2 py-2 m-auto whitespace-nowrap">Add Dealers</Button>
     </div>
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable
-      class="next-prev-pagination"
-      ref="datatable"
-      skin="bh-table-striped bh-table-hover "
-      :hasCheckbox="true"
-      :cloneHeaderInFooter="false"
-      :stickyHeader="false"
-      :rows="data"
-      :columns="dealersCols"
-      :loading="dataTableLoding"
-      :totalRows="totalRows"
-      :isServerMode="true"
-      :pageSize="10"
-      :search="search"
-      @change="changePage"
-    >
+    <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+      :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="dealersCols"
+      :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
+      @change="changePage">
       <template #featured_image_url="data">
-        <img
-          :src="$filePath(data.value.featured_image_url)"
-          alt="Material Image"
-          style="max-width: 50px; max-height: 50px"
-        />
+        <img :src="$filePath(data.value.featured_image_url)" alt="Material Image"
+          style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
         <span v-if="data.value.status === 1">Draft</span>
@@ -87,26 +41,18 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div
-            @click="
-              () => {
-                router.push({ name: 'Dealer-edit' })
-                store.dispatch('setEdit', data.value)
-              }
-            "
-            id="edit svg"
-          >
+          <div @click="() => {
+              router.push({ name: 'Dealer-form' })
+              store.dispatch('setEdit', data.value)
+            }
+            " id="edit svg">
             <EditSvg />
           </div>
-          <div
-            id="delete svg"
-            @click="
-              () => {
-                project_id = data.value
-                openDeleteModal()
-              }
-            "
-          >
+          <div id="delete svg" @click="() => {
+              project_id = data.value
+              openDeleteModal()
+            }
+            ">
             <DeleteSvg />
           </div>
         </div>
@@ -115,11 +61,7 @@
     </vue3-datatable>
   </div>
 
-  <DeleteModal
-    v-model:isOpen="deleteModalIsOpen"
-    :modalTitle="'Delete Dealer'"
-    @delete="handleDeleteProjects"
-  >
+  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Dealer'" @delete="handleDeleteProjects">
     Do you want to delete ?
   </DeleteModal>
   <Loader :isLoading="loading" :fullPage="true" />

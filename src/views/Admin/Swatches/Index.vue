@@ -18,7 +18,7 @@
       <TextInput type="text" class="block bg-white rounded-lg mr-2 h-[40px] w-full" placeholder="Search"
         v-model="search" />
       <Button v-if="permissions.write"
-        @click="() => { router.push({ name: 'swatches-add' }); store.dispatch('clearEditData'); }"
+        @click="() => { router.push({ name: 'Swatches-form' }); store.dispatch('clearEditData'); }"
         class="px-2 py-2 m-auto whitespace-nowrap"> Add Swatches </Button>
     </div>
   </div>
@@ -45,7 +45,7 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'swatches-edit' }); store.dispatch('setEdit', data.value) }"
+          <div @click="() => { router.push({ name: 'Swatches-form' }); store.dispatch('setEdit', data.value) }"
             id="edit svg">
             <EditSvg />
           </div>
