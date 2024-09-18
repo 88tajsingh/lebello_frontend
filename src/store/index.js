@@ -1,14 +1,15 @@
 import LoginServices from '@/services/LoginServices';
 import Vuex from 'vuex';
+import { encryptData, decryptData } from './EncriptDecript'; 
 
 export default new Vuex.Store({
   state: {
-    token: localStorage.getItem('token') || null,
-    expiresAt: localStorage.getItem('expiresAt')|| null,
-    user: safeJsonParse(localStorage.getItem('user')) || null,
+    token: decryptData(localStorage.getItem('token')) || null,
+    expiresAt: localStorage.getItem('expiresAt') || null,
+    user: decryptData(localStorage.getItem('user')) || null,
     editData: '', 
-    edit: safeJsonParse(localStorage.getItem('edit')) || null,
-    domain: safeJsonParse(localStorage.getItem('domain')) || null,
+    edit: decryptData(localStorage.getItem('edit')) || null,
+    domain: decryptData(localStorage.getItem('domain')) || null,
   },
   getters: {
     token: (state) => state.token,
@@ -24,7 +25,7 @@ export default new Vuex.Store({
       state.token = token;
       state.expiresAt = expiresAt;
       localStorage.setItem('expiresAt', expiresAt);
-      localStorage.setItem('token', token);
+      localStorage.setItem('token', encryptData(token)); // Encrypt token
     },
     clearToken(state) {
       state.token = null;
@@ -33,7 +34,7 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', encryptData(user)); // Encrypt user data
     },
     setEditData(state, data) {
       state.editData = data;
@@ -43,11 +44,11 @@ export default new Vuex.Store({
       localStorage.removeItem('user');
     },
     setDomain(state, domain) {
-      localStorage.setItem('domain', JSON.stringify(domain));
+      localStorage.setItem('domain', encryptData(domain)); // Encrypt domain
       state.domain = domain;
     },
     setEdit(state, data) {
-      localStorage.setItem('edit', JSON.stringify(data));
+      localStorage.setItem('edit', encryptData(data)); // Encrypt edit data
       state.edit = data;
     },
     clearEdit(state) {
@@ -82,7 +83,7 @@ export default new Vuex.Store({
     clearEditData({ commit }) {
       commit('clearEdit');
     },
-    clearToken({commit}){
+    clearToken({commit}) {
       commit('clearToken');
     }
   },

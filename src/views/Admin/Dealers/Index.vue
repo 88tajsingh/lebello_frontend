@@ -19,7 +19,7 @@
       <TextInput type="text" class="block bg-white mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
         v-model="search" />
       <Button v-if="permissions.write" @click="() => {
-          router.push({ name: 'Dealer-form' })
+          router.push('/dealer-form')
           store.dispatch('clearEditData')
         }
         " class="px-2 py-2 m-auto whitespace-nowrap">Add Dealers</Button>

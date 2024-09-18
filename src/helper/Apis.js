@@ -188,3 +188,19 @@ export const getDomins = async () => {
      if(loading) loading.value = false
     }
   };
+
+  const setSidebar = async (payload) => {
+    loading.value = true;
+
+    try {
+        const { status, data } = await CommonServices.getSideMenu(payload)
+        if (status === 200 && data.success) {
+            idsToFilter.value = data.data;
+        }
+    } catch (error) {
+        showToast('Something went wrong', 'error')
+        console.error('Error while fetching data:', error)
+    } finally {
+        loading.value = false;
+    }
+}
