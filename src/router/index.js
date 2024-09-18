@@ -101,11 +101,11 @@ const router = createRouter({
         },
         {
           path: '/swatches-form',
-          name: 'swatches-form',
+          name: 'Swatches-form',
           component: () => import('../views/Admin/Swatches/AddAndEdit.vue'),
           meta: { requiresAuth: true }
         },
-      
+
         {
           path: '/materials',
           name: 'materials',
@@ -148,7 +148,7 @@ const router = createRouter({
           component: () => import('../views/Admin/Pages/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
-        
+
         {
           path: '/media',
           name: 'Media-section',
@@ -167,7 +167,7 @@ const router = createRouter({
           component: () => import('../views/Admin/Contract/Contract-Design/AddEditContract.vue'),
           meta: { requiresAuth: true }
         },
-        
+
         {
           path: '/contract-type',
           name: 'Contract-type',
@@ -226,7 +226,7 @@ const router = createRouter({
           component: () => import('../views/Admin/Tags/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
-       
+
         {
           path: '/designer',
           name: 'Designer',
@@ -265,7 +265,6 @@ const router = createRouter({
           component: () => import('../views/Admin/Dealers/AddEditForm.vue'),
           meta: { requiresAuth: true }
         },
-       
 
         // ---------------------------------Company ROutes--------------------------------------------//
         {
@@ -485,7 +484,7 @@ const router = createRouter({
           name: 'user-form',
           component: () => import('../views/Admin/User/AddEditUser.vue'),
           meta: { requiresAuth: true }
-        },
+        }
       ]
     }
   ]
@@ -500,7 +499,7 @@ const relatedRoutesMap = {
   '/contract-location': '/contract-loaction-form',
   '/tags': '/tags-form',
   '/designer': '/designer-form',
-  '/dealers': '/dealer-form',
+  '/dealer': '/dealer-form',
   '/company': '/company-form',
   '/product': '/product-form',
   '/product-contract': '/product-contract-from',
@@ -516,49 +515,47 @@ const relatedRoutesMap = {
   '/home-slider': '/home-slider-form',
   '/material-slider': '/material-slider-form',
   '/global-seo': '/global-meta-tag-form',
-  '/users': '/user-form',
-};
+  '/users': '/user-form'
+}
+
+let isRedirecting = false
 
 router.beforeEach((to, from, next) => {
-  console.log(`Navigating to: ${to.path}`);
-  
-  const token = store?.getters?.token || localStorage.getItem('token');
-  const allowedPaths = store.getters.user?.modules?.route || [];
+  const token = store?.getters?.token || localStorage.getItem('token')
+  const allowedPaths = store.getters.user?.modules?.route || []
 
-  console.log('Allowed Paths:', allowedPaths);
-
-  const isRelatedPathAllowed = allowedPaths.some(path => {
-    return relatedRoutesMap[path] === to.path;
-  });
+  const isRelatedPathAllowed = allowedPaths.some((path) => {
+    return relatedRoutesMap[path] === to.path
+  })
 
   try {
-    // Check if the target route is the same as the current route
     if (to.path === from.path) {
-      console.log('Already on this route, no need to navigate again.');
-      return next(false); // Prevent navigation
+      return next(false)
     }
-
     if (to.name === 'login' && isAuthenticated(token)) {
-      console.log('User is authenticated, redirecting to dashboard');
-      next('/dashboard');
+      next('/dashboard')
     } else if (to.meta.requiresAuth && !isAuthenticated(token)) {
-      console.log('User not authenticated, redirecting to login');
-      next('/login');
+      if (!isRedirecting) {
+        isRedirecting = true
+        next('/login')
+      } else {
+        next(false)
+      }
     } else if (to.meta.requiresAuth && !allowedPaths.includes(to.path) && !isRelatedPathAllowed) {
-      console.log('User does not have access to this route');
-      next('/login');
+      if (!isRedirecting) {
+        isRedirecting = true
+        next('/login')
+      } else {
+        next(false)
+      }
     } else {
-      console.log('Navigation allowed to:', to.path);
-      next();
+      isRedirecting = false
+      next()
     }
   } catch (error) {
-    console.warn('Navigation error:', error);
-    next(false);
+    console.warn('Navigation error:', error)
+    next(false)
   }
-});
-
-
-
-
+})
 
 export default router
