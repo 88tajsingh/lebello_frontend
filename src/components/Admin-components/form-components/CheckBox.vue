@@ -21,7 +21,7 @@
           class="text-lg focus:outline-none"
         >
           <svg 
-            v-if="item.expanded && item.children" 
+            v-if="!item.expanded && item.children" 
             width="18px" 
             height="18px" 
             viewBox="0 0 24 24" 
@@ -48,7 +48,7 @@
           </svg>
         </button>
       </div>
-      <div v-show="item.expanded && item.children" class="ml-5">
+      <div v-show="!item.expanded && item.children" class="ml-5">
         <div v-for="child in item.children" :key="child.id" class="mt-2">
           <label class="flex items-center">
             <input 

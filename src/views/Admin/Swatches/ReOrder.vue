@@ -1,5 +1,5 @@
 <template>
-  <PageHeader>Material - Re-Order</PageHeader>
+  <PageHeader>Swatches - Re-Order</PageHeader>
   <div class="w-52 ml-auto">
     <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
       v-model="domain_id" />
@@ -31,9 +31,7 @@ const domain_id = ref('')
 const permissions = store.getters.user.permissions;
 
 function handleListUpdate(updatedList) {
-  console.log('Updated list in parent:', updatedList);
   sortedData.value = updatedList;
-  console.log("sortedData", sortedData.value)
 };
 
 const loading = ref(false);
@@ -65,14 +63,13 @@ const handleSortSwatches = async () => {
   const id = sortedData.value.map(item => item.id);
   loading.value = true;
   try {
-    const res = await SwatchesServices.swatchesSorting({ key: 'swatches', data: id });
+    const res = await SwatchesServices.swatchesSorting({ key: 'swatches', data: id ,domain_id:domain_id.value });
     if (res.status === 200 && res.data.success) {
       sortedData.value = [];
-      showToast('Sorting data successfully', 'success');
+      showToast(res.data.message, 'success');
     }
   } catch (error) {
-    console.error('Error sorting swatches:', error);
-    showToast('Error sorting swatches', 'error');
+    showToast(res.data.message, 'error');
   } finally {
     loading.value = false;
   }

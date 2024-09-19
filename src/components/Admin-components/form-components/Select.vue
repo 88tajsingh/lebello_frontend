@@ -9,29 +9,30 @@
     />
     <div class="w-full">
       <select 
-      class="rounded-lg border bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
-      v-bind="$attrs"
-      v-model="selectedOption"
-      :class="[cusClass, { 'border-red': errorClass }]"
-      :disabled="disabled"
-      @change="handleSelectChange"
-    >
-      <option v-if="defaultZero" value="0">{{ label }}</option>
-      <option v-else :value="selectedOption === null ? null : ''">{{ label }}</option>
-      
-      <template v-for="option in options" :key="option[valueField]">
-        <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>
-        <template v-if="option.children">
-          <option v-for="child in option.children" :value="child[valueField]" :key="child[valueField]">
-            &nbsp;&nbsp;&nbsp;{{ child[showfield] }}
-          </option>
+        ref="selectElement"
+        class="rounded-lg border bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
+        v-bind="$attrs"
+        v-model="selectedOption"
+        :class="[cusClass, { 'border-red': errorClass }]"
+        :disabled="disabled"
+        @change="handleSelectChange"
+      >
+        <option v-if="defaultZero" value="0">{{ label }}</option>
+        <option v-else :value="selectedOption === null ? null : ''">{{ label }}</option>
+        
+        <template v-for="option in options" :key="option[valueField]">
+          <option :value="option[valueField]" class="group-option">{{ option[showfield] }}</option>
+          <template v-if="option.children">
+            <option v-for="child in option.children" :value="child[valueField]" :key="child[valueField]">
+              &nbsp;&nbsp;&nbsp;{{ child[showfield] }}
+            </option>
+          </template>
         </template>
-      </template>
-    </select>
-    <div v-show="errorClass">
-    <p class="text-sm ml-1 text-red">{{ errMessage }}</p>
-  </div>
-  </div>  
+      </select>
+      <div v-show="errorClass">
+        <p class="text-sm ml-1 text-red">{{ errMessage }}</p>
+      </div>
+    </div>  
   </div>
 </template>
 
@@ -93,24 +94,45 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:checkValue']);
 
 const selectedOption = ref(props.modelValue);
+const selectElement = ref(null);
 const checked = ref(false);
 
+// Watch for modelValue changes
 watch(() => props.modelValue, (newValue) => {
   selectedOption.value = newValue;
 });
 
+// Watch for errMessage changes
+watch(() => props.errMessage, (newErrMessage) => {
+  if (newErrMessage) {
+    selectElement.value?.focus(); // Focus on selectElement if there's an error message
+  }
+});
+
+// Handle select change
 const handleSelectChange = (event) => {
   emit('update:modelValue', event.target.value);
 };
 
+// Handle checkbox change
 const handleCheckboxChange = (event) => {
   checked.value = event.target.checked;
   emit('update:checkValue', checked.value);
 };
 
+// Watch for checked state changes
 watch(checked, (newChecked) => {
   emit('update:checkValue', newChecked);
 });
+
+// Expose focus method
+const focus = () => {
+  if (selectElement.value) {
+    selectElement.value.focus();
+  }
+};
+
+defineExpose({ focus });  
 </script>
 
 <style scoped>

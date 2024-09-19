@@ -25,7 +25,7 @@ export default new Vuex.Store({
       state.token = token;
       state.expiresAt = expiresAt;
       localStorage.setItem('expiresAt', expiresAt);
-      localStorage.setItem('token', encryptData(token)); // Encrypt token
+      localStorage.setItem('token', encryptData(token)); 
     },
     clearToken(state) {
       state.token = null;
@@ -34,7 +34,7 @@ export default new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
-      localStorage.setItem('user', encryptData(user)); // Encrypt user data
+      localStorage.setItem('user', encryptData(user)); 
     },
     setEditData(state, data) {
       state.editData = data;
@@ -44,11 +44,12 @@ export default new Vuex.Store({
       localStorage.removeItem('user');
     },
     setDomain(state, domain) {
-      localStorage.setItem('domain', encryptData(domain)); // Encrypt domain
+      localStorage.setItem('domain', encryptData(domain));
       state.domain = domain;
+      // console.log(state.domain)
     },
     setEdit(state, data) {
-      localStorage.setItem('edit', encryptData(data)); // Encrypt edit data
+      localStorage.setItem('edit', encryptData(data)); 
       state.edit = data;
     },
     clearEdit(state) {

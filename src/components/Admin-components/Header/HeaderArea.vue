@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSidebarStore } from '@/stores/sidebar'
 import DarkModeSwitcher from './DarkModeSwitcher.vue'
-import DropdownMessage from './DropdownMessage.vue'
+// import DropdownMessage from './DropdownMessage.vue'
 import DropdownNotification from './DropdownNotification.vue'
 import DropdownUser from './DropdownUser.vue'
 
@@ -18,13 +18,7 @@ const sidebarStore = useSidebarStore()
         <!-- Hamburger Toggle BTN -->
         <button
           class="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
-          @click="
-            () => {
-              console.log('Toggling Sidebar')
-              toggleSidebar()
-            }
-          "
-        >
+          @click="toggleSidebar">
           <span class="relative block h-5.5 w-5.5 cursor-pointer">
             <span class="block absolute right-0 h-full w-full">
               <span
@@ -55,7 +49,7 @@ const sidebarStore = useSidebarStore()
         <!-- Hamburger Toggle BTN -->
         <router-link class="block flex-shrink-0 lg:hidden" to="/">
           <!-- <img src="@/assets/images/logo/logo-icon.svg" alt="Logo" /> -->
-          XX
+         
         </router-link>
       </div>
       <div class="hidden sm:block">

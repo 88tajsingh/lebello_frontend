@@ -8,7 +8,7 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
         <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="domain_id" />
+          v-model="pagiantionData.domain_id" />
       </div>
     </div>
     <div class="flex">
@@ -30,7 +30,7 @@
         </div>
       </template>
       <template #image="data">
-        <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="data.value.image" alt="Contract" style="max-width: 50px; max-height: 50px" />
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
@@ -80,6 +80,7 @@ const search = ref('');
 const datatable = ref(null);
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '',})
 const getDominsList = ref([])
 const domain_id = ref('')
 const getLoading = ref(false);
@@ -122,9 +123,9 @@ const isRowHovered = (value) => {
 };
 
 const changePages = (page) => {
-  console.log("page changed", page)
-  const payload = { limit: page.pagesize, page: page.current_page }
-  handleGetTags(payload);
+  const { pagesize, current_page } = page;
+  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
+ handleGetTags(pagiantionData.value);
 }
 // api calls
 const handleGetTags = async (payload) => {
@@ -147,7 +148,7 @@ const handleDeleteProductType = async () => {
   try {
     const res = await CommonServices.deleteTags({ id: editData.value });
     if (res.status === 200 && res.data.success) {
-      rows.value = rows.value.filter(item => item.id !== editData.value)
+     await handleGetTags(pagiantionData.value)
       showToast(res.data.message, 'success');
       deleteModalIsOpen.value = false;
       editData.value = null;
@@ -172,7 +173,7 @@ const handleBulkActions = async () => {
     try {
       const res = await CommonServices.BulkDeleteTags({ id: ids });
       if (res.status === 200 && res.data.success) {
-        await handleGetTags();
+        await handleGetTags(pagiantionData.value);
         showToast(res.data.message, 'success');
       }
       else if (res.status === 400) {
@@ -190,8 +191,8 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
-  store.dispatch('setDomain', defaultDomain);
+  pagiantionData.value.domain_id = defaultDomain.id
+  // store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
@@ -200,12 +201,12 @@ onMounted(() => {
 );
 
 watch(
-  () => domain_id.value,
+  () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
 
-    handleGetTags({ limit: 10, page: 1, domain_id: domain_id.value });
+    handleGetTags(pagiantionData.value);
   }
 );
 </script>

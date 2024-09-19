@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white relative pb-5 px-6">
+    <div class="bg-white  pb-5 px-6">
         <div v-if="getFlag == false" class="pt-4">
             <PageHeader> Media Library </PageHeader>
         </div>
@@ -88,7 +88,7 @@
             </div>
             </div>
         </div>
-        <div v-if="btnName " class=" absolute bottom-0 right-4 border m-0  ">
+        <div v-if="btnName " class=" absolute bottom-5 right-4 border m-0  ">
             <Button class="px-2 py-1 mt-auto" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                 @click="() => selectedFiles([...selectedMedia])">
                 {{ btnName }}</Button>
@@ -97,7 +97,6 @@
         </div>
     </div>
     
-    <Loader :isLoading="loading" :fullPage="true" />
 
     <!-- folders popups -->
     <PopupModal modalTitle="Add Folder" custonClasses="w-[400px] h-[200px] " v-model:isOpen="modalflag.open">
@@ -150,16 +149,28 @@
             <div class="flex">
                 <div class="w-4/6 px-5 h-[100%]">
                     <template v-if="isImage(editMediaData.file_url)">
-                        <img class="w-full h-[470px]" :src="filePath(editMediaData.file_url)" alt="Image" />
+                        <img class="w-full h-[470px]" :src="filePath(editMediaData.file_url)" alt="" />
                     </template>
                     <template
                         v-else-if="isPdf(editMediaData.file_url) || isWord(editMediaData.file_url) || isExcel(editMediaData.file_url)">
-                        <iframe :src="getGoogleDocsViewerUrl(editMediaData.file_url)" width="100%"
-                            height="600px"></iframe>
+                        <iframe 
+                        :src="getGoogleDocsViewerUrl(editMediaData.file_url)" 
+                        width="100%" 
+                        height="600px" 
+                        title="Document Viewer">
+                    </iframe>
+                    
                     </template>
                     <template v-else-if="isVideo(editMediaData.file_url)">
+
                         <video controls>
                             <source :src="editMediaData.file_url" type="video/mp4">
+                            <track 
+                                kind="subtitles" 
+                                :src="filePath(editMediaData.file_url)" 
+                                srclang="en" 
+                                label="English" 
+                                default>
                             Your browser does not support the video tag.
                         </video>
                     </template>
@@ -194,6 +205,9 @@
     <DeleteModal v-model:isOpen="mediaModalflag.delete" :modalTitle="'Delete Media File'" @delete="handleDeleteMedia">
         Do you want to delete Media File ?
     </DeleteModal>
+
+    <Loader :isLoading="loading" :fullPage="true" />
+
 
 </template>
 
@@ -449,6 +463,7 @@ const handleDeleteFolders = async () => {
 
 // madia apis
 const handleGetMediaChild = async (payload) => {
+    loading.value = true
     try {
         await FolderServices.GetMediaChild(payload)
             .then((res) => {
@@ -461,6 +476,8 @@ const handleGetMediaChild = async (payload) => {
             })
     } catch (e) {
         console.error('Error while folder get:', e)
+    }finally{
+        loading.value = false;
     }
 }
 

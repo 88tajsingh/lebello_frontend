@@ -57,10 +57,10 @@ const ApiConfig = {
   editPages: '/update-pages',
   deletePages: '/delete-pages',
   PagesSorting: '/sort-data',
+  bulkDeletePages: '/bulk-delete-pages',
   globalPageUpdate: '/global-page-update',
   deletePageMaster: '/delete-master-page',
   masterPageSlugUpdate: '/master-page-slug-update',
-  // bulkDeletePages :'/bulk-Pages-delete',
 
   // contract design
   getNewContract: '/get-contract-design',

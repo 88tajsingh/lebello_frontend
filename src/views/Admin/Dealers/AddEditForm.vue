@@ -14,18 +14,17 @@
                         <div class="px-6">
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
-                                :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                        checkedFields.title = value
-                                    }
-                                    " />
+                                :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="(value) => { checkedFields.title = value }"
+                                @update:modelValue="$clearError(errors, 'title')" />
 
                             <div class="flex mt-3 flex-col">
                                 <InputLabel for="status" value="Select Template" />
                                 <Select :options="TemplateVersion" showfield="name" class="w-full" valueField="value"
                                     label="Select " v-model="form.dealer_page_template" :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="(value) => {
-                                            checkedFields.dealer_page_template = value
-                                        }
+                                        checkedFields.dealer_page_template = value
+                                    }
                                         " />
                                 <p>Default First Version will active.</p>
                             </div>
@@ -54,7 +53,7 @@
                                                 v-for="(slide, index) in imageData.day_banner_images.images"
                                                 :key="`slide-${index}`">
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(slide.file_url)" />
+                                                    :src="$filePath(slide.file_url)" alt="Description of the content" />
                                                 <div @click="() => handleRemoveDayImage(slide)"
                                                     class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -89,7 +88,7 @@
                                                 v-for="(slide, index) in imageData.night_banner_images.images"
                                                 :key="`slide-${index}`">
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(slide.file_url)" />
+                                                    :src="$filePath(slide.file_url)" alt="Description" />
                                                 <div @click="() => handleRemoveNightImage(slide)"
                                                     class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -119,8 +118,8 @@
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Latitude"
                                         placeholder="" v-model="form.latitude" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.latitude = value
-                                            }
+                                            checkedFields.latitude = value
+                                        }
                                             " />
                                     <p>put the latitude coordinate.</p>
                                 </div>
@@ -128,8 +127,8 @@
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Longitude *"
                                         placeholder="" v-model="form.longitude" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.longitude = value
-                                            }
+                                            checkedFields.longitude = value
+                                        }
                                             " />
                                     <p>Put the longitude coordinate.</p>
                                 </div>
@@ -138,8 +137,8 @@
                                     <TextInput id="seo_meta_description" :isTextarea="true" :rows="4" type="text"
                                         class="block w-[180px] mr-2" v-model="form.bubble_info" placeholder=""
                                         label="Buble info" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                                checkedFields.bubble_info = value
-                                            }
+                                            checkedFields.bubble_info = value
+                                        }
                                             " />
                                     <span>Most search engines use a maximum of 160 chars for the description. </span>
                                 </div>
@@ -148,8 +147,8 @@
                                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.show_dealer_page" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.show_dealer_page = value
-                                            }
+                                            checkedFields.show_dealer_page = value
+                                        }
                                             " />
                                     <p>Default First Version will active.</p>
                                 </div>
@@ -162,8 +161,8 @@
                                 <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
                                     :message="errors.seo_title" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                            checkedFields.title = value
-                                        }
+                                        checkedFields.title = value
+                                    }
                                         " />
                                 <span>Custom title tag.</span>
                             </div>
@@ -173,8 +172,8 @@
                                     placeholder="Meta Description" label="Meta Description"
                                     :message="errors.seo_meta_description" :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="(value) => {
-                                            checkedFields.seo_meta_description = value
-                                        }
+                                        checkedFields.seo_meta_description = value
+                                    }
                                         " />
                                 <span>Most search engines use a maximum of 160 chars for the description. </span>
                             </div>
@@ -183,8 +182,8 @@
                                     class="block w-[180px] mr-2" v-model="form.meta_keywords"
                                     placeholder="Meta Keywords" label="Meta Keywords"
                                     :message="errors.seo_meta_keywords" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                            checkedFields.seo_meta_keywords = value
-                                        }
+                                        checkedFields.seo_meta_keywords = value
+                                    }
                                         " />
                                 <span>Seperate each term with comma.</span>
                             </div>
@@ -196,8 +195,8 @@
                                 <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
                                     v-model="form.country_name" placeholder="" label="Country Name	"
                                     :message="errors.country_name" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                            checkedFields.country_name = value
-                                        }
+                                        checkedFields.country_name = value
+                                    }
                                         " />
                             </div>
                             <div class="mt-2 px-6 h-auto">
@@ -205,8 +204,8 @@
                                     class="block w-[180px] mr-2" v-model="form.slider_address"
                                     placeholder="Meta Keywords" label="Slider Address" :message="errors.slider_address"
                                     :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                            checkedFields.slider_address = value
-                                        }
+                                        checkedFields.slider_address = value
+                                    }
                                         " />
                             </div>
                         </Accordion>
@@ -218,8 +217,8 @@
                                     class="block w-[180px] mr-2" v-model="form.agent_description"
                                     placeholder="Meta Keywords" label="Agent Description"
                                     :message="errors.agent_description" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                            checkedFields.agent_description = value
-                                        }
+                                        checkedFields.agent_description = value
+                                    }
                                         " />
                             </div>
                         </Accordion>
@@ -235,9 +234,12 @@
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.status = value
-                                            }
-                                            " />
+                                            checkedFields.status = value
+                                        }"
+                                        :errorClass='errors.status'
+                                        :errMessage="errors.status"
+                                        @update:modelValue="$clearError(errors, 'status')"
+                                        />
                                 </div>
                             </div>
                         </div>
@@ -269,16 +271,16 @@
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Dealer email"
                                         placeholder="" v-model="form.email" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.email = value
-                                            }
+                                            checkedFields.email = value
+                                        }
                                             " />
                                 </div>
                                 <div class="mt-3">
                                     <TextInput type="number" class="block mr-2 h-[40px] w-full"
                                         label="Dealer contact number" placeholder="" v-model="form.contact_number"
                                         :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
-                                                checkedFields.contact_number = value
-                                            }
+                                            checkedFields.contact_number = value
+                                        }
                                             " />
                                 </div>
                                 <div class="flex flex-col">
@@ -286,8 +288,8 @@
                                     <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.territory" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.territory = value
-                                            }
+                                            checkedFields.territory = value
+                                        }
                                             " />
                                     <span>Select one territory. If none selected it will not be displayed on the
                                         list.</span>
@@ -296,8 +298,8 @@
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Company Name"
                                         placeholder="" v-model="form.company_name" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.company_name = value
-                                            }
+                                            checkedFields.company_name = value
+                                        }
                                             " />
                                 </div>
 
@@ -305,24 +307,24 @@
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="City"
                                         placeholder="" v-model="form.city" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.city = value
-                                            }
+                                            checkedFields.city = value
+                                        }
                                             " />
                                 </div>
                                 <div class="mt-3">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Weather City"
                                         placeholder="" v-model="form.weather_city" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.weather_city = value
-                                            }
+                                            checkedFields.weather_city = value
+                                        }
                                             " />
                                 </div>
                                 <div class="mt-3">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Time Zone"
                                         placeholder="" v-model="form.timezone" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => {
-                                                checkedFields.timezone = value
-                                            }
+                                            checkedFields.timezone = value
+                                        }
                                             " />
                                 </div>
                                 <div class="mr-2 mt-3 h-auto">
@@ -339,8 +341,8 @@
 
                                         <div class="mt-3 flex overflow-x-auto">
                                             <img v-for="file in imageData.company_logo.images" :key="file"
-                                                :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                                :alt="file?.alternative_text || 'image'" />
+                                                :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                                :alt="file?.alternative_text || 'Description of the content'" />
                                         </div>
                                         <InputError class="mt-2" :message="errors?.featured_image" />
                                     </div>
@@ -359,8 +361,9 @@
 
                                         <div class="mt-3 flex overflow-x-auto">
                                             <img v-for="file in imageData.thumb_image.images" :key="file"
-                                                :src="$filePath(file.file_url)" class="inline-block w-auto h-34 mr-4"
-                                                :alt="file?.alternative_text || 'image'" />
+                                                :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                                :alt="file?.alternative_text || 'Description of the content'" />
+
                                         </div>
                                         <InputError class="mt-2" :message="errors?.featured_image" />
                                     </div>
@@ -433,7 +436,7 @@ const errors = ref({})
 const loading = ref(false)
 const form = ref(
     store.getters.editData || {
-        status: '',
+        status: 1,
         visibility: '',
         dealer_page_template: 'First Version (OLD)'
     }
@@ -483,6 +486,10 @@ const validateForm = () => {
         errors.value.title = 'Title is required'
         return false
     }
+    if (!form.value.status) {
+        errors.value.status = 'status is required'
+        return false
+    }
     return true
 }
 
@@ -497,28 +504,22 @@ const handleSubmit = async () => {
     try {
         const action = store.getters.editData ? DealersServices.editDealer : DealersServices.addDealer
         const {
-            deleted_at,
-            created_at,
-            slug,
-            domains_data,
-            night_banner_images_data,
-            day_banner_images_data,
-            default_domain,
-            default_master,
-            updated_at,
-            featured_image_url,
-            ...payload
+            deleted_at,created_at,thumb_image_data,company_logo_data,slug,domains_data,night_banner_images_data,
+            day_banner_images_data,default_domain,default_master,updated_at,featured_image_url,...payload
         } = form.value
         if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
-        const res = await action(payload)
-        if (res.status === 200 && res.data.success) {
+        const { status, data } = await action(payload)
+        if (status === 200 && data.success) {
             if (hasCheckedFields) {
                 handleGlobalUpdate()
             } else {
-                showToast(res.data.message, 'success')
+                showToast(data.message, 'success')
                 router.push('/dealer')
             }
+        } else if (status === 400 || status === 403) {
+            showToast(data.message, 'error')
         }
+
     } catch (e) {
         console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} Dealers:`, e)
     } finally {
@@ -578,13 +579,19 @@ const fetchPagesData = async () => {
 // Lifecycle Hooks
 onMounted(() => {
     if (store.getters.editData) {
-        imageData.value.day_banner_images.mediaName =
-            store.getters?.editData?.day_banner_images_data?.file_url || 'Select Images'
-        imageData.value.day_banner_images.images = store.getters?.editData?.day_banner_images_data
-        imageData.value.night_banner_images.mediaName =
-            store.getters?.editData?.night_banner_images_data?.file_url || 'Select Images'
-        imageData.value.night_banner_images.images = store.getters?.editData?.night_banner_images_data
-    }
+    const { day_banner_images_data, night_banner_images_data, company_logo_data, thumb_image_data } = store.getters.editData;
+
+    const setImageData = (key, data, isArray = false) => {
+        imageData.value[key].mediaName = data?.file_url || 'Select Images';
+        imageData.value[key].images = isArray ? data : [data];
+    };
+
+    setImageData('day_banner_images', day_banner_images_data, true);
+    setImageData('night_banner_images', night_banner_images_data, true);
+    setImageData('company_logo', company_logo_data);
+    setImageData('thumb_image', thumb_image_data);
+}
+
 })
 
 // Check if domain_id is present in domains_data and fetch data if so
@@ -593,9 +600,7 @@ watch(
     (newDomainId) => {
         if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
             fetchPagesData()
-        } else {
-            console.log('data not in array', form.value?.domains_data)
-        }
+        } 
     }
 )
 

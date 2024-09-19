@@ -15,6 +15,7 @@
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
                                 :hasCheckBox="checkBoxFlag"
+                                 @update:modelValue="$clearError(errors, 'title')"
                                 @update:checkValue="(value) => { checkedFields.title = value }" />
                         </div>
                         <div class="px-6 mt-3">
@@ -84,7 +85,11 @@
                                         <InputLabel for="status" value="Status" />
                                         <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                             label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
-                                            @update:checkValue="(value) => { checkedFields.status = value }" />
+                                            @update:checkValue="(value) => { checkedFields.status = value }"
+                                            :errorClass='errors.status'
+                                            :errMessage="errors.status"
+                                            @update:modelValue="$clearError(errors, 'status')"
+                                            />
                                     </div>
                                 </div>
                             </div>
@@ -112,9 +117,9 @@
                                 <div class="flex flex-col w-full">
                                     <div class=" mt-3 flex overflow-x-auto">
                                         <img v-if="imageData.featured_image.images[0]"
-                                            v-for="file in imageData.featured_image.images" :key="file"
-                                            :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || 'image'" />
+                                        v-for="file in imageData.featured_image.images" :key="file"
+                                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file?.alternative_text || 'Featured'" />
                                     </div>
                                 </div>
                             </div>
@@ -126,9 +131,9 @@
         </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.featured_image.IsOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
-            :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" />
+        v-model:isOpen="imageData.featured_image.IsOpen"> 
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+            :closeModal="() => { imageData.featured_image.IsOpen = false }" :selectedFiles="handleFeatureFiles" /> 
     </popupModal>
 
 
@@ -170,9 +175,14 @@ const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, fa
 
 // Validate form data
 const validateForm = () => {
+    if(loading.value === true) return
     errors.value = {};
     if (!form.value.title) {
         errors.value.title = 'Title is required';
+        return false;
+    }
+    if (!form.value.status) {
+        errors.value.status = 'Title is required';
         return false;
     }
     return true;
@@ -208,6 +218,9 @@ const handleSubmit = async () => {
                 showToast(res.data.message, 'success');
                 router.push('/company');
             }
+        }
+        else if(res.status === 400 || res.status === 403){
+            showToast(res.data.message, 'error')
         }
     } catch (e) {
         console.error('Error:', e);
