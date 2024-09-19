@@ -52,9 +52,9 @@ const handleSortMaterials = async () => {
   try {
     const res = await CommonServices.taxonomySorting({ key: 'material', data: id, domain_id: domain_id.value });
     if (res.status === 200 && res.data.success) {
-      showToast('Sorting data successfully', 'success');
+      showToast(res.data.message, 'success');
     } else if (res.status === 400) {
-      showToast('Something went wrong', 'error');
+      showToast(res.data.message, 'error');
     }
   } catch (error) {
     console.error('Error sorting materials:', error);

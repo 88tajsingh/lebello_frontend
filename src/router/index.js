@@ -518,44 +518,63 @@ const relatedRoutesMap = {
   '/users': '/user-form'
 }
 
-let isRedirecting = false
+const publicPaths = [
+  '/login',
+  '/forget-password',
+  '/register',
+  '/', 
+  '/productDetail',
+  '/category',
+  '/contract',
+  '/contractDetails',
+  '/contactUs',
+  '/contractDesign',
+  '/dealers',
+  '/libraryandtools',
+];
+
+let isRedirecting = false;
 
 router.beforeEach((to, from, next) => {
-  const token = store?.getters?.token || localStorage.getItem('token')
-  const allowedPaths = store.getters.user?.modules?.route || []
+  const token = store?.getters?.token || localStorage.getItem('token');
+  const allowedPaths = store.getters.user?.modules?.route || [];
 
   const isRelatedPathAllowed = allowedPaths.some((path) => {
-    return relatedRoutesMap[path] === to.path
-  })
+    return relatedRoutesMap[path] === to.path;
+  });
 
   try {
+    if (publicPaths.includes(to.path)) {
+      return next();
+    }
     if (to.path === from.path) {
-      return next(false)
+      return next(false);
     }
     if (to.name === 'login' && isAuthenticated(token)) {
-      next('/dashboard')
+      next('/dashboard');
     } else if (to.meta.requiresAuth && !isAuthenticated(token)) {
       if (!isRedirecting) {
-        isRedirecting = true
-        next('/login')
+        isRedirecting = true;
+        next('/login');
       } else {
-        next(false)
+        next(false);
       }
     } else if (to.meta.requiresAuth && !allowedPaths.includes(to.path) && !isRelatedPathAllowed) {
       if (!isRedirecting) {
-        isRedirecting = true
-        next('/login')
+        isRedirecting = true;
+        next('/login');
       } else {
-        next(false)
+        next(false);
       }
     } else {
-      isRedirecting = false
-      next()
+      isRedirecting = false;
+      next();
     }
   } catch (error) {
-    console.warn('Navigation error:', error)
-    next(false)
+    console.warn('Navigation error:', error);
+    next(false);
   }
-})
+});
+
 
 export default router

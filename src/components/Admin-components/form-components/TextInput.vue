@@ -50,10 +50,6 @@ const props = defineProps({
   errors: Object
 });
 
-watch(() => props.modelValue, (newValue) => {
-  model.value = newValue;
-});
-
 const emits = defineEmits(['update:modelValue', 'update:checkValue']);
 
 const inputClass = computed(() => ({
@@ -69,23 +65,40 @@ const textareaClass = computed(() => ({
 }));
 
 const model = ref(props.modelValue); 
-
-const inputRef = ref(null); // Changed from input to inputRef
+const inputRef = ref(null);
 const checked = ref(false);  
 
 onMounted(() => {
-  if (inputRef.value && inputRef.value.hasAttribute('autofocus')) {
+  // Focus if there's an error message initially
+  if (props.errMessage) {
+    inputRef.value?.focus();
+  } else if (inputRef.value && inputRef.value.hasAttribute('autofocus')) {
     inputRef.value.focus();
   }
 });
 
+// Watch for changes in modelValue
+watch(() => props.modelValue, (newValue) => {
+  model.value = newValue;
+});
+
+// Watch for changes in errMessage
+watch(() => props.errMessage, (newErrMessage) => {
+  if (newErrMessage) {
+    inputRef.value?.focus(); 
+  }
+});
+
+// Watch for model changes
 watch(model, (newValue) => {
   emits('update:modelValue', newValue);  
 });
 
+// Watch for checked state changes
 watch(checked, (newChecked) => {
   emits('update:checkValue', newChecked);
 });
 
+// Expose focus method
 defineExpose({ focus: () => inputRef.value.focus() });
 </script>

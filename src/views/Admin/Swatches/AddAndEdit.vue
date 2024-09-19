@@ -16,7 +16,6 @@
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
                                 @update:modelValue="$clearError(errors, 'title')" :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="(value) => { checkedFields.title = value }" />
-                            <!-- @update:checkValue="form.isTitle = $event" hasCheckBox -->
 
                         </div>
                     </Accordion>
@@ -115,23 +114,18 @@
                     <Accordion header="Publish" open="false">
                         <div class="px-1 py-3">
                             <div class="flex justify-between mb-2 px-2">
-                                <!-- <div>
-                                    <Button type="button" class=" text-sm ml-auto px-2 py-1">
-                                        preview
-                                    </Button>
-                                </div>
-                                <div>
-                                    <Button type="submit" class=" text-sm ml-auto px-2 py-1">
-                                        Save Draft
-                                    </Button>
-                                </div> -->
+                              
                             </div>
                             <div class="px-2">
                                 <div>
                                     <InputLabel for="status" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select an option" v-model="form.status" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="(value) => { checkedFields.status = value }" />
+                                        @update:checkValue="(value) => { checkedFields.status = value }"
+                                        :errorClass='errors.status'
+                                        :errMessage="errors.status"
+                                        @update:modelValue="$clearError(errors, 'status')"
+                                        />
                                 </div>
 
                             </div>
@@ -158,10 +152,11 @@
                         <Accordion :open="true" header="Materials">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">
+                                  
+                                    <SingleCheck v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></SingleCheck>
                                     <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true"
                                         valueField="id" showField="name" :data="MaterialTreeListData"
                                         @checked-items="handleCheckedItems" />
-                                    <!-- <div v-else>sdfsdf</div> -->
                                 </div>
                             </div>
                         </Accordion>
@@ -223,7 +218,7 @@ import { useStore } from 'vuex';
 import { ref, onMounted, watch, computed } from "vue";
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { MaterialTreeList } from '@/helper/Apis';
-import { PublishOptions, statusData } from '@/json/data';
+import {statusData } from '@/json/data';
 import SwatchesServices from '@/services/SwatchesServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
@@ -239,7 +234,7 @@ const router = useRouter();
 // Reactive State
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: null, description: ' ', material_template: false, materials: [] });
+const form = ref(store.getters.editData || { status: 1, description: ' ', material_template: false, materials: [] });
 const MaterialTreeListData = ref([]);
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
@@ -257,6 +252,10 @@ const validateForm = () => {
     errors.value = {};
     if (!form.value.title) {
         errors.value.title = 'Title is required';
+        return false;
+    }
+    if (form.value.status=== null || form.value.status=== undefined || form.value.status=== '') {
+        errors.value.status = 'Please select status';
         return false;
     }
     return true;
@@ -286,12 +285,16 @@ const handleSubmit = async () => {
                 store.dispatch('clearEditData');
                 router.push('/swatches');
             }
-        } else {
-            showToast('Something went wrong', 'error');
         }
+        else if(status === 400) {
+            showToast(data.message, 'error');
+        } 
+        else if(status === 403) {
+            showToast(data.message, 'error');
+        } 
     } catch (e) {
         console.error(`Error ${store.getters.editData ? 'editing' : 'adding'} swatches:`, e);
-        showToast('Something went wrong', 'error');
+        showToast(e, 'error');
     } finally {
         loading.value = false;
     }
@@ -345,10 +348,9 @@ const fetchSwatchData = async () => {
 }
 
 // Fetch Initial Data
-const fetchMaterialTreeData = async () => {
+const fetchMaterialTreeData = async (payload) => {
     try {
-        const domainId = form.value.domain_id || store.getters.getDomain.id;
-        MaterialTreeListData.value = await MaterialTreeList({ domain_id: domainId });
+        MaterialTreeListData.value = await MaterialTreeList({ domain_id: payload });
     } catch (e) {
         console.error('Error fetching material tree data:', e);
     }
@@ -356,21 +358,20 @@ const fetchMaterialTreeData = async () => {
 
 // Lifecycle Hooks
 onMounted(() => {
-    fetchMaterialTreeData();
-
-    if (store.getters.editData) {
+    if (store?.getters?.editData) {
         imageData.value.featured_image.mediaName = store.getters?.editData?.featured_image_data?.file_url || 'Select Featured Image';
         imageData.value.featured_image.images = [store.getters?.editData?.featured_image_data];
+        fetchMaterialTreeData(store?.getters?.editData.domain_id);
+
     }
 });
 
 // Check if domain_id is present in domains_data and fetch  data if so
 watch(() => form.value.domain_id, (newDomainId) => {
-    fetchMaterialTreeData();
+    console.log("called watch")
+    fetchMaterialTreeData(newDomainId);
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchSwatchData();
-    } else {
-        console.log('data not in array', form.value?.domains_data);
     }
 });
 

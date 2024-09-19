@@ -33,7 +33,7 @@
             @change="changeServer">
             <template #featured_image_url="data">
                 {{ data.featured_image_data }}
-                <img :src="$filePath(data.value?.featured_image_data?.file_url)" alt="Material Image"
+                <img :src="$filePath(data.value?.featured_image_data?.file_url)" alt="Material"
                     style="max-width: 50px; max-height: 50px" />
             </template>
             <template v-if="permissions.write" #actions="data">
