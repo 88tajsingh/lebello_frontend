@@ -4,7 +4,7 @@
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[38px] border-boxdark	  " :options="SwatchesBulkOption"
         showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>modalflag.multiDelete=true">Apply</Button>
       <div class="max-w-52 mr-2">
         <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
@@ -34,8 +34,8 @@
         </div>
       </template>
       <template #src="data">
-        <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Swatches Image"
-          style="max-width: 50px; max-height: 50px" />
+        <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Swatch"
+     style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
         <span v-if="data.value.status === 1">Draft</span>
@@ -60,6 +60,11 @@
   <!-- popups modals -->
   <DeleteModal v-model:isOpen="modalflag.delete" :modalTitle="'Delete Swatches'" @delete="handleDeleteSwatches">
     Do you want to delete ?
+  </DeleteModal>
+
+  <!-- multiple popups modals -->
+  <DeleteModal v-model:isOpen="modalflag.multiDelete" :modalTitle="'Multiple Delete Swatches'" @delete="handleBulkActions">
+    Do you want to delete multiple swatches ?
   </DeleteModal>
 
   <Loader :isLoading="loading" :fullPage="true" />
@@ -113,6 +118,7 @@ const changePage = (page) => {
 // modal 
 const modalflag = ref({
   delete: false,
+  multiDelete:false,
 })
 const deleteModal = () => {
   modalflag.value.delete = true;
@@ -145,7 +151,7 @@ const handleDeleteSwatches = async () => {
   try {
     const res = await SwatchesServices.deleteSwatches(swatch_id.value);
     if (res.status === 200 && res.data.success) {
-      rows.value = rows.value.filter(item => item.id !== swatch_id.value);
+      handleGetSwatches(pagiantionData.value);
       showToast('Swatch deleted successfully', 'success');
     } else if (res.status === 400) {
       showToast('Something went wrong', 'error');
@@ -158,10 +164,12 @@ const handleDeleteSwatches = async () => {
 };
 
 const handleBulkActions = async () => {
-  loading.value = true;
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
-
+  if(ids.length === 0){
+    return showToast('Please select atleast one swatch', 'error');
+  }
+  loading.value = true;
   if (bulkActionSelected.value === 'delete') {
     try {
       const res = await SwatchesServices.bulkDeleteSwatches({ id: ids });
@@ -185,7 +193,6 @@ const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
-  store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
@@ -196,7 +203,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetSwatches(pagiantionData.value);
   }

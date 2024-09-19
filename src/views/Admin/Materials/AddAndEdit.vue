@@ -10,9 +10,10 @@
         <form @submit.prevent="handleSubmit">
             <div class="p-6.5 grid grid-cols-2 gap-6">
                 <div class="flex flex-col ">
-                    <TextInput type="text" class=" " label='Name' :class="{ 'border-red': errors.name }" placeholder=""
-                        v-model="form.name" :errMessage="errors.name" @update:modelValue="$clearError(errors, 'name')"
-                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }" />
+                    <TextInput ref="nameInput" type="text" class=" " label='Name' :class="{ 'border-red': errors.name }"
+                        placeholder="" v-model="form.name" :errMessage="errors.name"
+                        @update:modelValue="$clearError(errors, 'name')" :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="(value) => { checkedFields.name = value }" />
                     <p class="text-sm text-[#646970] text-[11.5px]" :class="{ 'ml-8': form.id }">
                         The name is how it appears on your site.
                     </p>
@@ -28,9 +29,11 @@
                     </p>
                 </div>
                 <div class="flex flex-col ">
-                    <Select :options="MaterialTreeListData" title="Parent Material" showfield="name" class="w-full"
-                        :defaultZero='true' valueField="id" label="Select Parent Material"
-                        v-model="form.parent_material" />
+                    <Select ref="parentInput" :options="MaterialTreeListData" title="Parent Material" showfield="name"
+                        class="w-full" :defaultZero='true' valueField="id" label="Select Parent Material"
+                        v-model="form.parent_material" :errorClass='errors.parent_material'
+                        :errMessage="errors.parent_material"
+                        @update:modelValue="$clearError(errors, 'parent_material')" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of
                         Bebop
@@ -102,12 +105,12 @@
                         @update:model="clearError(errors, 'trade_mark_label')" />
                 </div>
                 <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Show New Badge 2021" showfield="name" class="w-full"
-                        valueField="value" label="Select an option" v-model="form.show_new_badge_2021"
+                    <Select ref="badgeInput" :options="trueFalse" title="Show New Badge 2021" showfield="name"
+                        class="w-full" valueField="value" label="Select an option" v-model="form.show_new_badge_2021"
                         :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.show_new_badge_2021 = value }" />
-
-                    <InputError class="mt-2" :message="errors?.show_new_badge_2021" />
+                        @update:checkValue="(value) => { checkedFields.show_new_badge_2021 = value }"
+                        :errorClass='errors.show_new_badge_2021' :errMessage="errors.show_new_badge_2021"
+                        @update:modelValue="$clearError(errors, 'show_new_badge_2021')" />
                 </div>
                 <div class="flex flex-col ">
                     <Select :options="colors" title="Single Color" showfield="name" class="w-full" valueField="value"
@@ -143,7 +146,8 @@
                     <div class=" mt-3 flex overflow-x-auto">
                         <img v-if="imageData.media_id.images[0]" v-for="file in imageData.media_id.images" :key="file"
                             :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                            :alt="file?.alternative_text || 'image'" />
+                            :alt="file?.alternative_text || ''" />
+
                     </div>
                 </div>
             </div>
@@ -174,7 +178,7 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
-import { onMounted, ref, watch, computed } from 'vue'
+import { onMounted, ref, nextTick, watch, computed } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -185,6 +189,7 @@ const router = useRouter();
 
 // Reactive state
 const errors = ref({});
+
 const loading = ref(false);
 const form = ref(store.getters.editData || {
     parent_material: 0,
@@ -208,10 +213,22 @@ const handleFeatureFiles = (data) => handleFileUpdate('media_id', data, false, i
 // Form Validation
 const validateForm = () => {
     errors.value = {};
+
     if (!form.value.name) {
         errors.value.name = 'Name is required';
         return false;
     }
+
+    if (form.value.show_new_badge_2021 === null || form.value.show_new_badge_2021 === undefined || form.value.show_new_badge_2021 === '') {
+        errors.value.show_new_badge_2021 = 'Show New Badge 2021 is required';
+        return false;
+    }
+
+    if (form.value.parent_material == form.value.id) {
+        errors.value.parent_material = 'Parent Material cannot be same as Material Name';
+        return false;
+    }
+
     return true;
 };
 
@@ -237,7 +254,9 @@ const handleSubmit = async () => {
                 showToast(data.message, 'success');
                 router.push('/materials');
             }
-        } else {
+        } else if (status === 400) {
+            showToast(data.message, 'error');
+        } else if (status === 403) {
             showToast(data.message, 'error');
         }
     } catch (error) {
@@ -258,7 +277,6 @@ const handleGlobalUpdate = async () => {
         master_material_id: form.value.master_material_id,
         global_keys: globalUpdate
     }
-
     try {
         const { status, data } = await MaterialsServices.globalMaterialUpdate(payload)
         status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
@@ -318,9 +336,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
     // Check if newDomainId is present in domains_data and fetch 
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchMaterialData();
-    } else {
-        console.log('data not in array', form.value?.domains_data);
-    }
+    } 
 });
 
 

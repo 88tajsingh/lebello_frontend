@@ -14,6 +14,7 @@
           <input-label for="page_title " value="Page Title *" />
           <TextInput type="text" class="block mr-2 h-[40px] w-full" v-model="form.page_title"
             :errMessage="errors.page_title" :hasCheckBox="checkBoxFlag"
+            @update:modelValue="$clearError(errors, 'page_title')"
             @update:checkValue="(value) => { checkedFields.page_title = value }" />
         </div>
         <!-- <div class="flex flex-col">
@@ -60,7 +61,8 @@
               <div class=" flex flex-wrap">
                 <div class="relative p-1" v-for="(slide, index) in imageData.gallery.images" :key="`slide-${index}`">
 
-                  <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]" :src="$filePath(slide.file_url)">
+                  <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]" :src="$filePath(slide.file_url)"
+                    alt="Desc">
                   <div @click="() => handleRemoveImage(slide)" class=" absolute top-2 right-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                       stroke="currentColor" class="size-6">
@@ -133,7 +135,7 @@
           </div>
           <div class=" mt-3 flex overflow-x-auto">
             <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file?.file_url)"
-              class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'" />
+              class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'desc'" />
           </div>
         </div>
         <div class="col-span-1 w-full">
@@ -159,7 +161,7 @@
 <script setup>
 import _ from 'lodash';
 import { ref, onMounted, watch, computed } from 'vue';
-import { handleFileUpdate, validateForm, getGlobalUpdateData } from '@/helper/functions';
+import { handleFileUpdate, getGlobalUpdateData } from '@/helper/functions';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import TinyMCE from '@/components/Admin-components/TinyMCE.vue';
@@ -167,7 +169,7 @@ import PagesServices from '@/services/PagesServices';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions'
-import { PublishOptions, trueFalse } from '@/json/data';
+import { trueFalse } from '@/json/data';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 
 // store and router
@@ -203,37 +205,50 @@ const handleRemoveImage = (slide) => {
   }
 }
 
+// Form Validation
+const validateForm = () => {
+  errors.value = {};
+  if (!form.value.page_title) {
+    errors.value.page_title = 'Title is required';
+    return false;
+  }
+  return true;
+};
+
+
 
 // Submit Handler
 const handleSubmit = async () => {
-  if (!validateForm('page_title', 'Page Title', form, errors)) return
-  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+  if (validateForm()) {
+    const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
-  loading.value = true;
-  try {
-    const action = store.getters.editData ? PagesServices.editPages : PagesServices.addPages;
-    const { deleted_at, created_at, domains_data, default_domain, default_master, updated_at, featured_image_url, ...payload } = form.value;
-    if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
+    loading.value = true;
+    try {
+      const action = store.getters.editData ? PagesServices.editPages : PagesServices.addPages;
+      const { deleted_at, created_at, domains_data, default_domain, default_master, updated_at, featured_image_url, ...payload } = form.value;
+      if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
-    const res = await action(payload);
-    if (res.status === 200 && res.data.success) {
-      if (hasCheckedFields) {
-        handleGlobalUpdate();
+      const res = await action(payload);
+      if (res.status === 200 && res.data.success) {
+        if (hasCheckedFields) {
+          handleGlobalUpdate();
+        }
+        else {
+          showToast(res.data.message, 'success');
+          router.push('/pages');
+        }
+
+      } else {
+        showToast(res.data.message || 'Something went wrong', 'error');
       }
-      else {
-        showToast(res.data.message, 'success');
-        router.push('/pages');
-      }
+    } catch (e) {
+      console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} pages:`, e);
+      showToast(e || 'Something went wrong', 'error');
 
-    } else {
-      showToast(res.data.message || 'Something went wrong', 'error');
+    } finally {
+      loading.value = false;
     }
-  } catch (e) {
-    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} pages:`, e);
-  } finally {
-    loading.value = false;
   }
-
 };
 
 // Global Update Handler
@@ -284,6 +299,7 @@ const fetchPagesData = async () => {
 // Lifecycle Hooks
 onMounted(() => {
   if (store.getters.editData) {
+    
     imageData.value.gallery.mediaName = store.getters?.editData?.gallery_urls?.file_url || 'Select Media';
     imageData.value.gallery.images = store.getters?.editData?.gallery_urls;
     imageData.value.featured_image.mediaName = store.getters?.editData?.featured_image_data?.file_url || 'Select Media';
@@ -295,13 +311,11 @@ onMounted(() => {
 watch(() => form.value.domain_id, (newDomainId) => {
   if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
     fetchPagesData();
-  } else {
-    console.log('data not in array', form.value?.domains_data);
   }
 });
 
 // Computed Property
 const buttonText = computed(() => {
-  return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
+  return (form.value.id ? 'Update' : 'Submit')
 })
 </script>

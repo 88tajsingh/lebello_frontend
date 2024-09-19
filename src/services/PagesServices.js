@@ -26,6 +26,9 @@ class Pageservices {
   bulkDeletePages(payload) {
     return instance.post(ApiConfig.bulkDeletePages,payload)
   }
+  bulkDeletePages(payload) {
+    return instance.post(ApiConfig.bulkDeletePages,payload)
+  }
   PagesSorting(payload) {
     return instance.post(ApiConfig.PagesSorting,payload)
   }

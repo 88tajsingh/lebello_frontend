@@ -80,11 +80,11 @@ const handleAddTabs = () => {
 const handleDeleteData = (deleteIndex) => {
   if (formData.value?.domains_data?.includes(selectedDomain.value.id)) {
     index.value = deleteIndex;
-    if (selectedDomain.value.id === formData.value?.default_domain && formData.value?.default_domain[0]) {
+    const default_domain = formData.value?.default_domain && formData.value?.default_domain[0]
+    if (selectedDomain.value.id === default_domain) {
       deleteMasterFlag.value = true;
     }
     else {
-      console.log("object")
       deleteFlag.value = true;
     }
   }

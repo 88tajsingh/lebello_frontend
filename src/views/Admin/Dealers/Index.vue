@@ -31,8 +31,7 @@
       :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
       @change="changePage">
       <template #featured_image_url="data">
-        <img :src="$filePath(data.value.featured_image_url)" alt="Material Image"
-          style="max-width: 50px; max-height: 50px" />
+        <img :src="$filePath(data.value.featured_image_url)" alt="Material" style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
         <span v-if="data.value.status === 1">Draft</span>
@@ -189,7 +188,6 @@ const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter((site) => site.default === 1)[0]
   pagiantionData.value.domain_id = defaultDomain.id
-  store.dispatch('setDomain', defaultDomain)
 }
 
 onMounted(() => {
@@ -199,7 +197,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter((site) => site.id == domain_id.value)
+    const defaultDomain = getDominsList.value.filter((site) =>( site.id == pagiantionData.value.domain_id))
     store.dispatch('setDomain', defaultDomain[0])
     handleGetDealers(pagiantionData.value)
   }
