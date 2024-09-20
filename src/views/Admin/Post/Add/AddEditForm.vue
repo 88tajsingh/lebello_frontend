@@ -1,4 +1,4 @@
-<template>
+<template>{{ form }}
     <DefaultCard :cardTitle="form.id ? `Edit Post` : `Add New Post`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="PostServices.deletePost"
             masterKey="master_post_id" :masterDeleteService="PostServices.masterDeletePost" routeTo="post" />
@@ -14,6 +14,7 @@
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
                                 :hasCheckBox="checkBoxFlag"
+                                @update:modelValue="$clearError(errors, 'title')"
                                 @update:checkValue="(value) => { checkedFields.title = value }" />
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug (Read Only) "
                                 placeholder="Add title" v-model="form.slug" :errMessage="errors.slug" disabled />
@@ -79,7 +80,11 @@
                                     <InputLabel for="status" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="(value) => { checkedFields.status = value }" />
+                                        @update:checkValue="(value) => { checkedFields.status = value }"
+                                        :errorClass='errors.status'
+                                        :errMessage="errors.status"
+                                        @update:modelValue="$clearError(errors, 'status')"
+                                        />
                                 </div>
                             </div>
                         </div>
@@ -160,7 +165,7 @@
                                 <div class=" mt-3 flex overflow-x-auto">
                                     <img v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'" />
+                                        :alt="file?.alternative_text || ''" />
                                 </div>
                             </div>
                         </Accordion>
@@ -179,7 +184,7 @@
                                 <div class="mt-3 flex overflow-x-auto">
                                     <img v-for="file in imageData.gallery.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'" />
+                                        :alt="file?.alternative_text || ''" />
                                 </div>
                             </div>
                         </Accordion>
@@ -228,7 +233,7 @@ const router = useRouter();
 // Reactive State
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: '', visibility: '' });
+const form = ref(store.getters.editData || { status: 1, visibility: '' });
 const postCategoryTree = ref([]);
 const TagsData = ref([]);
 const checkedFields = ref({})
@@ -240,8 +245,8 @@ const imageData = ref({
 })
 
 // Image Handlers
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
-const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data,imageData, form,false);
+const handleGalleryFiles = (data) => handleFileUpdate('gallery',data,imageData, form,true);
 
 // remove image form gallery
 const handleRemoveImage = (slide) => {
@@ -258,6 +263,10 @@ const validateForm = () => {
     errors.value = {};
     if (!form.value.title) {
         errors.value.title = 'Title is required';
+        return false;
+    }
+    if(form.value.status=== null || form.value.status=== undefined || form.value.status=== ''){
+        errors.value.status = 'Status is required';
         return false;
     }
     return true;
@@ -285,6 +294,9 @@ const handleSubmit = async () => {
                 showToast(data.message, 'success');
                 router.push('/post');
             }
+        }
+        else if (status === 400 || status === 403) {
+            showToast(data.message, 'error');
         }
     } catch (e) {
         console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} post:`, e);

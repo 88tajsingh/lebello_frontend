@@ -34,7 +34,7 @@
         </div>
       </template>
       <template #image="data">
-        <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="data.value.image" alt="Contract" style="max-width: 50px; max-height: 50px"  />
       </template>
       <template #status="data">
         <span v-if="data.value.status === 1">Draft</span>

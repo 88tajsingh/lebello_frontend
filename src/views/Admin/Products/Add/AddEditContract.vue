@@ -91,8 +91,8 @@
                                                 v-for="(slide, index) in imageData.new_product_slider.images"
                                                 :key="`slide-${index}`">
 
-                                                <img class=" border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(slide?.file_url)">
+                                                <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
+                                                    :src="$filePath(slide?.file_url)" :alt="slide?.alternative_text">
                                                 <div @click="() => handleRemoveSliderImage(slide)"
                                                     class=" absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -136,7 +136,7 @@
                                         <img v-if="imageData.new_product_additional_bg_image.images[0]"
                                             v-for="file in imageData.new_product_additional_bg_image.images" :key="file"
                                             :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || 'image'">
+                                            :alt="file?.alternative_text || 'img'">
                                     </div>
                                 </div>
                                 <div class="mt-3">
@@ -158,7 +158,7 @@
                                             v-for="file in imageData.new_product_additional_right_box_image.images"
                                             :key="file" :src="$filePath(file?.file_url)"
                                             class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || 'image'">
+                                            :alt="file?.alternative_text || 'img'">
                                     </div>
                                 </div>
                             </div>
@@ -282,7 +282,7 @@
                                             <img v-if="imageData.image?.images[index]"
                                                 :src="$filePath(imageData.image?.images[index]?.file_url)"
                                                 class="inline-block w-auto h-34 mr-4"
-                                                :alt="imageData.ima?.images[index]?.alternative_text || 'image'">
+                                                :alt="imageData.ima?.images[index]?.alternative_text || ''">
                                         </div>
                                     </div>
                                 </div>
@@ -318,7 +318,7 @@
                                             <img v-if="imageData.video_source?.images[index]"
                                                 :src="$filePath(imageData.video_source?.images[index]?.file_url)"
                                                 class="inline-block w-auto h-34 mr-4"
-                                                :alt="imageData.video_source?.images[index]?.alternative_text || 'image'">
+                                                :alt="imageData.video_source?.images[index]?.alternative_text || ''">
                                         </div>
                                     </div>
                                 </div>
@@ -375,7 +375,7 @@
                                                 v-for="(file, index) in imageData?.downloadable_files?.images"
                                                 :key="`file-${index}`">
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(file.file_url)" />
+                                                    :src="$filePath(file.file_url)" alt="img" />
                                                 <div @click="() => handleRemoveDownloadable(file)"
                                                     class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -514,7 +514,7 @@
                                     <img v-if="imageData.featured_image.images[0]"
                                         v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'">
+                                        :alt="file?.alternative_text || ''">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -533,7 +533,7 @@
                                     <div class=" mt-3 flex overflow-x-auto">
                                         <img v-for="file in imageData.gallery.images" :key="file"
                                             :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || 'image'">
+                                            :alt="file?.alternative_text || ''">
                                     </div>
                                     <InputError class="mt-2" :message="errors?.featured_image" />
                                 </div>
@@ -716,15 +716,15 @@ const imageData = ref({
 });
 
 // Handle file updates for different image types
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
 const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
 const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, true, imageData, form);
-const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, false, imageData, form);
-const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, false, imageData, form);
+const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form,false);
+const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
 const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, true, imageData, form);
-const handleImageFiles = (data) => handleFileUpdate('image', data, false, imageData, form);
-const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, false, imageData, form);
-const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, false, imageData, form);
+const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
+const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form,false);
+const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
 
 
 const handleVideoSource = (data) => {

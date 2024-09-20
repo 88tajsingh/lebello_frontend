@@ -193,7 +193,7 @@ const imageData = ref({
 })
 
 // Image Handlers
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
 const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
 
 // remove image form gallery

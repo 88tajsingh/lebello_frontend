@@ -58,7 +58,11 @@
                                     <InputLabel for="status" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="(value) => { checkedFields.status = value }" />
+                                        @update:checkValue="(value) => { checkedFields.status = value }"
+                                        :errorClass='errors.status'
+                                        :errMessage="errors.status"
+                                        @update:modelValue="$clearError(errors, 'status')"
+                                        />
                                 </div>
                             </div>
                         </div>
@@ -83,7 +87,7 @@
                                 <div class=" mt-3 flex overflow-x-auto">
                                     <img v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'">
+                                        :alt="file?.alternative_text || ''">
                                 </div>
                             </div>
                         </Accordion>
@@ -216,7 +220,7 @@ const store = useStore();
 const errors = ref({});
 const iswithBg = ref();
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: '', slider_menu_color: '', visibility: '', slider_menu_color: 0 });
+const form = ref(store.getters.editData || { status: 1, slider_menu_color: '', visibility: '', slider_menu_color: 0 });
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 
@@ -235,14 +239,18 @@ const imageData = ref({
 });
 
 // Image Handlers  and true  for multiple file  and for  single file false 
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
-const handleVideoFiles = (data) => handleFileUpdate('slider_video_source', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image',data,imageData, form, false,);
+const handleVideoFiles = (data) => handleFileUpdate('slider_video_source',data,imageData, form, false);
 
 // Validate form fields
 const validateForm = () => {
     errors.value = {};
     if (!form.value.title) {
         errors.value.title = 'Title is required';
+        return false;
+    }
+    if(form.value.status=== null || form.value.status=== undefined || form.value.status=== ''){
+        errors.value.status = 'Status is required';
         return false;
     }
     return true;

@@ -82,7 +82,6 @@ const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const pagiantionData = ref({ limit: 10, page: 1, domain_id: '',})
 const getDominsList = ref([])
-const domain_id = ref('')
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
@@ -99,16 +98,7 @@ const openDeleteModal = (data) => {
   console.log(data.id)
 };
 
-const openModal = () => {
-  modalIsOpen.value = true;
-};
 
-const editModal = (data) => {
-  console.log("data ", data)
-  editData.value = { ...data.value };
-  // router.push({ name: 'EditPages', params: { id: data.value.id } });
-  editIsOpen.value = true;
-};
 
 const handleMouseEnter = (data) => {
   actionsFlag.value = data.value.name;
@@ -118,9 +108,6 @@ const handleMouseLeave = () => {
   actionsFlag.value = null;
 };
 
-const isRowHovered = (value) => {
-  return actionsFlag.value === value.name;
-};
 
 const changePages = (page) => {
   const { pagesize, current_page } = page;

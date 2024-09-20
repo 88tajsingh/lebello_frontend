@@ -9,7 +9,7 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
         <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="domain_id" />
+          v-model="pagiantionData.domain_id" />
       </div>
     </div>
     <div class="flex">
@@ -75,10 +75,10 @@ const loading = ref(false);
 const datatable = ref('')
 const bulkPopup = ref(false);
 const search = ref('');
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: ''})
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDominsList = ref([])
-const domain_id = ref('')
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
@@ -94,37 +94,11 @@ const openDeleteModal = (data) => {
   console.log(data.id)
 };
 
-const openModal = () => {
-  modalIsOpen.value = true;
-};
-
-const editModal = (data) => {
-  console.log("data ", data)
-  editData.value = { ...data.value };
-  // router.push({ name: 'EditPages', params: { id: data.value.id } });
-  editIsOpen.value = true;
-};
-
-const handleMouseEnter = (data) => {
-  actionsFlag.value = data.value.name;
-};
-
-const handleMouseLeave = () => {
-  actionsFlag.value = null;
-};
-
-const isRowHovered = (value) => {
-  return actionsFlag.value === value.name;
-};
-
 const changeServer = (page) => {
-  console.log("page changed", page)
-  const payload = { limit: page.pagesize, page: page.current_page }
-  handleGetContractType(payload);
+  const { pagesize, current_page } = page;
+  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
+ handleGetContractType(pagiantionData.value);
 }
-const navigateToRoute = () => {
-  router.push({ name: 'EditPages', params: { id: '1' } });
-};
 
 // api calls
 const handleGetContractType = async (payload) => {
@@ -141,6 +115,7 @@ const handleGetContractType = async (payload) => {
     getLoading.value = false;
   }
 };
+
 
 const handleDeleteContractType = async () => {
   loading.value = true;
@@ -169,9 +144,8 @@ const handleBulkActions = async () => {
   try {
     const res = await ContractServices.BulkDeleteContractType({ id: ids });
     if (res.status === 200 && res.data.success) {
-      rows.value = res.data.data;
       showToast('Bulk delete successfully', 'success');
-      await handleGetContractType();
+      await handleGetContractType(pagiantionData.value);
     }
   } catch (e) {
     console.error('Error during bulk delete:', e);
@@ -180,12 +154,10 @@ const handleBulkActions = async () => {
   }
 };
 
-
-
 const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -195,11 +167,11 @@ onMounted(() => {
 );
 
 watch(
-  () => domain_id.value,
+  () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetContractType({ limit: 10, page: 1, domain_id: domain_id.value });
+    handleGetContractType(pagiantionData.value);
   }
 );
 </script>

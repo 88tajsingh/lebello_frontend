@@ -454,9 +454,9 @@ const imageData = ref({
 
 // Image Handlers  and true  for multiple file  and for  single file false
 const handleCompanyLogoFiles = (data) =>
-    handleFileUpdate('company_logo', data, false, imageData, form)
+    handleFileUpdate('company_logo', data, imageData, form,false)
 const handleThumbImageFiles = (data) =>
-    handleFileUpdate('thumb_image', data, false, imageData, form)
+    handleFileUpdate('thumb_image', data, imageData, form,false)
 const handleDayBannerFiles = (data) =>
     handleFileUpdate('day_banner_images', data, true, imageData, form)
 const handleNightBannerFiles = (data) =>

@@ -6,12 +6,15 @@ import StoreServices from "@/services/StoreServices";
 import PostServices from "@/services/PostServices";
 import { showToast } from "./functions";
 import store from "@/store";
-// import { useRouter } from "vue-router";
 import router from "@/router";
 import ProjectServices from "@/services/ProjectServices";
 
-// const router = useRouter();
 
+/**
+ * Logs out the user and redirects to login page
+ * 
+ * @returns {void}
+ */
 export const logout = async () => {
     try {
       const res = await CommonServices.logout();
@@ -25,6 +28,11 @@ export const logout = async () => {
     }
   };
 
+  /**
+   * Get Material Tree List
+   * @param {Object} payload
+   * @return {Promise<Array<Object>>}
+   */
 export const MaterialTreeList = async (payload) => {
     try {
       const res = await MaterialsServices.MaterialTreeList(payload);
@@ -35,6 +43,12 @@ export const MaterialTreeList = async (payload) => {
       console.log("MaterialTreeList err", err);
     }
   };
+
+  /**
+   * Get Contract Type Tree
+   * @param {Object} payload
+   * @return {Promise<Array<Object>>}
+   */
 export const contractTypeTreeList = async (payload) => {
     try {
       const res = await ContractServices.getAllContractType(payload);
@@ -45,7 +59,14 @@ export const contractTypeTreeList = async (payload) => {
       console.log("contractTypeTreeList err", err);
     }
   };
+
+  /**
+   * Get contract location tree
+   * @param {Object} payload
+   * @return {Promise<Array<Object>>}
+   */
 export const contractLoctionTreeList = async (payload) => {
+
     try {
       const res = await ContractServices.getAllContractLocation(payload);
       if (res.status === 200) {
@@ -57,6 +78,13 @@ export const contractLoctionTreeList = async (payload) => {
   };
 
 export const getAllCountries = async (payload) => {
+/**
+ * Get list of all countries
+ * @param {Object} payload
+ * @return {Promise<Array<Object>>}
+ */
+/*************  ✨ Codeium Command ⭐  *************/
+/******  9f6b6455-bed0-403f-a9e0-232a3597fc6b  *******/
     try {
       const res = await CommonServices.allCountrys(payload);
       if (res.status === 200) {
@@ -67,6 +95,11 @@ export const getAllCountries = async (payload) => {
     }
   };
   
+/**
+ * Get list of all currencies
+ * @param {Object} payload
+ * @return {Promise<Array<Object>>}
+ */
 export const getAllCurrenciesList = async (payload) => {
     try {
       const res = await CommonServices.getAllCurrencies(payload);
@@ -78,6 +111,10 @@ export const getAllCurrenciesList = async (payload) => {
     }
   };
 
+/**
+ * Get all domains
+ * @return {Promise<Array<Object>>}
+ */
 export const getDomins = async () => {
     try {
       const res = await CommonServices.getDomains();
@@ -89,6 +126,11 @@ export const getDomins = async () => {
     }
   };
   
+/**
+ * Get Product Type Tree
+ * @param {Object} payload
+ * @return {Promise<Array<Object>>}
+ */
   export const getProductTypeTree = async (payload) => {
     try {
       const res = await ProductServices.getProductTypeTreeList(payload);
@@ -99,6 +141,12 @@ export const getDomins = async () => {
       console.log("getProductTypeTreeList err", err);
     }
   };
+  
+/**
+ * Get Product Series Tree
+ * @param {Object} payload
+ * @return {Promise<Array<Object>>}
+ */
   export const getProductSeriesTree = async (payload) => {
     try {
       const res = await ProductServices.getProductSeriesTreeList(payload);
@@ -109,6 +157,12 @@ export const getDomins = async () => {
       console.log("getProductTypeTreeList err", err);
     }
   };
+  
+/**
+ * Get Product Category Type Tree
+ * @param {Object} payload
+ * @return {Promise<Array<Object>>}
+ */
   export const getProductCategoryTypeTree = async (payload) => {
     try {
       const res = await ProductServices.getProductCategoryTypeTreeList(payload);
@@ -119,6 +173,11 @@ export const getDomins = async () => {
       console.log("getProductCategoryTypeTreeList err", err);
     }
   };
+/**
+ * Get Store Category Tree
+ * @param {Object} payload
+ * @return {Promise<Array<Object>>}
+ */
   export const getStoreCategoryTree = async (payload) => {
     try {
       const res = await StoreServices.getStoreCategoryTreeList(payload);
@@ -130,16 +189,13 @@ export const getDomins = async () => {
     }
   };
 
-  export const getProductContractTree = async (payload) => {
-    try {
-      const res = await ProductServices.getProductContractTreeList(payload);
-      if (res.status === 200) {
-        return  res.data.data || [];
-      } 
-    } catch (err) {
-      console.log("getProductCategoryTypeTreeList err", err);
-    }
-  };
+
+
+/**
+ * Get Project Category Tree
+ * @param {Object} payload
+ * @return {Promise<Array<Object>>}
+ */
   export const getProjectCategoryTree = async (payload) => {
     try {
       const res = await ProjectServices.getProjectCategoryTree(payload);
@@ -151,6 +207,11 @@ export const getDomins = async () => {
     }
   };
 
+  /**
+   * Get Post Category Tree
+   * @param {Object} payload
+   * @return {Promise<Array<Object>>}
+   */
   export const getPostCategoryTree = async (payload) => {
     try {
       const res = await PostServices.getPostCategoryTreeList(payload);
@@ -188,19 +249,3 @@ export const getDomins = async () => {
      if(loading) loading.value = false
     }
   };
-
-  const setSidebar = async (payload) => {
-    loading.value = true;
-
-    try {
-        const { status, data } = await CommonServices.getSideMenu(payload)
-        if (status === 200 && data.success) {
-            idsToFilter.value = data.data;
-        }
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error('Error while fetching data:', error)
-    } finally {
-        loading.value = false;
-    }
-}

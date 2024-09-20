@@ -56,7 +56,6 @@
           </div>
         </div>
       </template>
-      x
     </vue3-datatable>
   </div>
 
@@ -96,7 +95,6 @@ const datatable = ref('')
 const totalRows = ref('')
 const actionsFlag = ref(null)
 const getDominsList = ref([])
-const domain_id = ref('')
 
 const isRowHovered = (value) => {
   return actionsFlag.value === value.name
@@ -152,7 +150,7 @@ const handleDeleteProjects = async () => {
     const res = await DealersServices.deleteDealer({ id: project_id.value.id })
     if (res.status === 200) {
       showToast(res.data.message, 'success')
-      data.value = data.value.filter((item) => item.id !== project_id.value.id)
+      await handleGetDealers(pagiantionData.value)
       deleteModalIsOpen.value = false
     } else if (res.status === 400) {
       showToast(res.message, 'error')
@@ -174,7 +172,7 @@ const handleBulkActions = async () => {
       const res = await DealersServices.BulkDeleteDealer({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        await handleGetDealers({ limit: 10, page: 1, domain_id: domain_id.value })
+        await handleGetDealers(pagiantionData.value)
       }
     } catch (e) {
       console.error('Error while performing bulk delete:', e)

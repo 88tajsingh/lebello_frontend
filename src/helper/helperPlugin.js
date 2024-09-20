@@ -1,4 +1,4 @@
-import { isAuthenticated,showToast, clearError,filePath,checkPermissions } from './functions';
+import { isAuthenticated,showToast, clearError,filePath,checkPermissions,handleErrorResponse } from './functions';
 
 const HelpersPlugin = {
   install(app) {
@@ -7,6 +7,7 @@ const HelpersPlugin = {
     app.config.globalProperties.$filePath = filePath;
     app.config.globalProperties.$showToast = showToast;
     app.config.globalProperties.$checkPermissions = checkPermissions;
+    app.config.globalProperties.$handleErrorResponse = handleErrorResponse;
   }
 };
 
