@@ -5,8 +5,8 @@
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOptions" showfield="text"
         valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
-      <div class="max-w-52 mr-2">
+        <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
+        <div class="max-w-52 mr-2">
         <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
@@ -57,6 +57,10 @@
         </div>
       </template>
     </vue3-datatable>
+
+    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Multiple Delete Contract Design'" @delete="handleBulkActions">
+      Do you want to delete multiple contracts ?
+    </DeleteModal>
   </div>
 
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Home Slider'" @delete="handleDeleteHomeSlider">
@@ -92,6 +96,7 @@ const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const data = ref([])
 const totalRows = ref(0)
 const datatable = ref(null)
+const bulkPopup = ref(false)
 const deleteModalIsOpen = ref(false)
 const domain_id = ref('')
 const getDominsList = ref([])
@@ -140,6 +145,8 @@ const handleBulkActions = async () => {
   if (bulkActionSelected.value === 'delete') {
     const selected = datatable.value.getSelectedRows()
     const ids = selected.map(item => item.id)
+    if (!ids.length) return showToast('Please select atleast one slider to delete', 'error')
+    loading.value = true
     try {
       const { status, data } = await HomeSliderServices.BulkDeleteHomeSlider({ id: ids })
       if (status === 200 && data.success) {
@@ -150,6 +157,9 @@ const handleBulkActions = async () => {
       }
     } catch (error) {
       console.error('Error during bulk delete:', error)
+    }
+    finally{
+      loading.value = false
     }
   }
 }

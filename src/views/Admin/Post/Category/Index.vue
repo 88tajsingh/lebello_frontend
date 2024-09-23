@@ -156,7 +156,7 @@ const handleDeletePostCategory = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
-
+  if (!ids.length) return showToast('Please select atleast one Post Category to delete', 'error');
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
