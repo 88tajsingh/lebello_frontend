@@ -144,17 +144,15 @@
 <script setup>
 import _ from 'lodash';
 import { ref, onMounted, computed, watch } from "vue";
-import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
+import { showToast, handleFileUpdate, getGlobalUpdateData, } from '@/helper/functions';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import CompanyServices from '@/services/CompanyServices';
 import Accordion from "@/components/Admin-components/Accordion.vue";
-import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
-import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import { PublishOptions, statusData } from '@/json/data';
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue';
+import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
+import { statusData } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import { commonApiCalls } from '@/helper/Apis';
 
 // store and router
 const router = useRouter();
@@ -171,7 +169,7 @@ const imageData = ref({
     featured_image: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
 })
 
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
 
 // Validate form data
 const validateForm = () => {
@@ -297,4 +295,3 @@ const buttonText = computed(() => {
 })
 </script>
 
-<style scoped></style>

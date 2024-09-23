@@ -174,15 +174,7 @@ const applyBulkActions = async () => {
   }
 }
 
-// Handle domain change
-watch(
-  () => pagiantionData.value.domain_id,
-  () => {
-    const defaultDomain = domainList.value.find(site => site.id == pagiantionData.value.domain_id);
-    store.dispatch('setDomain', defaultDomain);
-    fetchMaterials(pagiantionData.value);
-  }
-);
+
 
 // Component methods
 const navigateToAddMaterial = () => {
@@ -204,4 +196,14 @@ const confirmDelete = (material) => {
 onMounted(() => {
   fetchDomains()
 })
+
+// Handle domain change
+watch(
+  () => pagiantionData.value.domain_id,
+  () => {
+    const defaultDomain = domainList.value.find(site => site.id == pagiantionData.value.domain_id);
+    store.dispatch('setDomain', defaultDomain);
+    fetchMaterials(pagiantionData.value);
+  }
+);
 </script>

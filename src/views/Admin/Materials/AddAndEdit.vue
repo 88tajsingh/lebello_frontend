@@ -178,7 +178,7 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
-import { onMounted, ref, nextTick, watch, computed } from 'vue'
+import { onMounted, ref, watch, computed } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -208,7 +208,7 @@ const imageData = ref({
     media_id: { IsOpen: false, mediaName: 'Select Feature Media', images: [] },
 })
 
-const handleFeatureFiles = (data) => handleFileUpdate('media_id', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('media_id', data, imageData, form,false);
 
 // Form Validation
 const validateForm = () => {

@@ -3,7 +3,6 @@ import './assets/css/satoshi.css'
 import './assets/css/style.css'
 import '@bhplugin/vue3-datatable/dist/style.css'
 import { createApp } from 'vue'
-import { createI18n } from 'vue-i18n'
 import VueApexCharts from 'vue3-apexcharts'
 import App from './App.vue'
 import { createPinia } from 'pinia'
@@ -52,8 +51,8 @@ const options = {
 }
 
 const app = createApp(App)
-app.use(apiPlugin)
 app.use(HelpersPlugin)
+app.use(apiPlugin)
 app.use(Toast, options)
 app.use(router)
 app.use(ToastPlugin).use(store).use(createPinia()).component('Tabs', Tabs).component('Tab', Tab)

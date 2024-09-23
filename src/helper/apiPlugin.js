@@ -1,4 +1,4 @@
-import { logout,MaterialTreeList } from "./Apis";
+import { logout, MaterialTreeList } from "./Apis";
 
 const apiPlugin = {
   install(app) {

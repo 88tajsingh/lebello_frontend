@@ -29,7 +29,11 @@
         <div class="flex flex-col ">
           <InputLabel for="Parent Material" value="Parent Post Category " />
           <Select :options="postCategory" :defaultZero='true' showfield="name" class="w-full" valueField="id"
-            label="Select " v-model="form.parent_post_category" />
+            label="Select " v-model="form.parent_post_category" 
+            :errorClass="errors.parent_post_category"
+            :errMessage="errors.parent_post_category"
+             @update:modelValue="$clearError(errors, 'parent_post_category')"
+            />
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
             and Big Band.
@@ -38,7 +42,7 @@
 
         <div class="flex flex-col w-full">
           <TextInput type="text" class="block mr-2  w-full" label="Description" placeholder="" :isTextarea="true"
-            rows="4" v-model="form.description" :hasCheckBox="checkBoxFlag"
+            :rows="4" v-model="form.description" :hasCheckBox="checkBoxFlag"
             @update:checkValue="value => checkedFields.description = value" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -86,6 +90,10 @@ const validateForm = () => {
   errors.value = {};
   if (!form.value.name) {
     errors.value.name = 'Name is required';
+    return false;
+  }
+  if(form.value.parent_post_category == form.value.id) {
+    errors.value.parent_post_category = 'Cannot select self as parent category';
     return false;
   }
   return true;
@@ -178,7 +186,10 @@ const fetchPostCategoryTree = async (domainId) => {
 
 // Lifecycle Hooks
 onMounted(() => {
-  fetchPostCategoryTree(store.getters.getDomain.id);
+  // console.log(store.getters.getDomain?.id)t
+  if(store.getters.editData) {
+    fetchPostCategoryTree(store.getters.editData?.domain_id);
+  }
 });
 
 
@@ -192,12 +203,12 @@ watch(() => form.value.domain_id, (newDomainId) => {
 });
 
 // Watchers
-watch(() => form.value.parent_post_category, (newValue) => {
-  if (newValue == form.value.id)
-    selectError.value = true;
-  else
-    selectError.value = false;
-});
+// watch(() => form.value.parent_post_category, (newValue) => {
+//   if (newValue == form.value.id)
+//     selectError.value = true;
+//   else
+//     selectError.value = false;
+// });
 
 // Computed Properties
 const buttonText = computed(() => {

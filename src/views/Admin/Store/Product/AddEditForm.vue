@@ -42,7 +42,7 @@ div<template>
                                             <div class="relative p-1" v-for="(slide, index) in imageData.slider.images"
                                                 :key="`slide-${index}`">
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(slide?.file_url)" />
+                                                    :src="$filePath(slide?.file_url)" alt="slide" />
                                                 <div @click="() => handleRemoveImage(slide)"
                                                     class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -318,7 +318,7 @@ div<template>
                                                 v-for="(file, index) in imageData.downloadable_files.images"
                                                 :key="`file-${index}`">
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(file.file_url)" />
+                                                    :src="$filePath(file.file_url)" alt="" />
                                                 <div @click="() => handleRemoveDownloadable(file)"
                                                     class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -463,7 +463,7 @@ div<template>
                                     <img v-if="imageData.featured_image.images[0]"
                                         v-for="file in imageData.featured_image.images" :key="file?.file_url"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'">
+                                        :alt="file?.alternative_text || ''">
                                 </div>
                             </div>
                         </Accordion>
@@ -481,7 +481,7 @@ div<template>
                                 <div class="mt-3 flex overflow-x-auto">
                                     <img v-if="imageData.gallery.images > 0" v-for="file in imageData.gallery.images"
                                         :key="file" :src="$filePath(file?.file_url)"
-                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'image'">
+                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || ''">
                                 </div>
                             </div>
                         </Accordion>
@@ -591,8 +591,8 @@ const imageData = ref({
 });
 
 // Common handler for image updates
-const handleSpecs_Img = (data) => handleFileUpdate('product_specs', data, false, imageData, form);
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleSpecs_Img = (data) => handleFileUpdate('product_specs', data, imageData, form,false);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
 const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
 const handleSlider = (data) => handleFileUpdate('slider', data, true, imageData, form);
 const handleDownloadable = (data) => handleFileUpdate('downloadable_files', data, true, imageData, form);

@@ -29,8 +29,11 @@
         <div class="flex flex-col ">
           <InputLabel for="Parent Contract Type" value="Parent Contract Type" />
           <Select :options="contractTypeTreeListData" :defaultZero='true' showfield="contract_name" class="w-full"
-            valueField="id" label="Select Contract Type" v-model="form.parent_contract_type" :errorClass="selectError"
-            @update:modelValue="clearError('parent_contract_type')" errMessage="Should not be own parent" />
+            valueField="id" label="Select Contract Type" v-model="form.parent_contract_type" 
+            :errorClass='errors.parent_contract_type'
+            :errMessage="errors.parent_contract_type"
+            @update:modelValue="$clearError(errors, 'parent_contract_type')"
+            />
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of
             Bebop
@@ -59,7 +62,7 @@
         </div>
         <div class="flex flex-col w-full">
           <TextInput type="text" class="block mr-2  w-full" label="Description" placeholder="" :isTextarea="true"
-            rows="4" v-model="form.description" :hasCheckBox="checkBoxFlag"
+            :rows="4" v-model="form.description" :hasCheckBox="checkBoxFlag"
             @update:checkValue="value => checkedFields.description = value" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -67,12 +70,12 @@
         </div>
         <div class="flex flex-col w-full">
           <TextInput type="text" class="block mr-2  w-full" label="Contract Sub Page Meta Description" placeholder=""
-            :isTextarea="true" rows="4" v-model="form.sub_page_meta_description" :hasCheckBox="checkBoxFlag"
+            :isTextarea="true" :rows="4" v-model="form.sub_page_meta_description" :hasCheckBox="checkBoxFlag"
             @update:checkValue="value => checkedFields.sub_page_meta_description = value" />
         </div>
         <div class="flex flex-col w-full">
           <TextInput type="text" class="block mr-2  w-full" label="Contract Project Meta Description" placeholder=""
-            :isTextarea="true" rows="4" v-model="form.project_page_meta_description" :hasCheckBox="checkBoxFlag"
+            :isTextarea="true" :rows="4" v-model="form.project_page_meta_description" :hasCheckBox="checkBoxFlag"
             @update:checkValue="value => checkedFields.project_page_meta_description = value" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The description is not prominent by default; however, some themes may show it.
@@ -118,42 +121,51 @@ const validateForm = () => {
     errors.value.contract_name = 'Name is required';
     return false;
   }
-  if (selectError.value)
+  if(form.value.parent_contract_type == form.value.id) {
+    errors.value.parent_contract_type = 'cannot be selected as parent to own'
     return false;
-
+  }
+ 
   return true;
 };
 
 // Submit form data (add or edit contract type)
 const handleSubmit = async () => {
   if (!validateForm()) return;
-  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
 
+  const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
   loading.value = true;
 
-  // Prepare payload for API call
-  const { deleted_at, created_at, updated_at, featured_image_url, slug, domains_data, default_domain, default_master, ...payload } = form.value;
-  if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
-
   try {
-    const service = store.getters.editData ? ContractServices.editContractType : ContractServices.addContractType;
-    const res = await service(payload);
+    const {domains_data, ...payload } = form.value;
+    if (!domains_data?.includes(form.value.domain_id)) delete payload.id;
 
-    if (res.status === 200 && res.data.success) {
-      if (hasCheckedFields)
-        handleGlobalUpdate();
-      else {
-        showToast(res.data.message, 'success');
-        router.push('/contract-type');
-      }
-    } else if (res.status === 400) {
-      showToast(res.data.data.error || 'Something went wrong', 'error');
+    const service = store.getters.editData 
+      ? ContractServices.editContractType 
+      : ContractServices.addContractType;
+
+    const { status, data } = await service(payload);
+
+    if (status === 200 && data.success) {
+      hasCheckedFields ? handleGlobalUpdate() : router.push('/contract-type');
+      showToast(data.message, 'success');
+    } else {
+      handleErrorResponse(status, data);
     }
-  } catch (e) {
-    console.error('Error:', e);
+  } catch (error) {
+    console.error('Error:', error);
     showToast('An error occurred', 'error');
   } finally {
     loading.value = false;
+  }
+};
+
+const handleErrorResponse = (status, data) => {
+  if (status === 403) {
+    showToast(data.message, 'error');
+  } else {
+    const message = status === 400 ? (data?.message || 'Something went wrong') : 'An error occurred';
+    showToast(message, 'error');
   }
 };
 
@@ -163,20 +175,27 @@ const handleGlobalUpdate = async () => {
 
   const payload = {
     master_contract_type_id: form.value.master_contract_type_id,
-    global_keys: globalUpdate
+    global_keys: globalUpdate,
   };
 
   try {
     const { status, data } = await ContractServices.globalContractTypeUpdate(payload);
-    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error');
-    if (status === 200 && data.success) router.push('/contract-type');
+    const messageType = status === 200 && data.success ? 'success' : 'error';
+    showToast(data.message, messageType);
+
+    if (status === 200 && data.success) {
+      router.push('/contract-type');
+    } else if (status === 400 || status === 403) {
+      showToast(data.error || 'Something went wrong', 'error');
+    }
   } catch (error) {
-    showToast('Something went wrong', 'error');
     console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error);
+    showToast('Something went wrong', 'error');
   } finally {
     loading.value = false;
   }
 };
+
 
 
 // fetch the data 

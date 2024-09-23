@@ -3,13 +3,11 @@
     <div class="flex items-center justify-end gap-2">
 
         <div class="w-52">
-            <Label class="ml-1">Select Domain</Label>
-            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+            <Select :options="getDominsList" title="Select Domain" showfield="name" class="w-full" valueField="id" label="All Domain"
                 v-model="domain_id" />
         </div>
         <div class="w-52">
-            <Label class="ml-1">Select Taxonomy</Label>
-            <Select :options="productTaxonomy" showfield="name" class="w-full" valueField="value"
+            <Select :options="productTaxonomy" title="Select Taxonomy" showfield="name" class="w-full" valueField="value"
                 label="Select Taxonomy" v-model="key" />
         </div>
     </div>

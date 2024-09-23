@@ -83,7 +83,7 @@ const props = defineProps({
     default: false
   },
   errorClass: {
-    type: Boolean,
+    type: [Boolean, String],
     default: false
   },
   errMessage: {

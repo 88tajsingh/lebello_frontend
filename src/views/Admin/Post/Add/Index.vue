@@ -34,7 +34,7 @@
         </div>
       </template>
       <template #image="data">
-        <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="data.value.image" alt="Contract" style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
         <span v-if="data.value.status === 1">Draft</span>
@@ -57,12 +57,6 @@
     </vue3-datatable>
   </div>
 
-  <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
-    <AddEditForm @handleApi="handleAddPages" />
-  </PopupModal>
-  <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
-    <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
-  </PopupModal>
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Post '" @delete="handleDeletePost">
     Do you want to delete?
   </DeleteModal>

@@ -132,7 +132,7 @@ const handleDeleteCompany = async () => {
         const res = await CompanyServices.deleteCompany({ id: company_id.value });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
-            data.value = data.value.filter(item => item.id !== company_id.value);
+            await handleGetCompany(pagiantionData.value);
             deleteModalIsOpen.value = false;
         } else if (res.status === 400) {
             showToast(res.message, 'error');

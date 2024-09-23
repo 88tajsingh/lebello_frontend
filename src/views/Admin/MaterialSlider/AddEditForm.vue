@@ -1,56 +1,28 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Material Slider` : `Add Material Slider`">
-    <DomainComponent
-      @customChange="(id) => (form.domain_id = id)"
-      :deleteService="MaterialSliderServices.deleteMaterialSlider"
-      masterKey="master_material_slider_id"
-      :masterDeleteService="MaterialSliderServices.masterDeleteMaterialSlider"
-      routeTo="store-product"
-    />
+    <DomainComponent @customChange="(id) => (form.domain_id = id)"
+      :deleteService="MaterialSliderServices.deleteMaterialSlider" masterKey="master_material_slider_id"
+      :masterDeleteService="MaterialSliderServices.masterDeleteMaterialSlider" routeTo="store-product" />
     <template v-if="form.id" v-slot:header>
-      <MasterSlugForm
-        :form="form"
-        @update-slug="() => fetchMaterialSliderData()"
+      <MasterSlugForm :form="form" @update-slug="() => fetchMaterialSliderData()"
         :SlugUpdateservices="MaterialSliderServices.masterMaterialSliderSlugUpdate"
-        masteridKeyName="master_material_slider_id"
-      />
+        masteridKeyName="master_material_slider_id" />
     </template>
     <form @submit.prevent="handleSubmit" class="mb-5 m-5">
       <div class="grid grid-cols-12 gap-4 mt-5">
         <div class="col-span-8">
           <Accordion :open="true" header="Fileds">
             <div class="px-6">
-              <TextInput
-                type="text"
-                class="block mr-2 h-[40px] w-full"
-                label="Title *"
-                placeholder="Add title"
-                v-model="form.title"
-                :errMessage="errors.title"
-                :hasCheckBox="checkBoxFlag"
-                @update:checkValue="
-                  (value) => {
+              <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *" placeholder="Add title"
+                v-model="form.title" :errMessage="errors.title" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
                     checkedFields.title = value
                   }
-                "
-                :errors="errors"
-              />
-              <TextInput
-                type="text"
-                class="block mr-2 h-[40px] w-full"
-                label="Slug (Read Only)"
-                placeholder="Add title"
-                v-model="form.slug"
-                :errMessage="errors.slug"
-                :hasCheckBox="checkBoxFlag"
-                @update:checkValue="
-                  (value) => {
+                  " :errors="errors" @update:modelValue="$clearError(errors, 'title')" />
+              <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug (Read Only)" placeholder="Add title"
+                v-model="form.slug" :errMessage="errors.slug" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
                     checkedFields.slug = value
                   }
-                "
-                :errors="errors"
-                disabled
-              />
+                  " :errors="errors" disabled />
             </div>
           </Accordion>
         </div>
@@ -61,29 +33,17 @@
                 <div class="px-4">
                   <div class="flex flex-col">
                     <InputLabel for="status" value="Status" />
-                    <Select
-                      :options="statusData"
-                      showfield="name"
-                      class="w-full"
-                      valueField="value"
-                      label="Select "
-                      v-model="form.status"
-                      :hasCheckBox="checkBoxFlag"
-                      @update:checkValue="
-                        (value) => {
-                          checkedFields.status = value
-                        }
-                      "
-                    />
+                    <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="Select "
+                      v-model="form.status" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
+                          checkedFields.status = value }"
+                           :errorClass='errors.status' :errMessage="errors.status"
+                      @update:modelValue="$clearError(errors, 'status')" />
                   </div>
                 </div>
               </div>
               <div class="bg-[#f6f7f7] flex py-3">
-                <Button
-                  type="submit"
-                  bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                  class="text-sm ml-auto px-3 py-2"
-                >
+                <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
+                  class="text-sm ml-auto px-3 py-2">
                   {{ buttonText }}
                 </Button>
               </div>
@@ -95,27 +55,16 @@
               <div class="h-auto">
                 <InputLabel for="featured_image" value="Featured Image" />
                 <div class="flex w-full h-auto">
-                  <SingleCheck
-                    v-if="form.id"
-                    label=""
-                    v-model="checkedFields.media_id"
-                  ></SingleCheck>
-                  <div
-                    class="py-2 rounded-lg w-full px-2 border border-stroke"
-                    @click="() => (imageData.featured_image.isOpen = true)"
-                  >
+                  <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                  <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                    @click="() => (imageData.featured_image.isOpen = true)">
                     {{ imageData.featured_image.mediaName }}
                   </div>
                 </div>
 
                 <div class="mt-3 flex overflow-x-auto">
-                  <img
-                    v-for="file in imageData.featured_image.images"
-                    :key="file"
-                    :src="$filePath(file?.file_url)"
-                    class="inline-block w-auto h-34 mr-4"
-                    :alt="file?.alternative_text || 'image'"
-                  />
+                  <img v-for="file in imageData.featured_image.images" :key="file" :src="$filePath(file?.file_url)"
+                    class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || ''" />
                 </div>
               </div>
             </div>
@@ -124,23 +73,13 @@
       </div>
     </form>
   </DefaultCard>
-  <popupModal
-    modalTitle="Media Library"
-    customClasses="w-[1000px] h-[570px]"
-    v-model:isOpen="imageData.featured_image.isOpen"
-  >
-    <GetLibrary
-      btnName="select File"
-      :getFlag="true"
-      :selected="imageData.featured_image.images"
-      :singleFile="true"
-      :closeModal="
-        () => {
+  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+    v-model:isOpen="imageData.featured_image.isOpen">
+    <GetLibrary btnName="select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
+      :closeModal="() => {
           imageData.featured_image.isOpen = false
         }
-      "
-      :selectedFiles="handleFeaturedImageFiles"
-    />
+        " :selectedFiles="handleFeaturedImageFiles" />
   </popupModal>
 
   <Loader :isLoading="loading" :fullPage="true" />
@@ -173,13 +112,17 @@ const imageData = ref({
 })
 
 const handleFeaturedImageFiles = (data) =>
-  handleFileUpdate('featured_image', data, false, imageData, form)
+  handleFileUpdate('featured_image', data, imageData, form, false)
 
 // Form Validation
 const validateForm = () => {
   errors.value = {}
   if (!form.value.title) {
     errors.value.title = 'Title is required'
+    return false
+  }
+  if(form.value.status=== null || form.value.status=== undefined || form.value.status=== ''){
+    errors.value.status = 'Status is required'
     return false
   }
   return true
@@ -292,9 +235,7 @@ watch(
     // Check if newDomainId is present in domains_data and fetch
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
       fetchMaterialSliderData()
-    } else {
-      console.log('data not in array', form.value?.domains_data)
-    }
+    } 
   }
 )
 

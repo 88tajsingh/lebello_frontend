@@ -145,12 +145,12 @@ const applyBulkActions = async () => {
     const selectedRows = datatable.value.getSelectedRows()
     const ids = selectedRows.map(item => item.id)
     if(ids.length === 0) return showToast('Please select atleast one page to delete', 'error')
-    loading.value = true
+    loading.value = true;
     try {
       const res = await PagesServices.bulkDeletePages({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        fetchMaterials(pagiantionData.value)
+        handleGetPages(pagiantionData.value)
       }
     } catch (error) {
       console.error('Error performing bulk delete:', error)

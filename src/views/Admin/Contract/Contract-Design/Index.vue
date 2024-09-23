@@ -34,7 +34,7 @@
         </div>
       </template>
       <template #image="data">
-        <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="data.value.image" alt="Contract" style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
         <span v-if="data.value.status === 1">Draft</span>
@@ -158,7 +158,26 @@ const handleDeleteContract = async () => {
     loading.value = false;
   }
 };
-
+// Handle bulk actions
+const applyBulkActions = async () => {
+  if (bulkActionSelected.value === 'delete') {
+    const selectedRows = datatable.value.getSelectedRows()
+    const ids = selectedRows.map(item => item.id)
+    if(ids.length === 0) return showToast('Please select atleast one contract to delete', 'error')
+    getLoading.value = true
+    try {
+      const res = await materialsServices.BulkDeleteMaterial({ id: ids })
+      if (res.status === 200 && res.data.success) {
+        showToast(res.data.message, 'success')
+        fetchMaterials(pagiantionData.value)
+      }
+    } catch (error) {
+      console.error('Error performing bulk delete:', error)
+    } finally {
+      getLoading.value = false
+    }
+  }
+}
 const handleDeleteSuccess = (message) => {
   showToast(message, 'success');
   rows.value = rows.value.filter(item => item.id !== editData.value);
@@ -170,7 +189,7 @@ const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
-  store.dispatch('setDomain', defaultDomain);
+  // store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
@@ -181,7 +200,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetContract(pagiantionData.value);
   }

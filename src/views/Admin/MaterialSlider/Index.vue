@@ -29,7 +29,7 @@
             :columns="materialSlidersCols" :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true"
             :pageSize="10" :search="search" @change="changePage">
             <template #featured_image_url="data">
-                <img :src="$filePath(data.value?.featured_image_url?.file_url)" alt="Material Image"
+                <img :src="$filePath(data.value?.featured_image_url?.file_url)" alt=""
                     style="max-width: 50px; max-height: 50px" />
             </template>
             <template #status="data">
@@ -96,8 +96,8 @@ const openDeleteModal = () => {
     deleteModalIsOpen.value = true;
 };
 const changePage = (page) => {
-    const payload = { limit: page.pagesize, page: page.current_page }
-    handleGetMaterialSlider(payload);
+    pagiantionData.value = {...pagiantionData.value, limit: page.pagesize, page: page.current_page }
+    handleGetMaterialSlider(pagiantionData.value    );
 }
 
 // get materials function
@@ -136,7 +136,7 @@ const handleDeleteMaterialSlider = async () => {
         const res = await MaterialSliderServices.deleteMaterialSlider({ id: company_id.value.id });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
-            data.value = data.value.filter(item => item.id !== company_id.value.id)
+            await handleGetMaterialSlider(pagiantionData.value);
             deleteModalIsOpen.value = false;
         } else if (res.status === 400) {
             showToast(res.message, 'error');
@@ -158,7 +158,7 @@ const handleBulkActions = async () => {
             const res = await MaterialSliderServices.bulkDeleteMaterialSlider({ id: ids });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
-                await handleGetMaterialSlider({ limit: 10, page: 1, domain_id: domain_id.value });
+                await handleGetMaterialSlider(pagiantionData.value);
             }
         } catch (e) {
             console.error('Error while performing bulk delete:', e);
