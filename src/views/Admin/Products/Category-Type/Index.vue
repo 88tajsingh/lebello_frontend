@@ -7,7 +7,7 @@
       <Button v-if="permissions.write" class="px-2 py-2 m-auto"
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="domain_id" />
       </div>
     </div>
@@ -47,12 +47,6 @@
     </vue3-datatable>
   </div>
 
-  <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
-    <AddEditForm @handleApi="handleAddPages" />
-  </PopupModal>
-  <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
-    <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
-  </PopupModal>
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Product Category Type'"
     @delete="handleDeleteProductContractType">
     Do you want to delete?
@@ -69,7 +63,7 @@ import Vue3Datatable from '@bhplugin/vue3-datatable';
 import ProductServices from '@/services/ProductServices';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions';
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import { productCategoryTypeCols } from '@/json/data';
 import store from '@/store';
 
@@ -81,7 +75,7 @@ const search = ref('');
 const datatable = ref(null);
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 const getLoading = ref(false);
 const editData = ref({});
@@ -167,7 +161,7 @@ const handleDeleteProductContractType = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
-
+  if (!ids.length) return showToast('Please select atleast one product category type to delete', 'error');
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
@@ -188,8 +182,8 @@ const handleBulkActions = async () => {
 };
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   domain_id.value = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
@@ -202,7 +196,7 @@ onMounted(() => {
 watch(
   () => domain_id.value,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
     store.dispatch('setDomain', defaultDomain[0]);
     getProductCategoryTypeTree({ limit: 10, page: 1, domain_id: domain_id.value });
   }

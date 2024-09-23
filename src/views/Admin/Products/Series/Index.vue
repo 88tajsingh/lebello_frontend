@@ -5,10 +5,10 @@
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
         valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
       <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="domain_id" />
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+          v-model="pagiantionData.domain_id" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
@@ -46,6 +46,11 @@
     @delete="handleDeleteProductSeries">
     Do you want to delete ?
   </DeleteModal>
+
+  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Multiple Delete Product Series'"
+    @delete="handleBulkActions">
+    Do you want to delete multiple product series ?
+  </DeleteModal>
   <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
@@ -55,14 +60,13 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomins } from '@/helper/Apis'
+import { getDomains } from '@/helper/Apis'
 import { productSeriesCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import Button from '@/components/Admin-components/Buttons/Button.vue'
 import ProductServices from '@/services/ProductServices'
 import { useRouter } from 'vue-router';
-import SingleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
 import { useStore } from 'vuex';
 
 const store = useStore();
@@ -71,14 +75,16 @@ const bulkActionSelected = ref(null)
 const search = ref('')
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const material_id = ref('')
 const dataTableLoding = ref(false)
+const bulkPopup = ref(false)
 const loading = ref(false)
 const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')
 const actionsFlag = ref(null)
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 
 const handleMouseEnter = (data) => {
@@ -99,8 +105,9 @@ const openDeleteModal = () => {
 };
 
 const changePage = (page) => {
-  const payload = { limit: page.pagesize, page: page.current_page }
-  handleGetProductSeries(payload);
+  const { pagesize, current_page } = page;
+  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
+    handleGetProductSeries(pagiantionData.value);
 }
 
 function handleCheckboxChange(event) {
@@ -136,30 +143,6 @@ const handleGetProductSeries = async (payload) => {
   }
 }
 
-const handleEditProductSeries = async (payload) => {
-  loading.value = true;
-  if (form.value.domain_id !== PreviousDomain.value) {
-    delete form.value.id;
-  } else {
-    // clone existing  in other domain 
-    form.value = { ...form.value, master_material_id: masterId.value };
-  }
-  delete form.value?.featured_image_url;
-  try {
-    const res = await ProductServices.editProductSeries({ ...form.value });
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      router.push('/product-series');
-    } else if (res.status === 400) {
-      showToast(res.data.message, 'error');
-    }
-  } catch (error) {
-    console.error('Error editing location:', error);
-  } finally {
-    loading.value = false;
-  }
-}
-
 // Delete Product Series
 const handleDeleteProductSeries = async () => {
   loading.value = true;
@@ -167,7 +150,7 @@ const handleDeleteProductSeries = async () => {
     const res = await ProductServices.deleteProductSeries({ id: material_id.value.id });
     if (res.status === 200) {
       showToast(res.data.message, 'success');
-      data.value = data.value.filter(item => item.id !== material_id.value.id)
+      await handleGetProductSeries(pagiantionData.value);
       deleteModalIsOpen.value = false;
     } else if (res.status === 400) {
       showToast(res.message, 'error');
@@ -183,26 +166,24 @@ const handleDeleteProductSeries = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
+  if (!ids.length) return showToast('Please select atleast one product series to delete', 'error');
   if (bulkActionSelected.value === 'delete') {
-    loading.value = true;
     try {
       const res = await ProductServices.BulkDeleteProductSeries({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetProductSeries();
+        await handleGetProductSeries(pagiantionData.value);
       }
     } catch (e) {
       console.error('Error while performing bulk delete:', e);
-    } finally {
-      loading.value = false;
-    }
+    } 
   }
 };
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
+  pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -212,11 +193,11 @@ onMounted(() => {
 );
 
 watch(
-  () => domain_id.value,
+  () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetProductSeries({ limit: 10, page: 1, domain_id: domain_id.value });
+    handleGetProductSeries(pagiantionData.value);
   }
 );
 </script>

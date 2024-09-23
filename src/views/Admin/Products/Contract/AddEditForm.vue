@@ -13,7 +13,7 @@
       <div class="p-6.5 grid grid-cols-2 gap-6">
         <div class="flex flex-col">
           <TextInput type="text" :class="{ 'border-red': errors.name }" v-model="form.name" :errMessage="errors.name"
-            @update:modelValue="clearError('name')" label="Name" :hasCheckBox="checkBoxFlag"
+            @update:modelValue="$clearError(errors, 'name')" label="Name" :hasCheckBox="checkBoxFlag"
             @update:checkValue="value => checkedFields.name = value" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The name is how it appears on your site.
@@ -34,8 +34,8 @@
           <!-- <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name" class="w-full" valueField="id"
             v-model="form.parent_contract" /> -->
           <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name"
-            class="w-full" valueField="id" :errorClass="selectError" @update:modelValue="clearError('parent_contract')"
-            errMessage="Should not be own parent" v-model="form.parent_contract" />
+            class="w-full" valueField="id" :errorClass="errors.parent_contract" @update:modelValue="$clearError(errors,'parent_contract')"
+            :errMessage="errors.parent_contract" v-model="form.parent_contract" />
 
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big
@@ -95,6 +95,10 @@ const validateForm = () => {
   errors.value = {};
   if (!form.value.name) {
     errors.value.name = 'Name is required';
+    return false;
+  }
+  if(form.value.parent_contract == form.value.id) {
+    errors.value.parent_contract = 'Should not be own parent';
     return false;
   }
   return true;
@@ -180,16 +184,6 @@ const fetchProductContractTree = async (domainId) => {
   }
 };
 
-
-
-// clear error message
-const clearError = (field) => {
-  console.log("field", field);
-  if (errors.value[field]) {
-    delete errors.value[field];
-  }
-};
-
 // Lifecycle Hooks
 onMounted(() => {
   fetchProductContractTree(store.getters.getDomain?.id);
@@ -202,14 +196,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
   if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
     fetchProductContractData();
   }
-});
-
-// Watchers
-watch(() => form.value.parent_contract, (newValue) => {
-  if (newValue == form.value.id)
-    selectError.value = true;
-  else
-    selectError.value = false;
 });
 
 // Computed Properties

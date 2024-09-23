@@ -66,7 +66,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { getDomins } from '@/helper/Apis'
+import { getDomains } from '@/helper/Apis'
 import { materialCols } from '@/json/data'
 import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
@@ -100,13 +100,13 @@ const isDeleteModalOpen = ref(false)
 
 // Fetch domains and materials
 // const fetchDomains = async () => {
-//   const response = await getDomins()
+//   const response = await getDomains()
 //   domainList.value = response
 //   selectedDomainId.value = domainList.value.find(d => d.default)?.id || ''
 //   store.dispatch('setDomain', domainList.value.find(d => d.default))
 // }
 const fetchDomains = async (payload) => {
-  domainList.value = await getDomins(payload)
+  domainList.value = await getDomains(payload)
   const defaultDomain = domainList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
@@ -159,7 +159,6 @@ const applyBulkActions = async () => {
     const selectedRows = datatable.value.getSelectedRows()
     const ids = selectedRows.map(item => item.id)
     if(ids.length === 0) return showToast('Please select atleast one material to delete', 'error')
-    isLoading.value = true
     try {
       const res = await materialsServices.BulkDeleteMaterial({ id: ids })
       if (res.status === 200 && res.data.success) {
@@ -168,9 +167,7 @@ const applyBulkActions = async () => {
       }
     } catch (error) {
       console.error('Error performing bulk delete:', error)
-    } finally {
-      isLoading.value = false
-    }
+    } 
   }
 }
 

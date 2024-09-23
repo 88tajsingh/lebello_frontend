@@ -1,7 +1,7 @@
 <template>
   <PageHeader>Swatches - Re-Order</PageHeader>
   <div class="w-52 ml-auto">
-    <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+    <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
       v-model="domain_id" />
   </div>
   <Dreagable v-model:list="list" @update:list="handleListUpdate" parentfield="title" Classes="mt-3 border-[#ccc]">
@@ -17,7 +17,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { showToast } from '@/helper/functions'
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import SwatchesServices from '@/services/SwatchesServices';
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
@@ -26,7 +26,7 @@ import store from '@/store';
 
 const sortedData = ref([])
 const list = ref([])
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 const permissions = store.getters.user.permissions;
 
@@ -76,8 +76,8 @@ const handleSortSwatches = async () => {
 }
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   domain_id.value = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
@@ -91,7 +91,7 @@ onMounted(() => {
 watch(
   () => domain_id.value,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetSwatches({ domain_id: domain_id.value });
   }

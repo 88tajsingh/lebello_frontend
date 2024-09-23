@@ -3,8 +3,8 @@
     <div class="flex items-center justify-end gap-2">
 
         <div class="w-52">
-            <Label class="ml-1">Select Domain</Label>
-            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+            <InputLabel class="ml-1">Select Domain</InputLabel>
+            <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                 v-model="domain_id" />
         </div>
     </div>
@@ -21,15 +21,16 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
-import { getDomins, getProjectCategoryTree } from '@/helper/Apis'
+import { getDomains, getProjectCategoryTree } from '@/helper/Apis'
 import CommonServices from '@/services/CommonServices'
 import { productTaxonomy } from '@/json/data'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import store from '@/store'
+import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 
 const sortedData = ref([])
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 const treeData = ref([])
 const key = ref('project_categories')
@@ -83,8 +84,8 @@ const handleSorting = async () => {
 
 
 const getDomainList = async (payload) => {
-    getDominsList.value = await getDomins(payload)
-    const defaultDomain = getDominsList.value.filter((site) => site.default === 1)[0]
+    getDomainsList.value = await getDomains(payload)
+    const defaultDomain = getDomainsList.value.filter((site) => site.default === 1)[0]
     domain_id.value = defaultDomain.id
     store.dispatch('setDomain', defaultDomain)
 }
@@ -94,7 +95,7 @@ onMounted(() => {
 })
 
 watch(domain_id, () => {
-    const defaultDomain = getDominsList.value.filter(
+    const defaultDomain = getDomainsList.value.filter(
         (site) => site.id == domain_id.value
     )
     store.dispatch('setDomain', defaultDomain[0])

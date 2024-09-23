@@ -7,7 +7,7 @@
       <Button v-if="permissions.write" class="px-2 py-2 m-auto"
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
     </div>
@@ -63,7 +63,7 @@ import Vue3Datatable from '@bhplugin/vue3-datatable';
 import ContractServices from '@/services/ContractServices';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions';
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import { ContractLocationCols } from '@/json/data';
 import { useStore } from 'vuex';
 
@@ -76,7 +76,7 @@ const permissions = store.getters.user.permissions;
 const search = ref('');
 const datatable = ref(null);
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 const getLoading = ref(false);
 const editData = ref({});
@@ -168,8 +168,8 @@ const handleBulkActions = async () => {
 };
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
@@ -182,7 +182,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetContractLocation(pagiantionData.value);
   }

@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Post` : `Add New Post`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="PostServices.deletePost"
             masterKey="master_post_id" :masterDeleteService="PostServices.masterDeletePost" routeTo="post" />

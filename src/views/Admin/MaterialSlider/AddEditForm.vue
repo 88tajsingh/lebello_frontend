@@ -103,7 +103,7 @@ const router = useRouter()
 // reactive state
 const errors = ref({})
 const loading = ref(false)
-const form = ref(store.getters.editData || { status: '', visibility: '' })
+const form = ref(store.getters.editData || { status: '1', visibility: '' })
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 
@@ -161,6 +161,7 @@ const handleSubmit = async () => {
         router.push('/material-slider')
       }
     }
+    if (res.status === 400 || res.status === 403) showToast(res.data.message, 'error')
   } catch (e) {
     console.error(
       `Error while ${store.getters.editData ? 'editing' : 'adding'} Material Sliders:`,

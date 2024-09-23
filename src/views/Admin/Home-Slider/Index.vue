@@ -7,7 +7,7 @@
         valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
         <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
         <div class="max-w-52 mr-2">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
@@ -75,7 +75,7 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomins } from '@/helper/Apis'
+import { getDomains } from '@/helper/Apis'
 import { sliderCols, bulkOptions, statusData } from '@/json/data'
 import Select from '@/components/Admin-components/form-components/Select.vue'
 import HomeSliderServices from '@/services/HomeSliderServices'
@@ -99,7 +99,7 @@ const datatable = ref(null)
 const bulkPopup = ref(false)
 const deleteModalIsOpen = ref(false)
 const domain_id = ref('')
-const getDominsList = ref([])
+const getDomainsList = ref([])
 
 // Methods
 const openDeleteModal = () => { deleteModalIsOpen.value = true }
@@ -167,8 +167,8 @@ const handleBulkActions = async () => {
 // get the domain
 const getDomainList = async () => {
   try {
-    const domains = await getDomins()
-    getDominsList.value = domains
+    const domains = await getDomains()
+    getDomainsList.value = domains
     const defaultDomain = domains.find(site => site.default === 1)
     pagiantionData.value.domain_id = defaultDomain.id
     store.dispatch('setDomain', defaultDomain)
@@ -185,7 +185,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetHomeSlider(pagiantionData.value);
   }

@@ -15,6 +15,7 @@
                         <div class="px-6">
                             <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *"
                                 placeholder="Add title" v-model="form.title" :errMessage="errors.title" :errors="errors"
+                                @update:modelValue="$clearError(errors, 'title')"
                                 :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
                                     checkedFields.title = value
                                 }
@@ -43,10 +44,10 @@
                                     <InputLabel for="status" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select " v-model="form.status" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="(value) => {
-                                            checkedFields.status = value
-                                        }
-                                            " />
+                                        @update:checkValue="(value) => {checkedFields.status = value}"
+                                        :errorClass='errors.status' :errMessage="errors.status"
+                                        @update:modelValue="$clearError(errors, 'status')"
+                                        />
                                 </div>
                             </div>
                         </div>
@@ -119,7 +120,7 @@ const errors = ref({})
 const loading = ref(false)
 const form = ref({
     ...store.getters.editData,
-    status: '',
+    status: '1',
     project_categories: []
 })
 const checkedFields = ref({})
@@ -135,10 +136,16 @@ const handleFeatureFiles = (data) =>
 // Form Validation
 const validateForm = () => {
     errors.value = {}
+    if(loading.value === true) return
     if (!form.value.title) {
         errors.value.title = 'Title is required'
         return false
     }
+    if (form.value.status === null || form.value.status === undefined || form.value.status === '') {
+        errors.value.status = 'Status is required'
+        return false
+    }
+
     return true
 }
 

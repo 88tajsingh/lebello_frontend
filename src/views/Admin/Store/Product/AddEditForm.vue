@@ -318,13 +318,13 @@ div<template>
                                                 v-for="(file, index) in imageData.downloadable_files.images"
                                                 :key="`file-${index}`">
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(file.file_url)" alt="" />
+                                                    :src="$filePath(file?.file_url)" alt="" />
                                                 <div @click="() => handleRemoveDownloadable(file)"
                                                     class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                         class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                        <path stroake-linecap="round" stroke-linejoin="round"
                                                             d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                     </svg>
                                                 </div>
@@ -479,7 +479,7 @@ div<template>
                                     </div>
                                 </div>
                                 <div class="mt-3 flex overflow-x-auto">
-                                    <img v-if="imageData.gallery.images > 0" v-for="file in imageData.gallery.images"
+                                    <img v-if="imageData.gallery.images > 0" v-for="file in imageData?.gallery?.images"
                                         :key="file" :src="$filePath(file?.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || ''">
                                 </div>
@@ -526,22 +526,21 @@ div<template>
 </template>
 
 <script setup>
-import _ from 'lodash';
-import { ref, onMounted, watch, computed } from "vue";
-import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
-import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
-import { PublishOptions, productOptionsType, statusData, trueFalse } from '@/json/data';
-import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
-import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
-import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
+import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
-import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
-import { useStore } from 'vuex';
-import { useRouter } from "vue-router";
+import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue';
+import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
+import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
+import { getGlobalUpdateData, handleFileUpdate, showToast } from '@/helper/functions';
+import { productOptionsType, statusData } from '@/json/data';
 import CommonServices from '@/services/CommonServices';
 import StoreServices from '@/services/StoreServices';
+import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue';
+import _ from 'lodash';
+import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from 'vuex';
 
 //Store and router
 const store = useStore();
@@ -591,8 +590,8 @@ const imageData = ref({
 });
 
 // Common handler for image updates
-const handleSpecs_Img = (data) => handleFileUpdate('product_specs', data, imageData, form,false);
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
+const handleSpecs_Img = (data) => handleFileUpdate('product_specs', data, imageData, form, false);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
 const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
 const handleSlider = (data) => handleFileUpdate('slider', data, true, imageData, form);
 const handleDownloadable = (data) => handleFileUpdate('downloadable_files', data, true, imageData, form);
@@ -703,7 +702,7 @@ const handleSubmit = async () => {
                 router.push('/store-product');
             }
 
-        } else if (status === 400) {
+        } else if (status === 400 || status === 403) {
             showToast(data.message, 'error');
         }
     } catch (error) {

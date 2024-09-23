@@ -6,7 +6,7 @@
         showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
       <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>modalflag.multiDelete=true">Apply</Button>
       <div class="max-w-52 mr-2">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
@@ -74,7 +74,7 @@
 <script setup>
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue';
 import { SwatchesBulkOption, swatchCols, statusData } from '@/json/data.js'
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import { showToast } from '@/helper/functions'
 import SwatchesServices from '@/services/SwatchesServices';
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
@@ -89,7 +89,7 @@ import { useStore } from 'vuex';
 const store = useStore();
 const router = useRouter();
 const domain_id = ref(null);
-const getDominsList = ref([]);
+const getDomainsList = ref([]);
 const dataTableLoding = ref(false);
 const rows = ref([]);
 const permissions = store.getters.user.permissions;
@@ -190,8 +190,8 @@ const handleBulkActions = async () => {
 
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
 }
 
@@ -203,7 +203,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetSwatches(pagiantionData.value);
   }

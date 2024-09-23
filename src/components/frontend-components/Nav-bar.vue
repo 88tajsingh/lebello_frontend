@@ -22,11 +22,11 @@
           </button>
         </div>
         <div class="px-20 hidden md2:block " :class="{ 'hover:bg-[#0e0e0e89] bg-opacity-5': absolute, }">
-          <div class="flex  mt-auto mb-0 flex pt-8  " @mouseenter="absolute ? navColor1 = true : navColor1 = false"
+          <div class="flex  mt-auto mb-0  pt-8  " @mouseenter="absolute ? navColor1 = true : navColor1 = false"
             @mouseleave="absolute ? navColor1 = false : ''">
             <router-link to="/"  class="col-span-1 flex">
               <img class="h-8 right-end text-right w-full"
-                :src="navColor1 ? '@/../public/logo-header.png' : (navColor === 'white' ? '@/../public/logo-header.png' : '@/../public/logo-header4.png')"
+                :src="navColor1 ? '@/../logo-header.png' : (navColor === 'white' ? '@/../logo-header.png' : '@/../logo-header4.png')"
                 alt="Lebello-global" />
             </router-link>
             <!-- nav links route -->

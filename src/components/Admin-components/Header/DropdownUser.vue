@@ -7,8 +7,8 @@
     >
       <span class="hidden text-right lg:block">
         
-        <span class="block text-sm font-medium text-black dark:text-white">{{ store.getters.user.name }}</span>
-        <span class="block text-xs font-medium">{{ store.getters.user.email }}</span>
+        <span class="block text-sm font-medium text-black dark:text-white">{{ store.getters?.user?.name }}</span>
+        <span class="block text-xs font-medium">{{ store.getters?.user?.email }}</span>
       </span>
 
       <span class="h-12 w-12 rounded-full">

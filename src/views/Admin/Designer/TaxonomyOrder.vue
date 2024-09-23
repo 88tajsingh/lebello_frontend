@@ -2,9 +2,9 @@
   <PageHeader> Designer Taxonomy Order </PageHeader>
   <div class="flex items-center justify-end gap-2">
     <div class="w-52">
-      <Label class="ml-1">Select Domain</Label>
+      <InputLabel class="ml-1">Select Domain</InputLabel>
       <Select
-        :options="getDominsList"
+        :options="getDomainsList"
         showfield="name"
         class="w-full"
         valueField="id"
@@ -13,7 +13,7 @@
       />
     </div>
     <div class="w-52">
-      <Label class="ml-1">Select Taxonomy</Label>
+      <InputLabel class="ml-1">Select Taxonomy</InputLabel>
       <Select
         :options="designerTaxonomy"
         showfield="name"
@@ -45,102 +45,105 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { showToast } from '@/helper/functions'
+import { ref, onMounted, watch } from "vue";
+import { showToast } from "@/helper/functions";
 import {
-  getDomins,
-  getProductContractTree,
-  getProductSeriesTree,
+  getDomains,
   getProductCategoryTypeTree,
-  MaterialTreeList,
-  getProductTypeTree
-} from '@/helper/Apis'
-import CommonServices from '@/services/CommonServices'
-import { designerTaxonomy } from '@/json/data'
-import Dreagable from '@/components/Admin-components/Dreag-able.vue'
-import PageHeader from '@/components/Admin-components/PageHeader.vue'
-import store from '@/store'
+  getProductTypeTree,
+} from "@/helper/Apis";
+import CommonServices from "@/services/CommonServices";
+import { designerTaxonomy } from "@/json/data";
+import Dreagable from "@/components/Admin-components/Dreag-able.vue";
+import PageHeader from "@/components/Admin-components/PageHeader.vue";
+import store from "@/store";
 
-const sortedData = ref([])
-const getDominsList = ref([])
-const domain_id = ref('')
-const treeData = ref([])
-const key = ref('product_type')
-const loading = ref(false)
-const permissions = store.getters.user.permissions
+const sortedData = ref([]);
+const getDomainsList = ref([]);
+const domain_id = ref("");
+const treeData = ref([]);
+const key = ref("product_type");
+const loading = ref(false);
+const permissions = store.getters.user.permissions;
 
 function handleListUpdate(updatedList) {
-  sortedData.value = updatedList
+  sortedData.value = updatedList;
 }
 
 const handleChange = () => {
-  console.log('key', key.value)
-  loading.value = true
-  if (key.value === 'product_type') {
-    handleProductTypeTree({ domain_id: domain_id.value })
-  } else if (key.value === 'product_category_type') {
-    getProductCategoryTypeTreeList({ domain_id: domain_id.value })
+  console.log("key", key.value);
+  loading.value = true;
+  if (key.value === "product_type") {
+    handleProductTypeTree({ domain_id: domain_id.value });
+  } else if (key.value === "product_category_type") {
+    getProductCategoryTypeTreeList({ domain_id: domain_id.value });
   }
-}
+};
 
 // ContractType
 const getProductCategoryTypeTreeList = async (payload) => {
-  loading.value = true
-  treeData.value = await getProductCategoryTypeTree(payload)
-  loading.value = false
-}
+  loading.value = true;
+  treeData.value = await getProductCategoryTypeTree(payload);
+  loading.value = false;
+};
 
 // ProductType
 const handleProductTypeTree = async (payload) => {
-  loading.value = true
-  treeData.value = await getProductTypeTree(payload)
-  loading.value = false
-}
+  loading.value = true;
+  treeData.value = await getProductTypeTree(payload);
+  loading.value = false;
+};
 
 //  sorting api call
 const handleSorting = async () => {
   let id = sortedData.value.map((item) => ({
     id: item.id,
-    children: item.children ? item.children.map((child) => ({ id: child.id })) : []
-  }))
+    children: item.children
+      ? item.children.map((child) => ({ id: child.id }))
+      : [],
+  }));
   try {
-    loading.value = true
+    loading.value = true;
     await CommonServices.taxonomySorting({
       key: key.value,
       data: id,
-      domain_id: domain_id.value
+      domain_id: domain_id.value,
     }).then((res) => {
       if (res.status === 200 && res.data.success === true) {
-        showToast(' Sorting data sucessfully', 'success')
-        handleChange()
-        loading.value = false
+        showToast(" Sorting data sucessfully", "success");
+        handleChange();
+        loading.value = false;
       }
       if (res.status === 400) {
-        showToast(' Somthing went wrong', 'error')
-        handleChange()
-        loading.value = false
+        showToast(" Somthing went wrong", "error");
+        handleChange();
+        loading.value = false;
       }
-    })
+    });
   } catch (e) {
-    console.error('Error while log in:', e)
+    console.error("Error while log in:", e);
   }
-}
+};
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter((site) => site.default === 1)[0]
-  domain_id.value = defaultDomain.id
-  store.dispatch('setDomain', defaultDomain)
-}
+  getDomainsList.value = await getDomains(payload);
+  const defaultDomain = getDomainsList.value.filter(
+    (site) => site.default === 1
+  )[0];
+  domain_id.value = defaultDomain.id;
+  store.dispatch("setDomain", defaultDomain);
+};
 
 onMounted(() => {
-  getDomainList()
-})
+  getDomainList();
+});
 
-watch(key, handleChange)
+watch(key, handleChange);
 watch(domain_id, () => {
-  const defaultDomain = getDominsList.value.filter((site) => site.id == domain_id.value)
-  store.dispatch('setDomain', defaultDomain[0])
-  handleProductTypeTree({ domain_id: domain_id.value })
-})
+  const defaultDomain = getDomainsList.value.filter(
+    (site) => site.id == domain_id.value
+  );
+  store.dispatch("setDomain", defaultDomain[0]);
+  handleProductTypeTree({ domain_id: domain_id.value });
+});
 </script>

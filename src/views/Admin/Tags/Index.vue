@@ -7,7 +7,7 @@
       <Button v-if="permissions.write" class="px-2 py-2 m-auto"
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
     </div>
@@ -47,12 +47,6 @@
     </vue3-datatable>
   </div>
 
-  <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
-    <AddEditForm @handleApi="handleAddPages" />
-  </PopupModal>
-  <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
-    <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
-  </PopupModal>
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Tags'" @delete="handleDeleteProductType">
     Do you want to delete?
   </DeleteModal>
@@ -68,7 +62,7 @@ import Vue3Datatable from '@bhplugin/vue3-datatable';
 import CommonServices from '@/services/CommonServices';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions';
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import { tagsCols } from '@/json/data';
 import store from '@/store';
 
@@ -81,7 +75,7 @@ const datatable = ref(null);
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const pagiantionData = ref({ limit: 10, page: 1, domain_id: '',})
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
@@ -176,8 +170,8 @@ const handleBulkActions = async () => {
 };
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   // store.dispatch('setDomain', defaultDomain);
 }
@@ -190,7 +184,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
 
     handleGetTags(pagiantionData.value);

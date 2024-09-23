@@ -6,7 +6,7 @@
                 :label="option.label" :modelValue="SelectedOption" @update:modelValue="SelectedOption = $event" />
         </div>
         <div class="w-52">
-            <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+            <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                 v-model="domain_id" />
         </div>
     </div>
@@ -26,7 +26,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
-import { contractLoctionTreeList, contractTypeTreeList, getDomins } from '@/helper/Apis'
+import { contractLocationTreeList, contractTypeTreeList, getDomains } from '@/helper/Apis'
 import CommonServices from '@/services/CommonServices'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
@@ -34,7 +34,7 @@ import RadioButton from '@/components/Admin-components/form-components/RadioButt
 import store from '@/store';
 
 const sortedData = ref([])
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const permissions = store.getters.user.permissions;
 const domain_id = ref('')
 const contractTreeData = ref([])
@@ -61,7 +61,7 @@ const handleChange = () => {
 // contractLoctionTree sorting 
 const contractLoctionTree = async (payload) => {
     loading.value = true;
-    contractTreeData.value = await contractLoctionTreeList(payload)
+    contractTreeData.value = await contractLocationTreeList(payload)
     loading.value = false;
 }
 // contractLoctionTree sorting 
@@ -100,8 +100,8 @@ const handleSortMaterials = async () => {
 }
 
 const getDomainList = async (payload) => {
-    getDominsList.value = await getDomins(payload)
-    const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+    getDomainsList.value = await getDomains(payload)
+    const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
     domain_id.value = defaultDomain.id
     store.dispatch('setDomain', defaultDomain);
 }
@@ -116,7 +116,7 @@ watch(SelectedOption, handleChange);
 watch(
     () => domain_id.value,
     () => {
-        const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+        const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
         store.dispatch('setDomain', defaultDomain[0]);
         contractLoctionTree({ domain_id: domain_id.value });
     }
