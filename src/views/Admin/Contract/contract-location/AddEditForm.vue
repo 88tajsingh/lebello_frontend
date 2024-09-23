@@ -34,9 +34,12 @@
           <!-- <Select :options="productContractList" :defaultZero="true" label="Parent Product Contract" showfield="name" class="w-full" valueField="id"
             v-model="form.parent_contract_location" /> -->
           <Select :options="contractLoction" :defaultZero="true" label="Parent Contract Location"
-            showfield="contract_location" class="w-full" valueField="id" :errorClass="selectError"
-            @update:modelValue="clearError('parent_contract_location')" errMessage="Should not be own parent"
-            v-model="form.parent_contract_location" />
+            showfield="contract_location" class="w-full" valueField="id" 
+            v-model="form.parent_contract_location"
+            :errorClass='errors.parent_contract_location'
+            :errMessage="errors.parent_contract_location"
+            @update:modelValue="$clearError(errors, 'parent_contract_location')"
+            />
 
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop and Big
@@ -95,8 +98,10 @@ const validateForm = () => {
     errors.value.contract_location = 'Name is required';
     return false;
   }
-  if (selectError.value)
+  if(form.value.parent_contract_location == form.value.id) {
+    errors.value.parent_contract_location = 'cant be selected as parent to own';
     return false;
+  }
 
   return true;
 };

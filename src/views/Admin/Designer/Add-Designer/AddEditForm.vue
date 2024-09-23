@@ -83,7 +83,7 @@
                     :key="file"
                     :src="$filePath(file?.file_url)"
                     class="inline-block w-auto h-34 mr-4"
-                    :alt="file?.alternative_text || 'image'"
+                    :alt="file?.alternative_text || 'Img'"
                   />
                 </div>
               </div>
@@ -206,7 +206,7 @@
                     :key="file"
                     :src="$filePath(file?.file_url)"
                     class="inline-block w-auto h-34 mr-4"
-                    :alt="file?.alternative_text || 'image'"
+                    :alt="file?.alternative_text || 'img'"
                   />
                 </div>
                 <InputError class="mt-2" :message="errors?.featured_image" />
@@ -308,8 +308,8 @@ const imageData = ref({
 
 // Handlers for file updates
 const handleFeatureFiles = (data) =>
-  handleFileUpdate('featured_image', data, false, imageData, form)
-const handleProductFiles = (data) => handleFileUpdate('product_image', data, false, imageData, form)
+  handleFileUpdate('featured_image', data, imageData, form,false)
+const handleProductFiles = (data) => handleFileUpdate('product_image', data, imageData, form,false)
 
 // Validate form fields
 const validateForm = () => {

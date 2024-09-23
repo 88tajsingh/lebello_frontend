@@ -3,76 +3,33 @@
   <PageHeader> Designer </PageHeader>
   <div class="flex content-between justify-between mb-2">
     <div class="flex">
-      <Select
-        v-if="permissions.write"
-        cusClass="h-[40px] border-box"
-        :options="bulkOption"
-        showfield="text"
-        valueField="value"
-        label="Bulk Options"
-        v-model="bulkActionSelected"
-      />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()"
-        >Apply</Button
-      >
+      <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
+        valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>bulkPopup=true">Apply</Button>
       <div class="max-w-52 ml-2">
-        <Select
-          :options="getDominsList"
-          showfield="name"
-          class="w-full"
-          valueField="id"
-          label="All Domain"
-          v-model="pagiantionData.domain_id"
-        />
+        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+          v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
-        <Select
-          :options="statusData"
-          showfield="name"
-          class="w-full"
-          valueField="value"
-          label="All Records"
-          v-model="pagiantionData.status"
-        />
+        <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
+          v-model="pagiantionData.status" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
-      <TextInput
-        type="text"
-        class="block bg-white mr-2 rounded-lg h-[40px] w-full"
-        placeholder="Search"
-        v-model="search"
-      />
-      <Button
-        v-if="permissions.write"
-        @click="
-          () => {
-            router.push({ name: 'Designer-form' })
-            store.dispatch('clearEditData')
-          }
-        "
-        class="px-2 py-2 m-auto whitespace-nowrap"
-        >Add Designer</Button
-      >
+      <TextInput type="text" class="block bg-white mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
+        v-model="search" />
+      <Button v-if="permissions.write" @click="() => {
+          router.push({ name: 'Designer-form' })
+          store.dispatch('clearEditData')
+        }
+        " class="px-2 py-2 m-auto whitespace-nowrap">Add Designer</Button>
     </div>
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable
-      class="next-prev-pagination"
-      ref="datatable"
-      skin="bh-table-striped bh-table-hover "
-      :hasCheckbox="true"
-      :cloneHeaderInFooter="false"
-      :stickyHeader="false"
-      :rows="data"
-      :columns="designerCols"
-      :loading="dataTableLoding"
-      :totalRows="totalRows"
-      :isServerMode="true"
-      :pageSize="10"
-      :search="search"
-      @change="changePage"
-    >
+    <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
+      :hasCheckbox="true" :cloneHeaderInFooter="false" :stickyHeader="false" :rows="data" :columns="designerCols"
+      :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
+      @change="changePage">
       <template #status="data">
         <span v-if="data.value.status === 1">Draft</span>
         <span v-if="data.value.status === 2">Pending Review</span>
@@ -81,26 +38,18 @@
 
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div
-            @click="
-              () => {
-                router.push({ name: 'Designer-form' })
-                store.dispatch('setEdit', data.value)
-              }
-            "
-            id="edit svg"
-          >
+          <div @click="() => {
+              router.push({ name: 'Designer-form' })
+              store.dispatch('setEdit', data.value)
+            }
+            " id="edit svg">
             <EditSvg />
           </div>
-          <div
-            id="delete svg"
-            @click="
-              () => {
-                project_id = data.value
-                openDeleteModal()
-              }
-            "
-          >
+          <div id="delete svg" @click="() => {
+              project_id = data.value
+              openDeleteModal()
+            }
+            ">
             <DeleteSvg />
           </div>
         </div>
@@ -108,13 +57,14 @@
     </vue3-datatable>
   </div>
 
-  <DeleteModal
-    v-model:isOpen="deleteModalIsOpen"
-    :modalTitle="'Delete Designer'"
-    @delete="handleDeleteDesigner"
-  >
+  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Designer'" @delete="handleDeleteDesigner">
     Do you want to delete ?
   </DeleteModal>
+
+  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Multiple Delete Designer Type'" @delete="handleBulkActions()">
+    Do you want to delete multiple designer ?
+  </DeleteModal>
+
   <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
@@ -147,9 +97,9 @@ const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')
 const getDominsList = ref([])
-const domain_id = ref('')
 
 const deleteModalIsOpen = ref(false)
+const bulkPopup = ref(false)
 const openDeleteModal = () => {
   deleteModalIsOpen.value = true
 }
@@ -199,7 +149,7 @@ const handleDeleteDesigner = async () => {
     const res = await DesignerServices.deleteDesigners({ id: project_id.value.id })
     if (res.status === 200) {
       showToast(res.data.message, 'success')
-      data.value = data.value.filter((item) => item.id !== project_id.value.id)
+      await handleGetDesigner(pagiantionData.value)
       deleteModalIsOpen.value = false
     } else if (res.status === 400) {
       showToast(res.message, 'error')
@@ -216,12 +166,16 @@ const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows()
   const ids = selected.map((item) => item.id)
   if (bulkActionSelected.value === 'delete') {
+    if (ids.length === 0) {
+      showToast('Please select at least one item', 'error')
+      return 
+    }
     loading.value = true
     try {
       const res = await DesignerServices.bulkDeleteDesigners({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        await handleGetDesigner()
+        await handleGetDesigner(pagiantionData.value)
       }
     } catch (e) {
       console.error('Error while performing bulk delete:', e)
@@ -245,7 +199,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter((site) => site.id == domain_id.value)
+    const defaultDomain = getDominsList.value.filter((site) => site.id == pagiantionData.value.domain_id)
     store.dispatch('setDomain', defaultDomain[0])
     handleGetDesigner(pagiantionData.value)
   }

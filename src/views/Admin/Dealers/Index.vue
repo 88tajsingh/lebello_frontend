@@ -5,7 +5,7 @@
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
         valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{multiDeleteModal = true}">Apply</Button>
       <div class="max-w-52 ml-2">
         <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
@@ -56,12 +56,15 @@
           </div>
         </div>
       </template>
-      x
     </vue3-datatable>
   </div>
 
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Dealer'" @delete="handleDeleteProjects">
     Do you want to delete ?
+  </DeleteModal>
+
+  <DeleteModal v-model:isOpen="multiDeleteModal" :modalTitle="'Multiple Delete Dealer'" @delete="handleBulkActions">
+    Do you want to delete multiple dealers ?
   </DeleteModal>
   <Loader :isLoading="loading" :fullPage="true" />
 </template>
@@ -91,12 +94,12 @@ const bulkOption = [{ text: 'Delete', value: 'delete' }]
 const project_id = ref('')
 const dataTableLoding = ref(false)
 const loading = ref(false)
+const multiDeleteModal = ref(false)
 const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')
 const actionsFlag = ref(null)
 const getDominsList = ref([])
-const domain_id = ref('')
 
 const isRowHovered = (value) => {
   return actionsFlag.value === value.name
@@ -152,7 +155,7 @@ const handleDeleteProjects = async () => {
     const res = await DealersServices.deleteDealer({ id: project_id.value.id })
     if (res.status === 200) {
       showToast(res.data.message, 'success')
-      data.value = data.value.filter((item) => item.id !== project_id.value.id)
+      await handleGetDealers(pagiantionData.value)
       deleteModalIsOpen.value = false
     } else if (res.status === 400) {
       showToast(res.message, 'error')
@@ -168,13 +171,14 @@ const handleDeleteProjects = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows()
   const ids = selected.map((item) => item.id)
+  if(!ids.length) return showToast('Please select atleast one dealer to delete', 'error')
   if (bulkActionSelected.value === 'delete') {
     loading.value = true
     try {
       const res = await DealersServices.BulkDeleteDealer({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        await handleGetDealers({ limit: 10, page: 1, domain_id: domain_id.value })
+        await handleGetDealers(pagiantionData.value)
       }
     } catch (e) {
       console.error('Error while performing bulk delete:', e)

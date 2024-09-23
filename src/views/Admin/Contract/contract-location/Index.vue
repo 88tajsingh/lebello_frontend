@@ -8,7 +8,7 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
         <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="domain_id" />
+          v-model="pagiantionData.domain_id" />
       </div>
     </div>
     <div class="flex">
@@ -30,7 +30,7 @@
         </div>
       </template>
       <template #image="data">
-        <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
+        <img :src="data.value.image" alt="Contract" style="max-width: 50px; max-height: 50px" />
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
@@ -71,6 +71,7 @@ const router = useRouter();
 const store = useStore();
 const bulkActionSelected = ref(null)
 const loading = ref(false);
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const permissions = store.getters.user.permissions;
 const search = ref('');
 const datatable = ref(null);
@@ -93,17 +94,6 @@ const openDeleteModal = (data) => {
   console.log(data.id)
 };
 
-const openModal = () => {
-  modalIsOpen.value = true;
-};
-
-const editModal = (data) => {
-  console.log("data ", data)
-  editData.value = { ...data.value };
-  // router.push({ name: 'EditPages', params: { id: data.value.id } });
-  editIsOpen.value = true;
-};
-
 const handleMouseEnter = (data) => {
   actionsFlag.value = data.value.name;
 };
@@ -112,14 +102,10 @@ const handleMouseLeave = () => {
   actionsFlag.value = null;
 };
 
-const isRowHovered = (value) => {
-  return actionsFlag.value === value.name;
-};
-
 const changePages = (page) => {
-  console.log("page changed", page)
-  const payload = { limit: page.pagesize, page: page.current_page }
-  handleGetContractLocation(payload);
+  const { pagesize, current_page } = page;
+  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
+   handleGetContractLocation(pagiantionData.value);
 }
 // api calls
 const handleGetContractLocation = async (payload) => {
@@ -142,7 +128,7 @@ const handleDeleteContractLocation = async () => {
   try {
     const res = await ContractServices.deleteContractLocation({ id: editData.value });
     if (res.status === 200 && res.data.success) {
-      rows.value = rows.value.filter(item => item.id !== editData.value)
+      await handleGetContractLocation(pagiantionData.value)
       showToast(res.data.message, 'success');
       deleteModalIsOpen.value = false;
       editData.value = null;
@@ -168,7 +154,7 @@ const handleBulkActions = async () => {
       const res = await ContractServices.BulkDeleteContractLocation({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetContractLocation();
+        await handleGetContractLocation(pagiantionData.value);
       }
       else if (res.status === 400) {
         showToast(res.data.message, 'error');
@@ -184,7 +170,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDominsList.value = await getDomins(payload)
   const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -194,11 +180,11 @@ onMounted(() => {
 );
 
 watch(
-  () => domain_id.value,
+  () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetContractLocation({ limit: 10, page: 1, domain_id: domain_id.value });
+    handleGetContractLocation(pagiantionData.value);
   }
 );
 </script>

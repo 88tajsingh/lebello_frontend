@@ -112,7 +112,7 @@
           <div class=" mt-3 flex overflow-x-auto">
             <img v-if="imageData.featured_image.images[0]" v-for="file in imageData.featured_image.images" :key="file"
               :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-              :alt="file?.alternative_text || 'image'">
+              :alt="file?.alternative_text || ''">
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@ const imageData = ref({
 })
 
 // Image Handlers
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
 
 
 

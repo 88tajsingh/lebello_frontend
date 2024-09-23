@@ -35,7 +35,8 @@
         </div>
       </template>
       <template #featured_image_url="data">
-        <img :src="$filePath(data.value.featured_image_url)" alt="Material Image"
+        
+        <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Material"
           style="max-width: 50px; max-height: 50px" />
       </template>
       <template #status="data">
@@ -99,7 +100,8 @@ const getDominsList = ref([])
 const openDeleteModal = () => { deleteModalIsOpen.value = true }
 
 const changePage = async (page) => {
-  await handleGetHomeSlider({ limit: page.pagesize, page: page.current_page })
+  pagiantionData.value = { ...pagiantionData.value, limit: page.pagesize, page: page.current_page }
+  await handleGetHomeSlider(pagiantionData.value)
 }
 
 // get current page
@@ -142,7 +144,9 @@ const handleBulkActions = async () => {
       const { status, data } = await HomeSliderServices.BulkDeleteHomeSlider({ id: ids })
       if (status === 200 && data.success) {
         showToast(data.message, 'success')
-        await handleGetHomeSlider({ limit: 10, page: 1, domain_id: domain_id.value })
+        datatable.value.clearSelectedRows()
+        // console.log(datatable.value)
+        await handleGetHomeSlider(pagiantionData.value)
       }
     } catch (error) {
       console.error('Error during bulk delete:', error)

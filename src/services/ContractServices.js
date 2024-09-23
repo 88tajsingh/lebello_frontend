@@ -59,7 +59,7 @@ class ContractDesignService {
   }
 
   BulkDeleteContractType(payload) {
-    return instance.post(ApiConfig.bulkDeleteMaterial, payload)
+    return instance.post(ApiConfig.bulkDeletecontract, payload)
   }
   
   deleteMasterContractType(payload) {

@@ -245,7 +245,7 @@ const imageData = ref({
 });
 
 // Image Handlers
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
 
 // Form Validation
 const validateForm = () => {
@@ -286,10 +286,7 @@ const handleSubmit = async () => {
                 router.push('/swatches');
             }
         }
-        else if(status === 400) {
-            showToast(data.message, 'error');
-        } 
-        else if(status === 403) {
+        else if(status === 400 ||status === 403) {
             showToast(data.message, 'error');
         } 
     } catch (e) {
@@ -380,5 +377,3 @@ const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
 </script>
-
-<style></style>

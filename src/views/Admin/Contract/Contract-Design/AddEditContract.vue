@@ -112,7 +112,7 @@
                                     <img v-if="imageData.contract_slider_image.images[0]"
                                         v-for="file in imageData.contract_slider_image.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'">
+                                        :alt="file?.alternative_text || ''">
                                 </div>
                             </div>
                         </Accordion>
@@ -131,7 +131,7 @@
                                     <img v-if="imageData.contract_logo.images[0]"
                                         v-for="file in imageData.contract_logo.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'">
+                                        :alt="file?.alternative_text || ''">
                                 </div>
                             </div>
                         </Accordion>
@@ -157,7 +157,11 @@
                                     <InputLabel for="statu1s" value="Status" />
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select Status" v-model="form.status" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="value => checkedFields.status = value" />
+                                        @update:checkValue="value => checkedFields.status = value"
+                                        :errorClass='errors.status'
+                                        :errMessage="errors.status"
+                                        @update:modelValue="$clearError(errors, 'status')"
+                                        />
                                 </div>
                             </div>
                         </div>
@@ -248,7 +252,7 @@
                                     <img v-if="imageData.featured_image.images[0]"
                                         v-for="file in imageData.featured_image.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                        :alt="file?.alternative_text || 'image'">
+                                        :alt="file?.alternative_text || ''">
                                 </div>
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
@@ -267,7 +271,7 @@
                                     <div class=" mt-3 flex overflow-x-auto">
                                         <img v-for="file in imageData.gallery.images" :key="file"
                                             :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || 'image'">
+                                            :alt="file?.alternative_text || ''">
                                     </div>
                                     <InputError class="mt-2" :message="errors?.featured_image" />
                                 </div>
@@ -389,7 +393,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import { trueFalse, withBgWithoutBg, oldNewContract, capsNOCaps, statusData } from '@/json/data';
+import { trueFalse, withBgWithoutBg , capsNOCaps, statusData } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
@@ -400,7 +404,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: '', simple_fields: false, description: '', contract_home_page_slide: 0 });
+const form = ref(store.getters.editData || { status:1, simple_fields: false, description: '', contract_home_page_slide: 0 });
 const contractLocation = ref([]);
 const contractType = ref([]);
 const checkedFields = ref({})
@@ -417,10 +421,10 @@ const imageData = ref({
 });
 
 // Handle file updates for different image types
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, false, imageData, form);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
 const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
-const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, false, imageData, form);
-const handleContractSliderImageFiles = (data) => handleFileUpdate('contract_slider_image', data, false, imageData, form);
+const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form,false);
+const handleContractSliderImageFiles = (data) => handleFileUpdate('contract_slider_image', data, imageData, form,false);
 
 
 // Validate form fields
@@ -428,6 +432,10 @@ const validateForm = () => {
     errors.value = {};
     if (!form.value.title) {
         errors.value.title = 'Title is required';
+        return false;
+    }
+    if (!form.value.status) {
+        errors.value.status = 'status is required';
         return false;
     }
     return true;
@@ -456,6 +464,9 @@ const handleSubmit = async () => {
                 router.push('/Contract-Design');
             }
 
+        }
+        else if(res.status === 400 || res.status === 403) {
+            showToast(res.data.message, 'error');
         }
     } catch (e) {
         console.error('Error:', e);
@@ -507,40 +518,47 @@ const fetchDomainContractData = async () => {
 }
 
 // Fetch contract location and type data
-const fetchContractData = async () => {
-    contractLocation.value = await contractLoctionTreeList({ domain_id: store.getters.getDomain?.id });
-    contractType.value = await contractTypeTreeList({ domain_id: store.getters.getDomain?.id });
+const fetchContractData = async (payload) => {
+    const [location, type] = await Promise.all([
+    contractLoctionTreeList(payload),
+    contractTypeTreeList(payload)
+]);
+contractLocation.value = location;
+contractType.value = type;
 };
 
 // Initialize component state
 onMounted(() => {
     if (store.getters.editData) {
         const { featured_image_data, contract_logo_data, contract_slider_image_data, gallery_urls } = store.getters.editData;
-        console.log(contract_slider_image_data)
-        imageData.value.featured_image.images = [featured_image_data];
-        imageData.value.featured_image.mediaName = featured_image_data?.file_url || 'featured images';
-        imageData.value.contract_logo.images = [contract_logo_data];
-        imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
-        imageData.value.contract_slider_image.images = [contract_slider_image_data];
-        imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
-        imageData.value.gallery.images = gallery_urls;
-        imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
 
+const setImageData = (key, data, isArray = false) => {
+    imageData.value[key].images = isArray ? (Array.isArray(data) ? data : []) : [data];
+    
+    if (isArray && Array.isArray(data)) {
+        imageData.value[key].mediaName = data.map(item => item.file_url).join(', ') || `${key} images`;
+    } else {
+        imageData.value[key].mediaName = data?.file_url || `${key.charAt(0).toUpperCase() + key.slice(1)} image`;
+    }
+};
+
+setImageData('featured_image', featured_image_data);
+setImageData('contract_logo', contract_logo_data);
+setImageData('contract_slider_image', contract_slider_image_data);
+setImageData('gallery', gallery_urls, true);
+
+        fetchContractData({domain_id:store.getters.editData.domain_id});
     }
 });
 
 // Watch for domain_id changes to update contract data
-watch(() => form.value.domain_id, fetchContractData);
 watch(() => form.value.domain_id, (newDomainId) => {
     // Fetch product type tree and reset parent product type
-    fetchContractData({ domain_id: form.value.domain_id });
-
+    fetchContractData({ domain_id: newDomainId });
     // Check if newDomainId is present in domains_data and fetch product type data if so
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchDomainContractData();
-    } else {
-        console.log('data not in array', form.value?.domains_data);
-    }
+    } 
 });
 // Computed Property
 const buttonText = computed(() => {

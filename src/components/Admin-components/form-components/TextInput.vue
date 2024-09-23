@@ -27,7 +27,7 @@ import { onMounted, ref, computed, watch, defineEmits, defineProps } from 'vue';
 import SingleCheck from './SingleCheck.vue';
 
 const props = defineProps({
-  modelValue: String,
+  modelValue: [String, Boolean, Number],
   label: String,
   errMessage: String,
   placeholder: String,
