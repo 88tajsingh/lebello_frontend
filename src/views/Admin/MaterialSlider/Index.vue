@@ -4,8 +4,8 @@
         <div class="flex">
             <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
                 valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-            <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
-            <div class="max-w-52">
+                <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
+                <div class="max-w-52">
                 <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
                     v-model="pagiantionData.domain_id" />
             </div>
@@ -57,6 +57,11 @@
         @delete="handleDeleteMaterialSlider">
         Do you want to delete ?
     </DeleteModal>
+
+    <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="' Multiple Delete Material Slider'"
+        @delete="handleBulkActions">
+        Do you want to delete multiple Material Slider ?
+    </DeleteModal>
     <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
@@ -91,6 +96,7 @@ const datatable = ref('')
 const totalRows = ref('')
 const getDominsList = ref([])
 const domain_id = ref('')
+const bulkPopup = ref(false);
 const deleteModalIsOpen = ref(false);
 const openDeleteModal = () => {
     deleteModalIsOpen.value = true;
@@ -152,6 +158,7 @@ const handleDeleteMaterialSlider = async () => {
 const handleBulkActions = async () => {
     const selected = datatable.value.getSelectedRows();
     const ids = selected.map(item => item.id);
+    if (!ids.length) return showToast('Please select atleast one slider to delete', 'error');
     if (bulkActionSelected.value === 'delete') {
         loading.value = true;
         try {
