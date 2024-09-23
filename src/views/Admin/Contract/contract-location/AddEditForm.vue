@@ -71,7 +71,7 @@
 import _ from 'lodash';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import { contractLoctionTreeList } from '@/helper/Apis'
+import { contractLocationTreeList } from '@/helper/Apis'
 import ContractServices from '@/services/ContractServices'
 import { showToast, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
@@ -182,7 +182,7 @@ const fetchContractLocationData = async () => {
 
 // Fetch contract location tree data
 const contractLoctionTree = async (payload) => {
-  contractLoction.value = await contractLoctionTreeList(payload);
+  contractLoction.value = await contractLocationTreeList(payload);
 };
 
 // clear error message

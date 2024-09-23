@@ -9,7 +9,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
 
 const emit = defineEmits(['customChange'])
 const props = defineProps({

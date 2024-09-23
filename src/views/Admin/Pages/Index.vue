@@ -6,7 +6,7 @@
       <Button class="px-2 py-2 m-auto" @click="() => multiDeleteModalOpen = true">Apply</Button>
     </div>
     <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
       </div>
     <div class="flex ml-auto">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -52,7 +52,7 @@
 <script setup>
 import { ref, onMounted,watch } from 'vue';
 import { showToast } from '@/helper/functions'
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PagesServices from '@/services/PagesServices';
 import { useRouter } from 'vue-router';
@@ -63,7 +63,7 @@ const router = useRouter();
 // const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 
 const actionSelected = ref(null);
-const getDominsList = ref([]);
+const getDomainsList = ref([]);
 const domain_id=ref(null);
 const bulkOptions = [{ text: 'Delete', value: 'delete' }]
 const datatable  = ref(null);
@@ -161,8 +161,8 @@ const applyBulkActions = async () => {
 }
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
@@ -174,7 +174,7 @@ onMounted(() => {
 watch(
     () => pagiantionData.value.domain_id,
     () => {
-      const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id );
+      const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id );
       store.dispatch('setDomain', defaultDomain[0]);
       handleGetPages(pagiantionData.value);
     }

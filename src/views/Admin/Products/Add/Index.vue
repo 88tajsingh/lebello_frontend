@@ -5,7 +5,7 @@
         <Select v-if="permissions.write" cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
         <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
         <div class="max-w-52 mr-2">
-          <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
+          <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
         </div>
         <div class="max-w-52">
           <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
@@ -59,6 +59,7 @@
     <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Product '" @delete="handleDeleteProduct">
       Do you want to delete?
     </DeleteModal>
+
     <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Multiple Product '" @delete="handleBulkActions()">
     Do you want to delete ?
   </DeleteModal>
@@ -71,7 +72,7 @@
   import ProductServices from '@/services/ProductServices';
   import { useRouter } from 'vue-router';
   import { showToast  } from '@/helper/functions';
-  import { getDomins } from '@/helper/Apis';
+  import { getDomains } from '@/helper/Apis';
   import { product,statusData } from '@/json/data';
   import store from '@/store';
 
@@ -84,7 +85,7 @@
   const permissions =  store.getters.user.permissions;
   const pagiantionData= ref({limit: 10, page: 1, domain_id:'' ,status:''})
   const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-  const getDominsList = ref([])
+  const getDomainsList = ref([])
   const domain_id = ref('')
   const getLoading = ref(false);
   const editData = ref({});
@@ -156,7 +157,7 @@ const handleDeleteProduct = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
-
+  if (!ids.length) return showToast('Please select atleast one product to delete', 'error');
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
@@ -177,8 +178,8 @@ const handleBulkActions = async () => {
 };
 
   const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
@@ -191,7 +192,7 @@ onMounted(() => {
 watch(
     () => pagiantionData.value.domain_id,
     () => {
-      const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value );
+      const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value );
       store.dispatch('setDomain', defaultDomain[0]);
       handleGetProduct(pagiantionData.value);
     }

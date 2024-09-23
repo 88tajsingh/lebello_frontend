@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps, defineEmits } from 'vue';
+import { ref, watch } from 'vue';
 import { showToast } from '@/helper/functions';
 
 // Props from parent component

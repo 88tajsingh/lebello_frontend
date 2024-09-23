@@ -282,6 +282,7 @@ const handleSubmit = async () => {
                 router.push('/home-slider');
             }
         }
+        if (res.status === 400 || res.status === 403) showToast(res.data.message, 'error');
     } catch (e) {
         console.error('Error:', e);
     } finally {

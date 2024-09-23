@@ -6,7 +6,7 @@
         valueField="value" label="Bulk Options" v-model="actionSelected" />
       <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { actionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="max-w-52 mr-2">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
@@ -68,7 +68,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import { useRouter } from 'vue-router';
 import { ContractCols, statusData } from '@/json/data';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
@@ -82,7 +82,7 @@ const actionSelected = ref(null);
 const loading = ref(false);
 const search = ref('');
 const permissions = store.getters.user.permissions;
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const domain_id = ref('')
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
@@ -191,8 +191,8 @@ const handleDeleteSuccess = (message) => {
 };
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   // store.dispatch('setDomain', defaultDomain);
 }
@@ -205,7 +205,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetContract(pagiantionData.value);
   }

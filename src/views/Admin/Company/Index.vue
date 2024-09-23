@@ -68,7 +68,7 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomins } from '@/helper/Apis'
+import { getDomains } from '@/helper/Apis'
 import { companyCols, statusData } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
@@ -167,7 +167,7 @@ const handleBulkActions = async () => {
 // Fetch Domains List
 const getDomainList = async () => {
     try {
-        getDomainsList.value = await getDomins();
+        getDomainsList.value = await getDomains();
         const defaultDomain = getDomainsList.value.find(site => site.default === 1);
         pagiantionData.value.domain_id = defaultDomain.id;
         store.dispatch('setDomain', defaultDomain);

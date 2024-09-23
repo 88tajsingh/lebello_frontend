@@ -191,6 +191,13 @@ const menuGroups = ref([
                 "route": "",
                 "children": [
                     {
+                        "id": 48,
+                        "parent_module": 23,
+                        "icon": null,
+                        "label": "Product",
+                        "route": "/product"
+                    },
+                    {
                         "id": 24,
                         "parent_module": 23,
                         "icon": null,

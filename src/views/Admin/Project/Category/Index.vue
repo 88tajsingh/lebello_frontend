@@ -5,10 +5,10 @@
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
         valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="handleBulkActions()">Apply</Button>
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>bulkActionSelected?bulkPopUp=true:''">Apply</Button>
       <div class="w-52">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="domain_id" />
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+          v-model="pagiantionData.domain_id" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
@@ -49,6 +49,12 @@
     @delete="handleDeleteProductSeries">
     Do you want to delete ?
   </DeleteModal>
+
+  <DeleteModal v-model:isOpen="bulkPopUp" :modalTitle="'Multiple Delete Project Category'"
+    @delete="handleBulkActions">
+    Do you want to delete multiple projects ?
+  </DeleteModal>
+
   <Loader :isLoading="loading" :fullPage="true" />
 </template>
 
@@ -58,7 +64,7 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomins } from '@/helper/Apis'
+import { getDomains } from '@/helper/Apis'
 import { proectCategoryCols } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
@@ -71,17 +77,18 @@ const store = useStore();
 const router = useRouter();
 const bulkActionSelected = ref(null)
 const search = ref('')
+const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
 const material_id = ref('')
 const dataTableLoding = ref(false)
 const loading = ref(false)
-const editData = ref({})
+const bulkPopUp = ref(false)
 const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')
 const actionsFlag = ref(null)
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 
 const handleMouseEnter = (data) => {
@@ -102,8 +109,9 @@ const openDeleteModal = () => {
 };
 
 const changePage = (page) => {
-  const payload = { limit: page.pagesize, page: page.current_page }
-  handleGetProductSeries(payload);
+  const { pagesize, current_page } = page;
+  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
+   handleGetProductSeries(pagiantionData.value);
 }
 
 function handleCheckboxChange(event) {
@@ -146,7 +154,7 @@ const handleDeleteProductSeries = async () => {
     const res = await ProjectServices.deleteProjectCategory({ id: material_id.value.id });
     if (res.status === 200) {
       showToast(res.data.message, 'success');
-      data.value = data.value.filter(item => item.id !== material_id.value.id)
+      await handleGetProductSeries(pagiantionData.value);
       deleteModalIsOpen.value = false;
     } else if (res.status === 400) {
       showToast(res.message, 'error');
@@ -162,26 +170,31 @@ const handleDeleteProductSeries = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
+  if (!ids.length) return showToast('Please select atleast one material to delete', 'error');
   if (bulkActionSelected.value === 'delete') {
-    loading.value = true;
     try {
       const res = await ProjectServices.bulkDeleteProjectCategory({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetProductSeries();
+        await handleGetProductSeries(pagiantionData.value);
       }
     } catch (e) {
       console.error('Error while performing bulk delete:', e);
     } finally {
-      loading.value = false;
     }
   }
 };
 
+/**
+ * Fetch the list of domains.
+ * Sets the default domain to the first item in the list and
+ * dispatches the action to set the domain in the store.
+ * @param {Object} payload The payload to be sent with the request.
+ */
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
+  pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -191,11 +204,11 @@ onMounted(() => {
 );
 
 watch(
-  () => domain_id.value,
+  () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetProductSeries({ limit: 10, page: 1, domain_id: domain_id.value });
+    handleGetProductSeries(pagiantionData.value);
   }
 );
 </script>

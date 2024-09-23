@@ -12,7 +12,7 @@
             <div class="p-6.5 grid grid-cols-2 gap-6">
                 <div class="flex flex-col ">
                     <TextInput type="text" class=" " :class="{ 'border-red': errors.name }" placeholder=""
-                        v-model="form.name" :errMessage="errors.name" @update:model="clearError('name')" label="Name"
+                        v-model="form.name" :errMessage="errors.name" @update:modelValue="$clearError(errors,'name')" label="Name"
                         :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }" />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         The name is how it appears on your site.
@@ -30,7 +30,10 @@
                 <div class="flex flex-col ">
                     <InputLabel for="Parent Material" value="Parent Product Category " />
                     <Select :options="projectCategoryTree" :defaultZero='true' showfield="name" class="w-full"
-                        valueField="id" label="Select " v-model="form.parent_project_category" />
+                        valueField="id" label="Select " v-model="form.parent_project_category"
+                         :errorClass='errors.parent_project_category' :errMessage="errors.parent_project_category"
+                        @update:modelValue="$clearError(errors, 'parent_project_category')"
+                        />
                     <p class="text-sm text-[#646970] text-[11.5px]">
                         Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of
                         Bebop
@@ -62,7 +65,7 @@ import _ from 'lodash';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getProjectCategoryTree } from '@/helper/Apis'
-import { clearError, showToast, getGlobalUpdateData } from '@/helper/functions'
+import {showToast, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -86,8 +89,13 @@ const projectCategoryTree = ref([]);
 // Form Validation
 const validateForm = () => {
     errors.value = {};
+    if(loading.value === true) return
     if (!form.value.name) {
         errors.value.name = 'Name is required';
+        return false;
+    }
+    if(form.value.parent_project_category == form.value.id) {
+        errors.value.parent_project_category = 'Should not be own parent';
         return false;
     }
     return true;

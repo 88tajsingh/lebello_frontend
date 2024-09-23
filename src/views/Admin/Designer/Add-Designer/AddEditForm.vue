@@ -1,20 +1,11 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Designer` : `Add New Designer`">
-    <DomainComponent
-      @customChange="(id) => (form.domain_id = id)"
-      :deleteService="DesignerServices.deleteDesigners"
-      masterKey="master_designer_id"
-      :masterDeleteService="DesignerServices.deleteMasterDesigners"
-      routeTo="designer"
-    />
+    <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="DesignerServices.deleteDesigners"
+      masterKey="master_designer_id" :masterDeleteService="DesignerServices.deleteMasterDesigners" routeTo="designer" />
 
     <template v-if="form.id" v-slot:header>
-      <MasterSlugForm
-        :form="form"
-        @update-slug="() => fetchDesignerData()"
-        :SlugUpdateservices="DesignerServices.masterDesignersSlugUpdate"
-        masteridKeyName="master_designer_id"
-      />
+      <MasterSlugForm :form="form" @update-slug="() => fetchDesignerData()"
+        :SlugUpdateservices="DesignerServices.masterDesignersSlugUpdate" masteridKeyName="master_designer_id" />
     </template>
 
     <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -22,69 +13,35 @@
         <div class="col-span-8">
           <Accordion :open="true" header="Fileds">
             <div class="px-6">
-              <TextInput
-                type="text"
-                class="block mr-2 h-[40px] w-full"
-                label="Title *"
-                placeholder="Add title"
-                v-model="form.title"
-                :errMessage="errors.title"
-                @update:modelValue="$clearError(errors, 'title')"
-                :hasCheckBox="checkBoxFlag"
-                @update:checkValue="
-                  (value) => {
+              <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title *" placeholder="Add title"
+                v-model="form.title" :errMessage="errors.title" @update:modelValue="$clearError(errors, 'title')"
+                :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
                     checkedFields.title = value
                   }
-                "
-              />
+                  " />
 
-              <TextInput
-                type="text"
-                class="block mr-2 h-[40px] w-full"
-                label="Slug"
-                placeholder="slug (Read Only)"
-                v-model="form.slug"
-                disabled="true"
-              />
+              <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug" placeholder="slug (Read Only)"
+                v-model="form.slug" disabled="true" />
 
-              <TextInput
-                type="text"
-                class="block mr-2 h-[40px] w-full"
-                label="Product Url"
-                placeholder=""
-                v-model="form.product_url"
-                :hasCheckBox="checkBoxFlag"
-                @update:checkValue="
-                  (value) => {
+              <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Url" placeholder=""
+                v-model="form.product_url" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
                     checkedFields.product_url = value
                   }
-                "
-              />
+                  " />
 
               <div class="mr-2 mt-5 h-auto">
                 <InputLabel for="Featured_image" value="Featured Image" />
                 <div class="flex w-full h-auto">
-                  <SingleCheck
-                    v-if="form.id"
-                    label=""
-                    v-model="checkedFields.media_id"
-                  ></SingleCheck>
-                  <div
-                    class="py-2 rounded-lg w-full px-2 border border-stroke"
-                    @click="() => (imageData.product_image.isOpen = true)"
-                  >
+                  <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                  <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                    @click="() => (imageData.product_image.isOpen = true)">
                     {{ imageData.product_image.mediaName }}
                   </div>
                 </div>
                 <div class="mt-3 flex overflow-x-auto">
-                  <img
-                    v-if="imageData.product_image.images[0]"
-                    v-for="file in imageData.product_image.images"
-                    :key="file"
-                    :src="$filePath(file?.file_url)"
-                    class="inline-block w-auto h-34 mr-4"
-                    :alt="file?.alternative_text || 'Img'"
-                  />
+                  <img v-if="imageData.product_image.images[0]" v-for="file in imageData.product_image.images"
+                    :key="file" :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                    :alt="file?.alternative_text || 'Img'" />
                 </div>
               </div>
             </div>
@@ -105,30 +62,18 @@
               <div class="px-4">
                 <div class="flex flex-col">
                   <InputLabel for="status" value="Status" />
-                  <Select
-                    :options="statusData"
-                    showfield="name"
-                    class="w-full"
-                    valueField="value"
-                    label="Select "
-                    v-model="form.status"
-                    :hasCheckBox="checkBoxFlag"
-                    @update:checkValue="
-                      (value) => {
+                  <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="Select "
+                    v-model="form.status" :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => {
                         checkedFields.status = value
                       }
-                    "
-                  />
+                      " />
                 </div>
               </div>
             </div>
 
             <div class="bg-[#f6f7f7] flex py-3">
-              <Button
-                type="submit"
-                bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                class="text-sm ml-auto px-3 py-2"
-              >
+              <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
+                class="text-sm ml-auto px-3 py-2">
                 {{ buttonText }}
               </Button>
             </div>
@@ -137,15 +82,8 @@
           <div class="mt-3">
             <Accordion :open="true" header="Tags">
               <div class="mt-2 px-6 flex h-auto">
-                <Checkbox
-                  :nexted="true"
-                  :checkedData="form.tags"
-                  :dropdown="true"
-                  valueField="id"
-                  showField="name"
-                  :data="TagsData"
-                  @checked-items="(checked) => (form.tags = checked)"
-                />
+                <Checkbox :nexted="true" :checkedData="form.tags" :dropdown="true" valueField="id" showField="name"
+                  :data="TagsData" @checked-items="(checked) => (form.tags = checked)" />
               </div>
             </Accordion>
           </div>
@@ -153,15 +91,9 @@
           <div class="mt-3">
             <Accordion :open="true" header="Product Category Type">
               <div class="mt-2 px-6 flex h-auto">
-                <Checkbox
-                  :nexted="true"
-                  :checkedData="form.product_category_types"
-                  :dropdown="true"
-                  valueField="id"
-                  showField="name"
-                  :data="ProductCategory"
-                  @checked-items="(checked) => (form.product_category_types = checked)"
-                />
+                <Checkbox :nexted="true" :checkedData="form.product_category_types" :dropdown="true" valueField="id"
+                  showField="name" :data="ProductCategory"
+                  @checked-items="(checked) => (form.product_category_types = checked)" />
               </div>
             </Accordion>
           </div>
@@ -169,15 +101,8 @@
           <div class="mt-3">
             <Accordion :open="true" header="Product Type">
               <div class="mt-2 px-6 flex h-auto">
-                <Checkbox
-                  :nexted="true"
-                  :checkedData="form.product_types"
-                  :dropdown="true"
-                  valueField="id"
-                  showField="name"
-                  :data="productType"
-                  @checked-items="(checked) => (form.product_types = checked)"
-                />
+                <Checkbox :nexted="true" :checkedData="form.product_types" :dropdown="true" valueField="id"
+                  showField="name" :data="productType" @checked-items="(checked) => (form.product_types = checked)" />
               </div>
             </Accordion>
           </div>
@@ -187,27 +112,16 @@
               <div class="px-6 h-auto">
                 <InputLabel for="Featured_image" value="Featured_image" />
                 <div class="flex w-full h-auto">
-                  <SingleCheck
-                    v-if="form.id"
-                    label=""
-                    v-model="checkedFields.media_id"
-                  ></SingleCheck>
-                  <div
-                    class="py-2 rounded-lg w-full px-2 border border-stroke"
-                    @click="() => (imageData.featured_image.isOpen = true)"
-                  >
+                  <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                  <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                    @click="() => (imageData.featured_image.isOpen = true)">
                     {{ imageData.featured_image.mediaName }}
                   </div>
                 </div>
                 <div class="mt-3 flex overflow-x-auto">
-                  <img
-                    v-if="imageData.featured_image.images[0]"
-                    v-for="file in imageData.featured_image.images"
-                    :key="file"
-                    :src="$filePath(file?.file_url)"
-                    class="inline-block w-auto h-34 mr-4"
-                    :alt="file?.alternative_text || 'img'"
-                  />
+                  <img v-if="imageData.featured_image.images[0]" v-for="file in imageData.featured_image.images"
+                    :key="file" :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                    :alt="file?.alternative_text || 'img'" />
                 </div>
                 <InputError class="mt-2" :message="errors?.featured_image" />
               </div>
@@ -217,42 +131,22 @@
       </div>
     </form>
   </DefaultCard>
-  <popupModal
-    modalTitle="Media Library"
-    customClasses="w-[1000px] h-[570px]"
-    v-model:isOpen="imageData.featured_image.isOpen"
-  >
-    <GetLibrary
-      btnName="Select File"
-      :getFlag="true"
-      :selected="imageData.featured_image.images"
-      :singleFile="false"
-      :closeModal="
-        () => {
+  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+    v-model:isOpen="imageData.featured_image.isOpen">
+    <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="false"
+      :closeModal="() => {
           imageData.featured_image.isOpen = false
         }
-      "
-      :selectedFiles="handleFeatureFiles"
-    />
+        " :selectedFiles="handleFeatureFiles" />
   </popupModal>
 
-  <popupModal
-    modalTitle="Media Library"
-    customClasses="w-[1000px] h-[570px]"
-    v-model:isOpen="imageData.product_image.isOpen"
-  >
-    <GetLibrary
-      btnName="Select File"
-      :getFlag="true"
-      :selected="imageData.product_image.images"
-      :singleFile="false"
-      :closeModal="
-        () => {
+  <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+    v-model:isOpen="imageData.product_image.isOpen">
+    <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.product_image.images" :singleFile="false"
+      :closeModal="() => {
           imageData.product_image.isOpen = false
         }
-      "
-      :selectedFiles="handleProductFiles"
-    />
+        " :selectedFiles="handleProductFiles" />
   </popupModal>
   <Loader :isLoading="loading" :fullPage="true" />
 </template>
@@ -284,7 +178,7 @@ const errors = ref({})
 const loading = ref(false)
 const form = ref(
   store.getters.editData || {
-    status: '',
+    status: '1',
     visibility: '',
     tags: [],
     domain_id: store.getters.getDomain?.id || null,
@@ -308,14 +202,18 @@ const imageData = ref({
 
 // Handlers for file updates
 const handleFeatureFiles = (data) =>
-  handleFileUpdate('featured_image', data, imageData, form,false)
-const handleProductFiles = (data) => handleFileUpdate('product_image', data, imageData, form,false)
+  handleFileUpdate('featured_image', data, imageData, form, false)
+const handleProductFiles = (data) => handleFileUpdate('product_image', data, imageData, form, false)
 
 // Validate form fields
 const validateForm = () => {
   errors.value = {}
   if (!form.value.title) {
     errors.value.title = 'Title is required'
+    return false
+  }
+  if (form.value.status === null || form.value.status === undefined || form.value.status === '') {
+    errors.value.status = 'Status is required'
     return false
   }
   return true
@@ -328,18 +226,8 @@ const handleSubmit = async () => {
 
   loading.value = true
   const {
-    featured_image_url,
-    slug,
-    domains_data,
-    featured_image_data,
-    product_image_data,
-    product_category_types_data,
-    product_types_data,
-    default_domain,
-    tags_data,
-    product_image_url,
-    ...payload
-  } = form.value
+    featured_image_url,slug,domains_data,featured_image_data,product_image_data,product_category_types_data,
+    product_types_data,default_domain,tags_data,product_image_url,...payload} = form.value
   if (!form.value?.domains_data?.includes(form.value.domain_id)) {
     delete payload.id
   }
@@ -352,12 +240,16 @@ const handleSubmit = async () => {
     if (res.status === 200 && res.data.success) {
       if (hasCheckedFields) {
         handleGlobalUpdate()
-      } else {
+      } else  {
         showToast(res.data.message, 'success')
         router.push('/designer')
       }
     }
+    else if(res.status === 403 || res.status === 400) {
+        showToast(res.data.message, 'error')
+      }
   } catch (e) {
+    showToast('Something went wrong', 'error')
     console.error('Error:', e)
   } finally {
     loading.value = false

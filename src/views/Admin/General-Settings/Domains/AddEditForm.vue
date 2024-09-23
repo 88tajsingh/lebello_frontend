@@ -27,7 +27,6 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import { defineEmits } from 'vue';
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import store from '@/store';
 

@@ -391,7 +391,7 @@ import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import { contractLoctionTreeList, contractTypeTreeList } from '@/helper/Apis'
+import { contractLocationTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { trueFalse, withBgWithoutBg , capsNOCaps, statusData } from '@/json/data';
 import { useStore } from 'vuex';
@@ -520,7 +520,7 @@ const fetchDomainContractData = async () => {
 // Fetch contract location and type data
 const fetchContractData = async (payload) => {
     const [location, type] = await Promise.all([
-    contractLoctionTreeList(payload),
+    contractLocationTreeList(payload),
     contractTypeTreeList(payload)
 ]);
 contractLocation.value = location;

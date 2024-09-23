@@ -7,7 +7,7 @@
       <Button v-if="permissions.write" class="px-2 py-2 m-auto"
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="max-w-52 mr-2">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
@@ -60,8 +60,8 @@
     @delete="handleDeleteStoreProduct">
     Do you want to delete?
   </DeleteModal>
-  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Delete Store Product'" @delete="handleBulkActions()">
-    Do you want to delete ?
+  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Multiple Delete Store Product'" @delete="handleBulkActions()">
+    Do you want to delete multiple store products ?
   </DeleteModal>
   <!-- <Loader :isLoading="loading" :fullPage="true" /> -->
 </template>
@@ -72,7 +72,7 @@ import Vue3Datatable from '@bhplugin/vue3-datatable';
 import StoreServices from '@/services/StoreServices';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions';
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import { StoreProductCols, statusData } from '@/json/data';
 import { useStore } from 'vuex';
 
@@ -85,7 +85,7 @@ const permissions = store.getters.user.permissions;
 const datatable = ref(null);
 const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 const getLoading = ref(false);
 const editData = ref({});
@@ -154,29 +154,27 @@ const handleDeleteStoreProduct = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
-
+  if (!ids.length) return showToast('Please select atleast one store product to delete', 'error');
   if (bulkActionSelected.value === 'Delete') {
-    loading.value = true;
     try {
       const res = await StoreServices.BulkDeleteStoreProduct({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
         await handleGetStoreProduct();
       }
-      else if (res.status === 400) {
+      else if (res.status === 400|| res.status === 403) {
         showToast(res.data.message, 'error');
       }
     } catch (e) {
       console.error('Error while bulk deleting contract locations:', e);
     } finally {
-      loading.value = false;
     }
   }
 };
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
@@ -189,7 +187,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetStoreProduct(pagiantionData.value);
   }

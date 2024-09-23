@@ -23,7 +23,7 @@
 
 <script setup>
 import InputLabel from './InputLabel.vue';
-import { onMounted, ref, computed, watch, defineEmits, defineProps } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import SingleCheck from './SingleCheck.vue';
 
 const props = defineProps({

@@ -12,9 +12,9 @@
 
       <div class="p-6.5 grid grid-cols-2 gap-6">
         <div class="flex flex-col ">
-          <TextInput type="text" class=" " :class="{ 'border-red': errors.name }" placeholder="" v-model="form.name"
+          <TextInput type="text" class=" " :errorClass="errors.name" placeholder="" v-model="form.name"
             :errMessage="errors.name" :hasCheckBox="checkBoxFlag"
-            @update:checkValue="(value) => { checkedFields.name = value }" @update:model="clearError('name')"
+            @update:checkValue="(value) => { checkedFields.name = value }" @update:modelValue="$clearError(errors, 'name')"
             label="Name" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The name is how it appears on your site.
@@ -39,7 +39,7 @@
         <div class="flex flex-col ">
           <InputLabel for="Parent Material" value="Parent Product Type " />
           <Select :options="getProductTypeList" :defaultZero='true' showfield="name" class="w-full" valueField="id"
-            label="Select " v-model="form.parent_product_type" />
+            label="Select " v-model="form.parent_product_type" :errMessage="errors.parent_product_type" :errorClass="errors.parent_product_type" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
             and Big Band.
@@ -71,7 +71,7 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getProductTypeTree } from '@/helper/Apis'
 import ProductServices from '@/services/ProductServices'
-import { clearError, showToast, getGlobalUpdateData, validateForm } from '@/helper/functions'
+import { clearError, showToast, getGlobalUpdateData, } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import _ from 'lodash'
 import { useRouter } from 'vue-router'
@@ -92,10 +92,28 @@ const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 const getProductTypeList = ref([])
 
+/**
+ * Validate form data
+ * 
+ * @returns {boolean} - true if form is valid, false otherwise
+ */
+const validateForm = () => {
+  errors.value = {};
+  if (!form.value.name) {
+    errors.value.name = 'Name is required';
+    return false;
+  }
+  if(form.value.parent_product_type == form.value.id) {
+    errors.value.parent_product_type = 'Can not be own parent';
+    return false;
+  }
+  return true;
+};
+
 // Submit Handler
 const handleFormSubmit = async () => {
+  if (!validateForm()) return
   loading.value = true
-  if (!validateForm('name', 'Name', form, errors)) return
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
   try {
     const { deleted_at, created_at, domains_data, default_domain, default_master, updated_at, ...payload } = form.value
@@ -113,7 +131,9 @@ const handleFormSubmit = async () => {
         showToast(data.message, 'success')
         router.push('/product-type')
       }
-
+    }
+    else if(status === 400 || status === 403) { 
+      showToast(data.message, 'error')
     }
   } catch (error) {
     showToast('Something went wrong', 'error')
