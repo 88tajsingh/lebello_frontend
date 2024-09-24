@@ -4,9 +4,9 @@
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[38px] border-boxdark" :options="bulkOption" showfield="text"
         valueField="value" label="Bulk Options" v-model="actionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto">Apply</Button>
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { actionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="max-w-52 mr-2">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
@@ -59,12 +59,16 @@
   <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Contract Design'" @delete="handleDeleteContract">
     Do you want to delete?
   </DeleteModal>
+
+  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Multiple Delete Contract Design'" @delete="handleBulkActions">
+    Do you want to delete multiple contracts ?
+  </DeleteModal>
   <!-- <Loader :isLoading="loading" :fullPage="true" /> -->
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
-import { getDomins } from '@/helper/Apis';
+import { getDomains } from '@/helper/Apis';
 import { useRouter } from 'vue-router';
 import { ContractCols, statusData } from '@/json/data';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
@@ -78,16 +82,17 @@ const actionSelected = ref(null);
 const loading = ref(false);
 const search = ref('');
 const permissions = store.getters.user.permissions;
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const domain_id = ref('')
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
+const datatable = ref(null);
 const actionsFlag = ref(null);
 const modalIsOpen = ref(false);
-const editIsOpen = ref(false);
+const bulkPopup = ref(false);
 const deleteModalIsOpen = ref(false);
 const totalRows = ref('')
 
@@ -159,17 +164,17 @@ const handleDeleteContract = async () => {
   }
 };
 // Handle bulk actions
-const applyBulkActions = async () => {
-  if (bulkActionSelected.value === 'delete') {
+const handleBulkActions = async () => {
+  if (actionSelected.value === 'Delete') {
     const selectedRows = datatable.value.getSelectedRows()
     const ids = selectedRows.map(item => item.id)
     if(ids.length === 0) return showToast('Please select atleast one contract to delete', 'error')
     getLoading.value = true
     try {
-      const res = await materialsServices.BulkDeleteMaterial({ id: ids })
+      const res = await ContractServices.BulkDeleteNewContract({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        fetchMaterials(pagiantionData.value)
+        handleGetContract(pagiantionData.value)
       }
     } catch (error) {
       console.error('Error performing bulk delete:', error)
@@ -186,8 +191,8 @@ const handleDeleteSuccess = (message) => {
 };
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
   pagiantionData.value.domain_id = defaultDomain.id
   // store.dispatch('setDomain', defaultDomain);
 }
@@ -200,7 +205,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
     handleGetContract(pagiantionData.value);
   }

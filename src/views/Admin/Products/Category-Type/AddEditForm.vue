@@ -13,7 +13,7 @@
       <div class="p-6.5 grid grid-cols-2 gap-6">
         <div class="flex flex-col ">
           <TextInput type="text" class=" " :class="{ 'border-red': errors.name }" placeholder="" v-model="form.name"
-            :errMessage="errors.name" @update:model="clearError('name')" label="Name" :hasCheckBox="checkBoxFlag"
+            :errMessage="errors.name" @update:="$clearError(errors, 'name')" label="Name" :hasCheckBox="checkBoxFlag"
             @update:checkValue="(value) => { checkedFields.name = value }" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             The name is how it appears on your site.
@@ -30,7 +30,8 @@
         <div class="flex flex-col ">
           <InputLabel for="Parent Material" value="Parent Product Category " />
           <Select :options="getProductCategoryList" :defaultZero='true' showfield="name" class="w-full" valueField="id"
-            label="Select " v-model="form.parent_product_category_type" />
+            label="Select " v-model="form.parent_product_category_type" :errMessage="errors.parent_product_category_type"
+             :errorClass="errors.parent_product_category_type" @update:modelValue="$clearError(errors,'parent_product_category_type')" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
             and Big Band.
@@ -60,7 +61,7 @@
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getProductCategoryTypeTree } from '@/helper/Apis'
-import { clearError, showToast, validateForm, getGlobalUpdateData } from '@/helper/functions'
+import { clearError, showToast, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router';
 import _ from 'lodash';
@@ -82,9 +83,28 @@ const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 const getProductCategoryList = ref([])
 
+/**
+ * Validate form data
+ * 
+ * @returns {boolean} - true if form is valid, false otherwise
+ */
+ const validateForm = () => {
+  errors.value = {};
+  let isValid = true;
+  if (!form.value.name) {
+    errors.value.name = 'Name is required';
+    isValid = false;
+  }
+  if(form.value.parent_product_category_type == form.value.id) {
+    errors.value.parent_product_category_type = 'Can not be own parent';
+    isValid = false;
+  }
+  return isValid ? true : false;
+};
+
 // Submit Handler
 const handleSubmit = async () => {
-  if (!validateForm('name', 'Name', form, errors)) return
+  if (!validateForm()) return
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
   loading.value = true
   try {
@@ -180,9 +200,7 @@ watch(() => form.value.domain_id, (newDomainId) => {
   // Check if newDomainId is present in domains_data and fetch product type data if so
   if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
     fetchProductCategoryTypeData();
-  } else {
-    console.log('data not in array', form.value?.domains_data);
-  }
+  } 
 });
 
 // Computed Property

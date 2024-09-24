@@ -7,7 +7,7 @@
         valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
       <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{multiDeleteModal = true}">Apply</Button>
       <div class="max-w-52 ml-2">
-        <Select :options="getDominsList" showfield="name" class="w-full" valueField="id" label="All Domain"
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
       </div>
       <div class="max-w-52">
@@ -75,7 +75,7 @@ import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomins } from '@/helper/Apis'
+import { getDomains } from '@/helper/Apis'
 import { dealersCols, statusData } from '@/json/data'
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 import Select from '@/components/Admin-components/form-components/Select.vue'
@@ -99,7 +99,7 @@ const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')
 const actionsFlag = ref(null)
-const getDominsList = ref([])
+const getDomainsList = ref([])
 
 const isRowHovered = (value) => {
   return actionsFlag.value === value.name
@@ -189,8 +189,8 @@ const handleBulkActions = async () => {
 }
 
 const getDomainList = async (payload) => {
-  getDominsList.value = await getDomins(payload)
-  const defaultDomain = getDominsList.value.filter((site) => site.default === 1)[0]
+  getDomainsList.value = await getDomains(payload)
+  const defaultDomain = getDomainsList.value.filter((site) => site.default === 1)[0]
   pagiantionData.value.domain_id = defaultDomain.id
 }
 
@@ -201,7 +201,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDominsList.value.filter((site) =>( site.id == pagiantionData.value.domain_id))
+    const defaultDomain = getDomainsList.value.filter((site) =>( site.id == pagiantionData.value.domain_id))
     store.dispatch('setDomain', defaultDomain[0])
     handleGetDealers(pagiantionData.value)
   }

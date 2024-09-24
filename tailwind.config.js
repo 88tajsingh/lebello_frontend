@@ -32,6 +32,7 @@ export default {
           },
           colors: {
             ...colors,
+           
             bodydark1: '#1d2327',
             bodydark2: '#2c3338',            
             textColor1: '#72aee6',
@@ -84,8 +85,12 @@ export default {
             'meta-10': '#0FADCF',
             success: '#219653',
             danger: '#D34053',
-            warning: '#FFA70B'
-            
+            warning: '#FFA70B',
+            lightBlue: '#3ab0ff',
+            warmGray: '#a49f8c',
+            trueGray: '#7a7d8c',
+            coolGray: '#8c8c8c',
+            blueGray: '#7a9aab', 
           },
           fontSize: {
             'title-xxl': ['44px', '55px'],

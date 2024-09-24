@@ -3,7 +3,7 @@
     <div class="flex items-center justify-end gap-2">
 
         <div class="w-52">
-            <Select :options="getDominsList" title="Select Domain" showfield="name" class="w-full" valueField="id" label="All Domain"
+            <Select :options="getDomainsList" title="Select Domain" showfield="name" class="w-full" valueField="id" label="All Domain"
                 v-model="domain_id" />
         </div>
         <div class="w-52">
@@ -24,7 +24,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
-import { getDomins, getProductContractTree, getProductSeriesTree, getProductCategoryTypeTree, MaterialTreeList, getProductTypeTree } from '@/helper/Apis'
+import { getDomains, getProductContractTree, getProductSeriesTree, getProductCategoryTypeTree, MaterialTreeList, getProductTypeTree } from '@/helper/Apis'
 import CommonServices from '@/services/CommonServices'
 import { productTaxonomy } from '@/json/data'
 import Dreagable from '@/components/Admin-components/Dreag-able.vue'
@@ -32,7 +32,7 @@ import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import store from '@/store'
 
 const sortedData = ref([])
-const getDominsList = ref([])
+const getDomainsList = ref([])
 const domain_id = ref('')
 const treeData = ref([])
 const key = ref('material')
@@ -127,8 +127,8 @@ const handleSorting = async () => {
 }
 
 const getDomainList = async (payload) => {
-    getDominsList.value = await getDomins(payload)
-    const defaultDomain = getDominsList.value.filter((site) => site.default === 1)[0]
+    getDomainsList.value = await getDomains(payload)
+    const defaultDomain = getDomainsList.value.filter((site) => site.default === 1)[0]
     domain_id.value = defaultDomain.id
     store.dispatch('setDomain', defaultDomain)
 }
@@ -139,7 +139,7 @@ onMounted(() => {
 
 watch(key, handleChange)
 watch(domain_id, () => {
-    const defaultDomain = getDominsList.value.filter(
+    const defaultDomain = getDomainsList.value.filter(
         (site) => site.id == domain_id.value
     )
     store.dispatch('setDomain', defaultDomain[0])

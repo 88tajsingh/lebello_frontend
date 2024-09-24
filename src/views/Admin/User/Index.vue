@@ -37,12 +37,6 @@
         </vue3-datatable>
     </div>
 
-    <PopupModal modalTitle="Add Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="modalIsOpen">
-        <AddEditForm @handleApi="handleAddPages" />
-    </PopupModal>
-    <PopupModal modalTitle="Edit Pages" custonClasses="w-[1000px] h-[600px]" v-model:isOpen="editIsOpen">
-        <AddEditForm :pagesData="editData" @handleApi="handleEditPages" />
-    </PopupModal>
     <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Change Status '" @delete="handleStatusUser()">
         Do you want to change the status?
     </DeleteModal>
@@ -58,25 +52,21 @@ import Vue3Datatable from '@bhplugin/vue3-datatable';
 import UserServices from '@/services/UserServices';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions';
-// import { getDomins } from '@/helper/Apis';
+// import { getDomains } from '@/helper/Apis';
 import { usersCols } from '@/json/data';
 import store from '@/store';
 
 
 const router = useRouter();
-const bulkActionSelected = ref(null)
 const loading = ref(false);
 const search = ref('');
 const datatable = ref(null);
 const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', })
-const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-// const getDominsList = ref([])
-const domain_id = ref('')
+// const getDomainsList = ref([])
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
 const actionsFlag = ref(null);
-const bulkPopup = ref(null);
 const modalIsOpen = ref(false);
 const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
@@ -89,13 +79,7 @@ const openDeleteModal = (data) => {
 };
 
 
-const handleMouseEnter = (data) => {
-    actionsFlag.value = data.value.name;
-};
 
-const handleMouseLeave = () => {
-    actionsFlag.value = null;
-};
 
 const changePages = (page) => {
     console.log("page changed", page)
@@ -144,8 +128,8 @@ const handleStatusUser = async () => {
 // Bulk delete
 
 // const getDomainList = async (payload) => {
-//     getDominsList.value = await getDomins(payload)
-//     const defaultDomain = getDominsList.value.filter(site => site.default === 1)[0];
+//     getDomainsList.value = await getDomains(payload)
+//     const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
 //     pagiantionData.value.domain_id = defaultDomain.id
 //     store.dispatch('setDomain', defaultDomain);
 // }
@@ -159,7 +143,7 @@ onMounted(() => {
 watch(
     () => pagiantionData.value.domain_id,
     () => {
-        // const defaultDomain = getDominsList.value.filter(site => site.id == domain_id.value);
+        // const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
         // store.dispatch('setDomain', defaultDomain[0]);
         // handleGetGlobalMetaTag(pagiantionData.value);
     }

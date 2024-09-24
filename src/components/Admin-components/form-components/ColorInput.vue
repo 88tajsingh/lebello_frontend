@@ -37,7 +37,7 @@
 <script setup>
 import InputLabel from './InputLabel.vue';
 import SingleCheck from './SingleCheck.vue';
-import { ref, watch, defineEmits, defineProps } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     modelValue: {

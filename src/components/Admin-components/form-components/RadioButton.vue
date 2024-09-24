@@ -14,11 +14,9 @@
     </div>
   </template>
   
-  <script setup>
-  import { defineProps, defineEmits } from 'vue'
-  
+  <script setup>  
   const props = defineProps({
-    modelValue: [String,Boolean],
+    modelValue: [String,Boolean,Number],
     name: String,
     label: String,
     value: {

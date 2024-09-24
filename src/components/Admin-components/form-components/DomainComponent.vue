@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref, onMounted, watch } from 'vue';
+import {ref, onMounted, watch } from 'vue';
 import CommonServices from '@/services/CommonServices';
 import { showToast } from '@/helper/functions';
 import { useStore } from 'vuex';

@@ -65,7 +65,9 @@
         <div class="flex flex-col ">
           <InputLabel for="Parent Material" value="Parent Product Series " />
           <Select :options="ProductSeriesList" :defaultZero='true' showfield="name" class="w-full" valueField="id"
-            label="Select" v-model="form.parent_product_series" />
+            label="Select" v-model="form.parent_product_series" :errorClass="errors.parent_product_series"
+            @update:modelValue="$clearError(errors, 'parent_product_series')"
+            :errMessage="errors.parent_product_series" />
           <p class="text-sm text-[#646970] text-[11.5px]">
             Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of Bebop
             and Big Band.
@@ -137,7 +139,7 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import { getProductSeriesTree } from '@/helper/Apis'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import ProductServices from '@/services/ProductServices'
-import { clearError, showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
+import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
@@ -165,18 +167,23 @@ const imageData = ref({
 })
 
 // Image Handlers
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
 
 
 
 // Form Validation
 const validateForm = () => {
   errors.value = {}
+  let isValid = true
   if (!form.value.name) {
     errors.value.name = 'Name is required'
-    return false
+    isValid = false;
   }
-  return true
+  if (form.value.parent_product_series == form.value.id) {
+    errors.value.parent_product_series = 'Can not be own parent'
+    isValid = false
+  }
+  return isValid ? true : false
 }
 
 // Submit Handler
@@ -265,7 +272,6 @@ const fetchProductSeriesTree = async (domainId) => {
 // Lifecycle Hooks
 onMounted(() => {
   if (store.getters.editData) {
-    console.log(store.getters.editData.featured_image_data)
     const { featured_image_data } = store.getters.editData
     imageData.value.featured_image = {
       images: [featured_image_data],

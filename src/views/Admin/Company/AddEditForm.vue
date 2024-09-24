@@ -160,7 +160,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: '', visibility: '' });
+const form = ref(store.getters.editData || { status: '1', visibility: '' });
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 

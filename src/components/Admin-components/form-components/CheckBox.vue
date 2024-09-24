@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-  import { ref, defineProps, defineEmits, computed, watch } from 'vue';
+  import { ref, watch } from 'vue';
 
   const emit = defineEmits(['checked-items']);
 

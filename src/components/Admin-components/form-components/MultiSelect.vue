@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, defineProps, defineEmits, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import SingleCheck from './SingleCheck.vue';
 import InputLabel from './InputLabel.vue';
 

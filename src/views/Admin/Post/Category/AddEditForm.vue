@@ -122,9 +122,10 @@ const handleSubmit = async () => {
         router.push('/post-category');
       }
 
-    } else if (status === 400) {
-      showToast(data.message, 'error');
     }
+    else {
+      showToast(data.message, 'error');
+    } 
   } catch (error) {
     showToast('Something went wrong', 'error');
     console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} post category:`, error);

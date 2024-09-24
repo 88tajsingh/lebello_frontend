@@ -13,7 +13,6 @@ import ToastPlugin from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-bootstrap.css'
 import InputError from './components/Admin-components/form-components/InputError.vue'
 import InputLabel from './components/Admin-components/form-components/InputLabel.vue'
-import apiPlugin from './helper/apiPlugin'
 import DomainComponent from '@/components/Admin-components/form-components/DomainComponent.vue'
 import EditSvg from '@/components/Admin-components/svg/EditSvg.vue'
 import DeleteSvg from '@/components/Admin-components/svg/DeleteSvg.vue'
@@ -52,7 +51,6 @@ const options = {
 
 const app = createApp(App)
 app.use(HelpersPlugin)
-app.use(apiPlugin)
 app.use(Toast, options)
 app.use(router)
 app.use(ToastPlugin).use(store).use(createPinia()).component('Tabs', Tabs).component('Tab', Tab)
