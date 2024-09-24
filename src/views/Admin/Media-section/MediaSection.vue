@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white  pb-5 px-6">
+    <div class="bg-white pb-5 px-6 min-h-[78vh]">
         <div v-if="getFlag == false" class="pt-4">
             <PageHeader> Media Library </PageHeader>
         </div>
@@ -8,13 +8,13 @@
                 <Breadcrumb :breadcrumbData="breadcrumbData" :handlePopFunction="handlePopFunction" />
             </div>
             <div v-if="permissions.write">
-            <div v-if="getFlag == false" class='my-auto'>
-                <Button class="px-2 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                    @click="openModal">
-                    + Add Folder</Button>
-                <Button class="px-2 py-2 m-auto" @click="MediaModal">+ Add File</Button>
+                <div v-if="getFlag == false" class='my-auto'>
+                    <Button class="px-2 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
+                        @click="openModal">
+                        + Add Folder</Button>
+                    <Button class="px-2 py-2 m-auto" @click="MediaModal">+ Add File</Button>
+                </div>
             </div>
-        </div>
         </div>
         <div class="flex flex-wrap gap-3">
             <div v-for="folder in folders" :key="folder" class="border border-gray text-center w-[80px] px-2">
@@ -25,54 +25,55 @@
                     " class="icon" style="color: #eabf62; height: 60px; width: 60px" />
                 <span class="m-auto mt-0 break-all text-[13px] text-wrap w-[20px]">{{ folder?.folder_name }}</span>
                 <div v-if="permissions.write">
-                <div v-if="getFlag == false" class="flex gap-1 py-1 pb-2 justify-center">
-                    <EditSvg @click="() => {
-                        handleFolderInfo(folder)
-                        editModal()
-                    }
-                        " size="18px" />
-                    <DeleteSvg @click="() => {
-                        handleFolderInfo(folder)
-                        deleteModal()
-                    }
-                        " size="18px" />
-                </div>
+                    <div v-if="getFlag == false" class="flex gap-1 py-1 pb-2 justify-center">
+                        <EditSvg @click="() => {
+                            handleFolderInfo(folder)
+                            editModal()
+                        }
+                            " size="18px" />
+                        <DeleteSvg @click="() => {
+                            handleFolderInfo(folder)
+                            deleteModal()
+                        }
+                            " size="18px" />
+                    </div>
                 </div>
             </div>
             <div v-for="(media, index) in mediaData" :key="mediaData.id"
                 class=" relative border  border-gray-4   text-center w-[120px] ">
                 <div class=" p-2">
-                <label class="" @click="() => getFlag == false ? mediaEdit(media) : ''">
-                    <img v-if="isImage(media.file_url)" :src="filePath(media.file_url)" alt="abc" class="w-26 h-20" />
-                    <img v-else-if="isPdf(media.file_url)" class="w-20 h-20" src="@/assets/Icons/pdf.svg"
-                        alt="PDF Document" />
-                    <img v-else-if="isWord(media.file_url)" class="w-20 h-20" src="@/assets/Icons/msWord.svg"
-                        alt="Word Document" />
-                    <!-- <img v-else-if="isExcel(media.file_url)" class="w-20 h-20" src="@/assets/Icons/msExcel.svg"
+                    <label class="" @click="() => getFlag == false ? mediaEdit(media) : ''">
+                        <img v-if="isImage(media.file_url)" :src="filePath(media.file_url)" alt="abc"
+                            class="w-26 h-20" />
+                        <img v-else-if="isPdf(media.file_url)" class="w-20 h-20" src="@/assets/Icons/pdf.svg"
+                            alt="PDF Document" />
+                        <img v-else-if="isWord(media.file_url)" class="w-20 h-20" src="@/assets/Icons/msWord.svg"
+                            alt="Word Document" />
+                        <!-- <img v-else-if="isExcel(media.file_url)" class="w-20 h-20" src="@/assets/Icons/msExcel.svg"
                         alt="Excel Document" /> -->
-                    <img v-else-if="isVideo(media?.file_url)" class="w-20 h-20" src="@/assets/Icons/video.svg"
-                        alt="Video File" />
-                    <span v-else>Unknown file format.</span>
-                    <span class="m-auto break-all text-[13px] text-wrap w-[20px]">{{ media?.title }} </span>
-                 <div v-if="permissions.write">
-                    <div v-if="getFlag == false" class="m-auto absolute top-0 right-0 " @click.stop="() => {
-                        mediaDeleteModal();
-                        handleMediaData(media);
-                    }">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2 .5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                    </div>
-                </div>
-                    <div v-if="getFlag == true" class="m-auto absolute top-0 right-0 ">
-                        <input type="checkbox" :id="'media_' + media.id" :checked="isSelected(media)"
-                            @change="toggleSelection(media)" />
+                        <img v-else-if="isVideo(media?.file_url)" class="w-20 h-20" src="@/assets/Icons/video.svg"
+                            alt="Video File" />
+                        <span v-else>Unknown file format.</span>
+                        <span class="m-auto break-all text-[13px] text-wrap w-[20px]">{{ media?.title }} </span>
+                        <div v-if="permissions.write">
+                            <div v-if="getFlag == false" class="m-auto absolute top-0 right-0 " @click.stop="() => {
+                                mediaDeleteModal();
+                                handleMediaData(media);
+                            }">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="2 .5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div v-if="getFlag == true" class="m-auto absolute top-0 right-0 ">
+                            <input type="checkbox" :id="'media_' + media.id" :checked="isSelected(media)"
+                                @change="toggleSelection(media)" />
 
-                    </div>
+                        </div>
 
-                    <!-- <div class="flex gap-1 py-1 pb-2 justify-center">
+                        <!-- <div class="flex gap-1 py-1 pb-2 justify-center">
                     <EditSvg @click="() => {
                         handleFolderInfo(folder)
                         editModal()
@@ -84,11 +85,11 @@
                         }
                         " size="18px" />
                 </div> -->
-                </label>
-            </div>
+                    </label>
+                </div>
             </div>
         </div>
-        <div v-if="btnName " class=" absolute bottom-5 right-4 border m-0  ">
+        <div v-if="btnName" class=" absolute bottom-5 right-4 border m-0  ">
             <Button class="px-2 py-1 mt-auto" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                 @click="() => selectedFiles([...selectedMedia])">
                 {{ btnName }}</Button>
@@ -96,13 +97,14 @@
                 Cancel</Button>
         </div>
     </div>
-    
+
 
     <!-- folders popups -->
     <PopupModal modalTitle="Add Folder" custonClasses="w-[400px] h-[200px] " v-model:isOpen="modalflag.open">
         <div class="mx-3 pt-4">
             <TextInput id="0" type="text" class="block w-[180px] mr-2 h-[33px]" v-model="newFolder"
-                placeholder="Folder Name" label="Folder Name" :errMessage="errorMessage" />
+                placeholder="Folder Name" label="Folder Name" :errMessage="errors.newFolder"
+                @update:modelValue="$clearError(errors, 'newFolder')" :errorClass="errors.newFolder ? 'border-red-500' : ''" />
 
             <div class="mt-3">
                 <Button class="px-2 py-1 mt-auto" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
@@ -115,7 +117,8 @@
     <PopupModal modalTitle="Edit Folder" custonClasses="w-[400px] h-[200px] " v-model:isOpen="modalflag.edit">
         <div class="mx-3 pt-4">
             <TextInput id="0" type="text" class="block w-[180px] mr-2 h-[33px]" v-model="newFolder"
-                placeholder="Folder Name" label="Folder Name" :errMessage="errorMessage" />
+                placeholder="Folder Name" label="Folder Name" :errMessage="errors.newFolder"
+                @update:modelValue="$clearError(errors, 'newFolder')" :errorClass="errors.newFolder ? 'border-red-500' : ''" />
             <div class="mt-3">
                 <Button class="px-2 py-1 mt-auto" bg_th_color=" mt-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                     @click="handleEditFolders">
@@ -136,8 +139,8 @@
             </div>
             <!-- <span v-if="mediaFIle"> Uploded File :- {{ mediaFIle.name }}</span> -->
             <div class="mt-3">
-                <Button v-if="permissions.write" class="px-2 py-1 mt-auto" bg_th_color=" mt-5 px-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                    @click="handleAddMedia">
+                <Button v-if="permissions.write" class="px-2 py-1 mt-auto"
+                    bg_th_color=" mt-5 px-5 text-white bg-[#2271B1] hover:bg-[#0a4b78]" @click="handleAddMedia">
                     Save </Button>
                 <Button v-if="permissions.write" class="px-2 py-1 mt-auto" @click="closeMediaModal"> Cancel</Button>
             </div>
@@ -153,23 +156,16 @@
                     </template>
                     <template
                         v-else-if="isPdf(editMediaData.file_url) || isWord(editMediaData.file_url) || isExcel(editMediaData.file_url)">
-                        <iframe 
-                        :src="getGoogleDocsViewerUrl(editMediaData.file_url)" 
-                        width="100%" 
-                        height="600px" 
-                        title="Document Viewer">
-                    </iframe>
-                    
+                        <iframe :src="getGoogleDocsViewerUrl(editMediaData.file_url)" width="100%" height="600px"
+                            title="Document Viewer">
+                        </iframe>
+
                     </template>
                     <template v-else-if="isVideo(editMediaData.file_url)">
 
                         <video controls>
                             <source :src="editMediaData.file_url" type="video/mp4">
-                            <track 
-                                kind="subtitles" 
-                                :src="filePath(editMediaData.file_url)" 
-                                srclang="en" 
-                                label="English" 
+                            <track kind="subtitles" :src="filePath(editMediaData.file_url)" srclang="en" label="English"
                                 default>
                             Your browser does not support the video tag.
                         </video>
@@ -180,7 +176,8 @@
                 </div>
                 <div class="w-2/6 border">
                     <TextInput id="editTitle" type="text" class="block w-[180px] mr-2 h-[33px]"
-                        v-model="editMediaData.title" placeholder="Title" label="Title" :errMessage="errorMessage" />
+                        v-model="editMediaData.title" placeholder="Title" label="Title" :errMessage="errors.title"
+                        @update:modelValue="$clearError(errors, 'title')" :errorClass="errors.title ? 'border-red-500' : ''" />
                     <TextInput id="editCaption" type="text" class="block w-[180px] mr-2 h-[33px]"
                         v-model="editMediaData.caption" placeholder="Caption" label="Caption"
                         :errMessage="errorMessage" />
@@ -190,8 +187,8 @@
                     <TextInput id="editDescription" type="text" :isTextarea="true" rows="4"
                         class="block w-[180px] mr-2 h-[33px]" v-model="editMediaData.description"
                         placeholder="Description" label="Description" :errMessage="errorMessage" />
-                    <Button v-if="permissions.write" class="px-6 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                        @click="handleEditMedia">
+                    <Button v-if="permissions.write" class="px-6 m-0"
+                        bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]" @click="handleEditMedia">
                         Save
                     </Button>
                     <Button v-if="permissions.write" class="px-4 py-2 m-auto" @click="closeMediaModal">
@@ -251,16 +248,28 @@ const mediaData = ref([])
 const store = useStore();
 const SelectedFolder = ref({ id: 0 })
 const newFolder = ref()
-const permissions =  store.getters.user.permissions;
+const permissions = store.getters.user.permissions;
 const mediaFIle = ref()
 const errorMessage = ref()
 const breadcrumbData = ref([])
 const selectedMedia = ref(props.selected || [])
 const breadcrumbFlag = ref(true)
+const errors = ref({})
+
+
+const handleValidation = () => {
+  let isValid = true;
+  errors.value = {};
+  if (!editMediaData.value.title) {
+    errors.value.title = 'Title is required';
+    isValid = false;
+  }
+  return isValid;
+};
 
 const isSelected = (media) => {
     if (!Array.isArray(selectedMedia.value)) {
-        return false; 
+        return false;
     }
     return selectedMedia.value.some(item => item?.id === media?.id);
 };
@@ -308,6 +317,7 @@ const deleteModal = () => {
     modalflag.value.delete = true
 }
 const closeModal = () => {
+    errors.value = {}
     modalflag.value.open = false
     modalflag.value.edit = false
     modalflag.value.delete = false
@@ -345,10 +355,10 @@ const handleMediaData = (data) => {
 
 const handleFolderInfo = (data) => {
     newFolder.value = data.folder_name
-    SelectedFolder.value = {...data}
-    const idExists =breadcrumbData.value.some(item => item.id === SelectedFolder.value.id);
-    if(!idExists)
-    breadcrumbData.value.push(data)
+    SelectedFolder.value = { ...data }
+    const idExists = breadcrumbData.value.some(item => item.id === SelectedFolder.value.id);
+    if (!idExists)
+        breadcrumbData.value.push(data)
 }
 const handlePopFunction = (slice) => {
 
@@ -382,7 +392,7 @@ const handleGetChildFolders = async (folder) => {
         if (res.status === 200 && res.data.success === true) {
             folders.value = res.data.data;
             handleGetMediaChild(payload);
-            
+
         }
     } catch (e) {
         console.error('Error while getting child folders:', e);
@@ -390,19 +400,25 @@ const handleGetChildFolders = async (folder) => {
 };
 
 const handleAddFolders = async () => {
+    if(!newFolder.value){
+        errors.value.newFolder = 'Folder Name is required';
+        return
+    }
     try {
         loading.value = true;
         const payload = { parent: SelectedFolder.value.id, folder_name: newFolder.value };
         const res = await FolderServices.AddFolder(payload);
+        if (res.status_code === 400) {
+            // errorMessage.value = res.message;
+            showToast(res.message, 'error')
+        }
         if (res.status === 200 && res.data.success === true) {
             closeModal();
-            showToast(' Create folder sucessfully','success')
+            showToast(res.data.message, 'success')
             const parent_id = { id: res.data.data.parent };
             await handleGetChildFolders(parent_id);
-        } else if (res.status === 400) {
-            errorMessage.value = res.message;
-            showToast('Somthing went wrong','error')
-        }
+        } 
+      
     } catch (e) {
         console.error('Error while adding folder:', e);
     } finally {
@@ -411,6 +427,10 @@ const handleAddFolders = async () => {
 };
 
 const handleEditFolders = async () => {
+    if(!newFolder.value){
+        errors.value.newFolder = 'Folder Name is required';
+        return
+    }
     try {
         loading.value = true;
         const payload = {
@@ -421,16 +441,17 @@ const handleEditFolders = async () => {
         const res = await FolderServices.EditFolder(payload);
         if (res.status === 200 && res.data.success === true) {
             closeModal();
-            showToast(' Edit folder sucessfully','success')
+            showToast(res.data.message, 'success')
             const parent_id = { id: SelectedFolder.value.parent };
             if (SelectedFolder.value.parent > 0) {
                 await handleGetChildFolders(parent_id);
-            } else {
-                await handleGetFolders();
             }
+            // else {
+            //     await handleGetFolders();
+            // }
         } else if (res.status === 400) {
             errorMessage.value = res.message;
-            showToast(' Somthing went wrong','success')
+            showToast(res.data.message, 'success')
         }
     } catch (e) {
         console.error('Error while editing folder:', e);
@@ -446,12 +467,12 @@ const handleDeleteFolders = async () => {
         const parent_id = { id: SelectedFolder.value.parent };
         const res = await FolderServices.DeleteFolder(payload);
         if (res.status === 200 && res.data.success === true) {
-            showToast(res.data.message,'success')
+            showToast(res.data.message, 'success')
             await handleGetChildFolders(parent_id);
             closeModal();
         }
-        if(res.status === 400){
-            showToast('Somthing went wrong','error')
+        if (res.status === 400) {
+            showToast(res.data.message, 'error')
         }
     } catch (e) {
         console.error('Error while deleting folder:', e);
@@ -476,12 +497,13 @@ const handleGetMediaChild = async (payload) => {
             })
     } catch (e) {
         console.error('Error while folder get:', e)
-    }finally{
+    } finally {
         loading.value = false;
     }
 }
 
 const handleAddMedia = async () => {
+    if(!mediaFIle.value) return
     try {
         loading.value = true
         const payload = { image: mediaFIle.value, folder_id: SelectedFolder.value.id }
@@ -490,7 +512,8 @@ const handleAddMedia = async () => {
             loading.value = false
             handleGetMediaChild({ id: SelectedFolder.value.id });
             closeMediaModal();
-            showToast(' Add file sucessfully','success')
+            showToast(res.data.message, 'success')
+            mediaFIle.value = null
             // if (SelectedFolder.value.parent > 0) {
             //     handleGetChildFolders({ id: res.data.data.parent })
             // } else {
@@ -500,7 +523,7 @@ const handleAddMedia = async () => {
         if (res.status_code === 400) {
             loading.value = false
             errorMessage.value = res.message
-            showToast('Somthing went wrong','success')
+            showToast(res.data.message, 'success')
         }
     } catch (e) {
         loading.value = false
@@ -508,6 +531,7 @@ const handleAddMedia = async () => {
     }
 }
 const handleEditMedia = async () => {
+    if(!handleValidation()) return
     try {
         loading.value = true
         const payload = {
@@ -522,7 +546,7 @@ const handleEditMedia = async () => {
                 if (res.status === 200) {
                     loading.value = false
                     closeMediaModal();
-                    showToast('Edit file sucessfully','success')
+                    showToast(res.data.message, 'success')
                     // if (SelectedFolder.value.parent > 0) {
                     //     handleGetChildFolders(parent_id)
                     // } else {
@@ -532,7 +556,7 @@ const handleEditMedia = async () => {
                 if (res.status_code === 400) {
                     loading.value = false
                     errorMessage.value = res.message
-                    showToast('Somthing went wrong','success')
+                    showToast(res.data.message, 'success')
                 }
             })
             .catch((e) => {
@@ -553,7 +577,7 @@ const handleDeleteMedia = async () => {
                 if (res.status === 200) {
                     handleGetMediaChild({ id: SelectedFolder.value.id });
                     loading.value = false
-                    showToast(' Delete file sucessfully','success')
+                    showToast(res.data.message, 'success')
                     // if (SelectedFolder.value.parent > 0) {
                     //     handleGetChildFolders(parent_id)
                     // } else {
@@ -562,9 +586,9 @@ const handleDeleteMedia = async () => {
                     // handleGetChildFolders({payload})
                     closeModal()
                 }
-                if(res.status ===400){
+                if (res.status === 400) {
                     loading.value = false
-                    showToast('Somthing went wrong','success')
+                    showToast(res.data.message, 'success')
                 }
             })
             .catch((e) => {

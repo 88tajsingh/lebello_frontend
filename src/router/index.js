@@ -71,7 +71,7 @@ const router = createRouter({
       component: () => import('../views/NotFound404.vue')
     },
     {
-      path: '/admin',
+      path: '/dashboard',
       component: () => import('../Layouts/AdminLayout.vue'),
       meta: { requiresAuth: true },
       children: [
@@ -515,7 +515,8 @@ const relatedRoutesMap = {
   '/home-slider': '/home-slider-form',
   '/material-slider': '/material-slider-form',
   '/global-seo': '/global-meta-tag-form',
-  '/users': '/user-form'
+  '/users': '/user-form',
+  '/dashboard': '/dashboard'
 }
 
 const publicPaths = [
@@ -538,43 +539,59 @@ let isRedirecting = false;
 router.beforeEach((to, from, next) => {
   const token = store?.getters?.token || localStorage.getItem('token');
   const allowedPaths = store.getters.user?.modules?.route || [];
+  const isAuthenticatedUser = isAuthenticated(token);
 
-  const isRelatedPathAllowed = allowedPaths.some((path) => {
-    return relatedRoutesMap[path] === to.path;
-  });
+  console.log(`Navigating to: ${to.path}`);
 
-  try {
-    if (publicPaths.includes(to.path)) {
-      return next();
+  // Check for public paths
+  if (publicPaths.includes(to.path)) {
+    
+    if (to.path === '/login' && isAuthenticatedUser) {
+      console.log('Redirecting to dashboard...');
+      return next('/dashboard'); // Redirect authenticated users away from login
     }
-    if (to.path === from.path) {
-      return next(false);
-    }
-    if (to.name === 'login' && isAuthenticated(token)) {
-      next('/dashboard');
-    } else if (to.meta.requiresAuth && !isAuthenticated(token)) {
-      if (!isRedirecting) {
-        isRedirecting = true;
-        next('/login');
-      } else {
-        next(false);
-      }
-    } else if (to.meta.requiresAuth && !allowedPaths.includes(to.path) && !isRelatedPathAllowed) {
-      if (!isRedirecting) {
-        isRedirecting = true;
-        next('/login');
-      } else {
-        next(false);
-      }
-    } else {
-      isRedirecting = false;
-      next();
-    }
-  } catch (error) {
-    console.warn('Navigation error:', error);
-    next(false);
+    return next(); // Allow access to public paths
   }
+
+  // Prevent navigating to the same route
+  if (to.path === from.path) {
+    console.log('Route already exists');
+    return next(false);
+  }
+
+  // Redirect authenticated users away from login
+  if (to.name === 'login' && isAuthenticatedUser) {
+    console.log('Redirecting to dashboard...');q
+    return next('/dashboard');
+  }
+
+  // Check for the dashboard route specifically
+  if (to.path === '/dashboard' && !isAuthenticatedUser) {
+    console.log('Redirecting to login...');
+    return next('/login'); // Redirect to login if not authenticated
+  }
+
+  // Check for routes requiring authentication
+  if (to.meta.requiresAuth) {
+    if (!isAuthenticatedUser) {
+      console.log("Redirecting to login...");
+      return next('/login'); // Redirect unauthenticated users to login
+    }
+
+    // Check if the path is allowed
+    const isPathAllowed = allowedPaths.includes(to.path) || 
+                          allowedPaths.some(path => relatedRoutesMap[path] === to.path);
+    
+    if (!isPathAllowed) {
+      console.log("Redirecting to homepage due to insufficient permissions...");
+      return next('/'); // Redirect if the path is not allowed
+    }
+  }
+
+  next(); // Allow access to the route
 });
+
+
 
 
 export default router

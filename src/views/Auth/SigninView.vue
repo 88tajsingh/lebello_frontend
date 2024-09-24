@@ -39,40 +39,39 @@ const validateForm = () => {
     errors.value.password = 'Password is required';
     isValid = false;
   }
+  if(form.value.password.length < 6) {
+    errors.value.password = 'Password must be longer than 6 characters';
+    isValid = false;
+  }
+  
 
   return isValid;
 };
 // login function
 const handleLogin = async () => {
-  try {
-    if (validateForm()) {
-      processing.value = true;
-      const user = { ...form.value };
-      LoginService.login(user)
-        .then(res => {
-          if (res.status === 200) {
-            const token = res.data.data.access_token
-            const expiresAt = res.data.data.expires_at
-            const user = res.data.data.user_data
-            showToast(' Login sucessfully', 'success')
-            // console.log(res.data.data.access_token)
-            store.dispatch('login', { token, user, expiresAt });
-            // localStorage.setItem('token', token);
-            processing.value = false;
-            router.push('/admin');
-          }
-          if (res.status === 401) {
-            processing.value = false;
-          }
+  if (!validateForm()) return;
 
-        })
+  processing.value = true;
+
+  try {
+    const user = { ...form.value };
+    const { status, data } = await LoginService.login(user);
+    console.log(status,data)
+    if (status === 200) {
+      const { access_token: token, expires_at: expiresAt, user_data: user } = data.data;
+      showToast(data.message, 'success');
+      store.dispatch('login', { token, user, expiresAt });
+      router.push('/dashboard');
+    } else if(status === 400 || status === 401 || status === 403) {
+      showToast(data.message, 'error');
     }
   } catch (e) {
-    console.error('Error while log in:', e);
+    console.error('Error while logging in:', e);
   } finally {
     processing.value = false;
   }
 };
+
 
 </script>
 
@@ -95,7 +94,7 @@ const handleLogin = async () => {
                 <div class="w-full">
                   <TextInput name="email" type="email" label="Email" id='email' class="w-full border border-black"
                     :errMessage="errors.email" v-model="form.email" placeholder="email"
-                    :class="{ 'border-red-500': errors.email }" @update:model="$clearError(errors, 'email')">
+                    :class="{ 'border-red-500': errors.email }" @update:modelValue="$clearError(errors, 'email')">
                     <svg class="fill-current" width="22" height="22" viewBox="0 0 22 22" fill="none"
                       xmlns="http://www.w3.org/2000/svg">
                       <g opacity="0.5">
@@ -108,7 +107,7 @@ const handleLogin = async () => {
 
                   <TextInput name="password" type="password" label="Passowrd" id="password"
                     :errMessage="errors.password" v-model="form.password" placeholder="6+ Characters, 1 Capital letter"
-                    :class="{ 'border-red-500': errors.password }" @update:model="$clearError(errors, 'password')">
+                    :class="{ 'border-red-500': errors.password }" @update:modelValue="$clearError(errors, 'password')">
                     <svg class="fill-current" width="22" height="22" viewBox="0 0 22 22" fill="none"
                       xmlns="http://www.w3.org/2000/svg">
                       <g opacity="0.5">
