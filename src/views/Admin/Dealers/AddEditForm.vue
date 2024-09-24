@@ -458,9 +458,9 @@ const handleCompanyLogoFiles = (data) =>
 const handleThumbImageFiles = (data) =>
     handleFileUpdate('thumb_image', data, imageData, form,false)
 const handleDayBannerFiles = (data) =>
-    handleFileUpdate('day_banner_images', data, true, imageData, form)
+    handleFileUpdate('day_banner_images',data, imageData, form, false)
 const handleNightBannerFiles = (data) =>
-    handleFileUpdate('night_banner_images', data, true, imageData, form)
+    handleFileUpdate('night_banner_images',data, imageData, form, false)
 
 // remove image form gallery
 const handleRemoveDayImage = (slide) => {

@@ -717,11 +717,11 @@ const imageData = ref({
 
 // Handle file updates for different image types
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
-const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
-const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, true, imageData, form);
+const handlegalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, false);
+const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider',data, imageData, form, false);
 const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form,false);
 const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
-const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, true, imageData, form);
+const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files',data, imageData, form, false);
 const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
 const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form,false);
 const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
