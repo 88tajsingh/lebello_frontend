@@ -1,4 +1,4 @@
-div<template>
+<template>{{form}}
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="StoreServices.deleteStoreProduct"
             masterKey="master_store_product_id" :masterDeleteService="StoreServices.masterDeleteStoreProduct"
