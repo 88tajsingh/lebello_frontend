@@ -422,7 +422,7 @@ const imageData = ref({
 
 // Handle file updates for different image types
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
-const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
+const handlegalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, false);
 const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form,false);
 const handleContractSliderImageFiles = (data) => handleFileUpdate('contract_slider_image', data, imageData, form,false);
 

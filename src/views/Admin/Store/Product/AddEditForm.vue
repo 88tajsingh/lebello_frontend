@@ -592,9 +592,9 @@ const imageData = ref({
 // Common handler for image updates
 const handleSpecs_Img = (data) => handleFileUpdate('product_specs', data, imageData, form, false);
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
-const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, true, imageData, form);
-const handleSlider = (data) => handleFileUpdate('slider', data, true, imageData, form);
-const handleDownloadable = (data) => handleFileUpdate('downloadable_files', data, true, imageData, form);
+const handleGalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, false);
+const handleSlider = (data) => handleFileUpdate('slider',data, imageData, form, false);
+const handleDownloadable = (data) => handleFileUpdate('downloadable_files',data, imageData, form, false);
 
 // Function to remove a specific image from the slider
 const handleRemoveImage = (slide) => {
