@@ -32,22 +32,23 @@ export default {
           },
           colors: {
             ...colors,
-           
+            
             bodydark1: '#1d2327',
-            bodydark2: '#2c3338',            
+            bodydark2: '#2c3338',
             textColor1: '#72aee6',
             textColor2: '#2271b1',
             textColorBlack: '#333',
-            Black666:'#666',
-            
+            Black666: '#666',
+          
             navListBg: '#0e0e0ec9',
-            borderColor:'#8c8f94',
-            green : '#4dc45c',
+            borderColor: '#8c8f94',
+            green: '#4dc45c',
             paritGreen: '#7bd924',
-            blue : '#3399ff',
-            darkTrasparent :'#0e0e0e89',
-            orange:'#d98c3a',
-            //  theam colors 
+            blue: '#3399ff',
+            darkTrasparent: '#0e0e0e89',
+            orange: '#d98c3a',
+            
+            // Theme colors 
             current: 'currentColor',
             transparent: 'transparent',
             white: '#FFFFFF',
@@ -63,7 +64,7 @@ export default {
             stroke: '#E2E8F0',
             gray: '#EFF4FB',
             graydark: '#333A48',
-            'gray-4':'#C6C6C6',
+            'gray-4': '#C6C6C6',
             'gray-2': '#F7F9FC',
             'gray-3': '#FAFAFA',
             whiten: '#F1F5F9',
@@ -86,12 +87,13 @@ export default {
             success: '#219653',
             danger: '#D34053',
             warning: '#FFA70B',
-            lightBlue: '#3ab0ff',
-            warmGray: '#a49f8c',
-            trueGray: '#7a7d8c',
-            coolGray: '#8c8c8c',
-            blueGray: '#7a9aab', 
+            sky: '#3ab0ff',       
+            stone: '#a49f8c',    
+            neutral: '#7a7d8c',   
+            gray: '#8c8c8c',      
+            slate: '#7a9aab',   
           },
+          
           fontSize: {
             'title-xxl': ['44px', '55px'],
             'title-xxl2': ['42px', '58px'],

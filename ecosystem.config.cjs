@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'vue-app-dev',   // Name of your application
+      name: 'Lebello Global',   // Name of your application
       script: 'npm',         // Use npm to run the script
       args: 'run dev',       // Command to run your development script
       cwd: '/var/www/html/lebello_frontend', // Directory where your project is located
