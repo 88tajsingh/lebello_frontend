@@ -7,7 +7,7 @@ export default new Vuex.Store({
     token: decryptData(localStorage.getItem('token')) || null,
     expiresAt: localStorage.getItem('expiresAt') || null,
     user: decryptData(localStorage.getItem('user')) || null,
-    editData: null,  // Changed from '' to null to match tests
+    editData: null,
     edit: decryptData(localStorage.getItem('edit')) || null,
     domain: decryptData(localStorage.getItem('domain')) || null,
   },
@@ -15,7 +15,7 @@ export default new Vuex.Store({
     token: (state) => state.token,
     user: (state) => state.user,
     getDomain: (state) => state.domain,
-    editData: (state) => state.editData, // Ensure editData is accessible
+    editData: (state) => state.edit, 
     isTokenExpired(state) {
       return state.expiresAt;
     }
@@ -37,7 +37,7 @@ export default new Vuex.Store({
       localStorage.setItem('user', encryptData(user)); 
     },
     setEditData(state, data) {
-      state.editData = data; // Ensure this mutation updates editData
+      state.editData = data; 
     },
     clearUser(state) {
       state.user = null;
@@ -72,7 +72,7 @@ export default new Vuex.Store({
       commit('setUser', user);
     },
     editData({ commit }, data) {
-      commit('setEditData', data); // Ensure this action updates editData
+      commit('setEditData', data); 
     },
     setDomain({ commit }, domain) {
       commit('setDomain', domain);
