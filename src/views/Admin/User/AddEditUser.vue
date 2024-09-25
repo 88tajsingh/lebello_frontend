@@ -4,38 +4,32 @@
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="p-6.5 grid grid-cols-2 gap-6">
                 <div class="flex flex-col">
-                    <TextInput id="name" type="text" class="block w-full mr-2 h-[33px]" v-model="form.name"
-                        placeholder="Name" label="Name" :errMessage="errors?.name"
-                        @update:model="clearError(errors, 'name')" />
+                    <TextInput id="name" type="text" class="block w-full mr-2 h-[40px]" v-model="form.name"
+                        placeholder="Name" label="Name" :errMessage="errors.name"
+                        @update:modelValue="$clearError(errors, 'name')" />
                 </div>
 
                 <div class="flex flex-col">
-                    <TextInput id="email" type="text" class="block w-full mr-2 h-[33px]" v-model="form.email"
+                    <TextInput id="email" type="text" class="block w-full mr-2 h-[40px]" v-model="form.email"
                         placeholder="Email" label="Email
-         " :errMessage="errors?.email" @update:model="clearError(errors, 'email')" />
+         " :errMessage="errors?.email" @update:modelValue="$clearError(errors, 'email')" />
                 </div>
                 <div class="flex flex-col">
-                    <InputLabel for="role" value="Role" />
-                    <Select :options="roles" showfield="role" class="w-full" valueField="id" label="Select an option"
-                        v-model="form.role_id" />
+                    <Select :options="roles" showfield="role" title="Select a Role" class="w-full" valueField="id"
+                        label="Select a Role" v-model="form.role_id" :errorClass='errors.role_id'
+                        :errMessage="errors.role_id" @update:modelValue="$clearError(errors, 'role_id')" />
                 </div>
-                <!-- <div class="flex flex-col ">
-                    <InputLabel for="Status" value="Status" />
-                    <Select :options="domainStatus" showfield="name" class="w-full" valueField="value"
-                        label="Select Status" v-model="form.active" />
-                    <InputError class="mt-2" :message="errors.status" />
-                </div> -->
                 <div class="flex flex-col">
-                    <TextInput id="Password" type="Password" class="block w-full mr-2 h-[33px]" v-model="form.password"
+                    <TextInput id="Password" type="Password" class="block w-full mr-2 h-[40px]" v-model="form.password"
                         placeholder="Password" label="Password
-         " :errMessage="errors?.password" @update:model="clearError(errors, 'password')" />
+         " :errMessage="errors?.password" @update:modelValue="$clearError(errors, 'password')" />
                 </div>
 
                 <div class="flex flex-col w-full">
-                    <TextInput id="comPassword" type="text" class="block w-full mr-2 h-[33px]"
+                    <TextInput id="comPassword" type="text" class="block w-full mr-2 h-[40px]"
                         v-model="form.password_confirmation" placeholder="Confirm Password" label="Confirm Password
              " :errMessage="errors?.password_confirmation"
-                        @update:model="clearError(errors, 'password_confirmation')" />
+                        @update:modelValue="$clearError(errors, 'password_confirmation')" />
                 </div>
             </div>
 
@@ -52,8 +46,8 @@
 
 <script setup>
 import _ from 'lodash'
-import { ref, onMounted, watch, computed } from 'vue'
-import { showToast, getGlobalUpdateData } from '@/helper/functions'
+import { ref, onMounted, computed } from 'vue'
+import { showToast } from '@/helper/functions'
 import UserServices from '@/services/UserServices';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { useStore } from 'vuex'
@@ -67,10 +61,7 @@ const router = useRouter()
 // Reactive State
 const errors = ref({})
 const loading = ref(false)
-const form = ref({
-    ...store.getters.editData
-
-} || { status: '', role_id: '' })
+const form = ref(store?.getters?.editData || { status: '', role_id: '' })
 
 const roles = ref({});
 
@@ -87,6 +78,10 @@ const validateForm = () => {
     }
     if (!form.value.email) {
         errors.value.email = 'Email is required'
+        isValid = false
+    }
+    if (!form.value.role_id) {
+        errors.value.role_id = 'Role is required'
         isValid = false
     }
     if (!store.getters.editData) {
@@ -120,18 +115,16 @@ const handleSubmit = async () => {
     if (!validateForm()) return
     loading.value = true
     try {
-        const action = store.getters.editData
+        const { status, data } = await (store.getters.editData
             ? UserServices.editUser
-            : UserServices.addUser
-        const {
-            deleted_at,
-            created_at,
-            updated_at,
-            role,
-            ...payload
-        } = form.value
+            : UserServices.addUser)({
+                ...form.value,
+                deleted_at: undefined,
+                created_at: undefined,
+                updated_at: undefined,
+                role: undefined,
+            })
 
-        const { status, data } = await action(payload)
         if (status === 200 && data.success) {
             showToast(data.message, 'success');
             router.push('/users')
@@ -157,41 +150,7 @@ const fetchRoleList = async () => {
 
 onMounted(() => {
     fetchRoleList();
-}),
-    // Fetch Perticular Domain Data
-    // const fetchMetaTagData = async () => {
-    //     loading.value = true
-    //     const payload = { key: form.value.key, domain_id: form.value.domain_id }
-    //     try {
-    //         const { status, data } = await UserServices.getUser(payload)
-    //         if (status === 200 && data.success) {
-    //             const dataValue = data.data[0]
-    //             store.dispatch('setEdit', dataValue)
-    //             Object.assign(form.value, dataValue)
-    //         }
-    //     } catch (error) {
-    //         showToast('Something went wrong', 'error')
-    //         console.error('Error while fetching data:', error)
-    //     }
-    //     finally {
-    //         loading.value = false;
-    //     }
-    // }
-
-    watch(
-        // () => form.value.domain_id,
-
-    )
-
-// watch(() => form.value.domain_id, (newDomainId) => {
-//     // Check if newDomainId is present in domains_data and fetch 
-//     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
-//         fetchMetaTagData();
-//     } else {
-//         console.log('data not in array', form.value?.domains_data);
-//     }
-// });
-
+})
 // Computed Property
 const buttonText = computed(() => {
     return form.value.id ? 'Update' : 'Submit'

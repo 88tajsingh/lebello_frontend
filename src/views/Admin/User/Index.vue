@@ -18,8 +18,13 @@
             </template>
 
             <template #active="data">
-                <span v-if="data.value.active === 0">In Active</span>
-                <span v-else-if="data.value.active === 1">Active</span>
+                <span id="delete svg" class=" flex flex-col justify-center align-center" @click="openDeleteModal(data.value)">
+                    <i v-if="!data.value.active" class='fas fa-toggle-off ' style='font-size:24px'></i>
+                    <i v-if="data.value.active" class='fas fa-toggle-on' style='font-size:24px'></i>
+                    <span v-if="data.value.active === 0">In Active</span>
+                    <span v-else-if="data.value.active === 1">Active</span>
+                </span>
+                
             </template>
 
             <template #actions="data">
@@ -29,15 +34,17 @@
                         <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
                         <EditSvg />
                     </div>
-                    <div id="delete svg" @click="openDeleteModal(data.value)">
-                        <DeleteSvg />
-                    </div>
+                    <!-- <div id="delete svg" @click="openDeleteModal(data.value)">
+                        <i v-if="!data.value.active" class='fas fa-toggle-off' style='font-size:24px'></i>
+                        <i v-if="data.value.active" class='fas fa-toggle-on' style='font-size:24px'></i>
+
+                    </div> -->
                 </div>
             </template>
         </vue3-datatable>
     </div>
 
-    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Change Status '" @delete="handleStatusUser()">
+    <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Change Status '" @delete="handleStatusUser()" btnName="Change Status">
         Do you want to change the status?
     </DeleteModal>
     <!-- <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Change Status '" @delete="handleBulkActions()">

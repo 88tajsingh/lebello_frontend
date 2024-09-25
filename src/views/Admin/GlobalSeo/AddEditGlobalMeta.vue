@@ -6,7 +6,9 @@
             <div class="p-6.5 grid grid-cols-2 gap-6">
                 <div class="flex flex-col">
                     <TextInput type="text" class=" " :class="{ 'border-red': errors.key }" placeholder=""
-                        v-model="form.key" :errMessage="errors.key" label="Key" />
+                        v-model="form.key" label="Key" :errMessage="errors.key"
+                        :errorClass="errors.key ? 'border-red-500' : ''"
+                        @update:modelValue="$clearError(errors, 'key')" />
                 </div>
 
                 <div class="flex flex-col">
@@ -37,8 +39,8 @@
 
 <script setup>
 import _ from 'lodash'
-import { ref, onMounted, watch, computed } from 'vue'
-import { showToast, getGlobalUpdateData } from '@/helper/functions'
+import { ref, watch, computed } from 'vue'
+import { showToast } from '@/helper/functions'
 import GlobalMetaTags from '@/services/GlobalMetaTagServices';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { useStore } from 'vuex'
@@ -66,7 +68,12 @@ const validateForm = () => {
     return true
 }
 
-// Submit Handler
+/**
+ * Handles form submission for adding/editing global SEO meta tags
+ * @async
+ * @function
+ * @returns {undefined}
+ */
 const handleSubmit = async () => {
     if (!validateForm()) return
     loading.value = true
@@ -119,17 +126,11 @@ const fetchMetaTagData = async () => {
     }
 }
 
-watch(
-    () => form.value.domain_id,
-
-)
-
+// Watchers
 watch(() => form.value.domain_id, (newDomainId) => {
     // Check if newDomainId is present in domains_data and fetch 
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchMetaTagData();
-    } else {
-        console.log('data not in array', form.value?.domains_data);
     }
 });
 
