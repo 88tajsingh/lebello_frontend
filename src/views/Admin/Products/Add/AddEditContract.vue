@@ -721,11 +721,20 @@ const handlegalleryFiles = (data) => handleFileUpdate('gallery',data, imageData,
 const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider',data, imageData, form, true);
 const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form,false);
 const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
-const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files',data, imageData, form, false);
-const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
+const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files',data, imageData, form, true);
+// const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
 const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form,false);
 const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
 
+const handleImageFiles = (data) =>{
+    const media_titles = data.map((item) => item.title);
+    imageData.value.image.mediaName = media_titles.join(", ");
+    imageData.value.image.images = [...imageData.value.image.images,...data];
+    imageData.value.image.isOpen = false;
+    const media_ids = data.map((item) => item.id);
+    form.value.product_specs[productsSpecsIndex.value].image = media_ids;
+    console.log(imageData.value.image.images);
+}
 
 const handleVideoSource = (data) => {
     const media_titles = data.map((item) => item.title);
@@ -825,7 +834,8 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
     loading.value = true;
-    const { status, featured_image_data, featured_image_url, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
+    const { status, featured_image_url,new_product_slider_url,new_product_additional_bg_image_url,new_product_additional_right_box_image_url,
+        downloadable_files_url,product_series_data,contracts_data,product_types_data,product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
     try {
@@ -892,52 +902,78 @@ const fetchProductData = async () => {
 }
 
 // Fetch contract location and type data
-const fetchNacessaryData = async (payload) => {
-    productContractTree.value = await getProductContractTree(payload);
-    productSeriesTree.value = await getProductSeriesTree(payload);
-    productCategoryTypeTree.value = await getProductCategoryTypeTree(payload);
-    productTypeTree.value = await getProductTypeTree(payload);
-    CommonServices.getSwatchesMaterialList(payload).then(res => {
-        if (res.status === 200 && res.data.success) {
-            materialSwatchesList.value = res.data.data;
-        }
-    }).catch(e => console.error('Error while getSwatchesMaterialList:', e))
-};
-// Fetch Initial Data
-const fetchMaterialTreeData = async () => {
+const fetchAllData = async (payload) => {
     try {
+        // Fetch necessary data in parallel
+        const [
+            contractTree,
+            seriesTree,
+            categoryTypeTree,
+            typeTree,
+            swatchesRes,
+            materialTreeListData
+        ] = await Promise.all([
+            getProductContractTree(payload),
+            getProductSeriesTree(payload),
+            getProductCategoryTypeTree(payload),
+            getProductTypeTree(payload),
+            CommonServices.getSwatchesMaterialList(payload),
+            MaterialTreeList(payload)  // Add MaterialTreeList to the Promise.all
+        ]);
 
-        const domainId = store.getters.getDomain.id;
-        MaterialTreeListData.value = await MaterialTreeList({ domain_id: domainId });
+        // Assign the fetched data
+        productContractTree.value = contractTree;
+        productSeriesTree.value = seriesTree;
+        productCategoryTypeTree.value = categoryTypeTree;
+        productTypeTree.value = typeTree;
+
+        // Handle the swatches response
+        if (swatchesRes.status === 200 && swatchesRes.data.success) {
+            materialSwatchesList.value = swatchesRes.data.data;
+        }
+
+        // Assign MaterialTreeList data
+        MaterialTreeListData.value = materialTreeListData;
+
     } catch (e) {
-        console.error('Error fetching material tree data:', e);
+        console.error('Error while fetching data:', e);
     }
 };
 
 
+
 // Initialize component state
 onMounted(() => {
-    // if (store.getters.editData) {
-    //     const { featured_image_data, contract_logo_data, contract_slider_image_data, gallery_urls } = store.getters.editData;
-    //     console.log(contract_slider_image_data)
-    //     imageData.value.featured_image.images = [featured_image_data];
-    //     imageData.value.featured_image.mediaName = featured_image_data?.file_url || 'featured images';
-    //     imageData.value.contract_logo.images = [contract_logo_data];
-    //     imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
-    //     imageData.value.contract_slider_image.images = [contract_slider_image_data];
-    //     imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
-    //     imageData.value.gallery.images = gallery_urls;
-    //     imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
+    if (store.getters.editData) {
 
-    // }
-    fetchMaterialTreeData();
+        const { featured_image_url, contract_logo_data,new_product_slider_url,
+            new_product_additional_bg_image_url, new_product_additional_right_box_image_url,downloadable_files_url, gallery_urls } = store.getters.editData;
+        console.log(new_product_slider_url)
+        imageData.value.featured_image.images = [featured_image_url];
+        imageData.value.featured_image.mediaName = featured_image_url?.file_url || 'featured images';
+        imageData.value.new_product_additional_bg_image.images = [new_product_additional_bg_image_url];
+        imageData.value.new_product_additional_bg_image.mediaName = new_product_additional_bg_image_url?.file_url || 'images';
+        imageData.value.new_product_additional_right_box_image.images = [new_product_additional_right_box_image_url];
+        imageData.value.new_product_additional_right_box_image.mediaName = new_product_additional_right_box_image_url?.file_url || 'images';
+        imageData.value.downloadable_files.images = downloadable_files_url;
+        imageData.value.downloadable_files.mediaName = downloadable_files_url.map(item => item?.file_url).join(', ') || 'featured images';
+        imageData.value.new_product_slider.images = new_product_slider_url;
+        imageData.value.new_product_slider.mediaName = new_product_slider_url.map(item => item?.file_url).join(', ') || 'featured images';
+       
+        imageData.value.contract_logo.images = [contract_logo_data];
+        imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
+        // imageData.value.contract_slider_image.images = [contract_slider_image_data] ||[];
+        // imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
+        imageData.value.gallery.images = gallery_urls;
+        imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
+
+    }
 });
 
 // Watch for domain_id changes to update contract data
 watch(() => form.value.domain_id, (newDomainId) => {
     // Fetch product type tree and reset parent product type
-    fetchNacessaryData({ domain_id: form.value.domain_id });
-    fetchMaterialTreeData();
+    fetchAllData({ domain_id: form.value.domain_id });
 
     // Check if newDomainId is present in domains_data and fetch product type data if so
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {

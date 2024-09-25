@@ -90,7 +90,7 @@ export default {
             sky: '#3ab0ff',       
             stone: '#a49f8c',    
             neutral: '#7a7d8c',   
-            gray: '#8c8c8c',      
+            // gray: '#8c8c8c',      
             slate: '#7a9aab',   
           },
           
