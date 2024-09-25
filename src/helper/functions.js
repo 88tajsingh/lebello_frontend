@@ -33,13 +33,6 @@ export const isChecked = (variable, id) => variable.value.some(item => item.id =
 export const filePath = (fileUrl) =>
   fileUrl ? `${import.meta.env.VITE_FILES_PATH}${fileUrl}` : import.meta.env.VITE_DEFAULT_IMAGE;
 
-export const handleFiles = (data) => {
-  const media_titles = data.map((item) => item.title);
-  const mediaName = media_titles.join(", ");
-  const media_ids = data.map((item) => item.id);
-  return { mediaName, media_ids };
-};
-
 /**
  * Handles the logic of updating a file in a form.
  *
@@ -50,7 +43,9 @@ export const handleFiles = (data) => {
  * @param {boolean} [multiple=false] - Whether the file type is a single file or multiple files
  */
 export const handleFileUpdate = (type, data, imageData, form, multiple = false) => {
-  const { mediaName, media_ids } = handleFiles(data);
+  const media_titles = data.map((item) => item.title);
+  const mediaName = media_titles.join(", ");
+  const media_ids = data.map((item) => item.id);
   imageData.value[type] = { isOpen: false, mediaName, images: data };
   form.value[type] = multiple ? media_ids : media_ids[0];
   console.log('multiple',form.value[type] )

@@ -15,7 +15,7 @@
           </div>
           <div class=" flex justify-end mt-4 px-6 py-2 bg-gray-100 rounded-b-lg ">
             <button @click="deleteItem" class="bg-red hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none">
-              Delete
+              {{btnName}}
             </button>
             <button @click="closeModal" class="ml-4 bg-gray-300 border border-black hover:bg-gray-400 text-gray-800 px-4 py-2 rounded focus:outline-none">
               Cancel
@@ -32,6 +32,7 @@
   export default defineComponent({
     props: {
       modalTitle: String,
+      btnName: {type: String, default: 'Delete'},
       isOpen: {
         type: [Boolean,Number],
         default: false,

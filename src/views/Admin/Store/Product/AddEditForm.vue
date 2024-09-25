@@ -1,4 +1,4 @@
-<template>{{form}}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="StoreServices.deleteStoreProduct"
             masterKey="master_store_product_id" :masterDeleteService="StoreServices.masterDeleteStoreProduct"
@@ -592,9 +592,9 @@ const imageData = ref({
 // Common handler for image updates
 const handleSpecs_Img = (data) => handleFileUpdate('product_specs', data, imageData, form, false);
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
-const handleGalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, false);
-const handleSlider = (data) => handleFileUpdate('slider',data, imageData, form, false);
-const handleDownloadable = (data) => handleFileUpdate('downloadable_files',data, imageData, form, false);
+const handleGalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
+const handleSlider = (data) => handleFileUpdate('slider', data, imageData, form, true);
+const handleDownloadable = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
 
 // Function to remove a specific image from the slider
 const handleRemoveImage = (slide) => {
@@ -760,7 +760,6 @@ const fetchStoreProductData = async () => {
 // Function to fetch all necessary data
 const handleFetchAllData = async (payload) => {
     try {
-        console.log("payload ", payload)
         await Promise.all([
             CommonServices.getTags(payload).then(res => {
                 if (res.status === 200 && res.data.success) {
@@ -776,7 +775,6 @@ const handleFetchAllData = async (payload) => {
 
             MaterialTreeList(payload).then(data => {
                 MaterialTreeListData.value = data;
-                console.log(MaterialTreeListData.value)
             }).catch(e => console.error('Error while getMaterialTree:', e)),
 
             getStoreCategoryTree(payload).then(data => {
@@ -793,16 +791,24 @@ onMounted(() => {
     // Initialize image on edit data
     if (store.getters.editData) {
         const domainId = store.getters.editData?.domain_id;
-        const { downlaodable_urls, slider_data, gallery_data, featured_image_data } = store.getters.editData;
-        imageData.value.gallery.images = gallery_data || 'gallery';
-        imageData.value.gallery.mediaName = gallery_data?.map(item => item?.file_url).join(', ') || 'gallery';
-        imageData.value.slider.images = slider_data
-        imageData.value.slider.mediaName = slider_data?.map(item => item?.file_url).join(', ') || 'slider images';;
-        imageData.value.downloadable_files.images = downlaodable_urls
-        imageData.value.downloadable_files.mediaName = downlaodable_urls?.map(item => item?.file_url).join(', ') || 'Downloadable Images';
-        imageData.value.featured_image.images = [featured_image_data]
-        imageData.value.featured_image.mediaName = featured_image_data?.file_url || "Featured Image"
         handleFetchAllData({ domain_id: domainId });
+
+        const { downlaodable_urls, slider_data, gallery_data, featured_image_data } = store.getters.editData;
+
+        const setMediaData = (key, data, defaultMessage) => {
+            imageData.value[key] = {
+                images: Array.isArray(data) ? data : [data] || [defaultMessage],
+                mediaName: Array.isArray(data)
+                    ? data.map(item => item?.file_url).join(', ') || defaultMessage
+                    : data?.file_url || defaultMessage
+            };
+        };
+
+        setMediaData('gallery', gallery_data, 'gallery');
+        setMediaData('slider', slider_data, 'slider images');
+        setMediaData('downloadable_files', downlaodable_urls, 'Downloadable Images');
+        setMediaData('featured_image', featured_image_data, 'Featured Image');
+
     }
     // Fetch all required data
 });
@@ -814,8 +820,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
     // Check if newDomainId is present in domains_data and fetch 
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchStoreProductData();
-    } else {
-        console.log('data not in array', form.value?.domains_data);
     }
 });
 

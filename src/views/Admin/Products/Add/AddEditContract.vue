@@ -1,4 +1,4 @@
-<template>
+<template>{{form}}
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
 
         <!-- domain select delete master delete  -->
@@ -658,7 +658,7 @@
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
         v-model:isOpen="imageData.new_product_slider.isOpen">
         <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
-            :singleFile="true" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
+            :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
             :selectedFiles="handleProductSliderFiles" />
     </popupModal>
     <Loader :isLoading="loading" :fullPage="true" />
@@ -687,7 +687,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { simple_field: null, featured_product: false, status: null, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+const form = ref(store.getters.editData || { simple_field: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
@@ -717,8 +717,8 @@ const imageData = ref({
 
 // Handle file updates for different image types
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
-const handlegalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, false);
-const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider',data, imageData, form, false);
+const handlegalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, true);
+const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider',data, imageData, form, true);
 const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form,false);
 const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
 const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files',data, imageData, form, false);
