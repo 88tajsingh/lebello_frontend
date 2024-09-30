@@ -539,8 +539,10 @@ const publicPaths = [
 
 let isRedirecting = false;
 
+
+
 router.beforeEach((to, from, next) => {
-  // console.log(`Navigating to: ${to.path}`);
+  console.log(`Navigating to: ${to.path}`);
 
   const token = store?.getters?.token || localStorage.getItem('token');
   const allowedPaths = store.getters.user?.modules?.route || [];
