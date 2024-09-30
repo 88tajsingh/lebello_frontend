@@ -38,7 +38,7 @@
             </template>
             <template v-if="permissions.write" #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'company-form' }); store.dispatch('setEdit', data.value) }"
+                    <div @click="() => handelEditClick(data.value)"
                         id="edit svg">
                         <EditSvg />
                     </div>
@@ -99,6 +99,14 @@ const getDomainsList = ref([]);
 const deleteModalIsOpen = ref(false);
 const deleteMulModalIsOpen = ref(false);
 
+
+
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'company-form' });
+}
 
 // Open Delete Modals
 const openDeleteModal = () => deleteModalIsOpen.value = true;

@@ -44,7 +44,7 @@
       </template>
       <template #actions="data">
         <div v-if="permissions.write" class="flex gap-3">
-          <div @click="() => { router.push({ name: 'Contract-form' }); store.dispatch('setEdit', data.value); }"
+          <div @click="() => handelEditClick(data.value)"
             id="edit svg">
             <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
             <EditSvg />
@@ -98,9 +98,14 @@ const totalRows = ref('')
 
 const openDeleteModal = (data) => {
   deleteModalIsOpen.value = true;
-  editData.value = data.id;
-  console.log(data.id)
-};
+  editData.value = data.id;};
+
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'Contract-form' });
+}
 
 const openModal = () => {
   modalIsOpen.value = true;

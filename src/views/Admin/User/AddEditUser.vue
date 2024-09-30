@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="flex flex-col w-full">
-                    <TextInput id="comPassword" type="text" class="block w-full mr-2 h-[40px]"
+                    <TextInput id="comPassword" type="password" class="block w-full mr-2 h-[40px]"
                         v-model="form.password_confirmation" placeholder="Confirm Password" label="Confirm Password
              " :errMessage="errors?.password_confirmation"
                         @update:modelValue="$clearError(errors, 'password_confirmation')" />

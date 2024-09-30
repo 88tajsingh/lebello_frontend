@@ -274,7 +274,7 @@ const fetchMaterialSliderData = async () => {
 onMounted(() => {
     if (store.getters.editData) {
         imageData.value.featured_image.images = [store.getters.editData?.featured_image_data];
-        imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_data.file_url;
+        imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_data?.file_url || 'Select Featured Image';
 
     }
 });

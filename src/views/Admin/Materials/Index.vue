@@ -38,7 +38,7 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="editMaterial(data.value)" id="edit svg">
+          <div @click="handelEditClick(data.value)" id="edit svg">
             <EditSvg />
           </div>
           <div @click="confirmDelete(data.value)" id="delete svg">
@@ -98,13 +98,13 @@ const domainList = ref([])
 const selectedDomainId = ref('')
 const isDeleteModalOpen = ref(false)
 
-// Fetch domains and materials
-// const fetchDomains = async () => {
-//   const response = await getDomains()
-//   domainList.value = response
-//   selectedDomainId.value = domainList.value.find(d => d.default)?.id || ''
-//   store.dispatch('setDomain', domainList.value.find(d => d.default))
-// }
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'materials-form' })
+}
+
 const fetchDomains = async (payload) => {
   domainList.value = await getDomains(payload)
   const defaultDomain = domainList.value.filter(site => site.default === 1)[0];
@@ -179,10 +179,6 @@ const navigateToAddMaterial = () => {
   store.dispatch('clearEditData')
 }
 
-const editMaterial = (material) => {
-  router.push({ name: 'materials-form' })
-  store.dispatch('setEdit', material)
-}
 
 const confirmDelete = (material) => {
   selectedMaterialId.value = material

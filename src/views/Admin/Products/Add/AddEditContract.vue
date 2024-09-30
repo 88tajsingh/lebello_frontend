@@ -1,4 +1,4 @@
-<template>{{form}}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
 
         <!-- domain select delete master delete  -->

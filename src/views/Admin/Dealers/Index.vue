@@ -5,7 +5,7 @@
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
         valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{multiDeleteModal = true}">Apply</Button>
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { multiDeleteModal = true }">Apply</Button>
       <div class="max-w-52 ml-2">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="pagiantionData.domain_id" />
@@ -19,9 +19,9 @@
       <TextInput type="text" class="block bg-white mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
         v-model="search" />
       <Button v-if="permissions.write" @click="() => {
-          router.push('/dealer-form')
-          store.dispatch('clearEditData')
-        }
+        router.push('/dealer-form')
+        store.dispatch('clearEditData')
+      }
         " class="px-2 py-2 m-auto whitespace-nowrap">Add Dealers</Button>
     </div>
   </div>
@@ -40,17 +40,13 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => {
-              router.push({ name: 'Dealer-form' })
-              store.dispatch('setEdit', data.value)
-            }
-            " id="edit svg">
+          <div @click="() => handelEditClick(data.value)" id="edit svg">
             <EditSvg />
           </div>
           <div id="delete svg" @click="() => {
-              project_id = data.value
-              openDeleteModal()
-            }
+            project_id = data.value
+            openDeleteModal()
+          }
             ">
             <DeleteSvg />
           </div>
@@ -103,6 +99,13 @@ const getDomainsList = ref([])
 
 const isRowHovered = (value) => {
   return actionsFlag.value === value.name
+}
+
+const handelEditClick = (data) => {
+  store.dispatch('setEdit', data)
+  const id = data.domain_id
+  store.dispatch('setDomain', { id: id });
+  router.push({ name: 'Dealer-form' })
 }
 
 const deleteModalIsOpen = ref(false)
@@ -171,7 +174,7 @@ const handleDeleteProjects = async () => {
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows()
   const ids = selected.map((item) => item.id)
-  if(!ids.length) return showToast('Please select atleast one dealer to delete', 'error')
+  if (!ids.length) return showToast('Please select atleast one dealer to delete', 'error')
   if (bulkActionSelected.value === 'delete') {
     loading.value = true
     try {
@@ -201,7 +204,7 @@ onMounted(() => {
 watch(
   () => pagiantionData.value.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter((site) =>( site.id == pagiantionData.value.domain_id))
+    const defaultDomain = getDomainsList.value.filter((site) => (site.id == pagiantionData.value.domain_id))
     store.dispatch('setDomain', defaultDomain[0])
     handleGetDealers(pagiantionData.value)
   }

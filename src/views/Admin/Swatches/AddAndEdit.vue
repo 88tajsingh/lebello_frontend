@@ -326,6 +326,7 @@ const handleGlobalUpdate = async () => {
 const fetchSwatchData = async () => {
     loading.value = true
     const payload = { master_swatch_id: form.value.master_swatch_id, domain_id: form.value.domain_id }
+    console.log('payload', payload);
     try {
         const { status, data } = await SwatchesServices.getSwatches(payload)
         if (status === 200 && data.success) {

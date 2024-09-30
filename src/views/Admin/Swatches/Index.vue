@@ -45,7 +45,7 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'Swatches-form' }); store.dispatch('setEdit', data.value) }"
+          <div @click="()=>handelEditClick(data.value)"
             id="edit svg">
             <EditSvg />
           </div>
@@ -107,6 +107,13 @@ const handleMouseEnter = (data) => {
 
 const handleMouseLeave = () => {
   actionsFlag.value = null
+}
+
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'Swatches-form' });
 }
 
 const changePage = (page) => {

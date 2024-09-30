@@ -47,7 +47,7 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'home-slider-form' }); store.dispatch('setEdit', data.value); }"
+          <div @click="() => handelEditClick(data.value)"
             id="edit svg">
             <EditSvg />
           </div>
@@ -100,6 +100,13 @@ const bulkPopup = ref(false)
 const deleteModalIsOpen = ref(false)
 const domain_id = ref('')
 const getDomainsList = ref([])
+
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'home-slider-form' });
+}
 
 // Methods
 const openDeleteModal = () => { deleteModalIsOpen.value = true }
