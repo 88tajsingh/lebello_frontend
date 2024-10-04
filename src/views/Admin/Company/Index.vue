@@ -176,7 +176,7 @@ const handleBulkActions = async () => {
 const getDomainList = async () => {
     try {
         getDomainsList.value = await getDomains();
-        const defaultDomain = getDomainsList.value.find(site => site.default === 1);
+        const defaultDomain = getDomainsList.vzalue.find(site => site.default === 1);
         pagiantionData.value.domain_id = defaultDomain.id;
         store.dispatch('setDomain', defaultDomain);
     } catch (e) {
