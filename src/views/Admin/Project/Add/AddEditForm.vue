@@ -109,7 +109,7 @@ import { getProjectCategoryTree } from '@/helper/Apis'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import { PublishOptions, statusData } from '@/json/data'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 
 // Store and Router
 const store = useStore()
@@ -161,6 +161,7 @@ const handleSubmit = async () => {
         const {
             deleted_at,
             created_at,
+            domain,
             featured_image_url,
             slug,
             domains_data,
@@ -276,4 +277,9 @@ watch(
 const buttonText = computed(() => {
     return form.value.id ? 'Update' : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

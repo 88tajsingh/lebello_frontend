@@ -61,7 +61,7 @@ import { commonApiCalls, } from '@/helper/Apis'
 import { showToast } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import _ from 'lodash'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { useStore } from 'vuex'
 
 // Access the Vuex store
@@ -104,7 +104,7 @@ const handleFormSubmit = async () => {
   const hasCheckedFields = Object.values(checkedFields.value).some(value => value)
 
   loading.value = true
-  const { deleted_at, created_at, updated_at, domains_data, default_domain, default_master, featured_image_url, ...payload } =
+  const { deleted_at,domain, created_at, updated_at, domains_data, default_domain, default_master, featured_image_url, ...payload } =
     form.value
   if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
   // if (payload.domain_id !== PreviousDomain.value) delete payload.id
@@ -196,4 +196,9 @@ const buttonText = computed(() => {
   }
   return form.value.id ? 'Update' : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

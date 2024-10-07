@@ -6,7 +6,7 @@
       <Button class="px-2 py-2 m-auto" @click="() => multiDeleteModalOpen = true">Apply</Button>
     </div>
     <div class="w-52">
-        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="pagiantionData.domain_id" />
+        <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain" v-model="paginationData.domain_id" />
       </div>
     <div class="flex ml-auto">
       <TextInput type="text" class="block bg-white mr-2 h-[40px] w-full" placeholder="Search" v-model="search" />
@@ -17,7 +17,7 @@
   <div class="bg-white rounded-[20px]">
     <vue3-datatable  class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
     :hasCheckbox="true":cloneHeaderInFooter="true"  :stickyHeader="false" 
-    :rows="rows" :columns="cols"  :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
+    :rows="rows" :columns="pagesCol"  :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search" @change="changePages">
       <template #name="data" >
         <div @mouseenter="handleMouseEnter(data)" @mouseleave="handleMouseLeave()">
           {{ data.value.name }}
@@ -53,6 +53,7 @@
 import { ref, onMounted,watch } from 'vue';
 import { showToast } from '@/helper/functions'
 import { getDomains } from '@/helper/Apis';
+import { pagesCol } from '@/json/data';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PagesServices from '@/services/PagesServices';
 import { useRouter } from 'vue-router';
@@ -64,7 +65,6 @@ const router = useRouter();
 
 const actionSelected = ref(null);
 const getDomainsList = ref([]);
-const domain_id=ref(null);
 const bulkOptions = [{ text: 'Delete', value: 'delete' }]
 const datatable  = ref(null);
 const loading = ref(false);
@@ -74,16 +74,11 @@ const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
 const actionsFlag = ref(null);
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const permissions =  store.getters.user.permissions;
 const deleteModalIsOpen = ref(false);
 const  totalRows = ref('')
-const cols = ref([
-  { field: 'page_title', title: 'Page Title', slot: true },
-  { field: 'seo_title', title: 'Seo Title', filter: true },
-  { field: 'status', title: 'Status' },
-  { field: 'actions', title: 'Actions' }
-]);
+
 
 const handelEditClick =(data)=>{
   store.dispatch('setEdit', data) 
@@ -107,8 +102,8 @@ const handleMouseLeave = () => {
 
 const changePages =(page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
-  handleGetPages(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+  handleGetPages(paginationData.value);
 }
 
 // api calls
@@ -133,7 +128,7 @@ const handleDeletePages = async () => {
     const res = await PagesServices.deletePages({ id: editData.value });
     if (res.status === 200 && res.data.success) {
       showToast(res.data.message, 'success');
-       await handleGetPages(pagiantionData.value)
+       await handleGetPages(paginationData.value)
       deleteModalIsOpen.value = false;
       editData.value = null;
     } else if (res.status === 400) {
@@ -157,7 +152,7 @@ const applyBulkActions = async () => {
       const res = await PagesServices.bulkDeletePages({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        handleGetPages(pagiantionData.value)
+        handleGetPages(paginationData.value)
       }
     } catch (error) {
       console.error('Error performing bulk delete:', error)
@@ -170,7 +165,7 @@ const applyBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 onMounted(() => {
@@ -179,11 +174,11 @@ onMounted(() => {
 );
 
 watch(
-    () => pagiantionData.value.domain_id,
+    () => paginationData.value.domain_id,
     () => {
-      const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id );
+      const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id );
       store.dispatch('setDomain', defaultDomain[0]);
-      handleGetPages(pagiantionData.value);
+      handleGetPages(paginationData.value);
     }
 );
 </script>

@@ -141,7 +141,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import ProductServices from '@/services/ProductServices'
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
 import { trueFalse } from '@/json/data'
 
@@ -192,7 +192,7 @@ const handleSubmit = async () => {
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
   loading.value = true
   try {
-    const { deleted_at, created_at, slug, updated_at, default_master, domains_data, default_domain, featured_image_data, ...payload } = form.value
+    const { deleted_at,domain, created_at, slug, updated_at, default_master, domains_data, default_domain, featured_image_data, ...payload } = form.value
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
     const action = store.getters.editData ? ProductServices.editProductSeries : ProductServices.addProductSeries
@@ -307,4 +307,9 @@ watch(() => form.value.parent_contract, (newValue) => {
 const buttonText = computed(() => {
   return (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

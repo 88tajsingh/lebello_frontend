@@ -167,7 +167,7 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import TinyMCE from '@/components/Admin-components/TinyMCE.vue';
 import PagesServices from '@/services/PagesServices';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 import { showToast } from '@/helper/functions'
 import { trueFalse } from '@/json/data';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
@@ -225,7 +225,7 @@ const handleSubmit = async () => {
     loading.value = true;
     try {
       const action = store.getters.editData ? PagesServices.editPages : PagesServices.addPages;
-      const { deleted_at, created_at, domains_data, default_domain, default_master, updated_at, featured_image_url, ...payload } = form.value;
+      const { deleted_at, created_at,domain, domains_data, default_domain, default_master, updated_at, featured_image_url, ...payload } = form.value;
       if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
       const res = await action(payload);
@@ -318,4 +318,10 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
   return (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
+
 </script>

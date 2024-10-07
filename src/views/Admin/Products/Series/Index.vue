@@ -8,7 +8,7 @@
       <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
       <div class="w-52">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
@@ -75,7 +75,7 @@ const bulkActionSelected = ref(null)
 const search = ref('')
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const material_id = ref('')
 const dataTableLoding = ref(false)
 const bulkPopup = ref(false)
@@ -114,8 +114,8 @@ const openDeleteModal = () => {
 
 const changePage = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
-    handleGetProductSeries(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+    handleGetProductSeries(paginationData.value);
 }
 
 function handleCheckboxChange(event) {
@@ -158,7 +158,7 @@ const handleDeleteProductSeries = async () => {
     const res = await ProductServices.deleteProductSeries({ id: material_id.value.id });
     if (res.status === 200) {
       showToast(res.data.message, 'success');
-      await handleGetProductSeries(pagiantionData.value);
+      await handleGetProductSeries(paginationData.value);
       deleteModalIsOpen.value = false;
     } else if (res.status === 400) {
       showToast(res.message, 'error');
@@ -180,7 +180,7 @@ const handleBulkActions = async () => {
       const res = await ProductServices.BulkDeleteProductSeries({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetProductSeries(pagiantionData.value);
+        await handleGetProductSeries(paginationData.value);
       }
     } catch (e) {
       console.error('Error while performing bulk delete:', e);
@@ -191,7 +191,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -201,11 +201,11 @@ onMounted(() => {
 );
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetProductSeries(pagiantionData.value);
+    handleGetProductSeries(paginationData.value);
   }
 );
 </script>

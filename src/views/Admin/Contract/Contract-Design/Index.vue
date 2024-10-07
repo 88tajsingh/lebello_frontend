@@ -7,11 +7,11 @@
       <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { actionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="max-w-52 mr-2">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
       <div class="max-w-52">
         <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-          v-model="pagiantionData.status" />
+          v-model="paginationData.status" />
       </div>
     </div>
     <div class="flex">
@@ -83,7 +83,7 @@ const loading = ref(false);
 const search = ref('');
 const permissions = store.getters.user.permissions;
 const getDomainsList = ref([])
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const domain_id = ref('')
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getLoading = ref(false);
@@ -132,8 +132,8 @@ const isRowHovered = (value) => {
 
 const changeServer = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
-  handleGetContract(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+  handleGetContract(paginationData.value);
 }
 
 // api calls
@@ -179,7 +179,7 @@ const handleBulkActions = async () => {
       const res = await ContractServices.BulkDeleteNewContract({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        handleGetContract(pagiantionData.value)
+        handleGetContract(paginationData.value)
       }
     } catch (error) {
       console.error('Error performing bulk delete:', error)
@@ -198,7 +198,7 @@ const handleDeleteSuccess = (message) => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -208,17 +208,17 @@ onMounted(() => {
 );
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetContract(pagiantionData.value);
+    handleGetContract(paginationData.value);
   }
 );
 watch(
-  () => pagiantionData.value.status,
+  () => paginationData.value.status,
   () => {
-    handleGetContract(pagiantionData.value);
+    handleGetContract(paginationData.value);
   }
 );
 </script>

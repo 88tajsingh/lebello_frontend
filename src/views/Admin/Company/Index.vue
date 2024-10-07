@@ -10,11 +10,11 @@
 
             <div class="max-w-52 mr-2">
                 <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-                    v-model="pagiantionData.domain_id" />
+                    v-model="paginationData.domain_id" />
             </div>
             <div class="max-w-52">
                 <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-                    v-model="pagiantionData.status" />
+                    v-model="paginationData.status" />
             </div>
         </div>
         <div class="flex rounded-lg bg-transparent">
@@ -42,7 +42,7 @@
                         id="edit svg">
                         <EditSvg />
                     </div>
-                    <div id="delete svg" @click="() => { company_id = data.value; deleteModalIsOpen = true; }">
+                    <div id="delete svg" @click="() => { company_id = data.value.id; deleteModalIsOpen = true; }">
                         <DeleteSvg />
                     </div>
                 </div>
@@ -87,7 +87,7 @@ const router = useRouter();
 const permissions = store.getters.user.permissions;
 const bulkActionSelected = ref(null);
 const search = ref('');
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const bulkOption = [{ text: 'Delete', value: 'delete' }];
 const company_id = ref('');
 const dataTableLoading = ref(false);
@@ -113,8 +113,8 @@ const openDeleteModal = () => deleteModalIsOpen.value = true;
 
 const changeServer = (page) => {
     const { pagesize, current_page } = page;
-    pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
-    handleGetCompany(pagiantionData.value);
+    paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+    handleGetCompany(paginationData.value);
 }
 
 // Fetch Companies Data
@@ -123,7 +123,10 @@ const handleGetCompany = async (payload) => {
     try {
         const res = await CompanyServices.getCompany(payload);
         if (res.status === 200 && res.data.success) {
-            data.value = res.data.data || [];
+            console.log('res.data.data', res.data.data);
+            // res.data.data.length > 0 ? data.value = res.data.data : null;
+            data.value = res.data.data || null;
+            console.log('data.value', data.value);
             totalRows.value = res.data.total_records || 0;
         }
     } catch (e) {
@@ -140,17 +143,20 @@ const handleDeleteCompany = async () => {
         const res = await CompanyServices.deleteCompany({ id: company_id.value });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
-            await handleGetCompany(pagiantionData.value);
+            // Fetch the updated company list after deletion
+            await handleGetCompany(paginationData.value);
             deleteModalIsOpen.value = false;
         } else if (res.status === 400) {
-            showToast(res.message, 'error');
+            showToast(res.data.message || 'Error deleting company', 'error');
         }
     } catch (e) {
         console.error('Error while deleting company:', e);
+        showToast('An unexpected error occurred.', 'error');
     } finally {
         loading.value = false;
     }
 };
+
 
 // Bulk Delete Companies
 const handleBulkActions = async () => {
@@ -162,7 +168,7 @@ const handleBulkActions = async () => {
             const res = await CompanyServices.bulkDeleteCompany({ id: ids });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
-                await handleGetCompany(pagiantionData.value);
+                await handleGetCompany(paginationData.value);
             }
         } catch (e) {
             console.error('Error performing bulk delete:', e);
@@ -176,8 +182,8 @@ const handleBulkActions = async () => {
 const getDomainList = async () => {
     try {
         getDomainsList.value = await getDomains();
-        const defaultDomain = getDomainsList.vzalue.find(site => site.default === 1);
-        pagiantionData.value.domain_id = defaultDomain.id;
+        const defaultDomain = getDomainsList.value.find(site => site.default === 1);
+        paginationData.value.domain_id = defaultDomain.id;
         store.dispatch('setDomain', defaultDomain);
     } catch (e) {
         console.error('Error fetching domain list:', e);
@@ -188,18 +194,18 @@ const getDomainList = async () => {
 onMounted(() => getDomainList());
 
 watch(
-    () => pagiantionData.value.domain_id,
+    () => paginationData.value.domain_id,
     () => {
-        const selectedDomain = getDomainsList.value.find(site => site.id == pagiantionData.value.domain_id);
+        const selectedDomain = getDomainsList.value.find(site => site.id == paginationData.value.domain_id);
         store.dispatch('setDomain', selectedDomain);
-        handleGetCompany(pagiantionData.value);
+        handleGetCompany(paginationData.value);
     }
 );
 
 watch(
-    () => pagiantionData.value.status,
+    () => paginationData.value.status,
     () => {
-        handleGetCompany(pagiantionData.value);
+        handleGetCompany(paginationData.value);
     }
 );
 

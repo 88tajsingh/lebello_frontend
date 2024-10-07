@@ -12,7 +12,7 @@
       </Button>
       <div class="w-52">
         <Select :options="domainList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
@@ -34,7 +34,6 @@
       <template #image="data">
         <img :src="$filePath(data.value?.media_data?.file_url)" alt="Material"
           style="max-width: 50px; max-height: 50px" />
-
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
@@ -55,7 +54,8 @@
   </DeleteModal>
 
   <!--Multi Delete Modal -->
-  <DeleteModal v-model:isOpen="multiDeleteModalOpen" :modalTitle="'Multiple Delete Material'" @delete="applyBulkActions">
+  <DeleteModal v-model:isOpen="multiDeleteModalOpen" :modalTitle="'Multiple Delete Material'"
+    @delete="applyBulkActions">
     Do you want to delete selected materials?
   </DeleteModal>
 
@@ -84,7 +84,7 @@ const router = useRouter()
 // State variables
 const bulkActionSelected = ref(null)
 const searchQuery = ref('')
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id:'', status: '' })
 const permissions = store.getters.user.permissions;
 const bulkOptions = [{ text: 'Delete', value: 'delete' }]
 const selectedMaterialId = ref(null)
@@ -95,20 +95,19 @@ const isLoading = ref(false)
 const materials = ref([])
 const totalRecords = ref(0)
 const domainList = ref([])
-const selectedDomainId = ref('')
 const isDeleteModalOpen = ref(false)
 
-const handelEditClick =(data)=>{
-  store.dispatch('setEdit', data) 
-  const id =data.domain_id
-  store.dispatch('setDomain', {id:id});
+const handelEditClick = (data) => {
+  store.dispatch('setEdit', data)
+  const id = data.domain_id
+  store.dispatch('setDomain', { id: id });
   router.push({ name: 'materials-form' })
 }
 
 const fetchDomains = async (payload) => {
   domainList.value = await getDomains(payload)
   const defaultDomain = domainList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  // paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -130,8 +129,8 @@ const fetchMaterials = async (payload) => {
 // Handle page change
 const onPageChange = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
-  fetchMaterials(pagiantionData.value)
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+  fetchMaterials(paginationData.value)
 }
 
 // Handle material deletion
@@ -141,7 +140,7 @@ const deleteMaterial = async () => {
     const res = await materialsServices.deleteMaterial({ id: selectedMaterialId.value.id })
     if (res.status === 200) {
       showToast(res.data.message, 'success')
-     await fetchMaterials(pagiantionData.value);
+      await fetchMaterials(paginationData.value);
       isDeleteModalOpen.value = false
     } else {
       showToast(res.message, 'error')
@@ -158,16 +157,16 @@ const applyBulkActions = async () => {
   if (bulkActionSelected.value === 'delete') {
     const selectedRows = datatable.value.getSelectedRows()
     const ids = selectedRows.map(item => item.id)
-    if(ids.length === 0) return showToast('Please select atleast one material to delete', 'error')
+    if (ids.length === 0) return showToast('Please select atleast one material to delete', 'error')
     try {
       const res = await materialsServices.BulkDeleteMaterial({ id: ids })
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success')
-        fetchMaterials(pagiantionData.value)
+        fetchMaterials(paginationData.value)
       }
     } catch (error) {
       console.error('Error performing bulk delete:', error)
-    } 
+    }
   }
 }
 
@@ -188,15 +187,16 @@ const confirmDelete = (material) => {
 // Initialize
 onMounted(() => {
   fetchDomains()
+  fetchMaterials(paginationData.value);
 })
 
 // Handle domain change
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
-    const defaultDomain = domainList.value.find(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = domainList.value.find(site => site.id == paginationData.value.domain_id);
     store.dispatch('setDomain', defaultDomain);
-    fetchMaterials(pagiantionData.value);
+    fetchMaterials(paginationData.value);
   }
 );
 </script>

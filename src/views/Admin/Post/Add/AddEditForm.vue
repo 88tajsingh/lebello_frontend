@@ -213,7 +213,7 @@
 <script setup>
 import _ from 'lodash';
 import { useStore } from 'vuex';
-import { useRouter } from "vue-router";
+import { useRouter,onBeforeRouteLeave } from "vue-router";
 import { trueFalse, statusData } from '@/json/data';
 import PostServices from '@/services/PostServices';
 import { getPostCategoryTree } from '@/helper/Apis';
@@ -281,7 +281,7 @@ const handleSubmit = async () => {
     loading.value = true;
     try {
         const action = store.getters.editData ? PostServices.editPost : PostServices.addPost;
-        const { featured_image_url, gallery_urls, slug, gallery_data, domains_data, default_domain, deleted_at, created_at, updated_at, ...payload } = form.value
+        const { featured_image_url,domain, gallery_urls, slug, gallery_data, domains_data, default_domain, deleted_at, created_at, updated_at, ...payload } = form.value
         if (!form.value?.domains_data?.includes(form.value.domain_id)) {
             delete payload.id;
         }
@@ -392,4 +392,9 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

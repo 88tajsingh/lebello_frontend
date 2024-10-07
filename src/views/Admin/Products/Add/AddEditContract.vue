@@ -676,7 +676,7 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import { statusData, trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
 import ProductServices from '@/services/ProductServices';
 
@@ -834,7 +834,7 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
     loading.value = true;
-    const { status, featured_image_url,new_product_slider_url,new_product_additional_bg_image_url,new_product_additional_right_box_image_url,
+    const { status,domain, featured_image_url,new_product_slider_url,new_product_additional_bg_image_url,new_product_additional_right_box_image_url,
         downloadable_files_url,product_series_data,contracts_data,product_types_data,product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
@@ -989,4 +989,9 @@ watch(() => logo_right_nav.value, (newValue) => {
 const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

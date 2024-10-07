@@ -425,7 +425,7 @@ import {
     trueFalse
 } from '@/json/data'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 
 // store and router
 const store = useStore()
@@ -504,7 +504,7 @@ const handleSubmit = async () => {
     try {
         const action = store.getters.editData ? DealersServices.editDealer : DealersServices.addDealer
         const {
-            deleted_at,created_at,thumb_image_data,company_logo_data,slug,domains_data,night_banner_images_data,
+            deleted_at,created_at,thumb_image_data,domain,company_logo_data,slug,domains_data,night_banner_images_data,
             day_banner_images_data,default_domain,default_master,updated_at,featured_image_url,...payload
         } = form.value
         if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
@@ -608,4 +608,9 @@ watch(
 const buttonText = computed(() => {
     return form.value.id ? 'Update' : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

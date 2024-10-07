@@ -8,11 +8,11 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="max-w-52 mr-2">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
       <div class="max-w-52">
         <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-          v-model="pagiantionData.status" />
+          v-model="paginationData.status" />
       </div>
     </div>
     <div class="flex">
@@ -83,7 +83,7 @@ const loading = ref(false);
 const search = ref('');
 const permissions = store.getters.user.permissions;
 const datatable = ref(null);
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDomainsList = ref([])
 const domain_id = ref('')
@@ -118,8 +118,8 @@ const handleMouseLeave = () => {
 
 const changePages = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
-  handleGetStoreProduct(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+  handleGetStoreProduct(paginationData.value);
 }
 // api calls
 const handleGetStoreProduct = async (payload) => {
@@ -182,7 +182,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -192,17 +192,17 @@ onMounted(() => {
 );
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
     const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetStoreProduct(pagiantionData.value);
+    handleGetStoreProduct(paginationData.value);
   }
 );
 watch(
-  () => pagiantionData.value.status,
+  () => paginationData.value.status,
   () => {
-    handleGetStoreProduct(pagiantionData.value);
+    handleGetStoreProduct(paginationData.value);
   }
 );
 </script>

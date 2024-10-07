@@ -210,7 +210,7 @@ import DatePicker from '@/components/Admin-components/form-components/DatePicker
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { PublishOptions, trueFalse, withBgWithoutBg, capsNOCaps, statusData } from '@/json/data';
 import { useStore } from 'vuex';
-import { useRouter } from "vue-router";
+import { useRouter,onBeforeRouteLeave } from "vue-router";
 
 // Setup router and store
 const router = useRouter();
@@ -267,7 +267,7 @@ const handleSubmit = async () => {
     try {
         // Determine if editing or adding a new slider
         const isEditing = !!store.getters.editData;
-        const { created_at, deleted_at, slug, featured_image_url, slider_video_source_url, domains_data, default_domain, featured_image_data, updated_at, ...payload } = form.value
+        const { created_at, deleted_at, slug, featured_image_url,domain, slider_video_source_url, domains_data, default_domain, featured_image_data, updated_at, ...payload } = form.value
         if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
         const action = isEditing ? HomeSliderServices.editHomeSlider : HomeSliderServices.addHomeSlider;
@@ -360,6 +360,10 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>
 
 <style scoped></style>

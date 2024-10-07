@@ -8,155 +8,166 @@
                 :SlugUpdateservices='MaterialsServices.masterMaterialSlugUpdate' masteridKeyName='master_material_id' />
         </template>
         <form @submit.prevent="handleSubmit">
-            <div class="p-6.5 grid grid-cols-2 gap-6">
-                <div class="flex flex-col ">
-                    <TextInput ref="nameInput" type="text" class=" " label='Name' :class="{ 'border-red': errors.name }"
-                        placeholder="" v-model="form.name" :errMessage="errors.name"
-                        @update:modelValue="$clearError(errors, 'name')" :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.name = value }" />
-                    <p class="text-sm text-[#646970] text-[11.5px]" :class="{ 'ml-8': form.id }">
-                        The name is how it appears on your site.
-                    </p>
-                </div>
-                <div class="flex flex-col ">
-                    <TextInput type="text" label='Slug (Read Only)' disabled class="block mr-2 h-[40px] w-full"
-                        :class="{ 'border-red-500': errors.slug }" placeholder="" v-model="form.slug"
-                        :errMessage="errors.slug" @update:model="clearError(errors, 'slug')" />
-                    <p class="text-sm text-[#646970] text-[11.5px]">
-                        The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
-                        only
-                        letters, numbers, and hyphens.
-                    </p>
-                </div>
-                <div class="flex flex-col ">
-                    <Select ref="parentInput" :options="MaterialTreeListData" title="Parent Material" showfield="name"
-                        class="w-full" :defaultZero='true' valueField="id" label="Select Parent Material"
-                        v-model="form.parent_material" :errorClass='errors.parent_material'
-                        :errMessage="errors.parent_material"
-                        @update:modelValue="$clearError(errors, 'parent_material')" />
-                    <p class="text-sm text-[#646970] text-[11.5px]">
-                        Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of
-                        Bebop
-                        and Big Band.
-                    </p>
-                    <InputError class="mt-2" :message="errors?.parent_material" />
-                </div>
-                <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Display in Material Options" showfield="name" class="w-full"
-                        valueField="value" label="Select Material Options" v-model="form.display_material_option"
-                        :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.display_material_option = value }" />
-                    <InputError class="mt-2" :message="errors?.display_material_option" />
-                </div>
-                <div class="flex flex-col w-full">
-                    <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Material Price"
-                        :class="{ 'border-red-500': errors.material_price }" placeholder=""
-                        v-model="form.material_price" :errMessage="errors.material_price" :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.material_price = value }"
-                        @update:model="clearError(errors, 'material_price')" />
-                    <p class="text-sm text-[#646970] text-[11.5px]" :class="{ 'ml-8': form.id }">
-                        The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
-                        only
-                        letters, numbers, and hyphens.
-                    </p>
-                </div>
-                <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Yellow Banner Display On Material Images" showfield="name"
-                        class="w-full" valueField="value" label="Select an option"
-                        v-model="form.yellow_banner_material_image" :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.yellow_banner_material_image = value }" />
-                </div>
-                <div class="flex flex-col ">
-                    <Select :options="trueFalse" title="Show New Badge" showfield="name" class="w-full"
-                        valueField="value" label="Select an option" v-model="form.show_new_badge"
-                        :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.show_new_badge = value }" />
-                </div>
-                <div class="flex flex-col ">
-                    <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Label"
-                        :class="{ 'border-red-500': errors.label }" placeholder="" v-model="form.label"
-                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.label = value }"
-                        :errMessage="errors.label" @update:model="clearError(errors, 'label')" />
-                </div>
-                <div class="flex flex-col ">
-                    <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Material Code"
-                        :class="{ 'border-red-500': errors.material_code }" placeholder="" v-model="form.material_code"
-                        :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.material_code = value }"
-                        :errMessage="errors.material_code" @update:model="clearError(errors, 'material_code')" />
-                </div>
-                <div class="flex flex-col ">
-                    <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Group Name"
-                        :class="{ 'border-red-500': errors.group_name }" placeholder="" v-model="form.group_name"
-                        :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.name = value }"
-                        :errMessage="errors.group_name" @update:model="clearError(errors, 'group_name')" />
-                </div>
-                <div class="flex flex-col mt-1">
-                    <ColorPicker label="Label Background Color" v-model="form.label_background_color"
-                        :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.label_background_color = value }" />
-                </div>
-                <div class="flex flex-col ">
-                    <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Trade Mark Label"
-                        :class="{ 'border-red-500': errors.trade_mark_label }" placeholder=""
-                        v-model="form.trade_mark_label" :errMessage="errors.trade_mark_label"
-                        :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.trade_mark_label = value }"
-                        @update:model="clearError(errors, 'trade_mark_label')" />
-                </div>
-                <div class="flex flex-col ">
-                    <Select ref="badgeInput" :options="trueFalse" title="Show New Badge 2021" showfield="name"
-                        class="w-full" valueField="value" label="Select an option" v-model="form.show_new_badge_2021"
-                        :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.show_new_badge_2021 = value }"
-                        :errorClass='errors.show_new_badge_2021' :errMessage="errors.show_new_badge_2021"
-                        @update:modelValue="$clearError(errors, 'show_new_badge_2021')" />
-                </div>
-                <div class="flex flex-col ">
-                    <Select :options="colors" title="Single Color" showfield="name" class="w-full" valueField="value"
-                        label="Select Color" v-model="form.single_color" :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.single_color = value }" />
-                </div>
-                <div class="flex flex-col ">
-                    <MultiSelect v-model="form.multiple_color" label="Multiple Color" :options="colors"
-                        placeHolder="Select multiple color" :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.multiple_color = value }" />
-                    <InputError class="mt-2" :message="errors?.multiple_color" />
-                </div>
-                <div class="flex flex-col w-full">
-                    <InputLabel for="Featured_image" :class="{ 'ml-8': form.id }" value="Featured_image" />
-                    <div class=" flex  w-full h-auto ">
-                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
-                        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                            @click="() => imageData.media_id.IsOpen = true"> {{
-                                imageData.media_id.mediaName }}</div>
-                    </div>
-                </div>
-                <div class="flex flex-col w-full">
-                    <TextInput type="text" class="block mr-2  w-full" label='Description'
-                        :class="{ 'border-red-500': errors.description }" placeholder="" :isTextarea="true" :rows="4"
-                        v-model="form.description" :errMessage="errors.description"
-                        @update:model="clearError(errors, 'description')" :hasCheckBox="checkBoxFlag"
-                        @update:checkValue="(value) => { checkedFields.description = value }" />
-                    <p class="text-sm text-[#646970] text-[11.5px]">
-                        The description is not prominent by default; however, some themes may show it.
-                    </p>
-                </div>
-                <div class="flex flex-col w-full">
-                    <div class=" mt-3 flex overflow-x-auto">
-                        <img v-if="imageData.media_id.images[0]" v-for="file in imageData.media_id.images" :key="file"
-                            :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                            :alt="file?.alternative_text || ''" />
-
-                    </div>
+        <div class="p-6.5 grid grid-cols-2 gap-6">
+            <div class="flex flex-col">
+                <TextInput ref="nameInput" type="text" label='Name' :class="{ 'border-red': errors.name }"
+                    placeholder="" v-model="form.name" :errMessage="errors.name"
+                    @update:modelValue="$clearError(errors, 'name')" :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.name = value }" 
+                    :id="'name-input'" />
+                <p class="text-sm text-[#646970] text-[11.5px]" :class="{ 'ml-8': form.id }">
+                    The name is how it appears on your site.
+                </p>
+            </div>
+            <div class="flex flex-col">
+                <TextInput type="text" label='Slug (Read Only)' disabled class="block mr-2 h-[40px] w-full"
+                    :class="{ 'border-red-500': errors.slug }" placeholder="" v-model="form.slug"
+                    :errMessage="errors.slug" @update:model="clearError(errors, 'slug')" 
+                    :id="'slug-input'" />
+                <p class="text-sm text-[#646970] text-[11.5px]">
+                    The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
+                    only letters, numbers, and hyphens.
+                </p>
+            </div>
+            <div class="flex flex-col">
+                <Select ref="parentInput" :options="MaterialTreeListData" title="Parent Material" showfield="name"
+                    class="w-full" :defaultZero='true' valueField="id" label="Select Parent Material"
+                    v-model="form.parent_material" :errorClass='errors.parent_material'
+                    :errMessage="errors.parent_material"
+                    @update:modelValue="$clearError(errors, 'parent_material')" 
+                    :id="'parent-material-select'" />
+                <p class="text-sm text-[#646970] text-[11.5px]">
+                    Assign a parent term to create a hierarchy. The term Jazz, for example, would be the parent of
+                    Bebop and Big Band.
+                </p>
+                <InputError class="mt-2" :message="errors?.parent_material" />
+            </div>
+            <div class="flex flex-col">
+                <Select :options="trueFalse" title="Display in Material Options" showfield="name" class="w-full"
+                    valueField="value" label="Select Material Options" v-model="form.display_material_option"
+                    :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.display_material_option = value }"
+                    :id="'display-material-option-select'" />
+                <InputError class="mt-2" :message="errors?.display_material_option" />
+            </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Material Price"
+                    :class="{ 'border-red-500': errors.material_price }" placeholder=""
+                    v-model="form.material_price" :errMessage="errors.material_price" :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.material_price = value }"
+                    @update:model="clearError(errors, 'material_price')" 
+                    :id="'material-price-input'" />
+                <p class="text-sm text-[#646970] text-[11.5px]" :class="{ 'ml-8': form.id }">
+                    The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
+                    only letters, numbers, and hyphens.
+                </p>
+            </div>
+            <div class="flex flex-col">
+                <Select :options="trueFalse" title="Yellow Banner Display On Material Images" showfield="name"
+                    class="w-full" valueField="value" label="Select an option"
+                    v-model="form.yellow_banner_material_image" :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.yellow_banner_material_image = value }"
+                    :id="'yellow-banner-select'" />
+            </div>
+            <div class="flex flex-col">
+                <Select :options="trueFalse" title="Show New Badge" showfield="name" class="w-full"
+                    valueField="value" label="Select an option" v-model="form.show_new_badge"
+                    :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.show_new_badge = value }"
+                    :id="'show-new-badge-select'" />
+            </div>
+            <div class="flex flex-col">
+                <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Label"
+                    :class="{ 'border-red-500': errors.label }" placeholder="" v-model="form.label"
+                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.label = value }"
+                    :errMessage="errors.label" @update:model="clearError(errors, 'label')" 
+                    :id="'label-input'" />
+            </div>
+            <div class="flex flex-col">
+                <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Material Code"
+                    :class="{ 'border-red-500': errors.material_code }" placeholder="" v-model="form.material_code"
+                    :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.material_code = value }"
+                    :errMessage="errors.material_code" @update:model="clearError(errors, 'material_code')" 
+                    :id="'material-code-input'" />
+            </div>
+            <div class="flex flex-col">
+                <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Group Name"
+                    :class="{ 'border-red-500': errors.group_name }" placeholder="" v-model="form.group_name"
+                    :hasCheckBox="checkBoxFlag" @update:checkValue="(value) => { checkedFields.group_name = value }"
+                    :errMessage="errors.group_name" @update:model="clearError(errors, 'group_name')" 
+                    :id="'group-name-input'" />
+            </div>
+            <div class="flex flex-col mt-1">
+                <ColorPicker label="Label Background Color" v-model="form.label_background_color"
+                    :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.label_background_color = value }" 
+                    :id="'label-background-color-picker'" />
+            </div>
+            <div class="flex flex-col">
+                <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Trade Mark Label"
+                    :class="{ 'border-red-500': errors.trade_mark_label }" placeholder=""
+                    v-model="form.trade_mark_label" :errMessage="errors.trade_mark_label"
+                    :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.trade_mark_label = value }"
+                    @update:model="clearError(errors, 'trade_mark_label')" 
+                    :id="'trade-mark-label-input'" />
+            </div>
+            <div class="flex flex-col">
+                <Select ref="badgeInput" :options="trueFalse" title="Show New Badge 2021" showfield="name"
+                    class="w-full" valueField="value" label="Select an option" v-model="form.show_new_badge_2021"
+                    :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.show_new_badge_2021 = value }"
+                    :errorClass='errors.show_new_badge_2021' :errMessage="errors.show_new_badge_2021"
+                    @update:modelValue="$clearError(errors, 'show_new_badge_2021')" 
+                    :id="'show-new-badge-2021-select'" />
+            </div>
+            <div class="flex flex-col">
+                <Select :options="colors" title="Single Color" showfield="name" class="w-full" valueField="value"
+                    label="Select Color" v-model="form.single_color" :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.single_color = value }" 
+                    :id="'single-color-select'" />
+            </div>
+            <div class="flex flex-col">
+                <MultiSelect v-model="form.multiple_color" label="Multiple Color" :options="colors"
+                    placeHolder="Select multiple color" :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.multiple_color = value }" 
+                    :id="'multiple-color-select'" />
+                <InputError class="mt-2" :message="errors?.multiple_color" />
+            </div>
+            <div class="flex flex-col w-full">
+                <InputLabel for="featured-image" :class="{ 'ml-8': form.id }" value="Featured Image" />
+                <div class="flex w-full h-auto">
+                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.media_id"></SingleCheck>
+                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                        @click="() => imageData.media_id.IsOpen = true"> {{ imageData.media_id.mediaName }}</div>
                 </div>
             </div>
+            <div class="flex flex-col w-full">
+                <TextInput type="text" class="block mr-2 w-full" label='Description'
+                    :class="{ 'border-red-500': errors.description }" placeholder="" :isTextarea="true" :rows="4"
+                    v-model="form.description" :errMessage="errors.description"
+                    @update:model="clearError(errors, 'description')" :hasCheckBox="checkBoxFlag"
+                    @update:checkValue="(value) => { checkedFields.description = value }" 
+                    :id="'description-input'" />
+                <p class="text-sm text-[#646970] text-[11.5px]">
+                    The description is not prominent by default; however, some themes may show it.
+                </p>
+            </div>
+            <div class="flex flex-col w-full">
+                <div class="mt-3 flex overflow-x-auto">
+                    <img v-if="imageData.media_id.images[0]" v-for="file in imageData.media_id.images" :key="file"
+                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                        :alt="file?.alternative_text || ''" />
+                </div>
+            </div>
+        </div>
 
-            <button type="submit"
-                class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
-                {{ buttonText }}
-            </button>
-        </form>
+        <button type="submit"
+            class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+            {{ buttonText }}
+        </button>
+    </form>
     </DefaultCard>
     <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
         v-model:isOpen="imageData.media_id.IsOpen">
@@ -180,7 +191,7 @@ import MaterialsServices from '@/services/MaterialsServices'
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
 
 // Store and router
@@ -237,7 +248,7 @@ const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
-    const { deleted_at, created_at, updated_at, slug, domains_data, default_domain, default_master, media_id_url, ...payload } = form.value;
+    const { deleted_at, created_at,domian, updated_at, slug, domains_data, default_domain, default_master, media_id_url, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
         delete payload.id;
     }
@@ -344,5 +355,10 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 
 </script>

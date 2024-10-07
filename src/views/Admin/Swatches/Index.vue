@@ -7,11 +7,11 @@
       <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>modalflag.multiDelete=true">Apply</Button>
       <div class="max-w-52 mr-2">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
       <div class="max-w-52">
         <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-          v-model="pagiantionData.status" />
+          v-model="paginationData.status" />
       </div>
     </div>
     <div class="flex">
@@ -88,12 +88,11 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter();
-const domain_id = ref(null);
 const getDomainsList = ref([]);
 const dataTableLoding = ref(false);
 const rows = ref([]);
 const permissions = store.getters.user.permissions;
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const loading = ref(false);
 const datatable = ref('')
 const bulkActionSelected = ref(null);
@@ -118,8 +117,8 @@ const handelEditClick =(data)=>{
 
 const changePage = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
-  handleGetSwatches(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+  handleGetSwatches(paginationData.value);
 
 }
 // modal 
@@ -158,7 +157,7 @@ const handleDeleteSwatches = async () => {
   try {
     const res = await SwatchesServices.deleteSwatches(swatch_id.value);
     if (res.status === 200 && res.data.success) {
-      handleGetSwatches(pagiantionData.value);
+      handleGetSwatches(paginationData.value);
       showToast('Swatch deleted successfully', 'success');
     } else if (res.status === 400) {
       showToast('Something went wrong', 'error');
@@ -199,7 +198,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  paginationData.value.domain_id = defaultDomain.id
 }
 
 onMounted(() => {
@@ -208,17 +207,17 @@ onMounted(() => {
 );
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetSwatches(pagiantionData.value);
+    handleGetSwatches(paginationData.value);
   }
 );
 watch(
-  () => pagiantionData.value.status,
+  () => paginationData.value.status,
   () => {
-    handleGetSwatches(pagiantionData.value);
+    handleGetSwatches(paginationData.value);
   }
 );
 

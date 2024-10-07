@@ -10,7 +10,7 @@
     <SingleCheck v-if="hasCheckBox" :id="`${id}textbox`" label=""
       v-model:modelValue="checked"></SingleCheck>
      
-    <input :id="`${id} ${label}`" :class="inputClass" v-model="model" ref="inputRef" :placeholder="placeholder"
+    <input :id="`${id} ${label}`" :name="`${id} ${label}`" :class="inputClass" v-model="model" ref="inputRef" :placeholder="placeholder"
       v-bind="$attrs" />
     <span class="absolute right-4 mt-2">
       <slot></slot>

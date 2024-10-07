@@ -8,7 +8,7 @@
                 @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
             <div class="max-w-52 mr-2">
                 <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-                    v-model="pagiantionData.domain_id" />
+                    v-model="paginationData.domain_id" />
             </div>
         </div>
         <div class="flex">
@@ -80,7 +80,7 @@ const loading = ref(false);
 const search = ref('');
 const datatable = ref(null);
 const permissions = store.getters.user.permissions;
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', })
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDomainsList = ref([])
 const domain_id = ref('')
@@ -185,7 +185,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
     getDomainsList.value = await getDomains(payload)
     const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-    pagiantionData.value.domain_id = defaultDomain.id
+    paginationData.value.domain_id = defaultDomain.id
     store.dispatch('setDomain', defaultDomain);
 }
 
@@ -195,17 +195,17 @@ onMounted(() => {
 );
 
 watch(
-    () => pagiantionData.value.domain_id,
+    () => paginationData.value.domain_id,
     () => {
         const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
         store.dispatch('setDomain', defaultDomain[0]);
-        handleGetGlobalMetaTag(pagiantionData.value);
+        handleGetGlobalMetaTag(paginationData.value);
     }
 );
 watch(
-    () => pagiantionData.value.status,
+    () => paginationData.value.status,
     () => {
-        handleGetGlobalMetaTag(pagiantionData.value);
+        handleGetGlobalMetaTag(paginationData.value);
     }
 );
 </script>

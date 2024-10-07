@@ -68,7 +68,7 @@ const router = useRouter();
 const loading = ref(false);
 const search = ref('');
 const datatable = ref(null);
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', })
 // const getDomainsList = ref([])
 const getLoading = ref(false);
 const editData = ref({});
@@ -137,7 +137,7 @@ const handleStatusUser = async () => {
 // const getDomainList = async (payload) => {
 //     getDomainsList.value = await getDomains(payload)
 //     const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-//     pagiantionData.value.domain_id = defaultDomain.id
+//     paginationData.value.domain_id = defaultDomain.id
 //     store.dispatch('setDomain', defaultDomain);
 // }
 
@@ -148,17 +148,17 @@ onMounted(() => {
 );
 
 watch(
-    () => pagiantionData.value.domain_id,
+    () => paginationData.value.domain_id,
     () => {
         // const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
         // store.dispatch('setDomain', defaultDomain[0]);
-        // handleGetGlobalMetaTag(pagiantionData.value);
+        // handleGetGlobalMetaTag(paginationData.value);
     }
 );
 watch(
-    () => pagiantionData.value.status,
+    () => paginationData.value.status,
     () => {
-        // handleGetGlobalMetaTag(pagiantionData.value);
+        // handleGetGlobalMetaTag(paginationData.value);
     }
 );
 </script>

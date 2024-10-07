@@ -374,22 +374,27 @@ export const designerTaxonomy = [
   { name: 'Product Category Type ', value: 'product_category_type' }
 ]
 
-// cols all tables
+export const bulkOptions = [{ text: 'Delete', value: 'delete' }]
+
+
+
+// ----------------------------------- cols all tables -------------------------------------
+
 export const materialCols = [
   { field: 'image', title: 'Image', slot: true },
   { field: 'name', title: 'Name', filter: true },
   { field: 'description', title: 'Description' },
   { field: 'slug', title: 'Slug' },
-  { field: 'count', title: 'Count' },
-  { field: 'actions', title: 'Actions' }
+  { field: 'domain.name', title: 'Domain Name' },
+  { field: 'actions', title: 'Actions' }  
 ]
 
-export const bulkOptions = [{ text: 'Delete', value: 'delete' }]
 export const sliderCols = [
   { field: 'featured_image_url', title: 'Image', slot: true },
   { field: 'title', title: 'Title', filter: true },
   { field: 'slug', title: 'Slug' },
   { field: 'status', title: 'Status' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const productSeriesCols = [
@@ -397,20 +402,30 @@ export const productSeriesCols = [
   { field: 'name', title: 'Name', filter: true },
   { field: 'description', title: 'Description' },
   { field: 'slug', title: 'Slug' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const proectCategoryCols = [
   { field: 'name', title: 'Name', filter: true },
   { field: 'description', title: 'Description' },
   { field: 'slug', title: 'Slug' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
+export const pagesCol = [
+  { field: 'page_title', title: 'Page Title', slot: true },
+  { field: 'seo_title', title: 'Seo Title', filter: true },
+  { field: 'status', title: 'Status' },
+  { field: 'domain.name', title: 'Domain Name' },
+  { field: 'actions', title: 'Actions' }
+];
 
 export const swatchCols = [
   { field: 'src', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', filter: true },
   { field: 'slug', title: 'Slug' },
   { field: 'status', title: 'Status' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -418,6 +433,7 @@ export const ContractCols = [
   { field: 'title', title: 'Contract Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'status' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -425,18 +441,21 @@ export const ContractLocationCols = [
   { field: 'contract_location', title: 'Contract Location', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const productContractCols = [
   { field: 'name', title: 'Product Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const productTypeCols = [
   { field: 'name', title: 'Product Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const PostCols = [
@@ -444,6 +463,7 @@ export const PostCols = [
   { field: 'description', title: 'Description' },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'Status', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const StoreProductCols = [
@@ -451,12 +471,14 @@ export const StoreProductCols = [
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
   { field: 'status', title: 'Status' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const tagsCols = [
   { field: 'name', title: 'Tag Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const projectsCols = [
@@ -464,18 +486,21 @@ export const projectsCols = [
   { field: 'title', title: 'Projet Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'Status' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const designerCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'Status', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const dealersCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'Status', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -484,6 +509,7 @@ export const product = [
   { field: 'title', title: 'Projet Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'Status', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -491,11 +517,13 @@ export const productCategoryTypeCols = [
   { field: 'name', title: 'Product Name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'description', title: 'Description' },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const contractTypeCols = [
   { field: 'contract_name', title: 'contract_name', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 
@@ -504,12 +532,14 @@ export const materialSlidersCols = [
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
   { field: 'status', title: 'Status', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const companyCols = [
   { field: 'featured_image_url', title: 'Thumbs', slot: true },
   { field: 'title', title: 'Title', slot: true },
   { field: 'slug', title: 'Slug', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 export const MetaTagCols = [
@@ -517,6 +547,7 @@ export const MetaTagCols = [
   { field: 'meta_title', title: 'Meta Title' },
   { field: 'meta_description', title: 'Meta Description', filter: true },
   { field: 'meta_keywords', title: 'Meta Description', filter: true },
+  { field: 'domain.name', title: 'Domain Name' },
   { field: 'actions', title: 'Actions' }
 ]
 
