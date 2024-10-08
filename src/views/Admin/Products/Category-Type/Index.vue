@@ -8,7 +8,7 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
     </div>
     <div class="flex">
@@ -74,9 +74,9 @@ const loading = ref(false);
 const search = ref('');
 const datatable = ref(null);
 const permissions = store.getters.user.permissions;
+const paginationData= ref({limit: 10, page: 1, domain_id:''})
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDomainsList = ref([])
-const domain_id = ref('')
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
@@ -124,9 +124,9 @@ const isRowHovered = (value) => {
 };
 
 const changePages = (page) => {
-  console.log("page changed", page)
-  const payload = { limit: page.pagesize, page: page.current_page }
-  getProductCategoryTypeTree(payload);
+  const {pagesize,current_page} =page;
+    paginationData.value={...paginationData.value,limit:pagesize,page:current_page}
+  getProductCategoryTypeTree(paginationData.value);
 }
 // api calls
 const getProductCategoryTypeTree = async (payload) => {
@@ -191,7 +191,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  domain_id.value = defaultDomain.id
+  // paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
@@ -201,11 +201,11 @@ onMounted(() => {
 );
 
 watch(
-  () => domain_id.value,
+  () => paginationData.value.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    getProductCategoryTypeTree({ limit: 10, page: 1, domain_id: domain_id.value });
+    getProductCategoryTypeTree(paginationData.value);
   }
 );
 </script>

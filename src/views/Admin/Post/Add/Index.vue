@@ -201,12 +201,13 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  paginationData.value.domain_id = defaultDomain.id
+  // paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
   getDomainList();
+  handleGetPost(paginationData.value);
 }
 );
 

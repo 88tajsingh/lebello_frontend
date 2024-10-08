@@ -537,12 +537,7 @@ const publicPaths = [
   '/not-found',
 ];
 
-let isRedirecting = false;
-
-
-
 router.beforeEach((to, from, next) => {
-  console.log(`Navigating to: ${to.path}`);
 
   const token = store?.getters?.token || localStorage.getItem('token');
   const allowedPaths = store.getters.user?.modules?.route || [];
@@ -553,35 +548,30 @@ router.beforeEach((to, from, next) => {
   if (publicPaths.includes(to.path)) {
     
     if (to.path === '/login' && isAuthenticatedUser) {
-      console.log('Redirecting to dashboard...');
-      return next('/dashboard'); // Redirect authenticated users away from login
+      return next('/dashboard');
     }
-    return next(); // Allow access to public paths
+    return next(); 
   }
 
   // Prevent navigating to the same route
   if (to.path === from.path) {
-    console.log('Route already exists');
     return next(false);
   }
 
   // Redirect authenticated users away from login
   if (to.name === 'login' && isAuthenticatedUser) {
-    console.log('Redirecting to dashboard...');q
     return next('/dashboard');
   }
 
   // Check for the dashboard route specifically
   if (to.path === '/dashboard' && !isAuthenticatedUser) {
-    console.log('Redirecting to login...');
-    return next('/login'); // Redirect to login if not authenticated
+    return next('/login'); 
   }
 
   // Check for routes requiring authentication
   if (to.meta.requiresAuth) {
     if (!isAuthenticatedUser) {
-      console.log("Redirecting to login...");
-      return next('/login'); // Redirect unauthenticated users to login
+      return next('/login');
     }
 
     // Check if the path is allowed
@@ -590,11 +580,11 @@ router.beforeEach((to, from, next) => {
     
     if (!isPathAllowed) {
       console.log("Redirecting to homepage due to insufficient permissions...");
-      return next('/'); // Redirect if the path is not allowed
+      return next('/'); 
     }
   }
 
-  next(); // Allow access to the route
+  next();
 });
 
 

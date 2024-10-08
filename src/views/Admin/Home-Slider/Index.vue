@@ -176,7 +176,7 @@ const getDomainList = async () => {
     const domains = await getDomains()
     getDomainsList.value = domains
     const defaultDomain = domains.find(site => site.default === 1)
-    paginationData.value.domain_id = defaultDomain.id
+    // paginationData.value.domain_id = defaultDomain.id
     store.dispatch('setDomain', defaultDomain)
   } catch (error) {
     console.error('Error fetching domains:', error)
@@ -185,7 +185,8 @@ const getDomainList = async () => {
 
 // Lifecycle hooks
 onMounted(() => {
-  getDomainList()
+  getDomainList();
+  handleGetHomeSlider(paginationData.value);
 })
 
 watch(

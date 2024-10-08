@@ -1,40 +1,37 @@
 <template>
-  <!-- <div class="ml-96"><Languages/></div> -->
   <PageHeader> Product Series</PageHeader>
-  <div class="flex  content-between justify-between   mb-2">
+  <div class="flex content-between justify-between mb-2">
     <div class="flex">
       <Select v-if="permissions.write" cusClass="h-[40px] border-box" :options="bulkOption" showfield="text"
-        valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>{bulkActionSelected?bulkPopup=true:''}">Apply</Button>
+        valueField="value" label="Bulk Options" v-model="state.bulkActionSelected" />
+      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="openBulkPopup">Apply</Button>
       <div class="w-52">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="paginationData.domain_id" />
+          v-model="state.paginationData.domain_id" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
-      <TextInput type="text" class="block bg-white  mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
-        v-model="search" />
-      <Button v-if="permissions.write"
-        @click="() => { router.push({ name: 'product-series-from' }); store.dispatch('clearEditData'); }"
-        class="px-2 py-2 m-auto whitespace-nowrap">Add Series</Button>
+      <TextInput type="text" class="block bg-white mr-2 rounded-lg h-[40px] w-full" placeholder="Search"
+        v-model="state.search" />
+      <Button v-if="permissions.write" @click="navigateToAddSeries" class="px-2 py-2 m-auto whitespace-nowrap">Add
+        Series</Button>
     </div>
   </div>
   <div class="bg-white rounded-[20px]">
-    <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover "
-      :hasCheckbox="true" :cloneHeaderInFooter="true" :stickyHeader="false" :rows="data" :columns="productSeriesCols"
-      :loading="dataTableLoding" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
-      @change="changePage">
+    <vue3-datatable class="next-prev-pagination" ref="datatable" skin="bh-table-striped bh-table-hover"
+      :hasCheckbox="true" :cloneHeaderInFooter="true" :stickyHeader="false" :rows="state.data"
+      :columns="productSeriesCols" :loading="state.dataTableLoading" :totalRows="state.totalRows" :isServerMode="true"
+      :pageSize="10" :search="state.search" @change="changePage">
       <template #image="data">
         <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Product Series Image"
           style="max-width: 50px; max-height: 50px" />
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() =>handelEditClick(data.value)"
-            id="edit svg">
+          <div @click="handleEditClick(data.value)" id="edit svg">
             <EditSvg />
           </div>
-          <div id="delete svg" @click="() => { material_id = data.value; openDeleteModal(); }">
+          <div id="delete svg" @click="openDeleteModal(data.value)">
             <DeleteSvg />
           </div>
         </div>
@@ -42,170 +39,159 @@
     </vue3-datatable>
   </div>
 
-  <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Delete Product Series'"
+  <DeleteModal v-model:isOpen="modals.deleteModalIsOpen" :modalTitle="'Delete Product Series'"
     @delete="handleDeleteProductSeries">
-    Do you want to delete ?
+    Do you want to delete?
   </DeleteModal>
 
-  <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Multiple Delete Product Series'"
+  <DeleteModal v-model:isOpen="modals.bulkPopup" :modalTitle="'Multiple Delete Product Series'"
     @delete="handleBulkActions">
-    Do you want to delete multiple product series ?
+    Do you want to delete multiple product series?
   </DeleteModal>
-  <Loader :isLoading="loading" :fullPage="true" />
+  <Loader :isLoading="state.loading" :fullPage="true" />
 </template>
 
 <script setup>
-import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue'
-import { ref, onMounted, watch } from 'vue'
-import { showToast } from '@/helper/functions'
-import PageHeader from '@/components/Admin-components/PageHeader.vue'
-import Vue3Datatable from '@bhplugin/vue3-datatable'
-import { getDomains } from '@/helper/Apis'
-import { productSeriesCols } from '@/json/data'
-import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
-import Select from '@/components/Admin-components/form-components/Select.vue'
-import Button from '@/components/Admin-components/Buttons/Button.vue'
-import ProductServices from '@/services/ProductServices'
+import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue';
+import { ref, onMounted, watch } from 'vue';
+import { showToast } from '@/helper/functions';
+import PageHeader from '@/components/Admin-components/PageHeader.vue';
+import Vue3Datatable from '@bhplugin/vue3-datatable';
+import { getDomains } from '@/helper/Apis';
+import { productSeriesCols } from '@/json/data';
+import TextInput from '@/components/Admin-components/form-components/TextInput.vue';
+import Select from '@/components/Admin-components/form-components/Select.vue';
+import Button from '@/components/Admin-components/Buttons/Button.vue';
+import ProductServices from '@/services/ProductServices';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 
 const store = useStore();
 const router = useRouter();
-const bulkActionSelected = ref(null)
-const search = ref('')
+
+// Consolidated state
+const state = ref({
+  bulkActionSelected: null,
+  search: '',
+  paginationData: { limit: 10, page: 1, domain_id: '' },
+  data: [],
+  totalRows: '',
+  loading: false,
+  dataTableLoading: false,
+});
+
+const datatable = ref(null);
+
+const modals = ref({
+  deleteModalIsOpen: false,
+  bulkPopup: false,
+});
+
 const permissions = store.getters.user.permissions;
-const bulkOption = [{ text: 'Delete', value: 'delete' }]
-const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
-const material_id = ref('')
-const dataTableLoding = ref(false)
-const bulkPopup = ref(false)
-const loading = ref(false)
-const data = ref([])
-const datatable = ref('')
-const totalRows = ref('')
-const actionsFlag = ref(null)
-const getDomainsList = ref([])
-const domain_id = ref('')
+const bulkOption = [{ text: 'Delete', value: 'delete' }];
+const getDomainsList = ref([]);
 
-const handelEditClick =(data)=>{
-  store.dispatch('setEdit', data) 
-  const id =data.domain_id
-  store.dispatch('setDomain', {id:id});
-  router.push({ name: 'product-series-from' });
-}
-
-
-const handleMouseEnter = (data) => {
-  actionsFlag.value = data.value.name
-}
-
-const handleMouseLeave = () => {
-  actionsFlag.value = null
-}
-
-const isRowHovered = (value) => {
-  return actionsFlag.value === value.name
-}
-
-const deleteModalIsOpen = ref(false);
-const openDeleteModal = () => {
-  deleteModalIsOpen.value = true;
+// Open bulk popup
+const openBulkPopup = () => {
+  if (state.value.bulkActionSelected) modals.value.bulkPopup = true;
 };
 
+// Navigate to Add Series
+const navigateToAddSeries = () => {
+  router.push({ name: 'product-series-from' });
+  store.dispatch('clearEditData');
+};
+
+// Handle Edit Click
+const handleEditClick = (data) => {
+  store.dispatch('setEdit', data);
+  store.dispatch('setDomain', { id: data.domain_id });
+  router.push({ name: 'product-series-from' });
+};
+
+// Change Page
 const changePage = (page) => {
   const { pagesize, current_page } = page;
-  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
-    handleGetProductSeries(paginationData.value);
-}
+  state.value.paginationData = { ...state.value.paginationData, limit: pagesize, page: current_page };
+  fetchProductSeries(state.value.paginationData);
+};
 
-function handleCheckboxChange(event) {
-  console.log('Checkbox state changed:', event.target.checked);
-}
-
-// get materials function
-const handleGetProductSeries = async (payload) => {
-
-  dataTableLoding.value = true;
+// Fetch Product Series
+const fetchProductSeries = async (payload) => {
+  state.value.dataTableLoading = true;
   try {
-    await ProductServices.getProductSeries(payload)
-      .then(res => {
-        if (res.status === 200 && res.data.success === true) {
-          if (res.data.data && res.data.data.length > 0) {
-            data.value = res.data.data
-            totalRows.value = res.data.total_records
-          }
-          else {
-            data.value = res.data.data
-            totalRows.value = 0;
-          }
-          dataTableLoding.value = false;
-        }
-      }).catch((res) => {
-        console.log("error", res)
-      });
-  } catch (e) {
-    console.error('Error while log in:', e);
-    dataTableLoding.value = false;
-  } finally {
-    dataTableLoding.value = false;
-  }
-}
-
-// Delete Product Series
-const handleDeleteProductSeries = async () => {
-  loading.value = true;
-  try {
-    const res = await ProductServices.deleteProductSeries({ id: material_id.value.id });
-    if (res.status === 200) {
-      showToast(res.data.message, 'success');
-      await handleGetProductSeries(paginationData.value);
-      deleteModalIsOpen.value = false;
-    } else if (res.status === 400) {
-      showToast(res.message, 'error');
+    const res = await ProductServices.getProductSeries(payload);
+    if (res.status === 200 && res.data.success) {
+      state.value.data = res.data.data || [];
+      state.value.totalRows = res.data.total_records || 0;
     }
-  } catch (e) {
-    console.error('Error while deleting material:', e);
+  } catch (error) {
+    console.error('Error fetching product series:', error);
   } finally {
-    loading.value = false;
+    state.value.dataTableLoading = false;
   }
 };
 
-// Bulk Delete 
+// Open Delete Modal
+const openDeleteModal = (data) => {
+  modals.value.deleteModalIsOpen = true;
+  state.value.material_id = data; // Assuming material_id is needed here
+};
+
+// Handle Delete Product Series
+const handleDeleteProductSeries = async () => {
+  state.value.loading = true;
+  try {
+    const res = await ProductServices.deleteProductSeries({ id: state.value.material_id.id });
+    if (res.status === 200) {
+      showToast(res.data.message, 'success');
+      await fetchProductSeries(state.value.paginationData);
+      modals.value.deleteModalIsOpen = false;
+    } else {
+      showToast(res.message, 'error');
+    }
+  } catch (error) {
+    console.error('Error deleting product series:', error);
+  } finally {
+    state.value.loading = false;
+  }
+};
+
+// Bulk Delete
 const handleBulkActions = async () => {
   const selected = datatable.value.getSelectedRows();
   const ids = selected.map(item => item.id);
-  if (!ids.length) return showToast('Please select atleast one product series to delete', 'error');
-  if (bulkActionSelected.value === 'delete') {
-    try {
-      const res = await ProductServices.BulkDeleteProductSeries({ id: ids });
-      if (res.status === 200 && res.data.success) {
-        showToast(res.data.message, 'success');
-        await handleGetProductSeries(paginationData.value);
-      }
-    } catch (e) {
-      console.error('Error while performing bulk delete:', e);
-    } 
+  if (!ids.length) return showToast('Please select at least one product series to delete', 'error');
+
+  try {
+    const res = await ProductServices.BulkDeleteProductSeries({ id: ids });
+    if (res.status === 200 && res.data.success) {
+      showToast(res.data.message, 'success');
+      await fetchProductSeries(state.value.paginationData);
+    }
+  } catch (error) {
+    console.error('Error during bulk delete:', error);
   }
 };
 
-const getDomainList = async (payload) => {
-  getDomainsList.value = await getDomains(payload)
-  const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  paginationData.value.domain_id = defaultDomain.id
-  store.dispatch('setDomain', defaultDomain);
-}
+// Fetch Domains
+const fetchDomainList = async () => {
+  getDomainsList.value = await getDomains();
+  const defaultDomain = getDomainsList.value.find(site => site.default === 1);
+  if (defaultDomain) {
+    state.value.paginationData.domain_id = defaultDomain.id;
+    store.dispatch('setDomain', defaultDomain);
+  }
+};
 
-onMounted(() => {
-  getDomainList();
-}
-);
-
+onMounted(() => { fetchDomainList(); fetchProductSeries(); });
+console.log("getDomainsList.value", state.value.paginationData.domain_id);
 watch(
-  () => paginationData.value.domain_id,
+  () => state.value.paginationData.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id);
-    store.dispatch('setDomain', defaultDomain[0]);
-    handleGetProductSeries(paginationData.value);
+    const selectedDomain = getDomainsList.value.find(site => site.id == state.value.paginationData.domain_id);
+    store.dispatch('setDomain', selectedDomain);
+    fetchProductSeries(state.value.paginationData);
   }
 );
 </script>
