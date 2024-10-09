@@ -152,7 +152,7 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 import { statusData } from '@/json/data';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 
 // store and router
 const router = useRouter();
@@ -198,7 +198,7 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
 
     loading.value = true;
-    const { slug, domains_data, featured_image_data, default_domain, featured_image_url, ...payload } = form.value;
+    const { slug, domains_data, featured_image_data,domain, default_domain, featured_image_url, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {
         delete payload.id;
     }
@@ -274,7 +274,7 @@ const fetchMaterialSliderData = async () => {
 onMounted(() => {
     if (store.getters.editData) {
         imageData.value.featured_image.images = [store.getters.editData?.featured_image_data];
-        imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_data.file_url;
+        imageData.value.featured_image.mediaName = store.getters.editData?.featured_image_data?.file_url || 'Select Featured Image';
 
     }
 });
@@ -293,5 +293,11 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
+
 </script>
 

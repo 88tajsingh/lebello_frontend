@@ -8,11 +8,11 @@
         <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
         <div class="max-w-52 mr-2">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
       <div class="max-w-52">
         <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-          v-model="pagiantionData.status" />
+          v-model="paginationData.status" />
       </div>
     </div>
     <div class="flex rounded-lg bg-transparent">
@@ -35,7 +35,6 @@
         </div>
       </template>
       <template #featured_image_url="data">
-        
         <img :src="$filePath(data.value.featured_image_data?.file_url)" alt="Material"
           style="max-width: 50px; max-height: 50px" />
       </template>
@@ -47,7 +46,7 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'home-slider-form' }); store.dispatch('setEdit', data.value); }"
+          <div @click="() => handelEditClick(data.value)"
             id="edit svg">
             <EditSvg />
           </div>
@@ -92,7 +91,7 @@ const material_id = ref('')
 const loading = ref(false)
 const dataTableLoding = ref(false)
 const permissions = store.getters.user.permissions;
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const data = ref([])
 const totalRows = ref(0)
 const datatable = ref(null)
@@ -101,12 +100,19 @@ const deleteModalIsOpen = ref(false)
 const domain_id = ref('')
 const getDomainsList = ref([])
 
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'home-slider-form' });
+}
+
 // Methods
 const openDeleteModal = () => { deleteModalIsOpen.value = true }
 
 const changePage = async (page) => {
-  pagiantionData.value = { ...pagiantionData.value, limit: page.pagesize, page: page.current_page }
-  await handleGetHomeSlider(pagiantionData.value)
+  paginationData.value = { ...paginationData.value, limit: page.pagesize, page: page.current_page }
+  await handleGetHomeSlider(paginationData.value)
 }
 
 // get current page
@@ -153,7 +159,7 @@ const handleBulkActions = async () => {
         showToast(data.message, 'success')
         datatable.value.clearSelectedRows()
         // console.log(datatable.value)
-        await handleGetHomeSlider(pagiantionData.value)
+        await handleGetHomeSlider(paginationData.value)
       }
     } catch (error) {
       console.error('Error during bulk delete:', error)
@@ -170,7 +176,7 @@ const getDomainList = async () => {
     const domains = await getDomains()
     getDomainsList.value = domains
     const defaultDomain = domains.find(site => site.default === 1)
-    pagiantionData.value.domain_id = defaultDomain.id
+    // paginationData.value.domain_id = defaultDomain.id
     store.dispatch('setDomain', defaultDomain)
   } catch (error) {
     console.error('Error fetching domains:', error)
@@ -179,21 +185,22 @@ const getDomainList = async () => {
 
 // Lifecycle hooks
 onMounted(() => {
-  getDomainList()
+  getDomainList();
+  handleGetHomeSlider(paginationData.value);
 })
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
     const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetHomeSlider(pagiantionData.value);
+    handleGetHomeSlider(paginationData.value);
   }
 );
 watch(
-  () => pagiantionData.value.status,
+  () => paginationData.value.status,
   () => {
-    handleGetHomeSlider(pagiantionData.value);
+    handleGetHomeSlider(paginationData.value);
   }
 );
 </script>

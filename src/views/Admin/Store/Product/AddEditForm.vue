@@ -539,7 +539,7 @@ import StoreServices from '@/services/StoreServices';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue';
 import _ from 'lodash';
 import { computed, onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter,onBeforeRouteLeave } from "vue-router";
 import { useStore } from 'vuex';
 
 //Store and router
@@ -679,7 +679,7 @@ const handleSubmit = async () => {
     loading.value = true;
     try {
         // Prepare payload by excluding unwanted fields
-        const { deleted_at, slug, domains_data, default_domain, created_at, featured_image_data, downlaodable_urls, gallery_data, slider_data, downloadable_urls, updated_at, ...payload } = form.value;
+        const { deleted_at,domain, slug, domains_data, default_domain, created_at, featured_image_data, downlaodable_urls, gallery_data, slider_data, downloadable_urls, updated_at, ...payload } = form.value;
         if (!form.value?.domains_data?.includes(form.value.domain_id)) {
             delete payload.id;
         }
@@ -827,4 +827,10 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
+
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

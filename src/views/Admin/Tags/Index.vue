@@ -8,7 +8,7 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
     </div>
     <div class="flex">
@@ -34,7 +34,7 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { store.dispatch('setEdit', data.value); router.push({ name: 'Tags-form' }); }"
+          <div @click="() => handelEditClick(data.value)"
             id="edit svg">
             <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
             <EditSvg />
@@ -74,17 +74,22 @@ const search = ref('');
 const datatable = ref(null);
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '',})
+const paginationData = ref({ limit: 10, page: 1, domain_id: '',})
 const getDomainsList = ref([])
 const getLoading = ref(false);
 const editData = ref({});
 const rows = ref([]);
 const actionsFlag = ref(null);
 const bulkPopup = ref(null);
-const modalIsOpen = ref(false);
-const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
 const totalRows = ref('')
+
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'Tags-form' });
+}
 
 const openDeleteModal = (data) => {
   deleteModalIsOpen.value = true;
@@ -105,8 +110,8 @@ const handleMouseLeave = () => {
 
 const changePages = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
- handleGetTags(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+ handleGetTags(paginationData.value);
 }
 // api calls
 const handleGetTags = async (payload) => {
@@ -129,7 +134,7 @@ const handleDeleteProductType = async () => {
   try {
     const res = await CommonServices.deleteTags({ id: editData.value });
     if (res.status === 200 && res.data.success) {
-     await handleGetTags(pagiantionData.value)
+     await handleGetTags(paginationData.value)
       showToast(res.data.message, 'success');
       deleteModalIsOpen.value = false;
       editData.value = null;
@@ -154,7 +159,7 @@ const handleBulkActions = async () => {
     try {
       const res = await CommonServices.BulkDeleteTags({ id: ids });
       if (res.status === 200 && res.data.success) {
-        await handleGetTags(pagiantionData.value);
+        await handleGetTags(paginationData.value);
         showToast(res.data.message, 'success');
       }
       else if (res.status === 400) {
@@ -172,7 +177,7 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  paginationData.value.domain_id = defaultDomain.id
   // store.dispatch('setDomain', defaultDomain);
 }
 
@@ -182,12 +187,12 @@ onMounted(() => {
 );
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
 
-    handleGetTags(pagiantionData.value);
+    handleGetTags(paginationData.value);
   }
 );
 </script>

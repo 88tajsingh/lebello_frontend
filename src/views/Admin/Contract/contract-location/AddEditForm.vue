@@ -75,7 +75,7 @@ import { contractLocationTreeList } from '@/helper/Apis'
 import ContractServices from '@/services/ContractServices'
 import { showToast, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
 
 //store and router 
@@ -112,7 +112,7 @@ const handleSubmit = async () => {
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
 
   loading.value = true;
-  const { featured_image_url, slug, domains_data, default_domain, default_master, ...payload } = form.value;
+  const { featured_image_url, slug, domains_data,dimain,default_domain, default_master, ...payload } = form.value;
 
   if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
@@ -219,6 +219,11 @@ watch(() => form.value.parent_contract_location, (newValue) => {
 // Computed Properties
 const buttonText = computed(() => {
   return (form.value.id ? 'Update' : 'Submit');
+});
+
+onBeforeRouteLeave((to, from, next) => {
+  store.dispatch('clearEditData');
+    next();
 });
 
 </script>

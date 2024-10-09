@@ -8,7 +8,7 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
     </div>
     <div class="flex">
@@ -34,7 +34,7 @@
       </template>
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'Post-category-form' }); store.dispatch('setEdit', data.value); }"
+          <div @click="() => handelEditClick(data.value)"
             id="edit svg">
             <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
             <EditSvg />
@@ -73,7 +73,7 @@ const bulkActionSelected = ref(null)
 const loading = ref(false);
 const search = ref('');
 const datatable = ref(null);
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDomainsList = ref([])
@@ -87,6 +87,13 @@ const modalIsOpen = ref(false);
 const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
 const totalRows = ref('')
+
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'Post-category-form' });
+}
 
 const openDeleteModal = (data) => {
   deleteModalIsOpen.value = true;
@@ -107,8 +114,8 @@ const handleMouseLeave = () => {
 
 const changePages = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
- handleGetPostCategory(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+ handleGetPostCategory(paginationData.value);
 }
 // api calls
 const handleGetPostCategory = async (payload) => {
@@ -131,7 +138,7 @@ const handleDeletePostCategory = async () => {
   try {
     const res = await PostServices.deletePostCategory({ id: editData.value });
     if (res.status === 200 && res.data.success) {
-      await handleGetPostCategory(pagiantionData.value);
+      await handleGetPostCategory(paginationData.value);
       showToast(res.data.message, 'success');
       deleteModalIsOpen.value = false;
       editData.value = null;
@@ -157,7 +164,7 @@ const handleBulkActions = async () => {
       const res = await PostServices.BulkDeletePostCategory({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
-        await handleGetPostCategory(pagiantionData.value);
+        await handleGetPostCategory(paginationData.value);
       }
       else if (res.status === 400) {
         showToast(res.data.message, 'error');
@@ -173,21 +180,22 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  // paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
   getDomainList();
+  handleGetPostCategory(paginationData.value);
 }
 );
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
     const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetPostCategory(pagiantionData.value);
+    handleGetPostCategory(paginationData.value);
   }
 );
 </script>

@@ -395,7 +395,7 @@ import { contractLocationTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { trueFalse, withBgWithoutBg , capsNOCaps, statusData } from '@/json/data';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 
 // store and router
 const router = useRouter();
@@ -448,7 +448,7 @@ const handleSubmit = async () => {
     if (!validateForm()) return;
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     loading.value = true;
-    const { featured_image_data, slug, domains_data, contract_logo_data, contract_slider_image_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
+    const { featured_image_data, slug, domains_data,domain,contract_logo_data, contract_slider_image_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
     try {
@@ -564,4 +564,9 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
     return (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

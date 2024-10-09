@@ -74,7 +74,7 @@ import ProductServices from '@/services/ProductServices'
 import { clearError, showToast, getGlobalUpdateData, } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
 import _ from 'lodash'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { useStore } from 'vuex'
 
 // Store and Router
@@ -116,7 +116,7 @@ const handleFormSubmit = async () => {
   loading.value = true
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
   try {
-    const { deleted_at, created_at, domains_data, default_domain, default_master, updated_at, ...payload } = form.value
+    const { deleted_at,domain, created_at, domains_data, default_domain, default_master, updated_at, ...payload } = form.value
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
 
     const action = store.getters.editData ? ProductServices.editProductType : ProductServices.addProductType
@@ -213,4 +213,9 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
   return Object.values(checkedFields.value).some(Boolean) ? 'Global Update' : (form.value.id ? 'Update' : 'Submit')
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

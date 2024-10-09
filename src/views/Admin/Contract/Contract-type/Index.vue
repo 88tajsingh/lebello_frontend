@@ -9,7 +9,7 @@
         @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
       <div class="w-52">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-          v-model="pagiantionData.domain_id" />
+          v-model="paginationData.domain_id" />
       </div>
     </div>
     <div class="flex">
@@ -28,7 +28,7 @@
 
       <template v-if="permissions.write" #actions="data">
         <div class="flex gap-3">
-          <div @click="() => { router.push({ name: 'Contract-type-form' }); store.dispatch('setEdit', data.value); }"
+          <div @click="() => handelEditClick(data.value)"
             id="edit svg">
             <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
             <EditSvg />
@@ -69,7 +69,7 @@ const loading = ref(false);
 const datatable = ref('')
 const bulkPopup = ref(false);
 const search = ref('');
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: ''})
+const paginationData = ref({ limit: 10, page: 1, domain_id: ''})
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'Delete' }];
 const getDomainsList = ref([])
@@ -88,10 +88,17 @@ const openDeleteModal = (data) => {
   console.log(data.id)
 };
 
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'Contract-type-form' });
+}
+
 const changeServer = (page) => {
   const { pagesize, current_page } = page;
-  pagiantionData.value = { ...pagiantionData.value, limit: pagesize, page: current_page }
- handleGetContractType(pagiantionData.value);
+  paginationData.value = { ...paginationData.value, limit: pagesize, page: current_page }
+ handleGetContractType(paginationData.value);
 }
 
 // api calls
@@ -139,7 +146,7 @@ const handleBulkActions = async () => {
     const res = await ContractServices.BulkDeleteContractType({ id: ids });
     if (res.status === 200 && res.data.success) {
       showToast('Bulk delete successfully', 'success');
-      await handleGetContractType(pagiantionData.value);
+      await handleGetContractType(paginationData.value);
     }
   } catch (e) {
     console.error('Error during bulk delete:', e);
@@ -151,21 +158,22 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
   getDomainsList.value = await getDomains(payload)
   const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-  pagiantionData.value.domain_id = defaultDomain.id
+  // paginationData.value.domain_id = defaultDomain.id
   store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
   getDomainList();
+  handleGetContractType(paginationData.value);
 }
 );
 
 watch(
-  () => pagiantionData.value.domain_id,
+  () => paginationData.value.domain_id,
   () => {
-    const defaultDomain = getDomainsList.value.filter(site => site.id == pagiantionData.value.domain_id);
+    const defaultDomain = getDomainsList.value.filter(site => site.id == paginationData.value.domain_id);
     store.dispatch('setDomain', defaultDomain[0]);
-    handleGetContractType(pagiantionData.value);
+    handleGetContractType(paginationData.value);
   }
 );
 </script>

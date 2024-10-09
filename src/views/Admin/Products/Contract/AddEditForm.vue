@@ -71,7 +71,7 @@ import { getProductContractTree } from '@/helper/Apis';
 import ProductServices from '@/services/ProductServices';
 import { showToast, getGlobalUpdateData } from '@/helper/functions';
 import { onMounted, ref, watch, computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
 
 // Store and Router
@@ -110,7 +110,7 @@ const handleSubmit = async () => {
 
     loading.value = true;
     try {
-      const { deleted_at, created_at, slug, domains_data, default_domain, default_master, updated_at, ...payload } = form.value;
+      const { deleted_at,domain, created_at, slug, domains_data, default_domain, default_master, updated_at, ...payload } = form.value;
       if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
       const action = store.getters.editData ? ProductServices.editProductContract : ProductServices.addProductContract;
@@ -201,6 +201,11 @@ watch(() => form.value.domain_id, (newDomainId) => {
 // Computed Properties
 const buttonText = computed(() => {
   return (form.value.id ? 'Update' : 'Submit');
+});
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
 });
 </script>
 

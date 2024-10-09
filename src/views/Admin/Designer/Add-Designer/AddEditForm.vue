@@ -165,7 +165,7 @@ import DatePicker from '@/components/Admin-components/form-components/DatePicker
 import DesignerServices from '@/services/DesignerServices'
 import { PublishOptions, statusData } from '@/json/data'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import CommonServices from '@/services/CommonServices'
 import DealersServices from '@/services/DealersServices'
 
@@ -226,7 +226,7 @@ const handleSubmit = async () => {
 
   loading.value = true
   const {
-    featured_image_url,slug,domains_data,featured_image_data,product_image_data,product_category_types_data,
+    featured_image_url,domain,slug,domains_data,featured_image_data,product_image_data,product_category_types_data,
     product_types_data,default_domain,tags_data,product_image_url,...payload} = form.value
   if (!form.value?.domains_data?.includes(form.value.domain_id)) {
     delete payload.id
@@ -354,6 +354,11 @@ watch(
 const buttonText = computed(() => {
   return form.value.id ? 'Update' : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>
 
 <style scoped></style>

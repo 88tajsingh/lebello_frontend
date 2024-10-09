@@ -44,7 +44,7 @@ import { showToast } from '@/helper/functions'
 import GlobalMetaTags from '@/services/GlobalMetaTagServices';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 
 // Store and Router
 const store = useStore()
@@ -85,6 +85,7 @@ const handleSubmit = async () => {
             deleted_at,
             created_at,
             updated_at,
+            domain,
             ...payload
         } = form.value
         if (!form.value?.domains_data?.includes(form.value.domain_id)) {
@@ -138,4 +139,9 @@ watch(() => form.value.domain_id, (newDomainId) => {
 const buttonText = computed(() => {
     return form.value.id ? 'Update' : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

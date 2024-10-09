@@ -124,7 +124,7 @@
 <script setup>
 import _ from 'lodash'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { onMounted, ref, watch, computed } from 'vue'
 import { getStoreCategoryTree } from '@/helper/Apis'
 import StoreServices from '@/services/StoreServices'
@@ -164,7 +164,7 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     loading.value = true
     try {
-      const { deleted_at, created_at, slug, domains_data, default_domain, updated_at, ...payload } =
+      const { deleted_at,domain, created_at, slug, domains_data, default_domain, updated_at, ...payload } =
         form.value
       if (!form.value?.domains_data?.includes(form.value.domain_id)) {
         delete payload.id
@@ -281,4 +281,10 @@ const buttonText = computed(() => {
     ? 'Update'
     : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
+
 </script>

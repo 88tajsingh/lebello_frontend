@@ -47,6 +47,11 @@ export default new Vuex.Store({
       localStorage.setItem('domain', encryptData(domain));
       state.domain = domain;
     },
+    clearDomain(state) {
+      localStorage.removeItem('domain');
+      state.domain = null;
+    },
+
     setEdit(state, data) {
       localStorage.setItem('edit', encryptData(data)); 
       state.edit = data;
@@ -79,6 +84,9 @@ export default new Vuex.Store({
     },
     setEdit({ commit }, data) {
       commit('setEdit', data);
+    },
+    clearDomain({ commit }) {
+      commit('clearDomain');
     },
     clearEditData({ commit }) {
       commit('clearEdit');

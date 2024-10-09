@@ -87,7 +87,7 @@
 <script setup>
 import _ from 'lodash'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { ref, onMounted, watch, computed } from 'vue'
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { PublishOptions, statusData } from '@/json/data'
@@ -244,5 +244,11 @@ watch(
 const buttonText = computed(() => {
   return form.value.id ? 'Update' : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
+
 </script>
 <style scoped></style>

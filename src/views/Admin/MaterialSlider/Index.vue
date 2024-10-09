@@ -7,11 +7,11 @@
                 <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="() => { bulkActionSelected ? bulkPopup = true : '' }">Apply</Button>
                 <div class="max-w-52">
                 <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
-                    v-model="pagiantionData.domain_id" />
+                    v-model="paginationData.domain_id" />
             </div>
             <div class="max-w-52">
                 <Select :options="statusData" showfield="name" class="w-full" valueField="value" label="All Records"
-                    v-model="pagiantionData.status" />
+                    v-model="paginationData.status" />
             </div>
         </div>
         <div class="flex rounded-lg bg-transparent">
@@ -40,7 +40,7 @@
             </template>
             <template v-if="permissions.write" #actions="data">
                 <div class="flex gap-3">
-                    <div @click="() => { router.push({ name: 'material-slider-form'}); store.dispatch('setEdit', data.value) }"
+                    <div @click="() =>handelEditClick(data.value)"
                         id="edit svg">
                         <EditSvg />
                     </div>
@@ -90,7 +90,7 @@ const dataTableLoding = ref(false)
 const bulkActionSelected = ref(null)
 const permissions = store.getters.user.permissions;
 const bulkOption = [{ text: 'Delete', value: 'delete' }]
-const pagiantionData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
+const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const data = ref([])
 const datatable = ref('')
 const totalRows = ref('')
@@ -98,12 +98,20 @@ const getDomainsList = ref([])
 const domain_id = ref('')
 const bulkPopup = ref(false);
 const deleteModalIsOpen = ref(false);
+
+const handelEditClick =(data)=>{
+  store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
+  router.push({ name: 'material-slider-form'});
+}
+
 const openDeleteModal = () => {
     deleteModalIsOpen.value = true;
 };
 const changePage = (page) => {
-    pagiantionData.value = {...pagiantionData.value, limit: page.pagesize, page: page.current_page }
-    handleGetMaterialSlider(pagiantionData.value    );
+    paginationData.value = {...paginationData.value, limit: page.pagesize, page: page.current_page }
+    handleGetMaterialSlider(paginationData.value    );
 }
 
 // get materials function
@@ -142,7 +150,7 @@ const handleDeleteMaterialSlider = async () => {
         const res = await MaterialSliderServices.deleteMaterialSlider({ id: company_id.value.id });
         if (res.status === 200) {
             showToast(res.data.message, 'success');
-            await handleGetMaterialSlider(pagiantionData.value);
+            await handleGetMaterialSlider(paginationData.value);
             deleteModalIsOpen.value = false;
         } else if (res.status === 400) {
             showToast(res.message, 'error');
@@ -165,7 +173,7 @@ const handleBulkActions = async () => {
             const res = await MaterialSliderServices.bulkDeleteMaterialSlider({ id: ids });
             if (res.status === 200 && res.data.success) {
                 showToast(res.data.message, 'success');
-                await handleGetMaterialSlider(pagiantionData.value);
+                await handleGetMaterialSlider(paginationData.value);
             }
         } catch (e) {
             console.error('Error while performing bulk delete:', e);
@@ -178,28 +186,29 @@ const handleBulkActions = async () => {
 const getDomainList = async (payload) => {
     getDomainsList.value = await getDomains(payload)
     const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-    pagiantionData.value.domain_id = defaultDomain.id
+    // paginationData.value.domain_id = defaultDomain.id
     store.dispatch('setDomain', defaultDomain);
 }
 
 onMounted(() => {
     getDomainList();
+    handleGetMaterialSlider(paginationData.value);
 }
 );
 
 watch(
-    () => pagiantionData.value.domain_id,
+    () => paginationData.value.domain_id,
     () => {
         const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
         store.dispatch('setDomain', defaultDomain[0]);
-        handleGetMaterialSlider(pagiantionData.value);
+        handleGetMaterialSlider(paginationData.value);
     }
 );
 
 watch(
-    () => pagiantionData.value.status,
+    () => paginationData.value.status,
     () => {
-        handleGetMaterialSlider(pagiantionData.value);
+        handleGetMaterialSlider(paginationData.value);
     }
 );
 </script>

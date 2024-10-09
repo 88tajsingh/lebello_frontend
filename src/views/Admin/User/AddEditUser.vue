@@ -26,7 +26,7 @@
                 </div>
 
                 <div class="flex flex-col w-full">
-                    <TextInput id="comPassword" type="text" class="block w-full mr-2 h-[40px]"
+                    <TextInput id="comPassword" type="password" class="block w-full mr-2 h-[40px]"
                         v-model="form.password_confirmation" placeholder="Confirm Password" label="Confirm Password
              " :errMessage="errors?.password_confirmation"
                         @update:modelValue="$clearError(errors, 'password_confirmation')" />
@@ -51,7 +51,7 @@ import { showToast } from '@/helper/functions'
 import UserServices from '@/services/UserServices';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import CommonServices from '@/services/CommonServices'
 
 // Store and Router
@@ -155,4 +155,9 @@ onMounted(() => {
 const buttonText = computed(() => {
     return form.value.id ? 'Update' : 'Submit'
 })
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
 </script>

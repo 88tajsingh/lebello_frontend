@@ -99,9 +99,8 @@ import ContractServices from '@/services/ContractServices'
 import _ from 'lodash';
 import { showToast, getGlobalUpdateData } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
-import Button from '@/components/Admin-components/Buttons/Button.vue';
 
 // Reactive state
 const store = useStore();
@@ -257,4 +256,10 @@ watch(() => form.value.parent_contract_type, (newValue) => {
 const buttonText = computed(() => {
   return (form.value.id ? 'Update' : 'Submit');
 });
+
+onBeforeRouteLeave((to, from, next) => {
+    store.dispatch('clearEditData');
+    next();
+});
+
 </script>
