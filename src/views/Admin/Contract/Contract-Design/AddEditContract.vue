@@ -1,7 +1,5 @@
 <template>
-    
     <DefaultCard :cardTitle="form.id ? `Edit Contract` : `Add New Contract`">
-        {{form}}
         <!-- domain select delete master delete  -->
         <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ContractServices.deleteNewContract"
             masterKey="master_contract_design_id" :masterDeleteService="ContractServices.deleteMasterContractDesign"
