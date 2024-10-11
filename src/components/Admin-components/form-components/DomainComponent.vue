@@ -1,12 +1,13 @@
 <template>
   <div class="flex ml-auto mt-2 gap-2 justify-end">
+    <SingleCheck v-if="store.getters.editData?.id && selectedDomain?.default" label="Override All Domains" v-model="check" ></SingleCheck>
     <div class="w-52">
       <Select 
         :options="DropData" 
         showfield="name" 
         class="w-full" 
         valueField="id" 
-        label="All Domain"
+        label="Domain List"
         v-model="domain_id" 
       />
     </div>
@@ -63,8 +64,9 @@ const selectedDomain = ref(null);
 const deleteFlag = ref(false);
 const deleteMasterFlag = ref(false);
 const index = ref(null);
+const check = ref(null);
 const formData = ref(store.getters.editData);
-
+const unCheckDomains = ref([]);
 const isDefaultDomain = (id) => formData.value?.default_domain?.[0] === id;
 
 const getStrokeColor = (item) => {
@@ -134,6 +136,14 @@ const removeItem = (indexValue) => {
 };
 
 const emitItemClick = (item) => {
+  console.log(item);
+  if(item.default === 1) {
+  const filteredIds = DropData.value.filter(domain => domain.id !== item.id).map(domain => domain.id);
+  const resultArray = filteredIds.filter(id => !formData.value.domains_data.includes(id));
+  unCheckDomains.value = resultArray;
+  emit('customChange',resultArray )
+  }
+  else
   emit('customChange', item.id);
   selectedDomain.value = item;
 };
@@ -160,7 +170,8 @@ const handleGetDomains = async () => {
       DropData.value = res.data.data;
       selectedDomain.value = store.getters.getDomain || DropData.value.find(site => site.default === 1) || null;
       domain_id.value = selectedDomain.value?.id || null;
-      emit('customChange', domain_id.value);
+      if(selectedDomain.value.default === 1) emit('customChange', DropData.value.filter(domain => domain.id !== selectedDomain.value.id).map(domain => domain.id))
+      else emit('customChange', domain_id.value);
       mapIdsToDomains();
     }
   } catch (error) {
@@ -174,8 +185,16 @@ watch(
   { immediate: true }
 );
 
+watch(() => check.value, (check) => {
+  if (check) {
+    emit('customChange', DropData.value.filter(domain => domain.id !== selectedDomain.value.id).map(domain => domain.id));
+  } else {
+    emit('customChange', unCheckDomains.value);
+  }
+});
+
 watch(domain_id, handleAddTabs);
-watch(domainsArray, emitArray, { immediate: true });
+// watch(domainsArray, emitArray, { immediate: true });
 watch(() => store.getters?.editData?.id, (newValue) => {
   if (newValue) formData.value = store.getters.editData;
 }, { immediate: true });

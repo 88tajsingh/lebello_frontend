@@ -153,7 +153,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">
                                   
-                                    <SingleCheck v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></SingleCheck>
+                                    <singleCheckBox v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></singleCheckBox>
                                     <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true"
                                         valueField="id" showField="name" :data="MaterialTreeListData"
                                         @checked-items="handleCheckedItems" />

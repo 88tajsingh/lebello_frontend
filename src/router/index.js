@@ -538,15 +538,14 @@ const publicPaths = [
 ];
 
 router.beforeEach((to, from, next) => {
-
   const token = store?.getters?.token || localStorage.getItem('token');
   const allowedPaths = store.getters.user?.modules?.route || [];
   const isAuthenticatedUser = isAuthenticated(token);
-
+  console.log(`Navigating to: ${to.path}`);
+  console.log("token", token);
 
   // Check for public paths
   if (publicPaths.includes(to.path)) {
-    
     if (to.path === '/login' && isAuthenticatedUser) {
       return next('/dashboard');
     }
@@ -559,7 +558,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // Redirect authenticated users away from login
-  if (to.name === 'login' && isAuthenticatedUser) {
+  if (to.name === '/login' && isAuthenticatedUser) {
     return next('/dashboard');
   }
 

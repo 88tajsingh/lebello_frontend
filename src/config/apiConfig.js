@@ -71,6 +71,7 @@ const ApiConfig = {
   masterContractDesignSlugUpdate: '/master-contract-design-slug-update',
   globalContractDesignUpdate: '/global-contract-design-update',
   deleteMasterContractDesign: '/delete-master-contract-design',
+  getProductFeature: '/get-product-feature-list',
 
   // Contract Type Tree List
   getContract: '/get-contract-type',
