@@ -1,7 +1,7 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Company` : `Add New Company`">
-        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="CompanyServices.deleteCompany"
-            masterKey="master_company_id" :masterDeleteService="CompanyServices.masterCompanySlugUpdate"
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="CompanyServices.deleteCompany"
+            masterKey="master_company_id" :masterDeleteService="CompanyServices.masterDeleteCompany"
             routeTo="company" />
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm :form="form" @update-slug="() => fetchMaterialSliderData()"
@@ -196,7 +196,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
     const { slug, domains_data, featured_image_data,domain, default_domain, featured_image_url, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) {

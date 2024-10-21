@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Meta Tag` : `Add New Meta Tag`">
-        <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="GlobalMetaTags.deleteMetaTags"
+        <DomainComponent @customChange="(id) => (form.domain_id = id)" @domainArray="(array) => form.domain_all = array" :deleteService="GlobalMetaTags.deleteMetaTags"
             routeTo="global-seo" />
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="p-6.5 grid grid-cols-2 gap-6">
@@ -76,6 +76,7 @@ const validateForm = () => {
  */
 const handleSubmit = async () => {
     if (!validateForm()) return
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true
     try {
         const action = store.getters.editData

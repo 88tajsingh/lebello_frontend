@@ -3,33 +3,63 @@ import InputError from 'src/components/Admin-components/InputError.vue';
 import InputLabel from '@/Components/form-components/InputLabel.vue';
 import PrimaryButton from 'src/components/Admin-components/PrimaryButton.vue';
 import TextInput from 'src/components/Admin-components/TextInput.vue';
-import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
 
-const form = useForm({
+// Manage the form state manually
+const form = ref({
     current_password: '',
     password: '',
     password_confirmation: '',
+    errors: {},
+    processing: false,
+    recentlySuccessful: false,
 });
 
-const updatePassword = () => {
-    form.put(route('password.update'), {
-        preserveScroll: true,
-        onSuccess: () => form.reset(),
-        onError: () => {
-            if (form.errors.password) {
-                form.reset('password', 'password_confirmation');
+const updatePassword = async () => {
+    form.value.processing = true;
+
+    try {
+        const response = await fetch(route('password.update'), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include any necessary authentication headers
+            },
+            body: JSON.stringify({
+                current_password: form.value.current_password,
+                password: form.value.password,
+                password_confirmation: form.value.password_confirmation,
+            }),
+        });
+
+        if (response.ok) {
+            form.value.recentlySuccessful = true;
+            // Reset the form
+            form.value.current_password = '';
+            form.value.password = '';
+            form.value.password_confirmation = '';
+            form.value.errors = {};
+        } else {
+            const errorData = await response.json();
+            form.value.errors = errorData.errors || {};
+            // Focus on the appropriate input field
+            if (form.value.errors.password) {
                 passwordInput.value.focus();
             }
-            if (form.errors.current_password) {
-                form.reset('current_password');
+            if (form.value.errors.current_password) {
                 currentPasswordInput.value.focus();
             }
-        },
-    });
+        }
+    } catch (error) {
+        console.error('Error updating password:', error);
+        // Handle unexpected errors
+        form.value.errors.general = 'An unexpected error occurred.';
+    } finally {
+        form.value.processing = false; // Reset processing state
+    }
 };
 </script>
 
@@ -37,7 +67,6 @@ const updatePassword = () => {
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">Update Password</h2>
-
             <p class="mt-1 text-sm text-gray-600">
                 Ensure your account is using a long, random password to stay secure.
             </p>

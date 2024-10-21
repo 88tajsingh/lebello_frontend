@@ -1,6 +1,6 @@
-<template>
+<template>{{ form }}
   <DefaultCard :cardTitle="form.id ? `Edit Tags` : `Add Tags`">
-    <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="CommonServices.deleteTags"
+    <DomainComponent @customChange="(id) => (form.domain_id = id)" @domainArray="(array) => form.domain_all = array" :deleteService="CommonServices.deleteTags"
       masterKey="master_tag_id" :masterDeleteService="CommonServices.masterSlugDelete" routeTo="tags">
     </DomainComponent>
     <template v-if="form.id" v-slot:header>
@@ -104,6 +104,7 @@ const handleFormSubmit = async () => {
   const hasCheckedFields = Object.values(checkedFields.value).some(value => value)
 
   loading.value = true
+  !form.value.domain_all && delete form.value.domain_all
   const { deleted_at,domain, created_at, updated_at, domains_data, default_domain, default_master, featured_image_url, ...payload } =
     form.value
   if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id

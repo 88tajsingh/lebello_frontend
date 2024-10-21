@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Store Product` : `Add New Store Product`">
-        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="StoreServices.deleteStoreProduct"
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="StoreServices.deleteStoreProduct"
             masterKey="master_store_product_id" :masterDeleteService="StoreServices.masterDeleteStoreProduct"
             routeTo="store-product" />
         <template v-if="form.id" v-slot:header>
@@ -639,7 +639,6 @@ const handleCheckboxChange = (materialId, event) => {
     } else {
         selectedMaterialIds.value = selectedMaterialIds.value.filter(id => id !== materialId);
     }
-    console.log('Selected Materials:', selectedMaterialIds.value);
 };
 
 // Function to remove a form item at a specific index
@@ -676,6 +675,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
     try {
         // Prepare payload by excluding unwanted fields

@@ -1,6 +1,6 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Contract Location` : `Add Contract Location`">
-    <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ContractServices.deleteContractLocation"
+    <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="ContractServices.deleteContractLocation"
       masterKey="master_contract_location_id" :masterDeleteService="ContractServices.deleteMasterContractLocation"
       routeTo="contract-location"></DomainComponent>
 
@@ -110,7 +110,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
   if (!validateForm()) return;
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean);
-
+  !form.value.domain_all && delete form.value.domain_all
   loading.value = true;
   const { featured_image_url, slug, domains_data,dimain,default_domain, default_master, ...payload } = form.value;
 

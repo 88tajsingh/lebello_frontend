@@ -1,22 +1,22 @@
 <template>
     <NavBar :absolute="false"></NavBar>
-    <div class="mt-5 flex px-10 ">
+    <div class="mt-5 flex lg:px-10 ">
         <div class="">
-            <div v-for="(company, index) in data.companies" :key="index" class="company m-10 p-4 bg-paritGreen  mr-5">
+            <div v-for="(company, index) in data.companies" :key="index" class="company m-5 lg:m-10 p-4 bg-paritGreen  ">
                 <div class="mb-10">
-                    <p><span class="bg-white p-2 font-graphik text-[24px] mb-2">{{ company.title }}</span></p>
-                    <p class="mt-3"><span class="bg-white p-2  font-graphik text-[24px] ">{{ company.subtitle }}</span>
+                    <p class="pb-3"><span class="bg-white p-2 font-graphik text-[18px] md:text-[24px] ">{{ company.title }}</span></p>
+                    <p class="md:mt-3"><span class="bg-white p-2  font-graphik text-[14px] md:text-[24px] ">{{ company.subtitle }}</span>
                     </p>
                 </div>
-                <div class="flex justify-between pt-10">
-                    <p class="bg-white pl-4 pr-10  py-5">{{ company.description }}</p>
-                    <img class="ml-10" :src="company.imageUrl" :alt="company.title" width="138" height="93">
+                <div class="md:flex justify-between pt-10">
+                    <p class="bg-white px-2 :md:pl-4 md:pr-10 py-5">{{ company.description }}</p>
+                    <img class=" lg:pt-0 md:ml-10" :src="company.imageUrl" :alt="company.title" width="138" height="93">
                 </div>
             </div>
         </div>
-        <div class="mr-10 p-3 pl-5 ">
+        <div class="hidden lg:block mr-10 p-3 pl-5 ">
             <ul>
-                <p class="  pb-6 pt-10 text-blue hover:text-paritGreen uppercase text-[14px] font-graphikMedium">company
+                <p class="pb-6 pt-10 text-blue hover:text-paritGreen uppercase text-[14px] font-graphikMedium">company
                 </p>
                 <li v-for="(item, ubIndex) in data.list" :key="ubIndex"
                     class="text-[13px] w-[150px] border-b hover:text-green text-blue cursor-pointer border-[rgba(122,120,120,0.37)]">

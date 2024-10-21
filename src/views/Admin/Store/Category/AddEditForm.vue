@@ -1,6 +1,6 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Store Category ` : `Add Store Category`">
-    <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="StoreServices.deleteStoreCategory"
+    <DomainComponent @customChange="(id) => (form.domain_id = id)" @domainArray="(array) => form.domain_all = array" :deleteService="StoreServices.deleteStoreCategory"
       masterKey="master_store_category_id" :masterDeleteService="StoreServices.deleteMasterProductCategory"
       routeTo="store-category" />
 
@@ -162,6 +162,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
   if (validateForm()) {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true
     try {
       const { deleted_at,domain, created_at, slug, domains_data, default_domain, updated_at, ...payload } =

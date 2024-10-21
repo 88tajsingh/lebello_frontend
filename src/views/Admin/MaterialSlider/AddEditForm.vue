@@ -1,7 +1,7 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Material Slider` : `Add Material Slider`">
     <DomainComponent @customChange="(id) => (form.domain_id = id)"
-      :deleteService="MaterialSliderServices.deleteMaterialSlider" masterKey="master_material_slider_id"
+      :deleteService="MaterialSliderServices.deleteMaterialSlider" @domainArray="(array) => form.domain_all = array" masterKey="master_material_slider_id"
       :masterDeleteService="MaterialSliderServices.masterDeleteMaterialSlider" routeTo="store-product" />
     <template v-if="form.id" v-slot:header>
       <MasterSlugForm :form="form" @update-slug="() => fetchMaterialSliderData()"
@@ -132,7 +132,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
   if (!validateForm()) return
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-
+  !form.value.domain_all && delete form.value.domain_all;
   loading.value = true
   try {
     const action = store.getters.editData

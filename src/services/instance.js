@@ -16,7 +16,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async (config) => {
-    let token = store.getters.token || localStorage.getItem('token');
+    let token = store.getters.token;
     // if( token )
       // checkAndRefreshToken();
     if (token) {
