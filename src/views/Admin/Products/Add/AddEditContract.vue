@@ -2,7 +2,7 @@
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
 
         <!-- domain select delete master delete  -->
-        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ProductServices.deleteProduct"
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="ProductServices.deleteProduct"
             masterKey="master_product_id" :masterDeleteService="ProductServices.mastetrDeleteProduct" routeTo="product">
         </DomainComponent>
         <!-- slug update  -->
@@ -832,7 +832,7 @@ function banner_slide_remove(index) {
 const handleSubmit = async () => {
     if (!validateForm()) return;
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
     const { status,domain, featured_image_url,new_product_slider_url,new_product_additional_bg_image_url,new_product_additional_right_box_image_url,
         downloadable_files_url,product_series_data,contracts_data,product_types_data,product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;

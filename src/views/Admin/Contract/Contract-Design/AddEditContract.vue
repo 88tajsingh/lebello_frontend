@@ -1,8 +1,7 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Contract` : `Add New Contract`">
-
-        <!-- domain select delete master delete  -->
-        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ContractServices.deleteNewContract"
+        <!-- domain select delete master delete domainArray  -->
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"  :deleteService="ContractServices.deleteNewContract"
             masterKey="master_contract_design_id" :masterDeleteService="ContractServices.deleteMasterContractDesign"
             routeTo="Contract-Design"></DomainComponent>
         <!-- slug update  -->
@@ -138,11 +137,10 @@
                     </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Featured Products ">
-                            <div class="w-52 ml-auto mr-5">
-                                <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                    label="Select an option" v-model="form.status" />
-                            </div>
-                            <div class=" px-6  h-auto ">
+                            <div class="mt-2 px-6 flex h-auto ">
+                                <Checkbox :nexted=true :dropdown="true" valueField="id" showField="contract_name"
+                                    :checkedData='form.contract_type' :data="contractType"
+                                    @checked-items="(checked) => { form.contract_type = checked }" />
                             </div>
                         </Accordion>
                     </div>
@@ -410,6 +408,7 @@ const contractType = ref([]);
 const checkedFields = ref({})
 const iswithBg = ref()
 const checkBoxFlag = ref(Boolean(form.value.id))
+const productFeatureData = ref([])
 
 
 // Image data for various categories
@@ -521,11 +520,23 @@ const fetchDomainContractData = async () => {
 const fetchContractData = async (payload) => {
     const [location, type] = await Promise.all([
     contractLocationTreeList(payload),
-    contractTypeTreeList(payload)
+    contractTypeTreeList(payload),
+    
 ]);
 contractLocation.value = location;
 contractType.value = type;
 };
+
+
+const productFeature = async(payload) => {
+    
+    const {status,data} = await ContractServices.getProductFeature(payload)
+    if (status === 200 && data.success) {
+        const dataValue = data.data
+        productFeatureData.value = dataValue
+    }
+};
+
 
 // Initialize component state
 onMounted(() => {
@@ -555,6 +566,7 @@ setImageData('gallery', gallery_urls, true);
 watch(() => form.value.domain_id, (newDomainId) => {
     // Fetch product type tree and reset parent product type
     fetchContractData({ domain_id: newDomainId });
+    productFeature({domain_id:newDomainId})
     // Check if newDomainId is present in domains_data and fetch product type data if so
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchDomainContractData();

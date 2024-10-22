@@ -13,9 +13,9 @@
             :cloneHeaderInFooter="true" :stickyHeader="false" :rows="rows" :columns="usersCols"
             :loading="getLoading" :totalRows="totalRows" :isServerMode="true" :pageSize="10" :search="search"
             @change="changePages">
-            <template #image="data">
+            <!-- <template #image="data">
                 <img :src="data.value.image" alt="Contract Image" style="max-width: 50px; max-height: 50px" />
-            </template>
+            </template> -->
 
             <template #active="data">
                 <span id="delete svg" class=" flex flex-col justify-center align-center" @click="openDeleteModal(data.value)">
@@ -31,26 +31,16 @@
                 <div class="flex gap-3">
                     <div @click="() => { router.push({ name: 'user-form' }); store.dispatch('setEdit', data.value); }"
                         id="edit svg">
-                        <!-- router.push({ name:'Contract-edit',params: { id: data.value.id }})  -->
                         <EditSvg />
                     </div>
-                    <!-- <div id="delete svg" @click="openDeleteModal(data.value)">
-                        <i v-if="!data.value.active" class='fas fa-toggle-off' style='font-size:24px'></i>
-                        <i v-if="data.value.active" class='fas fa-toggle-on' style='font-size:24px'></i>
-
-                    </div> -->
                 </div>
             </template>
         </vue3-datatable>
     </div>
 
     <DeleteModal v-model:isOpen="deleteModalIsOpen" :modalTitle="'Change Status '" @delete="handleStatusUser()" btnName="Change Status">
-        Do you want to change the status?
+       {{`Do you want to ${active.active === 0 ? 'Activate' : 'Deactivate'} ${active.name}?`}}
     </DeleteModal>
-    <!-- <DeleteModal v-model:isOpen="bulkPopup" :modalTitle="'Change Status '" @delete="handleBulkActions()">
-        Do you want to delete ?
-    </DeleteModal> -->
-    <!-- <Loader :isLoading="loading" :fullPage="true" /> -->
 </template>
 
 <script setup>
@@ -78,18 +68,19 @@ const modalIsOpen = ref(false);
 const editIsOpen = ref(false);
 const deleteModalIsOpen = ref(false);
 const totalRows = ref('')
+const active = ref('')
+
 
 const openDeleteModal = (data) => {
     deleteModalIsOpen.value = true;
     editData.value = data.id;
-    console.log(data.id)
+    active.value=data;
 };
 
 
 
 
 const changePages = (page) => {
-    console.log("page changed", page)
     const payload = { limit: page.pagesize, page: page.current_page }
     handleGetUserList(payload);
 }
@@ -132,33 +123,10 @@ const handleStatusUser = async () => {
     }
 };
 
-// Bulk delete
-
-// const getDomainList = async (payload) => {
-//     getDomainsList.value = await getDomains(payload)
-//     const defaultDomain = getDomainsList.value.filter(site => site.default === 1)[0];
-//     paginationData.value.domain_id = defaultDomain.id
-//     store.dispatch('setDomain', defaultDomain);
-// }
-
 onMounted(() => {
-    // getDomainList();
     handleGetUserList();
 }
 );
 
-watch(
-    () => paginationData.value.domain_id,
-    () => {
-        // const defaultDomain = getDomainsList.value.filter(site => site.id == domain_id.value);
-        // store.dispatch('setDomain', defaultDomain[0]);
-        // handleGetGlobalMetaTag(paginationData.value);
-    }
-);
-watch(
-    () => paginationData.value.status,
-    () => {
-        // handleGetGlobalMetaTag(paginationData.value);
-    }
-);
+
 </script>

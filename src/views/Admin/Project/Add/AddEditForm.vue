@@ -1,7 +1,7 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Projects` : `Add New Project`">
 
-        <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="ProjectServices.deleteProjects"
+        <DomainComponent @customChange="(id) => (form.domain_id = id)" @domainArray="(array) => form.domain_all = array" :deleteService="ProjectServices.deleteProjects"
             masterKey="master_project_id" :masterDeleteService="ProjectServices.deleteMasterProjects"
             routeTo="projects" />
         <template v-if="form.id" v-slot:header>
@@ -153,6 +153,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true
     try {
         const action = store.getters.editData

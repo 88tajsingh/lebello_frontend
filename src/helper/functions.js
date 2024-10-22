@@ -2,9 +2,6 @@ import LoginServices from "@/services/LoginServices";
 import store from "@/store";
 import _ from "lodash";
 import moment from "moment";
-import { useToast } from "vue-toast-notification";
-
-const $toast = useToast();
 
 export const isAuthenticated = (token) => !!token;
 
@@ -48,8 +45,8 @@ export const handleFileUpdate = (type, data, imageData, form, multiple = false) 
   const media_ids = data.map((item) => item.id);
   imageData.value[type] = { isOpen: false, mediaName, images: data };
   form.value[type] = multiple ? media_ids : media_ids[0];
-  console.log('multiple',form.value[type] )
-  console.log('single',form.value[type] )
+  console.log('multiple', form.value[type]);
+  console.log('single', form.value[type]);
 };
 
 /**
@@ -59,7 +56,10 @@ export const handleFileUpdate = (type, data, imageData, form, multiple = false) 
  * @param {string} type - The type of toast (success, error, warning, default)
  * @param {string} [position="top-right"] - The position to show the toast (top-right, top-center, top-left, bottom-right, bottom-center, bottom-left)
  */
-export const showToast = (message, type, position = "top-right") => {
+export const showToast = async (message, type, position = "top-right") => {
+  const { useToast } = await import("vue-toast-notification");
+  const $toast = useToast();
+  
   $toast.open({ message, type, position, duration: 3000 });
 };
 

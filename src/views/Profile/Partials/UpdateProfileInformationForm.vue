@@ -3,7 +3,7 @@ import InputError from 'src/components/Admin-components/InputError.vue';
 import InputLabel from '@/Components/form-components/InputLabel.vue';
 import PrimaryButton from 'src/components/Admin-components/PrimaryButton.vue';
 import TextInput from 'src/components/Admin-components/TextInput.vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -14,28 +14,82 @@ defineProps({
     },
 });
 
-const user = usePage().props.auth.user;
+// Replace this with actual user data passed as a prop or retrieved from a store
+const user = {
+    name: '', // Set initial name
+    email: '', // Set initial email
+};
 
-const form = useForm({
+// Manage the form state manually
+const form = ref({
     name: user.name,
     email: user.email,
+    errors: {},
+    processing: false,
+    recentlySuccessful: false,
 });
+
+const updateProfile = async () => {
+    form.value.processing = true;
+    form.value.errors = {}; // Reset errors
+
+    try {
+        const response = await fetch('/profile/update', { // Update the route accordingly
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: form.value.name,
+                email: form.value.email,
+            }),
+        });
+
+        if (response.ok) {
+            form.value.recentlySuccessful = true;
+            // Optionally, reset the form state or update the user data
+        } else {
+            const errorData = await response.json();
+            form.value.errors = errorData.errors || {};
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+    } finally {
+        form.value.processing = false; // Reset processing state
+    }
+};
+
+const resendVerificationEmail = async () => {
+    try {
+        const response = await fetch('/verification/send', { // Update the route accordingly
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            // Handle success message for email sent
+            console.log('Verification email sent.');
+        } else {
+            // Handle error case
+            console.error('Error sending verification email.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
 </script>
 
 <template>
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
-
             <p class="mt-1 text-sm text-gray-600">
                 Update your account's profile information and email address.
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="updateProfile" class="mt-6 space-y-6">
             <div>
                 <InputLabel for="name" value="Name" />
-
                 <TextInput
                     id="name"
                     type="text"
@@ -45,13 +99,11 @@ const form = useForm({
                     autofocus
                     autocomplete="name"
                 />
-
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
 
             <div>
                 <InputLabel for="email" value="Email" />
-
                 <TextInput
                     id="email"
                     type="email"
@@ -60,27 +112,22 @@ const form = useForm({
                     required
                     autocomplete="username"
                 />
-
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div v-if="mustVerifyEmail && user.email_verified_at === null">
+            <div v-if="mustVerifyEmail && !user.email_verified_at">
                 <p class="text-sm mt-2 text-gray-800">
                     Your email address is unverified.
-                    <Link
-                        :href="route('verification.send')"
-                        method="post"
-                        as="button"
+                    <button
+                        type="button"
+                        @click="resendVerificationEmail"
                         class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                         Click here to re-send the verification email.
-                    </Link>
+                    </button>
                 </p>
 
-                <div
-                    v-show="status === 'verification-link-sent'"
-                    class="mt-2 font-medium text-sm text-green-600"
-                >
+                <div v-show="status === 'verification-link-sent'" class="mt-2 font-medium text-sm text-green-600">
                     A new verification link has been sent to your email address.
                 </div>
             </div>

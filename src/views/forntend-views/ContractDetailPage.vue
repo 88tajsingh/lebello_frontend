@@ -1,21 +1,21 @@
 <template>
   <NavBar :absolute="false" />
-  <div class="grid grid-cols-5 mx-20">
-    <div class="col-span-4 container pt-7">
+  <div class="grid grid-cols-1 lg:grid-cols-5 mx-5 lg:mx-20">
+    <div class="col-span-12 lg:col-span-4 container pt-7">
       <div class="flex">
         <h1 class="uppercase font-graphik text-[20px]">HOTELS & RESORTS</h1>
       </div>
       <BreadcrumbSection :breadcrumbData="breadcrumbData" seprate="/" />
     </div>
-    <div class="uppercase pt-16 pl-10 font-graphikMedium text-green p-2">CONTRACT</div>
+    <div class="hidden lg:block uppercase pt-16 pl-10 font-graphikMedium text-green p-2">CONTRACT</div>
     <!-- image view -->
-    <div class="col-span-4 container pb-10">
+    <div class="col-span-12 lg:col-span-4 container pb-10">
       <div class="bg-[#f7f7f7]" @click="toggleModal">
-        <div id="carouselExampleControls" class="relative" data-twe-carousel-init data-twe-ride="carousel">
+        <div id=" carouselExampleControls" class="relative " data-twe-carousel-init data-twe-ride="carousel">
           <!--Carousel items-->
           <div class="relative w-full overflow-hidden after:clear-both after:block after:content-['']">
             <!--First item-->
-            - <div v-for="(item, index) in carouselItems" :key="index" :class="[
+             <div v-for="(item, index) in carouselItems" :key="index" :class="[
               'relative',
               'float-left',
               '-mr-[100%]',
@@ -26,12 +26,12 @@
               'motion-reduce:transition-none',
               { hidden: index !== activeIndex },
             ]">
-              <img :src="item.src" class="block  h-96  " :alt="item.alt" />
+              <img :src="item.src" class="block  lg:h-96  " :alt="item.alt" />
             </div>
           </div>
-          <div class="absolute bottom-14 left-10">
-            <p class=" bg-[#ff9d0f] text-white text-2xl py-1 px-2 capitalize mb-3">Caliza Pool | Alys Beach</p>
-            <span class="bg-white border text-black text-1xl py-2 px-3 capitalize mx-auto">Alys Beach, FL</span>
+          <div class=" absolute bottom-2 left-6 md:left-10 md:bottom-10 lg:bottom-14 lg:left-10">
+            <p class=" bg-[#ff9d0f] text-white text-[11px] md:text-[20px] lg:text-2xl sm:py-1 px-2 capitalize mb-1 sm:mb-3">Caliza Pool | Alys Beach</p>
+            <span class="bg-white border text-black text-[11px] md:text-[16px] lg:text-1xl py-1 sm:py-2 px-3 capitalize mx-auto">Alys Beach, FL</span>
           </div>
           <!--Carousel controls - prev item-->
           <button
@@ -73,21 +73,25 @@
           </div>
         </div>
       </div>
-      <div class="grid grid-cols-2 my-2 items-center">
+      <div class="grid grid-cols-1 md:grid-cols-2 my-2 items-center">
         <h3 class="text-[23px] font-graphikLight text-green">Custom Hotel</h3>
-        <div class="flex gap-2 justify-end">
+        <div class="flex sm:gap-1 wrap md:justify-end">
+          <div class="flex flex-col-reverse md:flex-row my-3">
+          <div class="flex ">
           <a href="mailto:?subject=Parc 55 Hotel&amp;body=https://lebello.com/contract_design/parc-55-hotel/"
             title="Parc 55 Hotel" class="flex items-center ">
-            <img src="https://lebello.com/wp-content/themes/lebello-ep/images/mailto.gif" alt="mail to" class="mx-2 ">
+            <img src="https://lebello.com/wp-content/themes/lebello-ep/images/mailto.gif" alt="mail to" class="mx-1 ">
             <span class="text-blue font-graphik text-[14px] hover:text-[#23527C]">Email</span> </a>
           <a href="javascript:window.print()" class="flex items-center"><img
               src="https://lebello.com/wp-content/themes/lebello-ep/images/print.gif" class="mx-2" alt="print"> <span
               class="hover:text-[#23527C] text-blue font-graphik text-[14px]">Print</span></a>
-          <ul class="flex justify-center ml-2">
+          </div>
+          <div >
+          <ul class="flex justify-center mb-3 md:mb-0 md:ml-2 ">
             <li>
               <a href="https://www.facebook.com/share.php?u=https://lebello.com/products/b-chair-1-2/&title=B Chair"
                 target="_blank" title="Facebook"
-                class="flex  items-center  justify-center w-9 h-9 bg-gray-300 rounded-full mx-1 hover:bg-green-500">
+                class="flex  items-center bg-[#DDDDDD] rounded-full justify-center w-9 h-9 bg-gray-300 rounded-full mx-1 hover:bg-green-500">
                 <svg width="17px" height="17px" viewBox="-5 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
                   xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fcfcfc" stroke="#fcfcfc">
                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -104,12 +108,13 @@
                     </g>
                   </g>
                 </svg>
+
               </a>
             </li>
             <li>
               <a href="https://www.houzz.com/imageClipperUpload?link=https://lebello.com/products/b-chair-1-2/&source=button&hzid=8628&imageUrl=https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg&title=B Chair&ref=https://lebello.com/products/b-chair-1-2/"
                 target="_blank" title="Houzz"
-                class="flex items-center justify-center w-9 h-9 bg-gray-300 rounded-full mx-1">
+                class="flex items-center bg-[#DDDDDD] rounded-full justify-center w-9 h-9 bg-gray-300 rounded-full mx-1">
                 <svg fill="#ffffff" width="17px" height="17px" viewBox="-5 0 24 24" xmlns="http://www.w3.org/2000/svg"
                   stroke="#ffffff">
                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -125,7 +130,7 @@
             <li>
               <a href="https://pinterest.com/pin/create/bookmarklet/?media=https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg&url=https://lebello.com/products/b-chair-1-2/&is_video=false&description=B Chair"
                 target="_blank" title="Pinterest"
-                class="flex items-center justify-center w-9 h-9 bg-gray-300 rounded-full mx-1">
+                class="flex items-center bg-[#DDDDDD] rounded-full justify-center w-9 h-9 bg-gray-300 rounded-full mx-1">
                 <svg width="17px" height="17px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
                   xmlns:xlink="http://www.w3.org/1999/xlink" fill="#f5f5f5" stroke="#f5f5f5">
                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -150,13 +155,15 @@
             <li>
               <a href="https://twitter.com/intent/tweet?status=Discover Lebello - B Chair+https://lebello.com/products/b-chair-1-2/"
                 target="_blank" title="Twitter"
-                class="flex items-center justify-center w-9 h-9 bg-gray-300 rounded-full mx-1">
+                class="flex items-center bg-[#DDDDDD] rounded-full justify-center w-9 h-9 bg-gray-300 rounded-full mx-1">
                 <img class="w-[17px] h-[17px]"
                   src="https://lebello.com/wp-content/themes/lebello-ep/images/Lebello-twitterx-icon.svg"
                   alt="Social Icon" />
               </a>
             </li>
           </ul>
+         </div>
+        </div>
 
         </div>
       </div>
@@ -166,22 +173,22 @@
         traveler who appreciates design, art and comfort. Using the Marshmellow as side
         tables or foot stools. Simply functional and yet modern.
       </p>
-      <div class="grid grid-cols-3 text-[20px] text-green font-graphikLight">
+      <div class="grid  grid-cols-1 md:grid-cols-3 gap-4 md:gap-0 text-[20px] text-green font-graphikLight">
         <div>
           <p>Designer</p>
         </div>
         <div>
           <p>Client</p>
-          <p class="text-Black666 text-[14px]">Joie De Vivre</p>
+          <p class="text-Black666 text-[14px] py-1 md:py-0">Joie De Vivre</p>
         </div>
         <div>
           <p>Product Featured:</p>
-          <p class="text-Black666 text-[14px]">Marshmallow M2 ></p>
+          <p class="text-Black666 text-[14px] py-1 md:py-0  ">Marshmallow M2 ></p>
         </div>
       </div>
     </div>
     <!-- listing right -->
-    <div class=" pl-10">
+    <div class="hidden lg:block pl-10">
       <ul class="list-wid text-sm font-normal">
         <li
           class=" font-sans text-textColorBlack  border-b hover:text-green cursor-pointer border-[rgba(122,120,120,0.37)]">

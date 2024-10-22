@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Post` : `Add New Post`">
-        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="PostServices.deletePost"
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="PostServices.deletePost"
             masterKey="master_post_id" :masterDeleteService="PostServices.masterDeletePost" routeTo="post" />
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm :form="form" @update-slug="() => fetchPostData()"
@@ -277,8 +277,8 @@ const handleSubmit = async () => {
 
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-
-    loading.value = true;
+    !form.value.domain_all && delete form.value.domain_all
+    loading.value = true;   
     try {
         const action = store.getters.editData ? PostServices.editPost : PostServices.addPost;
         const { featured_image_url,domain, gallery_urls, slug, gallery_data, domains_data, default_domain, deleted_at, created_at, updated_at, ...payload } = form.value

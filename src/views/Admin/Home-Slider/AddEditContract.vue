@@ -1,7 +1,7 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Home Slider` : `Add Home Slider`">
         <DomainComponent @customChange="(id) => form.domain_id = id"
-            :deleteService="HomeSliderServices.deleteHomeSlider" masterKey="master_home_slider_id"
+            :deleteService="HomeSliderServices.deleteHomeSlider" @domainArray="(array) => form.domain_all = array" masterKey="master_home_slider_id"
             :masterDeleteService="HomeSliderServices.deleteMasterHomeSlider" routeTo="home-slider"></DomainComponent>
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm :form="form" @update-slug="() => fetchPagesData()"
@@ -261,8 +261,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
     if (!validateForm()) return; // Validate form fields
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-
-
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
     try {
         // Determine if editing or adding a new slider

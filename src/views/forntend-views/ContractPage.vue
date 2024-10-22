@@ -90,7 +90,7 @@
       </div>
     </div>
     <!-- images -->
-    <div class="mx-20 relative grid grid-cols-1 md:grid-cols-4 gap-0">
+    <div class="mx-5 md:mx-20 relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-0">
       <!-- Loop through products -->
       <div v-for="(product, index) in products" :key="index" class=" ">
         <div class="prod_content overflow-hidden">
@@ -99,7 +99,7 @@
               isHovered[index],
           }" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
             <router-link to="/">
-              <img class="aos-item" ref="element" :data-aos="animationType"
+              <img class="aos-item w-full" ref="element" :data-aos="animationType"
                 :data-aos-duration="getAnimationDuration(index)" :src="product?.image" :alt="product?.name" />
               <div :class="{
                 'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20':

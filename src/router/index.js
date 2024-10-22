@@ -9,17 +9,17 @@ const  routes = [
     component: () => import('../views/forntend-views/Index-main.vue')
   },
   {
-    path: '/productDetail',
+    path: '/productDetail',//done
     name: 'ProductDetail',
     component: () => import('../views/forntend-views/ProductDetails.vue')
   },
   {
-    path: '/category',
+    path: '/category',//done
     name: 'category',
     component: () => import('../views/forntend-views/CategoryPage.vue')
   },
   {
-    path: '/contract',
+    path: '/contract', //done
     name: 'contract',
     component: () => import('../views/forntend-views/ContractPage.vue')
   },
@@ -29,7 +29,7 @@ const  routes = [
     component: () => import('../views/forntend-views/ContractDetailPage.vue')
   },
   {
-    path: '/contactUs',
+    path: '/contactUs',//done
     name: 'contactUs',
     component: () => import('../views/forntend-views/ContactUsPage.vue')
   },
@@ -44,7 +44,7 @@ const  routes = [
     component: () => import('../views/forntend-views/DealersPage.vue')
   },
   {
-    path: '/libraryandtools',
+    path: '/libraryandtools',//done
     name: 'library_and_tools',
     component: () => import('../views/forntend-views/library_and_tools.vue')
   },
@@ -145,7 +145,7 @@ const  routes = [
       {
         path: '/media',
         name: 'Media-section',
-        component: () => import('../views/Admin/Media-section/MediaSection.vue'),
+        component: () => import('@/views/Admin/Media-section/MediaSection.vue'),
         meta: { requiresAuth: true }
       },
       {
@@ -480,11 +480,11 @@ const  routes = [
       }
     ]
   },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'NotFound',
-    component: () => import('../views/NotFound404.vue')
-  },
+  // {
+  //   path: '/:pathMatch(.*)*',
+  //   name: 'NotFound',
+  //   component: () => import('../views/NotFound404.vue')
+  // },
 ]
 
 const router = createRouter({
@@ -534,19 +534,18 @@ const publicPaths = [
   '/contractDesign',
   '/dealers',
   '/libraryandtools',
-  '/not-found',
+  // '/not-found',
 ];
 
 router.beforeEach((to, from, next) => {
-
   const token = store?.getters?.token || localStorage.getItem('token');
   const allowedPaths = store.getters.user?.modules?.route || [];
   const isAuthenticatedUser = isAuthenticated(token);
-
+  // console.log(`Navigating to: ${to.path}`);
+  // console.log("token", token);
 
   // Check for public paths
   if (publicPaths.includes(to.path)) {
-    
     if (to.path === '/login' && isAuthenticatedUser) {
       return next('/dashboard');
     }
@@ -559,7 +558,7 @@ router.beforeEach((to, from, next) => {
   }
 
   // Redirect authenticated users away from login
-  if (to.name === 'login' && isAuthenticatedUser) {
+  if (to.name === '/login' && isAuthenticatedUser) {
     return next('/dashboard');
   }
 

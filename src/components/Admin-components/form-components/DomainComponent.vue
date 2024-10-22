@@ -1,35 +1,23 @@
 <template>
   <div class="flex ml-auto mt-2 gap-2 justify-end">
     <div class="w-52">
-      <Select 
-        :options="DropData" 
-        showfield="name" 
-        class="w-full" 
-        valueField="id" 
-        label="All Domain"
-        v-model="domain_id" 
-      />
+      <Select :options="DropData" showfield="name" title="" class="w-full" valueField="id" label="All Domain"
+        v-model="domain_id" />
     </div>
   </div>
   <div class="flex flex-wrap mt-2">
     <div class="flex flex-wrap">
-      <div 
-        v-for="(item, index) in domainsArray" 
-        @click="emitItemClick(item)" 
-        :key="item.id"
+      <div v-for="(item, index) in domainsArray" @click="emitItemClick(item)" :key="item.id"
         class="badge py-1 border border-black relative bg-blue-500 px-2 rounded-lg flex items-center mb-2 mr-2 cursor-pointer"
-        :class="{ 'border-primary bg-primary text-gray': item.id === selectedDomain?.id }"
-      >
-        {{ item.name }} ({{ item.country ? item.country.code : 'N/A' }}) 
+        :class="{ 'border-primary bg-primary text-gray': item.id === selectedDomain?.id }">
+        {{ item.name }} ({{ item.country ? item.country.code : 'N/A' }})
         {{ isDefaultDomain(item.id) ? '*' : '' }}
-        <button 
-          type="button" 
-          @click.stop="handleDeleteData(index)" 
-          class="ml-2 hover:text-red-500 focus:outline-none"
-        >
-          <svg v-if="selectedDomain?.id === item.id" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <button type="button" @click.stop="handleDeleteData(index)" class="ml-2 hover:text-red-500 focus:outline-none">
+          <svg v-if="selectedDomain?.id === item.id" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="10" :stroke="getStrokeColor(item)" stroke-width="1.5"></circle>
-            <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" :stroke="getStrokeColor(item)" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M14.5 9.50002L9.5 14.5M9.49998 9.5L14.5 14.5" :stroke="getStrokeColor(item)" stroke-width="1.5"
+              stroke-linecap="round"></path>
           </svg>
         </button>
       </div>
@@ -50,7 +38,7 @@ import { showToast } from '@/helper/functions';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
-defineProps(['deleteService', 'masterKey', 'masterDeleteService', 'routeTo']);
+const { deleteService, masterKey, masterDeleteService, routeTo } = defineProps(['deleteService', 'masterKey', 'masterDeleteService', 'routeTo']);
 
 
 const router = useRouter();
@@ -91,7 +79,7 @@ const handleDeleteData = (deleteIndex) => {
 const handleDelete = async () => {
   const payload = { id: formData.value.id };
   try {
-    const res = await props.deleteService(payload);
+    const res = await deleteService(payload);
     handleResponse(res, () => removeItem(index.value));
   } catch (error) {
     handleError(error);
@@ -101,11 +89,11 @@ const handleDelete = async () => {
 const masterDelete = async () => {
   const payload = {
     id: formData.value.id,
-    [props.masterKey]: formData.value[props.masterKey],
+    [masterKey]: formData.value[masterKey],
   };
   try {
-    const res = await props.masterDeleteService(payload);
-    handleResponse(res, () => router.push(`/${props.routeTo}`));
+    const res = await masterDeleteService(payload);
+    handleResponse(res, () => router.push(`/${routeTo}`));
   } catch (error) {
     handleError(error);
   }
@@ -121,7 +109,8 @@ const handleResponse = (res, onSuccess) => {
 };
 
 const handleError = (error) => {
-  showToast('Something went wrong', 'error');
+  showToast('Something went wrong', error);
+  console.log("error", error);
 };
 
 const removeItem = (indexValue) => {
@@ -129,7 +118,7 @@ const removeItem = (indexValue) => {
     domainsArray.value.splice(indexValue, 1);
     selectedDomain.value = domainsArray.value.length > 0 ? domainsArray.value[0] : null;
     emit('customChange', selectedDomain.value?.id);
-    emitArray();
+    // emitArray();
   }
 };
 
@@ -149,8 +138,8 @@ const mapIdsToDomains = () => {
   domainsArray.value = formData.value.domains_data
     .map(id => DropData.value.find(domain => domain.id === id))
     .filter(Boolean);
-  
-  emitArray();
+
+  // emitArray();
 };
 
 const handleGetDomains = async () => {
@@ -158,6 +147,7 @@ const handleGetDomains = async () => {
     const res = await CommonServices.getDomains();
     if (res.status === 200 && res.data.success) {
       DropData.value = res.data.data;
+      
       selectedDomain.value = store.getters.getDomain || DropData.value.find(site => site.default === 1) || null;
       domain_id.value = selectedDomain.value?.id || null;
       emit('customChange', domain_id.value);
@@ -175,10 +165,21 @@ watch(
 );
 
 watch(domain_id, handleAddTabs);
-watch(domainsArray, emitArray, { immediate: true });
+// watch(domainsArray, emitArray, { immediate: true });
 watch(() => store.getters?.editData?.id, (newValue) => {
   if (newValue) formData.value = store.getters.editData;
 }, { immediate: true });
+
+watch(() => domain_id.value, (newValue) => {
+  if (!newValue){ 
+    !formData.value?.id ? selectedDomain.value = null :''
+    !formData.value?.id ? domainsArray.value = [] :''
+    //  emit('customChange', null);
+     emit('domainArray', DropData.value.map(item => item.id));        
+    }
+    else 
+    emit('domainArray',null)
+});
 
 onMounted(handleGetDomains);
 </script>

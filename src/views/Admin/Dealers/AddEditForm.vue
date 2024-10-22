@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Dealer` : `Add New Dealer`">
-        <DomainComponent @customChange="(id) => (form.domain_id = id)" :deleteService="DealersServices.deleteDealer"
+        <DomainComponent @customChange="(id) => (form.domain_id = id)" @domainArray="(array) => form.domain_all = array" :deleteService="DealersServices.deleteDealer"
             masterKey="master_dealer_id" :masterDeleteService="DealersServices.deleteMasterDealer" routeTo="dealer">
         </DomainComponent>
         <template v-if="form.id" v-slot:header>
@@ -497,7 +497,7 @@ const validateForm = () => {
 const handleSubmit = async () => {
     if (!validateForm('page_title', 'Page Title', form, errors)) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-
+    !form.value.domain_all && delete form.value.domain_all
     delete form.value?.domain
 
     loading.value = true

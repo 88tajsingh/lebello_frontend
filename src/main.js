@@ -1,40 +1,40 @@
-import './assets/main.css'
-import './assets/css/satoshi.css'
-import './assets/css/style.css'
-import '@bhplugin/vue3-datatable/dist/style.css'
-import { createApp } from 'vue'
-import VueApexCharts from 'vue3-apexcharts'
-import App from './App.vue'
-import { createPinia } from 'pinia'
-import router from './router'
-import store from './store'
-import HelpersPlugin from './helper/helperPlugin'
-import ToastPlugin from 'vue-toast-notification'
-import 'vue-toast-notification/dist/theme-bootstrap.css'
-import InputError from './components/Admin-components/form-components/InputError.vue'
-import InputLabel from './components/Admin-components/form-components/InputLabel.vue'
-import DomainComponent from '@/components/Admin-components/form-components/DomainComponent.vue'
-import EditSvg from '@/components/Admin-components/svg/EditSvg.vue'
-import DeleteSvg from '@/components/Admin-components/svg/DeleteSvg.vue'
-import Loader from '@/components/Admin-components/Loader.vue'
-import { Tabs, Tab } from 'vue3-tabs-component'
-import MasterSlugForm from './components/Admin-components/MasterSlugForm.vue'
-import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
-import ColorInput from '@/components/Admin-components/form-components/ColorInput.vue'
-import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
-import Button from '@/components/Admin-components/Buttons/Button.vue'
-import Checkbox from '@/components/Admin-components/form-components/CheckBox.vue'
-import PopupModal from '@/components/Admin-components/Modals/PopupModal.vue'
-import Select from '@/components/Admin-components/form-components/Select.vue'
-import SingleCheck from '@/components/Admin-components/form-components/SingleCheck.vue'
-import PageHeader from '@/components/Admin-components/PageHeader.vue'
-import DeleteModal from './components/Admin-components/Modals/DeleteModal.vue'
-import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue'
-import Toast from 'vue-toastification'
-import 'vue-toastification/dist/index.css'
+import './assets/main.css';
+import './assets/css/satoshi.css';
+import './assets/css/style.css';
+import '@bhplugin/vue3-datatable/dist/style.css';
+import { createApp, defineAsyncComponent } from 'vue';
+import App from './App.vue';
+import { createPinia } from 'pinia';
+import router from './router';
+import store from './store';
+import HelpersPlugin from './helper/helperPlugin';
+import 'vue-toast-notification/dist/theme-bootstrap.css';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
-const options = {
+// Lazy load components
+const Loader = defineAsyncComponent(() => import('@/components/Admin-components/Loader.vue'));
+const Button = defineAsyncComponent(() => import('@/components/Admin-components/Buttons/Button.vue'));
+const Select = defineAsyncComponent(() => import('@/components/Admin-components/form-components/Select.vue'));
+const InputError = defineAsyncComponent(() => import('@/components/Admin-components/form-components/InputError.vue'));
+const InputLabel = defineAsyncComponent(() => import('@/components/Admin-components/form-components/InputLabel.vue'));
+const DomainComponent = defineAsyncComponent(() => import('@/components/Admin-components/form-components/DomainComponent.vue'));
+const EditSvg = defineAsyncComponent(() => import('@/components/Admin-components/svg/EditSvg.vue'));
+const DeleteSvg = defineAsyncComponent(() => import('@/components/Admin-components/svg/DeleteSvg.vue'));
+const ColorInput = defineAsyncComponent(() => import('@/components/Admin-components/form-components/ColorInput.vue'));
+const TextInput = defineAsyncComponent(() => import('@/components/Admin-components/form-components/TextInput.vue'));
+const Checkbox = defineAsyncComponent(() => import('@/components/Admin-components/form-components/CheckBox.vue'));
+const PopupModal = defineAsyncComponent(() => import('@/components/Admin-components/Modals/PopupModal.vue'));
+const SingleCheck = defineAsyncComponent(() => import('@/components/Admin-components/form-components/SingleCheck.vue'));
+const PageHeader = defineAsyncComponent(() => import('@/components/Admin-components/PageHeader.vue'));
+const DeleteModal = defineAsyncComponent(() => import('@/components/Admin-components/Modals/DeleteModal.vue'));
+const DatePicker = defineAsyncComponent(() => import('@/components/Admin-components/form-components/DatePicker.vue'));
+const RadioButton = defineAsyncComponent(() => import('@/components/Admin-components/form-components/RadioButton.vue'));
+const MasterSlugForm = defineAsyncComponent(() => import('@/components/Admin-components/MasterSlugForm.vue'));
+const GetLibrary = () => import('@/views/Admin/Media-section/MediaSection.vue');
+
+// Toast options
+const toastOptions = {
   position: 'top-right',
   timeout: 5000,
   closeOnClick: true,
@@ -47,32 +47,36 @@ const options = {
   closeButton: true,
   pauseOnHover: true,
   pauseOnFocusLoss: true
-}
+};
 
-const app = createApp(App)
-app.use(HelpersPlugin)
-app.use(Toast, options)
-app.use(router)
-app.use(ToastPlugin).use(store).use(createPinia()).component('Tabs', Tabs).component('Tab', Tab)
-app.use(VueApexCharts)
-app.component('Loader', Loader)
-app.component('Button', Button)
-app.component('Select', Select)
-app.component('EditSvg', EditSvg)
-app.component('Checkbox', Checkbox)
-app.component('DeleteSvg', DeleteSvg)
-app.component('ColorPicker', ColorInput)
-app.component('MasterSlugForm', MasterSlugForm)
-app.component('TextInput', TextInput)
-app.component('PopupModal', PopupModal)
-app.component('DatePicker', DatePicker)
-app.component('PageHeader', PageHeader)
-app.component('InputError', InputError)
-app.component('GetLibrary', GetLibrary)
-app.component('InputLabel', InputLabel)
-app.component('DeleteModal', DeleteModal)
-app.component('RadioButton', RadioButton)
-app.component('SingleCheck', SingleCheck)
-app.component('DomainComponent', DomainComponent)
-app.component('RouterLink', router.options.history.routerLink)
-app.mount('#app')
+// Create Vue app
+const app = createApp(App);
+app.use(HelpersPlugin);
+app.use(Toast, toastOptions);
+app.use(router);
+app.use(store).use(createPinia());
+
+// Register components
+app.component('Loader', Loader);
+app.component('Button', Button);
+app.component('Select', Select);
+app.component('InputError', InputError);
+app.component('InputLabel', InputLabel);
+app.component('DomainComponent', DomainComponent);
+app.component('EditSvg', EditSvg);
+app.component('DeleteSvg', DeleteSvg);
+app.component('ColorPicker', ColorInput);
+app.component('TextInput', TextInput);
+app.component('Checkbox', Checkbox);
+app.component('PopupModal', PopupModal);
+app.component('SingleCheck', SingleCheck);
+app.component('PageHeader', PageHeader);
+app.component('DeleteModal', DeleteModal);
+app.component('DatePicker', DatePicker);
+app.component('RadioButton', RadioButton);
+app.component('MasterSlugForm', MasterSlugForm);
+app.component('GetLibrary', GetLibrary);
+app.component('RouterLink', router.options.history.routerLink);
+
+// Mount the app
+app.mount('#app');

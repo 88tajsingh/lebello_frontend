@@ -2,6 +2,9 @@ import instance from './instance'
 import ApiConfig from '@/config/apiConfig'
 
 class ContractDesignService {
+  getProductFeature(payload) {
+    return instance.get(ApiConfig.getProductFeature,{params: {...payload}})
+  }
   getNewContract(payload) {
     return instance.get(ApiConfig.getNewContract,{params: {...payload}})
   }

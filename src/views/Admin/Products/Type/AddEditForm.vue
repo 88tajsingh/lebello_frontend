@@ -1,6 +1,6 @@
 <template>
   <DefaultCard :cardTitle="form.id ? `Edit Product Type ` : `Add Product Type`">
-    <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="ProductServices.deleteProductType"
+    <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="ProductServices.deleteProductType"
       masterKey="master_product_type_id" :masterDeleteService="ProductServices.mastetrDeleteProductType"
       routeTo="product-type" />
     <template v-if="form.id" v-slot:header>
@@ -115,6 +115,7 @@ const handleFormSubmit = async () => {
   if (!validateForm()) return
   loading.value = true
   const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
+  !form.value.domain_all && delete form.value.domain_all
   try {
     const { deleted_at,domain, created_at, domains_data, default_domain, default_master, updated_at, ...payload } = form.value
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id

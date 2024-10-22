@@ -179,13 +179,12 @@ const fetchDomainList = async () => {
   getDomainsList.value = await getDomains();
   const defaultDomain = getDomainsList.value.find(site => site.default === 1);
   if (defaultDomain) {
-    state.value.paginationData.domain_id = defaultDomain.id;
+    // state.value.paginationData.domain_id = defaultDomain.id;
     store.dispatch('setDomain', defaultDomain);
   }
 };
 
 onMounted(() => { fetchDomainList(); fetchProductSeries(); });
-console.log("getDomainsList.value", state.value.paginationData.domain_id);
 watch(
   () => state.value.paginationData.domain_id,
   () => {

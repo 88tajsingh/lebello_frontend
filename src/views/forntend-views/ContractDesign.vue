@@ -1,163 +1,132 @@
 <template>
   <div class="relative pb-20">
-    <NavBar :absolute='false' />
-    <div class="absolute top-11 right-0 mx-auto">
+    <NavBar :absolute="false" />
+    
+    <div class="absolute z-[9999] top-11 right-0 mx-auto">
       <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
     </div>
-    <!-- menu icon  -->
-    <div class="relative" ref="closeMenu">
+
+    <!-- Menu Icon -->
+    <div class="relative z-[9999]" ref="closeMenu">
       <div class="absolute top-24 right-0">
         <v-card id="mySidenav" :dark="active" @click="active = true"
-          :class="{ 'w-[230px] right-0  ': isOpen, 'w-[230px] right-[-250px]': !isOpen }"
-          class="sidenav bg-[#ededed] text-graphik text-[14px] pb-2 z-50 absolute top-7 right-0 transition-all duration-10  00 overflow-hidden">
-          <div class=" ">
-            <diva class="flex border border-gray-400 items-center">
-              <div class="sticky top-3 p-4 border-r border-gray-400">
-                <MenuSvg size="15px" fillColor="black" />
-              </div>
-              <div class="h-auto">
-                <h3 class="text-[14px] font-medium">
-                  <a href="https://www.lebello.com/product/" class="uppercase">Collection 2024</a>
-                </h3>
-              </div>
-            </diva>
-            <div id="" class="text-black">
-              <div v-for="(item, index) in items" :key="index" class="border-0" :class="{
-                'rounded-t-lg': index === 0,
-                'rounded-b-lg': index === items.length - 1,
-              }">
-                <h2 :id="'heading' + index" class="mb-0">
-                  <button @click="toggleAccordion(index)" :aria-expanded="activeIndex === index"
-                    :aria-controls="'collapse' + index"
-                    class="group relative flex w-full items-center hover:text-orange border-0 px-5 py-2 text-left transition [overflow-anchor:none] hover:z-[2] focus:z-[3] focus:outline-none"
-                    :class="{
-                      ' text-primary shadow-border-b hover:text-orange dark:bg-surface-dark dark:text-primary dark:shadow-white/10':
-                        activeIndex === index,
-                    }" type="button">
-                    {{ item.title }}
-                    <span class="-me-1 ms-auto h-5 w-5 shrink-0 transition-transform duration-200 ease-in-out" :class="{
-                      'rotate-0': activeIndex !== index,
-                      'rotate-[-180deg]': activeIndex === index,
-                    }">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
-                        stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                      </svg>
-                    </span>
-                  </button>
-                </h2>
-                <div :id="'collapse' + index" v-show="activeIndex === index" class="pl-7 py-0"
-                  :aria-labelledby="'heading' + index" data-twe-collapse-item data-twe-parent="#accordionExample">
-                  <div v-if="item.subMenu">
-                    <ul>
-                      <li class="hover:text-orange text-graphikLight text-[13px]"
-                        v-for="(sub, itemIndex) in item.subMenu" :key="itemIndex">
-                        <a href="#" class="font-graphikLight text-[13px]">{{
-                          sub.name
-                          }}</a>
-                      </li>
-                    </ul>
-                  </div>
+          :class="{ 'w-[230px] right-0': isOpen, 'w-[230px] right-[-250px]': !isOpen }"
+          class="sidenav bg-[#ededed] text-graphik text-[14px] pb-2 z-50 absolute top-7 right-0 transition-all duration-300 overflow-hidden">
+          
+          <div class="flex border border-gray-400 items-center">
+            <div class="sticky top-3 p-4 border-r border-gray-400">
+              <MenuSvg size="15px" fillColor="black" />
+            </div>
+            <h3 class="text-[14px] font-medium">
+              <a href="https://www.lebello.com/product/" class="uppercase">Collection 2024</a>
+            </h3>
+          </div>
+
+          <div class="text-black">
+            <div v-for="(item, index) in items" :key="index" class="border-0 rounded-lg">
+              <h2 :id="'heading' + index" class="mb-0">
+                <button @click="toggleAccordion(index)" :aria-expanded="activeIndex === index"
+                  :aria-controls="'collapse' + index"
+                  class="group relative flex w-full items-center hover:text-orange border-0 px-5 py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
+                  :class="{'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === index}" type="button">
+                  {{ item.title }}
+                  <span class="-me-1 ms-auto h-5 w-5 transition-transform duration-200 ease-in-out"
+                    :class="{'rotate-0': activeIndex !== index, 'rotate-[-180deg]': activeIndex === index}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
+                      stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </span>
+                </button>
+              </h2>
+              <div :id="'collapse' + index" v-show="activeIndex === index" class="pl-7 py-0"
+                :aria-labelledby="'heading' + index" data-twe-collapse-item data-twe-parent="#accordionExample">
+                <div v-if="item.subMenu">
+                  <ul>
+                    <li class="hover:text-orange text-graphikLight text-[13px]" v-for="(sub, itemIndex) in item.subMenu" :key="itemIndex">
+                      <a href="#" class="font-graphikLight text-[13px]">{{ sub.name }}</a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </v-card>
+        
         <span v-if="!active" @click="openNav" class="p-3 text-white">
           <MenuSvg size="35px" fillColor="#ffffff" class="p-2 bg-[#9ce163]" />
         </span>
       </div>
     </div>
 
-    <!-- slider -->
-    <div id="default-carousel" class="relative mx-16" data-carousel="static">
-      <div class="w-full h-full  mx-0">
-        <div class="overflow-hidden  h-screen sm:h-screen xl:h-screen 2xl:h-screen">
-          <div v-show="currentIndex === index" v-for="(slide, index) in images" :key="index"
+    <!-- Slider -->
+    <div id="default-carousel" class="relative mx-3  md:mx-8 lg:mx-16" data-carousel="static">
+      <div class="w-full h-full mx-0 overflow-hidden h-screen">
+        <div class="h-screen">
+          <div v-for="(slide, index) in images" :key="index" v-show="currentIndex === index"
             class="w-full duration-700 ease-in-out" data-carousel-item>
-            <img :src="slide?.image"
-              class="block  absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2 "
-              :alt="slide.alt" />
+            <img :src="slide?.image" class="absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2" :alt="slide.alt" />
           </div>
         </div>
 
         <div class="flex absolute bottom-1/3 rotate-90 z-30 right-0 space-x-2 -translate-x-1">
           <button v-for="(slide, index) in images" :key="index" type="button"
-            :class="{ 'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index }"
+            :class="{'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index}"
             class="w-2 h-2 rounded-full" aria-current="false" @click="changeSlide(index)"></button>
-
         </div>
-        <button @click="previous" type="button"
-          class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
-          data-carousel-prev>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
+        <button @click="previous" type="button" class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none" data-carousel-prev>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <button @click="next" type="button"
-          class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none"
-          data-carousel-next>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
+        <button @click="next" type="button" class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none" data-carousel-next>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
           </svg>
         </button>
       </div>
-      <!-- text left bottom -->
-      <div id="sideText" class="absolute bottom-20 left-14 mx-auto">
+
+      <!-- Text Left Bottom -->
+      <div id="sideText" class="absolute bottom-20 left-14">
         <div class="text-[25px] font-graphik text-[#ffffff] bg-[#ff9d0f] uppercase px-2 py-1 mb-4">
           Sandbar Jax Bch | Springhill Suites By Marriott
         </div>
-        <span class="text-[17px] font-graphikLight text-textColorBlack bg-[#ffffff]  px-3 py-2">Irvine, CA</span>
+        <span class="text-[17px] font-graphikLight text-textColorBlack bg-[#ffffff] px-3 py-2">Irvine, CA</span>
       </div>
 
       <div class="absolute top-3 right-0">
-        <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png"
-          alt="Contract Design">
+        <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png" alt="Contract Design" />
       </div>
     </div>
-    <div class="mx-16 bg-[#f7f7f7] font-graphik text-[14px] text-[#4c4c4c]">
-      <p class="px-5 py-6 ">
-        Lebello contract design offers customized solutions for the hospitality, retail and trade industry. We built
-        long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and unique
-        bespoken outdoor products.
+
+    <div class="mx-3 md:mx-8 lg:mx-16 bg-[#f7f7f7] font-graphik text-[14px] text-[#4c4c4c]">
+      <p class="px-5 py-6">
+        Lebello contract design offers customized solutions for the hospitality, retail and trade industry. We build long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and unique bespoke outdoor products.
       </p>
     </div>
-    <!-- right corner watermark  -->
 
-
-
-
-    <!-- images -->
-    <div class="mx-16 relative grid grid-cols-1 md:grid-cols-4 gap-0">
-      <!-- Loop through products -->
-      <div v-for="(product, index) in products" :key="index" class=" ">
-        <div class="prod_content overflow-hidden">
-          <div class="product_img holder relative" :class="{
-            'transition-transform  duration-9000 ease-in-out transform scale-125':
-              isHovered[index],
-          }" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
-            <a :href="route('contractDetails')">
-              <img class="aos-item" ref="element" :data-aos="animationType"
-                :data-aos-duration="getAnimationDuration(index)" :src="product?.image" :alt="product?.name" />
-              <div :class="{
-                'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20':
-                  isHovered[index],
-              }"></div>
-              <div class="prod-overlay " :class="{ 'show-overlay': isHovered[index] }">
-                <div class="overlay-content">
-                  <p class="text-[11px] px-6 font-graphik">{{ product?.name }}</p>
-                  <p class=" text-[11px] font-graphikLight">{{ product?.location }}</p>
-                </div>
+    <!-- Images -->
+    <div class="mx-3 md:mx-8 lg:mx-16 relative grid grid-cols-2  md:grid-cols-4 gap-0 py-3 md:py-0">
+      <div v-for="(product, index) in products" :key="index" class="prod_content overflow-hidden ">
+        <div class="product_img holder relative" :class="{'md:transition-transform md:duration-9000 md:ease-in-out md:transform scale-125': isHovered[index]}"
+          @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+          <a :href="product.link">
+            <img :src="product?.image" :alt="product?.name" class="aos-item" ref="element"
+              :data-aos="animationType" :data-aos-duration="getAnimationDuration(index)" />
+            <div :class="{'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index]}"></div>
+            <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
+              <div class="overlay-content">
+                <p class="text-[11px]  font-graphik">{{ product?.name }}</p>
+                <p class="text-[11px] font-graphikLight">{{ product?.location }}</p>
               </div>
-            </a>
-          </div>
+            </div>
+          </a>
         </div>
       </div>
     </div>
+
+    <FooterSection />
   </div>
-  <FooterSection />
 </template>
 
 <script setup>

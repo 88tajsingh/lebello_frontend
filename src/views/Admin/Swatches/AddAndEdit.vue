@@ -1,6 +1,6 @@
 <template>
     <DefaultCard :cardTitle="store.getters.editData ? `Edit Swatches` : `Add Swatches`">
-        <DomainComponent @customChange="(id) => form.domain_id = id" :deleteService="SwatchesServices.deleteSwatches"
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="SwatchesServices.deleteSwatches"
             masterKey="master_swatch_id" :masterDeleteService="SwatchesServices.deleteMasterSwatch" routeTo="swatches">
         </DomainComponent>
         <template v-if="form.id" v-slot:header>
@@ -153,7 +153,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">
                                   
-                                    <SingleCheck v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></SingleCheck>
+                                    <singleCheckBox v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></singleCheckBox>
                                     <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true"
                                         valueField="id" showField="name" :data="MaterialTreeListData"
                                         @checked-items="handleCheckedItems" />
@@ -269,7 +269,7 @@ const handleCheckedItems = (checkedItems) => {
 const handleSubmit = async () => {
     if (!validateForm()) return
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
-
+    !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
     try {
         const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
