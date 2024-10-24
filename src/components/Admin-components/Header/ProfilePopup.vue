@@ -25,7 +25,7 @@
                             <Button class="px-6 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                                 @click="handleProfileUpdate">
                                 Save</Button>
-                            <Button class="px-4 py-2 m-auto" @click="() => { router.push('/admin') }">Cancel</Button>
+                            <Button class="px-4 py-2 m-auto" @click="() => { router.push('/dashboard') }">Cancel</Button>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@ const handleProfileUpdate = async () => {
                 const { password, password_confirmation, ...data } = form.value
                 store.dispatch('userUpdate', data);
                 showToast(res.data.message, 'success');
-                router.push('/admin');
+                router.push('/dashboard');
                 processing.value = false;
             } else if (res.status === 401) {
                 showToast(res.data.message, 'error');

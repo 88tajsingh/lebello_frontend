@@ -1,9 +1,16 @@
 <template>
   <div class=" overflow-x-hidden">
-    <NavMainSlider :list="products" :mainSlider="true" :showDropDown="false" :showHeading="true"
-      :downDropdown="false" />
+    <!-- v-if="sliderImages.length > 0"  -->
+    <MainSlider 
+  :sidebarList="sidebarList" 
+  :sliderImages="sliderImages" 
+  :mainSlider="true" 
+  :showDropDown="false" 
+  :showHeading="true" 
+  :downDropdown="false" 
+/>
     <CollectionVideoc />
-    <ProductCatergory />
+    <ProductCatergory  />
     <LogoSection />
     <FooterSection />
 
@@ -11,15 +18,30 @@
 </template>
 
 <script setup>
+import MainSlider from '@/components/frontend-components/Main-Slider.vue';
 import CollectionVideoc from '@/components/frontend-components/Collection-Video.vue';
 import ProductCatergory from '@/components/frontend-components/ProductCatergory.vue';
 import FooterSection from '@/components/frontend-components/Footer-section.vue';
-import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue';
 import LogoSection from '@/components/frontend-components/Logo-section.vue';
-import { ref, } from 'vue'
+import { onMounted, ref, } from 'vue'
+import PublicServices from '@/services/publicServices/PublicServices';
 
+const sliderImages = ref([]);
 
-const products = ref([
+const handleSliderImages =async () => {
+   const res = await PublicServices.getHomeSlider();
+  //  console.log("slider images", res);
+   if (res.status === 200 && res.data.success) {
+     sliderImages.value = res.data.data;
+    //  console.log("slider images", sliderImages.value);
+   }
+}
+
+onMounted(() => {
+  handleSliderImages();
+})
+
+const sidebarList = ref([
   { name: 'Trixie Lounger', link: 'https://lebello.com/products/trixie-lounger/' },
   { name: '4L Pixie Arms Chair', link: 'https://lebello.com/products/4l-pixie-arms-chair/' },
   { name: 'Monyet Stool', link: 'https://lebello.com/products/monyet-stool/' },

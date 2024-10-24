@@ -313,7 +313,14 @@ const ApiConfig = {
   statusUser: '/active-user',
 
   // Role API
-  getRole: '/role-list'
+  getRole: '/role-list',
+
+
+  // public  routes ---------------------------------
+  getHomeSlider: '/home-slider',
+
+
+
 }
 
 export default ApiConfig

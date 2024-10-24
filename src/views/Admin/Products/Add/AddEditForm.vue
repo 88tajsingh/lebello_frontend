@@ -2,8 +2,9 @@
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
 
         <!-- domain select delete master delete  -->
-        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="ProductServices.deleteProduct"
-            masterKey="master_product_id" :masterDeleteService="ProductServices.mastetrDeleteProduct" routeTo="product">
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
+            :deleteService="ProductServices.deleteProduct" masterKey="master_product_id"
+            :masterDeleteService="ProductServices.mastetrDeleteProduct" routeTo="product">
         </DomainComponent>
         <!-- slug update  -->
         <template v-if="form.id" v-slot:header>
@@ -676,7 +677,7 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import { statusData, trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
 import ProductServices from '@/services/ProductServices';
 
@@ -716,20 +717,20 @@ const imageData = ref({
 });
 
 // Handle file updates for different image types
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
-const handlegalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, true);
-const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider',data, imageData, form, true);
-const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form,false);
-const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
-const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files',data, imageData, form, true);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
+const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
+const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
+const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form, false);
+const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
+const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
 // const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
-const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form,false);
-const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form,false);
+const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form, false);
+const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
 
-const handleImageFiles = (data) =>{
+const handleImageFiles = (data) => {
     const media_titles = data.map((item) => item.title);
     imageData.value.image.mediaName = media_titles.join(", ");
-    imageData.value.image.images = [...imageData.value.image.images,...data];
+    imageData.value.image.images = [...imageData.value.image.images, ...data];
     imageData.value.image.isOpen = false;
     const media_ids = data.map((item) => item.id);
     form.value.product_specs[productsSpecsIndex.value].image = media_ids;
@@ -834,19 +835,22 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
-    const { status,domain, featured_image_url,new_product_slider_url,new_product_additional_bg_image_url,new_product_additional_right_box_image_url,
-        downloadable_files_url,product_series_data,contracts_data,product_types_data,product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
-    if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
+    const {  domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url,       new_product_additional_right_box_image_url,
+        downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
+    if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
+    form.value.material_swatches = {'swatch_ids': selectedSwatchIds.value, 'material_ids': selectedMaterialIds.value}
     try {
         const service = store.getters.editData ? ProductServices.editProduct : ProductServices.addProduct;
         const res = await service(payload);
+        console.log(' Update Response:', res);
 
         if (res.status === 200 && res.data.success) {
             if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
             else {
+                console.log('entred here');
                 showToast(res.data.message, 'success');
                 router.push('/product');
             }
@@ -886,7 +890,7 @@ const fetchProductData = async () => {
     loading.value = true
     const payload = { master_product_id: form.value.master_product_id, domain_id: form.value.domain_id }
     try {
-        const { status, data } = await ContractServices.getNewContract(payload)
+        const { status, data } = await ProductServices.getProduct(payload)
         if (status === 200 && data.success) {
             const dataValue = data.data[0]
             store.dispatch('setEdit', dataValue)
@@ -946,8 +950,8 @@ const fetchAllData = async (payload) => {
 onMounted(() => {
     if (store.getters.editData) {
 
-        const { featured_image_url, contract_logo_data,new_product_slider_url,
-            new_product_additional_bg_image_url, new_product_additional_right_box_image_url,downloadable_files_url, gallery_urls } = store.getters.editData;
+        const { featured_image_url, contract_logo_data, new_product_slider_url,
+            new_product_additional_bg_image_url, new_product_additional_right_box_image_url, downloadable_files_url, gallery_urls } = store.getters.editData;
         console.log(new_product_slider_url)
         imageData.value.featured_image.images = [featured_image_url];
         imageData.value.featured_image.mediaName = featured_image_url?.file_url || 'featured images';
@@ -956,10 +960,10 @@ onMounted(() => {
         imageData.value.new_product_additional_right_box_image.images = [new_product_additional_right_box_image_url];
         imageData.value.new_product_additional_right_box_image.mediaName = new_product_additional_right_box_image_url?.file_url || 'images';
         imageData.value.downloadable_files.images = downloadable_files_url;
-        imageData.value.downloadable_files.mediaName = downloadable_files_url.map(item => item?.file_url).join(', ') || 'featured images';
+        imageData.value.downloadable_files.mediaName = downloadable_files_url?.map(item => item?.file_url).join(', ') || 'featured images';
         imageData.value.new_product_slider.images = new_product_slider_url;
-        imageData.value.new_product_slider.mediaName = new_product_slider_url.map(item => item?.file_url).join(', ') || 'featured images';
-       
+        imageData.value.new_product_slider.mediaName = new_product_slider_url?.map(item => item?.file_url).join(', ') || 'featured images';
+
         imageData.value.contract_logo.images = [contract_logo_data];
         imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
         // imageData.value.contract_slider_image.images = [contract_slider_image_data] ||[];
@@ -967,14 +971,20 @@ onMounted(() => {
         imageData.value.gallery.images = gallery_urls;
         imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
 
+        fetchAllData({ domain_id: form.value.domain_id });
+
     }
 });
 
 // Watch for domain_id changes to update contract data
 watch(() => form.value.domain_id, (newDomainId) => {
-    // Fetch product type tree and reset parent product type
-    fetchAllData({ domain_id: form.value.domain_id });
-
+    form.value.product_series = null;
+    form.value.product_types = null;
+    form.value.contracts = null;
+    form.value.product_category_types = null;
+    form.value.materials = null;
+    // form.value.swatches = null;
+    fetchAllData({ domain_id: newDomainId });
     // Check if newDomainId is present in domains_data and fetch product type data if so
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchProductData();

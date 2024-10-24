@@ -282,7 +282,7 @@ const  routes = [
       {
         path: '/product-form',
         name: 'Product-from',
-        component: () => import('../views/Admin/Products/Add/AddEditContract.vue'),
+        component: () => import('../views/Admin/Products/Add/AddEditForm.vue'),
         meta: { requiresAuth: true }
       },
       {
@@ -585,8 +585,5 @@ router.beforeEach((to, from, next) => {
 
   next();
 });
-
-
-
 
 export default router
