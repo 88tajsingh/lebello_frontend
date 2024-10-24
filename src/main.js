@@ -13,6 +13,7 @@ import './assets/css/style.css';
 import '@bhplugin/vue3-datatable/dist/style.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import 'vue-toastification/dist/index.css';
+import Loader from '@/components/Admin-components/Loader.vue';
 
 // Lazy load components
 const components = {
@@ -64,26 +65,26 @@ app.use(store);
 app.use(createPinia());
 
 // Register components normally
-app.component('Loader', Loader);
-app.component('Button', Button);
-app.component('Select', Select);
-app.component('InputError', InputError);
-app.component('InputLabel', InputLabel);
-app.component('DomainComponent', DomainComponent);
-app.component('EditSvg', EditSvg);
-app.component('CompareSvg', CompareSvg);
-app.component('DeleteSvg', DeleteSvg);
-app.component('ColorInput', ColorInput);
-app.component('TextInput', TextInput);
-app.component('Checkbox', Checkbox);
-app.component('PopupModal', PopupModal);
-app.component('SingleCheck', SingleCheck);
-app.component('PageHeader', PageHeader);
-app.component('DeleteModal', DeleteModal);
-app.component('DatePicker', DatePicker);
-app.component('RadioButton', RadioButton);
-app.component('MasterSlugForm', MasterSlugForm);
-app.component('GetLibrary', GetLibrary);
+app.component('Loader', components.Loader);
+app.component('Button', components.Button);
+app.component('Select', components.Select);
+app.component('InputError', components.InputError);
+app.component('InputLabel', components.InputLabel);
+app.component('DomainComponent', components.DomainComponent);
+app.component('EditSvg', components.EditSvg);
+app.component('CompareSvg', components.CompareSvg);
+app.component('DeleteSvg', components.DeleteSvg);
+app.component('ColorInput', components.ColorInput);
+app.component('TextInput', components.TextInput);
+app.component('Checkbox', components.Checkbox);
+app.component('PopupModal', components.PopupModal);
+app.component('SingleCheck', components.SingleCheck);
+app.component('PageHeader', components.PageHeader);
+app.component('DeleteModal', components.DeleteModal);
+app.component('DatePicker', components.DatePicker);
+app.component('RadioButton', components.RadioButton);
+app.component('MasterSlugForm', components.MasterSlugForm);
+app.component('GetLibrary', components.GetLibrary);
 
 // Mount the app
 app.mount('#app');
