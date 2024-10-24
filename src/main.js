@@ -3,16 +3,13 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import { createVuetify } from 'vuetify';
 import HelpersPlugin from './helper/helperPlugin';
 import Toast from 'vue-toastification';
-
 
 // CSS Imports
 import './assets/main.css';
 import './assets/css/satoshi.css';
 import './assets/css/style.css';
-import 'vuetify/styles';
 import '@bhplugin/vue3-datatable/dist/style.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import 'vue-toastification/dist/index.css';
@@ -58,7 +55,6 @@ const toastOptions = {
 };
 
 // Create Vue app
-const vuetify = createVuetify();
 const app = createApp(App);
 
 app.use(HelpersPlugin);
@@ -66,12 +62,28 @@ app.use(Toast, toastOptions);
 app.use(router);
 app.use(store);
 app.use(createPinia());
-app.use(vuetify)
 
-// Register components
-Object.entries(components).forEach(([name, loader]) => {
-  app.component(name, defineAsyncComponent(loader));
-});
+// Register components normally
+app.component('Loader', Loader);
+app.component('Button', Button);
+app.component('Select', Select);
+app.component('InputError', InputError);
+app.component('InputLabel', InputLabel);
+app.component('DomainComponent', DomainComponent);
+app.component('EditSvg', EditSvg);
+app.component('CompareSvg', CompareSvg);
+app.component('DeleteSvg', DeleteSvg);
+app.component('ColorInput', ColorInput);
+app.component('TextInput', TextInput);
+app.component('Checkbox', Checkbox);
+app.component('PopupModal', PopupModal);
+app.component('SingleCheck', SingleCheck);
+app.component('PageHeader', PageHeader);
+app.component('DeleteModal', DeleteModal);
+app.component('DatePicker', DatePicker);
+app.component('RadioButton', RadioButton);
+app.component('MasterSlugForm', MasterSlugForm);
+app.component('GetLibrary', GetLibrary);
 
 // Mount the app
 app.mount('#app');
