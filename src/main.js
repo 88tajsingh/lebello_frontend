@@ -16,29 +16,7 @@ import 'vue-toastification/dist/index.css';
 import Loader from '@/components/Admin-components/Loader.vue';
 
 // Lazy load components
-const components = {
-  Loader: () => import('@/components/Admin-components/Loader.vue'),
-  Button: () => import('@/components/Admin-components/Buttons/Button.vue'),
-  Select: () => import('@/components/Admin-components/form-components/Select.vue'),
-  InputError: () => import('@/components/Admin-components/form-components/InputError.vue'),
-  InputLabel: () => import('@/components/Admin-components/form-components/InputLabel.vue'),
-  DomainComponent: () => import('@/components/Admin-components/form-components/DomainComponent.vue'),
-  EditSvg: () => import('@/components/Admin-components/svg/EditSvg.vue'),
-  CompareSvg: () => import('@/components/Admin-components/svg/CompareSvg.vue'),
-  DeleteSvg: () => import('@/components/Admin-components/svg/DeleteSvg.vue'),
-  ColorInput: () => import('@/components/Admin-components/form-components/ColorInput.vue'),
-  TextInput: () => import('@/components/Admin-components/form-components/TextInput.vue'),
-  Checkbox: () => import('@/components/Admin-components/form-components/CheckBox.vue'),
-  PopupModal: () => import('@/components/Admin-components/Modals/PopupModal.vue'),
-  SingleCheck: () => import('@/components/Admin-components/form-components/SingleCheck.vue'),
-  PageHeader: () => import('@/components/Admin-components/PageHeader.vue'),
-  DeleteModal: () => import('@/components/Admin-components/Modals/DeleteModal.vue'),
-  DatePicker: () => import('@/components/Admin-components/form-components/DatePicker.vue'),
-  RadioButton: () => import('@/components/Admin-components/form-components/RadioButton.vue'),
-  MasterSlugForm: () => import('@/components/Admin-components/MasterSlugForm.vue'),
-  GetLibrary: () => import('@/views/Admin/Media-section/MediaSection.vue'),
-};
-
+defineAsyncComponent
 // Toast options
 const toastOptions = {
   position: 'top-right',
