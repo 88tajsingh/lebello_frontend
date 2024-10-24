@@ -10,7 +10,7 @@
 </div>
 
     <div class="hidden  lg:block absolute left-1/2 bottom-5 animate-bounce mx-auto">
-      <div @click="scrollToTarget"
+      <div @click="()=>scrollDown('sideText1')"
         class="text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5 ease-in duration-300 px-3 py-1">
         <span class="transition ease-out duration-1000">
           <svg width="24px" height="24px" viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg" fill="#fafafa" stroke="#fafafa" stroke-width="73.728">
@@ -169,6 +169,7 @@ import BreadcrumbSection from "@/components/frontend-components/BreadcrumbSectio
 import LogoSection from "@/components/frontend-components/Logo-section.vue";
 import Footer from "@/components/frontend-components/Footer-section.vue";
 import { ref } from 'vue'
+import { scrollDown } from "@/helper/frontendHelpers";
 import MenuSvg from '@/components/frontend-components/Svg/Menu-Svg.vue';
 import { onClickOutside } from '@vueuse/core'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
@@ -222,30 +223,6 @@ const toggleAccordion = (index) => {
   activeIndex.value = activeIndex.value === index ? null : index;
 };
 
-const scrollToTarget = () => {
-  const targetDiv = document.getElementById('sideText1');
-  const startPosition = window.pageYOffset;
-  const targetPosition = targetDiv.getBoundingClientRect().top + window.pageYOffset;
-  const distance = targetPosition - startPosition;
-  const duration = 1000; // Duration of the scroll in milliseconds
-  let startTime = null;
-
-  const easeInOutQuad = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-
-  const animateScroll = (currentTime) => {
-    if (startTime === null) startTime = currentTime;
-    const timeElapsed = currentTime - startTime;
-    const run = easeInOutQuad(timeElapsed / duration) * distance + startPosition;
-    window.scrollTo(0, run);
-    if (timeElapsed < duration) {
-      requestAnimationFrame(animateScroll);
-    } else {
-      window.scrollTo(0, targetPosition);
-    }
-  };
-
-  requestAnimationFrame(animateScroll);
-}
 
 const items = ref([
   {

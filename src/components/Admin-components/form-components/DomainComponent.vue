@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import CommonServices from '@/services/CommonServices';
 import { showToast } from '@/helper/functions';
 import { useStore } from 'vuex';
@@ -110,7 +110,6 @@ const handleResponse = (res, onSuccess) => {
 
 const handleError = (error) => {
   showToast('Something went wrong', error);
-  console.log("error", error);
 };
 
 const removeItem = (indexValue) => {
@@ -179,6 +178,10 @@ watch(() => domain_id.value, (newValue) => {
     }
     else 
     emit('domainArray',null)
+});
+
+watch(() => domainsArray.value.length === 1 , (lenth) => {
+  domainsArray.value.length === 1 && (selectedDomain.value = domainsArray.value[0]);
 });
 
 onMounted(handleGetDomains);

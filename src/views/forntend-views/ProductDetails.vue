@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-hidden">
-    <NavMainSlider :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
+    <MainSlider :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
       :downDropdown="false" />
 
     <div class="flex justify-between py-5">
@@ -52,7 +52,7 @@
     </section>
 
     <transition>
-      <div id="app" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
+      <div id="scrollTOadditional" v-scroll="-400" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
         <div class="grid grid-cols-1 mt-[5px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div class="product-item p-0" v-for="(product, index) in products" :key="index">
             <div class="product_img overflow-hidden">
@@ -68,7 +68,7 @@
     </transition>
 
     <transition>
-      <div ref="scrollTOadditional" v-scroll="-400" v-show="addiVisible"
+      <div ref="scrollTOadditional"  v-scroll="-400" v-show="addiVisible"
         class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0">
         <div class="py-10 m-0 relative px-14 ld:w-1/2 font-light text-left text-white bg-green">
           <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
@@ -189,9 +189,11 @@
 </template>
 
 <script setup>
+import MainSlider from '@/components/frontend-components/Main-Slider.vue'
 import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import { ref } from 'vue'
+import { scrollDown } from '@/helper/frontendHelpers'
 import ArrowSvg from '@/components/frontend-components/Svg/Arrow-Svg.vue'
 import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'
 import { onClickOutside } from '@vueuse/core'
@@ -254,7 +256,7 @@ const rotate = () => {
 const HandleAdditionalInfo = () => {
   addiVisible.value = !addiVisible.value;
   isVisible.value = false;
-  if (addiVisible.value) scrollToTarget();
+  if (addiVisible.value) scrollToTarget('scrollTOadditional');
 };
 
 const scrollToTarget = () => {

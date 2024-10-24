@@ -1,7 +1,7 @@
 <template>
   <transition name="modal-fade">
     <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center py-2 px-28 bg-black bg-opacity-50 z-999999 ">
-      <div :class="custonClasses ? custonClasses :'max-w-full w-full h-full'" class="modal-container relative  bg-white rounded-lg shadow-lg  overflow-y-auto" 
+      <div  class="modal-container relative  bg-white rounded-lg shadow-lg  overflow-y-auto" :class="custonClasses ? custonClasses :'max-w-full w-full h-full'" 
       >
         <div class="modal-header flex justify-between items-center mt-4 ml-3  bg-gray-200 rounded-t-lg">
           <h3 class="text-lg font-semibold">{{ modalTitle }}</h3>

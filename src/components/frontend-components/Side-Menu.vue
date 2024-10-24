@@ -2,7 +2,7 @@
   <div class="">
     <v-card :class="{ 'w-[230px] z-50 right-0': isOpen, 'w-[230px] z-50 right-[-250px]': !isOpen }"
       class="sidenav bg-[#ededed] pb-2 z-50 absolute top-7  transition-all duration-1000 ease-in-out">
-      <div class="z-50">
+      <!-- <div class="z-50">
         <div v-if="mainSlider" class="h-auto mb-2 mx-7 mt-4">
           <h3 class="text-[14px]">
             <a href="https://www.lebello.com/listItem/"
@@ -149,7 +149,8 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
+      <slot></slot>
     </v-card>
     <span v-if="!isOpen" @click="handleSideMenu" class="text-9xl bg-transparent sticky top-5">
       <MenuSvg :size="svgSize" :fillColor="svgColor" />
@@ -159,6 +160,7 @@
 
 <script setup>
 import MenuSvg from "./Svg/Menu-Svg.vue";
+// import { VCard } from 'vuetify/lib';
 import FormDropdown from "./Form-components/Form-Dropdown.vue";
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/style.css';
