@@ -16,7 +16,29 @@ import 'vue-toastification/dist/index.css';
 import Loader from '@/components/Admin-components/Loader.vue';
 
 // Lazy load components
-defineAsyncComponent
+const components = {
+  Loader: defineAsyncComponent(() => import('@/components/Admin-components/Loader.vue')),
+  Button: defineAsyncComponent(() => import('@/components/Admin-components/Buttons/Button.vue')),
+  Select: defineAsyncComponent(() => import('@/components/Admin-components/form-components/Select.vue')),
+  InputError: defineAsyncComponent(() => import('@/components/Admin-components/form-components/InputError.vue')),
+  InputLabel: defineAsyncComponent(() => import('@/components/Admin-components/form-components/InputLabel.vue')),
+  DomainComponent: defineAsyncComponent(() => import('@/components/Admin-components/form-components/DomainComponent.vue')),
+  EditSvg: defineAsyncComponent(() => import('@/components/Admin-components/svg/EditSvg.vue')),
+  CompareSvg: defineAsyncComponent(() => import('@/components/Admin-components/svg/CompareSvg.vue')),
+  DeleteSvg: defineAsyncComponent(() => import('@/components/Admin-components/svg/DeleteSvg.vue')),
+  ColorInput: defineAsyncComponent(() => import('@/components/Admin-components/form-components/ColorInput.vue')),
+  TextInput: defineAsyncComponent(() => import('@/components/Admin-components/form-components/TextInput.vue')),
+  Checkbox: defineAsyncComponent(() => import('@/components/Admin-components/form-components/CheckBox.vue')),
+  PopupModal: defineAsyncComponent(() => import('@/components/Admin-components/Modals/PopupModal.vue')),
+  SingleCheck: defineAsyncComponent(() => import('@/components/Admin-components/form-components/SingleCheck.vue')),
+  PageHeader: defineAsyncComponent(() => import('@/components/Admin-components/PageHeader.vue')),
+  DeleteModal: defineAsyncComponent(() => import('@/components/Admin-components/Modals/DeleteModal.vue')),
+  DatePicker: defineAsyncComponent(() => import('@/components/Admin-components/form-components/DatePicker.vue')),
+  RadioButton: defineAsyncComponent(() => import('@/components/Admin-components/form-components/RadioButton.vue')),
+  MasterSlugForm: defineAsyncComponent(() => import('@/components/Admin-components/MasterSlugForm.vue')),
+  GetLibrary: defineAsyncComponent(() => import('@/views/Admin/Media-section/MediaSection.vue')),
+};
+
 // Toast options
 const toastOptions = {
   position: 'top-right',
