@@ -11,10 +11,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@bhplugin/vue3-datatable": "^1.1.4",
+    "@bhplugin/vue3-datatable": "^2.0.0",
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.1.5",
-    "@tinymce/tinymce-vue": "^6.0.1",
+    "@tinymce/tinymce-vue": "^6.1.0",
     "@vuepic/vue-datepicker": "^9.0.3",
     "@vueuse/core": "^11.1.0",
     "aos": "^2.3.4",
@@ -23,9 +23,9 @@
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
-    "pinia": "^2.2.2",
-    "tailwindcss": "^3.4.13",
-    "vue": "^3.5.8",
+    "pinia": "^2.2.4",
+    "tailwindcss": "^3.4.14",
+    "vue": "^3.5.12",
     "vue-draggable-next": "^2.2.1",
     "vue-loading-overlay": "^6.0.6",
     "vue-router": "^4.4.5",
@@ -47,6 +47,6 @@
     "autoprefixer": "^10.4.20",
     "less": "^4.2.0",
     "prettier": "^3.3.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.10"
   }
 }
