@@ -31,7 +31,7 @@ const productdata = ref([
     img: 'https://lebello.com/wp-content/uploads/2022/09/Contract-Design-image-2.png',
     heading: 'Contract Design',
     peragraph: 'See our previous project around the world',
-    urlLink:'/contractDesign'
+    urlLink:'/contract_designs'
   },
   {
     img: 'https://lebello.com/wp-content/uploads/2022/09/Product-Catalog-image.jpg',

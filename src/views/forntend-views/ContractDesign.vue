@@ -59,9 +59,9 @@
       </div>
     </div>
 
-    <!-- Slider -->
+    <!-- Slider --> 
     <div id="default-carousel" class="relative mx-3  md:mx-8 lg:mx-16" data-carousel="static">
-      <div class="w-full h-full mx-0 overflow-hidden h-screen">
+      <div class="w-full h-full mx-0 overflow-hidden">
         <div class="h-screen">
           <div v-for="(slide, index) in images" :key="index" v-show="currentIndex === index"
             class="w-full duration-700 ease-in-out" data-carousel-item>
@@ -137,6 +137,7 @@ import { onClickOutside } from "@vueuse/core";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { getContractDesignData } from "@/helper/frontendHelpers";
 
 const element = ref(null);
 const currentIndex = ref(0)
@@ -151,6 +152,11 @@ const closeSideMenu = () => {
   active.value = false;
 };
 onClickOutside(closeMenu, closeSideMenu);
+
+const getContractDesign= async()=>{
+  const {status,data}= await getContractDesignData()
+  console.log("slider images",status, data);
+}
 
 const products = [
   {
@@ -304,6 +310,7 @@ const toggleOverlay = (index, show) => {
   isHovered.value[index] = show;
 };
 onMounted(() => {
+  getContractDesign() 
   AOS.init({});
   AOS.refresh();
 
@@ -324,6 +331,18 @@ onMounted(() => {
   products.value = [];
   isHovered.value = new Array(products.value.length).fill(false);
 });
+
+const  handleContracrtDesignData = async () => {  
+  const res = await getContractDesignData()
+   console.log("slider images", res);
+  if (res.status === 200 && res.data.success) {
+     landingPageData.value = res.data.data
+  }
+}
+
+onMounted(() => {
+  handleContracrtDesignData()
+})
 
 onUnmounted(() => {
   AOS.refreshHard();

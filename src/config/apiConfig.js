@@ -317,7 +317,9 @@ const ApiConfig = {
 
 
   // public  routes ---------------------------------
-  getHomeSlider: '/home-slider',
+  getDomain:'/get-domain',
+  getLandingPageData: '/get-landing-page-data',
+  getContractDesign: '/get-contract-design-data',
 
 
 
