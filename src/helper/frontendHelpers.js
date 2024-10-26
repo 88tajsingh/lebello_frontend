@@ -1,3 +1,5 @@
+import PublicServices from "@/services/publicServices/PublicServices";
+
 export const scrollDown = (id) => {
     console.log(id);
     const targetDiv = document.getElementById(id);
@@ -24,3 +26,39 @@ export const scrollDown = (id) => {
   
     requestAnimationFrame(animateScroll);
   }
+
+  const withDomain = async (service,single=false) => {
+    try {
+      const {status,data} = await PublicServices.getDomainData();
+      if (single) {
+        return { status, data };
+      } else if(status === 200){
+      const secondResponse = await service(data.data.id);
+      return secondResponse;       
+    }else{
+      console.log("Something went wrong",status,data);
+    }
+
+    } catch (error) {
+      console.error("API call error:", error);
+      throw error; 
+    }
+  };
+
+  const withoutDomain = async (service) => {
+    try {
+      const res = await service();
+      return res;   
+    } catch (error) {
+      console.error("API call error:", error);
+      throw error; 
+    }
+  };
+
+// with domain apis 
+  export const getLandingPageData = () => withDomain(PublicServices.getLandingPageData,false);
+  export const getContractDesignData = () => withDomain(PublicServices.getContractDesign,false);
+
+
+
+  // without domain apis

@@ -18,32 +18,32 @@ import { ref } from 'vue'
 
 const logoData = ref([
   {
-    href: 'contractDesign',
+    href: ' #',
     image: 'https://lebello.com/wp-content/uploads/2015/03/hyatt-logo-1.png',
     alt: 'hyatt'
   },
   {
-    href: 'contractDesign',
+    href: ' #',
     image: 'http://lebello.com/wp-content/uploads/2015/03/one-and-only-logo-1.png',
     alt: 'one-and-only'
   },
   {
-    href: 'contractDesign',
+    href: ' #',
     image: 'http://lebello.com/wp-content/uploads/2015/03/w-hotels-logo-1.png',
     alt: 'w-hotels'
   },
   {
-    href: 'contractDesign',
+    href: ' #',
     image: 'https://lebello.com/wp-content/uploads/2015/03/ink-logo_1-1.gif',
     alt: 'ink-logo'
   },
   {
-    href: 'contractDesign',
+    href: ' #',
     image: 'http://lebello.com/wp-content/uploads/2015/03/marriot-resorts-logo-1.png',
     alt: 'marriot-resorts'
   },
   {
-    href: 'contractDesign',
+    href: ' #',
     image: 'http://lebello.com/wp-content/uploads/2015/03/marriot-resorts-logo-1.png',
     alt: 'marriot-resorts'
   }

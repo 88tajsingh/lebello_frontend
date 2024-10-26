@@ -24,7 +24,7 @@ const  routes = [
     component: () => import('../views/forntend-views/ContractPage.vue')
   },
   {
-    path: '/contractDetails',
+    path: '/contract_design/:slug?',
     name: 'contractDetails',
     component: () => import('../views/forntend-views/ContractDetailPage.vue')
   },
@@ -34,7 +34,7 @@ const  routes = [
     component: () => import('../views/forntend-views/ContactUsPage.vue')
   },
   {
-    path: '/contractDesign',
+    path: '/contract_designs',
     name: 'contractDesign',
     component: () => import('../views/forntend-views/ContractDesign.vue')
   },
@@ -529,9 +529,9 @@ const publicPaths = [
   '/productDetail',
   '/category',
   '/contract',
-  '/contractDetails',
+  '/contract_design/:slug?',
   '/contactUs',
-  '/contractDesign',
+  '/contract-design',
   '/dealers',
   '/libraryandtools',
   // '/not-found',

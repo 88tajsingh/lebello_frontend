@@ -1,4 +1,4 @@
-<template>
+<template>{{form}}
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
 
         <!-- domain select delete master delete  -->
@@ -309,55 +309,56 @@
                     <div class="mt-3">
                         <Accordion :open="true" header="Products Slider Heading">
                             <div v-for="(item, index) in form.banner_slide" :key="index">
-                                <div class="mt-3">
-                                    <div class="px-6  h-auto ">
-                                        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                            @click="() => { productsSpecsIndex = index; imageData.video_source.isOpen = true; }">
-                                            {{ imageData.video_source?.mediaName }}
-                                        </div>
-                                        <div class="mt-3 flex overflow-x-auto">
-                                            <img v-if="imageData.video_source?.images[index]"
-                                                :src="$filePath(imageData.video_source?.images[index]?.file_url)"
-                                                class="inline-block w-auto h-34 mr-4"
-                                                :alt="imageData.video_source?.images[index]?.alternative_text || ''">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-2 px-6  h-auto">
-                                    <ColorPicker label="Text Color" v-model="item.text_color"
-                                        :hasCheckBox="checkBoxFlag" />
-                                </div>
-                                <div class="mt-2 px-6  h-auto">
-                                    <ColorPicker label="Background Color" v-model="item.bg_color" />
-                                </div>
-                                <div class="flex flex-col px-7 ">
-                                    <InputLabel for="Memu Color" value="Memu Color" />
-                                    <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
-                                        label="Select Status" v-model="item.menu_color" />
-                                </div>
-                                <div class=" px-5 my-4 items-center text-gray-600 text-sm">
-                                    <TextInput id="seo_title" type="text" class="block mr-2 h-[33px]"
-                                        v-model="item.transparent" placeholder="" label="Transprent %" />
-                                </div>
-                                <div class="px-6  h-auto ">
-                                    <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                        @click="() => { productsSpecsIndex = index; imageData.slide.isOpen = true; }">
-                                        {{ imageData.slide?.mediaName }}
-                                    </div>
-                                    <div class="mt-3 flex overflow-x-auto">
-                                        <img v-if="imageData.slide?.images[index]"
-                                            :src="$filePath(imageData.slide?.images[index]?.file_url)"
-                                            class="inline-block w-auto h-34 mr-4"
-                                            :alt="imageData.slide?.images[index]?.alternative_text || 'image'">
-                                    </div>
-                                </div>
-                                <div class="ml-auto">
-                                    <button @click="banner_slide_remove" type="button"
-                                        class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-red  font-medium text-gray hover:bg-opacity-90">
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
+    <div class="mt-3">
+        <div class="px-6 h-auto">
+            <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                @click="() => { productsSpecsIndex = index; imageData.video_source.isOpen = true; }">
+                {{ imageData.video_source?.mediaName }}
+            </div>
+            <div class="mt-3 flex overflow-x-auto">
+                <img v-if="imageData.video_source?.images[index]"
+                    :src="$filePath(imageData.video_source?.images[index]?.file_url)"
+                    class="inline-block w-auto h-34 mr-4"
+                    >
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 px-6 h-auto">
+        <ColorPicker label="Text Color" v-model="item.text_color" :hasCheckBox="checkBoxFlag" />
+    </div>
+    <div class="mt-2 px-6 h-auto">
+        <ColorPicker label="Background Color" v-model="item.bg_color" />
+    </div>
+    <div class="flex flex-col px-7">
+        <InputLabel for="Menu Color" value="Menu Color" />
+        <Select :options="trueFalse" showfield="name" class="w-full" valueField="value"
+            label="Select Status" v-model="item.menu_color" />
+    </div>
+    <div class="px-5 my-4 items-center text-gray-600 text-sm">
+        <TextInput id="seo_title" type="text" class="block mr-2 h-[33px]"
+            v-model="item.transparent" placeholder="" label="Transparent %" />
+    </div>
+    <div class="px-6 h-auto">
+        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+            @click="() => { productsSpecsIndex = index; imageData.slide.isOpen = true; }">
+            {{ imageData.slide?.mediaName }} 
+        </div>
+        {{ productsSpecsIndex }}
+        <div class="mt-3 flex overflow-x-auto">
+            <img v-if="imageData.slide?.images[index]"
+                :src="$filePath(imageData.slide?.images[index]?.file_url)"
+                class="inline-block w-auto h-34 mr-4"
+                :alt="imageData.slide?.images[index]?.alternative_text || 'image'">
+        </div>
+    </div>
+    <div class="ml-auto">
+        <button @click="banner_slide_remove" type="button"
+            class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-red font-medium text-gray hover:bg-opacity-90">
+            Remove
+        </button>
+    </div>
+</div>
+
                             <button @click="banner_slide" type="button"
                                 class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
                                 Add
@@ -669,7 +670,6 @@
 import _ from 'lodash';
 import { ref, onMounted, watch, computed } from "vue";
 import { showToast, getGlobalUpdateData, handleFileUpdate } from '@/helper/functions'
-import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
@@ -821,7 +821,7 @@ function banner_slide() {
         text_color: '',
         bg_color: '',
         menu_color: '',
-        transparent: '',
+        transparent: 0,
         slide: '',
     });
 }

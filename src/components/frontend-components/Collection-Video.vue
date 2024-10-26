@@ -19,7 +19,7 @@
         <div class="px-7">
           <div class="search">
             <form role="search">
-              <div>
+              <div class="border border-[#33333357]">
                 <FormDropdown />
               </div>
               <div class="relative border-b border-gray-400 mt-2">
@@ -36,7 +36,7 @@
               </div>
             </form>
           </div> 
-          <div  class="h-auto mb-2  mt-4 border-b border-gray-400">
+          <div  class="h-auto mb-2 border-y border-[#33333357] py-2 border-b border-gray-400">
           <h3 class="text-[14px]">
             <a href="https://www.lebello.com/listItem/"
               class="uppercase font-graphikMedium text-[14px] text-textColorBlack">Collection 2024</a>
@@ -44,12 +44,13 @@
         </div>
           <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
             <PerfectScrollbar class="max-h-52">
-              <li class="mt-1" v-for="(listItem, index) in products" :key="index">
+              <li class="mt-1" v-for="(listItem, index) in props.sidebarList" :key="index">
                 <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.name }}</a>
+              
               </li>
             </PerfectScrollbar>
           </ul>
-          <div  class="border-t border-gray-400 my-3">
+          <div  class="border-t border-[#33333357] my-3">
             <ul class="flex justify-center mt-3">
               <li>
                 <a href="https://www.facebook.com/share.php?u=https://lebello.com/products/b-chair-1-2/&title=B Chair"
@@ -206,6 +207,14 @@ import { ref } from "vue";
 import SideMenu from "./Side-Menu.vue";
 import MenuSvg from "./Svg/Menu-Svg.vue";
 import FormDropdown from "./Form-components/Form-Dropdown.vue";
+
+
+const props = defineProps({
+  sidebarList: {
+    type: Array,
+    required: true,
+  },
+});
 
 const open = ref(false);
 const handleModal = () => {
