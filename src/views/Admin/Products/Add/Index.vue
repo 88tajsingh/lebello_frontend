@@ -244,10 +244,10 @@ import { showToast } from '@/helper/functions';
 import { getDomains } from '@/helper/Apis';
 import { product, statusData } from '@/json/data';
 import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
-import store from '@/store';
-
+import { useStore } from 'vuex';
 
 const router = useRouter();
+const store =  useStore();
 const materialNames = ref({});
 const bulkActionSelected = ref(null)
 const loading = ref(false);
@@ -276,9 +276,10 @@ const materialSwatchesList = ref([]);
 const MaterialTreeListData = ref([]);
 
 const handelEditClick = (data) => {
-  store.dispatch('setEdit', data)
-  const id = data.domain_id
-  store.dispatch('setDomain', { id: id });
+  console.log("data",data);
+ store.dispatch('setEdit', data) 
+  const id =data.domain_id
+  store.dispatch('setDomain', {id:id});
   router.push({ name: 'Product-from' });
 }
 
