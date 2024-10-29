@@ -326,7 +326,7 @@
                                             name="Visibility" :value="option.value" :label="option.label"
                                             :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
-                                    <div v-if="iswithBg == 1" class="">
+                                    <div v-if="iswithBg == 1 || form.sub_heading_background" class="">
                                         <ColorPicker label="Select BG Color" v-model="form.sub_heading_background"
                                             :hasCheckBox="checkBoxFlag"
                                             @update:checkValue="value => checkedFields.sub_heading_background = value" />
@@ -371,7 +371,7 @@
                                             name="Visibility" :value="option.value" :label="option.label"
                                             :modelValue="iswithBgHeading" @update:modelValue="iswithBgHeading = $event" />
                                     </div>
-                                    <div v-if="iswithBgHeading == 1" class="">
+                                    <div v-if="iswithBgHeading == 1 || form.heading_background" class="">
                                         <ColorPicker label="Select BG Color" v-model="form.heading_background"
                                             :hasCheckBox="checkBoxFlag"
                                             @update:checkValue="value => checkedFields.heading_background = value" />

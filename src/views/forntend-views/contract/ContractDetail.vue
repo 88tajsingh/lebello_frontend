@@ -353,6 +353,18 @@ const handleClick = (sub) => {
   router.push(route);
 };
 
+const camelCase = (slide, text) => {
+  if (!text) return '';
+  console.log(slide.sub_heading_case );
+  if (slide.sub_heading_case === 'No Caps' || slide.heading_case === 'no caps')
+    return text
+  else
+    return text
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+};
+
 onMounted(() => {
   handleContractDesignData();
 });
