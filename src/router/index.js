@@ -18,15 +18,20 @@ const  routes = [
     name: 'category',
     component: () => import('../views/forntend-views/CategoryPage.vue')
   },
+  // {
+  //   path: '/contract', //done
+  //   name: 'contract',
+  //   component: () => import('../views/forntend-views/contract/ContractPage.vue')
+  // },
   {
-    path: '/contract', //done
-    name: 'contract',
-    component: () => import('../views/forntend-views/ContractPage.vue')
+    path: '/contract_type/:slug?',
+    name: 'contractType',
+    component: () => import('../views/forntend-views/contract/ContractType.vue')
   },
   {
     path: '/contract_design/:slug?',
-    name: 'contractDetails',
-    component: () => import('../views/forntend-views/ContractDetailPage.vue')
+    name: 'contractDesign',
+    component: () => import('../views/forntend-views/contract/ContractDetail.vue')
   },
   {
     path: '/contactUs',//done
@@ -35,8 +40,8 @@ const  routes = [
   },
   {
     path: '/contract_designs',
-    name: 'contractDesign',
-    component: () => import('../views/forntend-views/ContractDesign.vue')
+    name: 'contractDesigns',
+    component: () => import('../views/forntend-views/contract/ContractDesign.vue')
   },
   {
     path: '/dealers',

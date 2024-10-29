@@ -13,6 +13,9 @@ class PublicServices {
     return instance.get(ApiConfig.getContractDesign, { params: {domain_id:payload} })
   }
 
+  contractDesign(id,payload) {
+    return instance.get(ApiConfig.contractDesign, { params: {domain_id:id,id:payload}, })
+  }
  
 }
 

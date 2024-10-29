@@ -4,6 +4,7 @@ import { encryptData, decryptData } from './EncriptDecript';
 
 export default new Vuex.Store({
   state: {
+    currentID:localStorage.getItem('currentID')|| null,
     token: decryptData(localStorage.getItem('token')) || null,
     expiresAt: localStorage.getItem('expiresAt') || null,
     user: decryptData(localStorage.getItem('user')) || null,
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     domain: decryptData(localStorage.getItem('domain')) || null,
   },
   getters: {
+    getCurrentID: (state) => state.currentID,
     token: (state) => state.token,
     user: (state) => state.user,
     getDomain: (state) => state.domain,
@@ -59,7 +61,12 @@ export default new Vuex.Store({
     clearEdit(state) {
       state.edit = null;
       localStorage.removeItem('edit');
-    }
+    },
+    setCurrentId(state, params) {
+      console.log("currentID", params)
+      localStorage.setItem('currentID', params);
+      state.currentID = params;
+    },
   },
   actions: {
     login({ commit }, { token, user, expiresAt }) {
@@ -84,6 +91,10 @@ export default new Vuex.Store({
     },
     setEdit({ commit }, data) {
       commit('setEdit', data);
+    },
+    setCurrentId({ commit }, data) {
+      console.log("setCurrentId", data);
+      commit('setCurrentId', data);
     },
     clearDomain({ commit }) {
       commit('clearDomain');
