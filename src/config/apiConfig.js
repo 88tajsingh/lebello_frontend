@@ -319,7 +319,8 @@ const ApiConfig = {
   // public  routes ---------------------------------
   getDomain:'/get-domain',
   getLandingPageData: '/get-landing-page-data',
-  getContractDesign: '/get-contract-design-data',
+  getContractDesign: '/front-end-contract-design-data',
+  contractDesign: '/front-end-contract-design',
 
 
 

@@ -27,30 +27,30 @@ export const scrollDown = (id) => {
     requestAnimationFrame(animateScroll);
   }
 
-  const withDomain = async (service,single=false) => {
+  const withDomain = async (service,payload,single=false) => {
     try {
       const {status,data} = await PublicServices.getDomainData();
       if (single) {
         return { status, data };
       } else if(status === 200){
-      const secondResponse = await service(data.data.id);
+      const secondResponse = await service(data.data.id,payload);
       return secondResponse;       
     }else{
       console.log("Something went wrong",status,data);
     }
 
     } catch (error) {
-      console.error("API call error:", error);
+      console.error(`${service} call error:`, error);
       throw error; 
     }
   };
 
-  const withoutDomain = async (service) => {
+  const withoutDomain = async (service,id) => {
     try {
-      const res = await service();
+      const res = await service(id);
       return res;   
     } catch (error) {
-      console.error("API call error:", error);
+      console.error(`${service} call error:`, error);
       throw error; 
     }
   };
@@ -58,7 +58,9 @@ export const scrollDown = (id) => {
 // with domain apis 
   export const getLandingPageData = () => withDomain(PublicServices.getLandingPageData,false);
   export const getContractDesignData = () => withDomain(PublicServices.getContractDesign,false);
+  export const getContractDesign = (id) => withDomain(PublicServices.contractDesign,id,false);
 
 
 
   // without domain apis
+  export const getContractDesi = (id) => withoutDomain(PublicServices.contractDesign,id);

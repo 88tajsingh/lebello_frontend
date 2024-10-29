@@ -1,9 +1,10 @@
-<template>
+<template>{{ form }}
     <DefaultCard :cardTitle="form.id ? `Edit Contract` : `Add New Contract`">
         <!-- domain select delete master delete domainArray  -->
-        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"  :deleteService="ContractServices.deleteNewContract"
-            masterKey="master_contract_design_id" :masterDeleteService="ContractServices.deleteMasterContractDesign"
-            routeTo="Contract-Design"></DomainComponent>
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
+            :deleteService="ContractServices.deleteNewContract" masterKey="master_contract_design_id"
+            :masterDeleteService="ContractServices.deleteMasterContractDesign" routeTo="Contract-Design">
+        </DomainComponent>
         <!-- slug update  -->
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm :form="form" @update-slug="fetchDomainContractData"
@@ -137,11 +138,43 @@
                     </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Featured Products ">
-                            <div class="mt-2 px-6 flex h-auto ">
-                                <Checkbox :nexted=true :dropdown="true" valueField="id" showField="contract_name"
-                                    :checkedData='form.contract_type' :data="contractType"
-                                    @checked-items="(checked) => { form.contract_type = checked }" />
+                            <div class="p-4">
+                                <div v-for="item in productFeatureData" :key="item.id" class="mb-2">
+                                    <div class="flex items-center justify-between cursor-pointer bg-gray p-1 rounded-sm px-3"
+                                        @click.prevent="toggleExpand(item)">
+                                        <label class="font-semibold">
+                                            {{ item.title }}
+                                        </label>
+                                        <span class="mr-2">
+                                            <svg v-if="isExpanded(item.id)" xmlns="http://www.w3.org/2000/svg"
+                                                class="w-4 h-4 inline-block" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 12H9m6-6l-6 6 6 6" />
+                                            </svg>
+                                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 12h6m-6 6l6-6-6-6" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <div v-if="isExpanded(item.id)" class="pl-3">
+                                        <div v-if="item.product_series && item.product_series.length">
+                                            <input type="checkbox" :id="'child-' + item.product_series[0].id"
+                                                v-model="form.feature_products" :value="item.product_series[0].id"
+                                                class="mr-2" />
+                                            <label :for="'child-' + item.product_series[0].id">{{
+                                                item.product_series[0].name
+                                                }}</label>
+                                        </div>
+                                        <div v-else class="text-gray-500">
+                                            No children available.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </Accordion>
                     </div>
 
@@ -156,10 +189,8 @@
                                     <Select :options="statusData" showfield="name" class="w-full" valueField="value"
                                         label="Select Status" v-model="form.status" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.status = value"
-                                        :errorClass='errors.status'
-                                        :errMessage="errors.status"
-                                        @update:modelValue="$clearError(errors, 'status')"
-                                        />
+                                        :errorClass='errors.status' :errMessage="errors.status"
+                                        @update:modelValue="$clearError(errors, 'status')" />
                                 </div>
                             </div>
                         </div>
@@ -279,8 +310,8 @@
                     <div class="mt-5">
                         <Accordion :open="true" header="Simple Fields">
                             <div class="mt-2 px-6 flex h-auto">
-                                <Select :options="options" showfield="name" class="w-full" :defaultZero='true'
-                                    valueField="value" label="Select Parent Material" v-model="form.simple_fields"
+                                <Select :options="simple_fields" showfield="name" class="w-full" :defaultZero='true'
+                                    valueField="id" label="Select Parent Material" v-model="form.simple_fields"
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.simple_fields = value" />
                             </div>
@@ -295,10 +326,10 @@
                                             name="Visibility" :value="option.value" :label="option.label"
                                             :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
-                                    <div v-if="iswithBg" class="">
-                                        <ColorPicker label="Select BG Color" v-model="form.contract_title_color"
+                                    <div v-if="iswithBg == 1" class="">
+                                        <ColorPicker label="Select BG Color" v-model="form.sub_heading_background"
                                             :hasCheckBox="checkBoxFlag"
-                                            @update:checkValue="value => checkedFields.contract_title_color = value" />
+                                            @update:checkValue="value => checkedFields.sub_heading_background = value" />
                                     </div>
 
                                 </div>
@@ -309,19 +340,64 @@
                                 </div>
 
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                    label="Heading Font Size" v-model="form.sub_heading_font_size"
+                                    :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="value => checkedFields.sub_heading_font_size = value" />
+
+                                <div class="my-3">
+                                    <InputLabel for="subHeadingCase" value="Heading Case" />
+                                    <div class='flex gap-3'>
+                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.sub_heading_case">
+                                        </SingleCheck>
+                                        <RadioButton v-for="option in capsNOCaps" :key="option.value" name="Visibility"
+                                            :value="option.value" :label="option.label"
+                                            :modelValue="form.sub_heading_case"
+                                            @update:modelValue="form.sub_heading_case = $event" />
+                                    </div>
+                                </div>
+                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                    label="Transparent %" v-model="form.sub_heading_transparent_percentage"
+                                    :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="value => checkedFields.sub_heading_transparent_percentage = value" />
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-5">
+                        <Accordion :open="true" header="Heading Settings">
+                            <div class="mt-2 px-6  h-auto">
+                                <div>
+                                    <div class="my-3">
+                                        <RadioButton v-for="option in withBgWithoutBg" :key="option.value"
+                                            name="Visibility" :value="option.value" :label="option.label"
+                                            :modelValue="iswithBgHeading" @update:modelValue="iswithBgHeading = $event" />
+                                    </div>
+                                    <div v-if="iswithBgHeading == 1" class="">
+                                        <ColorPicker label="Select BG Color" v-model="form.heading_background"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="value => checkedFields.heading_background = value" />
+                                    </div>
+
+                                </div>
+                                <div class="my-3">
+                                    <ColorPicker label="Text Color" v-model="form.heading_text_color"
+                                        :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="value => checkedFields.heading_text_color = value" />
+                                </div>
+
+                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
                                     label="Heading Font Size" v-model="form.heading_font_size"
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.heading_font_size = value" />
 
                                 <div class="my-3">
-                                    <InputLabel for="-HeadingCase" value="Heading Case" />
+                                    <InputLabel for="HeadingCase" value="Heading Case" />
                                     <div class='flex gap-3'>
-                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.contract_design">
+                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.heading_case">
                                         </SingleCheck>
                                         <RadioButton v-for="option in capsNOCaps" :key="option.value" name="Visibility"
                                             :value="option.value" :label="option.label"
-                                            :modelValue="form.contract_design"
-                                            @update:modelValue="form.contract_design = $event" />
+                                            :modelValue="form.heading_case"
+                                            @update:modelValue="form.heading_case = $event" />
                                     </div>
                                 </div>
                                 <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
@@ -331,20 +407,7 @@
                             </div>
                         </Accordion>
                     </div>
-
-                    <!-- <div class="mt-5">
-                        <Accordion :open="true" header="Contract design">
-                            <div class="mt-2 px-6 flex h-auto">
-                                <div class="">
-                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.contract_design">
-                                    </SingleCheck>
-                                    <RadioButton v-for="option in oldNewContract" :key="option.value" name="Visibility"
-                                        :value="option.value" :label="option.label" :modelValue="form.contract_design"
-                                        @update:modelValue="form.contract_design = $event" />
-                                </div>
-                            </div>
-                        </Accordion>
-                    </div> -->
+          
                 </div>
             </div>
 
@@ -388,12 +451,13 @@ import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
+import ColorPicker from '@/components/Admin-components/form-components/ColorInput.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { contractLocationTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
-import { trueFalse, withBgWithoutBg , capsNOCaps, statusData } from '@/json/data';
+import { trueFalse, withBgWithoutBg, capsNOCaps, statusData } from '@/json/data';
 import { useStore } from 'vuex';
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 
 // store and router
 const router = useRouter();
@@ -402,11 +466,12 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { status:1, simple_fields: false, description: '', contract_home_page_slide: 0 });
+const form = ref(store.getters.editData || { status: 1, simple_fields:0, description: '', contract_home_page_slide: 0, feature_products: [] });
 const contractLocation = ref([]);
 const contractType = ref([]);
 const checkedFields = ref({})
-const iswithBg = ref()
+const iswithBg = ref(0)
+const iswithBgHeading = ref(0)
 const checkBoxFlag = ref(Boolean(form.value.id))
 const productFeatureData = ref([])
 
@@ -419,11 +484,13 @@ const imageData = ref({
     contract_slider_image: { isOpen: false, mediaName: 'Main Slider Image', images: [] }
 });
 
+const simple_fields = [{id:0,name : "Inherit from parent(no parent found)"},{id:1,name  : "contract logo"}]
+
 // Handle file updates for different image types
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
-const handlegalleryFiles = (data) => handleFileUpdate('gallery',data, imageData, form, false);
-const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form,false);
-const handleContractSliderImageFiles = (data) => handleFileUpdate('contract_slider_image', data, imageData, form,false);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
+const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
+const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form, false);
+const handleContractSliderImageFiles = (data) => handleFileUpdate('contract_slider_image', data, imageData, form, false);
 
 
 // Validate form fields
@@ -442,12 +509,14 @@ const validateForm = () => {
 
 
 
+
+
 // Handle form submission (add or edit contract)
 const handleSubmit = async () => {
     if (!validateForm()) return;
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     loading.value = true;
-    const { featured_image_data, slug, domains_data,domain,contract_logo_data, contract_slider_image_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
+    const { featured_image_data, slug, domains_data, domain, contract_logo_data, contract_slider_image_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
 
     try {
@@ -464,7 +533,7 @@ const handleSubmit = async () => {
             }
 
         }
-        else if(res.status === 400 || res.status === 403) {
+        else if (res.status === 400 || res.status === 403) {
             showToast(res.data.message, 'error');
         }
     } catch (e) {
@@ -519,21 +588,22 @@ const fetchDomainContractData = async () => {
 // Fetch contract location and type data
 const fetchContractData = async (payload) => {
     const [location, type] = await Promise.all([
-    contractLocationTreeList(payload),
-    contractTypeTreeList(payload),
-    
-]);
-contractLocation.value = location;
-contractType.value = type;
+        contractLocationTreeList(payload),
+        contractTypeTreeList(payload),
+
+    ]);
+    contractLocation.value = location;
+    contractType.value = type;
 };
 
 
-const productFeature = async(payload) => {
-    
-    const {status,data} = await ContractServices.getProductFeature(payload)
+const productFeature = async (payload) => {
+
+    const { status, data } = await ContractServices.getProductFeature(payload)
     if (status === 200 && data.success) {
         const dataValue = data.data
         productFeatureData.value = dataValue
+        console.log("dataValue", dataValue);
     }
 };
 
@@ -543,22 +613,23 @@ onMounted(() => {
     if (store.getters.editData) {
         const { featured_image_data, contract_logo_data, contract_slider_image_data, gallery_urls } = store.getters.editData;
 
-const setImageData = (key, data, isArray = false) => {
-    imageData.value[key].images = isArray ? (Array.isArray(data) ? data : []) : [data];
-    
-    if (isArray && Array.isArray(data)) {
-        imageData.value[key].mediaName = data.map(item => item.file_url).join(', ') || `${key} images`;
-    } else {
-        imageData.value[key].mediaName = data?.file_url || `${key.charAt(0).toUpperCase() + key.slice(1)} image`;
-    }
-};
+        const setImageData = (key, data, isArray = false) => {
+            imageData.value[key].images = isArray ? (Array.isArray(data) ? data : []) : [data];
 
-setImageData('featured_image', featured_image_data);
-setImageData('contract_logo', contract_logo_data);
-setImageData('contract_slider_image', contract_slider_image_data);
-setImageData('gallery', gallery_urls, true);
+            if (isArray && Array.isArray(data)) {
+                imageData.value[key].mediaName = data.map(item => item.file_url).join(', ') || `${key} images`;
+            } else {
+                imageData.value[key].mediaName = data?.file_url || `${key.charAt(0).toUpperCase() + key.slice(1)} image`;
+            }
+        };
 
-        fetchContractData({domain_id:store.getters.editData.domain_id});
+        setImageData('featured_image', featured_image_data);
+        setImageData('contract_logo', contract_logo_data);
+        setImageData('contract_slider_image', contract_slider_image_data);
+        setImageData('gallery', gallery_urls, true);
+
+        fetchContractData({ domain_id: store.getters.editData.domain_id });
+        productFeature({ domain_id: store.getters.editData.domain_id })
     }
 });
 
@@ -566,11 +637,11 @@ setImageData('gallery', gallery_urls, true);
 watch(() => form.value.domain_id, (newDomainId) => {
     // Fetch product type tree and reset parent product type
     fetchContractData({ domain_id: newDomainId });
-    productFeature({domain_id:newDomainId})
+    productFeature({ domain_id: newDomainId })
     // Check if newDomainId is present in domains_data and fetch product type data if so
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchDomainContractData();
-    } 
+    }
 });
 // Computed Property
 const buttonText = computed(() => {
@@ -581,4 +652,19 @@ onBeforeRouteLeave((to, from, next) => {
     store.dispatch('clearEditData');
     next();
 });
+
+// featured product  related  data
+const expandedItems = ref(new Set());
+
+const toggleExpand = (item) => {
+    if (expandedItems.value.has(item.id)) {
+        expandedItems.value.delete(item.id);
+    } else {
+        expandedItems.value.add(item.id);
+    }
+};
+
+const isExpanded = (id) => {
+    return expandedItems.value.has(id);
+};
 </script>
