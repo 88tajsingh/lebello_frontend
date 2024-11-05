@@ -1,155 +1,165 @@
-<template> {{ contractDesignData.contract_design_slider }}
-
-  <div class="relative pb-20">
+<template>
+  <div class="relative  overflow-hidden">
     <NavBar :absolute="false" />
 
-    <div class="absolute z-[9999] top-11 right-0 mx-auto">
+    <div class="absolute z-[9999] top-11 right-0 mx-auto ">
       <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
     </div>
 
     <!-- Menu Icon -->
-    <div class="relative z-[9999]" ref="closeMenu">
-      <div class="absolute top-24 right-0">
-        <v-card id="mySidenav" :dark="active" @click="active = true"
-          :class="{ 'w-[230px] right-0': isOpen, 'w-[230px] right-[-250px]': !isOpen }"
-          class="sidenav bg-[#ededed] text-graphik text-[14px] pb-2 z-50 absolute top-7 right-0 transition-all duration-300 overflow-hidden">
-
-          <div class="flex border border-gray-400 items-center">
-            <div class="sticky top-3 p-4 border-r border-gray-400">
-              <MenuSvg size="15px" fillColor="black" />
-            </div>
-            <h3 class="text-[14px] font-medium">
-              <a href="https://www.lebello.com/product/" class="uppercase">Collection 2024</a>
-            </h3>
+    <div ref="closeMenu" class="absolute border top-52 right-0 z-[9999] ">
+      <SideMenu :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebar" svgColor="#f9f9f9"
+        menuClass="p-2 bg-[#9ce163]">
+        <div class="flex border border-gray-400 items-center">
+          <div class="sticky top-3 p-4 border-r border-gray-400">
+            <MenuSvg size="15px" fillColor="black" />
           </div>
+          <h3 class="text-[14px] font-medium">
+            <a href="https://www.lebello.com/product/" class="uppercase">Collection 2024</a>
+          </h3>
+        </div>
 
-          <div class="text-black">
-            <div v-for="(item, key) in contractDesignData.contract_design_sidebar" :key="key"
-              class="border-0 rounded-lg">
-              <h2 :id="'heading' + key" class="mb-0">
-                <button @click="toggleAccordion(key)" :aria-expanded="activeIndex === key"
-                  :aria-controls="'collapse' + key"
-                  class="group relative flex w-full items-center hover:text-orange border-0 px-5 py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
-                  :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === key }" type="button">
-                  {{ key }} <!-- Display key here -->
-                  <span class="-me-1 ms-auto h-5 w-5 transition-transform duration-200 ease-in-out"
-                    :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
-                      stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                    </svg>
-                  </span>
-                </button>
-              </h2>
-              <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0"
-                :aria-labelledby="'heading' + key" data-twe-collapse-item data-twe-parent="#accordionExample">
-                <div v-if="item">
-                  <ul>
-                    <li class="hover:text-orange text-graphikLight text-[13px]" v-for="(sub, itemIndex) in item"
-                      :key="itemIndex">
-                      <a @click.prevent="handleClick(sub)" class="font-graphikLight text-[13px]">{{ sub.title ||
-                        sub.contract_location }}</a>
+        <div class="text-black">
+          <div v-for="(item, key) in contractDesignData.contract_design_sidebar" :key="key" class="border-0 rounded-lg">
+            <h2 :id="'heading' + key" class="mb-0">
+              <button @click="toggleAccordion(key)" :aria-expanded="activeIndex === key"
+                :aria-controls="'collapse' + key"
+                class="group relative flex w-full items-center hover:text-orange border-0 px-5 py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
+                :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === key }" type="button">
+                {{ key }}
+                <span class="-me-1 ms-auto h-5 w-5 transition-transform duration-200 ease-in-out"
+                  :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </span>
+              </button>
+            </h2>
+            <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0"
+              :aria-labelledby="'heading' + key" data-twe-collapse-item data-twe-parent="#accordionExample">
+              <div v-if="item">
+                <ul>
+                  <!-- Overview -->
+                  <li v-if="item.overview">
+                    <a @click.prevent="handleClick(item.overview)"
+                      class="font-graphikLight text-[13px] cursor-pointer">{{ item.overview.title }}</a>
+                  </li>
+                  <!-- Location -->
+                  <template v-if="Array.isArray(item)">
+                    <li v-for="(sub, itemIndex) in item" :key="itemIndex">
+                      <a @click.prevent="handleClick(sub)" class="font-graphikLight text-[13px] cursor-pointer">{{
+                        sub.contract_location || sub.title }}</a>
                     </li>
-                  </ul>
-                </div>
+                  </template>
+                  <!-- Contract designs -->
+                  <template v-else-if="item.designs">
+                    <li v-for="(sub, itemIndex) in item.designs" :key="itemIndex">
+                      <a @click.prevent="handleClick(sub)" class="font-graphikLight text-[13px] cursor-pointer">{{
+                        sub.title }}</a>
+                    </li>
+                  </template>
+                </ul>
               </div>
             </div>
-
           </div>
-        </v-card>
+        </div>
 
-        <span v-if="!active" @click="openNav" class="p-3 text-white">
+
+
+        <!-- <span v-if="!active" @click="openNav" class="p-3 text-white">
           <MenuSvg size="35px" fillColor="#ffffff" class="p-2 bg-[#9ce163]" />
-        </span>
-      </div>
+        </span> -->
+
+      </SideMenu>
     </div>
 
     <!-- Slider -->
-    <div id="default-carousel" class="relative mx-3  md:mx-8 lg:mx-16" data-carousel="static">
-      <div class="w-full h-full mx-0 overflow-hidden">
-        <div class="h-screen">
-          <div v-for="(slide, index) in contractDesignData.contract_design_slider" :key="index"
-            v-show="currentIndex === index" class="w-full duration-700 ease-in-out" data-carousel-item>
-            <img :src="$filePath(slide?.contract_slider_image_data?.file_url)"
-              class="absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2" :alt="slide.alt" />
+    <div class="mx-5 mt-8 md:lg-10 lg:mx-18">
+      <div id="default-carousel" class="relative mx-3  md:mx-8 lg:mx-16" data-carousel="static">
+        <div class="w-full h-full mx-0 overflow-hidden">
+          <div class="h-screen">
+            <div v-for="(slide, index) in contractDesignData.contract_design_slider" :key="index"
+              v-show="currentIndex === index" class="w-full duration-700 ease-in-out" data-carousel-item>
+              <img :src="$filePath(slide?.contract_slider_image_data?.file_url)"
+                class="absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2" :alt="slide.alt" />
 
-            <!-- Text Overlay -->
-            <div id="sideText" class="absolute bottom-20 left-14">
-              <div class=" font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
-                {{ camelCase(slide?.heading_case, slide?.title) }}
+              <!-- Text Overlay -->
+              <div id="sideText" class="absolute bottom-20 left-14">
+                <div class=" font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
+                  {{ camelCase(slide?.heading_case, slide?.title) }}
+                </div>
+                <span class=" font-graphikLight  px-3 py-2" :style="subHeadingStyle(slide)">
+                  {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
+                </span>
               </div>
-              <span class=" font-graphikLight  px-3 py-2" :style="subHeadingStyle(slide)">
-                {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
-              </span>
             </div>
-          </div>
 
-          <!-- Navigation Dots -->
-          <div class="flex absolute bottom-1/3 rotate-90 z-30 right-0 space-x-2 -translate-x-1">
-            <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" type="button"
-              :class="{ 'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index }"
-              class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
-          </div>
+            <!-- Navigation Dots -->
+            <div class="flex absolute bottom-1/3 rotate-90 z-30 right-0 space-x-2 -translate-x-1">
+              <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" type="button"
+                :class="{ 'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index }"
+                class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
+            </div>
 
-          <!-- Previous Button -->
-          <button @click="previous" type="button"
-            class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
-            data-carousel-prev>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <!-- Next Button -->
-          <button @click="next" type="button"
-            class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none"
-            data-carousel-next>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+            <!-- Previous Button -->
+            <button @click="previous" type="button"
+              class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
+              data-carousel-prev>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <!-- Next Button -->
+            <button @click="next" type="button"
+              class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none"
+              data-carousel-next>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="absolute top-3 right-0">
+          <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png"
+            alt="Contract Design" />
         </div>
       </div>
 
-
-
-      <div class="absolute top-3 right-0">
-        <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png"
-          alt="Contract Design" />
+      <div class=" bg-[#f7f7f7] font-graphik text-[14px] text-[#4c4c4c]">
+        <p class="px-5 py-6">
+          Lebello contract design offers customized solutions for the hospitality, retail and trade industry. We build
+          long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and
+          unique
+          bespoke outdoor products.
+        </p>
       </div>
-    </div>
 
-    <div class="mx-3 md:mx-8 lg:mx-16 bg-[#f7f7f7] font-graphik text-[14px] text-[#4c4c4c]">
-      <p class="px-5 py-6">
-        Lebello contract design offers customized solutions for the hospitality, retail and trade industry. We build
-        long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and unique
-        bespoke outdoor products.
-      </p>
-    </div>
-
-    <!-- Images -->
-    <div class="mx-3 md:mx-8 lg:mx-16 relative grid grid-cols-2  md:grid-cols-4 gap-0 py-3 md:py-0">
-      <div v-for="(images, index) in contractDesignData.contract_design" :key="index"
-        class="prod_content overflow-hidden ">
-        <div :onclick="() => handleRoute(images)" class="product_img holder relative"
-          :class="{ 'md:transition-transform md:duration-9000 md:ease-in-out md:transform scale-125': isHovered[index] }"
-          @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
-          <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
-            class="aos-item" ref="element" :data-aos="animationType" :data-aos-duration="getAnimationDuration(index)" />
-          <div
-            :class="{ 'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index] }">
-          </div>
-          <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
-            <div class="overlay-content">
-              <p class="text-[11px]  font-graphik">{{ images?.title }}</p>
-              <p class="text-[11px] font-graphikLight">{{ images?.contract_info_location }}</p>
+      <!-- Images -->
+      <div class=" relative grid grid-cols-2  md:grid-cols-4 gap-0 py-3 md:py-0">
+        <div v-for="(images, index) in contractDesignData.contract_design" :key="index"
+          class="prod_content overflow-hidden ">
+          <div :onclick="() => handleRoute(images)" class="product_img holder relative"
+            :class="{ 'md:transition-transform md:duration-9000 md:ease-in-out md:transform scale-125': isHovered[index] }"
+            @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+            <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
+              class="aos-item" ref="element" :data-aos="animationType"
+              :data-aos-duration="getAnimationDuration(index)" />
+            <div
+              :class="{ 'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index] }">
+            </div>
+            <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
+              <div class="overlay-content">
+                <p class="text-[11px]  font-graphik">{{ images?.title }}</p>
+                <p class="text-[11px] font-graphikLight">{{ images?.contract_info_location }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
     <FooterSection />
   </div>
 </template>
@@ -163,6 +173,7 @@ import { useRouter } from 'vue-router';
 import { onClickOutside } from "@vueuse/core";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 import { getContractDesignData } from "@/helper/frontendHelpers";
 import { useStore } from "vuex";
 
@@ -179,26 +190,46 @@ const isOpen = ref(false);
 const isHovered = ref([]);
 const closeMenu = ref(null);
 const contractDesignData = ref([]);
+const isOpenSidebar = ref(false);
+const handleSideMenu = () => {
+  isOpenSidebar.value = !isOpenSidebar.value;
+};
+
+const closeSideMenu = () => {
+  isOpenSidebar.value = false;
+};
+onClickOutside(closeMenu, closeSideMenu);
+
 
 // Navigation Handling
 const handleClick = (sub) => {
   store.dispatch('setCurrentId', sub.id);
-  const route = sub.title ?
-    { name: 'contractType', params: { slug: sub.slug, title: sub } } :
-    { name: 'ContractLocation', params: { slug: sub.slug } };
+  let route;
+  if (sub.title === 'overview' || sub.title === 'Overview') {
+    route = { name: 'contractType', params: { slug: sub.slug } };
+  } else if (sub.title) {
+    route = { name: 'contractDesign', params: { slug: sub.slug } };
+  } else {
+    route = { name: 'ContractLocation', params: { slug: sub.slug } };
+  }
+  console.log("sub.title", sub.title);
+  if (sub.title === 'overview' || sub.title === 'Overview') {
+    sessionStorage.setItem('contract_type_id', sub.id);
+  } else if (sub.title) {
+    sessionStorage.setItem('contract_design_id', sub.id);
+  } else {
+    sessionStorage.setItem('contract_location_id', sub.id);
+  }
+
   router.push(route);
 };
 
+
 const handleRoute = (sub) => {
-  store.dispatch('setCurrentId', sub.id);
+  sessionStorage.setItem('contract_design_id', sub.id);
   router.push({ name: 'contractDesign', params: { slug: sub.slug } });
 };
 
-const closeSideMenu = () => {
-  isOpen.value = false;
-  active.value = false;
-};
-onClickOutside(closeMenu, closeSideMenu);
 
 // Fetch Contract Design Data
 const handleContractDesignData = async () => {
@@ -233,7 +264,7 @@ const toggleAccordion = (index) => {
 const getAnimationDuration = computed(() => {
   return (index) => {
     const positionInRow = index % 4;
-    return positionInRow * 500 + 500; // Adjust duration based on position
+    return positionInRow * 500 + 500;
   };
 });
 
@@ -265,16 +296,14 @@ const hexToRgb = (hex) => {
 
 const titleStyle = (slide) => {
   const defaultHex = '#ff9d0f';
-  const baseBackground = slide?.sub_heading_background || defaultHex; // Use default if not provided
-
+  const baseBackground = slide?.sub_heading_background || defaultHex;
   const transparency = slide?.sub_heading_transparent_percentage
     ? parseFloat(slide.sub_heading_transparent_percentage) / 100
-    : 1; // Default to fully opaque
+    : 1;
 
-  // Use baseBackground directly if it's a valid hex color
   const rgbaBackground = baseBackground.startsWith('#')
     ? `rgba(${hexToRgb(baseBackground)}, ${transparency})`
-    : baseBackground; // If it's already in rgba or valid color format
+    : baseBackground;
 
   return {
 

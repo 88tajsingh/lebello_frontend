@@ -59,6 +59,8 @@ export const scrollDown = (id) => {
   export const getLandingPageData = () => withDomain(PublicServices.getLandingPageData,false);
   export const getContractDesignData = () => withDomain(PublicServices.getContractDesign,false);
   export const getContractDesign = (id) => withDomain(PublicServices.contractDesign,id,false);
+  export const getContractType = (id) => withDomain(PublicServices.contractType,id,false);
+  export const getContractLocation = (id) => withDomain(PublicServices.contractLocation,id,false);
 
 
 

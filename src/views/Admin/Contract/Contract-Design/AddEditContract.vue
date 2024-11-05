@@ -1,4 +1,4 @@
-<template>{{ form }}
+<template>
     <DefaultCard :cardTitle="form.id ? `Edit Contract` : `Add New Contract`">
         <!-- domain select delete master delete domainArray  -->
         <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
@@ -407,7 +407,16 @@
                             </div>
                         </Accordion>
                     </div>
-          
+                    <div class="mt-5">
+                        <Accordion :open="true" header="Contract Design">
+                            <div class="mt-2 px-6 flex h-auto">
+                                <Select :options="[{name:'Old Contract Design'},{name:'New Contract Design'}]" showfield="name" class="w-full" :defaultZero='true'
+                                    valueField="name" label="Select Template" v-model="form.contract_design"
+                                    :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="value => checkedFields.contract_design = value" />
+                            </div>
+                        </Accordion>
+                    </div>
                 </div>
             </div>
 
@@ -466,7 +475,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: 1, simple_fields:0, description: '', contract_home_page_slide: 0, feature_products: [] });
+const form = ref(store.getters.editData || { status: 1, simple_fields:0,contract_design:0, description: '', contract_home_page_slide: 0, feature_products: [] });
 const contractLocation = ref([]);
 const contractType = ref([]);
 const checkedFields = ref({})

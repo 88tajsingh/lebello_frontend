@@ -128,7 +128,8 @@
   import { useRoute } from "vue-router";
   
   import "aos/dist/aos.css";
-import { getContractDesign, getContractType } from "@/helper/frontendHelpers";
+import { getContractDesign, getContractLocation, getContractType } from "@/helper/frontendHelpers";
+import { watch } from "less";
   
   const store = useStore();
   const router = useRouter();
@@ -139,8 +140,8 @@ import { getContractDesign, getContractType } from "@/helper/frontendHelpers";
   const isOpen = ref(false);
   const isHovered = ref([]);
   const closeMenu = ref(null);
-  const id = sessionStorage.getItem('contract_type_id');
-  const headerText = route?.params?.slug
+  const id = sessionStorage.getItem('contract_location_id');
+  const headerText = ref(route?.params?.slug ?? '')
   console.log("headerText", headerText);
   
 
@@ -152,19 +153,20 @@ import { getContractDesign, getContractType } from "@/helper/frontendHelpers";
 
   const contractDesignSidebar = ref([]);
   const contractDesignData = ref([]);
-  const handleContractDesignData = async () => {
+  const handleContractDesignData = async (id) => {
 
-  const { status, data } = await getContractType(id);
+  const { status, data } = await getContractLocation(id);
   if (status === 200 && data.success) {
     contractDesignSidebar.value = data.data.contract_design_sidebar;
     contractDesignData.value = data.data.contract_desing;
+    headerText.value= route?.params?.slug
   } else {
     console.log("error");
     contractDesignData.value = [];
   }
 };
   onMounted(() => {
-  handleContractDesignData();
+  handleContractDesignData(id);
 });
 const handleSideMenu = () => {
   isOpen.value = !isOpen.value;
@@ -200,14 +202,8 @@ const handleSideMenu = () => {
   const handleClick = (sub) => {
   store.dispatch('setCurrentId', sub.id);
   let route;
-  if (sub.title === 'overview' || sub.title === 'Overview') {
-    route = { name: 'contractType', params: { slug: sub.slug } };
-  } else if (sub.title) {
-    route = { name: 'contractDesign', params: { slug: sub.slug } };
-  } else {
-    route = { name: 'ContractLocation', params: { slug: sub.slug } };
-  }
-  console.log("sub.title", sub.title);
+
+  console.log("sub.title", sub);
   if (sub.title === 'overview' || sub.title === 'Overview') {
     sessionStorage.setItem('contract_type_id', sub.id);
   } else if (sub.title) {
@@ -216,13 +212,32 @@ const handleSideMenu = () => {
     sessionStorage.setItem('contract_location_id', sub.id);
   }
 
+  if (sub.title === 'overview' || sub.title === 'Overview') {
+    route = { name: 'contractType', params: { slug: sub.slug } };
+  } else if (sub.title) {
+    route = { name: 'contractDesign', params: { slug: sub.slug } };
+  } else {
+    handleContractDesignData( sub.id)
+    route = { name: 'ContractLocation', params: { slug: sub.slug } };
+  }
+
+
   router.push(route);
 };
   
   onUnmounted(() => {
     AOS.refreshHard();
   });
-  
+
+  onMounted(() => {
+  const contractTypeId = sessionStorage.getItem('contract_type_id');
+  if (contractTypeId) {
+    handleContractDesignData(contractTypeId);
+  }
+});
+
+
+    
   const activeIndex = ref(null);
   
   const toggleAccordion = (index) => {
