@@ -153,7 +153,7 @@
       <slot></slot>
     </v-card>
     <span v-if="!isOpen" @click="handleSideMenu" class="text-9xl bg-transparent sticky top-5">
-      <MenuSvg :size="svgSize" :fillColor="svgColor" />
+      <MenuSvg :size="svgSize" :fillColor="svgColor" :class="menuClass" />
     </span>
   </div>
 </template>
@@ -164,24 +164,20 @@ import MenuSvg from "./Svg/Menu-Svg.vue";
 import FormDropdown from "./Form-components/Form-Dropdown.vue";
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/style.css';
+console.log("hlo");
 
 const {
   handleSideMenu,
-  list,
+  menuClass,
   isOpen,
-  showHeading = true,
-  mainSlider = false,
-  downDropdown = false,
-  dropdown,
   svgColor,
   svgSize = '30px',
-  showMediaIcon = true,
-  showDropDown = false,
 } = defineProps([
   "handleSideMenu",
   "dropdown",
   "showMediaIcon",
   "list",
+  'menuClass',
   "showHeading",
   "downDropdown",
   "showDropDown",

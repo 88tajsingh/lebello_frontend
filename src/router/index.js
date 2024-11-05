@@ -18,16 +18,16 @@ const  routes = [
     name: 'category',
     component: () => import('../views/forntend-views/CategoryPage.vue')
   },
-  // {
-  //   path: '/contract', //done
-  //   name: 'contract',
-  //   component: () => import('../views/forntend-views/contract/ContractPage.vue')
-  // },
+  {
+    path: '/contract_location/:slug?',
+    name: 'ContractLocation',
+    component: () => import('../views/forntend-views/contract/ContractLocation.vue')
+  },
   {
     path: '/contract_type/:slug?',
     name: 'contractType',
     component: () => import('../views/forntend-views/contract/ContractType.vue')
-  },
+  },  
   {
     path: '/contract_design/:slug?',
     name: 'contractDesign',
@@ -531,6 +531,7 @@ const publicPaths = [
   '/forget-password',
   '/register',
   '/', 
+  '/contract_location',
   '/productDetail',
   '/category',
   '/contract',

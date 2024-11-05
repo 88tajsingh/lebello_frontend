@@ -321,6 +321,8 @@ const ApiConfig = {
   getLandingPageData: '/get-landing-page-data',
   getContractDesign: '/front-end-contract-design-data',
   contractDesign: '/front-end-contract-design',
+  contractType: '/front-end-contract-type',
+  contractLocation: '/front-end-contract-location',
 
 
 
