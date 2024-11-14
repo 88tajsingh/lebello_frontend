@@ -378,16 +378,27 @@ const menuGroups = ref([
         ]
     }
 ])
+// function filterChildren(children: any[], idsToFilter: number[]) {
+//     const filtered = children
+//         .filter(child => idsToFilter?.includes(child.id) || (child.children && child.children.some(c => idsToFilter?.includes(c.id))))
+//         .map(child => ({
+//             ...child,
+//             children: filterChildren(child.children || [], idsToFilter) 
+//         }));
+
+//     return filtered.length > 0 ? filtered : null; 
+// }
 function filterChildren(children: any[], idsToFilter: number[]) {
     const filtered = children
-        .filter(child => idsToFilter?.includes(child.id) || (child.children && child.children.some(c => idsToFilter?.includes(c.id))))
+        .filter(child => idsToFilter && idsToFilter.indexOf(child.id) !== -1 || (child.children && child.children.some(c => idsToFilter && idsToFilter.indexOf(c.id) !== -1)))
         .map(child => ({
             ...child,
-            children: filterChildren(child.children || [], idsToFilter) 
+            children: filterChildren(child.children || [], idsToFilter)
         }));
 
     return filtered.length > 0 ? filtered : null; 
 }
+
 
 function filterParents(data: any[], idsToFilter: number[]) {
     return data
@@ -401,11 +412,15 @@ function filterParents(data: any[], idsToFilter: number[]) {
 
 const filteredData = computed(() => filterParents(menuGroups.value, idsToFilter.value));
 
+// const result = computed(() => ({
+//     name: 'MENU',
+//     menuItems: filteredData.value.flatMap(group => group.menuItems || []) 
+// }));
+
 const result = computed(() => ({
     name: 'MENU',
-    menuItems: filteredData.value.flatMap(group => group.menuItems || []) 
+    menuItems: filteredData.value.reduce((acc, group) => acc.concat(group.menuItems || []), []) 
 }));
-
 
 // const setSidebar = async (payload: { role_id: number }) => {
 //     loading.value = true;

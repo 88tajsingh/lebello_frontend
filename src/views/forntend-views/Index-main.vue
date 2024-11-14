@@ -23,14 +23,13 @@ import ProductCatergory from '@/components/frontend-components/ProductCatergory.
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import LogoSection from '@/components/frontend-components/Logo-section.vue'
 import { onMounted, ref } from 'vue'
-import PublicServices from '@/services/publicServices/PublicServices'
 import { getLandingPageData } from '@/helper/frontendHelpers'
 
 const  landingPageData = ref([])
 
 const  handleLandingPageData = async () => {
    const res = await getLandingPageData()
-   console.log("slider images", res);
+   console.log("getLandingPageData", res);
   if (res.status === 200 && res.data.success) {
      landingPageData.value = res.data.data
   }
@@ -40,21 +39,4 @@ onMounted(() => {
    handleLandingPageData()
 })
 
-const sidebarList = ref([
-  { name: 'Trixie Lounger', link: 'https://lebello.com/products/trixie-lounger/' },
-  { name: '4L Pixie Arms Chair', link: 'https://lebello.com/products/4l-pixie-arms-chair/' },
-  { name: 'Monyet Stool', link: 'https://lebello.com/products/monyet-stool/' },
-  { name: 'Monyet Stool', link: 'https://lebello.com/products/monyet-stool/' },
-  { name: 'Mogul Lounger', link: 'https://lebello.com/products/mogul_lounger/' },
-  { name: 'Tubo Club', link: 'https://lebello.com/products/tubo-club-chair/' },
-  { name: 'Mogul Puff Lounger', link: 'https://lebello.com/products/mogul-puff-lounger/' },
-  { name: 'Mogul Puff Lounger', link: 'https://lebello.com/products/mogul-puff-lounger/' },
-  { name: 'Tubo Chair', link: 'https://lebello.com/products/tubo-chair/' },
-  { name: 'Monyet Stool', link: 'https://lebello.com/products/monyet-stool/' },
-  { name: 'Mogul Lounger', link: 'https://lebello.com/products/mogul_lounger/' },
-  { name: 'Tubo Club', link: 'https://lebello.com/products/tubo-club-chair/' },
-  { name: 'Mogul Puff Lounger', link: 'https://lebello.com/products/mogul-puff-lounger/' },
-  { name: 'Mogul Puff Lounger', link: 'https://lebello.com/products/mogul-puff-lounger/' },
-  { name: 'Tubo Chair', link: 'https://lebello.com/products/tubo-chair/' }
-])
 </script>

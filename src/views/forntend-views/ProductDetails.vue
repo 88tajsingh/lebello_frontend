@@ -1,8 +1,11 @@
 <template>
+  <div class="w-fill h-[400px]">
+    <div>3D Animation view</div>
+    <ThreeDAnimaation/>
+  </div>
   <div class="overflow-hidden">
-    <MainSlider :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
-      :downDropdown="false" />
-
+    <!-- <MainSlider :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
+      :downDropdown="false" /> -->
     <div class="flex justify-between py-5">
       <div class="ml-3 lg:ml-16">
         <BreadcrumbSection :breadcrumbData="breadcrumbData" seprate="/" />
@@ -36,11 +39,13 @@
 
         </div>
 
-        <div class="hidden md:block">
+        <div class="hidden md:block"> <div></div>
           <div class="relative h-full overflow-hidden">
-            <img
+            <div>Images 3D view </div>
+          <Images3DView/>
+            <!-- <img
               class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
-              src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" />
+              src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" /> -->
             <span v-scroll="isVisible ? arrowScroll : 0" class="absolute bottom-0 bg-green p-5">
               <ArrowSvg size="13px" fillColor="#ffffff" ref="arrowSvg" @click="rotate" />
             </span>
@@ -199,6 +204,8 @@ import AccordianSection from '@/components/frontend-components/Accordian-Section
 import { onClickOutside } from '@vueuse/core'
 import BreadcrumbSection from '@/components/frontend-components/BreadcrumbSection.vue'
 import SideMenu from '@/components/frontend-components/Side-Menu.vue'
+import Images3DView from '@/components/frontend-components/Images3DView.vue'
+import ThreeDAnimaation from '@/components/Admin-components/ThreeDAnimaation.vue'
 
 const sliderList = [
   { name: 'B Chair Series', link: 'https://lebello.com/products/trixie-lounger/' },

@@ -22,6 +22,12 @@ class PublicServices {
   contractLocation(id,payload) {
     return instance.get(ApiConfig.contractLocation, { params: {domain_id:id,id:payload}, })
   }
+
+  frontendSwatchList(id) {
+    return instance.get(ApiConfig.frontend_swatch_list, { params: {domain_id:id}, })
+  }
+
+  
  
 }
 

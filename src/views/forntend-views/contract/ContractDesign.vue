@@ -212,7 +212,7 @@ const handleClick = (sub) => {
   } else {
     route = { name: 'ContractLocation', params: { slug: sub.slug } };
   }
-  console.log("sub.title", sub.title);
+
   if (sub.title === 'overview' || sub.title === 'Overview') {
     sessionStorage.setItem('contract_type_id', sub.id);
   } else if (sub.title) {
