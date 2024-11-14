@@ -69,6 +69,16 @@ const  routes = [
     component: () => import('../views/Auth/Register.vue')
   },
   {
+    path: '/materials-shop',
+    name: 'materialsShop',
+    component: () => import('../views/forntend-views/our-materials/OurMaterials.vue')
+  },
+  {
+    path: '/material/:slug?',
+    name: 'materialDetail',
+    component: () => import('../views/forntend-views/our-materials/MaterialsDetail.vue')
+  },
+  {
     path: '/dashboard',
     component: () => import('../Layouts/AdminLayout.vue'),
     meta: { requiresAuth: true },
@@ -528,6 +538,7 @@ const relatedRoutesMap = {
 
 const publicPaths = [
   '/login',
+  'material:slug?',
   '/forget-password',
   '/register',
   '/', 

@@ -39,7 +39,7 @@ export default {
             textColor2: '#2271b1',
             textColorBlack: '#333',
             Black666: '#666',
-          
+            
             navListBg: '#0e0e0ec9',
             borderColor: '#8c8f94',
             green: '#4dc45c',
@@ -64,6 +64,7 @@ export default {
             stroke: '#E2E8F0',
             gray: '#EFF4FB',
             graydark: '#333A48',
+            'gray-5': '#f3f3f3',
             'gray-4': '#C6C6C6',
             'gray-2': '#F7F9FC',
             'gray-3': '#FAFAFA',
