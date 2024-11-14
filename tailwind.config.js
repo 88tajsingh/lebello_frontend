@@ -358,5 +358,7 @@ export default {
     typography,
     forms,
     aspectRatio,
+    require('tailwindcss')('./tailwind.config.js'), // check this path
+    require('autoprefixer'),
   ],
 }
