@@ -1,5 +1,8 @@
 <template>
-    <Menu as="div" class="relative inline-block bg- text-left ">
+    <div>
+        sd
+    </div>
+    <!-- <Menu as="div" class="relative inline-block bg- text-left ">
         <div class="hover:text-orange">
             <MenuButton @click="show"
                 class="inline-flex w-[180px] hover:text-orange  justify-between mt-2  border border-gray-400  px-3 py-2 text-sm font-semibold text-gray-900  ring-0 "
@@ -26,23 +29,23 @@
                 </div>
             </MenuItems>
         </transition>
-    </Menu>
+    </Menu> -->
 </template>
 
 <script setup>
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+// import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
+// import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { ref } from 'vue'
 
-const selected = ref(false)
-const menuItems = ref([
-    { label: 'Account settings', link: '#' },
-    { label: 'Support', link: '#' },
-    { label: 'L', link: '#' }
-])
+// const selected = ref(false)
+// const menuItems = ref([
+//     { label: 'Account settings', link: '#' },
+//     { label: 'Support', link: '#' },
+//     { label: 'L', link: '#' }
+// ])
 
 
-function show() {
-    selected.value = !selected.value
-}
+// function show() {
+//     selected.value = !selected.value
+// }
 </script>
