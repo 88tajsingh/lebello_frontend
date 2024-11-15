@@ -62,7 +62,7 @@
   </div>
 
   <!-- Configuration Panel -->
-  <div class="space-y-6 flex flex-col h-full pl-14 lg:w-2/5">
+  <div class=" flex flex-col h-full pl-14 lg:w-2/5">
   <div>
     <h1 class="text-2xl font-semibold">3D CONFIGURATOR</h1>
   </div>
@@ -85,7 +85,7 @@
   </div>
 
   <!-- Buttons at the bottom (added mt-auto for positioning) -->
-  <div class="mt-[120px] pb-16 h-full flex gap-4 items-end"> 
+  <div class="mt-[130px]  h-full flex gap-4 items-end"> 
     <button @click="handleStoreClick" class="text-[#B88746] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full">
       ENQUIRE/EMAIL
     </button>
