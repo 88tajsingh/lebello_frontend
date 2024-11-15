@@ -157,7 +157,7 @@
     <transition>
       <div ref="scrollTOadditional"  v-scroll="-400" v-show="addiVisible"
         class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0">
-        <div class="py-10 m-0 relative px-14 ld:w-1/2 font-light text-left text-white bg-green">
+        <div class="py-10 m-0 relative px-14 ld:w-1/2 font-light text-left text-white bg-orange">
           <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
             Crafted from our exclusive Ropetek® materials...
           </p>
