@@ -1,169 +1,68 @@
 <template>
-  <div class="w-fill h-[400px]  ">   
-    <div class="min-h-screen bg-white ">
-    <!-- Breadcrumb -->
-    <nav class="p-4 text-sm">
-      <div class="flex items-center gap-2">
-        <span class="text-gray-600">Collection</span>
-        <!-- Heroicon: ChevronRight -->
-        /
-        <span class="text-primary">Tubo Sofa Exposed</span>
-      </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container mx-auto grid grid-cols-1 gap-8 p-4 lg:grid-cols-2">
-      <!-- Product Viewer -->
-      <div class="relative aspect-square bg-gray-50 w-full h-[350px] rounded-lg">
-        <div>3D Animation view</div>
-        <ThreeDAnimaation/>
-        <!-- Controls -->
-        <!-- <div id="zoom-controls" class="absolute right-4 top-4 flex flex-col items-center gap-4 z-[9999] text-yellow-600"> -->
-    <!-- Fullscreen Icon -->
-    <!-- <button id="fullscreen-toggle" class="rounded-full p-2">
-  <svg height="22px" width="22px" viewBox="0 0 512 512" fill="#000000">
-    <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
-  </svg>
-</button> -->
-
     
-    <!-- Zoom In and Out Icons -->
-    <!-- <div class="flex flex-col items-center bg-white rounded-full shadow-lg  border border-yellow-600">
-        <button id="zoom-in" class="p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
-            </svg>
-        </button>
-        <div class="border-t border-yellow-600 w-full"></div>
-        <button id="zoom-out" class="p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
-            </svg>
-        </button>
-    </div> -->
-
-    <!-- Reset Icon -->
-    <!-- <button id="zoom-reset" class="rounded-full p-2 ">
-      <svg width="28px" height="28px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="1"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#c2a02f" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"></path></g></svg>
-    </button> -->
-<!-- </div> -->
-
-
-      </div>
-
-      <!-- Configuration Panel -->
-      <div class="space-y-6 flex flex-col h-full pl-14">
-  <div>
-    <h1 class="text-2xl font-semibold">3D CONFIGURATOR</h1>
-  </div>
-
-  <div class="space-y-4">
-    <div>
-      <h2 class="text-lg font-medium">Recommended Configuration</h2>
-      <p class="text-sm text-gray-500">Please select the configuration</p>
-    </div>
-
-    <!-- Select Dropdown -->
-    <div class="relative w-72 ">
-      <label for="configuration" class="block text-sm font-medium text-gray-700 ">Select Configuration</label>
-      <select 
-        v-model="configuration"
-        id="configuration"
-        class="w-full p-2 border border-gray-300 rounded-md"
-      >
-        <option value="1">Configuration 1</option>
-        <option value="2">Configuration 2</option>
-        <option value="3">Configuration 3</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Buttons at the bottom -->
-  <div class="mt-auto pb-5 h-full flex gap-4 items-end "> 
-    <button 
-      @click="handleStoreClick"
-      class="text-[#B88746] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full"
-    >
-      ENQUIRE/EMAIL
-    </button>
-    <button 
-      @click="handleStoreClick"
-      class="bg-[#B88746] text-white hover:bg-[#9E7339] py-1 px-10 rounded-full"
-    >
-      SEE AT STORE
-    </button>
-  </div>
-</div>
-
-    </div>
-  </div>
-  </div>
   <div class="overflow-hidden">
-    <!-- <MainSlider :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
-      :downDropdown="false" /> -->
-    <div class="flex justify-between py-5">
-      <!-- <div class="ml-3 lg:ml-16">
-        <BreadcrumbSection :breadcrumbData="breadcrumbData" seprate="/" />
-      </div> -->
-      <!-- <div class="relative top-30 right-0 pr-3" ref="closeMenu">
+    <MainSlider :isAbsolute="false" :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
+    :sliderImages="landingPageData"
+      :downDropdown="false" />
+    <div class="flex relative">
+     
+      <!-- <div class="absolute top-30 right-0 pr-3" ref="closeMenu">
         <SideMenu :list="list" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider" :mainSlider="false"
           :showDropDown="false" :showHeading="false" :downDropdown="true" />
       </div> -->
     </div>
-    <div class="min-h-screen bg-white">
+    <div class=" bg-white">
     <!-- Breadcrumb -->
-    <nav class="p-4 text-sm">
-      <div class="flex items-center gap-2">
-        <span class="text-gray-600">Collection</span>
+    <nav class="py-4 text-sm">
+      <div class="flex items-center gap-2 ml-14">
+        <span class="text-gray-600 font-medium">Collection</span>
         <!-- Heroicon: ChevronRight -->
         /
-        <span class="text-primary">Tubo Sofa Exposed</span>
+        <span class="text-yellow-600 font-medium">Tubo Sofa Exposed</span>
       </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container mx-auto grid grid-cols-1 gap-8 p-4 lg:grid-cols-2">
-      <!-- Product Viewer -->
-      <div class="relative aspect-square bg-gray-50 rounded-lg">
-        <div>3d images view</div>
-        <Images3DView/>
+    <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:flex lg:justify-between lg:px-10">
+  <!-- Product Viewer (Image Section) -->
+  <div class="relative aspect-square bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
+    <Images3DView/>
 
-        <!-- Controls -->
-        <div id="zoom-controls" class="absolute right-4 top-10 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
-    <!-- Fullscreen Icon -->
-    <button id="fullscreen-toggle" class="rounded-full p-2">
-  <svg height="22px" width="22px" viewBox="0 0 512 512" fill="#000000">
-    <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
-  </svg>
-</button>
+    <!-- Controls -->
+    <div id="zoom-controls" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
+      <!-- Fullscreen Icon -->
+      <button id="fullscreen-toggle" class="rounded-full p-2">
+        <svg height="22px" width="22px" viewBox="0 0 512 512" fill="#000000">
+          <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
+        </svg>
+      </button>
 
-    
-    <!-- Zoom In and Out Icons -->
-    <div class="flex flex-col items-center bg-white rounded-full shadow-lg  border border-yellow-600">
+      <!-- Zoom In and Out Icons -->
+      <div class="flex flex-col items-center bg-white rounded-full shadow-lg border border-yellow-600">
         <button id="zoom-in" class="p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
+          </svg>
         </button>
         <div class="border-t border-yellow-600 w-full"></div>
         <button id="zoom-out" class="p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
+          </svg>
         </button>
-    </div>
-
-    <!-- Reset Icon -->
-    <button id="zoom-reset" class="rounded-full p-2 ">
-      <svg width="28px" height="28px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="1"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#c2a02f" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"></path></g></svg>
-    </button>
-</div>
-
-
       </div>
 
-      <!-- Configuration Panel -->
-      <div class="space-y-6 flex flex-col h-full pl-14">
+      <!-- Reset Icon -->
+      <button id="zoom-reset" class="rounded-full p-2 ">
+        <svg width="28px" height="28px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+          <path fill="#c2a02f" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Configuration Panel -->
+  <div class="space-y-6 flex flex-col h-full pl-14 lg:w-2/5">
   <div>
     <h1 class="text-2xl font-semibold">3D CONFIGURATOR</h1>
   </div>
@@ -175,13 +74,9 @@
     </div>
 
     <!-- Select Dropdown -->
-    <div class="relative w-72 ">
-      <label for="configuration" class="block text-sm font-medium text-gray-700 ">Select Configuration</label>
-      <select 
-        v-model="configuration"
-        id="configuration"
-        class="w-full p-2 border border-gray-300 rounded-md"
-      >
+    <div class="relative w-72">
+      <label for="configuration" class="block text-sm font-medium text-gray-700">Select Configuration</label>
+      <select v-model="configuration" id="configuration" class="w-full p-2 border border-gray-300 rounded-md">
         <option value="1">Configuration 1</option>
         <option value="2">Configuration 2</option>
         <option value="3">Configuration 3</option>
@@ -189,27 +84,23 @@
     </div>
   </div>
 
-  <!-- Buttons at the bottom -->
-  <div class="mt-auto pb-5 h-full flex gap-4 items-end "> 
-    <button 
-      @click="handleStoreClick"
-      class="text-[#B88746] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full"
-    >
+  <!-- Buttons at the bottom (added mt-auto for positioning) -->
+  <div class="mt-[120px] pb-16 h-full flex gap-4 items-end"> 
+    <button @click="handleStoreClick" class="text-[#B88746] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full">
       ENQUIRE/EMAIL
     </button>
-    <button 
-      @click="handleStoreClick"
-      class="bg-[#B88746] text-white hover:bg-[#9E7339] py-1 px-10 rounded-full"
-    >
+    <button @click="handleStoreClick" class="bg-[#B88746] text-white hover:bg-[#9E7339] py-1 px-10 rounded-full">
       SEE AT STORE
     </button>
   </div>
 </div>
 
-    </div>
+</div>
+
   </div>
 
-    <section class="bg-[#f3f3f3]">
+  <div class="bg-[#f3f3f3] ">
+    <section class="">
       <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">
         <div class="lg:px-11 my-10">
           <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
@@ -218,33 +109,26 @@
               B Chair is now available in our exclusive timeless pixie weave design language. A chair that provides
               functionality with its open frame design allowing access to a self-storage compartment for personal
               belongings. The pixie design pattern embodies our authentic superior woven craftsmanship through which
-              clients can opt for our LSO option. Lebello Special Operations provides enhanced bespoke design
+            clients can opt for our LSO option. Lebello Special Operations provides enhanced bespoke design
               customization solutions tailored towards your design requirements. The B Chair comes in a low and
               high-back model.
             </p>
           </div>
-          <div class="mt-10 flex hover:text-green" :class="{ 'text-green': addiVisible }" @click="HandleAdditionalInfo"
-            @mouseenter="setAddiColor('#4dc45c')" @mouseleave="setAddiColor('#333')">
+          <div class="mt-10 flex hover:text-orange" :class="{ 'text-orange': addiVisible }" @click="HandleAdditionalInfo"
+            @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#333')">
             <span class="ml-12 uppercase font-graphikMedium text-[13px]">Additional Product info</span>
             <ArrowSvg class="mt-0 ml-3 self-center" size="15px"
-              :fillColor="addiVisible ? '#4dc45c' : additArrowColor" />
+              :fillColor="addiVisible ? '#d98c3a' : '#64748b' " />
           </div>
 
         </div>
 
         <div class="hidden md:block"> <div></div>
           <div class="relative h-full overflow-hidden">
-          <!-- <Images3DView/> -->
-      <!-- <div id="zoom-controls" style="position: absolute; top: 10px; left: 10px; z-index: 1000; display: flex; flex-direction: column;">
-    <button id="zoom-in" style="font-size: 20px; padding: 10px;">+</button>
-    <button id="zoom-out" style="font-size: 20px; padding: 10px;">-</button>
-    <button id="zoom-reset" style="font-size: 20px; padding: 10px; margin-top: 10px;">Reset Zoom</button>
-    <button id="fullscreen-toggle" style="font-size: 20px; padding: 10px; margin-top: 10px;">Full Screen</button>
-</div> -->
             <img
               class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
               src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" />
-            <span v-scroll="isVisible ? arrowScroll : 0" class="absolute bottom-0 bg-green p-5">
+            <span v-scroll="isVisible ? arrowScroll : 0" class="absolute bottom-0 bg-orange p-5">
               <ArrowSvg size="13px" fillColor="#ffffff" ref="arrowSvg" @click="rotate" />
             </span>
           </div>
@@ -288,32 +172,28 @@
       </div>
     </transition>
 
-    <div class="flex justify-between uppercase py-4 bg-white">
-      <div class="ml-16 flex self-center">
-        <ul class="flex font-graphikMedium text-[14px] text-green hover:text-blue"
+    <div class="flex justify-between uppercase py-4  ">
+      <div class="ml-16 flex self-center ">
+        <ul class="flex font-graphikMedium text-[14px] text-[#64748b] hover:text-orange"
           @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
           <li class="mr-2 ">
             <a class="font-graphikMedium text-[14px]" href="https://www.lebello.com/product/">Enquire</a>
             <span class="mx-1">/</span>
           </li>
           <li class="active">Email</li>
-          <span class="mx-3 self-center">
-            <ArrowSvg size="11px" :fillColor="arrowFillColor" />
-          </span>
+          
         </ul>
-        <ul class="flex font-medium text-green hover:text-blue" @mouseenter="setArrowFillColor2('#3399ff')"
+        <ul class="flex font-medium ml-20 text-[#64748b] hover:text-orange" @mouseenter="setArrowFillColor2('#3399ff')"
           @mouseleave="setArrowFillColor2('#4dc45c')">
           <li class="mr-2 ml-2">
             <a class="underline font-graphikMedium text-[14px]" target="_blank"
               href="https://lebello.com/wp-content/uploads/2013/09/B-Chair_Cutsheet.pdf">Download Cut Sheet</a>
           </li>
-          <span class="mx-1 self-center">
-            <ArrowSvg size="11px" :fillColor="arrowFillColor2" />
-          </span>
+         
         </ul>
       </div>
       <!-- social links -->
-      <ul class="flex justify-center space-x-1 pr-20 ">
+      <!-- <ul class="flex justify-center space-x-1 pr-20 ">
         <li> <a href="https://www.facebook.com/share.php?u=https://lebello.com/products/b-chair-1-2/&title=B Chair"
             target="_blank" title="Facebook"
             class="flex items-center justify-center w-11 h-11 bg-gray hover:bg-[#7bd923] rounded-full mx-3"> <svg
@@ -377,9 +257,9 @@
               class="w-[18px] h-[18px]"
               src="https://lebello.com/wp-content/themes/lebello-ep/images/Lebello-twitterx-icon.svg"
               alt="Social Icon" /> </a> </li>
-      </ul>
+      </ul> -->
 
-      <div class="relative top-30 right-0 pr-3 self-center z-[9999]" ref="closeMenu2">
+      <div class="relative top-30 right-0 pr-3 self-center" ref="closeMenu2">
         <SideMenu :list="list" :handleSideMenu="handleSideMenu2" :isOpen="isOpenSidebarSlider2" :mainSlider="false"
           :showDropDown="false" :showHeading="false" :downDropdown="true" />
       </div>
@@ -387,6 +267,7 @@
 
 
     <AccordianSection />
+  </div>
     <FooterSection />
   </div>
 </template>
@@ -395,7 +276,7 @@
 import MainSlider from '@/components/frontend-components/Main-Slider.vue'
 import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import { scrollDown } from '@/helper/frontendHelpers'
 import ArrowSvg from '@/components/frontend-components/Svg/Arrow-Svg.vue'
 import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'
@@ -404,15 +285,7 @@ import BreadcrumbSection from '@/components/frontend-components/BreadcrumbSectio
 import SideMenu from '@/components/frontend-components/Side-Menu.vue'
 import Images3DView from '@/components/frontend-components/Images3DView.vue'
 import ThreeDAnimaation from '@/components/Admin-components/ThreeDAnimaation.vue'
-import { ChevronRightIcon,PlusIcon,MinusIcon,ArrowsPointingOutIcon,ArrowPathIcon  } from '@heroicons/vue/24/solid'
-// import { 
-//   ChevronRightIcon, 
-//   MaximizeIcon, 
-//   PlusIcon, 
-//   RotateCcwIcon 
-// } from '@heroicons/vue/24/solid'
-
-// import { ChevronRightIcon, Max-imize2Icon, PlusIcon, RotateCcwIcon } from '@heroicons/vue/solid'
+import { getLandingPageData } from '@/helper/frontendHelpers'
 
 const sliderList = [
   { name: 'B Chair Series', link: 'https://lebello.com/products/trixie-lounger/' },
@@ -425,6 +298,40 @@ const products = ref([
   { title: 'Set of B Chair, B Chair 2 and Dot Table.', description: 'Set of B Chair, B Chair 2 and Dot Table.', image: 'https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg', thumbnail: 'http://lebello.com/wp-content/uploads/thumbs/b-chair-slider-gallery-302X202.png', alt: 'B Chair Piie Low & High Lounger Chair' },
 
 ]);
+
+const sliderImages = ref([
+ 
+  {
+    image: 'http://lebello.com/wp-content/uploads/2024/02/Lebello-Chair-8-Siider.jpg',
+    alt: 'Tubo Club',
+    navColor: 'black'
+  },
+  {
+    image: 'http://lebello.com/wp-content/uploads/2021/09/lebello_4l-pixie_arms_chair.jpg',
+    alt: 'Mogul Lounger',
+    navColor: 'white'
+  },
+  {
+    image: 'http://lebello.com/wp-content/uploads/2022/02/lebello_monyet_stools-outdoor.jpg',
+    alt: 'Trixie Lounger Chair    ',
+    navColor: 'white  '
+  },
+  {
+    image: 'http://lebello.com/wp-content/uploads/2024/02/Lebello-Twigs-XY-Slider.jpg',
+    alt: 'Monyet Stools',
+    navColor: 'white'
+  },
+  {
+    image: 'http://lebello.com/wp-content/uploads/2021/05/lebello_tubo_club-outdoor.jpg',
+    alt: 'Monyet Stools',
+    navColor: 'white'
+  },
+  { image: 'http://lebello.com/wp-content/uploads/2021/11/Lebello-tubo-club.jpeg', 
+    alt: 'Twiggy XY Chair',
+    navColor: 'white' 
+  }
+])
+
 
 const list = ref([
   { name: 'Trixie Lounger', link: 'https://lebello.com/products/trixie-lounger/' },
@@ -443,6 +350,7 @@ const addiVisible = ref(false);
 const arrowRotation = ref('down')
 const isVisible = ref(false);
 const arrowSvg = ref(null)
+const landingPageData = ref([])
 const arrowScroll = ref(0);
 const arrowFillColor = ref('#4dc45c');
 const arrowFillColor2 = ref('#333');
@@ -450,6 +358,18 @@ const closeMenu = ref(null);
 const closeMenu2 = ref(null);
 const configuration = ref('1')
 const email = ref('')
+
+const  handleLandingPageData = async () => {
+   const res = await getLandingPageData()
+   console.log("getLandingPageData", res.data.data.home_slider);
+  if (res.status === 200 && res.data.success) {
+     landingPageData.value = res.data.data.home_slider
+  }
+}
+
+onMounted(() => {
+   handleLandingPageData()
+})
 
 const handleStoreClick = () => {
   console.log('Email:', email.value)

@@ -1120,7 +1120,7 @@ window.keyshotXR = function (
       b += z + 'transform-origin: 50% 50%;'
       b += ' width: ' + window.innerWidth + 'px;'
       b += ' height: ' + window.innerHeight + 'px;'
-      b += ' background-color: #ffffff;'
+      b += ' background-color: #ccc;'
       b += ' opacity: .7'
       a.N.setAttribute('style', b)
       a.r.appendChild(a.N)

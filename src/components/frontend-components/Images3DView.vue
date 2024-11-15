@@ -1,5 +1,5 @@
 <template>
-    <div id="KeyShotXR" class=' overflow-hidden bg-white  h-full'></div>
+    <div id="KeyShotXR" class=' overflow-hidden overflow-x-hidden overflow-y-hidden bg-white  h-full'></div>
   </template>
   
   <script setup>
@@ -49,11 +49,9 @@
       const script = document.createElement('script');
       script.src = 'src/assets/KeyShortXR.js'; 
       script.onload = () => {
-        console.log('KeyShotXR script loaded');
         resolve();
       };
       script.onerror = (err) => {
-        console.error('Error loading KeyShotXR.js', err);
         reject(new Error('Failed to load KeyShotXR.js'));
       };
       document.head.appendChild(script);
@@ -86,7 +84,7 @@
     width: 100%;
     height: 100%;
     position: relative;
-    background-color: black;
+    background-color: #ffffff;
   }
   </style>
   
