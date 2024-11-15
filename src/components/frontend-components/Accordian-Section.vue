@@ -54,6 +54,7 @@
                     !tab?.active
                 }" :id="tab?.id" role="tabpanel" :aria-labelledby="tab?.id + '-tab'" data-twe-tab-active>
                   <div v-if="Array.isArray(tab?.content)">
+                  
                     <div v-if="tab?.active" class="container w-5/6">
                       <div class="grid grid-cols-5 justify-items-start ">
                         <div v-for="(itr, index) in tab?.content" :key="index" class="bg-white">
@@ -127,6 +128,7 @@ const faqs = ref([
     header: 'Lebello Fibers',
     tabs: [
       {
+        active:true,
         id: 0,
         name: 'PEEL FIBERS',
         content: [
@@ -256,6 +258,7 @@ const faqs = ref([
     header: 'RopeTek®',
     tabs: [
       {
+        active: true,
         id: '0',
         name: 'PEEL FIBERS',
         content: [

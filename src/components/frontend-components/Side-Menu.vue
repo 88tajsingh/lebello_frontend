@@ -152,7 +152,7 @@
       </div> -->
       <slot></slot>
     </v-card>
-    <span v-if="!isOpen" @click="handleSideMenu" class="text-9xl bg-transparent sticky top-5">
+    <span v-if="!isOpen" @click="handleSideMenu" class="text-9xl bg-transparent sticky top-5 z-[9999]" >
       <MenuSvg :size="svgSize" :fillColor="svgColor" :class="menuClass" />
     </span>
   </div>
