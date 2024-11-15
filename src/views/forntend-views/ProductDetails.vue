@@ -32,21 +32,21 @@
     <div id="zoom-controls" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
       <!-- Fullscreen Icon -->
       <button id="fullscreen-toggle" class="rounded-full p-2">
-        <svg height="22px" width="22px" viewBox="0 0 512 512" fill="#000000">
+        <svg height="20px" width="20px" viewBox="0 0 512 512" fill="#000000">
           <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
         </svg>
       </button>
 
       <!-- Zoom In and Out Icons -->
       <div class="flex flex-col items-center bg-white rounded-full shadow-lg border border-yellow-600">
-        <button id="zoom-in" class="p-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button id="zoom-in" class="py-2 px-[5px]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
           </svg>
         </button>
         <div class="border-t border-yellow-600 w-full"></div>
-        <button id="zoom-out" class="p-1">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <button id="zoom-out" class="py-2  px-[5px]">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
           </svg>
         </button>
