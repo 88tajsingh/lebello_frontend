@@ -30,6 +30,76 @@ window.keyshotXR = function (
   r,
   Ja
 ) {
+
+  var zoomFactor = 0.1;  
+  var defaultZoom = 1;
+
+  function zoomIn() {
+      c.n += zoomFactor;  
+      if (c.n > c.la / c.g) c.n = c.la / c.g; 
+      na();  
+  }
+  function zoomOut() {
+      c.n -= zoomFactor;  
+      if (c.n < c.ma / c.g) c.n = c.ma / c.g;  
+      na();  
+  }
+  function resetZoom() {
+    c.n = defaultZoom;  
+    na();  
+}
+
+ function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+      if (l.requestFullscreen) {
+          l.requestFullscreen();
+      } else if (l.mozRequestFullScreen) { 
+          l.mozRequestFullScreen();
+      } else if (l.webkitRequestFullscreen) { 
+          l.webkitRequestFullscreen();
+      } else if (l.msRequestFullscreen) { 
+          l.msRequestFullscreen();
+      }
+  } else {
+      if (document.exitFullscreen) {
+          document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { 
+          document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { 
+          document.msExitFullscreen();
+      }
+  }
+}
+
+  document.getElementById('zoom-in').addEventListener('click', zoomIn);
+  document.getElementById('zoom-out').addEventListener('click', zoomOut);
+  document.getElementById('zoom-reset').addEventListener('click', resetZoom);
+  document.getElementById('fullscreen-toggle').addEventListener('click', toggleFullScreen);
+
+  function na() {
+    var d = c.g;
+    c.g = 1;
+    if (d != c.g) a.T((a.w() * d) / c.g);
+    l.setAttribute('width', B.width);
+    if (a.i) {
+        l.removeAttribute('height');
+        l.style.width = '100%';
+        l.style[N] = 'scale(' + c.n + ')';
+        l.style.height = 'auto';
+        s.style['background-color'] = a.backgroundColor;
+        document.body.style['background-color'] = a.backgroundColor;
+    } else {
+        l.setAttribute('height', B.height);
+        l.style[N] = 'translate(' + -B.width / 2 + 'px,' + -B.height / 2 + 'px) scale(' + c.g + ') translate(' + (0.5 * C.width) / c.g + 'px,' + (0.5 * C.height) / c.g + 'px) translate(' + c.k + 'px,' + c.l + 'px) scale(' + c.n + ')';
+        l.style['max-width'] = '';
+        l.style.width = '';
+        l.style.height = '';
+        s.style['background-color'] = a.backgroundColor;
+    }
+}
+
   function P(a, f, b) {
     a.removeEventListener
       ? a.removeEventListener(f, b, u)
@@ -1050,7 +1120,7 @@ window.keyshotXR = function (
       b += z + 'transform-origin: 50% 50%;'
       b += ' width: ' + window.innerWidth + 'px;'
       b += ' height: ' + window.innerHeight + 'px;'
-      b += ' background-color: #ccc;'
+      b += ' background-color: #ffffff;'
       b += ' opacity: .7'
       a.N.setAttribute('style', b)
       a.r.appendChild(a.N)

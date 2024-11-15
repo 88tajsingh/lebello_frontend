@@ -1,5 +1,5 @@
 <template>
-    <div id="KeyShotXR" class=' overflow-hidden '></div>
+    <div id="KeyShotXR" class=' overflow-hidden bg-white  h-full min-h-[500px]'></div>
   </template>
   
   <script setup>
@@ -13,8 +13,8 @@
       const nameOfDiv = "KeyShotXR";
       const folderName = "src/assets/Stone Tables White Background.1";
       const viewPortWidth = 600;
-      const viewPortHeight = 410;
-      const backgroundColor = "#F2E9E9";
+      const viewPortHeight = 390;
+      const backgroundColor = "#ffffff";
       const uCount = 10;
       const vCount = 10;
       const uWrap = true;

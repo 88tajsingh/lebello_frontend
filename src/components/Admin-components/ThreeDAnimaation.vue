@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { TresCanvas, UseLoader } from '@tresjs/core';
-import { GLTFModel, OrbitControls } from '@tresjs/cientos'
+import { GLTFModel,FBXModel, OrbitControls } from '@tresjs/cientos'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';  
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'; 
 import { useGLTF } from '@tresjs/cientos'
@@ -40,8 +40,8 @@ watchEffect(() => {
 </script>
 
 <template>
-  <TresCanvas class='w-full h-full ' clear-color="#82DBC5">
-    <TresPerspectiveCamera :position="[11,11, 11]" />
+  <TresCanvas class='w-full h-full ' clear-color="#ffffff">
+    <TresPerspectiveCamera :position="[11, 11, 11]" />
     <OrbitControls />
     <Suspense>
       <!-- <UseLoader v-if="objectUrl" v-slot="{ data }" :loader="loader" :url="objectUrl"> -->
@@ -60,7 +60,11 @@ watchEffect(() => {
 
         
       <!-- </UseLoader> -->
-      <GLTFModel  path="src/assets/House_001_GLB.glb" />
+      <!-- <GLTFModel  path="src/assets/House_001_GLB.glb" /> -->
+      <FBXModel
+        path="src/assets/uploads_files_3400441_Aster+Luxury+Armchair.fbx"
+        :scale=".175"
+      />
     </Suspense>
     <TresDirectionalLight :position="[0, 2, 4]" :intensity="1.2"  />
   </TresCanvas>
