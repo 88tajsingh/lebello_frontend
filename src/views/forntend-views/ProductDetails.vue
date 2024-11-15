@@ -259,10 +259,10 @@
               alt="Social Icon" /> </a> </li>
       </ul> -->
 
-      <div class="relative top-30 right-0 pr-3 self-center" ref="closeMenu2">
+      <!-- <div class="relative top-30 right-0 pr-3 self-center" ref="closeMenu2">
         <SideMenu :list="list" :handleSideMenu="handleSideMenu2" :isOpen="isOpenSidebarSlider2" :mainSlider="false"
           :showDropDown="false" :showHeading="false" :downDropdown="true" />
-      </div>
+      </div> -->
     </div>
 
 
