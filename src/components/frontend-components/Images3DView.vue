@@ -1,5 +1,5 @@
 <template>
-    <div id="KeyShotXR" class=' overflow-hidden bg-white  h-full min-h-[500px]'></div>
+    <div id="KeyShotXR" class=' overflow-hidden bg-white  h-full'></div>
   </template>
   
   <script setup>
