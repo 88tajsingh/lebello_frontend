@@ -1,7 +1,7 @@
 <template>
-  <nav >
+  <nav class="z-[999]">
     <div class=" mx-auto w-full  top-0  self-start  text-graphik text-white  ease-in duration-300  z-50 " :class="{
-      'absolute top-0 left-0  bg-transparent	': absolute,
+      'absolute pb-10 top-0 left-0  bg-transparent	': absolute,
       'hover:text-white': navColor === 'white',
     }">
       <div class="relative  h-16 items-center  justify-between ">
@@ -22,8 +22,11 @@
           </button>
         </div>
         <div class="px-20 hidden md2:block " :class="{ 'hover:bg-[#0e0e0e89] bg-opacity-5': absolute, }">
-          <div class="flex  mt-auto mb-0  pt-8  " @mouseenter="absolute ? navColor1 = true : navColor1 = false"
-            @mouseleave="absolute ? navColor1 = false : ''">
+          <div
+    :class="['flex', 'mt-auto', 'mb-0', absolute ? 'pt-8' : 'py-4']"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
+  >
             <router-link to="/"  class="col-span-1 flex">
               <img class="h-8 right-end text-right w-full"
                 :src="navColor1 ? '@/../logo-header.png' : (navColor === 'white' ? '@/../logo-header.png' : '@/../logo-header4.png')"

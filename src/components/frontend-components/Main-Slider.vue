@@ -15,6 +15,10 @@ const closeSideMenu = () => {
 }
 onClickOutside(closeMenu, closeSideMenu)
 const props = defineProps({
+  isAbsolute: {
+    type: Boolean,
+    required: true,
+  },
   sidebarList: {
     type: Array,
     required: true,
@@ -49,7 +53,7 @@ const startAutoSwipe = () => {
 
 const changeSlide = (index) => {
   currentIndex.value = index
-  console.log(props. sliderImages[currentIndex.value].navColor);
+  console.log(props.sliderImages[currentIndex.value].navColor);
 }
 
 const previous = () => {
@@ -75,7 +79,7 @@ const handleSideMenu = () => {
 
 </script>
   <template>
-     <NavBar absolute="true" :navColor="navColor"/>
+     <NavBar :absolute="props.isAbsolute" :navColor="navColor"/>
     <div id="default-carousel" class="relative" data-carousel="static">
       <div class="w-full h-full  mx-0">
         <div class="overflow-hidden  h-screen sm:h-screen xl:h-screen 2xl:h-screen">
@@ -116,7 +120,7 @@ const handleSideMenu = () => {
       :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-6': !atBottom, 'bottom-10': atBottom }]" 
 
       >
-        <div class=" capitalize opacity-80 text-white font-graphikLight sm:text-[20px] md2:text-[40px]  ">{{ props.sliderImages[currentIndex]?.title }}</div>
+        <div class=" capitalize opacity-80 text-white font-graphikLight sm:text-[20px] md2:text-[40px]  ">{{ props.sliderImages[currentIndex]?.title || "default" }}</div>
       </div>
       <!-- down arrow -->
       <div class="absolute left-1/2 bottom-5 animate-bounce mx-auto">

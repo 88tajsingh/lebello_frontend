@@ -1,15 +1,15 @@
 <template>
-  <div class="mx-auto bg-white">
-    <div class="grid divide-y divide-neutral-200 border">
-      <div v-for="(faq, index) in faqs" :key="index" class="py-5 px-16">
-        <details class="group transition-all duration-500 ease-in">
+  <div class=" bg-[#f3f3f3] mx-16  border-t pb-10 border-neutral">
+    <div class="grid">
+      <div v-for="(faq, index) in faqs" :key="index" class="py-5 border-b border-neutral ">
+        <details class="group transition-all duration-500 ease-in ">
           <summary @click="toggleFAQ(index)"
-            class="flex justify-between  items-center text-green font-graphik text-[23px] cursor-pointer list-none hover:text-blue">
+            class="flex w-1/3 justify-between  items-center text-[#64748b] font-graphik text-[23px] cursor-pointer list-none hover:text-orange">
             <span class="text-2xl font-normal" :class="{ 'text-black ': faq?.open }">{{
               faq?.header
             }}</span>
             <span class=" transition-all duration-300 ease-in-out"
-              :class="{ 'group-open:rotate-90 ': faq?.open, 'text-black ': faq?.open }">
+              :class="{ 'group-open:rotate-90 ': faq?.open, 'text-[#64748b] ': faq?.open }">
               <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
                 stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"
                 transform="rotate(-90)">
