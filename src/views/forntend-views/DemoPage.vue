@@ -1,5 +1,5 @@
 <template>
-<div class="w-fill h-[400px]  ">   
+<div class="w-fill lg:h-[400px]  ">   
     <div class="min-h-screen bg-white ">
     <!-- Breadcrumb -->
     <nav class="p-4 text-sm">
@@ -79,7 +79,7 @@
   </div>
 
   <!-- Buttons at the bottom -->
-  <div class="mt-auto pb-5 h-full flex gap-4 items-end "> 
+  <div class="mt-auto  pb-5 h-full flex flex-col md:flex-row sm:w-72 md:w-full  gap-4 md:items-end "> 
     <button 
       @click="handleStoreClick"
       class="text-[#B88746] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full"
@@ -199,8 +199,17 @@
 </template>
 
 <script setup>
+
 import Images3DView from '@/components/frontend-components/Images3DView.vue'
 import ThreeDAnimaation from '@/components/Admin-components/ThreeDAnimaation.vue'
 import { ChevronRightIcon,PlusIcon,MinusIcon,ArrowsPointingOutIcon,ArrowPathIcon  } from '@heroicons/vue/24/solid'
+import { ref } from 'vue';
+
+const configuration = ref('1')
+const email = ref('')
+
+const handleStoreClick = () => {
+  console.log('Email:', email.value)
+}
 
 </script>
