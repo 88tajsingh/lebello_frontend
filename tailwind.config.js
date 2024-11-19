@@ -298,6 +298,14 @@ export default {
             5: '0px 1px 5px rgba(0, 0, 0, 0.2)'
           },
           keyframes: {
+            slideInRight: {
+              '0%': { transform: 'translateX(100%)' },
+              '100%': { transform: 'translateX(0)' },
+            },
+            slideOutRight: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(100%)' },
+            },
             linspin: {
               '100%': { transform: 'rotate(360deg)' }
             },
@@ -335,6 +343,8 @@ export default {
             }
           },
           animation: {
+            'slide-in-right': 'slideInRight 0.3s ease-out',
+            'slide-out-right': 'slideOutRight 0.3s ease-out',
             linspin: 'linspin 1568.2353ms linear infinite',
             easespin: 'easespin 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both',
             'left-spin': 'left-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both',
