@@ -7,9 +7,7 @@ import { useGLTF } from '@tresjs/cientos'
 
 import { Object3D } from 'three';  
 import { Suspense, ref, watchEffect } from 'vue';
-
-type GLTFResult = import('three/examples/jsm/loaders/GLTFLoader').GLTF;
-type OBJResult = Object3D;  
+ 
 const defaultFilePath = 'src/assets/House_001_GLB.glb';  
 
 const props = defineProps({
@@ -20,8 +18,8 @@ const props = defineProps({
   },
 });
 
-const loader = ref<any>(null); 
-const objectUrl = ref<THREE.Object3D>('');  
+const loader = ref(null); 
+const objectUrl = ref('');  
 
 watchEffect(() => {
   if (props.file) {

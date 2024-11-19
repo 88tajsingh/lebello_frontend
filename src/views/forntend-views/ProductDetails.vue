@@ -266,7 +266,10 @@
     </div>
 
 
-    <AccordianSection />
+    <!-- <AccordianSection /> -->
+     <div class="mx-12">
+       <AccordionNew />
+     </div>
   </div>
     <FooterSection />
   </div>
@@ -286,6 +289,7 @@ import SideMenu from '@/components/frontend-components/Side-Menu.vue'
 import Images3DView from '@/components/frontend-components/Images3DView.vue'
 import ThreeDAnimaation from '@/components/Admin-components/ThreeDAnimaation.vue'
 import { getLandingPageData } from '@/helper/frontendHelpers'
+import AccordionNew from '@/components/frontend-components/AccordionNew.vue'
 
 const sliderList = [
   { name: 'B Chair Series', link: 'https://lebello.com/products/trixie-lounger/' },

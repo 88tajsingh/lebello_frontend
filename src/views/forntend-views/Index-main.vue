@@ -4,6 +4,7 @@
     <MainSlider
       :sidebarList="landingPageData.home_sidebar_first"
       :sliderImages=" landingPageData.home_slider"
+      :isAbsolute="true"
       :mainSlider="true"
       :showDropDown="false"
       :showHeading="true"
@@ -29,7 +30,6 @@ const  landingPageData = ref([])
 
 const  handleLandingPageData = async () => {
    const res = await getLandingPageData()
-   console.log("getLandingPageData", res);
   if (res.status === 200 && res.data.success) {
      landingPageData.value = res.data.data
   }
