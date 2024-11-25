@@ -97,7 +97,7 @@ const handleRoute = (sub) => {
   sessionStorage.setItem('materialDetail', sub.id);
   router.push({ name: 'materialDetail', params: { slug: sub.slug } });
 };
-
+4
 </script>
   <template>
      <NavBar absolute="true" :navColor="navColor"/>

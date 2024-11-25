@@ -16,6 +16,9 @@ class PublicServices {
   contractDesign(id,payload) {
     return instance.get(ApiConfig.contractDesign, { params: {domain_id:id,id:payload}, })
   }
+  swatchDetail(payload) {
+    return instance.get(ApiConfig.frontend_swatch_Detail, { params: {id:payload}, })
+  }
   contractType(id,payload) {
     return instance.get(ApiConfig.contractType, { params: {domain_id:id,id:payload}, })
   }
