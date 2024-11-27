@@ -172,16 +172,17 @@
                     <div
                         class="font-graphik text-[20px] text-blue mx-auto px-auto border border-b-gray-4 font-medium ">
                         Materials</div>
-                    <div v-for="(item, key) in contractDesignSidebar" :key="key" class="">
-                        <h2 :id="'heading' + key" class="mb-0 border border-b-gray-4">
-                            <button @click="toggleAccordion(key)" :aria-expanded="activeIndex === key"
-                                :aria-controls="'collapse' + key"
+                    <div v-for="(item, key) in materialDetailSidebar" :key="key" class="">
+                        <h2 :id="'heading' + item.id" class="mb-0 border border-b-gray-4">
+                            <button @click="toggleAccordion(key,item)" :aria-expanded="activeIndex === item.id"
+                                :aria-controls="'collapse' + item.id"
                                 class="group relative flex  w-full items-center hover:text-orange border-0  py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
-                                :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === key }"
+                                :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === item.id }"
                                 type="button">
-                                {{ key }}
-                                <span class=" ms-auto  transition-transform duration-200 ease-in-out"
-                                    :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
+                                {{ item.title }}
+                                
+                                <span @click.stop="toggleAction(key,item)" class=" ms-auto  transition-transform duration-200 ease-in-out"
+                                    :class="{ 'rotate-0': activeIndex !== item.id, 'rotate-[-180deg]': activeIndex === item.id }">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="6px" height="6px"
                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4  w-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -191,34 +192,38 @@
                             </button>
                         </h2>
 
-                        <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0"
-                            :aria-labelledby="'heading' + key" data-twe-collapse-item
+                        <div :id="'collapse' + item.id" v-show="activeIndex === item.id" class="pl-7 py-0"
+                            :aria-labelledby="'heading' + item.id" data-twe-collapse-item
                             data-twe-parent="#accordionExample">
 
                             <div v-if="item" class="text-orange font-semibold">
+                            
                                 <ul class=''>
                                     <!-- Overview -->
-                                    <li v-if="item.overview" class="">
+                                     
+                                    <!-- <li v-if="item.overview" class="">
                                         <a @click.prevent="handleClick(item.overview)"
                                             class="font-graphikLight text-[13px] cursor-pointer ">{{
                                                 item.overview.title }}</a>
-                                    </li>
+                                    </li> -->
                                     <!-- Location -->
-                                    <template v-if="Array.isArray(item)">
+                                     
+                                    <!-- <template v-if="Array.isArray(item)">
                                         <li v-for="(sub, itemIndex) in item" :key="itemIndex">
                                             <a @click.prevent="handleClick(sub)"
                                                 class="font-graphikLight text-[13px] cursor-pointer">{{
                                                     sub.contract_location || sub.title }}</a>
                                         </li>
-                                    </template>
+                                    </template> -->
                                     <!-- Contract designs -->
-                                    <template v-else-if="item.designs">
-                                        <li v-for="(sub, itemIndex) in item.designs" :key="itemIndex">
+                                     
+                                    <div v-if="item.material_data">
+                                        <li v-for="(sub, itemIndex) in item.material_data" :key="itemIndex">
                                             <a @click.prevent="handleClick(sub)"
                                                 class="font-graphikLight text-[13px] cursor-pointer">{{
-                                                    sub.title }}</a>
+                                                    sub.name }}</a>
                                         </li>
-                                    </template>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -246,21 +251,21 @@ import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 
 const store = useStore();
 const router = useRouter();
-const contractDesignSidebar = ref([]);
+const materialDetailSidebar = ref([]);
 const swatchDetailData = ref([]);
 const breadcrumbData = ref([]);
 const loading = ref(true);
-const id = sessionStorage.getItem('materialDetail');
+const id = ref(sessionStorage.getItem('materialDetail'));
 
 const activeTab = ref(0)
 
 const handleswatchDetailData = async () => {
-    const { status, data } = await getSwatchDetail(id);
+    const { status, data } = await getSwatchDetail(id.value);
     if (status === 200 && data.success) {
-        contractDesignSidebar.value = data.data.contract_design_sidebar;
         swatchDetailData.value = data.data.swatch_data[0];
-        
+        materialDetailSidebar.value = data.data.swatch_side_bar;
         activeTab.value = swatchDetailData.value?.material_data[0]?.id;
+        activeIndex.value = swatchDetailData.value.id;
     }}
 
 
@@ -280,8 +285,6 @@ const activateTab = (tab, index) => {
         if (Array.isArray(tab.material_children) && tab.material_children.length > 0) {
             tab.material_children[0].active = true;  
         }
-
-        console.log("swatchDetailData after activation:", swatchDetailData.value?.material_data);
     }
 };
 
@@ -296,33 +299,28 @@ const closeSideMenu = () => {
 };
 onClickOutside(closeMenu, closeSideMenu);
 
-const handleClick = (sub) => {
-    let route;
-    if (sub.title === 'overview' || sub.title === 'Overview') {
-        route = { name: 'contractType', params: { slug: sub.slug } };
-    } else if (sub.title) {
-        route = { name: 'contractDesign', params: { slug: sub.slug } };
-    } else {
-        route = { name: 'ContractLocation', params: { slug: sub.slug } };
-    }
-    console.log("sub.title", sub.title);
-    if (sub.title === 'overview' || sub.title === 'Overview') {
-        sessionStorage.setItem('contract_type_id', sub.id);
-    } else if (sub.title) {
-        sessionStorage.setItem('contract_design_id', sub.id);
-    } else {
-        sessionStorage.setItem('contract_location_id', sub.id);
-    }
-
-    router.push(route);
+const handleClick = (sub) => {   
+   if(sub.id !== activeIndex.value){
+    sessionStorage.setItem('materialDetail', sub.id);
+    id.value = sub.id;
+    router.push({ name: 'materialDetail', params: { slug: sub.slug } });
+   }
+    activeTab.value = sub.id;
 };
 
 onMounted(() => {
     handleswatchDetailData();
-});``
+});
 
-const toggleAccordion = (index) => {
-    activeIndex.value = activeIndex.value === index ? null : index;
+const toggleAction = (index,sub) => {
+    activeIndex.value = activeIndex.value === sub.id ? null : sub.id;
+};
+const toggleAccordion = (index,sub) => {
+    activeIndex.value = activeIndex.value === sub.id ? null : sub.id;
+    sessionStorage.setItem('materialDetail', sub.id);
+    id.value = sub.id;
+    router.push({ name: 'materialDetail', params: { slug: sub.slug } });
+
 };
 
 watch(
@@ -344,7 +342,15 @@ watch(
     }
 );
 
-const activeIndex = ref(0);
+watch(
+    () => id.value,
+    () => {
+        handleswatchDetailData();
+        console.log("id",id.value);
+    }
+);
+
+const activeIndex = ref(null);
 const modalactiveIndex = ref(0);
 
 const nextSlide = () => {

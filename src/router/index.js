@@ -14,8 +14,8 @@ const  routes = [
     component: () => import('../views/forntend-views/ProductDetails.vue')
   },
   {
-    path: '/category',//done
-    name: 'category',
+    path: '/product_series/:slug?',//done
+    name: 'product_series',
     component: () => import('../views/forntend-views/CategoryPage.vue')
   },
   {
