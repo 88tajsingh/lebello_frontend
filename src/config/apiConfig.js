@@ -324,6 +324,7 @@ const ApiConfig = {
   contractType: '/front-end-contract-type',
   contractLocation: '/front-end-contract-location',
   frontend_swatch_list: '/front-end-swatch-list',
+  frontend_swatch_Detail: '/front-end-swatch-data',
 
 
 

@@ -25,6 +25,17 @@
                                 <SingleCheck v-if="form.id" label="" v-model="checkedFields.description"></SingleCheck>
                                 <div class="w-full">
                                     <TinyMCE v-model="form.description" />
+                                    <span class="text-sm pl-2">The material term id. This is generated from material taxonomy. Please do not make any changes here.</span>
+                                </div>
+                            </div>
+                        </Accordion>
+                    </div>
+                    <div class="mt-5 ">
+                        <Accordion :open="true" header=" Material teaser text ">
+                            <div class="px-3 pt-2 flex">
+                                <SingleCheck v-if="form.id" label="" v-model="checkedFields.material_text_overlay"></SingleCheck>
+                                <div class="w-full">
+                                    <TinyMCE v-model="form.material_text_overlay" />
                                     <span class="text-sm pl-2">Put Material Description.</span>
                                 </div>
                             </div>

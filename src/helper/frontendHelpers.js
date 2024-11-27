@@ -62,8 +62,8 @@ export const scrollDown = (id) => {
   export const getContractType = (id) => withDomain(PublicServices.contractType,id,false);
   export const getContractLocation = (id) => withDomain(PublicServices.contractLocation,id,false);
   export const getSwatchList = () => withDomain(PublicServices.frontendSwatchList,false);
-
+  export const getSwatchDetail = (id) => withDomain(PublicServices.swatchDetail,id,false);
 
 
   // without domain apis
-  export const getContractDesi = (id) => withoutDomain(PublicServices.contractDesign,id);
+  // export const getSwatchDetail = (id) => withoutDomain(PublicServices.swatchDetail,id);

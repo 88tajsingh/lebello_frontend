@@ -237,7 +237,7 @@ const links = [
     text: 'COLLECTION24',
     sublinks: [
       {
-        to: 'category',
+        to: 'product_series',
         text: '4L Series',
         submenu: [
           {
@@ -259,7 +259,7 @@ const links = [
           },
           {
             to: 'productDetail',
-            text: ' 4L Stools   ',
+            text: ' 4L Stools',
             supermenu: [
               { to: 'productDetail', text: '  4L Stool  ' },
               { to: 'productDetail', text: '  4L Backrest Stool  ' },

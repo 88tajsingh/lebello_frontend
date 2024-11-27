@@ -7,7 +7,7 @@
                 <div class="col-span-12 lg:col-span-4 container pt-10 pb-3  ">
                     <div class="flex ">
                         <h1 class=" font-graphik text-[25px] font-medium text-black">
-                            RopeTek®
+                           {{ swatchDetailData.title }}
                         </h1>
                     </div>
                 </div>
@@ -22,85 +22,69 @@
                         </li>
                         <li class="text-Black666 text-[15px] font-graphik hover:text-blue">
                             <p>
-                                RopeTek
+                                {{ swatchDetailData.title }}
                                 <span class="m-1">></span>
                             </p>
                         </li>
                     </ul>
-                    <p class="text-[16px] text-Black666 font-medium font-graphikLight pt-2">
-                        Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively
-                        for the Lebello collection and are available on many pieces where they are woven directly onto
-                        the product. Customization might be available for large contract applications.Our Gildo Rope is
-                        a larger knotted ropes that adds visual texture and complexity.
+                    <p v-html="swatchDetailData.description" class="text-[16px] text-Black666 font-medium font-graphikLight pt-2">
+                     
                     </p>
-                    <p><span class="font-semibold text-Black666">Composition:</span> 100% Polyolefin Made in Italy</p>
                     <div class="pt-16 pb-5 border border-b-gray-4 ">
                         <h1 class=" font-graphik text-[25px] text-black font-medium ">
-                            RopeTek®
+                            {{ swatchDetailData.title }}
                         </h1>
                     </div>
                     <div>
                         <ul class="flex  list-none flex-row flex-wrap mb-3" role="tablist" data-twe-nav-ref>
-                            <li v-for="(tab, tindex) in faqs" :key="tindex" role="presentation">
-                                <a :href="'#' + tab?.id" :class="{
+                            <li v-for="(tab, tindex) in swatchDetailData.material_data" :key="tindex" role="presentation">
+                               
+                               <a :href="'#' + tab?.id" :class="{
                                     'mt-3 block  px-4 pt-3 text-[13px]  pb-4 uppercase leading-tight  hover:text-blue :text-primary': true,
                                     'disabled pointer-events-none': tab?.disabled,
                                     'text-green border-b border-green': activeTab === tab?.id
                                 }" :data-twe-toggle="tab?.id" data-twe-nav-active role="tab" :aria-controls="tab?.id"
-                                    :aria-selected="tab?.active" @click.prevent="activateTab(tab, index)">{{ tab?.name
+                                    :aria-selected="tab?.active" @click.prevent="activateTab(tab, tab.id)">{{ tab?.name
                                     }}</a>
+                                    
                             </li>
                         </ul>
 
                         <!--Tabs content-->
-                        <div class="mb-6">
-                            <div v-for="(tab, index) in faqs" :key="index" :class="{
-                                hidden: !tab?.active,
-                                'opacity-100 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block':
-                                    tab.active,
-                                'opacity-0 transition-opacity duration-150 ease-linear data-[twe-tab-active]:block':
-                                    !tab?.active
-                            }" :id="tab?.id" role="tabpanel" :aria-labelledby="tab?.id + '-tab'" data-twe-tab-active>
-                                <div v-if="Array.isArray(tab?.content)">
-
-                                    <div v-if="tab?.active" class="container w-5/6">
-                                        <div class="grid grid-cols-4 justify-items-start ">
-                                            <div v-for="(itr, index) in tab?.content" :key="index" class="bg-white ">
-                                                <div class="w-48 h-48 mx-auto mb-10">
-                                                    <div class="w-full h-full relative overflow-hidden">
-                                                        <img :src="itr?.imageSrc" alt="Material Image"
-                                                            class="object-cover w-[185px] h-[185px] pr-2" />
-                                                        <div class="text-center absolute bottom-1">
-                                                            <p
-                                                                class=" p-[4px] px-[6px] font-graphik text-[14px] text-Black666 bg-[#ffffffc9]">
-                                                                {{ itr?.name }}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <p class="text-gray-600 font-graphik text-[13px] text-Black666">{{
-                                                        itr?.code }}</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                       <!-- Tabs content -->
+<div class="mb-6">
+    <div v-for="(tab, index) in swatchDetailData.material_data" :key="index">
+        <!-- Display the tab content only if it's the active tab -->
+        <div v-if="tab.id===activeTab" :id="tab?.id" role="tabpanel" :aria-labelledby="tab?.id + '-tab'" data-twe-tab-active>
+            <div v-if="Array.isArray(tab.material_children)">
+                <div v-if="tab.id===activeTab" class="container w-5/6">
+                    <div class="grid grid-cols-4 justify-items-start">
+                        <!-- Only display children of the active material tab -->
+                        <div v-if="tab.id === activeTab" v-for="(itr, index) in tab.material_children" :key="index">
+                            <div class="mb-10">
+                                <div class="w-full h-full relative overflow-hidden">
+                                    <img :src="$filePath(itr.media_data.file_url)" alt="Material Image"
+                                         class="object-cover w-[185px] h-[185px]" />
+                                    <div class="text-center absolute bottom-1">
+                                        <p class="p-[4px] px-[6px] font-graphik text-[14px] text-Black666 bg-[#ffffffc9]">
+                                            {{ itr.name }}
+                                        </p>
                                     </div>
                                 </div>
-                                <div v-else-if="typeof tab?.content === 'string'">
-                                    <p class="font-graphik text-[14px]  text-gray-600">
-                                        Our outdoor materials are made from HDPE - High Density Polyethylene synthetic
-                                        fibers. The material has a high UV and weather resistants. The fibers are
-                                        characterized by there durability and performance during temperature
-                                        fluctuations. Resistant to pool water, sea salt, and changes in climate with a
-                                        high tensile strength of &gt; 230 kg/cm2. Easy maintenance and free of toxins
-                                        that is 100% recyclable and friendly on the environment. Our products can be
-                                        left outside all year round and is able to withstand temperatures from -20°C to
-                                        +55°C. We offer two types of material sizes Round and Peel Fibers. Please refer
-                                        to the color chart to view the available product options. Fibers exceed ISO
-                                        4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the
-                                        environment.
-                                    </p>
-                                </div>
+                                <p class="text-gray-600 font-graphik text-[13px] pt-2 text-Black666">
+                                    <span>{{ itr.name }}</span>
+                                    <span class="float-right bg-[#70d94c] text-white rounded-lg px-2 border border-[#70d94c] hover:bg-white hover:text-[#70d94c]"> order </span>
+                                </p>
+                                <span class="text-[#70d94c] text-[13px]">2024 NEW</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
                     </div>
                     <div v-show="isModalOpen"
                         class="overflow-y-auto overflow-x-hidden fixed top-0 ml-auto z-50 justify-center items-center w-full max-h-full">
@@ -188,16 +172,17 @@
                     <div
                         class="font-graphik text-[20px] text-blue mx-auto px-auto border border-b-gray-4 font-medium ">
                         Materials</div>
-                    <div v-for="(item, key) in contractDesignSidebar" :key="key" class="">
-                        <h2 :id="'heading' + key" class="mb-0 border border-b-gray-4">
-                            <button @click="toggleAccordion(key)" :aria-expanded="activeIndex === key"
-                                :aria-controls="'collapse' + key"
+                    <div v-for="(item, key) in materialDetailSidebar" :key="key" class="">
+                        <h2 :id="'heading' + item.id" class="mb-0 border border-b-gray-4">
+                            <button @click="toggleAccordion(key,item)" :aria-expanded="activeIndex === item.id"
+                                :aria-controls="'collapse' + item.id"
                                 class="group relative flex  w-full items-center hover:text-orange border-0  py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
-                                :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === key }"
+                                :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === item.id }"
                                 type="button">
-                                {{ key }}
-                                <span class=" ms-auto  transition-transform duration-200 ease-in-out"
-                                    :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
+                                {{ item.title }}
+                                
+                                <span @click.stop="toggleAction(key,item)" class=" ms-auto  transition-transform duration-200 ease-in-out"
+                                    :class="{ 'rotate-0': activeIndex !== item.id, 'rotate-[-180deg]': activeIndex === item.id }">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="6px" height="6px"
                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4  w-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -207,34 +192,38 @@
                             </button>
                         </h2>
 
-                        <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0"
-                            :aria-labelledby="'heading' + key" data-twe-collapse-item
+                        <div :id="'collapse' + item.id" v-show="activeIndex === item.id" class="pl-7 py-0"
+                            :aria-labelledby="'heading' + item.id" data-twe-collapse-item
                             data-twe-parent="#accordionExample">
 
                             <div v-if="item" class="text-orange font-semibold">
+                            
                                 <ul class=''>
                                     <!-- Overview -->
-                                    <li v-if="item.overview" class="">
+                                     
+                                    <!-- <li v-if="item.overview" class="">
                                         <a @click.prevent="handleClick(item.overview)"
                                             class="font-graphikLight text-[13px] cursor-pointer ">{{
                                                 item.overview.title }}</a>
-                                    </li>
+                                    </li> -->
                                     <!-- Location -->
-                                    <template v-if="Array.isArray(item)">
+                                     
+                                    <!-- <template v-if="Array.isArray(item)">
                                         <li v-for="(sub, itemIndex) in item" :key="itemIndex">
                                             <a @click.prevent="handleClick(sub)"
                                                 class="font-graphikLight text-[13px] cursor-pointer">{{
                                                     sub.contract_location || sub.title }}</a>
                                         </li>
-                                    </template>
+                                    </template> -->
                                     <!-- Contract designs -->
-                                    <template v-else-if="item.designs">
-                                        <li v-for="(sub, itemIndex) in item.designs" :key="itemIndex">
+                                     
+                                    <div v-if="item.material_data">
+                                        <li v-for="(sub, itemIndex) in item.material_data" :key="itemIndex">
                                             <a @click.prevent="handleClick(sub)"
                                                 class="font-graphikLight text-[13px] cursor-pointer">{{
-                                                    sub.title }}</a>
+                                                    sub.name }}</a>
                                         </li>
-                                    </template>
+                                    </div>
                                 </ul>
                             </div>
                         </div>
@@ -256,165 +245,49 @@ import { onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
 import { onClickOutside } from "@vueuse/core";
-import { getContractDesign } from "@/helper/frontendHelpers";
+import { getSwatchDetail } from "@/helper/frontendHelpers";
 import { useRouter } from "vue-router";
 import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 
 const store = useStore();
 const router = useRouter();
-const contractDesignSidebar = ref([]);
-const contractDesignData = ref([]);
+const materialDetailSidebar = ref([]);
+const swatchDetailData = ref([]);
 const breadcrumbData = ref([]);
 const loading = ref(true);
-const id = sessionStorage.getItem('contract_design_id');
+const id = ref(sessionStorage.getItem('materialDetail'));
 
 const activeTab = ref(0)
 
-const faqs = ref([
-    {
-        active: true,
-        id: '0',
-        name: 'PEEL FIBERS',
-        content: [
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Curacao',
-                group: 'Peel Fibers',
-                code: '550',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Curacao-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Violet',
-                group: 'Peel Fibers',
-                code: '515',
-                imageSrc: 'http://lebello.com/wp-content/uploads/thumbs/515-violet-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Curacao',
-                group: 'Peel Fibers',
-                code: '550',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Curacao-peel-fibre-185x185-185X185.png'
-            }
-        ]
-    },
-    {
-        id: '1',
-        name: 'CORE FIBERS',
-        content: [
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Curacao',
-                group: 'Peel Fibers',
-                code: '550',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Curacao-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Violet',
-                group: 'Peel Fibers',
-                code: '515',
-                imageSrc: 'http://lebello.com/wp-content/uploads/thumbs/515-violet-185x185-185X185.png'
-            },
-            {
-                name: 'Beige',
-                group: 'Peel Fibers',
-                code: '012',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Beige-peel-fibre-185x185-185X185.png'
-            },
-            {
-                name: 'Curacao',
-                group: 'Peel Fibers',
-                code: '550',
-                imageSrc:
-                    'http://lebello.com/wp-content/uploads/thumbs/Curacao-peel-fibre-185x185-185X185.png'
-            }
-        ]
-    },
-    { id: '2', name: 'DESCRIPTION', content: 'Tab 4 content' }
-])
-const handleContractDesignData = async () => {
-    const { status, data } = await getContractDesign(id);
+const handleswatchDetailData = async () => {
+    const { status, data } = await getSwatchDetail(id.value);
     if (status === 200 && data.success) {
-        contractDesignSidebar.value = data.data.contract_design_sidebar;
-        contractDesignData.value = data.data.contract_desing[0];
-    } else {
-        console.log("error");
-        contractDesignData.value = [];
-    }
-};
+        swatchDetailData.value = data.data.swatch_data[0];
+        materialDetailSidebar.value = data.data.swatch_side_bar;
+        activeTab.value = swatchDetailData.value?.material_data[0]?.id;
+        activeIndex.value = swatchDetailData.value.id;
+    }}
+
+
 
 const activateTab = (tab, index) => {
     if (!tab.disabled) {
-        activeTab.value = tab.id
-        faqs.value?.forEach((t) => {
-            t.active = t.id === tab.id
-        })
+        activeTab.value = tab.id;
+        swatchDetailData.value?.material_data?.forEach((t) => {
+            t.active = t.id === tab.id;  
+            if (Array.isArray(t.material_children)) {
+                t.material_children.forEach(child => {
+                    child.active = false;  
+                });
+            }
+        });
+
+        if (Array.isArray(tab.material_children) && tab.material_children.length > 0) {
+            tab.material_children[0].active = true;  
+        }
     }
-}
+};
+
 const isOpenSidebar = ref(false);
 const closeMenu = ref(null);
 const handleSideMenu = () => {
@@ -426,65 +299,68 @@ const closeSideMenu = () => {
 };
 onClickOutside(closeMenu, closeSideMenu);
 
-const handleClick = (sub) => {
-    let route;
-    if (sub.title === 'overview' || sub.title === 'Overview') {
-        route = { name: 'contractType', params: { slug: sub.slug } };
-    } else if (sub.title) {
-        route = { name: 'contractDesign', params: { slug: sub.slug } };
-    } else {
-        route = { name: 'ContractLocation', params: { slug: sub.slug } };
-    }
-    console.log("sub.title", sub.title);
-    if (sub.title === 'overview' || sub.title === 'Overview') {
-        sessionStorage.setItem('contract_type_id', sub.id);
-    } else if (sub.title) {
-        sessionStorage.setItem('contract_design_id', sub.id);
-    } else {
-        sessionStorage.setItem('contract_location_id', sub.id);
-    }
-
-    router.push(route);
+const handleClick = (sub) => {   
+   if(sub.id !== activeIndex.value){
+    sessionStorage.setItem('materialDetail', sub.id);
+    id.value = sub.id;
+    router.push({ name: 'materialDetail', params: { slug: sub.slug } });
+   }
+    activeTab.value = sub.id;
 };
 
 onMounted(() => {
-    handleContractDesignData();
+    handleswatchDetailData();
 });
 
-const toggleAccordion = (index) => {
-    activeIndex.value = activeIndex.value === index ? null : index;
+const toggleAction = (index,sub) => {
+    activeIndex.value = activeIndex.value === sub.id ? null : sub.id;
+};
+const toggleAccordion = (index,sub) => {
+    activeIndex.value = activeIndex.value === sub.id ? null : sub.id;
+    sessionStorage.setItem('materialDetail', sub.id);
+    id.value = sub.id;
+    router.push({ name: 'materialDetail', params: { slug: sub.slug } });
+
 };
 
 watch(
-    () => contractDesignData.value,
+    () => swatchDetailData.value,
     () => {
 
         breadcrumbData.value = [
             { name: 'Contract Design', link: '/contract_designs' },
             {
-                name: contractDesignData.value?.contract_type_data?.[0]?.contract_name,
+                name: swatchDetailData.value?.contract_type_data?.[0]?.contract_name,
                 link: `/contract_type`,
-                contractTypeId: contractDesignData.value?.contract_type_data?.[0]?.id
+                contractTypeId: swatchDetailData.value?.contract_type_data?.[0]?.id
             },
             {
-                name: contractDesignData.value?.title || 'Default Title',
-                link: `/contract_design/${contractDesignData.value?.slug || 'default-slug'}`
+                name: swatchDetailData.value?.title || 'Default Title',
+                link: `/contract_design/${swatchDetailData.value?.slug || 'default-slug'}`
             }
         ];
     }
 );
 
-const activeIndex = ref(0);
+watch(
+    () => id.value,
+    () => {
+        handleswatchDetailData();
+        console.log("id",id.value);
+    }
+);
+
+const activeIndex = ref(null);
 const modalactiveIndex = ref(0);
 
 const nextSlide = () => {
-    modalactiveIndex.value = (modalactiveIndex.value + 1) % contractDesignData?.value?.gallery_urls?.length;
+    modalactiveIndex.value = (modalactiveIndex.value + 1) % swatchDetailData?.value?.gallery_urls?.length;
 };
 
 const prevSlide = () => {
     modalactiveIndex.value =
-        (modalactiveIndex.value - 1 + contractDesignData?.value?.gallery_urls?.length) %
-        contractDesignData?.value?.gallery_urls?.length;
+        (modalactiveIndex.value - 1 + swatchDetailData?.value?.gallery_urls?.length) %
+        swatchDetailData?.value?.gallery_urls?.length;
 };
 
 const isModalOpen = ref(false);
@@ -510,7 +386,7 @@ const beforeEnter = async (el) => {
     loading.value = true;
     el.style.height = '0';
     el.style.overflow = 'hidden';
-    await handleContractDesignData();
+    await handleswatchDetailData();
     loading.value = false;
 };
 
