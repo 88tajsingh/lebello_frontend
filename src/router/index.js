@@ -9,14 +9,24 @@ const  routes = [
     component: () => import('../views/forntend-views/Index-main.vue')
   },
   {
-    path: '/productDetail',//done
-    name: 'ProductDetail',
-    component: () => import('../views/forntend-views/ProductDetails.vue')
+    path: '/products',
+    name: 'products',
+    component: () => import('../views/forntend-views/products/ProductPage.vue')
+  },
+  {
+    path: '/productDetail/:slug?',//done
+    name: 'productDetail',
+    component: () => import('../views/forntend-views/products/ProductDetails.vue')
+  },
+  {
+    path: '/product_type/:slug?',//done
+    name: 'product_type',
+    component: () => import('../views/forntend-views/products/ProductType.vue')
   },
   {
     path: '/product_series/:slug?',//done
     name: 'product_series',
-    component: () => import('../views/forntend-views/CategoryPage.vue')
+    component: () => import('../views/forntend-views/products/ProductSeries.vue')
   },
   {
     path: '/contract_location/:slug?',
@@ -67,11 +77,6 @@ const  routes = [
     path: '/register',
     name: 'register',
     component: () => import('../views/Auth/Register.vue')
-  },
-  {
-    path: '/demoPage',
-    name: 'register',
-    component: () => import('../views/forntend-views/DemoPage.vue')
   },
   {
     path: '/materials-shop',
@@ -547,6 +552,8 @@ const publicPaths = [
   '/forget-password',
   '/register',
   '/', 
+  '/swatches',
+  '/products',
   '/contract_location',
   '/productDetail',
   '/category',
