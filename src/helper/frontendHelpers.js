@@ -38,9 +38,8 @@ export const scrollDown = (id) => {
     }else{
       console.log("Something went wrong",status,data);
     }
-
     } catch (error) {
-      console.error(`${service} call error:`, error);
+      console.error(` call error:`, error);
       throw error; 
     }
   };
@@ -50,22 +49,22 @@ export const scrollDown = (id) => {
       const res = await service(id);
       return res;   
     } catch (error) {
-      console.error(`${service} call error:`, error);
+      console.error(`call error:`, error);
       throw error; 
     }
   };
 
 // with domain apis 
-  export const getLandingPageData = () => withDomain(PublicServices.getLandingPageData,false);
-  export const getContractDesignData = () => withDomain(PublicServices.getContractDesign,false);
+  export const getLandingPageData = () => withDomain(PublicServices.getLandingPageData,null,false);
+  export const getContractDesignData = () => withDomain(PublicServices.getContractDesign,null,false);
   export const getContractDesign = (id) => withDomain(PublicServices.contractDesign,id,false);
   export const getContractType = (id) => withDomain(PublicServices.contractType,id,false);
   export const getContractLocation = (id) => withDomain(PublicServices.contractLocation,id,false);
-  export const getSwatchList = () => withDomain(PublicServices.frontendSwatchList,false);
+  export const getSwatchList = () => withDomain(PublicServices.frontendSwatchList,null,false);
   export const getSwatchDetail = (id) => withDomain(PublicServices.swatchDetail,id,false);
   export const getProductList = (id) => withDomain(PublicServices.product_list,id,false);
   export const getProductSeriesList = (id) => withDomain(PublicServices.productSeriesList,id,false);
 
 
   // without domain apis
-  // export const getSwatchDetail = (id) => withoutDomain(PublicServices.swatchDetail,id);
+  // export const getSwatchList = (id) => withoutDomain(PublicServices.swatchDetail,id);

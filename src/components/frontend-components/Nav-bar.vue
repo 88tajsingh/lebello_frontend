@@ -29,7 +29,7 @@
   >
             <router-link to="/"  class="col-span-1 flex">
               <img class="h-8 right-end text-right w-full"
-                :src="navColor1 ? '@/../logo-header.png' : (navColor === 'white' ? '@/../logo-header.png' : '@/../logo-header4.png')"
+                :src="navColor1 ? logoDark : (navColor === 'white' ? logoDark : logoLight)"
                 alt="Lebello-global" />
             </router-link>
             <!-- nav links route -->
@@ -37,6 +37,7 @@
               <div class="flex-inline text-[15px]  items-center group top-12">
                 <button class="outline-none rounded-sm py-3  flex items-center min-w-32"
                   :class="navColor1 ? 'text-white' : (navColor === 'white' ? 'text-white' : 'text-black')">
+                  <router-link :to="link.to"   class="text-[13px]">
                   <div class="px-1 flex justify-between   w-full	 hover:text-blue">
                     <a class=" uppercase "> {{ link?.text }}  </a>
                     <div class="my-auto ml-2">
@@ -46,6 +47,8 @@
                       </svg>
                     </div>
                   </div>
+                </router-link>
+
                 </button>
                 <ul class="bg-[#0e0e0ec9] bg-opacity-5 transform scale-0 group-hover:scale-100 
                         absolute transition duration-150 ease-in-out origin-top list-wid mt-0 ">
@@ -200,6 +203,8 @@
 import { ref } from 'vue';
 // import BreadcrumbSection from "@/components/frontend-components/BreadcrumbSection.vue";
 import SearchModal from './SearchModal.vue'
+import logoDark from '../../assets/logo/logo.png'
+import logoLight from '../../assets/logo/logo-header4.png'
 
 const { absolute, navColor } = defineProps({
   absolute: Boolean,
@@ -233,7 +238,7 @@ const links = [
     ]
   },
   {
-    to: '',
+    to: 'products',
     text: 'COLLECTION24',
     sublinks: [
       {

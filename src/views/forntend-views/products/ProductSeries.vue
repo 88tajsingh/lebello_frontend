@@ -7,8 +7,8 @@
     <div class="relative">
       <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">
         <div class="bg-[#7bd923] p-3">
-          <SideMenu key="firstKey" :list="[]" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider"
-            :mainSlider="mainSlider" :showDropDown="showDropDown" :showHeading="true" :downDropdown="downDropdown"
+          <SideMenu key="firstKey" :list="productsSidebar" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider"
+          
             :showMediaIcon="true" svgSize="14px" svgColor="white">
             <div class="z-50">
               <div class="flex border border-[#33333357] items-center">
@@ -50,9 +50,8 @@
                 </div>
                 <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
                   <PerfectScrollbar class="max-h-52">
-                    <li class="mt-1" v-for="(listItem, index) in []" :key="index">
-                      <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.name }}</a>
-
+                    <li class="mt-1" v-for="(listItem, index) in productsSidebar" :key="index">
+                      <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">{{ listItem?.name }}</a>
                     </li>
                   </PerfectScrollbar>
                 </ul>
@@ -165,7 +164,8 @@
       <div class="py-10 ">
         <div class="uppercase font-graphik mb-3 text-[24px] text-[#3d3d3d]">{{ productSeries.name }}</div>
         <p class="font-graphikLight text-[17px] text-textColorBlack">
-          {{ productSeries.description }}
+          Lebello is an exclusive outdoor furniture manufacturer of innovative outdoor designs for home residential and commercial hospitality projects. The lebello range offers, sofas, tables, lounger and various timeless outdoor furnishings.
+
         </p>
 
         <div class="flex mt-2">
@@ -174,7 +174,7 @@
             <div
               class="flex items-center justify-between hover:bg-[#000000CC] text-[13px] pr-6 bg-gray-100 text-[#4dc45c]">
               <a class="menu-hover font-graphik uppercase text-green mx-2 py-1">Product Type</a>
-              <ArrowSvg size="8px" initialRotation="left" :fillColor="arrowFillColor2" />
+              <ArrowSvg size="8px" initialRotation="left"  />
             </div>
             <div @mouseenter="dropdownHoverColor = true" @mouseleave="dropdownHoverColor = false"
               class="invisible absolute bg-[#000000CC] z-50 flex w-full flex-col text-gray-800 shadow-xl group-hover:visible">
@@ -220,7 +220,7 @@ import FooterSection from "@/components/frontend-components/Footer-section.vue";
 import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
 import LogoSection from "@/components/frontend-components/Logo-section.vue";
 import SideMenu from '@/components/frontend-components/Side-Menu.vue';
-import { ref, onMounted } from "vue";
+import { ref,watch,onMounted } from "vue";
 import ArrowSvg from "@/components/frontend-components/Svg/Arrow-Svg.vue";
 import { onClickOutside } from '@vueuse/core'
 import { getProductSeriesList } from "@/helper/frontendHelpers";
@@ -235,25 +235,25 @@ const isOpenSidebarSlider = ref(false);
 const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
 onClickOutside(closeMenu, closeSideMenu);
 const handleSideMenu = () => { isOpenSidebarSlider.value = true; };
-const id = sessionStorage.getItem('Product_series');
+const id = ref(sessionStorage.getItem('Product_series'));
 console.log("series id", id);
 const productSeries = ref([]);
 const productType = ref([]);
+const productsSidebar = ref([]);
 
 const handleProductSeriesData = async () => {
-  const { status, data } = await getProductSeriesList(id);
+  const { status, data } = await getProductSeriesList(id.value);
   if (status === 200 && data.success) {
     productSeries.value = data.data.product_series_data[0];
     productType.value = data.data.product_types;
+    productsSidebar.value = data.data.product_series_sidebar;
   }
 }
 
 const handleProductType = (productType) => {
-  // window.location.href = prod.link;
   sessionStorage.setItem('Product_Type', productType.id);
   router.push({ name: 'product_type', params: { slug: productType.slug } });
 }
-
 onMounted(() => {
   handleProductSeriesData();
 });
@@ -261,8 +261,20 @@ onMounted(() => {
 const handleProductDetailNavigation = (product) => {
   sessionStorage.setItem('productDetail', product.id);
   router.push({ name: 'productDetail', params: { slug: product.slug } });
-
 }
+
+const handelProductSeriesNavigation = (prod) => {
+  id.value = prod.id;
+  sessionStorage.setItem('Product_series', prod.id);
+  router.push( { name: 'product_series', params: { slug: prod.slug } });
+}
+
+watch(() => id.value, (newDomainId) => {
+    // Check if newDomainId is present in domains_data and fetch 
+   console.log("series id", id.value);
+   handleProductSeriesData();
+});
+
 
 </script>
 
@@ -286,3 +298,4 @@ const handleProductDetailNavigation = (product) => {
   padding: 10px;
 }
 </style>
+

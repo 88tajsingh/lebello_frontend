@@ -4,12 +4,15 @@ import SideMenu from './Side-Menu.vue';
 import { onClickOutside } from '@vueuse/core'
 import { scrollDown } from '@/helper/frontendHelpers';
 import NavBar from './Nav-bar.vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const navColor = ref('')
 const atBottom = ref(false)
 const currentIndex = ref(0)
 const closeMenu = ref(null)
 const isOpenSidebarSlider = ref(false)
+
 const closeSideMenu = () => {
   isOpenSidebarSlider.value = false;
 }
@@ -42,6 +45,10 @@ const props = defineProps({
   },
 });
 
+const handleProductNav = (nav) => {
+  sessionStorage.setItem('productDetail', nav.id);
+  router.push({ name: 'productDetail', params: { slug: nav.slug } });
+}
 
 const startAutoSwipe = () => {
   setInterval(() => {
@@ -191,7 +198,7 @@ const handleSideMenu = () => {
           <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
             <PerfectScrollbar class="max-h-52">
               <li class="mt-1" v-for="(listItem, index) in sidebarList" :key="index">
-                <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.title }}</a>
+                <a @click="handleProductNav(listItem)" class="hover:text-orange">{{ listItem?.title }}</a>
                 
               </li>
             </PerfectScrollbar>

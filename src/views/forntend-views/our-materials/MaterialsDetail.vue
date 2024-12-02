@@ -219,7 +219,7 @@
                                      
                                     <div v-if="item.material_data">
                                         <li v-for="(sub, itemIndex) in item.material_data" :key="itemIndex">
-                                            <a @click.prevent="handleClick(sub)"
+                                            <a @click.prevent="handleClick(sub,item)"
                                                 class="font-graphikLight text-[13px] cursor-pointer">{{
                                                     sub.name }}</a>
                                         </li>
@@ -299,11 +299,12 @@ const closeSideMenu = () => {
 };
 onClickOutside(closeMenu, closeSideMenu);
 
-const handleClick = (sub) => {   
+const handleClick = (sub,item) => {   
+
    if(sub.id !== activeIndex.value){
-    sessionStorage.setItem('materialDetail', sub.id);
-    id.value = sub.id;
-    router.push({ name: 'materialDetail', params: { slug: sub.slug } });
+    sessionStorage.setItem('materialDetail', item.id);
+    id.value = item.id;
+    router.push({ name: 'materialDetail', params: { slug: item.slug } });
    }
     activeTab.value = sub.id;
 };

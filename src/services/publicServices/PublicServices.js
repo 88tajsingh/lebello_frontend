@@ -33,7 +33,9 @@ class PublicServices {
     return instance.get(ApiConfig.product_series_list, { params:{domain_id:id,id:payload} })
   }
 
-  
+  frontendSwatchList(id) {
+    return instance.get(ApiConfig.frontend_swatch_list, { params: {domain_id:id}, })
+  }
  
 }
 

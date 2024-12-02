@@ -229,8 +229,8 @@ const isOpenSidebarSlider = ref(false);
 const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
 onClickOutside(closeMenu, closeSideMenu);
 const handleSideMenu = () => { isOpenSidebarSlider.value = true; };
-const id = sessionStorage.getItem('Product_series');
-console.log("series id",id);
+const id = sessionStorage.getItem('Product_Type');
+console.log("Product_Type id",id);
 const products = [
   { id: 1, name: "Sandbar Jax Bch | Springhill Suites By Marriott", location: "Jacksonville Beach, FL", link: "https://lebello.com/contract_design/springhill-suites/", image: "http://lebello.com/wp-content/uploads/thumbs/SpringhillSuites-JacksonvilleFL-350X234.png" },
   { id: 2, name: "Watt Plaza", location: "Los Angeles, CA", link: "https://lebello.com/contract_design/watt-plaza/", image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png" },

@@ -2,7 +2,7 @@
   <div class="relative">
     <NavBar :absolute="false" background="red" />
     <img class="absolute top-8 right-0 mx-auto" src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
-
+    <!-- side menu  -->
     <div class="relative">
       <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">
         <div class="bg-[#7bd923] p-3">
@@ -11,11 +11,6 @@
             :list="[]"
             :handleSideMenu="handleSideMenu"
             :isOpen="isOpenSidebarSlider"
-            :mainSlider="mainSlider"
-            :showDropDown="showDropDown"
-            :showHeading="true"
-            :downDropdown="downDropdown"
-            :showMediaIcon="true"
             svgSize="14px"
             svgColor="white"
           >
@@ -164,11 +159,11 @@
         </div>
       </div>
     </div>
-
+    <!-- mian page  -->
     <div class="py-5 mx-7 md:mx-20">
       <div class="py-10 ">
-        <div class="uppercase font-graphik mb-3 text-[36px] text-[#3d3d3d]">2024 OUTDOOR FURNITURE</div>
-        <p class="font-graphikLight text-[23px] text-textColorBlack">
+        <div class="uppercase font-graphik mb-3 text-[24px] text-[#3d3d3d]">2024 OUTDOOR FURNITURE</div>
+        <p class="font-graphikLight font-light text-[17px] text-textColorBlack">
           Lebello is an exclusive outdoor furniture manufacturer of innovative outdoor designs for home residential and commercial hospitality projects. The lebello range offers, sofas, tables, lounger and various timeless outdoor furnishings.        </p>
         
         <div class="flex mt-2">
@@ -188,11 +183,11 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div v-for="(product, index) in products.product_series_data" :key="product.id" class="prod_content overflow-hidden mt-6 hover:bg-[#efefef]" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
-          <div class="relative overflow-hidden">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+        <div v-for="(product, index) in products.product_series_data" :key="product.id" class="prod_content overflow-hidden pb-6 hover:bg-[#efefef]" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+          <div class="relative overflow-hidden h-full max-h-[190px]">
             <a :href="product?.link">
-              <img  @click="handelProductSeriesNavigation(product)" class="opacity-60 transition-transform duration-700 ease-in-out transform hover:scale-105 hover:opacity-100" ref="element" :data-aos="animationType" :src="$filePath(product.featured_image_data.file_url)" :alt="product?.name" />
+              <img  @click="handelProductSeriesNavigation(product)" class="opacity-60 transition-transform duration-700 ease-in-out transform hover:scale-110 hover:opacity-100 h-full w-full " ref="element" :data-aos="animationType" :src="$filePath(product?.featured_image_data?.file_url)" :alt="product?.name" />
             </a>
             <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
               <div class="overlay-content">
@@ -200,9 +195,9 @@
               </div>
             </div>
           </div>
-          <div class="my-3 " >
+         
             <p v-for="(prod, index) in product.products" @click="handelProductDetailNavigation(prod)" class="pl-5 pt-1 cursor-pointer text-[#3d3d3d] font-graphikLight text-[13px]">{{ prod.title }}</p>
-          </div>
+          
         </div>
       </div>
     </div>
