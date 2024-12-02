@@ -1,167 +1,28 @@
-<script setup>
-import { ref, onMounted } from 'vue'
-import SideMenu from './Side-Menu.vue';
-import { onClickOutside } from '@vueuse/core'
-import { scrollDown } from '@/helper/frontendHelpers';
-import NavBar from './Nav-bar.vue';
-import { useRouter } from 'vue-router';
+<template>
+  <div class="relative">
+    <NavBar :absolute="false" background="red" />
+    <img class="absolute top-8 right-0 mx-auto" src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
 
-const router = useRouter();
-const navColor = ref('')
-const atBottom = ref(false)
-const currentIndex = ref(0)
-const closeMenu = ref(null)
-const isOpenSidebarSlider = ref(false)
-
-const closeSideMenu = () => {
-  isOpenSidebarSlider.value = false;
-}
-onClickOutside(closeMenu, closeSideMenu)
-const props = defineProps({
-  isAbsolute: {
-    type: Boolean,
-    required: true,
-  },
-  sidebarList: {
-    type: Array,
-    required: true,
-  },
-  mainSlider: {
-    type: Boolean,
-  },
-  showHeading: {
-    type: Boolean,
-    default: true,    
-  },
-  sliderImages:{
-    type: Array,
-    default: () => [],
-  },
-  showDropDown: {
-    type: Boolean,
-  },
-  downDropdown: {
-    type: Boolean,
-  },
-});
-
-const handleProductNav = (nav) => {
-  sessionStorage.setItem('productDetail', nav.id);
-  router.push({ name: 'productDetail', params: { slug: nav.slug } });
-}
-
-const startAutoSwipe = () => {
-  setInterval(() => {
-    navColor.value=props.sliderImages[currentIndex.value]?.navColor;
-    atBottom.value= !atBottom.value ;
-    next()
-  }, 5000)
-}
-
-const changeSlide = (index) => {
-  currentIndex.value = index
-  console.log(props.sliderImages[currentIndex.value].navColor);
-}
-
-const previous = () => {
-  navColor.value=props. sliderImages[currentIndex.value].navColor;
-  currentIndex.value = (currentIndex.value - 1 + props. sliderImages.length) % props. sliderImages.length
-}
-
-const next = () => {
-  if (props. sliderImages.length === 0) {
-        console.error("Slider images array is empty");
-        return;
-    }
-  navColor.value=props. sliderImages[currentIndex.value].navColor;
-  currentIndex.value = (currentIndex.value + 1) % props. sliderImages.length
-}
-
-onMounted(startAutoSwipe)
-
-const handleSideMenu = () => {
-  isOpenSidebarSlider.value = true;
-}
-
-
-</script>
-  <template>
-     <NavBar :absolute="props.isAbsolute" :navColor="navColor"/>
-    <div id="default-carousel" class="relative" data-carousel="static">
-      <div class="w-full h-full  mx-0">
-        <div class="overflow-hidden  h-screen sm:h-screen xl:h-screen 2xl:h-screen">
-          <div v-show="currentIndex === index" v-for="(slide, index) in sliderImages" :key="index"
-            class="w-full duration-700 ease-in-out" data-carousel-item>
-            <img :src="$filePath(slide?.featured_image_data?.file_url)"
-              class="block  absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2 "
-              :alt="slide?.featured_image_data?.file_url" />
-              <button @click="previous" type="button"
-          class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
-          data-carousel-prev>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" :stroke="navColor === 'white' ? '#ffffff' : '#000000'">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button @click="next" type="button"
-          class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none"
-          data-carousel-next>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" :stroke="navColor === 'white' ? '#ffffff' : '#000000'">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-          </div>
-        </div>
-        <div class="flex absolute bottom-1/2 rotate-90 z-30 left-7 space-x-2 -translate-x-1/2">
-          <button v-for="(slide, index) in props.sliderImages" :key="index" type="button"
-            :class="{ 'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index }"
-            class="w-2 h-2 rounded-full" aria-current="false" @click="changeSlide(index)"></button>
-        </div>
-       
-      </div>
-      <!-- lebellow icon right top -->
-      <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
-        <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
-      </a>
-      <!-- text left bottom -->
-      <div id="sideText" class="absolute bottom-10  mx-auto left-6 sm:left-14 md:left-20 "
-      :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-6': !atBottom, 'bottom-10': atBottom }]" 
-
-      >
-        <div class=" capitalize opacity-80 text-white font-graphikLight sm:text-[20px] md2:text-[40px]  ">{{ props.sliderImages[currentIndex]?.title || "default" }}</div>
-      </div>
-      <!-- down arrow -->
-      <div class="absolute left-1/2 bottom-5 animate-bounce mx-auto">
-        <div @click="()=> scrollDown('sideText')"
-          class="text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5 ease-in duration-300 px-3 py-1">
-          <span href="#" class="transition  ease-out duration-1000	">
-            <svg width="24px" height="24px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-              xmlns="http://www.w3.org/2000/svg" fill="#fafafa" stroke="#fafafa" stroke-width="73.728">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff"></path>
-              </g>
-            </svg>
-          </span>
-        </div>
-      </div>
-      <!-- menu item -->
-      <slot name="header"></slot>
-      <div class="absolute top-48 right-0 pr-3 " ref="closeMenu">
-        
-        <SideMenu key="firstKey" :list="sidebarList" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider"
-          :mainSlider="mainSlider" :showDropDown="showDropDown" :showHeading="showHeading"
-          :downDropdown="downDropdown" >
-            <div class="z-50">
-        <div v-if="mainSlider" class="h-auto mb-2 mx-7 mt-4">
-          <h3 class="text-[14px]">
-            <a href="https://www.lebello.com/listItem/"
-              class="uppercase font-graphikMedium text-[14px] text-textColorBlack">Collection 2024</a>
-          </h3>
-        </div>
-        <div v-else class="flex border border-gray-400 items-center">
-          <span class="sticky top-3 p-4 border-r mr-4 border-gray-400 bg-transparent">
-            <MenuSvg size="15px" fillColor="black" />
+    <div class="relative">
+      <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">
+        <div class="bg-[#7bd923] p-3">
+          <SideMenu
+            key="firstKey"
+            :list="[]"
+            :handleSideMenu="handleSideMenu"
+            :isOpen="isOpenSidebarSlider"
+            :mainSlider="mainSlider"
+            :showDropDown="showDropDown"
+            :showHeading="true"
+            :downDropdown="downDropdown"
+            :showMediaIcon="true"
+            svgSize="14px"
+            svgColor="white"
+          >
+          <div class="z-50">
+            <div class="flex border border-[#33333357] items-center">
+          <span class="sticky top-3 p-4 border-r  mr-2 border-[#33333357] bg-transparent">
+            <MenuSvg size="15px" fillColor="#000000" />
           </span>
           <div class="h-auto">
             <h3 class="text-[14px] font-medium">
@@ -170,10 +31,10 @@ const handleSideMenu = () => {
             </h3>
           </div>
         </div>
-        <div class="px-7">
+        <div class="px-4">
           <div class="search">
             <form role="search">
-              <div v-if="showDropDown">
+              <div class="border ">
                 <FormDropdown />
               </div>
               <div class="relative border-b border-gray-400 mt-2">
@@ -189,29 +50,27 @@ const handleSideMenu = () => {
                 </div>
               </div>
             </form>
-          </div>
-          <div v-if="showHeading" class=" border-y border-[#33333357]">
-            <h3 class="py-2 font-graphik hover:text-orange border-b border-gray-400 text-[14px] text-textColorBlack">
-              Highlights
-            </h3>
-          </div>
+          </div> 
+          <div  class="h-auto mb-2 border-y border-[#33333357] py-2 border-b border-gray-400">
+          <h3 class="text-[14px]">
+            <a href="https://www.lebello.com/listItem/"
+              class="uppercase font-graphikMedium text-[14px] text-textColorBlack">Collection 2024</a>
+          </h3>
+        </div>
           <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
             <PerfectScrollbar class="max-h-52">
-              <li class="mt-1" v-for="(listItem, index) in sidebarList" :key="index">
-                <a @click="handleProductNav(listItem)" class="hover:text-orange">{{ listItem?.title }}</a>
-                
+              <li class="mt-1" v-for="(listItem, index) in []" :key="index">
+                <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.name }}</a>
+              
               </li>
             </PerfectScrollbar>
           </ul>
-          <div v-if="downDropdown" class="mb-2">
-            <FormDropdown />
-          </div>
-          <div v-if="showMediaIcon" class="border-t border-gray-400 my-3">
+          <div  class="border-t border-[#33333357] my-3">
             <ul class="flex justify-center mt-3">
               <li>
                 <a href="https://www.facebook.com/share.php?u=https://lebello.com/products/b-chair-1-2/&title=B Chair"
                   target="_blank" title="Facebook"
-                  class="flex items-center justify-center w-8 h-8 bg-gray-900 rounded-full mx-2 hover:bg-green-500">
+                  class="flex bg-black items-center justify-center w-8 h-8 bg-gray-900 rounded-full mx-2 hover:bg-green-500">
                   <svg width="14px" height="14px" viewBox="-5 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fcfcfc" stroke="#fcfcfc">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -233,7 +92,7 @@ const handleSideMenu = () => {
               <li>
                 <a href="https://www.houzz.com/imageClipperUpload?link=https://lebello.com/products/b-chair-1-2/&source=button&hzid=8628&imageUrl=https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg&title=B Chair&ref=https://lebello.com/products/b-chair-1-2/"
                   target="_blank" title="Houzz"
-                  class="flex items-center justify-center w-8 h-8 bg-gray-900 rounded-full mx-2">
+                  class="flex bg-black items-center justify-center w-8 h-8 bg-gray-900 rounded-full mx-2">
                   <svg fill="#ffffff" width="14px" height="14px" viewBox="-5 0 24 24" xmlns="http://www.w3.org/2000/svg"
                     stroke="#ffffff">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -249,8 +108,8 @@ const handleSideMenu = () => {
               <li>
                 <a href="https://pinterest.com/pin/create/bookmarklet/?media=https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg&url=https://lebello.com/products/b-chair-1-2/&is_video=false&description=B Chair"
                   target="_blank" title="Pinterest"
-                  class="flex items-center justify-center w-8 h-8 bg-gray-900 rounded-full mx-2">
-                  <svg width="16px" height="16px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                  class="flex bg-black items-center justify-center w-8 h-8 bg-gray-900 rounded-full mx-2">
+                  <svg width="16px"  height="16px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" fill="#f5f5f5" stroke="#f5f5f5">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -301,15 +160,110 @@ const handleSideMenu = () => {
           </div>
         </div>
       </div>
-          </SideMenu>
+        </SideMenu>
+        </div>
+      </div>
+    </div>
 
+    <div class="py-5 mx-7 md:mx-20">
+      <div class="py-10 ">
+        <div class="uppercase font-graphik mb-3 text-[24px] text-[#3d3d3d]">Product Type</div>
+        <p class="font-graphikLight text-[17px] text-textColorBlack">
+          Lebello is an exclusive outdoor furniture manufacturer of innovative outdoor designs for home residential and commercial hospitality projects. The lebello range offers sofas, tables, loungers, and various timeless outdoor furnishings.
+        </p>
+        
+        <div class="flex mt-2">
+          <span class="font-graphikLight self-center mr-2 text-[13px] text-Black666 uppercase">Sort By</span>
+          <div class="group relative cursor-pointer">
+            <div class="flex items-center justify-between hover:bg-[#000000CC] text-[13px] pr-6 bg-gray-100 text-[#4dc45c]">
+              <a class="menu-hover font-graphik uppercase text-green mx-2 py-1">Product Type</a>
+              <ArrowSvg size="8px" initialRotation="left" :fillColor="arrowFillColor2" />
+            </div>
+            <div @mouseenter="dropdownHoverColor = true" @mouseleave="dropdownHoverColor = false"
+              class="invisible absolute bg-[#000000CC] z-50 flex w-full flex-col text-gray-800 shadow-xl group-hover:visible">
+              <a v-for="link in links" :key="link.url" :href="link.url" class="block border-b text-[12px] border-[#000000AA] py-1 px-2 font-graphikLight text-white hover:text-green">
+                {{ link.name }}
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div v-for="(product, index) in products" :key="product.id" class="prod_content overflow-hidden mt-6 hover:bg-[#efefef]" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+          <div class="relative overflow-hidden">
+            <a :href="product.link">
+              <img class="opacity-60 transition-transform duration-700 ease-in-out transform hover:scale-105 hover:opacity-100" ref="element" :data-aos="animationType" :src="product.image" :alt="product.name" />
+            </a>
+            <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
+              <div class="overlay-content">
+                <h1 class="hover:text-green text-[13px] font-graphik">{{ product.name }}</h1>
+              </div>
+            </div>
+          </div>
+          <p class="pl-5 mt-3 pb-4 text-[#3d3d3d] font-graphikLight text-[13px]">{{ product.location }}</p>
+        </div>
+      </div>
     </div>
-  </template>
+    
+    <LogoSection />
+    <FooterSection />
+  </div>
+</template>
 
+<script setup>
+import NavBar from "@/components/frontend-components/Nav-bar.vue";
+import FooterSection from "@/components/frontend-components/Footer-section.vue";
+import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
+import LogoSection from "@/components/frontend-components/Logo-section.vue";
+import SideMenu from '@/components/frontend-components/Side-Menu.vue';
+import { ref } from "vue";
+import ArrowSvg from "@/components/frontend-components/Svg/Arrow-Svg.vue";
+import { onClickOutside } from '@vueuse/core'
 
+const isHovered = ref([]);
+const toggleOverlay = (index, show) => { isHovered.value[index] = show; };
+const dropdownHoverColor = ref(false);
+const closeMenu = ref(null);
+const isOpenSidebarSlider = ref(false);
+const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
+onClickOutside(closeMenu, closeSideMenu);
+const handleSideMenu = () => { isOpenSidebarSlider.value = true; };
+const id = sessionStorage.getItem('Product_Type');
+console.log("Product_Type id",id);
+const products = [
+  { id: 1, name: "Sandbar Jax Bch | Springhill Suites By Marriott", location: "Jacksonville Beach, FL", link: "https://lebello.com/contract_design/springhill-suites/", image: "http://lebello.com/wp-content/uploads/thumbs/SpringhillSuites-JacksonvilleFL-350X234.png" },
+  { id: 2, name: "Watt Plaza", location: "Los Angeles, CA", link: "https://lebello.com/contract_design/watt-plaza/", image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png" },
+  { id: 3, name: "Ebbdunedin", location: "EBB Bunded In, New Zealand", link: "https://lebello.com/contract_design/ebbdunedin/", image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png" },
+];
+
+const links = [
+  { name: "Modular / Sofas", url: "https://lebello.com/product_type/modularsofas/" },
+  { name: "Lounge Poufs", url: "https://lebello.com/product_type/lounge-poufs/" },
+  { name: "Daybed", url: "https://lebello.com/product_type/daybed/" },
+  { name: "Outdoor Carpets", url: "https://lebello.com/product_type/outdoor-carpets/" },
+  { name: "Lounge Chairs", url: "https://lebello.com/product_type/lounge-chairs/" },
+];
+
+</script>
 
 <style scoped>
-/* / Add your scoped styles here / */
+.prod-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.prod-overlay.show-overlay {
+  opacity: 1;
+}
+
+.overlay-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  color: white;
+  background-color: #0e0e0e89;
+  padding: 10px;
+}
 </style>

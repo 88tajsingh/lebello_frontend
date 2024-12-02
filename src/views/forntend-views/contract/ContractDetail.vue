@@ -27,6 +27,9 @@
                 'float-left',
                 '-mr-[100%]',
                 'w-full',
+                'max-h-screen',
+                'h-full',
+                'object-cover',
                 'transition-transform',
                 'duration-[600ms]',
                 'ease-in-out',
@@ -34,7 +37,7 @@
 
               ]">
                 <img :src="$filePath(contractDesignData?.featured_image_data?.file_url)"
-                  class="block  lg:h-full lg:w-full " :alt="item?.alt" />
+                  class="block object-cover lg:h-full lg:w-full " :alt="item?.alt" />
               </div>
             </div>
             <div class=" absolute bottom-2 left-6 md:left-10 md:bottom-10 lg:bottom-14 lg:left-10">

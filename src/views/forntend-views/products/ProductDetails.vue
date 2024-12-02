@@ -303,51 +303,6 @@ const products = ref([
 
 ]);
 
-const sliderImages = ref([
- 
-  {
-    image: 'http://lebello.com/wp-content/uploads/2024/02/Lebello-Chair-8-Siider.jpg',
-    alt: 'Tubo Club',
-    navColor: 'black'
-  },
-  {
-    image: 'http://lebello.com/wp-content/uploads/2021/09/lebello_4l-pixie_arms_chair.jpg',
-    alt: 'Mogul Lounger',
-    navColor: 'white'
-  },
-  {
-    image: 'http://lebello.com/wp-content/uploads/2022/02/lebello_monyet_stools-outdoor.jpg',
-    alt: 'Trixie Lounger Chair    ',
-    navColor: 'white  '
-  },
-  {
-    image: 'http://lebello.com/wp-content/uploads/2024/02/Lebello-Twigs-XY-Slider.jpg',
-    alt: 'Monyet Stools',
-    navColor: 'white'
-  },
-  {
-    image: 'http://lebello.com/wp-content/uploads/2021/05/lebello_tubo_club-outdoor.jpg',
-    alt: 'Monyet Stools',
-    navColor: 'white'
-  },
-  { image: 'http://lebello.com/wp-content/uploads/2021/11/Lebello-tubo-club.jpeg', 
-    alt: 'Twiggy XY Chair',
-    navColor: 'white' 
-  }
-])
-
-
-const list = ref([
-  { name: 'Trixie Lounger', link: 'https://lebello.com/products/trixie-lounger/' },
-  { name: '4L Pixie Arms Chair', link: 'https://lebello.com/products/4l-pixie-arms-chair/' },
-  { name: 'Monyet Stool', link: 'https://lebello.com/products/monyet-stool/' }
-]);
-
-const breadcrumbData = ref([
-  { name: 'Collection', link: '/' },
-  { name: 'B Chair', link: '/' }
-]);
-
 const isOpenSidebarSlider = ref(false);
 const isOpenSidebarSlider2 = ref(false);
 const addiVisible = ref(false);

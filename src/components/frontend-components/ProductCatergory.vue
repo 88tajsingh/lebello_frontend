@@ -5,7 +5,7 @@
         <div class="overflow-hidden">
           <img :src="data.img" class="w-full transition-transform duration-1000 ease-in-out transform hover:scale-125" />
         </div>
-        <div class="mx-5 my-5 sm:min-h-[68px] lg:min-h-0">
+        <div class="mx-5 my-3 sm:min-h-[68px] lg:min-h-0">
           <h3 class="uppercase leading-none font-graphik text-[18px]">{{ data.heading }}</h3>
           <p class="text-[12px] font-graphik">{{ data.peragraph }}</p>
         </div>

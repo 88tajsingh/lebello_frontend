@@ -1,7 +1,4 @@
 <template>
-    <div>
-        sd
-    </div>
     <!-- <Menu as="div" class="relative inline-block bg- text-left ">
         <div class="hover:text-orange">
             <MenuButton @click="show"

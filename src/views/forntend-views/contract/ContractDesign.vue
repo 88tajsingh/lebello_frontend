@@ -1,20 +1,19 @@
 <template>
-  <div class="relative  overflow-hidden">
+  <div class="relative overflow-hidden">
     <NavBar :absolute="false" />
-
-    <div class="absolute z-[9999] top-11 right-0 mx-auto ">
-      <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+    <!-- Logo -->
+    <div class="absolute top-11 right-0 z-[9999] mx-auto">
+      <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" alt="Logo" />
     </div>
-
     <!-- Menu Icon -->
-    <div ref="closeMenu" class="absolute border top-52 right-0 z-[9999] ">
+    <div ref="closeMenu" class="absolute top-52 right-0 z-[9999]">
       <SideMenu :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebar" svgColor="#f9f9f9"
         menuClass="p-2 bg-[#9ce163]">
         <div class="flex border border-gray-400 items-center">
           <div class="sticky top-3 p-4 border-r border-gray-400">
             <MenuSvg size="15px" fillColor="black" />
           </div>
-          <h3 class="text-[14px] font-medium">
+          <h3 class="text-sm font-medium">
             <a href="https://www.lebello.com/product/" class="uppercase">Collection 2024</a>
           </h3>
         </div>
@@ -27,36 +26,35 @@
                 class="group relative flex w-full items-center hover:text-orange border-0 px-5 py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
                 :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === key }" type="button">
                 {{ key }}
-                <span class="-me-1 ms-auto h-5 w-5 transition-transform duration-200 ease-in-out"
-                  :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
+                <span class="absolute right-0 h-5 w-5 transition-transform duration-200 ease-in-out"
+                  :class="{ 'rotate-0': activeIndex !== key, 'rotate-180': activeIndex === key }">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                    stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                   </svg>
                 </span>
               </button>
             </h2>
-            <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0"
-              :aria-labelledby="'heading' + key" data-twe-collapse-item data-twe-parent="#accordionExample">
+            <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0">
               <div v-if="item">
                 <ul>
-                  <!-- Overview -->
                   <li v-if="item.overview">
-                    <a @click.prevent="handleClick(item.overview)"
-                      class="font-graphikLight text-[13px] cursor-pointer">{{ item.overview.title }}</a>
+                    <a @click.prevent="handleClick(item.overview)" class="font-graphikLight text-sm cursor-pointer">
+                      {{ item.overview.title }}
+                    </a>
                   </li>
-                  <!-- Location -->
                   <template v-if="Array.isArray(item)">
                     <li v-for="(sub, itemIndex) in item" :key="itemIndex">
-                      <a @click.prevent="handleClick(sub)" class="font-graphikLight text-[13px] cursor-pointer">{{
-                        sub.contract_location || sub.title }}</a>
+                      <a @click.prevent="handleClick(sub)" class="font-graphikLight text-sm cursor-pointer">
+                        {{ sub.contract_location || sub.title }}
+                      </a>
                     </li>
                   </template>
-                  <!-- Contract designs -->
                   <template v-else-if="item.designs">
                     <li v-for="(sub, itemIndex) in item.designs" :key="itemIndex">
-                      <a @click.prevent="handleClick(sub)" class="font-graphikLight text-[13px] cursor-pointer">{{
-                        sub.title }}</a>
+                      <a @click.prevent="handleClick(sub)" class="font-graphikLight text-sm cursor-pointer">
+                        {{ sub.title }}
+                      </a>
                     </li>
                   </template>
                 </ul>
@@ -64,57 +62,48 @@
             </div>
           </div>
         </div>
-
-
-
-        <!-- <span v-if="!active" @click="openNav" class="p-3 text-white">
-          <MenuSvg size="35px" fillColor="#ffffff" class="p-2 bg-[#9ce163]" />
-        </span> -->
-
       </SideMenu>
     </div>
-
     <!-- Slider -->
-    <div class="mx-5 mt-8 md:lg-10 lg:mx-18">
-      <div id="default-carousel" class="relative mx-3  md:mx-8 lg:mx-16" data-carousel="static">
+    <div class="mx-5 mt-8 lg:mx-20">
+      <div id="default-carousel" class="relative">
         <div class="w-full h-full mx-0 overflow-hidden">
-          <div class="h-screen">
+          <div class="h-screen w-screen">
             <div v-for="(slide, index) in contractDesignData.contract_design_slider" :key="index"
-              v-show="currentIndex === index" class="w-full duration-700 ease-in-out" data-carousel-item>
+              v-show="currentIndex === index" class="w-full duration-700 ease-in-out">
               <img :src="$filePath(slide?.contract_slider_image_data?.file_url)"
                 class="absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2" :alt="slide.alt" />
-
               <!-- Text Overlay -->
-              <div id="sideText" class="absolute bottom-20 left-14">
-                <div class=" font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
+              <div class="absolute bottom-20 left-14">
+                <div class="font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
                   {{ camelCase(slide?.heading_case, slide?.title) }}
                 </div>
-                <span class=" font-graphikLight  px-3 py-2" :style="subHeadingStyle(slide)">
+                <span class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
                   {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
                 </span>
               </div>
             </div>
 
             <!-- Navigation Dots -->
-            <div class="flex absolute bottom-1/3 rotate-90 z-30 right-0 space-x-2 -translate-x-1">
-              <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" type="button"
-                :class="{ 'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index }"
-                class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
+            <div class="flex absolute bottom-1/3 right-0 space-x-2 -translate-x-1 rotate-90 z-30">
+              <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" type="button" :class="{
+                'bg-gray-700': currentIndex === index,
+                'bg-gray-400': currentIndex !== index,
+              }" class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
             </div>
 
             <!-- Previous Button -->
             <button @click="previous" type="button"
-              class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
-              data-carousel-prev>
+              class="absolute left-10 top-1/2 z-30 p-3 text-white cursor-pointer group">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
+
             <!-- Next Button -->
             <button @click="next" type="button"
-              class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none"
-              data-carousel-next>
+              class="absolute right-10 top-1/2 z-30 p-4 text-white cursor-pointer group">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
@@ -122,30 +111,31 @@
             </button>
           </div>
         </div>
+
         <div class="absolute top-3 right-0">
           <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png"
             alt="Contract Design" />
         </div>
       </div>
 
-      <div class=" bg-[#f7f7f7] font-graphik text-[14px] text-[#4c4c4c]">
+      <!-- Description -->
+      <div class="bg-[#f7f7f7] font-graphik text-sm text-[#4c4c4c]">
         <p class="px-5 py-6">
-          Lebello contract design offers customized solutions for the hospitality, retail and trade industry. We build
+          Lebello contract design offers customized solutions for the hospitality, retail, and trade industry. We build
           long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and
-          unique
-          bespoke outdoor products.
+          unique bespoke outdoor products.
         </p>
       </div>
 
       <!-- Images -->
-      <div class=" relative grid grid-cols-2  md:grid-cols-4 gap-0 py-3 md:py-0">
-        <div v-for="(images, index) in contractDesignData.contract_design" :key="index"
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-0 py-3 md:py-0">
+      <div v-for="(images, index) in contractDesignData.contract_design" :key="index"
           class="prod_content overflow-hidden ">
-          <div :onclick="() => handleRoute(images)" class="product_img holder relative"
-            :class="{ 'md:transition-transform md:duration-9000 md:ease-in-out md:transform scale-125': isHovered[index] }"
+          <div @click="handleRoute(images)" class="product_img holder relative w-full max-h-[190px] h-full"
+            :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
             @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
             <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
-              class="aos-item" ref="element" :data-aos="animationType"
+              class="aos-item w-full h-full object-cover   " ref="element" :data-aos="animationType"
               :data-aos-duration="getAnimationDuration(index)" />
             <div
               :class="{ 'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index] }">
@@ -160,9 +150,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
     <FooterSection />
   </div>
 </template>
+
+
 
 <script setup>
 import NavBar from "@/components/frontend-components/Nav-bar.vue";

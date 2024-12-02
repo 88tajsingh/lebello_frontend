@@ -63,7 +63,7 @@ onMounted(() => {
 
 const startAutoSwipe = () => {
   setInterval(() => {
-    navColor.value=ourMaterialData.value.swatch_data[currentIndex.value]?.navColor;
+    // navColor.value=ourMaterialData.value?.swatch_data[currentIndex?.value]?.navColor;
     atBottom.value= !atBottom.value ;
     next()
   }, 5000)
