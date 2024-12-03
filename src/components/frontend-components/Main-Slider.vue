@@ -22,6 +22,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  imageKeyName: {
+    type: String,
+    default: 'featured_image_data',
+  },
   sidebarList: {
     type: Array,
     required: true,
@@ -92,9 +96,9 @@ const handleSideMenu = () => {
         <div class="overflow-hidden  h-screen sm:h-screen xl:h-screen 2xl:h-screen">
           <div v-show="currentIndex === index" v-for="(slide, index) in sliderImages" :key="index"
             class="w-full duration-700 ease-in-out" data-carousel-item>
-            <img :src="$filePath(slide?.featured_image_data?.file_url)"
+            <img :src="$filePath(slide[imageKeyName]?.file_url)"
               class="block  absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2 "
-              :alt="slide?.featured_image_data?.file_url" />
+              :alt="slide[imageKeyName]?.file_url" />
               <button @click="previous" type="button"
           class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
           data-carousel-prev>

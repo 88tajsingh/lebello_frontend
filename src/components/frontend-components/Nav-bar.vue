@@ -1,11 +1,11 @@
 <template>
-  <nav class="z-[999]">
+  <nav class="z-[99999]">
     <div class=" mx-auto w-full  top-0  self-start  text-graphik text-white  ease-in duration-300  z-50 " :class="{
       'absolute pb-10 top-0 left-0  bg-transparent	': absolute,
       'hover:text-white': navColor === 'white',
     }">
-      <div class="relative  h-16 items-center  justify-between ">
-        <div class="absolute inset-y-0 left-0 flex  items-center sm:hidden ">
+      <div class="relative z-[9999999]  h-16 items-center  justify-between ">
+        <div class="absolute z-[9999999] inset-y-0 left-0 flex  items-center sm:hidden ">
           <button type="button"
             class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
             aria-controls="mobile-menu" aria-expanded="false">
@@ -14,7 +14,6 @@
               aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-
             <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
               aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -221,7 +220,7 @@ const showModal = ref(false);
 
 const links = [
   {
-    to: 'productDetail',
+    to: '/productDetail',
     text: 'New',
     sublinks: [
       { to: 'productDetail', text: 'B Chair' },
@@ -238,11 +237,11 @@ const links = [
     ]
   },
   {
-    to: 'products',
+    to: '/products',
     text: 'COLLECTION24',
     sublinks: [
       {
-        to: 'product_series',
+        to: '/product_series',
         text: '4L Series',
         submenu: [
           {
@@ -254,7 +253,7 @@ const links = [
             ]
           },
           {
-            to: 'productDetail',
+            to: '/productDetail',
             text: ' 4L Pixie  ',
             supermenu: [
               { to: 'productDetail', text: ' 4L Pixie Chair ' },
@@ -263,7 +262,7 @@ const links = [
             ]
           },
           {
-            to: 'productDetail',
+            to: '/productDetail',
             text: ' 4L Stools',
             supermenu: [
               { to: 'productDetail', text: '  4L Stool  ' },
@@ -272,7 +271,7 @@ const links = [
             ]
           },
           {
-            to: 'productDetail',
+            to: '/productDetail',
             text: '4L X Series',
             supermenu: [
               { to: 'productDetail', text: '4L X Chair ' },
@@ -301,10 +300,10 @@ const links = [
     ]
   },
   {
-    to: '/',
+    to: 'contract_type/scqasdc',
     text: 'CONTRACT',
     sublinks: [
-      { text: "Hotels Restaurants", to: "contract" },
+      { text: "Hotels Restaurants", to: "contract_type/scqasdc" },
       { text: "Residential", to: "contract" },
       { text: "Retail & Education", to: "contract" },
       { text: "Communal Spaces", to: "contract" },
@@ -328,7 +327,7 @@ const links = [
     ]
   },
   {
-    to: 'category',
+    to: '/category',
     text: 'COMPANY',
     sublinks: [
       { to: 'dealers', text: 'Contact Us', submenu: [{ to: 'contactUs', text: 'Boston' }] },

@@ -1,7 +1,5 @@
 <template>
-  <div class='h-[410px]'>
     <div id="KeyShotXR" class=' overflow-hidden overflow-x-hidden z-[999] overflow-y-hidden bg-white'></div>
-  </div>
   </template>
   
   <script setup>
@@ -14,8 +12,8 @@
     if (typeof keyshotXR !== 'undefined' && keyshotXR) {
       const nameOfDiv = "KeyShotXR";
       const folderName = "src/assets/Stone Tables White Background.1";
-      const viewPortWidth = 600;
-      const viewPortHeight = 375;
+      const viewPortWidth = window.innerWidth;
+      const viewPortHeight =  window.innerHeight;
       const backgroundColor = "#ffffff";
       const uCount = 10;
       const vCount = 10;

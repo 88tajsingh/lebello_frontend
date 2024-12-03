@@ -32,6 +32,12 @@ class PublicServices {
   productSeriesList(id,payload) {
     return instance.get(ApiConfig.product_series_list, { params:{domain_id:id,id:payload} })
   }
+  productTypeList(id,payload) {
+    return instance.get(ApiConfig.product_Type_list, { params:{domain_id:id,id:payload} })
+  }
+  productDetail(id,payload) {
+    return instance.get(ApiConfig.product_Detail, { params:{domain_id:id,id:payload} })
+  }
 
   frontendSwatchList(id) {
     return instance.get(ApiConfig.frontend_swatch_list, { params: {domain_id:id}, })
