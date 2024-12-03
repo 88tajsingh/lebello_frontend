@@ -1,24 +1,19 @@
 <template>
     
   <div class="overflow-hidden">
-    <MainSlider :isAbsolute="false" :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
-    :sliderImages="landingPageData"
+    <MainSlider :isAbsolute="false" :list="sliderList" imageKeyName='file_url' :mainSlider="true" :showDropDown="false" :showHeading="false"
+    :sliderImages="productData.new_product_slider_url"
       :downDropdown="false" />
     <div class="flex relative">
-     
-      <!-- <div class="absolute top-30 right-0 pr-3" ref="closeMenu">
-        <SideMenu :list="list" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider" :mainSlider="false"
-          :showDropDown="false" :showHeading="false" :downDropdown="true" />
-      </div> -->
     </div>
     <div class=" bg-white">
     <!-- Breadcrumb -->
-    <nav class="py-4 text-sm">
-      <div class="flex items-center gap-2 ml-14">
-        <span class="text-gray-600 font-medium">Collection</span>
+    <nav class="py-6 font-graphik  text-sm">
+      <div class="flex items-center  text-[16px] cursor-pointer gap-2 ml-14">
+        <span @click="() => $router.push('/products')" class="text-gray-600">Collection</span>
         <!-- Heroicon: ChevronRight -->
         /
-        <span class="text-yellow-600 font-medium">Tubo Sofa Exposed</span>
+        <span class="text-yellow-600 font-medium">{{ productData.title }}</span>
       </div>
     </nav>
 
@@ -26,27 +21,29 @@
     <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:flex lg:justify-between lg:px-10">
   <!-- Product Viewer (Image Section) -->
   <div class="relative aspect-square bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
+    <div class='pb-10 '>
+    <div class='h-[410px] overflow-hidden'>
     <Images3DView/>
-
+      </div>
     <!-- Controls -->
-    <div id="zoom-controls" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
+    <div id="zoom-controls" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-[#c59233]">
       <!-- Fullscreen Icon -->
       <button id="fullscreen-toggle" class="rounded-full p-2">
         <svg height="20px" width="20px" viewBox="0 0 512 512" fill="#000000">
-          <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
+          <polygon fill="#c59233" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
         </svg>
       </button>
 
       <!-- Zoom In and Out Icons -->
-      <div class="flex flex-col items-center bg-white rounded-full shadow-lg border border-yellow-600">
+      <div class="flex flex-col items-center bg-white rounded-full shadow-lg border border-[#c59233]">
         <button id="zoom-in" class="py-2 px-[5px]">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"  fill="#c59233" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-7-7h14"/>
           </svg>
         </button>
-        <div class="border-t border-yellow-600 w-full"></div>
+        <div class="border-t border-[#c59233] w-full"></div>
         <button id="zoom-out" class="py-2  px-[5px]">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"  fill="#c59233" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14"/>
           </svg>
         </button>
@@ -54,11 +51,15 @@
 
       <!-- Reset Icon -->
       <button id="zoom-reset" class="rounded-full p-2 ">
-        <svg width="28px" height="28px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000">
-          <path fill="#c2a02f" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"></path>
-        </svg>
+        <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21" width="21" height="21">
+	<title>&lt;Group&gt;</title>
+	<g id="&lt;Group&gt;">
+		<path id="&lt;Path&gt;" fill="#c59233" class="s0" d="m20.7 10.5l-0.8-7.7-2 1.5c-0.6-0.8-1.3-1.3-2.1-1.8-1.1-0.6-2.2-1.1-3.4-1.3-1.2-0.3-2.5-0.3-3.6-0.1-1.2 0.2-2.4 0.6-3.4 1.1-1.1 0.7-2.1 1.4-2.8 2.3-0.8 0.9-1.5 2-1.9 3.1-0.8 2.2-0.8 4.7 0 6.8 0.8 2.3 2.4 4.1 4.3 5.2 1 0.6 2.2 1 3.3 1.2 1 0.2 2.2 0.1 3.3 0 2.2-0.4 4.3-1.7 5.6-3.4 0.7-0.9 1.3-1.8 1.6-2.9 0.4-1 0.5-2.1 0.5-3.2 0 1.1-0.3 2.1-0.7 3.2-0.4 1-1 1.9-1.6 2.7-1.5 1.5-3.4 2.6-5.5 2.8-1 0.2-2.1 0.1-3-0.1-1.1-0.2-2.1-0.6-2.9-1.2-1.7-1.1-3-2.8-3.6-4.7-0.5-1.9-0.4-4 0.4-5.8 0.8-1.7 2.2-3.2 3.9-4 0.9-0.4 1.8-0.7 2.7-0.8 1 0 2 0 2.9 0.2 1.4 0.4 2.7 1.2 3.7 2.3l-2 1.5z"/>
+	</g>
+</svg>
       </button>
     </div>
+  </div>
   </div>
 
   <!-- Configuration Panel -->
@@ -104,8 +105,8 @@
       <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">
         <div class="lg:px-11 my-10">
           <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
-            <h2 class="text-[24px] md:text-[18px] text-textColorBlack pb-4 ">B Chair 1/2 & Pixie</h2>
-            <p class="sm:text-[15px] md:text-[15px] lg:text-[16px] text-[#666]">
+            <h2 class="text-[24px] md:text-[18px] lg:text-[27px] pb-[35px] text-textColorBlack ">{{ productData.title }}</h2>
+            <p class="sm:text-[15px] md:text-[15px] lg:text-[16px] lg:leading-[25px] text-[#666]">
               B Chair is now available in our exclusive timeless pixie weave design language. A chair that provides
               functionality with its open frame design allowing access to a self-storage compartment for personal
               belongings. The pixie design pattern embodies our authentic superior woven craftsmanship through which
@@ -124,10 +125,10 @@
         </div>
 
         <div class="hidden md:block"> <div></div>
-          <div class="relative h-full overflow-hidden">
+          <div class="relative overflow-hidden h-full max-h-[450px] w-full">
             <img
               class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
-              src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" />
+              :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)" alt="B Chair" />
             <span v-scroll="isVisible ? arrowScroll : 0" class="absolute bottom-0 bg-orange p-5">
               <ArrowSvg size="13px" fillColor="#ffffff" ref="arrowSvg" @click="rotate" />
             </span>
@@ -141,12 +142,12 @@
     <transition>
       <div id="scrollTOadditional" v-scroll="-400" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
         <div class="grid grid-cols-1 mt-[5px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <div class="product-item p-0" v-for="(product, index) in products" :key="index">
+          <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
             <div class="product_img overflow-hidden">
-              <a :title="product.title" :href="product.image" rel="pro-gallery">
+              <a :title="product?.title" :href="product?.image" rel="pro-gallery">
                 <img
                   class="w-full h-auto opacity-55 hover:opacity-100 transition-transform duration-700 ease-in-out transform hover:scale-125"
-                  :src="product.thumbnail" :alt="product.alt" />
+                  :src="$filePath(product?.file_url)" />
               </a>
             </div>
           </div>
@@ -156,10 +157,11 @@
 
     <transition>
       <div ref="scrollTOadditional"  v-scroll="-400" v-show="addiVisible"
-        class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0">
-        <div class="py-10 m-0 relative px-14 ld:w-1/2 font-light text-left text-white bg-orange">
-          <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
-            Crafted from our exclusive Ropetek® materials...
+        class="container-fluid mt-1 h-[450px] w-full p-0"
+        :style="{ backgroundImage: 'url(' + $filePath(productData?.new_product_additional_bg_image_url?.file_url) + ')' }">
+        <div class="py-10 m-0 relative px-14 lg:w-1/2 font-light text-left text-white bg-orange">
+          <p id="directTO" class="font-graphikLight   sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
+           {{ productData?.new_product_additional_info }}
           </p>
           <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -288,7 +290,7 @@ import BreadcrumbSection from '@/components/frontend-components/BreadcrumbSectio
 import SideMenu from '@/components/frontend-components/Side-Menu.vue'
 import Images3DView from '@/components/frontend-components/Images3DView.vue'
 import ThreeDAnimaation from '@/components/Admin-components/ThreeDAnimaation.vue'
-import { getLandingPageData } from '@/helper/frontendHelpers'
+import { getProductDetail } from '@/helper/frontendHelpers'
 import AccordionNew from '@/components/frontend-components/AccordionNew.vue'
 
 const sliderList = [
@@ -302,6 +304,7 @@ const products = ref([
   { title: 'Set of B Chair, B Chair 2 and Dot Table.', description: 'Set of B Chair, B Chair 2 and Dot Table.', image: 'https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg', thumbnail: 'http://lebello.com/wp-content/uploads/thumbs/b-chair-slider-gallery-302X202.png', alt: 'B Chair Piie Low & High Lounger Chair' },
 
 ]);
+
 
 const isOpenSidebarSlider = ref(false);
 const isOpenSidebarSlider2 = ref(false);
@@ -317,17 +320,23 @@ const closeMenu = ref(null);
 const closeMenu2 = ref(null);
 const configuration = ref('1')
 const email = ref('')
+const productData = ref([])
+const ProductTypes = ref([])
 
-const  handleLandingPageData = async () => {
-   const res = await getLandingPageData()
+const id = ref(sessionStorage.getItem('productDetail'));
+console.log("Product_Detail id", id.value);
+const  handleProductDetailData = async () => {
+   const res = await getProductDetail(id.value)
    console.log("getLandingPageData", res.data.data.home_slider);
   if (res.status === 200 && res.data.success) {
-     landingPageData.value = res.data.data.home_slider
+    productData.value = res.data.data.product_data[0];
+    productTypes.value = res.data.data.product_types;
+    //  landingPageData.value = res.data.data.home_slider
   }
 }
 
 onMounted(() => {
-   handleLandingPageData()
+   handleProductDetailData()
 })
 
 const handleStoreClick = () => {

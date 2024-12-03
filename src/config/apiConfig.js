@@ -327,6 +327,8 @@ const ApiConfig = {
   frontend_swatch_Detail: '/front-end-swatch-data',
   product_list: '/front-end-product-list',
   product_series_list: '/front-end-product-series-data',
+  product_Type_list: '/front-end-product-type-data',
+  product_Detail: '/front-end-product-data',
 
 
 

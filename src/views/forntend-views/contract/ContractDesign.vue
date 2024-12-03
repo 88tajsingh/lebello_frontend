@@ -65,7 +65,7 @@
       </SideMenu>
     </div>
     <!-- Slider -->
-    <div class="mx-5 mt-8 lg:mx-20">
+    <div class="mx-5 mt-4 lg:mx-20">
       <div id="default-carousel" class="relative">
         <div class="w-full h-full mx-0 overflow-hidden">
           <div class="h-screen w-screen">

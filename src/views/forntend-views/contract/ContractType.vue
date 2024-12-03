@@ -89,13 +89,14 @@
         <!-- Loop through products -->
         <div v-for="(slide, index) in contractDesignData" :key="index" class=" ">
           <div @click.prevent="handleClick(slide)" class="prod_content overflow-hidden">
-            <div class="product_img holder relative" :class="{
-              'transition-transform  duration-9000 ease-in-out transform scale-125':
-                isHovered[index],
-            }" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
-              
-                <img  class="aos-item w-full" ref="element" :data-aos="animationType"
-                  :data-aos-duration="getAnimationDuration(index)" :src="$filePath(slide?.featured_image_data?.file_url)" :alt="slide?.title" />
+            <div @click="handleRoute(slide)" class="product_img holder relative w-full h-full object-cover max-h-[190px] "
+            :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
+            @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+            
+            <img :src="$filePath(slide?.featured_image_data?.file_url)" :alt="slide?.featured_image_data?.file_url"
+              class="aos-item w-full h-full object-cover   " ref="element" :data-aos="animationType"
+              :data-aos-duration="getAnimationDuration(index)" />
+
                 <div :class="{
                   'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20':
                     isHovered[index],
@@ -116,6 +117,7 @@
   </template>
   
   <script setup>
+  // Importing necessary components, libraries, and hooks
   import NavBar from "@/components/frontend-components/Nav-bar.vue";
   import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
   import { ref, onMounted, onUnmounted, computed } from "vue";
@@ -124,56 +126,62 @@
   import FooterSection from "@/components/frontend-components/Footer-section.vue";
   import AOS from "aos";
   import { useStore } from "vuex";
-  import { useRouter } from "vue-router";
-  import { useRoute } from "vue-router";
+  import { useRouter, useRoute } from "vue-router";
   
+  // Importing AOS library for animations
   import "aos/dist/aos.css";
-import { getContractDesign, getContractType } from "@/helper/frontendHelpers";
+  import { getContractType } from "@/helper/frontendHelpers";
   
+  // Initialize store, router, and route
   const store = useStore();
   const router = useRouter();
   const route = useRoute();
+  
+  // References state management
   const element = ref(null);
   const animationType = "fade-up";
   const active = ref(false);
   const isOpen = ref(false);
   const isHovered = ref([]);
   const closeMenu = ref(null);
-  const id = sessionStorage.getItem('contract_type_id');
-  const headerText = route?.params?.slug
-  console.log("headerText", headerText);
   
+  const id = ref(sessionStorage.getItem('contract_type_id'));
+  const headerText = route?.params?.slug;
+  console.log("headerText", headerText);
 
+  // Function to close side menu when clicked outside
   const closeSideMenu = () => {
     isOpen.value = false;
     active.value = false;
   };
-  onClickOutside(closeMenu, closeSideMenu);
+  onClickOutside(closeMenu, closeSideMenu);  // Set up click outside event listener
 
   const contractDesignSidebar = ref([]);
   const contractDesignData = ref([]);
-  const handleContractDesignData = async () => {
-
-  const { status, data } = await getContractType(id);
-  if (status === 200 && data.success) {
-    contractDesignSidebar.value = data.data.contract_design_sidebar;
-    contractDesignData.value = data.data.contract_desing;
-  } else {
-    console.log("error");
-    contractDesignData.value = [];
-  }
-};
-  onMounted(() => {
-  handleContractDesignData();
-});
-const handleSideMenu = () => {
-  isOpen.value = !isOpen.value;
-};
-
   
+  // Function to fetch contract design data
+  const handleContractDesignData = async () => {
+    const { status, data } = await getContractType(id.value);
+    if (status === 200 && data.success) {
+      contractDesignSidebar.value = data.data.contract_design_sidebar;
+      contractDesignData.value = data.data.contract_desing;
+    } else {
+      contractDesignData.value = [];
+    }
+  };
+
+  onMounted(() => {
+    handleContractDesignData();
+  });
+
+  const handleSideMenu = () => {
+    isOpen.value = !isOpen.value;
+  };
+
   const toggleOverlay = (index, show) => {
     isHovered.value[index] = show;
   };
+
   onMounted(() => {
     AOS.init({});
     AOS.refresh();
@@ -196,29 +204,30 @@ const handleSideMenu = () => {
     isHovered.value = new Array(contractDesignData.value.length).fill(false);
   });
 
-  // Navigation Handling
   const handleClick = (sub) => {
-  store.dispatch('setCurrentId', sub.id);
-  let route;
-  if (sub.title === 'overview' || sub.title === 'Overview') {
-    route = { name: 'contractType', params: { slug: sub.slug } };
-  } else if (sub.title) {
-    route = { name: 'contractDesign', params: { slug: sub.slug } };
-  } else {
-    route = { name: 'ContractLocation', params: { slug: sub.slug } };
-  }
-  console.log("sub.title", sub.title);
-  if (sub.title === 'overview' || sub.title === 'Overview') {
-    sessionStorage.setItem('contract_type_id', sub.id);
-  } else if (sub.title) {
-    sessionStorage.setItem('contract_design_id', sub.id);
-  } else {
-    sessionStorage.setItem('contract_location_id', sub.id);
-  }
+    store.dispatch('setCurrentId', sub.id); 
+    
+    let route;
+    if (sub.title === 'overview' || sub.title === 'Overview') {
+      route = { name: 'contractType', params: { slug: sub.slug } };
+    } else if (sub.title) {
+      route = { name: 'contractDesign', params: { slug: sub.slug } };
+    } else {
+      route = { name: 'ContractLocation', params: { slug: sub.slug } };
+    }
+        
+    if (sub.title === 'overview' || sub.title === 'Overview') {
+      sessionStorage.setItem('contract_type_id', sub.id);
+    } else if (sub.title) {
+      sessionStorage.setItem('contract_design_id', sub.id);
+    } else {
+      sessionStorage.setItem('contract_location_id', sub.id);
+    }
 
-  router.push(route);
-};
+    router.push(route);
+  };
   
+  // Refresh AOS animations on component unmount
   onUnmounted(() => {
     AOS.refreshHard();
   });
@@ -228,10 +237,10 @@ const handleSideMenu = () => {
   const toggleAccordion = (index) => {
     activeIndex.value = activeIndex.value === index ? null : index;
   };
-  
+
   const getAnimationDuration = computed(() => {
     return (index) => {
-      const positionInRow = index % 4;
+      const positionInRow = index % 4; 
       switch (positionInRow) {
         case 0:
           return 500;
@@ -246,13 +255,15 @@ const handleSideMenu = () => {
       }
     };
   });
-  
+
+  // Function to open the navigation menu
   const openNav = () => {
     active.value = true;
     isOpen.value = true;
   };
-  
-  </script>
+
+</script>
+
   <style scoped>
   .prod-overlay {
     opacity: 0;

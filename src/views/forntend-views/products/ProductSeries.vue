@@ -172,6 +172,7 @@
           <span class="font-graphikLight self-center mr-2 text-[13px] text-Black666 uppercase">Sort By</span>
           <div class="group relative cursor-pointer">
             <div
+            :class="{'bg-[#000000CC]': dropdownHoverColor}"
               class="flex items-center justify-between hover:bg-[#000000CC] text-[13px] pr-6 bg-gray-100 text-[#4dc45c]">
               <a class="menu-hover font-graphik uppercase text-green mx-2 py-1">Product Type</a>
               <ArrowSvg size="8px" initialRotation="left"  />
@@ -236,7 +237,6 @@ const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
 onClickOutside(closeMenu, closeSideMenu);
 const handleSideMenu = () => { isOpenSidebarSlider.value = true; };
 const id = ref(sessionStorage.getItem('Product_series'));
-console.log("series id", id);
 const productSeries = ref([]);
 const productType = ref([]);
 const productsSidebar = ref([]);

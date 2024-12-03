@@ -64,6 +64,8 @@ export const scrollDown = (id) => {
   export const getSwatchDetail = (id) => withDomain(PublicServices.swatchDetail,id,false);
   export const getProductList = (id) => withDomain(PublicServices.product_list,id,false);
   export const getProductSeriesList = (id) => withDomain(PublicServices.productSeriesList,id,false);
+  export const getProductTypeList = (id) => withDomain(PublicServices.productTypeList,id,false);
+  export const getProductDetail = (id) => withDomain(PublicServices.productDetail,id,false);
 
 
   // without domain apis
