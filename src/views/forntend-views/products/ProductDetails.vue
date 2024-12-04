@@ -321,7 +321,7 @@ const closeMenu2 = ref(null);
 const configuration = ref('1')
 const email = ref('')
 const productData = ref([])
-const ProductTypes = ref([])
+const productTypes = ref([])
 
 const id = ref(sessionStorage.getItem('productDetail'));
 console.log("Product_Detail id", id.value);
@@ -330,7 +330,7 @@ const  handleProductDetailData = async () => {
    console.log("getLandingPageData", res.data.data.home_slider);
   if (res.status === 200 && res.data.success) {
     productData.value = res.data.data.product_data[0];
-    productTypes.value = res.data.data.product_types;
+    // productTypes.value = res.data.data.product_types;
     //  landingPageData.value = res.data.data.home_slider
   }
 }

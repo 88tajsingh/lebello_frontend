@@ -47,7 +47,7 @@
   const loadKeyShotXRScript = () => {
     return new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      script.src = 'src/assets/KeyShortXR.js'; 
+      script.src = '/src/assets/KeyShortXR.js'; 
       script.onload = () => {
         resolve();
       };
