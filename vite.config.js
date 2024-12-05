@@ -1,14 +1,15 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 
 export default defineConfig({
-  plugins: [vue()],
-  base: '/', 
+  plugins: [vue(), vueJsx()],
+  base: '/',
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
   build: {
     rollupOptions: {
@@ -18,18 +19,19 @@ export default defineConfig({
             const packageName = id.split('node_modules/')[1].split('/')[0];
             return `npm.${packageName.replace('@', '')}`;
           }
-        }
-      }
-    }
+        },
+      },
+    },
   },
   server: {
-    host: 'localhost',  
+    host: '0.0.0.0',
     port: 5173,
-    open: true 
+    open: true,
   },
   vue: {
     compilerOptions: {
-      isCustomElement: tag => ['PerfectScrollbar', 'perfect-scrollbar', 'v-card'].includes(tag)
-    }
-  }
+      isCustomElement: (tag) => 
+        [ 'PerfectScrollbar', 'perfect-scrollbar', 'v-card'].includes(tag),
+    },
+  },
 });

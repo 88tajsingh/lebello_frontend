@@ -297,7 +297,7 @@ const handleRoute = (sub) => {
       :alt="collection.title" 
       class="w-full h-48 object-cover filter grayscale transition duration-700 ease-in-out transform group-hover:scale-110 group-hover:filter-none"
     >
-    <span class="absolute top-4 right-4 text-white font-bold text-lg">{{ collection.slug.toUpperCase() }}</span>
+    <span class="absolute top-4 right-4 text-white font-bold text-lg">{{collection.trade_mark_label ? collection.trade_mark_label.toUpperCase() : collection.title }}</span>
   </div>
   
   <div class="pt-5 flex justify-between items-center">

@@ -1,10 +1,10 @@
 <template>
-  <div class=" bg-[#f3f3f3] mx-16  border-t pb-10 border-neutral">
+  <div class=" bg-white   border-t-2 pb-10 border-[#f3f3f3]">
     <div class="grid">
-      <div v-for="(faq, index) in faqs" :key="index" class="py-5 border-b border-neutral ">
+      <div v-for="(faq, index) in faqs" :key="index" class="py-5 border-b-2 px-16 border-[#f3f3f3] ">
         <details class="group transition-all duration-500 ease-in ">
           <summary @click="toggleFAQ(index)"
-            class="flex w-1/3 justify-between  items-center text-[#64748b] font-graphik text-[23px] cursor-pointer list-none hover:text-orange">
+            class="flex  justify-between  items-center text-[#64748b] font-graphik text-[23px] cursor-pointer list-none hover:text-green">
             <span class="text-2xl font-normal" :class="{ 'text-black ': faq?.open }">{{
               faq?.header
             }}</span>
@@ -20,10 +20,10 @@
           <transition @before-enter="beforeEnter" @enter="enter" @before-leave="beforeLeave" @leave="leave">
             <div v-if="faq?.header === 'Specifications'" class="spec-section">
               <div class="grid grid-cols-1 font-graphik text-[14px] text-textColorBlack md:grid-cols-4 gap-4">
-                <div v-for="(spe, spindex) in faq?.Specifications" :key="spindex">
+                <div v-for="(spe, spindex) in faq?.Specifications" class='pr-4' :key="spindex">
                   <p class="text-base font-graphik mt-5">{{ spe?.name }}</p>
                   <p>
-                    SKU: <strong>{{ spe?.sku }}</strong>
+                     <strong>{{ spe?.sku }}</strong>
                   </p>
                   <p>{{ spe?.frame }}</p>
                   <p>{{ spe?.dimension }}</p>
@@ -108,18 +108,18 @@ const faqs = ref([
     header: 'Specifications',
     Specifications: [
       {
-        name: 'B Chair',
-        sku: 'B1',
-        frame: 'Frame in aluminum',
-        dimension: 'W: 60/23.4”, D: 55/21.5”',
-        seatHeight: 'Seat H: 45/17.5”'
+        name: '',
+        sku: '',
+        frame: 'About the 4L Arrow.',
+        dimension: 'Please download the cut sheet for further information',
+        seatHeight: ''
       },
       {
-        name: 'B Chair',
-        sku: 'B1',
-        frame: 'Frame in aluminum',
-        dimension: 'W: 60/23.4”, D: 55/21.5”',
-        seatHeight: 'Seat H: 45/17.5”'
+        name: '',
+        sku: '',
+        frame: '4L Arrow Cushions.',
+        dimension: 'Cushions in G2 - G5 fabrics.',
+        seatHeight: ''
       }
     ],
     open: false

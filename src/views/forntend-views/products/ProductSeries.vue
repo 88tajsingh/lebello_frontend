@@ -255,6 +255,10 @@ const handleProductType = (productType) => {
   router.push({ name: 'product_type', params: { slug: productType.slug } });
 }
 onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
   handleProductSeriesData();
 });
 

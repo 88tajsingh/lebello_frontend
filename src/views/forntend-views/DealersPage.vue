@@ -28,11 +28,14 @@
       </div>
     </div>
   </div>
-
+  <LogoSection/>
+  <Footer />
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import LogoSection from "@/components/frontend-components/Logo-section.vue";
+import Footer from "@/components/frontend-components/Footer-section.vue";
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
 import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 import DealerCard from '@/components/frontend-components/DealersCard.vue'

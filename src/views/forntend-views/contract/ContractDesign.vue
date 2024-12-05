@@ -290,9 +290,10 @@ const hexToRgb = (hex) => {
 
 const titleStyle = (slide) => {
   const defaultHex = '#ff9d0f';
-  const baseBackground = slide?.sub_heading_background || defaultHex;
-  const transparency = slide?.sub_heading_transparent_percentage
-    ? parseFloat(slide.sub_heading_transparent_percentage) / 100
+  console.log("slide",slide?.heading_font_size);
+  const baseBackground = slide?.heading_background || defaultHex;
+  const transparency = slide?.heading_transparent_percentage
+    ? parseFloat(slide.heading_transparent_percentage) / 100
     : 1;
 
   const rgbaBackground = baseBackground.startsWith('#')
@@ -341,6 +342,10 @@ const camelCase = (capitalize, text) => {
 
 // AOS Initialization
 onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
   AOS.init({});
   AOS.refresh();
 

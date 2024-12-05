@@ -7,7 +7,7 @@
                 <div class="col-span-12 lg:col-span-4 container pt-10 pb-3  ">
                     <div class="flex ">
                         <h1 class=" font-graphik text-[25px] font-medium text-black">
-                           {{ swatchDetailData.title }}
+                            {{ swatchDetailData.title }}
                         </h1>
                     </div>
                 </div>
@@ -27,63 +27,72 @@
                             </p>
                         </li>
                     </ul>
-                    <p v-html="swatchDetailData.description" class="text-[16px] text-Black666 font-medium font-graphikLight pt-2">
-                     
-                    </p>
+                    <div v-html="swatchDetailData?.description"
+                        class="text-[16px] text-Black666 font-medium font-graphikLight pt-2">
+
+                    </div>
                     <div class="pt-16 pb-5 border border-b-gray-4 ">
                         <h1 class=" font-graphik text-[25px] text-black font-medium ">
-                            {{ swatchDetailData.title }}
+                            {{ swatchDetailData?.title }}
                         </h1>
                     </div>
                     <div>
                         <ul class="flex  list-none flex-row flex-wrap mb-3" role="tablist" data-twe-nav-ref>
-                            <li v-for="(tab, tindex) in swatchDetailData.material_data" :key="tindex" role="presentation">
-                               
-                               <a :href="'#' + tab?.id" :class="{
+                            <li v-for="(tab, tindex) in swatchDetailData.material_data" :key="tindex"
+                                role="presentation">
+
+                                <a :href="'#' + tab?.id" :class="{
                                     'mt-3 block  px-4 pt-3 text-[13px]  pb-4 uppercase leading-tight  hover:text-blue :text-primary': true,
                                     'disabled pointer-events-none': tab?.disabled,
                                     'text-green border-b border-green': activeTab === tab?.id
                                 }" :data-twe-toggle="tab?.id" data-twe-nav-active role="tab" :aria-controls="tab?.id"
                                     :aria-selected="tab?.active" @click.prevent="activateTab(tab, tab.id)">{{ tab?.name
                                     }}</a>
-                                    
+
                             </li>
                         </ul>
 
                         <!--Tabs content-->
-                       <!-- Tabs content -->
-<div class="mb-6">
-    <div v-for="(tab, index) in swatchDetailData.material_data" :key="index">
-        <!-- Display the tab content only if it's the active tab -->
-        <div v-if="tab.id===activeTab" :id="tab?.id" role="tabpanel" :aria-labelledby="tab?.id + '-tab'" data-twe-tab-active>
-            <div v-if="Array.isArray(tab.material_children)">
-                <div v-if="tab.id===activeTab" class="container w-5/6">
-                    <div class="grid grid-cols-4 justify-items-start">
-                        <!-- Only display children of the active material tab -->
-                        <div v-if="tab.id === activeTab" v-for="(itr, index) in tab.material_children" :key="index">
-                            <div class="mb-10">
-                                <div class="w-full h-full relative overflow-hidden">
-                                    <img :src="$filePath(itr.media_data.file_url)" alt="Material Image"
-                                         class="object-cover w-[185px] h-[185px]" />
-                                    <div class="text-center absolute bottom-1">
-                                        <p class="p-[4px] px-[6px] font-graphik text-[14px] text-Black666 bg-[#ffffffc9]">
-                                            {{ itr.name }}
-                                        </p>
+                        <!-- Tabs content -->
+                        <div class="mb-6">
+                            <div v-for="(tab, index) in swatchDetailData.material_data" :key="index">
+                                <!-- Display the tab content only if it's the active tab -->
+                                <div v-if="tab.id === activeTab" :id="tab?.id" role="tabpanel"
+                                    :aria-labelledby="tab?.id + '-tab'" data-twe-tab-active>
+                                    <div v-if="Array.isArray(tab.material_children)">
+                                        <div v-if="tab.id === activeTab" class="container w-5/6">
+                                            <div class="grid grid-cols-4 justify-items-start">
+                                                <!-- Only display children of the active material tab -->
+                                                <div v-if="tab.id === activeTab"
+                                                    v-for="(itr, index) in tab.material_children" :key="index">
+                                                    <div class="mb-10">
+                                                        <div class="w-full h-full relative overflow-hidden">
+                                                            <img :src="$filePath(itr.media_data.file_url)"
+                                                                alt="Material Image"
+                                                                class="object-cover w-[185px] h-[185px]" />
+                                                            <div class="text-center absolute bottom-1">
+                                                                <p
+                                                                    class="p-[4px] px-[6px] font-graphik text-[14px] text-Black666 bg-[#ffffffc9]">
+                                                                    {{ itr.name }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p
+                                                            class="text-gray-600 font-graphik text-[13px] pt-2 text-Black666">
+                                                            <span>{{ itr.name }}</span>
+                                                            <span
+                                                                class="float-right bg-[#70d94c] text-white rounded-lg px-2 border border-[#70d94c] hover:bg-white hover:text-[#70d94c]">
+                                                                order </span>
+                                                        </p>
+                                                        <span class="text-[#70d94c] text-[13px]">2024 NEW</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 font-graphik text-[13px] pt-2 text-Black666">
-                                    <span>{{ itr.name }}</span>
-                                    <span class="float-right bg-[#70d94c] text-white rounded-lg px-2 border border-[#70d94c] hover:bg-white hover:text-[#70d94c]"> order </span>
-                                </p>
-                                <span class="text-[#70d94c] text-[13px]">2024 NEW</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
                     </div>
                     <div v-show="isModalOpen"
@@ -169,19 +178,19 @@
 
                 <!-- listing right -->
                 <div class="hidden lg:block pl-4 min-w-52">
-                    <div
-                        class="font-graphik text-[20px] text-blue mx-auto px-auto border border-b-gray-4 font-medium ">
+                    <div class="font-graphik text-[20px] text-blue mx-auto px-auto border border-b-gray-4 font-medium ">
                         Materials</div>
                     <div v-for="(item, key) in materialDetailSidebar" :key="key" class="">
                         <h2 :id="'heading' + item.id" class="mb-0 border border-b-gray-4">
-                            <button @click="toggleAccordion(key,item)" :aria-expanded="activeIndex === item.id"
+                            <button @click="toggleAccordion(key, item)" :aria-expanded="activeIndex === item.id"
                                 :aria-controls="'collapse' + item.id"
                                 class="group relative flex  w-full items-center hover:text-orange border-0  py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
                                 :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === item.id }"
                                 type="button">
                                 {{ item.title }}
-                                
-                                <span @click.stop="toggleAction(key,item)" class=" ms-auto  transition-transform duration-200 ease-in-out"
+
+                                <span @click.stop="toggleAction(key, item)"
+                                    class=" ms-auto  transition-transform duration-200 ease-in-out"
                                     :class="{ 'rotate-0': activeIndex !== item.id, 'rotate-[-180deg]': activeIndex === item.id }">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="6px" height="6px"
                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4  w-4">
@@ -197,17 +206,17 @@
                             data-twe-parent="#accordionExample">
 
                             <div v-if="item" class="text-orange font-semibold">
-                            
+
                                 <ul class=''>
                                     <!-- Overview -->
-                                     
+
                                     <!-- <li v-if="item.overview" class="">
                                         <a @click.prevent="handleClick(item.overview)"
                                             class="font-graphikLight text-[13px] cursor-pointer ">{{
                                                 item.overview.title }}</a>
                                     </li> -->
                                     <!-- Location -->
-                                     
+
                                     <!-- <template v-if="Array.isArray(item)">
                                         <li v-for="(sub, itemIndex) in item" :key="itemIndex">
                                             <a @click.prevent="handleClick(sub)"
@@ -216,10 +225,10 @@
                                         </li>
                                     </template> -->
                                     <!-- Contract designs -->
-                                     
+
                                     <div v-if="item.material_data">
                                         <li v-for="(sub, itemIndex) in item.material_data" :key="itemIndex">
-                                            <a @click.prevent="handleClick(sub,item)"
+                                            <a @click.prevent="handleClick(sub, item)"
                                                 class="font-graphikLight text-[13px] cursor-pointer">{{
                                                     sub.name }}</a>
                                         </li>
@@ -266,7 +275,8 @@ const handleswatchDetailData = async () => {
         materialDetailSidebar.value = data.data.swatch_side_bar;
         activeTab.value = swatchDetailData.value?.material_data[0]?.id;
         activeIndex.value = swatchDetailData.value.id;
-    }}
+    }
+}
 
 
 
@@ -274,16 +284,16 @@ const activateTab = (tab, index) => {
     if (!tab.disabled) {
         activeTab.value = tab.id;
         swatchDetailData.value?.material_data?.forEach((t) => {
-            t.active = t.id === tab.id;  
+            t.active = t.id === tab.id;
             if (Array.isArray(t.material_children)) {
                 t.material_children.forEach(child => {
-                    child.active = false;  
+                    child.active = false;
                 });
             }
         });
 
         if (Array.isArray(tab.material_children) && tab.material_children.length > 0) {
-            tab.material_children[0].active = true;  
+            tab.material_children[0].active = true;
         }
     }
 };
@@ -299,24 +309,28 @@ const closeSideMenu = () => {
 };
 onClickOutside(closeMenu, closeSideMenu);
 
-const handleClick = (sub,item) => {   
+const handleClick = (sub, item) => {
 
-   if(sub.id !== activeIndex.value){
-    sessionStorage.setItem('materialDetail', item.id);
-    id.value = item.id;
-    router.push({ name: 'materialDetail', params: { slug: item.slug } });
-   }
+    if (sub.id !== activeIndex.value) {
+        sessionStorage.setItem('materialDetail', item.id);
+        id.value = item.id;
+        router.push({ name: 'materialDetail', params: { slug: item.slug } });
+    }
     activeTab.value = sub.id;
 };
 
 onMounted(() => {
+    window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
     handleswatchDetailData();
 });
 
-const toggleAction = (index,sub) => {
+const toggleAction = (index, sub) => {
     activeIndex.value = activeIndex.value === sub.id ? null : sub.id;
 };
-const toggleAccordion = (index,sub) => {
+const toggleAccordion = (index, sub) => {
     activeIndex.value = activeIndex.value === sub.id ? null : sub.id;
     sessionStorage.setItem('materialDetail', sub.id);
     id.value = sub.id;
@@ -347,7 +361,7 @@ watch(
     () => id.value,
     () => {
         handleswatchDetailData();
-        console.log("id",id.value);
+        console.log("id", id.value);
     }
 );
 
