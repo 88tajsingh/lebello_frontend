@@ -9,6 +9,21 @@ const  routes = [
     component: () => import('../views/forntend-views/Index-main.vue')
   },
   {
+    path: '/productDetailNew',
+    name: 'productDetailNew',
+    component: () => import('../views/forntend-views/products/ProductDetailNew.vue')
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: () => import('../views/forntend-views/products/ProductPage.vue')
+  },
+  {
+    path: '/products',
+    name: 'products',
+    component: () => import('../views/forntend-views/products/ProductPage.vue')
+  },
+  {
     path: '/products',
     name: 'products',
     component: () => import('../views/forntend-views/products/ProductPage.vue')
