@@ -13,7 +13,7 @@ import './assets/css/style.css';
 import '@bhplugin/vue3-datatable/dist/style.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import 'vue-toastification/dist/index.css';
-import Loader from '@/components/Admin-components/Loader.vue';
+// import Loader from '@/components/Admin-components/Loader.vue';
 
 // Lazy load components
 const components = {

@@ -794,7 +794,6 @@ const handleCheckboxChange = (materialId, event) => {
     } else {
         selectedMaterialIds.value = selectedMaterialIds.value.filter(id => id !== materialId);
     }
-    console.log('Selected Materials:', selectedMaterialIds.value,);
 };
 
 // Validate form fields
@@ -836,10 +835,11 @@ const handleSubmit = async () => {
     !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
 
+    form.value.material_swatches = {'swatch_ids': selectedSwatchIds.value, 'material_ids': selectedMaterialIds.value}
+
     const {  domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url,       new_product_additional_right_box_image_url,
         downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
-    form.value.material_swatches = {'swatch_ids': selectedSwatchIds.value, 'material_ids': selectedMaterialIds.value}
     try {
         const service = store.getters.editData ? ProductServices.editProduct : ProductServices.addProduct;
         const res = await service(payload);
@@ -951,7 +951,7 @@ onMounted(() => {
     if (store.getters.editData) {
 
         const { featured_image_url, contract_logo_data, new_product_slider_url,
-            new_product_additional_bg_image_url, new_product_additional_right_box_image_url, downloadable_files_url, gallery_urls } = store.getters.editData;
+            new_product_additional_bg_image_url, new_product_additional_right_box_image_url, downloadable_files_url, gallery_urls,material_swatches } = store.getters.editData;
         console.log(new_product_slider_url)
         imageData.value.featured_image.images = [featured_image_url];
         imageData.value.featured_image.mediaName = featured_image_url?.file_url || 'featured images';
@@ -970,7 +970,10 @@ onMounted(() => {
         // imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
         imageData.value.gallery.images = gallery_urls;
         imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
+        
 
+        selectedSwatchIds.value = material_swatches.swatch_ids;
+        selectedMaterialIds.value = material_swatches.material_ids;
         fetchAllData({ domain_id: form.value.domain_id });
 
     }

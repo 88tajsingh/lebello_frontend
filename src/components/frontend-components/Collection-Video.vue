@@ -2,7 +2,7 @@
   <div id="collection" class="h-full bg-[#e3dbcf] overflow-hidden pb-16 mx-0 transition duration-1000 ease-in">
     <!-- Menu Icon and Sidebar -->
     <div class="relative">
-      <div class="absolute top-5 right-0 pr-3 bg-transparent">
+      <div class="absolute top-5 right-0 pr-3 bg-transparent" ref="closeMenu">
         <SideMenu key="firstKey1" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebar">
           <div class="z-50">
             <!-- Sidebar Header -->
@@ -28,7 +28,7 @@
                   type="text"
                   placeholder="Search"
                 />
-                <div class="absolute right-2 inset-y-0 flex items-center">
+                <div class="absolute right-2 top-2 inset-y-0 flex items-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="h-5 w-5 ml-3 text-gray-400 hover:text-gray-500"

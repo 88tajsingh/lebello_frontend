@@ -29,6 +29,7 @@ export const isChecked = (variable, id) => variable.value.some(item => item.id =
  */
 export const filePath = (fileUrl) =>
   fileUrl ? `${import.meta.env.VITE_FILES_PATH}${fileUrl}` : import.meta.env.VITE_DEFAULT_IMAGE;
+export const normalFilePath = (fileUrl) =>`${import.meta.env.VITE_FILES_PATH}${fileUrl}`
 
 /**
  * Handles the logic of updating a file in a form.

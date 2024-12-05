@@ -166,6 +166,10 @@ import { watch } from "less";
   }
 };
   onMounted(() => {
+    window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
   handleContractDesignData(id);
 });
 const handleSideMenu = () => {
@@ -230,6 +234,7 @@ const handleSideMenu = () => {
   });
 
   onMounted(() => {
+    
   const contractTypeId = sessionStorage.getItem('contract_type_id');
   if (contractTypeId) {
     handleContractDesignData(contractTypeId);

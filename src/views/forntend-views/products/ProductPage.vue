@@ -237,6 +237,10 @@ const handleProductsData = async () => {
     }}
 
     onMounted(() => {
+      window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
       handleProductsData();
 });
 

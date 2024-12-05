@@ -1,8 +1,8 @@
 <template>
   <div class="bg-[rgb(220,214,205)] font-graphikLight">
     <div class="bg-[rgb(220,214,205)]   sm:m-0 md2:flex md2:mx-12">
-      <div id="app" class="mx-0 xl:flex  mx-5">
-        <div class="grid grid-cols-1 gap-5  sm:grid-cols-1 md:grid-cols-4  py-5 gap-4 w-full md:gap-6 md2:py-12 ">
+      <div id="app" class=" xl:flex  mx-5">
+        <div class="grid grid-cols-1 gap-5  sm:grid-cols-1 md:grid-cols-4  py-5  w-full md:gap-6 md2:py-12 ">
           <div class="px-1 min-w-[400px]" v-for="(section, index) in sections" :key="index">
             <h3 class="mb-2 text-[16px] text-textColorBlack font-graphikMedium">
               {{ section?.title }}

@@ -49,7 +49,7 @@
   
   <script setup>
   import { ref, onMounted, watch } from 'vue';
-  import Vue3Datatable from '@bhplug  in/vue3-datatable';
+  import Vue3Datatable from '@bhplugin/vue3-datatable';
   import CompanyServices from '@/services/CompanyServices';
   import { useRouter } from 'vue-router';
   import { showToast } from '@/helper/functions';

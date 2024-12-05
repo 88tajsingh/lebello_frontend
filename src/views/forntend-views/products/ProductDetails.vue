@@ -1,40 +1,127 @@
 <template>
-    
-  <div class="overflow-hidden">
-    <MainSlider :isAbsolute="false" :list="sliderList" imageKeyName='file_url' :mainSlider="true" :showDropDown="false" :showHeading="false"
+
+  <div class="overflow-hidden ">
+    <!-- <MainSlider :isAbsolute="false" :list="sliderList" imageKeyName='file_url' :mainSlider="true" :showDropDown="false" :showHeading="false"
     :sliderImages="productData.new_product_slider_url"
-      :downDropdown="false" />
+      :downDropdown="false" /> -->
+    <div>
+      <NavBar :absolute="true" :navColor="navColor"/>
+    <div id="default-carousel" class="relative" data-carousel="static">
+      <div class="w-full h-full  mx-0">
+        <div class="overflow-hidden  h-screen sm:h-screen xl:h-screen 2xl:h-screen">
+          <div v-show="currentIndex === index" v-for="(slide, index) in productData.gallery_urls" :key="index"
+            class="w-full duration-700 ease-in-out" data-carousel-item>
+            <img :src="$filePath(slide?.file_url)"
+              class="block  absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2 "
+              :alt="slide[imageKeyName]?.file_url" />
+              <button @click="previous" type="button"
+          class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
+          data-carousel-prev>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" :stroke="navColor === 'white' ? '#ffffff' : '#000000'">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button @click="next" type="button"
+          class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none"
+          data-carousel-next>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" :stroke="navColor === 'white' ? '#ffffff' : '#000000'">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+          </div>
+        </div>
+        <div class="flex absolute bottom-1/2 rotate-90 z-30 left-7 space-x-2 -translate-x-1/2">
+          <button v-for="(slide, index) in productData.gallery_urls" :key="index" type="button"
+            :class="{ 'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index }"
+            class="w-2 h-2 rounded-full" aria-current="false" @click="changeSlide(index)"></button>
+        </div>
+       
+      </div>
+      <!-- lebellow icon right top -->
+      <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
+        <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+      </a>
+      <!-- text left bottom -->
+      <div id="sideText" class="absolute bottom-10  mx-auto left-6 sm:left-14 md:left-20 "
+      :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-10': !atBottom, 'bottom-10': atBottom }]" 
+      >
+        <div class=" capitalize opacity-80 text-[#686868] font-graphik sm:text-[20px] md2:text-[40px]  ">{{ productData.title }}</div>
+      </div>
+      <!-- down arrow -->
+      <div class="absolute left-1/2 bottom-5 animate-bounce mx-auto">
+        <div @click="()=> scrollDown('sideText')"
+          class="text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5 ease-in duration-300 px-3 py-1">
+          <span href="#" class="transition  ease-out duration-1000	">
+            <svg width="24px" height="24px" viewBox="0 0 1024 1024" class="icon" version="1.1"
+              xmlns="http://www.w3.org/2000/svg" fill="#fafafa" stroke="#fafafa" stroke-width="73.728">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff"></path>
+              </g>
+            </svg>
+          </span>
+        </div>
+      </div>
+      <!-- menu item -->
+    </div>
+    </div>
     <div class="flex relative">
     </div>
-    <div class=" bg-white">
-    <!-- Breadcrumb -->
-    <nav class="py-6 font-graphik  text-sm">
-      <div class="flex items-center  text-[16px] cursor-pointer gap-2 ml-14">
-        <span @click="() => $router.push('/products')" class="text-gray-600">Collection</span>
-        <!-- Heroicon: ChevronRight -->
-        /
-        <span class="text-yellow-600 font-medium">{{ productData.title }}</span>
+    <div class=" ">
+      <!-- Breadcrumb -->
+       <div class="relative">
+         <nav class="py-6 font-graphik text-sm">
+           <div class="flex items-center  text-[16px] cursor-pointer gap-2 ml-14">
+             <span @click="() => $router.push('/products')" class="text-gray-600">Collection</span>
+             <!-- Heroicon: ChevronRight -->
+             /
+             <span class="text-green font-medium">{{ productData.title }}</span>
+           </div>
+         </nav>
+         <div class="absolute top-5 right-0 pr-3 bg-transparent " ref="closeMenu">
+        <SideMenu key="firstKey1" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider">
+          <div  class="z-50">
+            <div class="flex border border-[#686868] items-center">
+              <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
+                <MenuSvg size="15px" fillColor="#000000" />
+              </span>
+              <div>
+                <h3 class="text-[14px] font-medium">
+                  <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
+                    Collection 2024
+                  </a>
+                </h3>
+              </div>
+            </div> 
+            <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
+                <PerfectScrollbar class="max-h-52">
+                  <li v-for="(listItem, index) in productTypes " :key="index" class="mt-1 border-b border-[#cdc6c6]">
+                    <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange  cursor-pointer">
+                      {{ listItem?.name }}
+                    </a>
+                  </li>
+                </PerfectScrollbar>
+              </ul>
+          </div>
+        </SideMenu>
       </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:flex lg:justify-between lg:px-10">
-  <!-- Product Viewer (Image Section) -->
+       </div>
+      
+      <!-- Main Content -->
+      <!-- <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:flex lg:justify-between lg:px-10">
   <div class="relative aspect-square bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
     <div class='pb-10 '>
     <div class='h-[410px] overflow-hidden'>
     <Images3DView/>
       </div>
-    <!-- Controls -->
     <div id="zoom-controls" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-[#c59233]">
-      <!-- Fullscreen Icon -->
       <button id="fullscreen-toggle" class="rounded-full p-2">
         <svg height="20px" width="20px" viewBox="0 0 512 512" fill="#000000">
           <polygon fill="#c59233" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
         </svg>
       </button>
 
-      <!-- Zoom In and Out Icons -->
       <div class="flex flex-col items-center bg-white rounded-full shadow-lg border border-[#c59233]">
         <button id="zoom-in" class="py-2 px-[5px]">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3"  fill="#c59233" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -49,7 +136,6 @@
         </button>
       </div>
 
-      <!-- Reset Icon -->
       <button id="zoom-reset" class="rounded-full p-2 ">
         <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21" width="21" height="21">
 	<title>&lt;Group&gt;</title>
@@ -62,7 +148,6 @@
   </div>
   </div>
 
-  <!-- Configuration Panel -->
   <div class=" flex flex-col h-full pl-14 lg:w-2/5">
   <div>
     <h1 class="text-2xl font-semibold">3D CONFIGURATOR</h1>
@@ -74,7 +159,6 @@
       <p class="text-sm text-gray-500">Please select the configuration</p>
     </div>
 
-    <!-- Select Dropdown -->
     <div class="relative w-72">
       <label for="configuration" class="block text-sm font-medium text-gray-700">Select Configuration</label>
       <select v-model="configuration" id="configuration" class="w-full p-2 border border-gray-300 rounded-md">
@@ -85,7 +169,6 @@
     </div>
   </div>
 
-  <!-- Buttons at the bottom (added mt-auto for positioning) -->
   <div class="mt-[130px]  h-full flex gap-4 items-end"> 
     <button @click="handleStoreClick" class="text-[#B88746] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full">
       ENQUIRE/EMAIL
@@ -96,106 +179,106 @@
   </div>
 </div>
 
-</div>
+</div> -->
 
-  </div>
+    </div>
 
-  <div class="bg-[#f3f3f3] ">
-    <section class="">
-      <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">
-        <div class="lg:px-11 my-10">
-          <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
-            <h2 class="text-[24px] md:text-[18px] lg:text-[27px] pb-[35px] text-textColorBlack ">{{ productData.title }}</h2>
-            <p class="sm:text-[15px] md:text-[15px] lg:text-[16px] lg:leading-[25px] text-[#666]">
-              B Chair is now available in our exclusive timeless pixie weave design language. A chair that provides
-              functionality with its open frame design allowing access to a self-storage compartment for personal
-              belongings. The pixie design pattern embodies our authentic superior woven craftsmanship through which
-            clients can opt for our LSO option. Lebello Special Operations provides enhanced bespoke design
-              customization solutions tailored towards your design requirements. The B Chair comes in a low and
-              high-back model.
-            </p>
+    <div class="bg-white ">
+      <section class="bg-[#f3f3f3]">
+        <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">
+          <div class="lg:px-11 my-10">
+            <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
+              <h2 class="text-[24px] md:text-[18px] lg:text-[27px] pb-[35px] text-textColorBlack ">{{ productData.title
+                }}</h2>
+              <p v-html="productData.description"
+                class="sm:text-[15px] md:text-[15px] lg:text-[16px] lg:leading-[25px] text-[#666]">
+
+              </p>
+            </div>
+            <div class="mt-10 flex hover:text-green" :class="{ 'text-green': addiVisible }"
+              @click="HandleAdditionalInfo" @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#333')">
+              <span class="ml-5 uppercase font-graphikMedium text-[13px]">Additional Product info</span>
+              <ArrowSvg class="mt-0 ml-3 self-center" size="15px" :fillColor="addiVisible ? '#4dc45c' : '#64748b'" />
+            </div>
+
           </div>
-          <div class="mt-10 flex hover:text-orange" :class="{ 'text-orange': addiVisible }" @click="HandleAdditionalInfo"
-            @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#333')">
-            <span class="ml-12 uppercase font-graphikMedium text-[13px]">Additional Product info</span>
-            <ArrowSvg class="mt-0 ml-3 self-center" size="15px"
-              :fillColor="addiVisible ? '#d98c3a' : '#64748b' " />
+
+          <div class="hidden md:block">
+            <div></div>
+            <div class="relative overflow-hidden h-full max-h-[450px] w-full">
+              <img
+                class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
+                :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)" alt="B Chair" />
+              <span v-scroll="isVisible ? arrowScroll : 0" class="absolute bottom-0 bg-green p-5">
+                <ArrowSvg size="13px" fillColor="#ffffff" ref="arrowSvg" @click="rotate" />
+              </span>
+            </div>
           </div>
 
         </div>
 
-        <div class="hidden md:block"> <div></div>
-          <div class="relative overflow-hidden h-full max-h-[450px] w-full">
-            <img
-              class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
-              :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)" alt="B Chair" />
-            <span v-scroll="isVisible ? arrowScroll : 0" class="absolute bottom-0 bg-orange p-5">
-              <ArrowSvg size="13px" fillColor="#ffffff" ref="arrowSvg" @click="rotate" />
-            </span>
-          </div>
-        </div>
+      </section>
 
-      </div>
-
-    </section>
-
-    <transition>
-      <div id="scrollTOadditional" v-scroll="-400" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
-        <div class="grid grid-cols-1 mt-[5px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
-            <div class="product_img overflow-hidden">
-              <a :title="product?.title" :href="product?.image" rel="pro-gallery">
-                <img
-                  class="w-full h-auto opacity-55 hover:opacity-100 transition-transform duration-700 ease-in-out transform hover:scale-125"
-                  :src="$filePath(product?.file_url)" />
-              </a>
+      <transition>
+        <div id="scrollTOadditional" v-scroll="-400" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
+          <div class="grid grid-cols-1 mt-[5px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
+              <div class="product_img max-h-[250px] h-full  overflow-hidden">
+                <a :title="product?.title" :href="product?.image" rel="pro-gallery">
+                  <img
+                    class="w-full h-full opacity-55 hover:opacity-100 transition-transform duration-700 ease-in-out transform hover:scale-125"
+                    :src="$filePath(product?.file_url)" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </transition>
 
-    <transition>
-      <div ref="scrollTOadditional"  v-scroll="-400" v-show="addiVisible"
-        class="container-fluid mt-1 h-[450px] w-full p-0"
-        :style="{ backgroundImage: 'url(' + $filePath(productData?.new_product_additional_bg_image_url?.file_url) + ')' }">
-        <div class="py-10 m-0 relative px-14 lg:w-1/2 font-light text-left text-white bg-orange">
-          <p id="directTO" class="font-graphikLight   sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
-           {{ productData?.new_product_additional_info }}
-          </p>
-          <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path fill="none" d="M0 0h24v24H0z" />
-              <path fill="#ffffff"
-                d="M12 10.586l4.293-4.293 1.414 1.414L13.414 12l4.293 4.293-1.414 1.414L12 13.414l-4.293 4.293-1.414-1.414L10.586 12 6.293 7.707l1.414-1.414L12 10.586z" />
-            </svg>
+      <transition>
+        <div ref="scrollTOadditional" v-scroll="-400" v-show="addiVisible"
+          class="container-fluid mt-1 h-[450px] w-full p-0"
+          :style="{ backgroundImage: 'url(' + $filePath(productData?.new_product_additional_bg_image_url?.file_url) + ')' }">
+          <div class="py-10 m-0 relative px-14 lg:w-1/2 font-light text-left text-white bg-green">
+            <p id="directTO" class="font-graphikLight   sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
+              {{ productData?.new_product_additional_info }}
+            </p>
+            <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path fill="#ffffff"
+                  d="M12 10.586l4.293-4.293 1.414 1.414L13.414 12l4.293 4.293-1.414 1.414L12 13.414l-4.293 4.293-1.414-1.414L10.586 12 6.293 7.707l1.414-1.414L12 10.586z" />
+              </svg>
+            </div>
           </div>
         </div>
-      </div>
-    </transition>
+      </transition>
 
-    <div class="flex justify-between uppercase py-4  ">
-      <div class="ml-16 flex self-center ">
-        <ul class="flex font-graphikMedium text-[14px] text-[#64748b] hover:text-orange"
-          @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
-          <li class="mr-2 ">
-            <a class="font-graphikMedium text-[14px]" href="https://www.lebello.com/product/">Enquire</a>
-            <span class="mx-1">/</span>
-          </li>
-          <li class="active">Email</li>
-          
-        </ul>
-        <ul class="flex font-medium ml-20 text-[#64748b] hover:text-orange" @mouseenter="setArrowFillColor2('#3399ff')"
-          @mouseleave="setArrowFillColor2('#4dc45c')">
-          <li class="mr-2 ml-2">
-            <a class="underline font-graphikMedium text-[14px]" target="_blank"
-              href="https://lebello.com/wp-content/uploads/2013/09/B-Chair_Cutsheet.pdf">Download Cut Sheet</a>
-          </li>
-         
-        </ul>
-      </div>
-      <!-- social links -->
-      <!-- <ul class="flex justify-center space-x-1 pr-20 ">
+      <div class="flex justify-between uppercase py-7  ">
+        <div class="ml-16 flex self-center ">
+          <ul class="flex font-graphikMedium text-[14px] text-[#64748b] hover:text-green"
+            @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
+            <li class="mr-2 ">
+              <a class="font-graphikMedium text-[14px]" href="https://www.lebello.com/product/">Enquire</a>
+              <span class="mx-1">/</span>
+            </li>
+            <li class="active">Email</li>
+
+          </ul>
+          <ul class="flex font-medium ml-20 text-[#64748b] hover:text-green" @mouseenter="setArrowFillColor2('#3399ff')"
+            @mouseleave="setArrowFillColor2('#4dc45c')">
+            <li class="mr-2 ml-2">
+              <a class="underline font-graphikMedium text-[14px]" target="_blank"
+                :href="productData?.downloadable_files_url && productData?.downloadable_files_url[0]?.file_url ? $filePath(productData?.downloadable_files_url[0]?.file_url) : '#'">
+                Download Cut Sheet
+              </a>
+            </li>
+
+
+          </ul>
+        </div>
+        <!-- social links -->
+        <!-- <ul class="flex justify-center space-x-1 pr-20 ">
         <li> <a href="https://www.facebook.com/share.php?u=https://lebello.com/products/b-chair-1-2/&title=B Chair"
             target="_blank" title="Facebook"
             class="flex items-center justify-center w-11 h-11 bg-gray hover:bg-[#7bd923] rounded-full mx-3"> <svg
@@ -261,18 +344,18 @@
               alt="Social Icon" /> </a> </li>
       </ul> -->
 
-      <!-- <div class="relative top-30 right-0 pr-3 self-center" ref="closeMenu2">
+        <!-- <div class="relative top-30 right-0 pr-3 self-center" ref="closeMenu2">
         <SideMenu :list="list" :handleSideMenu="handleSideMenu2" :isOpen="isOpenSidebarSlider2" :mainSlider="false"
           :showDropDown="false" :showHeading="false" :downDropdown="true" />
       </div> -->
+      </div>
+
+
+      <AccordianSection />
+      <!-- <div class="mx-12"> -->
+      <!-- <AccordionNew /> -->
+      <!-- </div> -->
     </div>
-
-
-    <!-- <AccordianSection /> -->
-     <div class="mx-12">
-       <AccordionNew />
-     </div>
-  </div>
     <FooterSection />
   </div>
 </template>
@@ -281,29 +364,19 @@
 import MainSlider from '@/components/frontend-components/Main-Slider.vue'
 import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
-import { ref,onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { scrollDown } from '@/helper/frontendHelpers'
 import ArrowSvg from '@/components/frontend-components/Svg/Arrow-Svg.vue'
 import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'
 import { onClickOutside } from '@vueuse/core'
+import NavBar from '@/components/frontend-components/Nav-bar.vue'
 import BreadcrumbSection from '@/components/frontend-components/BreadcrumbSection.vue'
 import SideMenu from '@/components/frontend-components/Side-Menu.vue'
 import Images3DView from '@/components/frontend-components/Images3DView.vue'
 import ThreeDAnimaation from '@/components/Admin-components/ThreeDAnimaation.vue'
 import { getProductDetail } from '@/helper/frontendHelpers'
-import AccordionNew from '@/components/frontend-components/AccordionNew.vue'
-
-const sliderList = [
-  { name: 'B Chair Series', link: 'https://lebello.com/products/trixie-lounger/' },
-  { name: 'B Chair', link: 'https://lebello.com/products/4l-pixie-arms-chair/' }
-];
-
-const products = ref([
-  { title: 'Set of B Chair, B Chair 2 and Dot Table.', description: 'Set of B Chair, B Chair 2 and Dot Table.', image: 'https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg', thumbnail: 'http://lebello.com/wp-content/uploads/thumbs/b-chair-slider-gallery-302X202.png', alt: 'B Chair Piie Low & High Lounger Chair' },
-  { title: 'Set of B Chair, B Chair 2 and Dot Table.', description: 'Set of B Chair, B Chair 2 and Dot Table.', image: 'https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg', thumbnail: 'http://lebello.com/wp-content/uploads/thumbs/b-chair-slider-gallery-302X202.png', alt: 'B Chair Piie Low & High Lounger Chair' },
-  { title: 'Set of B Chair, B Chair 2 and Dot Table.', description: 'Set of B Chair, B Chair 2 and Dot Table.', image: 'https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg', thumbnail: 'http://lebello.com/wp-content/uploads/thumbs/b-chair-slider-gallery-302X202.png', alt: 'B Chair Piie Low & High Lounger Chair' },
-
-]);
+import MenuSvg from '@/components/frontend-components/Svg/Menu-Svg.vue'
+// import AccordionNew from '@/components/frontend-components/AccordionNew.vue'
 
 
 const isOpenSidebarSlider = ref(false);
@@ -322,21 +395,30 @@ const configuration = ref('1')
 const email = ref('')
 const productData = ref([])
 const productTypes = ref([])
+const navColor = ref('')
+const atBottom = ref(false)
+const currentIndex = ref(0)
+
+
 
 const id = ref(sessionStorage.getItem('productDetail'));
 console.log("Product_Detail id", id.value);
-const  handleProductDetailData = async () => {
-   const res = await getProductDetail(id.value)
-   console.log("getLandingPageData", res.data.data.home_slider);
+const handleProductDetailData = async () => {
+  const res = await getProductDetail(id.value)
+  console.log("getLandingPageData", res.data.data.home_slider);
   if (res.status === 200 && res.data.success) {
     productData.value = res.data.data.product_data[0];
-    // productTypes.value = res.data.data.product_types;
+    productTypes.value = res.data.data?.product_types;
     //  landingPageData.value = res.data.data.home_slider
   }
 }
 
 onMounted(() => {
-   handleProductDetailData()
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+  handleProductDetailData()
 })
 
 const handleStoreClick = () => {
@@ -396,6 +478,40 @@ const toggleVisibility = () => {
   else arrowScroll.value = 0
 }
 
+const handleProductNav = (nav) => {
+  sessionStorage.setItem('productDetail', nav.id);
+  router.push({ name: 'productDetail', params: { slug: nav.slug } });
+}
+
+const startAutoSwipe = () => {
+  setInterval(() => {
+    navColor.value=productData.value?.gallery_urls[currentIndex.value]?.navColor || '';
+    atBottom.value= !atBottom.value ;
+    next()
+  }, 5000)
+}
+
+const changeSlide = (index) => {
+  currentIndex.value = index
+  console.log(productData.value?.gallery_urls[currentIndex.value]?.navColor);
+}
+
+const previous = () => {
+  navColor.value=productData.value?.gallery_urls[currentIndex.value].navColor;
+  currentIndex.value = (currentIndex.value - 1 + productData.value?.gallery_urls.length) % productData.value?.gallery_urls.length
+}
+
+const next = () => {
+  console.log("productData.value?.gallery_urls",productData.value?.gallery_urls.length);
+  if (productData.value?.gallery_urls.length === 0) {
+        console.error("Slider images array is empty");
+        return;
+    }
+  navColor.value=productData.value?.gallery_urls[currentIndex.value].navColor;
+  currentIndex.value = (currentIndex.value + 1) % productData.value?.gallery_urls.length
+}
+
+onMounted(startAutoSwipe)
 
 </script>
 

@@ -260,6 +260,10 @@ const handleProductDetailNavigation = (product) => {
   router.push({ name: 'productDetail', params: { slug: product.slug } });
 }
 onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
   handleProductTypeData();
 });
 const products = [

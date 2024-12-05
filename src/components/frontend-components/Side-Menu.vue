@@ -164,7 +164,6 @@ import MenuSvg from "./Svg/Menu-Svg.vue";
 import FormDropdown from "./Form-components/Form-Dropdown.vue";
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import 'vue3-perfect-scrollbar/style.css';
-console.log("hlo");
 
 const {
   handleSideMenu,

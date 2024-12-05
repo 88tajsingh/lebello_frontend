@@ -88,7 +88,7 @@
       <div class="mx-5 md:mx-20 relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-0">
         <!-- Loop through products -->
         <div v-for="(slide, index) in contractDesignData" :key="index" class=" ">
-          <div @click.prevent="handleClick(slide)" class="prod_content overflow-hidden">
+          <div @click.prevent="handleClick(slide)" class="prod_content h-full overflow-hidden">
             <div @click="handleRoute(slide)" class="product_img holder relative w-full h-full object-cover max-h-[190px] "
             :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
             @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">

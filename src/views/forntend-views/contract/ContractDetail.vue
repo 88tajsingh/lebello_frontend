@@ -195,8 +195,8 @@
 
           </div>
         </div>
-        <p class="text-[14px] font-graphik text-[#666666] pb-6 mb-6 border-b">
-          {{ contractDesignData?.description }}
+        <!-- {{ contractDesignData?.description }} -->
+        <p v-html="contractDesignData?.description" class="text-[14px] font-graphik text-[#666666] pb-6 mb-6 border-b">
         </p>
         <div class="grid  grid-cols-1 md:grid-cols-3 gap-4 md:gap-0 text-[20px] text-green font-graphikLight">
           <div>
@@ -472,6 +472,10 @@ const handleClick = (sub) => {
 };
 
 onMounted(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
   handleContractDesignData();
 });
 
