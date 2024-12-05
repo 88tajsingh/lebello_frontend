@@ -18,7 +18,7 @@
           </div>
 
           <div class="text-black">
-            <div v-for="(item, key) in contractDesignSidebar" :key="key" class="border-0 rounded-lg">
+            <div v-for="(item, key) in contractLocationSidebar" :key="key" class="border-0 rounded-lg">
               <h2 :id="'heading' + key" class="mb-0">
                 <button @click="toggleAccordion(key)" :aria-expanded="activeIndex === key"
                   :aria-controls="'collapse' + key"
@@ -76,7 +76,7 @@
         <div class="">
           <ul class="flex">
             <li class="font-graphik text-[15px] hover:text-blue text-green">
-              <a href="/contract_designs">Contract Design</a><span class="ml-3 mr-1">/</span>
+              <a href="/contract_location">Contract Location</a><span class="ml-3 mr-1">/</span>
             </li>
             <li class="hover:text-blue font-graphik text-[15px]">
               <a class="overview-jumper_s" >{{ headerText }}</a>
@@ -87,7 +87,7 @@
       <!-- images -->
       <div class="mx-5 md:mx-20 relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-0">
         <!-- Loop through products -->
-        <div v-for="(slide, index) in contractDesignData" :key="index" class=" ">
+        <div v-for="(slide, index) in contractLocationData" :key="index" class=" ">
           <div @click.prevent="handleClick(slide)" class="prod_content overflow-hidden">
             <div class="product_img holder relative" :class="{
               'transition-transform  duration-9000 ease-in-out transform scale-125':
@@ -151,18 +151,19 @@ import { watch } from "less";
   };
   onClickOutside(closeMenu, closeSideMenu);
 
-  const contractDesignSidebar = ref([]);
-  const contractDesignData = ref([]);
-  const handleContractDesignData = async (id) => {
+  const contractLocationSidebar = ref([]);
+  const contractLocationData = ref([]);
+  const handleContractLocationData = async (id) => {
 
   const { status, data } = await getContractLocation(id);
   if (status === 200 && data.success) {
-    contractDesignSidebar.value = data.data.contract_design_sidebar;
-    contractDesignData.value = data.data.contract_desing;
+    console.log("data", data);
+    contractLocationSidebar.value = data.data.contract_design_sidebar;
+    contractLocationData.value = data.data.contract_desing;
     headerText.value= route?.params?.slug
   } else {
     console.log("error");
-    contractDesignData.value = [];
+    contractLocationData.value = [];
   }
 };
   onMounted(() => {
@@ -170,7 +171,7 @@ import { watch } from "less";
     top: 0,
     behavior: 'smooth',
   });
-  handleContractDesignData(id);
+  handleContractLocationData(id);
 });
 const handleSideMenu = () => {
   isOpen.value = !isOpen.value;
@@ -198,8 +199,8 @@ const handleSideMenu = () => {
       element.value
     );
   
-    contractDesignData.value = [];
-    isHovered.value = new Array(contractDesignData.value.length).fill(false);
+    contractLocationData.value = [];
+    isHovered.value = new Array(contractLocationData.value.length).fill(false);
   });
 
   // Navigation Handling
@@ -221,7 +222,7 @@ const handleSideMenu = () => {
   } else if (sub.title) {
     route = { name: 'contractDesign', params: { slug: sub.slug } };
   } else {
-    handleContractDesignData( sub.id)
+    handleContractLocationData( sub.id)
     route = { name: 'ContractLocation', params: { slug: sub.slug } };
   }
 
@@ -237,7 +238,7 @@ const handleSideMenu = () => {
     
   const contractTypeId = sessionStorage.getItem('contract_type_id');
   if (contractTypeId) {
-    handleContractDesignData(contractTypeId);
+    handleContractLocationData(contractTypeId);
   }
 });
 

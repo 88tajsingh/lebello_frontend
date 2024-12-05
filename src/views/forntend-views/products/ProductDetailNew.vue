@@ -25,7 +25,7 @@
     <!-- Main Content -->
     <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:flex lg:justify-between lg:px-10">
   <!-- Product Viewer (Image Section) -->
-  <div class="relative aspect-square bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
+  <div class="relative  max-h-[430px] mb-5 aspect-square bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
     <Images3DView/>
 
     <!-- Controls -->
