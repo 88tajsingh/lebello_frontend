@@ -196,7 +196,7 @@
                             </div>
                         </Accordion>
                     </div>
-                    
+
                     <div class="mt-3">
                         <Accordion :open="true" header="Material Swatches">
                             <div class="bg-white border-2   px-4">
@@ -210,55 +210,59 @@
                                         <div class="w-1/2 px-1">MATERIALS</div>
                                     </div>
                                     <div class="flex h-[200px] overflow-y-auto">
-    <!-- Left Panel -->
-    <div class="w-1/2 border-r">
-        <ul>
-            <li v-for="item in materialSwatchesList" :key="item.id"
-                class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
-                :class="{ 'bg-gray opacity-80': isSelected(item) }"
-                @click="toggleSwatchSelection(item)">
-                <span class="text-[#2272B1]">{{ item.title }}</span>
-                <span class="text-[10px] text-Black666">SWATCHES</span>
-            </li>
-        </ul>
-    </div>
+                                        <!-- Left Panel -->
+                                        <div class="w-1/2 border-r">
+                                            <ul>
+                                                <li v-for="item in materialSwatchesList" :key="item.id"
+                                                    class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
+                                                    :class="{ 'bg-gray opacity-80': isSelected(item) }"
+                                                    @click="toggleSwatchSelection(item)">
+                                                    <span class="text-[#2272B1]">{{ item.title }}</span>
+                                                    <span class="text-[10px] text-Black666">SWATCHES</span>
+                                                </li>
+                                            </ul>
+                                        </div>
 
-    <!-- Right Panel -->
-    <div class="w-1/2 pl-4">
-        <div v-if="selectedSwatchesData.length">
-            <div v-for="swatch in selectedSwatchesData" :key="swatch.swatch" class="mb-4">
-                <!-- Swatch Title -->
-                <div class="flex justify-between">
-                    <h4 class="text-[#2272B1]">
-                        {{
-                            materialSwatchesList && materialSwatchesList.find(item => item.id === swatch.swatch)?.title
-                        }}
-                    </h4>
-                    <span class="text-[12px]">SWATCHES</span>
-                </div>
-                <!-- Materials for the Swatch -->
-                <ul>
-                    <li v-for="material in materialSwatchesList.find(s => s.id === swatch.swatch)?.materials_data || []"
-                        :key="material.id" class="flex items-center mb-2">
-                        <div class="flex w-full justify-between">
-                            <span>
-                                <input type="checkbox"
-                                    :id="'material-' + material.id" class="mr-2"
-                                    @change="handleCheckboxChange(material.id, swatch.swatch, $event)" />
-                                <label :for="'material-' + material.id"
-                                    class="text-[#2272B1]">{{ material.name }}</label>
-                            </span>
-                            <span class="text-[10px]">MATERIAL</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div v-else>
-            <p class="text-gray-500">No swatches selected</p>
-        </div>
-    </div>
-</div>
+                                        <!-- Right Panel -->
+                                        <div class="w-1/2 pl-4">
+                                            <div v-if="selectedSwatchesData.length">
+                                                <div v-for="swatch in selectedSwatchesData" :key="swatch.swatch"
+                                                    class="mb-4">
+                                                    <!-- Swatch Title -->
+                                                    <div class="flex justify-between">
+                                                        <h4 class="text-[#2272B1]">
+                                                            {{
+                                                                materialSwatchesList && materialSwatchesList.find(item =>
+                                                                    item.id
+                                                                    === swatch.swatch)?.title
+                                                            }}
+                                                        </h4>
+                                                        <span class="text-[12px]">SWATCHES</span>
+                                                    </div>
+                                                    <!-- Materials for the Swatch -->
+                                                    <ul>
+                                                        <li v-for="material in materialSwatchesList.find(s => s.id === swatch.swatch)?.materials_data || []"
+                                                            :key="material.id" class="flex items-center mb-2">
+                                                            <div class="flex w-full justify-between">
+                                                                <span>
+                                                                    <input type="checkbox"
+                                                                        :id="'material-' + material.id" class="mr-2"
+                                                                        @change="handleCheckboxChange(material.id, swatch.swatch, $event)" />
+                                                                    <label :for="'material-' + material.id"
+                                                                        class="text-[#2272B1]">{{ material.name
+                                                                        }}</label>
+                                                                </span>
+                                                                <span class="text-[10px]">MATERIAL</span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div v-else>
+                                                <p class="text-gray-500">No swatches selected</p>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -427,9 +431,9 @@
                             </div>
                         </Accordion>
                     </div>
-                    <Select :options="trueFalse" title="Add in Store product" showfield="name" class="w-full" valueField="value"
-                                        label="Select " v-model="form.is_store_product" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="value => checkedFields.is_store_product = value" />
+                    <Select :options="trueFalse" title="Add in Store product" showfield="name" class="w-full"
+                        valueField="value" label="Select " v-model="form.is_store_product" :hasCheckBox="checkBoxFlag"
+                        @update:checkValue="value => checkedFields.is_store_product = value" />
 
                 </div>
                 <!-- right panel -->
@@ -438,8 +442,9 @@
                         <div class="px-1 py-3">
                             <div class="px-4">
                                 <div class="flex flex-col ">
-                                    <Select :options="statusData" title="Status" showfield="name" class="w-full" valueField="value"
-                                        label="Select Status" v-model="form.status" :hasCheckBox="checkBoxFlag"
+                                    <Select :options="statusData" title="Status" showfield="name" class="w-full"
+                                        valueField="value" label="Select Status" v-model="form.status"
+                                        :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.status = value" />
                                 </div>
                             </div>
@@ -644,80 +649,281 @@
                     </div> -->
                 </div>
             </div>
+            <div v-if='form.is_store_product'>
+                <div class="grid grid-cols-12 gap-4 mt-5 ">
+                    <div class="col-span-8">
+                        <div class="mt-3 ">
+                            <Accordion :open="true" header="Store Options">
+                                <div class="px-6">
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full"
+                                            label="Product Sub Title" placeholder="" v-model="form.product_sub_title"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.product_sub_title = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full"
+                                            label="Description Title" placeholder="" v-model="form.product_description"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.product_description = value }" />
+                                    </div>
+                                    <div class="mt-5  ">
+                                        <singleCheckBox id="FeaturedOption" label="Has Predefind Values"
+                                            v-model:modelValue="form.product_predefined_values">
+                                        </singleCheckBox>
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Quick Ship"
+                                            placeholder="" v-model="form.product_quick_ship" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.product_quick_ship = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full"
+                                            label="Custom (Custom Order)" placeholder=""
+                                            v-model="form.product_custom_order" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.product_custom_order = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Title"
+                                            placeholder="" v-model="form.product_title" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.product_title = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Sub Title"
+                                            placeholder="" v-model="form.sub_title" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.sub_title = value }" />
+                                    </div>
+                                    <div class="mt-5  ">
+                                        <singleCheckBox id="FeaturedOption" label="Featured"
+                                            v-model:modelValue="form.featured">
+                                        </singleCheckBox>
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Featured Title"
+                                            placeholder="" v-model="form.featured_title" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.featured_title = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full"
+                                            label="Featured Sub Title" placeholder="" v-model="form.featured_sub_title"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.featured_sub_title = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product SKU
+                                    " placeholder="" v-model="form.product_sku" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.product_sku = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full"
+                                            label="Advertise Price" placeholder="" v-model="form.advertise_price"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.advertise_price = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Shipping Price
+                                    " placeholder="" v-model="form.shipping_price" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.shipping_price = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Shipping Title
+                                    " placeholder="" v-model="form.shipping_title" :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.shipping_title = value }" />
+                                    </div>
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 w-full" label="Shipping Description"
+                                            :isTextarea="true" :rows="3" v-model="form.shipping_description"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.shipping_description = value }" />
+                                    </div>
+                                    <div class="border border-stroke rounded-lg px-4 mt-4 mr-2">
+                                        <div class="mt-4"> <span>Product Option </span> </div>
+                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_option">
+                                        </SingleCheck>
+                                        <div v-for="(item, index) in form.product_option" :key="index">
+                                            <hr class=" text-rose-400" />
+                                            <div class="mt-2">
+                                                <TextInput type="text" class="block mr-2 w-full" label="Sku Number"
+                                                    v-model="item.sku_number" />
+                                            </div>
 
+                                            <div class="mt-2">
+                                                <TextInput type="text" class="block mr-2 w-full" label="Shipping Price"
+                                                    v-model="item.shipping_price" />
+                                            </div>
+                                            <div class="mt-2">
+                                                <TextInput type="text" class="block mr-2 w-full" label="Name"
+                                                    v-model="item.name" />
+                                            </div>
+                                            <div class="mt-2">
+                                                <TextInput type="text" class="block mr-2 w-full" label="Sub Title"
+                                                    v-model="item.sub_title" />
+                                            </div>
+                                            <div class="mt-2">
+                                                <TextInput type="text" class="block mr-2 w-full" label="Price"
+                                                    v-model="item.price" />
+                                            </div>
+                                            <div>
+                                                <InputLabel for=" Option_type" value=" Option type" />
+                                                <Select :options="productOptionsType" showfield="name" class="w-full"
+                                                    valueField="value" label="Select an option"
+                                                    v-model="item.option_type" />
+                                            </div>
+
+                                            <div v-if="item.option_type == 'material'"
+                                                class='mt-3 border border-stroke p-4 rounded-lg'>
+                                                <InputLabel for=" Material_Option" value=" Material Option" />
+                                                <Checkbox :nexted=true :checkedData='item.project_categories'
+                                                    :dropdown="true" valueField="id" showField="name"
+                                                    :data="MaterialTreeListData"
+                                                    @checked-items="(checked) => item.option_type_data = checked" />
+                                            </div>
+                                            <div v-else-if="item.option_type == 'custome'"
+                                                class='mt-3 border border-stroke p-4 rounded-lg'>
+                                                <TextInput type="text" class="block mr-2 w-full" label="New Custom"
+                                                    :isTextarea="true" :rows="3" v-model="item.option_type_data" />
+                                            </div>
+                                            <div v-else-if="item.option_type == 'custome with price'"
+                                                class='mt-3 border border-stroke p-4 rounded-lg'>
+                                                <TextInput type="text" class="block mr-2 w-full"
+                                                    label="Custome With Price" :isTextarea="true" :rows="3"
+                                                    v-model="item.option_type_data" />
+                                            </div>
+                                            <div v-else-if="item.option_type == 'cushion'"
+                                                class='mt-3 border border-stroke p-4 rounded-lg'>
+                                                <TextInput type="text" class="block mr-2 w-full" label="New Cushion"
+                                                    :isTextarea="true" :rows="3" v-model="item.option_type_data" />
+                                            </div>
+
+
+                                            <div class="mt-5  ">
+                                                <singleCheckBox id="checked"
+                                                    label="If checked, this variation will be exported while exporting products."
+                                                    v-model:modelValue="item.export_field"></singleCheckBox>
+                                            </div>
+                                            <button @click="removeFormItem(index)" type="button"
+                                                class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-danger  font-medium text-gray hover:bg-opacity-90">
+                                                Remove
+                                            </button>
+
+                                            <!-- <hr v-if="index <div formItems.length - 1" class="my-4" /> -->
+
+                                        </div>
+
+                                        <button @click="addFormItem" type="button"
+                                            class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </Accordion>
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="mt-3 ">
+                            <Accordion :open="true" header="Tags">
+                                <div class="mt-2 px-6 flex h-auto ">
+                                    <Checkbox :nexted=true :checkedData='form.tags' :dropdown="true" valueField="id"
+                                        showField="name" :data="tagsData"
+                                        @checked-items="(checked) => form.tags = checked" />
+                                </div>
+                            </Accordion>
+                            </div>
+                            <div class="mt-3 ">
+                            <Accordion :open="true" header="Store Categories">
+                                <div class="mt-2 px-6 flex h-auto ">
+                                    <Checkbox :nexted=true :checkedData='form.store_categories' :dropdown="true"
+                                        valueField="id" showField="name" :data="storeCategoryTree"
+                                        @checked-items="(checked) => form.store_categories = checked" />
+                                </div>
+                            </Accordion>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
     </DefaultCard>
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.featured_image.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images" :singleFile="true"
-            :closeModal="() => { imageData.featured_image.isOpen = false }" :selectedFiles="handleFeatureFiles" />
-    </popupModal>
 
-    <!-- Gallery Image Modal -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.gallery.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.gallery.images" :singleFile="false"
-            :closeModal="() => { imageData.gallery.isOpen = false }" :selectedFiles="handlegalleryFiles" />
-    </popupModal>
 
-    <!-- Contract Logo Modal -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.contract_logo.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.contract_logo.images" :singleFile="true"
-            :closeModal="() => { imageData.contract_logo.isOpen = false }" :selectedFiles="handleContractLogoFiles" />
-    </popupModal>
-    <!--  new_product_additional_bg_image Modal -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.new_product_additional_bg_image.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_additional_bg_image.images"
-            :singleFile="true" :closeModal="() => { imageData.new_product_additional_bg_image.isOpen = false }"
-            :selectedFiles="handleAdditionalBgImageFiles" />
-    </popupModal>
-    <!--  handle Additional  Righ tBox Image Files Modal -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.new_product_additional_right_box_image.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true"
-            :selected="imageData.new_product_additional_right_box_image.images" :singleFile="true"
-            :closeModal="() => { imageData.new_product_additional_right_box_image.isOpen = false }"
-            :selectedFiles="handleAdditionalRightBoxImageFiles" />
-    </popupModal>
+    <!-- gallery popup -->
+    <div>
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.featured_image.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images"
+                :singleFile="true" :closeModal="() => { imageData.featured_image.isOpen = false }"
+                :selectedFiles="handleFeatureFiles" />
+        </popupModal>
 
-    <!--  Download able  Modal -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.downloadable_files.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.downloadable_files.images"
-            :singleFile="false" :closeModal="() => { imageData.downloadable_files.isOpen = false }"
-            :selectedFiles="handleDownloadablemageFiles" />
-    </popupModal>
+        <!-- Gallery Image Modal -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.gallery.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.gallery.images" :singleFile="false"
+                :closeModal="() => { imageData.gallery.isOpen = false }" :selectedFiles="handlegalleryFiles" />
+        </popupModal>
 
-    <!--  handle Additional  Righ tBox Image Files Modal -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]" v-model:isOpen="imageData.image.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.image.images" :singleFile="true"
-            :closeModal="() => { imageData.image.isOpen = false }" :selectedFiles="handleImageFiles" />
-    </popupModal>
+        <!-- Contract Logo Modal -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.contract_logo.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.contract_logo.images"
+                :singleFile="true" :closeModal="() => { imageData.contract_logo.isOpen = false }"
+                :selectedFiles="handleContractLogoFiles" />
+        </popupModal>
+        <!--  new_product_additional_bg_image Modal -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.new_product_additional_bg_image.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true"
+                :selected="imageData.new_product_additional_bg_image.images" :singleFile="true"
+                :closeModal="() => { imageData.new_product_additional_bg_image.isOpen = false }"
+                :selectedFiles="handleAdditionalBgImageFiles" />
+        </popupModal>
+        <!--  handle Additional  Righ tBox Image Files Modal -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.new_product_additional_right_box_image.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true"
+                :selected="imageData.new_product_additional_right_box_image.images" :singleFile="true"
+                :closeModal="() => { imageData.new_product_additional_right_box_image.isOpen = false }"
+                :selectedFiles="handleAdditionalRightBoxImageFiles" />
+        </popupModal>
 
-    <!-- ProductSlider Image Modal -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.new_product_slider.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
-            :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
-            :selectedFiles="handleProductSliderFiles" />
-    </popupModal>
-    <!-- Products Slider Heading Video Source  -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.video_source.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.video_source.images" :singleFile="true"
-            :closeModal="() => { imageData.video_source.isOpen = false }" :selectedFiles="handleVideoSource" />
-    </popupModal>
+        <!--  Download able  Modal -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.downloadable_files.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.downloadable_files.images"
+                :singleFile="false" :closeModal="() => { imageData.downloadable_files.isOpen = false }"
+                :selectedFiles="handleDownloadablemageFiles" />
+        </popupModal>
 
-    <!-- Products Slider Heading Slider -->
-    <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-        v-model:isOpen="imageData.new_product_slider.isOpen">
-        <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
-            :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
-            :selectedFiles="handleProductSliderFiles" />
-    </popupModal>
-    <Loader :isLoading="loading" :fullPage="true" />
+        <!--  handle Additional  Righ tBox Image Files Modal -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.image.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.image.images" :singleFile="true"
+                :closeModal="() => { imageData.image.isOpen = false }" :selectedFiles="handleImageFiles" />
+        </popupModal>
+
+        <!-- ProductSlider Image Modal -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.new_product_slider.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
+                :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
+                :selectedFiles="handleProductSliderFiles" />
+        </popupModal>
+        <!-- Products Slider Heading Video Source  -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.video_source.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.video_source.images"
+                :singleFile="true" :closeModal="() => { imageData.video_source.isOpen = false }"
+                :selectedFiles="handleVideoSource" />
+        </popupModal>
+
+        <!-- Products Slider Heading Slider -->
+        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
+            v-model:isOpen="imageData.new_product_slider.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
+                :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
+                :selectedFiles="handleProductSliderFiles" />
+        </popupModal>
+        <Loader :isLoading="loading" :fullPage="true" />
+    </div>
 </template>
 
 <script setup>
@@ -728,8 +934,8 @@ import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
-import { statusData, trueFalse,withBgWithoutBg,capsNOCaps, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
+import { MaterialTreeList, getStoreCategoryTree, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
+import { statusData, trueFalse, productOptionsType, withBgWithoutBg, capsNOCaps, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
@@ -742,7 +948,9 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { simple_field: 0,is_store_product:0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+const tagsData = ref([]);
+const storeCategoryTree = ref([]);
+const form = ref(store.getters.editData || { simple_field: 0, product_option: [], is_store_product: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
@@ -755,7 +963,19 @@ const logo_right_nav = ref('default')
 const iswithBg = ref(0)
 const iswithBgHeading = ref(0)
 const checkBoxFlag = ref(Boolean(form.value.id))
-
+const formItems = ref(
+    {
+        sku_number: '',
+        shipping_price: '',
+        name: '',
+        sub_title: '',
+        price: '',
+        option_type: 'material',
+        material: '',
+        project_categories: [],
+        export_field: false
+    }
+);
 
 // Image data for various categories
 const imageData = ref({
@@ -834,7 +1054,7 @@ const toggleSwatchSelection = (item) => {
     if (!Array.isArray(selectedSwatchesData.value)) {
         console.error("selectedSwatchesData is not an array", selectedSwatchesData.value);
         selectedSwatchesData.value = []; // Reset to an empty array if not
-    }   
+    }
 
     // Check if the swatch is already selected
     const existingSwatch = selectedSwatchesData.value.find(swatch => swatch.swatch === item.id);
@@ -854,31 +1074,24 @@ const toggleSwatchSelection = (item) => {
     }
 };
 
-// Function to check if a swatch is selected
 const isSelected = (item) => selectedSwatchIds.value.includes(item.id);
 
-// Function to handle material checkbox changes
 const handleCheckboxChange = (materialId, swatchId, event) => {
     const { checked } = event.target;
-
-    // Find the swatch object by swatchId
-    const swatch = selectedSwatchesData.value.find(s => s.swatch === swatchId); // Changed key name here
+    const swatch = selectedSwatchesData.value.find(s => s.swatch === swatchId);
 
     if (swatch) {
         if (checked) {
-            // Add material ID to the swatch's materials list if not already present
             if (!swatch.materials.includes(materialId)) {
                 swatch.materials.push(materialId);
             }
         } else {
-            // Remove material ID from the swatch's materials list
             swatch.materials = swatch.materials.filter(id => id !== materialId);
         }
     } else {
-        // If the swatch is not already in the selected data, create a new entry
         selectedSwatchesData.value.push({
-            swatch: swatchId, // Changed key name here
-            materials: checked ? [materialId] : [] // Add the material only if checked
+            swatch: swatchId,
+            materials: checked ? [materialId] : []
         });
         selectedSwatchIds.value.push(swatchId);
     }
@@ -916,6 +1129,14 @@ function banner_slide_remove(index) {
     form.value.banner_slide.splice(index, 1)
 }
 
+function addFormItem() {
+    form.value.product_option.push(formItems.value);
+}
+function removeFormItem(index) {
+    form.value.product_option.splice(index, 1);
+}
+
+
 // Handle form submission (add or edit contract)
 const handleSubmit = async () => {
     if (!validateForm()) return;
@@ -924,7 +1145,7 @@ const handleSubmit = async () => {
     loading.value = true;
 
     // form.value.material_swatches = []
-    form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length >0)||[];
+    form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length > 0) || [];
 
     const { domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
         downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
@@ -1002,14 +1223,25 @@ const fetchAllData = async (payload) => {
             categoryTypeTree,
             typeTree,
             swatchesRes,
-            materialTreeListData
+            materialTreeListData,
+            tagsRes,
+            storeCategoryTreeRes
         ] = await Promise.all([
             getProductContractTree(payload),
             getProductSeriesTree(payload),
             getProductCategoryTypeTree(payload),
             getProductTypeTree(payload),
             CommonServices.getSwatchesMaterialList(payload),
-            MaterialTreeList(payload)  // Add MaterialTreeList to the Promise.all
+            MaterialTreeList(payload),
+            CommonServices.getTags(payload)
+                .then(res => {
+                    if (res.status === 200 && res.data.success) {
+                        return res.data.data;
+                    }
+                    throw new Error('Failed to fetch Tags');
+                }),
+            getStoreCategoryTree(payload)
+                .then(data => data)
         ]);
 
         // Assign the fetched data
@@ -1018,17 +1250,17 @@ const fetchAllData = async (payload) => {
         productCategoryTypeTree.value = categoryTypeTree;
         productTypeTree.value = typeTree;
 
-        // Handle the swatches response
         if (swatchesRes.status === 200 && swatchesRes.data.success) {
             materialSwatchesList.value = swatchesRes.data.data;
         }
-
-        // Assign MaterialTreeList data
         MaterialTreeListData.value = materialTreeListData;
+        tagsData.value = tagsRes;
+        storeCategoryTree.value = storeCategoryTreeRes;
 
     } catch (e) {
         console.error('Error while fetching data:', e);
     }
+
 };
 
 

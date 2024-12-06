@@ -12,17 +12,10 @@
                     <!-- Navigation Buttons -->
 
                     <button @click="previous" class="absolute left-10 top-1/2 z-30 cursor-pointer">
-                        
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
-                            :stroke="navColor === 'white' ? '#ffffff' : '#000000'" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
+                        <ArrowSvg size="20px" direction="right" :strokeWidth="17" :fillColor="navColor === 'white' ? '#ffffff' : '#000000'"  />
                     </button>
                     <button @click="next" class="absolute right-10 top-1/2 z-30 cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
-                            :stroke="navColor === 'white' ? '#ffffff' : '#000000'" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ArrowSvg size="20px" direction="left" :strokeWidth="17" :fillColor="navColor === 'white' ? '#ffffff' : '#000000'"  />
                     </button>
                 </div>
             </div>
@@ -59,7 +52,7 @@
             </div>
         </div>
 
-        <div class="absolute top-48 right-0 pr-3">
+        <div class="absolute top-48 right-0 ">
             <SideMenu>
                 <slot name="sidebar"></slot>
             </SideMenu>
@@ -70,6 +63,7 @@
 <script setup>
 import { ref, onMounted, watch, defineProps } from 'vue';
 import SideMenu from './Side-Menu.vue';
+import ArrowSvg from './Svg/Arrow-Svg.vue';
 
 const currentIndex = ref(0);
 const atBottom = ref(false);
