@@ -7,9 +7,9 @@
     </div>
     <!-- Menu Icon -->
     <div  class="absolute top-52 right-0 z-[9999]">
-      <SideMenu  
+      <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height=""
       svgColor="#f9f9f9" 
-      menuClass="p-2 bg-[#9ce163]">
+      menuClass="p-2 bg-[#9ce163]" >
         <div class="flex border border-gray-400 items-center">
           <div class="sticky top-3 p-4 border-r border-gray-400">
             <MenuSvg size="15px" fillColor="black" />
@@ -27,13 +27,13 @@
                 class="group relative flex w-full items-center hover:text-orange border-0 px-5 py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
                 :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === key }" type="button">
                 {{ key }}
-                <span class="absolute right-0 h-5 w-5 transition-transform duration-200 ease-in-out"
-                  :class="{ 'rotate-0': activeIndex !== key, 'rotate-180': activeIndex === key }">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
-                </span>
+                <span class="-me-1 ms-auto h-5 w-5 transition-transform duration-200 ease-in-out"
+                    :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
+                      stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </span>
               </button>
             </h2>
             <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0">
@@ -83,6 +83,7 @@
                :alt="slide.alt" />
           <!-- Text Overlay -->
           <div class="absolute bottom-20 left-14">
+            {{slide}}
             <div class="font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
               {{ camelCase(slide?.heading_case, slide?.title) }}
             </div>
@@ -172,6 +173,7 @@ import "aos/dist/aos.css";
 import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 import { getContractDesignData } from "@/helper/frontendHelpers";
 import { useStore } from "vuex";
+import ArrowSvg from "@/components/frontend-components/Svg/Arrow-Svg.vue";
 import Slider from "@/components/frontend-components/Slider.vue";
 
 // Setup router and store

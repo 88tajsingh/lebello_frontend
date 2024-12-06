@@ -322,13 +322,13 @@ const menuGroups = ref([
                 "label": "Store",
                 "route": "",
                 "children": [
-                    {
-                        "id": 41,
-                        "parent_module": 40,
-                        "icon": null,
-                        "label": "Store Product",
-                        "route": "/store-product"
-                    },
+                    // {
+                    //     "id": 41,
+                    //     "parent_module": 40,
+                    //     "icon": null,
+                    //     "label": "Store Product",
+                    //     "route": "/store-product"
+                    // },
                     {
                         "id": 42,
                         "parent_module": 40,

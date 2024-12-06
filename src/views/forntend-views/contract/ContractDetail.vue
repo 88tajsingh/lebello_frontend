@@ -268,8 +268,7 @@
 
       </div>
       <div v-else ref="closeMenu" class="absolute border mt-24 right-0 ">
-        <SideMenu :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebar" svgColor="#f9f9f9"
-          menuClass="p-2 bg-[#9ce163]">
+        <SideMenu svgColor="#f9f9f9" menuClass="p-2 bg-[#9ce163]" openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height="" >
           <div class="flex border border-gray-400 items-center">
             <div class="sticky top-3 p-4 border-r border-gray-400">
               <MenuSvg size="15px" fillColor="black" />

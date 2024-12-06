@@ -98,63 +98,63 @@
                                 <div>
                                     <div class="  mt-2 items-center text-gray-600 text-sm">
                                         <TextInput id="Product Title" type="text" class="block w-[180px] mr-2 h-[33px]"
-                                            v-model="form.slider_product_title" placeholder="" label="Product Title"
+                                            v-model="form.heading_title" placeholder="" label="Product Title"
                                             :hasCheckBox="checkBoxFlag"
-                                            @update:checkValue="(value) => { checkedFields.slider_product_title = value }" />
+                                            @update:checkValue="(value) => { checkedFields.heading_title = value }" />
                                     </div>
-                                    <div class="  mt-2 items-center text-gray-600 text-sm">
+                                    <!-- <div class="  mt-2 items-center text-gray-600 text-sm">
                                         <TextInput id="Button Text" type="text" class="block w-[180px] mr-2 h-[33px]"
                                             v-model="form.slider_button_text" placeholder="" label="Button Text"
                                             :hasCheckBox="checkBoxFlag"
                                             @update:checkValue="(value) => { checkedFields.slider_button_text = value }" />
-                                    </div>
-                                    <div class="  mt-2 items-center text-gray-600 text-sm">
+                                    </div> -->
+                                    <!-- <div class="  mt-2 items-center text-gray-600 text-sm">
                                         <TextInput id="Button Link" type="text" class="block w-[180px] mr-2 h-[33px]"
                                             v-model="form.slider_button_link" placeholder=""
                                             label="Product Link / Button Link" :hasCheckBox="checkBoxFlag"
                                             @update:checkValue="(value) => { checkedFields.slider_button_link = value }" />
-                                    </div>
+                                    </div> -->
                                     <div class="py-4">
                                         <RadioButton v-for="option in withBgWithoutBg" :key="option.value"
                                             name="Visibility" :value="option.value" :label="option.label"
                                             :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
                                     <div v-if="iswithBg" class="">
-                                        <ColorInput label="Select BG Color" v-model="form.slider_heading_bg"
+                                        <ColorInput label="Select BG Color" v-model="form.heading_background"
                                             :hasCheckBox="checkBoxFlag"
-                                            @update:checkValue="(value) => { checkedFields.slider_heading_bg = value }" />
+                                            @update:checkValue="(value) => { checkedFields.heading_background = value }" />
                                     </div>
 
                                 </div>
                                 <div class="">
-                                    <ColorInput label="Text Color" v-model="form.slider_text_color"
+                                    <ColorInput label="Text Color" v-model="form.heading_text_color"
                                         :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="(value) => { checkedFields.slider_text_color = value }" />
+                                        @update:checkValue="(value) => { checkedFields.heading_text_color = value }" />
                                 </div>
 
-                                <TextInput type="slider_font_size" class="block mr-2 mb-2 h-[40px] " placeholder=""
-                                    label="Heading Font Size" v-model="form.slider_font_size"
+                                <TextInput type="heading_font_size" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                    label="Heading Font Size" v-model="form.heading_font_size"
                                     :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="(value) => { checkedFields.slider_font_size = value }" />
+                                    @update:checkValue="(value) => { checkedFields.heading_font_size = value }" />
 
                                 <div class="">
                                     <InputLabel for="HeadingCase" value="Heading Case" />
                                     <div class="flex">
 
                                         <SingleCheck v-if="form.id" label=""
-                                            v-model="checkedFields.slider_heading_case">
+                                            v-model="checkedFields.heading_case">
                                         </SingleCheck>
                                         <div>
                                             <RadioButton v-for="option in capsNOCaps" :key="option.value"
                                                 name="Visibility" :value="option.value" :label="option.label"
-                                                :modelValue="form.slider_heading_case"
-                                                @update:modelValue="form.slider_heading_case = $event" />
+                                                :modelValue="form.heading_case"
+                                                @update:modelValue="form.heading_case = $event" />
                                         </div>
                                     </div>
                                 </div>
                                 <TextInput type="text" class="block  mb-2 h-[40px] " placeholder=""
-                                    label="Transparent %" v-model="form.slider_transparent" :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="(value) => { checkedFields.slider_transparent = value }" />
+                                    label="Transparent %" v-model="form.heading_transparent_percentage" :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="(value) => { checkedFields.heading_transparent_percentage = value }" />
                                 <div class="mt-2  flex h-auto">
                                     <Select :options="sliderMenu" showfield="name" class="w-full" :defaultZero='true'
                                         valueField="value" label="Select Menu Color" v-model="form.slider_menu_color"
@@ -220,7 +220,7 @@ const store = useStore();
 const errors = ref({});
 const iswithBg = ref();
 const loading = ref(false);
-const form = ref(store.getters.editData || { status: 1, slider_menu_color: '', visibility: '', slider_menu_color: 0 });
+const form = ref(store.getters.editData || { status: 1, slider_menu_color: '',heading_text_color:'#000000', visibility: '', slider_menu_color: 0 });
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))
 
@@ -342,6 +342,7 @@ onMounted(() => {
         imageData.value.featured_image.mediaName = featured_image_data?.file_url || 'Featured Image';
         imageData.value.slider_video_source.images = [slider_video_source_url];
         imageData.value.slider_video_source.mediaName = slider_video_source_url?.file_url || 'Slider Video Source';
+        iswithBg.value = form.value?.heading_background ? 1 : 0
     }
 });
 

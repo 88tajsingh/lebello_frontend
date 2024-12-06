@@ -9,7 +9,6 @@
                 label=""
                 v-model="checked"
             ></SingleCheck>
-            
             <!-- Color Input -->
             <input
                 type="color"
