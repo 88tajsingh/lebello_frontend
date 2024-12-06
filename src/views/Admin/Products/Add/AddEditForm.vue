@@ -196,6 +196,7 @@
                             </div>
                         </Accordion>
                     </div>
+                    
                     <div class="mt-3">
                         <Accordion :open="true" header="Material Swatches">
                             <div class="bg-white border-2   px-4">
@@ -209,50 +210,56 @@
                                         <div class="w-1/2 px-1">MATERIALS</div>
                                     </div>
                                     <div class="flex h-[200px] overflow-y-auto">
-                                        <!-- Left Panel -->
-                                        <div class="w-1/2 border-r ">
-                                            <ul>
-                                                <li v-for="item in materialSwatchesList" :key="item.id"
-                                                    class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
-                                                    :class="{ 'bg-gray opacity-80': isSelected(item) }"
-                                                    @click="toggleSwatchSelection(item)">
-                                                    <span class="text-[#2272B1]">{{ item.title }}</span>
-                                                    <span class="text-[10px] text-Black666">SWATCHES <span></span>
-                                                    </span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <!-- Right Panel -->
-                                        <div class="w-1/2 pl-4">
-                                            <div v-if="selectedSwatches.length">
-                                                <div v-for="item in selectedSwatches" :key="item.id" class="mb-4">
-                                                    <div class="flex justify-between">
-                                                        <h4 class="text-[#2272B1]">{{ item.title }}</h4>
-                                                        <span class="text-[12px]"> SWATACHES</span>
-                                                    </div>
-                                                    <ul>
-                                                        <li v-for="material in item.materials_data" :key="material.id"
-                                                            class="flex items-center mb-2">
-                                                            <div class="flex w-full justify-between">
-                                                                <span>
-                                                                    <input type="checkbox"
-                                                                        id="material-{{ material.id }}" class="mr-2"
-                                                                        @change="handleCheckboxChange(material.id, $event)">
-                                                                    <label :for="'material-' + material.id"
-                                                                        class="text-[#2272B1]">{{ material.name
-                                                                        }}</label>
-                                                                </span>
-                                                                <span class="text-[10px]">MATERIAL</span>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div v-else>
-                                                <p class="text-gray-500">No swatches selected</p>
-                                            </div>
-                                        </div>
-                                    </div>
+    <!-- Left Panel -->
+    <div class="w-1/2 border-r">
+        <ul>
+            <li v-for="item in materialSwatchesList" :key="item.id"
+                class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
+                :class="{ 'bg-gray opacity-80': isSelected(item) }"
+                @click="toggleSwatchSelection(item)">
+                <span class="text-[#2272B1]">{{ item.title }}</span>
+                <span class="text-[10px] text-Black666">SWATCHES</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="w-1/2 pl-4">
+        <div v-if="selectedSwatchesData.length">
+            <div v-for="swatch in selectedSwatchesData" :key="swatch.swatch" class="mb-4">
+                <!-- Swatch Title -->
+                <div class="flex justify-between">
+                    <h4 class="text-[#2272B1]">
+                        {{
+                            materialSwatchesList && materialSwatchesList.find(item => item.id === swatch.swatch)?.title
+                        }}
+                    </h4>
+                    <span class="text-[12px]">SWATCHES</span>
+                </div>
+                <!-- Materials for the Swatch -->
+                <ul>
+                    <li v-for="material in materialSwatchesList.find(s => s.id === swatch.swatch)?.materials_data || []"
+                        :key="material.id" class="flex items-center mb-2">
+                        <div class="flex w-full justify-between">
+                            <span>
+                                <input type="checkbox"
+                                    :id="'material-' + material.id" class="mr-2"
+                                    @change="handleCheckboxChange(material.id, swatch.swatch, $event)" />
+                                <label :for="'material-' + material.id"
+                                    class="text-[#2272B1]">{{ material.name }}</label>
+                            </span>
+                            <span class="text-[10px]">MATERIAL</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div v-else>
+            <p class="text-gray-500">No swatches selected</p>
+        </div>
+    </div>
+</div>
+
                                 </div>
                             </div>
 
@@ -324,11 +331,11 @@
                                     </div>
                                 </div>
                                 <div class="mt-2 px-6  h-auto">
-                                    <ColorPicker label="Text Color" v-model="item.text_color"
+                                    <ColorInput label="Text Color" v-model="item.text_color"
                                         :hasCheckBox="checkBoxFlag" />
                                 </div>
                                 <div class="mt-2 px-6  h-auto">
-                                    <ColorPicker label="Background Color" v-model="item.bg_color" />
+                                    <ColorInput label="Background Color" v-model="item.bg_color" />
                                 </div>
                                 <div class="flex flex-col px-7 ">
                                     <InputLabel for="Memu Color" value="Memu Color" />
@@ -420,6 +427,10 @@
                             </div>
                         </Accordion>
                     </div>
+                    <Select :options="trueFalse" title="Add in Store product" showfield="name" class="w-full" valueField="value"
+                                        label="Select " v-model="form.is_store_product" :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="value => checkedFields.is_store_product = value" />
+
                 </div>
                 <!-- right panel -->
                 <div class="col-span-4">
@@ -427,8 +438,7 @@
                         <div class="px-1 py-3">
                             <div class="px-4">
                                 <div class="flex flex-col ">
-                                    <InputLabel for="statu1s" value="Status" />
-                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
+                                    <Select :options="statusData" title="Status" showfield="name" class="w-full" valueField="value"
                                         label="Select Status" v-model="form.status" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.status = value" />
                                 </div>
@@ -573,7 +583,7 @@
                                         @update:checkValue="value => checkedFields.logo_right_nav_settings.logoTrasparent = value" />
                                 </div>
                                 <div class="mt-2 px-6  h-auto">
-                                    <ColorPicker label="Label Background Color"
+                                    <ColorInput label="Label Background Color"
                                         v-model="form.logo_right_nav_settings.RightNavColor" :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => { checkedFields.logo_right_nav_settings.RightNavColor = value }" />
                                 </div>
@@ -587,6 +597,51 @@
 
                         </Accordion>
                     </div>
+                    <!-- <div class="mt-5">
+                        <Accordion :open="true" header="Heading Settings">
+                            <div class="mt-2 px-6  h-auto">
+                                <div>
+                                    <div class="my-3">
+                                        <RadioButton v-for="option in withBgWithoutBg" :key="option.value"
+                                            name="Visibility" :value="option.value" :label="option.label"
+                                            :modelValue="iswithBgHeading" @update:modelValue="iswithBgHeading = $event" />
+                                    </div>
+                                    <div v-if="iswithBgHeading == 1 || form.heading_background" class="">
+                                        <ColorInput label="Select BG Color" v-model="form.heading_background"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="value => checkedFields.heading_background = value" />
+                                    </div>
+
+                                </div>
+                                <div class="my-3">
+                                    <ColorInput label="Text Color" v-model="form.heading_text_color"
+                                        :hasCheckBox="checkBoxFlag"
+                                        @update:checkValue="value => checkedFields.heading_text_color = value" />
+                                </div>
+
+                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                    label="Heading Font Size" v-model="form.heading_font_size"
+                                    :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="value => checkedFields.heading_font_size = value" />
+
+                                <div class="my-3">
+                                    <InputLabel for="HeadingCase" value="Heading Case" />
+                                    <div class='flex gap-3'>
+                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.heading_case">
+                                        </SingleCheck>
+                                        <RadioButton v-for="option in capsNOCaps" :key="option.value" name="Visibility"
+                                            :value="option.value" :label="option.label"
+                                            :modelValue="form.heading_case"
+                                            @update:modelValue="form.heading_case = $event" />
+                                    </div>
+                                </div>
+                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                    label="Transparent %" v-model="form.heading_transparent_percentage"
+                                    :hasCheckBox="checkBoxFlag"
+                                    @update:checkValue="value => checkedFields.heading_transparent_percentage = value" />
+                            </div>
+                        </Accordion>
+                    </div> -->
                 </div>
             </div>
 
@@ -669,13 +724,12 @@
 import _ from 'lodash';
 import { ref, onMounted, watch, computed } from "vue";
 import { showToast, getGlobalUpdateData, handleFileUpdate } from '@/helper/functions'
-import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { MaterialTreeList, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
-import { statusData, trueFalse, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
+import { statusData, trueFalse,withBgWithoutBg,capsNOCaps, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
@@ -688,7 +742,7 @@ const store = useStore();
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
-const form = ref(store.getters.editData || { simple_field: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+const form = ref(store.getters.editData || { simple_field: 0,is_store_product:0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
@@ -698,7 +752,8 @@ const MaterialTreeListData = ref([]);
 const checkedFields = ref({})
 const productsSpecsIndex = ref()
 const logo_right_nav = ref('default')
-const iswithBg = ref()
+const iswithBg = ref(0)
+const iswithBgHeading = ref(0)
 const checkBoxFlag = ref(Boolean(form.value.id))
 
 
@@ -769,30 +824,63 @@ const handleRemoveDownloadable = (slide) => {
     }
 };
 
-// Swatches and materials functions
-const selectedSwatches = ref([]);
+// Data for swatches and materials
+const selectedSwatchesData = ref([]);
 const selectedSwatchIds = ref([]);
-const selectedMaterialIds = ref([]);
 
 // Function to toggle swatch selection
 const toggleSwatchSelection = (item) => {
-    const isSelected = selectedSwatches.value.some(swatch => swatch.id === item.id);
-    if (!isSelected) {
-        selectedSwatches.value.push(item);
-        selectedSwatchIds.value.push(item.master_swatch_id);
+    console.log("item", item);
+    if (!Array.isArray(selectedSwatchesData.value)) {
+        console.error("selectedSwatchesData is not an array", selectedSwatchesData.value);
+        selectedSwatchesData.value = []; // Reset to an empty array if not
+    }   
+
+    // Check if the swatch is already selected
+    const existingSwatch = selectedSwatchesData.value.find(swatch => swatch.swatch === item.id);
+
+    if (!existingSwatch) {
+        // Check if any material is selected for this swatch
+        const materialsSelected = item.materials?.length > 0; // Assuming materials is an array
+
+        if (materialsSelected) {
+            // Add new swatch if not already selected and materials are selected
+            selectedSwatchesData.value.push({
+                swatch: item.id, // Changed key name here
+                materials: item.materials.filter(material => material.selected) // Add only selected materials
+            });
+            selectedSwatchIds.value.push(item.id);
+        }
     }
 };
 
 // Function to check if a swatch is selected
-const isSelected = (item) => selectedSwatches.value.some(swatch => swatch.id === item.id);
+const isSelected = (item) => selectedSwatchIds.value.includes(item.id);
 
 // Function to handle material checkbox changes
-const handleCheckboxChange = (materialId, event) => {
+const handleCheckboxChange = (materialId, swatchId, event) => {
     const { checked } = event.target;
-    if (checked) {
-        selectedMaterialIds.value.push(materialId);
+
+    // Find the swatch object by swatchId
+    const swatch = selectedSwatchesData.value.find(s => s.swatch === swatchId); // Changed key name here
+
+    if (swatch) {
+        if (checked) {
+            // Add material ID to the swatch's materials list if not already present
+            if (!swatch.materials.includes(materialId)) {
+                swatch.materials.push(materialId);
+            }
+        } else {
+            // Remove material ID from the swatch's materials list
+            swatch.materials = swatch.materials.filter(id => id !== materialId);
+        }
     } else {
-        selectedMaterialIds.value = selectedMaterialIds.value.filter(id => id !== materialId);
+        // If the swatch is not already in the selected data, create a new entry
+        selectedSwatchesData.value.push({
+            swatch: swatchId, // Changed key name here
+            materials: checked ? [materialId] : [] // Add the material only if checked
+        });
+        selectedSwatchIds.value.push(swatchId);
     }
 };
 
@@ -835,22 +923,21 @@ const handleSubmit = async () => {
     !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
 
-    form.value.material_swatches = {'swatch_ids': selectedSwatchIds.value, 'material_ids': selectedMaterialIds.value}
+    // form.value.material_swatches = []
+    form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length >0)||[];
 
-    const {  domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url,       new_product_additional_right_box_image_url,
+    const { domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
         downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
     try {
         const service = store.getters.editData ? ProductServices.editProduct : ProductServices.addProduct;
         const res = await service(payload);
-        console.log(' Update Response:', res);
 
         if (res.status === 200 && res.data.success) {
             if (hasCheckedFields) {
                 handleGlobalUpdate();
             }
             else {
-                console.log('entred here');
                 showToast(res.data.message, 'success');
                 router.push('/product');
             }
@@ -951,8 +1038,7 @@ onMounted(() => {
     if (store.getters.editData) {
 
         const { featured_image_url, contract_logo_data, new_product_slider_url,
-            new_product_additional_bg_image_url, new_product_additional_right_box_image_url, downloadable_files_url, gallery_urls,material_swatches } = store.getters.editData;
-        console.log(new_product_slider_url)
+            new_product_additional_bg_image_url, new_product_additional_right_box_image_url, downloadable_files_url, gallery_urls, material_swatches } = store.getters.editData;
         imageData.value.featured_image.images = [featured_image_url];
         imageData.value.featured_image.mediaName = featured_image_url?.file_url || 'featured images';
         imageData.value.new_product_additional_bg_image.images = [new_product_additional_bg_image_url];
@@ -970,10 +1056,9 @@ onMounted(() => {
         // imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
         imageData.value.gallery.images = gallery_urls;
         imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
-        
 
-        selectedSwatchIds.value = material_swatches.swatch_ids;
-        selectedMaterialIds.value = material_swatches.material_ids;
+
+        selectedSwatchesData.value = material_swatches;
         fetchAllData({ domain_id: form.value.domain_id });
 
     }

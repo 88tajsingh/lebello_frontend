@@ -99,7 +99,7 @@
                     :id="'group-name-input'" />
             </div>
             <div class="flex flex-col mt-1">
-                <ColorPicker label="Label Background Color" v-model="form.label_background_color"
+                <ColorInput label="Label Background Color" v-model="form.label_background_color"
                     :hasCheckBox="checkBoxFlag"
                     @update:checkValue="(value) => { checkedFields.label_background_color = value }" 
                     :id="'label-background-color-picker'" />

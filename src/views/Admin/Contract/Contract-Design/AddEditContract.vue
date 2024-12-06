@@ -83,7 +83,7 @@
                           " :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.contract_background_title = value" />
 
-                                <ColorPicker v-model="form.contract_title_color" :hasCheckBox="checkBoxFlag"
+                                <ColorInput v-model="form.contract_title_color" :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.contract_title_color = value" />
 
                                 <TextInput id="LocationBackground	" type="text" class="block w-full mb-2 mr-2 h-[33px]"
@@ -327,14 +327,14 @@
                                             :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
                                     <div v-if="iswithBg == 1 || form.sub_heading_background" class="">
-                                        <ColorPicker label="Select BG Color" v-model="form.sub_heading_background"
+                                        <ColorInput label="Select BG Color" v-model="form.sub_heading_background"
                                             :hasCheckBox="checkBoxFlag"
                                             @update:checkValue="value => checkedFields.sub_heading_background = value" />
                                     </div>
 
                                 </div>
                                 <div class="my-3">
-                                    <ColorPicker label="Text Color" v-model="form.sub_heading_text_color"
+                                    <ColorInput label="Text Color" v-model="form.sub_heading_text_color"
                                         :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.sub_heading_text_color = value" />
                                 </div>
@@ -372,14 +372,14 @@
                                             :modelValue="iswithBgHeading" @update:modelValue="iswithBgHeading = $event" />
                                     </div>
                                     <div v-if="iswithBgHeading == 1 || form.heading_background" class="">
-                                        <ColorPicker label="Select BG Color" v-model="form.heading_background"
+                                        <ColorInput label="Select BG Color" v-model="form.heading_background"
                                             :hasCheckBox="checkBoxFlag"
                                             @update:checkValue="value => checkedFields.heading_background = value" />
                                     </div>
 
                                 </div>
                                 <div class="my-3">
-                                    <ColorPicker label="Text Color" v-model="form.heading_text_color"
+                                    <ColorInput label="Text Color" v-model="form.heading_text_color"
                                         :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="value => checkedFields.heading_text_color = value" />
                                 </div>
@@ -460,7 +460,6 @@ import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
-import ColorPicker from '@/components/Admin-components/form-components/ColorInput.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { contractLocationTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';

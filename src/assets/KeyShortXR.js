@@ -49,34 +49,10 @@ window.keyshotXR = function (
     na();  
 }
 
- function toggleFullScreen() {
-  if (!document.fullscreenElement) {
-      if (l.requestFullscreen) {
-          l.requestFullscreen();
-      } else if (l.mozRequestFullScreen) { 
-          l.mozRequestFullScreen();
-      } else if (l.webkitRequestFullscreen) { 
-          l.webkitRequestFullscreen();
-      } else if (l.msRequestFullscreen) { 
-          l.msRequestFullscreen();
-      }
-  } else {
-      if (document.exitFullscreen) {
-          document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) { 
-          document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { 
-          document.msExitFullscreen();
-      }
-  }
-}
-
   document.getElementById('zoom-in').addEventListener('click', zoomIn);
   document.getElementById('zoom-out').addEventListener('click', zoomOut);
   document.getElementById('zoom-reset').addEventListener('click', resetZoom);
-  document.getElementById('fullscreen-toggle').addEventListener('click', toggleFullScreen);
+  document.getElementById('fullscreen-toggle').addEventListener('click', Ka);
 
   function na() {
     var d = c.g;
@@ -833,31 +809,31 @@ window.keyshotXR = function (
   this.za = function () {
     k(window, 'resize', I)
     Ga && k(n, 'dblclick', Ka)
-    if (da())
-      if (
-        (k(window, 'mousewheel', R),
-        k(window, 'keydown', sa),
-        /Tablet PC/i.test(navigator.userAgent) && window.bb)
-      ) {
-        var b = new MSGesture()
-        b.target = a.h
-        a.h.Ja = b
-        a.h.Ja.pointerType = t
-        a.h.hb = []
-        k(a.h, 'MSPointerDown', ka)
-        k(a.h, 'MSPointerMove', ia)
-        k(a.h, 'MSPointerUp', ga)
-        k(a.h, 'MSPointerCancel', ea)
-      } else
-        k(n, 'mousedown', F),
-          k(l, 'mousedown', F),
-          k(n, 'mousemove', J),
-          k(l, 'mousemove', J),
-          k(document, 'mouseup', O)
-    else
+    // if (da())
+    //   if (
+    //     (k(window, 'mousewheel', R),
+    //     k(window, 'keydown', sa),
+    //     /Tablet PC/i.test(navigator.userAgent) && window.bb)
+    //   ) {
+    //     var b = new MSGesture()
+    //     b.target = a.h
+    //     a.h.Ja = b
+    //     a.h.Ja.pointerType = t
+    //     a.h.hb = []
+    //     k(a.h, 'MSPointerDown', ka)
+    //     k(a.h, 'MSPointerMove', ia)
+    //     k(a.h, 'MSPointerUp', ga)
+    //     k(a.h, 'MSPointerCancel', ea)
+    //   } else
+    //     k(n, 'mousedown', F),
+    //       k(l, 'mousedown', F),
+    //       k(n, 'mousemove', J),
+    //       k(l, 'mousemove', J),
+    //       k(document, 'mouseup', O)
+    // else
       n.addEventListener &&
         (k(document, 'mouseup', O),
-        k(n, 'mousewheel', R),
+        // k(n, 'mousewheel', R),
         k(document, 'keydown', sa),
         k(n, 'mousedown', F),
         k(l, 'mousedown', F),

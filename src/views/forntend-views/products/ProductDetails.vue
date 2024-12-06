@@ -13,7 +13,7 @@
             class="w-full duration-700 ease-in-out" data-carousel-item>
             <img :src="$filePath(slide?.file_url)"
               class="block  absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2 "
-              :alt="slide[imageKeyName]?.file_url" />
+              f />
               <button @click="previous" type="button"
           class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
           data-carousel-prev>
@@ -351,7 +351,7 @@
       </div>
 
 
-      <AccordianSection />
+      <AccordianSection :AccordionData="productData?.material_swatche_data" />
       <!-- <div class="mx-12"> -->
       <!-- <AccordionNew /> -->
       <!-- </div> -->
@@ -402,12 +402,11 @@ const currentIndex = ref(0)
 
 
 const id = ref(sessionStorage.getItem('productDetail'));
-console.log("Product_Detail id", id.value);
 const handleProductDetailData = async () => {
   const res = await getProductDetail(id.value)
-  console.log("getLandingPageData", res.data.data.home_slider);
   if (res.status === 200 && res.data.success) {
     productData.value = res.data.data.product_data[0];
+    console.log("productData", res.data.data.product_data[0]);
     productTypes.value = res.data.data?.product_types;
     //  landingPageData.value = res.data.data.home_slider
   }
@@ -502,7 +501,6 @@ const previous = () => {
 }
 
 const next = () => {
-  console.log("productData.value?.gallery_urls",productData.value?.gallery_urls.length);
   if (productData.value?.gallery_urls.length === 0) {
         console.error("Slider images array is empty");
         return;
