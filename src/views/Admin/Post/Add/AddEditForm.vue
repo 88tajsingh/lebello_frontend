@@ -60,12 +60,12 @@
                     <div class="mt-3">
                         <Accordion :open="true" header="News Options">
                             <div class=" px-6 flex mt-2 items-center text-gray-600 text-sm">
-                                <ColorPicker v-model="form.title_background_color" label='Title Background'
+                                <ColorInput v-model="form.title_background_color" label='Title Background'
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="(value) => { checkedFields.title_background_color = value }" />
                             </div>
                             <div class=" px-6 mt-2 flex items-center text-gray-600 text-sm">
-                                <ColorPicker v-model="form.title_color" label='Title Color' :hasCheckBox="checkBoxFlag"
+                                <ColorInput v-model="form.title_color" label='Title Color' :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="(value) => { checkedFields.title_color = value }" />
                             </div>
                         </Accordion>

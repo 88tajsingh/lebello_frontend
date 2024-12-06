@@ -59,7 +59,7 @@
 
         </div>
         <div class="">
-          <ColorPicker label="Text Color" v-model="form.label_background_color" :hasCheckBox="checkBoxFlag"
+          <ColorInput label="Text Color" v-model="form.label_background_color" :hasCheckBox="checkBoxFlag"
             @update:checkValue="value => checkedFields.label_background_color = value" />
         </div>
         <div class="flex flex-col ">

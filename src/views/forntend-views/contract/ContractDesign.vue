@@ -6,9 +6,10 @@
       <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" alt="Logo" />
     </div>
     <!-- Menu Icon -->
-    <div ref="closeMenu" class="absolute top-52 right-0 z-[9999]">
-      <SideMenu :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebar" svgColor="#f9f9f9"
-        menuClass="p-2 bg-[#9ce163]">
+    <div  class="absolute top-52 right-0 z-[9999]">
+      <SideMenu  
+      svgColor="#f9f9f9" 
+      menuClass="p-2 bg-[#9ce163]">
         <div class="flex border border-gray-400 items-center">
           <div class="sticky top-3 p-4 border-r border-gray-400">
             <MenuSvg size="15px" fillColor="black" />
@@ -47,6 +48,7 @@
                     <li v-for="(sub, itemIndex) in item" :key="itemIndex">
                       <a @click.prevent="handleClick(sub)" class="font-graphikLight text-sm cursor-pointer">
                         {{ sub.contract_location || sub.title }}
+                          <!-- {{sub}} -->
                       </a>
                     </li>
                   </template>
@@ -64,92 +66,92 @@
         </div>
       </SideMenu>
     </div>
-    <!-- Slider -->
+   
     <div class="mx-5 mt-4 lg:mx-20">
-      <div id="default-carousel" class="relative">
-        <div class="w-full h-full mx-0 overflow-hidden">
-          <div class="h-screen w-screen">
-            <div v-for="(slide, index) in contractDesignData.contract_design_slider" :key="index"
-              v-show="currentIndex === index" class="w-full duration-700 ease-in-out">
-              <img :src="$filePath(slide?.contract_slider_image_data?.file_url)"
-                class="absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2" :alt="slide.alt" />
-              <!-- Text Overlay -->
-              <div class="absolute bottom-20 left-14">
-                <div class="font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
-                  {{ camelCase(slide?.heading_case, slide?.title) }}
-                </div>
-                <span class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
-                  {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
-                </span>
-              </div>
+       <!-- Slider -->
+  <div id="default-carousel" class="relative">
+    <!-- Carousel Container -->
+    <!-- <Slider :images="contractDesignData.contract_design_slider" imageKeyName='contract_slider_image_data'  :navColor="'white'">
+    </Slider> -->
+    <div class="w-full h-full mx-0 overflow-hidden">
+      <div class="h-screen w-screen">
+        <!-- Slides -->
+        <div v-for="(slide, index) in contractDesignData.contract_design_slider" :key="index" 
+             v-show="currentIndex === index" class="w-full duration-700 ease-in-out">
+          <img :src="$filePath(slide?.contract_slider_image_data?.file_url)" 
+               class="absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2" 
+               :alt="slide.alt" />
+          <!-- Text Overlay -->
+          <div class="absolute bottom-20 left-14">
+            <div class="font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
+              {{ camelCase(slide?.heading_case, slide?.title) }}
             </div>
-
-            <!-- Navigation Dots -->
-            <div class="flex absolute bottom-1/3 right-0 space-x-2 -translate-x-1 rotate-90 z-30">
-              <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" type="button" :class="{
-                'bg-gray-700': currentIndex === index,
-                'bg-gray-400': currentIndex !== index,
-              }" class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
-            </div>
-
-            <!-- Previous Button -->
-            <button @click="previous" type="button"
-              class="absolute left-10 top-1/2 z-30 p-3 text-white cursor-pointer group">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <!-- Next Button -->
-            <button @click="next" type="button"
-              class="absolute right-10 top-1/2 z-30 p-4 text-white cursor-pointer group">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            <span class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
+              {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
+            </span>
           </div>
         </div>
 
-        <div class="absolute top-3 right-0">
-          <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png"
-            alt="Contract Design" />
+        <!-- Navigation Dots -->
+        <div class="flex absolute bottom-1/3 right-0 space-x-2 -translate-x-1 rotate-90 z-30">
+          <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" 
+                  type="button" 
+                  :class="{'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index}" 
+                  class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
         </div>
-      </div>
 
-      <!-- Description -->
-      <div class="bg-[#f7f7f7] font-graphik text-sm text-[#4c4c4c]">
-        <p class="px-5 py-6">
-          Lebello contract design offers customized solutions for the hospitality, retail, and trade industry. We build
-          long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and
-          unique bespoke outdoor products.
-        </p>
-      </div>
+        <!-- Previous Button -->
+        <button @click="previous" type="button" class="absolute left-10 top-1/2 z-30 p-3 text-white cursor-pointer group">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
 
-      <!-- Images -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-0 py-3 md:py-0">
-      <div v-for="(images, index) in contractDesignData.contract_design" :key="index"
-          class="prod_content overflow-hidden ">
-          <div @click="handleRoute(images)" class="product_img holder relative w-full max-h-[190px] h-full"
-            :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
-            @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
-            <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
-              class="aos-item w-full h-full object-cover   " ref="element" :data-aos="animationType"
-              :data-aos-duration="getAnimationDuration(index)" />
-            <div
-              :class="{ 'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index] }">
-            </div>
-            <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
-              <div class="overlay-content">
-                <p class="text-[11px]  font-graphik">{{ images?.title }}</p>
-                <p class="text-[11px] font-graphikLight">{{ images?.contract_info_location }}</p>
-              </div>
-            </div>
+        <!-- Next Button -->
+        <button @click="next" type="button" class="absolute right-10 top-1/2 z-30 p-4 text-white cursor-pointer group">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <div class="absolute top-3 right-0">
+      <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png" alt="Contract Design" />
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="bg-[#f7f7f7] font-graphik text-sm text-[#4c4c4c]">
+    <p class="px-5 py-6">
+      Lebello contract design offers customized solutions for the hospitality, retail, and trade industry. We build
+      long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and
+      unique bespoke outdoor products.
+    </p>
+  </div>
+
+  <!-- Image Gallery -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-0 py-3 md:py-0">
+    <div v-for="(images, index) in contractDesignData.contract_design" :key="index" class="prod_content overflow-hidden">
+      <div @click="handleRoute(images)" class="product_img relative w-full max-h-[190px] h-full"
+           :class="{'md:transition-transform md:duration-1000 md:ease-in-out md:transform scale-125': isHovered[index]}" 
+           @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+        <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
+             class="aos-item w-full h-full object-cover" ref="element" :data-aos="animationType" 
+             :data-aos-duration="getAnimationDuration(index)" />
+        <div :class="{'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index]}"></div>
+        <div class="prod-overlay" :class="{'show-overlay': isHovered[index]}">
+          <div class="overlay-content">
+            <p class="text-[11px] font-graphik">{{ images?.title }}</p>
+            <p class="text-[11px] font-graphikLight">{{ images?.contract_info_location }}</p>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
 
     <!-- Footer -->
     <FooterSection />
@@ -170,6 +172,7 @@ import "aos/dist/aos.css";
 import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 import { getContractDesignData } from "@/helper/frontendHelpers";
 import { useStore } from "vuex";
+import Slider from "@/components/frontend-components/Slider.vue";
 
 // Setup router and store
 const router = useRouter();

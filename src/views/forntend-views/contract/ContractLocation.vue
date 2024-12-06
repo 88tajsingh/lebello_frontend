@@ -88,13 +88,12 @@
       <div class="mx-5 md:mx-20 relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-0">
         <!-- Loop through products -->
         <div v-for="(slide, index) in contractLocationData" :key="index" class=" ">
-          <div @click.prevent="handleClick(slide)" class="prod_content overflow-hidden">
-            <div class="product_img holder relative" :class="{
-              'transition-transform  duration-9000 ease-in-out transform scale-125':
-                isHovered[index],
-            }" @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+          <div @click.prevent="handleClick(slide)" class="prod_content h-full overflow-hidden">
+            <div @click="handleRoute(slide)" class="product_img holder relative w-full h-full object-cover max-h-[190px] "
+            :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
+            @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
               
-                <img  class="aos-item w-full" ref="element" :data-aos="animationType"
+                <img  class="aos-item w-full h-full object-cover" ref="element" :data-aos="animationType"
                   :data-aos-duration="getAnimationDuration(index)" :src="$filePath(slide?.featured_image_data?.file_url)" :alt="slide?.title" />
                 <div :class="{
                   'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20':
@@ -234,13 +233,12 @@ const handleSideMenu = () => {
     AOS.refreshHard();
   });
 
-  onMounted(() => {
-    
-  const contractTypeId = sessionStorage.getItem('contract_type_id');
-  if (contractTypeId) {
-    handleContractLocationData(contractTypeId);
-  }
-});
+//   onMounted(() => {
+//   const contractTypeId = sessionStorage.getItem('contract_location_id');
+//   if (contractTypeId) {
+//     handleContractLocationData(contractTypeId);
+//   }
+// });
 
 
     

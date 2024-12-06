@@ -120,14 +120,14 @@
                                             :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
                                     <div v-if="iswithBg" class="">
-                                        <ColorPicker label="Select BG Color" v-model="form.slider_heading_bg"
+                                        <ColorInput label="Select BG Color" v-model="form.slider_heading_bg"
                                             :hasCheckBox="checkBoxFlag"
                                             @update:checkValue="(value) => { checkedFields.slider_heading_bg = value }" />
                                     </div>
 
                                 </div>
                                 <div class="">
-                                    <ColorPicker label="Text Color" v-model="form.slider_text_color"
+                                    <ColorInput label="Text Color" v-model="form.slider_text_color"
                                         :hasCheckBox="checkBoxFlag"
                                         @update:checkValue="(value) => { checkedFields.slider_text_color = value }" />
                                 </div>

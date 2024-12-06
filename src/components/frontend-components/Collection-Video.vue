@@ -1,7 +1,7 @@
 <template>
   <div id="collection" class="h-full bg-[#e3dbcf] overflow-hidden pb-16 mx-0 transition duration-1000 ease-in">
     <!-- Menu Icon and Sidebar -->
-    <div class="relative">
+    <div class="relative" id="sideText">
       <div class="absolute top-5 right-0 pr-3 bg-transparent" ref="closeMenu">
         <SideMenu key="firstKey1" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebar">
           <div class="z-50">
