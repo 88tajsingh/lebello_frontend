@@ -3,7 +3,8 @@
     <!-- Menu Icon and Sidebar -->
     <div class="relative" id="sideText">
       <div class="absolute top-5 right-0 bg-transparent" ref="closeMenu">
-        <SideMenu key="firstKey1" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebar">
+        <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height=""
+        >
           <div class="z-50">
             <!-- Sidebar Header -->
             <div class="flex border border-gray-400 items-center">

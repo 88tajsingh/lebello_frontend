@@ -1,67 +1,76 @@
 <template>
-    <div>
-        <!-- Slider Section -->
-        <div id="default-carousel" class="relative" data-carousel="static">
-           
-            <div class="overflow-hidden h-screen">
-                <div v-for="(slide, index) in props.images" :key="index" class="w-full duration-700 ease-in-out"
-                    v-show="currentIndex === index">
-                    <img :src="$filePath(slide[props.imageKeyName]?.file_url)"
-                        class="block absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2"
-                        :alt="slide[props.imageKeyName]?.file_url" />
-                    <!-- Navigation Buttons -->
+  <div>
+    <!-- Slider Section -->
+    <div id="default-carousel" class="relative" data-carousel="static">
 
-                    <button @click="previous" class="absolute left-10 top-1/2 z-30 cursor-pointer">
-                        <ArrowSvg size="20px" direction="right" :strokeWidth="17" :fillColor="navColor === 'white' ? '#ffffff' : '#000000'"  />
-                    </button>
-                    <button @click="next" class="absolute right-10 top-1/2 z-30 cursor-pointer">
-                        <ArrowSvg size="20px" direction="left" :strokeWidth="17" :fillColor="navColor === 'white' ? '#ffffff' : '#000000'"  />
-                    </button>
-                </div>
-            </div>
+      <div class="overflow-hidden h-screen">
+        <div v-for="(slide, index) in props.images" :key="index" class="w-full duration-700 ease-in-out"
+          v-show="currentIndex === index">
+          <img :src="$filePath(slide[props.imageKeyName]?.file_url)"
+            class="block absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2"
+            :alt="slide[props.imageKeyName]?.file_url" />
+          <!-- Navigation Buttons -->
 
-            <!-- Carousel Indicators -->
-            <div :class="['absolute space-x-2 z-30', indicatorPosition]">
-                <button v-for="(slide, index) in props.images" :key="index" @click="changeSlide(index)"
-                    :class="{ 'bg-[#909090]': currentIndex === index, 'bg-[#626262]': currentIndex !== index }"
-                    class="w-2 h-2 rounded-full"></button>
-            </div>
+          <button @click="previous" class="absolute left-10 top-1/2 z-30 cursor-pointer">
+            <ArrowSvg size="20px" direction="right" :strokeWidth="17"
+              :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
+          </button>
+          <button @click="next" class="absolute right-10 top-1/2 z-30 cursor-pointer">
+            <ArrowSvg size="20px" direction="left" :strokeWidth="17"
+              :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
+          </button>
 
-            <!-- Text on Carousel -->
-            <!-- <div class="absolute bottom-20 left-14">
-            <div class="font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
-              {{ camelCase(slide?.heading_case, slide?.title) }}
+
+
+
+          <!-- Carousel Indicators -->
+          <div :class="['absolute space-x-2 z-30', indicatorPosition]">
+            <button v-for="(slide, index) in props.images" :key="index" @click="changeSlide(index)"
+              :class="{ 'bg-[#909090]': currentIndex === index, 'bg-[#626262]': currentIndex !== index }"
+              class="w-2 h-2 rounded-full"></button>
+          </div>
+
+          <!-- Text on Carousel -->
+          <div :class="['absolute left-10 transition-all duration-1000 ease-in-out', {
+            'bottom-20': headingAndSubHeading, 'bottom-10': !hasHeadingAndLocation && atBottom,
+            'bottom-6': !hasHeadingAndLocation && !atBottom,
+          }]">
+            <div class="font-graphik px-3 py-3 mb-4" :style="titleStyle(slide)">
+              {{ camelCase(slide?.heading_case, slide.heading_title) }}
             </div>
-            <span class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
+            <span v-if="slide?.sub_heading_title" class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
               {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
             </span>
-          </div> -->
-            <div :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-6': !atBottom, 'bottom-10': atBottom }]"
+          </div>
+
+          <!-- <div :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-6': !atBottom, 'bottom-10': atBottom }]"
                 class="text-white left-6 sm:left-14 md:left-20 capitalize opacity-80 font-graphikLight sm:text-[20px] md2:text-[40px]">
                 {{ props?.images && props?.images[currentIndex]?.title || "default" }}
-            </div>
+            </div> -->
 
-            <!-- Down Arrow -->
-            <div
-                class="absolute left-1/2 bottom-5 animate-bounce text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5">
-                <div @click="() => scrollDown('sideText')" class="px-3 py-1 cursor-pointer">
-                    <svg width="24px" height="24px" viewBox="0 0 1024 1024" fill="#fafafa">
-                        <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" />
-                    </svg>
-                </div>
+          <!-- Down Arrow -->
+          <div
+            class="absolute left-1/2 bottom-5 animate-bounce text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5">
+            <div @click="() => scrollDown('sideText')" class="px-3 py-1 cursor-pointer">
+              <svg width="24px" height="24px" viewBox="0 0 1024 1024" fill="#fafafa">
+                <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" />
+              </svg>
             </div>
+          </div>
         </div>
-
-        <div class="absolute top-48 right-0 ">
-            <SideMenu>
-                <slot name="sidebar"></slot>
-            </SideMenu>
-        </div>
+      </div>
     </div>
+
+    <div class="absolute top-48 right-0 ">
+      <SideMenu :openClass="props.openClass" :closeClass="props.closeClass" :height="props.height">
+        <slot name="sidebar"></slot>
+      </SideMenu>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch, defineProps } from 'vue';
+import { ref, onMounted, watch, defineProps, computed } from 'vue';
 import SideMenu from './Side-Menu.vue';
 import ArrowSvg from './Svg/Arrow-Svg.vue';
 
@@ -70,37 +79,40 @@ const atBottom = ref(false);
 const navColor = ref('');
 
 const props = defineProps({
-    images: { type: Array, required: true },
-    navColor: { type: String, default: 'black' },
-    imageKeyName: { type: String, default: 'featured_image_data' },
-    indicatorPosition: { type: String, default: 'top-1/2 left-0 transform rotate-90' },  
+  images: { type: Array, required: true },
+  navColor: { type: String, default: 'black' },
+  imageKeyName: { type: String, default: 'featured_image_data' },
+  indicatorPosition: { type: String, default: 'top-1/2 left-0 transform rotate-90' },
+  closeClass: { type: String, default: 'w-[230px] z-50 absolute right-[-250px]' },
+  openClass: { type: String, default: 'w-[230px] absolute z-50 right-0' },
+  height: { type: String, default: '100vh' },
 });
 // :indicatorPosition="'bottom-5 left-1/2 transform -translate-x-1/2'"
 const startAutoSwipe = () => {
-    setInterval(() => {
-        navColor.value = props.images[currentIndex.value]?.navColor || 'black';
-        atBottom.value = !atBottom.value;
-        next();
-    }, 5000);
+  setInterval(() => {
+    navColor.value = props.images[currentIndex.value]?.navColor || 'black';
+    atBottom.value = !atBottom.value;
+    next();
+  }, 5000);
 };
 
 const changeSlide = (index) => {
-    currentIndex.value = index;
-    navColor.value = props.images[currentIndex.value]?.navColor || 'black';
+  currentIndex.value = index;
+  navColor.value = props.images[currentIndex.value]?.navColor || 'black';
 };
 
 const previous = () => {
-    currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
-    navColor.value = props.images[currentIndex.value]?.navColor || 'black';
+  currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
+  navColor.value = props.images[currentIndex.value]?.navColor || 'black';
 };
 
 const next = () => {
-    if (props.images.length === 0) {
-        console.error('Slider images array is empty');
-        return;
-    }
-    currentIndex.value = (currentIndex.value + 1) % props.images.length;
-    navColor.value = props.images[currentIndex.value]?.navColor || 'black';
+  if (props.images.length === 0) {
+    console.error('Slider images array is empty');
+    return;
+  }
+  currentIndex.value = (currentIndex.value + 1) % props.images.length;
+  navColor.value = props.images[currentIndex.value]?.navColor || 'black';
 };
 
 onMounted(startAutoSwipe);
@@ -126,8 +138,8 @@ const hexToRgb = (hex) => {
 };
 
 const titleStyle = (slide) => {
-  const defaultHex = '#ff9d0f';
-  console.log("slide",slide?.heading_font_size);
+  const defaultHex = '';
+  console.log("slide", slide?.heading_font_size);
   const baseBackground = slide?.heading_background || defaultHex;
   const transparency = slide?.heading_transparent_percentage
     ? parseFloat(slide.heading_transparent_percentage) / 100
@@ -147,7 +159,7 @@ const titleStyle = (slide) => {
 };
 
 const subHeadingStyle = (slide) => {
-  const defaultHex = '#ff9d0f';
+  const defaultHex = '';
   const baseBackground = slide?.sub_heading_background || defaultHex;
   const transparency = slide?.sub_heading_transparent_percentage
     ? parseFloat(slide.sub_heading_transparent_percentage) / 100
@@ -164,6 +176,9 @@ const subHeadingStyle = (slide) => {
   };
 };
 
+const headingAndSubHeading = computed(() => {
+  return slide?.heading_title && slide?.sub_heading_title;
+});
 // Function to convert text to camel case
 const camelCase = (capitalize, text) => {
   if (!text) return '';
@@ -177,7 +192,7 @@ const camelCase = (capitalize, text) => {
 };
 
 watch(() => props.images, () => {
-    props.images = props.images;
+  props.images = props.images;
 });
 </script>
 

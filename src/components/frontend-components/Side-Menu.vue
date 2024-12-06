@@ -1,11 +1,9 @@
 <template>
-  <div ref="closeMenu" class="relative">
-    <div 
-      :class="{
-        'w-[230px] z-50 right-0': isOpen,
-        'w-[230px] z-50 right-[-250px]': !isOpen
-      }"
-      class="sidenav borderborder-red bg-[#ededed] pb-2 z-50 absolute top-7 right-0 transition-all duration-1000 ease-in-out"
+  <div ref="closeMenu" class="relative z-99999">
+    <div
+      :class="isOpen ? openClass : closeClass"
+      :style="{ height: height }"
+      class="sidenav border bg-[#ededed] pb-2 transition-all duration-1500 ease-in-out"
     >
       <slot></slot>
     </div>
@@ -25,10 +23,16 @@ import { onClickOutside } from '@vueuse/core';
 import MenuSvg from './Svg/Menu-Svg.vue';
 
 // Define props
-const { svgColor, svgSize = '30px', menuClass, } = defineProps({
+const { svgColor, svgSize = '30px', menuClass,openClass = 'w-[230px] z-50 right-0',
+  closeClass = 'w-[230px] z-50 absolute right-[-250px]',
+  height = '', } = defineProps({
   svgColor: { type: String, required: true },
   svgSize: { type: String, default: '30px' },
   menuClass: { type: String, default: '' },
+  openClass: { type: String, default: 'w-[230px] absolute z-50 right-0' },
+  closeClass: { type: String, default: 'w-[230px] z-50 absolute right-[-250px]' },
+  height: { type: String, default: '' },
+  
 });
 
 const isOpen = ref(false);

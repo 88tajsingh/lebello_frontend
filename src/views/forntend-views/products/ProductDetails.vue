@@ -182,7 +182,6 @@
 </div> -->
 
     </div>
-
     <div class="bg-white ">
       <section class="bg-[#f3f3f3]">
         <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">

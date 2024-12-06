@@ -6,10 +6,8 @@
 
     <div class="relative">
       <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">
-        <div class="bg-[#7bd923] p-3">
-          <SideMenu key="firstKey" :list="productsSidebar" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider"
-          
-            :showMediaIcon="true" svgSize="14px" svgColor="white">
+        <div class="">
+          <SideMenu menuClass="p-2 bg-[#9ce163]" svgSize="30px" svgColor="white"  openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height="">
             <div class="z-50">
               <div class="flex border border-[#33333357] items-center">
                 <span class="sticky top-3 p-4 border-r  mr-2 border-[#33333357] bg-transparent">

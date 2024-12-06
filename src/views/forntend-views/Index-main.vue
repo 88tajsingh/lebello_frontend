@@ -1,7 +1,9 @@
 <template>
   <div class="overflow-x-hidden">
        <NavBar :absolute="true" :navColor="navColor" />
-       <Slider :images="landingPageData.home_slider" imageKeyName='featured_image_data'  :navColor="'white'">
+       <Slider :images="landingPageData.home_slider" imageKeyName='featured_image_data'  :navColor="'white'"
+       openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height=""
+       >
        <template #sidebar>
       <div class="z-50">
         <div  class="mx-7 mt-4 mb-2">

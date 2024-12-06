@@ -12,14 +12,8 @@ const router = useRouter();
 const navColor = ref('')
 const atBottom = ref(false)
 const currentIndex = ref(0)
-const sidebarList = ref([])
 const ourMaterialData = ref([])
-const closeMenu = ref(null)
-const isOpenSidebarSlider = ref(false)
-const closeSideMenu = () => {
-  isOpenSidebarSlider.value = false;
-}
-onClickOutside(closeMenu, closeSideMenu)
+
 const props = defineProps({
   sidebarList: {
     type: Array,
@@ -88,10 +82,6 @@ const next = () => {
 }
 
 onMounted(startAutoSwipe)
-
-const handleSideMenu = () => {
-  isOpenSidebarSlider.value = true;
-}
 
 const handleRoute = (sub) => {
   sessionStorage.setItem('materialDetail', sub.id);
@@ -167,11 +157,10 @@ const handleRoute = (sub) => {
       </div>
       <!-- menu item -->
       <slot name="header"></slot>
-      <div class="absolute top-48 right-0 pr-3 " ref="closeMenu">
-        
-        <SideMenu key="firstKey" :list="sidebarList" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider"
-          :mainSlider="mainSlider" :showDropDown="showDropDown" :showHeading="showHeading"
-          :downDropdown="downDropdown" >
+      <div class="absolute top-48 right-0  " ref="closeMenu">
+        <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height=""
+      svgColor="#696969" 
+      menuClass="" >
             <div class="z-50">
         <div class="h-auto mb-2 mx-3 mt-4 border-b border-[#898989]">
           <h3 class="text-[14px]">
