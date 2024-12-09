@@ -57,7 +57,7 @@ onMounted(startAutoSwipe);
 </script>
 
 <template>
-  <!-- <NavBar :absolute="props.isAbsolute" :navColor="navColor" /> -->
+  <NavBar :absolute="props.isAbsolute" :navColor="navColor" />
 
   <!-- Carousel Section -->
   <div id="default-carousel" class="relative" data-carousel="static">
