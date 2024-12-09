@@ -79,9 +79,9 @@
                                         @update:checkValue="(value) => { checkedFields.product_description = value }" />
                                 </div>
                                 <div class="mt-5  ">
-                                    <singleCheckBox id="FeaturedOption" label="Has Predefind Values"
+                                    <SingleCheck id="FeaturedOption" label="Has Predefind Values"
                                         v-model:modelValue="form.product_predefined_values">
-                                    </singleCheckBox>
+                                    </SingleCheck>
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Quick Ship"
@@ -105,9 +105,9 @@
                                         @update:checkValue="(value) => { checkedFields.sub_title = value }" />
                                 </div>
                                 <div class="mt-5  ">
-                                    <singleCheckBox id="FeaturedOption" label="Featured"
+                                    <SingleCheck id="FeaturedOption" label="Featured"
                                         v-model:modelValue="form.featured">
-                                    </singleCheckBox>
+                                    </SingleCheck>
                                 </div>
                                 <div class="mt-2">
                                     <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Featured Title"
@@ -205,9 +205,9 @@
 
 
                                         <div class="mt-5  ">
-                                            <singleCheckBox id="checked"
+                                            <SingleCheck id="checked"
                                                 label="If checked, this variation will be exported while exporting products."
-                                                v-model:modelValue="item.export_field"></singleCheckBox>
+                                                v-model:modelValue="item.export_field"></SingleCheck>
                                         </div>
                                         <button @click="removeFormItem(index)" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-danger  font-medium text-gray hover:bg-opacity-90">
@@ -529,7 +529,7 @@
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
-import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue';
+import SingleCheck from '@/components/Admin-components/form-components/SingleCheck.vue';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import { MaterialTreeList, getStoreCategoryTree } from '@/helper/Apis';
 import { getGlobalUpdateData, handleFileUpdate, showToast } from '@/helper/functions';

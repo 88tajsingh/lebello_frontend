@@ -2,32 +2,36 @@
   <div class="overflow-x-hidden">
        <NavBar :absolute="true" :navColor="navColor" />
        <Slider :images="landingPageData.home_slider" imageKeyName='featured_image_data'  :navColor="'white'"
-       openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height=""
+       openClass="w-[500px] fixed z-50 top-0 right-0 " closeClass="w-[500px] fixed z-50 top-0 right-[-520px]" height="100vh"
        >
        <template #sidebar>
-      <div class="z-50">
-        <div  class="mx-7 mt-4 mb-2">
-          <h3 class="text-[14px] uppercase font-graphikMedium">
-            <a href="https://www.lebello.com/listItem/" class="text-textColorBlack">Collection 2024</a>
+      <div class="z-50 pl-16 pr-32 pt-10">
+        <div  class=" mt-4 mb-2 gap-5  flex items-center">
+          <span class="sticky ">
+            <CloseSvg size="20px" fillColor="#000000" />
+          </span>
+          <h3 class="text-[20px] uppercase text-orange font-graphikMedium">
+            <a href="https://www.lebello.com/listItem/" class="text-orange">Collection 2024</a>
           </h3>
         </div>
-        <div class="px-7">
-          <div class="search">
+        <div class="">
+          <div class="search mt-4">
             <form role="search">
-              <div class="relative border-b border-gray-4 mt-2">
-                <input class="w-full py-[1px] text-[14px] font-graphikLight border-none bg-transparent focus:outline-none" id="username" type="text" placeholder="Search" />
+              <div class="relative border-b border-[#33333357] mt-2">
+                <input class="w-full py-[1px] font-graphikLight text-[20px] border-none bg-transparent focus:outline-none" id="username" type="text" placeholder="Search" />
                 <div class="absolute right-2 top-1 flex items-center">
                   <SearchSvg size="22px" fillColor="#000000" />
                 </div>
               </div>
             </form>
           </div>
-          <ul class="max-h-52 overflow-auto text-[13px] text-textColorBlack">
-            <PerfectScrollbar>
-              <li v-for="(listItem, index) in landingPageData.home_sidebar_first" :key="index">
-                <a @click="handleProductNav(listItem)" class="hover:text-orange">{{ listItem?.title }}</a>
+          <div class="text-[#333]">
+            <h3 class="text-[19px] font-graphikMedium pb-3 pt-8  border-b border-[#33333357] uppercase">Highlights</h3>
+          </div>
+          <ul class="max-h-full  text-[19px]  text-[#363636] pt-1">
+              <li v-for="(listItem, index) in landingPageData.home_sidebar_first" :key="index" class="py-[9px] font-graphikLight">
+                <a @click="handleProductNav(listItem)" class="hover:text-orange ">{{ listItem?.title }}</a>
               </li>
-            </PerfectScrollbar>
           </ul>
         </div>
       </div>
@@ -85,6 +89,7 @@
 </template>
 
 <script setup>
+import CloseSvg from '@/components/frontend-components/Svg/Close-Svg.vue'
 import SearchSvg from '@/components/frontend-components/Svg/Search-Svg.vue'
 import Slider from '@/components/frontend-components/Slider.vue'
 import NavBar from '@/components/frontend-components/Nav-bar.vue'

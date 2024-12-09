@@ -3,55 +3,42 @@
     <!-- Menu Icon and Sidebar -->
     <div class="relative" id="sideText">
       <div class="absolute top-5 right-0 bg-transparent" ref="closeMenu">
-        <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height=""
+        <SideMenu openClass="w-[500px] fixed z-50 top-0 right-0 " closeClass="w-[500px] fixed z-50 top-0 right-[-520px]" height="100vh"
         >
-          <div class="z-50">
+          <div class="z-50 pl-16 pr-32 pt-10">
             <!-- Sidebar Header -->
-            <div class="flex border border-gray-400 items-center">
-              <span class="sticky top-3 p-4 border-r mr-4 border-gray-400 bg-transparent">
-                <MenuSvg size="15px" fillColor="#000000" />
-              </span>
-              <div>
-                <h3 class="text-[14px] font-medium">
-                  <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
-                    Collection 2024
-                  </a>
-                </h3>
-              </div>
-            </div>
+            <div  class=" mt-4 mb-2 gap-5  flex items-center">
+          <span class="sticky ">
+            <CloseSvg size="20px" fillColor="#000000" />
+          </span>
+          <h3 class="text-[20px] uppercase text-orange font-graphikMedium">
+            <a href="https://www.lebello.com/listItem/" class="text-orange">Collection 2024</a>
+          </h3>
+        </div>
+
 
             <!-- Search Section -->
-            <div class="px-7">
-              <form role="search" class="border-b border-gray-400 mt-2 relative">
-                <input
-                  class="appearance-none mt-2 bg-transparent w-full py-[1px] text-[14px] font-light focus:outline-none"
-                  id="username"
-                  type="text"
-                  placeholder="Search"
-                />
-                <div class="absolute right-2 top-2 inset-y-0 flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 ml-3 text-gray-400 hover:text-gray-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    transform="scale(-1, 1)"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+            <div class="">
+              <div class="search mt-4">
+            <form role="search">
+              <div class="relative border-b border-[#33333357] mt-2  mx-0">
+                <input class="w-full py-[1px] font-graphikLight text-[20px] px-0 border-none bg-transparent focus:outline-none" id="username" type="text" placeholder="Search" />
+                <div class="absolute right-2 top-1 flex items-center">
+                  <SearchSvg size="22px" fillColor="#000000" />
                 </div>
-              </form>
-
+              </div>
+            </form>
+          </div>
+          <div class="text-[#333]">
+            <h3 class="text-[19px] font-graphikMedium pb-2 pt-8 hover:text-orange cursor-pointer uppercase">Collection 2024</h3>
+          </div>
               <!-- Sidebar Navigation Links -->
-              <ul class="font-light text-[13px] my-1 text-textColorBlack overflow-auto max-h-52">
-                <PerfectScrollbar class="max-h-52">
-                  <li v-for="(listItem, index) in props.sidebarList" :key="index" class="mt-1">
+              <ul class="max-h-full border-y border-[#33333357] text-[19px]  text-[#363636] pt-1">
+                  <li v-for="(listItem, index) in props.sidebarList" :key="index" class="py-[9px] font-graphikLight">
                     <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">
                       {{ listItem?.name }}
                     </a>
                   </li>
-                </PerfectScrollbar>
               </ul>
 
               <!-- Social Media Links -->
@@ -128,7 +115,8 @@
 
 <script setup>
 import VideoModal from "./VideoModal.vue";
-
+import SearchSvg from "./Svg/Search-Svg.vue";
+import CloseSvg from "./Svg/Close-Svg.vue";
 import { onClickOutside } from "@vueuse/core";
 import { ref } from "vue";
 import SideMenu from "./Side-Menu.vue";

@@ -4,13 +4,13 @@
     <div id="default-carousel" class="relative" data-carousel="static">
 
       <div class="overflow-hidden h-screen">
-        <div v-for="(slide, index) in props.images" :key="index" class="w-full duration-700 ease-in-out"
+        <div v-for="(slide, index) in props.images" :key="index" class="w-full duration-1000 ease-in-out"
           v-show="currentIndex === index">
           <img :src="$filePath(slide[props.imageKeyName]?.file_url)"
             class="block absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2"
             :alt="slide[props.imageKeyName]?.file_url" />
           <!-- Navigation Buttons -->
-
+         
           <button @click="previous" class="absolute left-10 top-1/2 z-30 cursor-pointer">
             <ArrowSvg size="20px" direction="right" :strokeWidth="17"
               :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
@@ -31,11 +31,10 @@
           </div>
 
           <!-- Text on Carousel -->
-          <div :class="['absolute left-10 transition-all duration-1000 ease-in-out', {
-            'bottom-20': headingAndSubHeading, 'bottom-10': !hasHeadingAndLocation && atBottom,
-            'bottom-6': !hasHeadingAndLocation && !atBottom,
-          }]">
+          <div :class="['absolute left-10 transition-all duration-2000 ease-in-out', { 'bottom-20': headingAndSubHeading, 'bottom-10': !headingAndSubHeading && atBottom, 'bottom-6': !headingAndSubHeading && !atBottom, }]">
+
             <div class="font-graphik px-3 py-3 mb-4" :style="titleStyle(slide)">
+              
               {{ camelCase(slide?.heading_case, slide.heading_title) }}
             </div>
             <span v-if="slide?.sub_heading_title" class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
@@ -61,7 +60,7 @@
       </div>
     </div>
 
-    <div class="absolute top-48 right-0 ">
+    <div v-if="isSlider" class="absolute top-48 right-0 ">
       <SideMenu :openClass="props.openClass" :closeClass="props.closeClass" :height="props.height">
         <slot name="sidebar"></slot>
       </SideMenu>
@@ -79,7 +78,12 @@ const atBottom = ref(false);
 const navColor = ref('');
 
 const props = defineProps({
-  images: { type: Array, required: true },
+  images: {
+    type: Array,
+    required: true,
+    default: () => [],
+  },
+  isSlider: { type: Boolean, default: true },
   navColor: { type: String, default: 'black' },
   imageKeyName: { type: String, default: 'featured_image_data' },
   indicatorPosition: { type: String, default: 'top-1/2 left-0 transform rotate-90' },
@@ -87,10 +91,11 @@ const props = defineProps({
   openClass: { type: String, default: 'w-[230px] absolute z-50 right-0' },
   height: { type: String, default: '100vh' },
 });
+
 // :indicatorPosition="'bottom-5 left-1/2 transform -translate-x-1/2'"
 const startAutoSwipe = () => {
   setInterval(() => {
-    navColor.value = props.images[currentIndex.value]?.navColor || 'black';
+    // navColor.value = props.images[currentIndex.value]?.navColor || 'black';
     atBottom.value = !atBottom.value;
     next();
   }, 5000);
@@ -177,8 +182,11 @@ const subHeadingStyle = (slide) => {
 };
 
 const headingAndSubHeading = computed(() => {
-  return slide?.heading_title && slide?.sub_heading_title;
+  if (!props.images || props.images.length === 0) return false;
+  const currentSlide = props.images[currentIndex.value];
+  return currentSlide?.heading_title && currentSlide?.sub_heading_title;
 });
+9
 // Function to convert text to camel case
 const camelCase = (capitalize, text) => {
   if (!text) return '';
@@ -191,9 +199,9 @@ const camelCase = (capitalize, text) => {
       .join(' ');
 };
 
-watch(() => props.images, () => {
-  props.images = props.images;
-});
+// watch(() => props.images, () => {
+//   props.images = props.images;
+// });
 </script>
 
 <style scoped>

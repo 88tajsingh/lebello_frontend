@@ -3,7 +3,7 @@
     <div
       :class="isOpen ? openClass : closeClass"
       :style="{ height: height }"
-      class="sidenav border bg-[#ededed] pb-2 transition-all duration-1500 ease-in-out"
+      class="sidenav border bg-[#ededed] pb-2 transition-all duration-2000 ease-in-out"
     >
       <slot></slot>
     </div>

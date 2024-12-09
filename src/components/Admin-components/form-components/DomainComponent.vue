@@ -87,6 +87,7 @@ const handleDelete = async () => {
 };
 
 const masterDelete = async () => {
+  console.log('masterDelete',formData.value[masterKey]);
   const payload = {
     id: formData.value.id,
     [masterKey]: formData.value[masterKey],

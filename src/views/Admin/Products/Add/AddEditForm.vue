@@ -3,13 +3,13 @@
 
         <!-- domain select delete master delete  -->
         <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
-            :deleteService="ProductServices.deleteProduct" masterKey="master_product_id"
-            :masterDeleteService="ProductServices.mastetrDeleteProduct" routeTo="product">
+            :deleteService="form.is_store_product ? StoreProductServices.deleteStoreProduct : ProductServices.deleteProduct" masterKey='master_product_id'
+            :masterDeleteService="form.is_store_product ? StoreProductServices.masterDeleteStoreProduct : ProductServices.mastetrDeleteProduct" routeTo="product">
         </DomainComponent>
         <!-- slug update  -->
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm :form="form" @update-slug="fetchProductData"
-                :SlugUpdateservices="ProductServices.masterSlugUpdateProduct" masteridKeyName="master_product_id" />
+                :SlugUpdateservices="form.is_store_product ?StoreProductServices.masterSlugStoreProduct : ProductServices.masterSlugUpdateProduct" masteridKeyName="master_product_id" />
         </template>
 
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
@@ -204,67 +204,8 @@
                                     <SingleCheck v-if="form.id" label="" v-model="checkedFields.material_swatches">
                                     </SingleCheck>
                                 </div>
-                                <div>
-                                    <div class="flex ">
-                                        <div class="w-1/2 px-1">SWATCHES</div>
-                                        <div class="w-1/2 px-1">MATERIALS</div>
-                                    </div>
-                                    <div class="flex h-[200px] overflow-y-auto">
-                                        <!-- Left Panel -->
-                                        <div class="w-1/2 border-r">
-                                            <ul>
-                                                <li v-for="item in materialSwatchesList" :key="item.id"
-                                                    class="flex text-[#2272B1] justify-between items-center p-2 cursor-pointer hover:bg-[#eaf2fa]"
-                                                    :class="{ 'bg-gray opacity-80': isSelected(item) }"
-                                                    @click="toggleSwatchSelection(item)">
-                                                    <span class="text-[#2272B1]">{{ item.title }}</span>
-                                                    <span class="text-[10px] text-Black666">SWATCHES</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <!-- Right Panel -->
-                                        <div class="w-1/2 pl-4">
-                                            <div v-if="selectedSwatchesData.length">
-                                                <div v-for="swatch in selectedSwatchesData" :key="swatch.swatch"
-                                                    class="mb-4">
-                                                    <!-- Swatch Title -->
-                                                    <div class="flex justify-between">
-                                                        <h4 class="text-[#2272B1]">
-                                                            {{
-                                                                materialSwatchesList && materialSwatchesList.find(item =>
-                                                                    item.id
-                                                                    === swatch.swatch)?.title
-                                                            }}
-                                                        </h4>
-                                                        <span class="text-[12px]">SWATCHES</span>
-                                                    </div>
-                                                    <!-- Materials for the Swatch -->
-                                                    <ul>
-                                                        <li v-for="material in materialSwatchesList.find(s => s.id === swatch.swatch)?.materials_data || []"
-                                                            :key="material.id" class="flex items-center mb-2">
-                                                            <div class="flex w-full justify-between">
-                                                                <span>
-                                                                    <input type="checkbox"
-                                                                        :id="'material-' + material.id" class="mr-2"
-                                                                        @change="handleCheckboxChange(material.id, swatch.swatch, $event)" />
-                                                                    <label :for="'material-' + material.id"
-                                                                        class="text-[#2272B1]">{{ material.name
-                                                                        }}</label>
-                                                                </span>
-                                                                <span class="text-[10px]">MATERIAL</span>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div v-else>
-                                                <p class="text-gray-500">No swatches selected</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
+                                <SwatchMaterial :materialSwatchesList="materialSwatchesList"
+                                    @updateSelectedSwatchesData="updateSelectedSwatchesData" />
                             </div>
 
                         </Accordion>
@@ -602,51 +543,60 @@
 
                         </Accordion>
                     </div>
-                    <!-- <div class="mt-5">
-                        <Accordion :open="true" header="Heading Settings">
+                    <div class="mt-5">
+                        <Accordion :open="true" header="Product Slider Heading">
                             <div class="mt-2 px-6  h-auto">
                                 <div>
-                                    <div class="my-3">
+                                    <div class="  mt-2 items-center text-gray-600 text-sm">
+                                        <TextInput id="Product Title" type="text" class="block w-[180px] mr-2 h-[33px]"
+                                            v-model="form.heading_title" placeholder="" label="Slider Heading"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.heading_title = value }" />
+                                    </div>
+                                    <div class="py-4">
                                         <RadioButton v-for="option in withBgWithoutBg" :key="option.value"
                                             name="Visibility" :value="option.value" :label="option.label"
-                                            :modelValue="iswithBgHeading" @update:modelValue="iswithBgHeading = $event" />
+                                            :modelValue="iswithBg" @update:modelValue="iswithBg = $event" />
                                     </div>
-                                    <div v-if="iswithBgHeading == 1 || form.heading_background" class="">
+                                    <div v-if="iswithBg" class="">
                                         <ColorInput label="Select BG Color" v-model="form.heading_background"
                                             :hasCheckBox="checkBoxFlag"
-                                            @update:checkValue="value => checkedFields.heading_background = value" />
+                                            @update:checkValue="(value) => { checkedFields.heading_background = value }" />
                                     </div>
 
                                 </div>
-                                <div class="my-3">
+                                <div class="">
                                     <ColorInput label="Text Color" v-model="form.heading_text_color"
                                         :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="value => checkedFields.heading_text_color = value" />
+                                        @update:checkValue="(value) => { checkedFields.heading_text_color = value }" />
                                 </div>
 
-                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                <TextInput type="heading_font_size" class="block mr-2 mb-2 h-[40px] " placeholder=""
                                     label="Heading Font Size" v-model="form.heading_font_size"
                                     :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.heading_font_size = value" />
+                                    @update:checkValue="(value) => { checkedFields.heading_font_size = value }" />
 
-                                <div class="my-3">
+                                <div class="">
                                     <InputLabel for="HeadingCase" value="Heading Case" />
-                                    <div class='flex gap-3'>
+                                    <div class="flex">
+
                                         <SingleCheck v-if="form.id" label="" v-model="checkedFields.heading_case">
                                         </SingleCheck>
-                                        <RadioButton v-for="option in capsNOCaps" :key="option.value" name="Visibility"
-                                            :value="option.value" :label="option.label"
-                                            :modelValue="form.heading_case"
-                                            @update:modelValue="form.heading_case = $event" />
+                                        <div>
+                                            <RadioButton v-for="option in capsNOCaps" :key="option.value"
+                                                name="Visibility" :value="option.value" :label="option.label"
+                                                :modelValue="form.heading_case"
+                                                @update:modelValue="form.heading_case = $event" />
+                                        </div>
                                     </div>
                                 </div>
-                                <TextInput type="text" class="block mr-2 mb-2 h-[40px] " placeholder=""
+                                <TextInput type="text" class="block  mb-2 h-[40px] " placeholder=""
                                     label="Transparent %" v-model="form.heading_transparent_percentage"
                                     :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.heading_transparent_percentage = value" />
+                                    @update:checkValue="(value) => { checkedFields.heading_transparent_percentage = value }" />
                             </div>
                         </Accordion>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <div v-if='form.is_store_product'>
@@ -668,9 +618,9 @@
                                             @update:checkValue="(value) => { checkedFields.product_description = value }" />
                                     </div>
                                     <div class="mt-5  ">
-                                        <singleCheckBox id="FeaturedOption" label="Has Predefind Values"
+                                        <SingleCheck id="FeaturedOption" label="Has Predefind Values"
                                             v-model:modelValue="form.product_predefined_values">
-                                        </singleCheckBox>
+                                        </SingleCheck>
                                     </div>
                                     <div class="mt-2">
                                         <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Quick Ship"
@@ -694,9 +644,9 @@
                                             @update:checkValue="(value) => { checkedFields.sub_title = value }" />
                                     </div>
                                     <div class="mt-5  ">
-                                        <singleCheckBox id="FeaturedOption" label="Featured"
+                                        <SingleCheck id="FeaturedOption" label="Featured"
                                             v-model:modelValue="form.featured">
-                                        </singleCheckBox>
+                                        </SingleCheck>
                                     </div>
                                     <div class="mt-2">
                                         <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Featured Title"
@@ -794,22 +744,16 @@
                                                 <TextInput type="text" class="block mr-2 w-full" label="New Cushion"
                                                     :isTextarea="true" :rows="3" v-model="item.option_type_data" />
                                             </div>
-
-
                                             <div class="mt-5  ">
-                                                <singleCheckBox id="checked"
+                                                <SingleCheck id="checked"
                                                     label="If checked, this variation will be exported while exporting products."
-                                                    v-model:modelValue="item.export_field"></singleCheckBox>
+                                                    v-model:modelValue="item.export_field"></SingleCheck>
                                             </div>
                                             <button @click="removeFormItem(index)" type="button"
                                                 class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-danger  font-medium text-gray hover:bg-opacity-90">
                                                 Remove
                                             </button>
-
-                                            <!-- <hr v-if="index <div formItems.length - 1" class="my-4" /> -->
-
                                         </div>
-
                                         <button @click="addFormItem" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
                                             Add
@@ -828,8 +772,8 @@
                                         @checked-items="(checked) => form.tags = checked" />
                                 </div>
                             </Accordion>
-                            </div>
-                            <div class="mt-3 ">
+                        </div>
+                        <div class="mt-3 ">
                             <Accordion :open="true" header="Store Categories">
                                 <div class="mt-2 px-6 flex h-auto ">
                                     <Checkbox :nexted=true :checkedData='form.store_categories' :dropdown="true"
@@ -843,97 +787,28 @@
             </div>
         </form>
     </DefaultCard>
-
-
     <!-- gallery popup -->
     <div>
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.featured_image.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.featured_image.images"
-                :singleFile="true" :closeModal="() => { imageData.featured_image.isOpen = false }"
-                :selectedFiles="handleFeatureFiles" />
-        </popupModal>
-
-        <!-- Gallery Image Modal -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.gallery.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.gallery.images" :singleFile="false"
-                :closeModal="() => { imageData.gallery.isOpen = false }" :selectedFiles="handlegalleryFiles" />
-        </popupModal>
-
-        <!-- Contract Logo Modal -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.contract_logo.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.contract_logo.images"
-                :singleFile="true" :closeModal="() => { imageData.contract_logo.isOpen = false }"
-                :selectedFiles="handleContractLogoFiles" />
-        </popupModal>
-        <!--  new_product_additional_bg_image Modal -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.new_product_additional_bg_image.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true"
-                :selected="imageData.new_product_additional_bg_image.images" :singleFile="true"
-                :closeModal="() => { imageData.new_product_additional_bg_image.isOpen = false }"
-                :selectedFiles="handleAdditionalBgImageFiles" />
-        </popupModal>
-        <!--  handle Additional  Righ tBox Image Files Modal -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.new_product_additional_right_box_image.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true"
-                :selected="imageData.new_product_additional_right_box_image.images" :singleFile="true"
-                :closeModal="() => { imageData.new_product_additional_right_box_image.isOpen = false }"
-                :selectedFiles="handleAdditionalRightBoxImageFiles" />
-        </popupModal>
-
-        <!--  Download able  Modal -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.downloadable_files.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.downloadable_files.images"
-                :singleFile="false" :closeModal="() => { imageData.downloadable_files.isOpen = false }"
-                :selectedFiles="handleDownloadablemageFiles" />
-        </popupModal>
-
-        <!--  handle Additional  Righ tBox Image Files Modal -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.image.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.image.images" :singleFile="true"
-                :closeModal="() => { imageData.image.isOpen = false }" :selectedFiles="handleImageFiles" />
-        </popupModal>
-
-        <!-- ProductSlider Image Modal -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.new_product_slider.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
-                :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
-                :selectedFiles="handleProductSliderFiles" />
-        </popupModal>
-        <!-- Products Slider Heading Video Source  -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.video_source.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.video_source.images"
-                :singleFile="true" :closeModal="() => { imageData.video_source.isOpen = false }"
-                :selectedFiles="handleVideoSource" />
-        </popupModal>
-
-        <!-- Products Slider Heading Slider -->
-        <popupModal modalTitle="Media Library" customClasses="w-[1000px] h-[570px]"
-            v-model:isOpen="imageData.new_product_slider.isOpen">
-            <GetLibrary btnName="Select File" :getFlag="true" :selected="imageData.new_product_slider.images"
-                :singleFile="false" :closeModal="() => { imageData.new_product_slider.isOpen = false }"
-                :selectedFiles="handleProductSliderFiles" />
-        </popupModal>
+        <PopupModal v-for="(modal, key) in imageData" :key="key" :modalTitle="'Media Library'"
+            customClasses="w-[1000px] h-[570px]" v-model:isOpen="modal.isOpen">
+            <GetLibrary btnName="Select File" :getFlag="true" :selected="modal.images"
+                :singleFile="modal.singleFile || false" :closeModal="() => { modal.isOpen = false }"
+                :selectedFiles="modal.selectedFiles" />
+        </PopupModal>
         <Loader :isLoading="loading" :fullPage="true" />
     </div>
 </template>
 
 <script setup>
 import _ from 'lodash';
+import SwatchMaterial from '@/components/Admin-components/SwatchMaterial.vue';
 import { ref, onMounted, watch, computed } from "vue";
 import { showToast, getGlobalUpdateData, handleFileUpdate } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
+import StoreProductServices from '@/services/StoreProductServices';
 import { MaterialTreeList, getStoreCategoryTree, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import { statusData, trueFalse, productOptionsType, withBgWithoutBg, capsNOCaps, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
@@ -977,31 +852,6 @@ const formItems = ref(
     }
 );
 
-// Image data for various categories
-const imageData = ref({
-    featured_image: { isOpen: false, mediaName: 'Feature Image', images: [] },
-    gallery: { isOpen: false, mediaName: 'Gallery Image', images: [] },
-    new_product_slider: { isOpen: false, mediaName: 'Gallery Image', images: [] },
-    new_product_additional_bg_image: { isOpen: false, mediaName: 'Gallery Image', images: [] },
-    contract_logo: { isOpen: false, mediaName: 'Logo Image', images: [] },
-    new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
-    downloadable_files: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
-    image: { isOpen: false, mediaName: 'Main Slider Image', images: [] },
-    video_source: { isOpen: false, mediaName: 'Add Video Source', images: [] },
-    slide: { isOpen: false, mediaName: 'Slider Image', images: [] },
-});
-
-// Handle file updates for different image types
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
-const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
-const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
-const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form, false);
-const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
-const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
-// const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
-const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form, false);
-const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
-
 const handleImageFiles = (data) => {
     const media_titles = data.map((item) => item.title);
     imageData.value.image.mediaName = media_titles.join(", ");
@@ -1021,6 +871,29 @@ const handleVideoSource = (data) => {
     form.value.banner_slide = media_ids;
 
 };
+
+// Handle file updates for different image types
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
+const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
+const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
+const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form, false);
+const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
+const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
+// const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
+const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form, false);
+const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
+
+// Image data for various categories
+
+const imageData = ref({ featured_image: { isOpen: false, mediaName: 'Feature Image', images: [], selectedFiles: handleFeatureFiles, singleFile: true },
+ gallery: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handlegalleryFiles, singleFile: false }, 
+ new_product_slider: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handleProductSliderFiles, singleFile: false }, 
+ new_product_additional_bg_image: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handleAdditionalBgImageFiles, singleFile: true },
+ contract_logo: { isOpen: false, mediaName: 'Logo Image', images: [], selectedFiles: handleContractLogoFiles, singleFile: true }, 
+ new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleAdditionalRightBoxImageFiles, singleFile: true }, 
+ downloadable_files: { isOpen: false, mediaName: 'Main Slider Image',images: [], selectedFiles: handleDownloadablemageFiles, singleFile: false }, 
+ image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleImageFiles, singleFile: true }, 
+ video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true }, }); 
 
 // remove image form gallery
 const handleRemoveSliderImage = (slide) => {
@@ -1043,58 +916,10 @@ const handleRemoveDownloadable = (slide) => {
         form.value.downloadable_files = imageData.value.downloadable_files.images.map(item => item.id);
     }
 };
-
-// Data for swatches and materials
 const selectedSwatchesData = ref([]);
-const selectedSwatchIds = ref([]);
 
-// Function to toggle swatch selection
-const toggleSwatchSelection = (item) => {
-    console.log("item", item);
-    if (!Array.isArray(selectedSwatchesData.value)) {
-        console.error("selectedSwatchesData is not an array", selectedSwatchesData.value);
-        selectedSwatchesData.value = []; // Reset to an empty array if not
-    }
-
-    // Check if the swatch is already selected
-    const existingSwatch = selectedSwatchesData.value.find(swatch => swatch.swatch === item.id);
-
-    if (!existingSwatch) {
-        // Check if any material is selected for this swatch
-        const materialsSelected = item.materials?.length > 0; // Assuming materials is an array
-
-        if (materialsSelected) {
-            // Add new swatch if not already selected and materials are selected
-            selectedSwatchesData.value.push({
-                swatch: item.id, // Changed key name here
-                materials: item.materials.filter(material => material.selected) // Add only selected materials
-            });
-            selectedSwatchIds.value.push(item.id);
-        }
-    }
-};
-
-const isSelected = (item) => selectedSwatchIds.value.includes(item.id);
-
-const handleCheckboxChange = (materialId, swatchId, event) => {
-    const { checked } = event.target;
-    const swatch = selectedSwatchesData.value.find(s => s.swatch === swatchId);
-
-    if (swatch) {
-        if (checked) {
-            if (!swatch.materials.includes(materialId)) {
-                swatch.materials.push(materialId);
-            }
-        } else {
-            swatch.materials = swatch.materials.filter(id => id !== materialId);
-        }
-    } else {
-        selectedSwatchesData.value.push({
-            swatch: swatchId,
-            materials: checked ? [materialId] : []
-        });
-        selectedSwatchIds.value.push(swatchId);
-    }
+const updateSelectedSwatchesData = (data) => {
+    selectedSwatchesData.value = data;
 };
 
 // Validate form fields
@@ -1143,15 +968,13 @@ const handleSubmit = async () => {
     const hasCheckedFields = Object.values(checkedFields.value).some(Boolean)
     !form.value.domain_all && delete form.value.domain_all
     loading.value = true;
-
-    // form.value.material_swatches = []
     form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length > 0) || [];
 
     const { domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
-        downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, contract_type_data, ...payload } = form.value;
+        downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data,store_category_data,tags_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
     try {
-        const service = store.getters.editData ? ProductServices.editProduct : ProductServices.addProduct;
+        const service = store.getters.editData ? form.value.is_store_product ? StoreProductServices.editStoreProduct : ProductServices.editProduct : form.value.is_store_product ? StoreProductServices.addStoreProduct : ProductServices.addProduct;
         const res = await service(payload);
 
         if (res.status === 200 && res.data.success) {
@@ -1162,7 +985,6 @@ const handleSubmit = async () => {
                 showToast(res.data.message, 'success');
                 router.push('/product');
             }
-
         }
     } catch (e) {
         console.error('Error:', e);
@@ -1180,9 +1002,9 @@ const handleGlobalUpdate = async () => {
         master_product_id: form.value.master_product_id,
         global_keys: globalUpdate
     }
-
+    const service = form.value.is_store_product ? StoreProductServices.globalUpdateStoreProduct : ProductServices.globalUpdateProduct;
     try {
-        const { status, data } = await ProductServices.globalUpdateProduct(payload)
+        const { status, data } = await service(payload)
         status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
         if (status === 200 && data.success) router.push('/product')
     } catch (error) {
@@ -1216,7 +1038,6 @@ const fetchProductData = async () => {
 // Fetch contract location and type data
 const fetchAllData = async (payload) => {
     try {
-        // Fetch necessary data in parallel
         const [
             contractTree,
             seriesTree,
@@ -1289,10 +1110,8 @@ onMounted(() => {
         imageData.value.gallery.images = gallery_urls;
         imageData.value.gallery.mediaName = gallery_urls?.map(item => item.file_url).join(', ') || 'Gallery images';
 
-
         selectedSwatchesData.value = material_swatches;
         fetchAllData({ domain_id: form.value.domain_id });
-
     }
 });
 
@@ -1305,7 +1124,6 @@ watch(() => form.value.domain_id, (newDomainId) => {
     form.value.materials = null;
     // form.value.swatches = null;
     fetchAllData({ domain_id: newDomainId });
-    // Check if newDomainId is present in domains_data and fetch product type data if so
     if (Array.isArray(form.value.domains_data) && form.value.domains_data.includes(newDomainId)) {
         fetchProductData();
     }
