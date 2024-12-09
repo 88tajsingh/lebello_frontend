@@ -272,7 +272,7 @@ const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
 const productCategoryTypeTree = ref([]);
 const materialSwatchesList = ref([]);
-const apiCallStoreProduct = ref(true);
+const apiCallStoreProduct = ref(false);
 
 const handelEditClick = (data) => {
   console.log("data",data);
@@ -327,7 +327,8 @@ const changePages = (page) => {
 const handleGetProduct = async (payload) => {
   getLoading.value = true;
   try {
-    const service = apiCallStoreProduct.value ? StoreProductServices.getStoreProduct : ProductServices.getProduct
+    console.log("payload",apiCallStoreProduct.value === true);
+    const service = apiCallStoreProduct.value === true ? StoreProductServices.getStoreProduct : ProductServices.getProduct
       // console.log("service",service());
     const res = await service(payload);
     if (res.status === 200 && res.data.success) {

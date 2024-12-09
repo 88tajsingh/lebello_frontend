@@ -3,7 +3,15 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => ['PerfectScrollbar', 'perfect-scrollbar'].includes(tag),
+        },
+      },
+    }),
+  ],
   base: '/',
   resolve: {
     alias: {
@@ -26,10 +34,5 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     open: true,
-  },
-  vue: {
-    compilerOptions: {
-      isCustomElement: (tag) => ['PerfectScrollbar', 'perfect-scrollbar'].includes(tag),
-    },
   },
 });
