@@ -40,14 +40,16 @@
         </div>
 
         <!-- Popup -->
-        <div v-if="showPopup" class="fixed inset-0  bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
-            <transition name="slide-in">
+        <Transition name="nested">
+            <div 
+                v-if="showPopup" 
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-end z-[9999]"
+            >
                 <div 
-                    v-if="showPopup"
-                    class="absolute top-0 bottom-0 right-0 bg-white shadow-lg w-3/4 md:w-2/4 z-50 p-6"
+                    class="outer absolute top-0 bottom-0 right-0 bg-white shadow-screen w-3/4 md:w-2/4 z-50 p-6"
                     @click.stop
                 >
-                    <div class="max-w-4xl mx-auto p-6">
+                    <div class="inner max-w-4xl mx-auto p-6">
                         <!-- Back button -->
                         <div class="flex gap-10">
                             <span>
@@ -70,8 +72,6 @@
                                     </span>
                                 </button>
                             </span>
-                       
-
                         <!-- Title -->
                         <div>
                             <h1 class="text-3xl font-bold mb-4">{{ popupTitle }}</h1>
@@ -92,10 +92,10 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                 </div>
             </div>
-            </transition>
-        </div>
+        </Transition>
     </div>
 </template>
 <script setup>
@@ -189,13 +189,6 @@ const openPopup = (parent, child) => {
     showPopup.value = true;
 };
 
-const updateSelectedChild = () => {
-    const selected = currentItem.value.children.find(
-        (child) => child.name === selectedChildName.value
-    );
-    selectedChildImages.value = selected ? selected.images : [];
-};
-
 const closePopup = () => {
     showPopup.value = false;
     popupTitle.value = "";
@@ -203,12 +196,25 @@ const closePopup = () => {
     selectedChildImages.value = [];
 };
 </script>
-<style lang="css">
-.scrollbar-hide {
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-    scrollbar-width: none; /* Firefox */
+
+<style>
+.outer,
+.inner {
+    /* background: #eee; */
+    padding: 30px;
+    min-height: 100px;
 }
-.scrollbar-hide::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Edge */
+
+
+
+.nested-enter-active,
+.nested-leave-active {
+    transition: all 0.5s ease-in-out;
+}
+
+.nested-enter-from,
+.nested-leave-to {
+    transform: translateX(30px);
+    opacity: 0;
 }
 </style>
