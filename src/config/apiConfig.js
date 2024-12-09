@@ -202,6 +202,17 @@ const ApiConfig = {
   globalProductSeriesUpdate: '/global-product-series-update',
   deleteMasterProductSeries: '/delete-master-product-series',
 
+  //---------------------------------------- Store Product  -------------------------------------
+  getStoreProduct: '/get-store-product',
+  addStoreProduct: '/add-store-product',
+  editStoreProduct: '/update-store-product',
+  deleteStoreProduct: '/delete-store-product',
+  bulkDeleteStoreProduct: '/bulk-delete-store-product',
+  masterDeleteStoreProduct: '/delete-master-store-product',
+  globalUpdateStoreProduct: '/global-store-product-update',
+  masterSlugStoreProduct: '/master-store-product-slug-update',
+
+
   // ---------------------------------------  store  -------------------------------------
   // store category
   getStoreCategory: '/get-store-category',

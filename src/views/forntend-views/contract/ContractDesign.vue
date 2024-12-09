@@ -83,7 +83,7 @@
                :alt="slide.alt" />
           <!-- Text Overlay -->
           <div class="absolute bottom-20 left-14">
-            {{slide}}
+            
             <div class="font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
               {{ camelCase(slide?.heading_case, slide?.title) }}
             </div>
@@ -97,7 +97,7 @@
         <div class="flex absolute bottom-1/3 right-0 space-x-2 -translate-x-1 rotate-90 z-30">
           <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" 
                   type="button" 
-                  :class="{'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index}" 
+                  :class="{'bg-warmGray-600': currentIndex === index, 'bg-gray': currentIndex !== index}" 
                   class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
         </div>
 

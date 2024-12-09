@@ -144,12 +144,12 @@
                     <!-- <div class="mt-3 ">
                         <Accordion :open="true" header="Discussion">
                             <div class="mt-2 px-6  h-auto ">
-                                <singleCheckBox id="FeaturedOption" label="Allow comments"
+                                <SingleCheck id="FeaturedOption" label="Allow comments"
                                     v-model:modelValue="form.allow_comments">
-                                </singleCheckBox>
-                                <singleCheckBox id="FeaturedOption" label="Allow pingbacks & trackbacks"
+                                </SingleCheck>
+                                <SingleCheck id="FeaturedOption" label="Allow pingbacks & trackbacks"
                                     v-model:modelValue="form.allow_pingbacks">
-                                </singleCheckBox>
+                                </SingleCheck>
                             </div>
                         </Accordion>
                     </div> -->

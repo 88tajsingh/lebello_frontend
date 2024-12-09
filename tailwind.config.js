@@ -362,8 +362,9 @@ export default {
             'dynamic-md': 'repeat(auto-fill, minmax(130px, 1fr))', // Example for medium screens
           },
           transitionDuration: {
-            '2000': '2000ms',
             '1500': '1500ms',
+            '2000': '2000ms',
+            '2500': '2500ms',
           }
     },
 },

@@ -27,8 +27,9 @@ export const isChecked = (variable, id) => variable.value.some(item => item.id =
  * @param {string} fileUrl - The URL of the file
  * @returns {string} - The full URL of the file
  */
-export const filePath = (fileUrl) =>
-  fileUrl ? `${import.meta.env.VITE_FILES_PATH}${fileUrl}` : import.meta.env.VITE_DEFAULT_IMAGE;
+export const filePath = (fileUrl) =>{
+  // console.log("avdd", import.meta.env.VITE_FILES_PATH+fileUrl);
+  return fileUrl ? `${import.meta.env.VITE_FILES_PATH}${fileUrl}` : import.meta.env.VITE_DEFAULT_IMAGE;}
 export const normalFilePath = (fileUrl) =>`${import.meta.env.VITE_FILES_PATH}${fileUrl}`
 
 /**

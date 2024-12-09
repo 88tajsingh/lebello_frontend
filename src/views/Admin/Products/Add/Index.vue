@@ -228,8 +228,6 @@
         </tbody>
       </table>
     </div>
-
-
   </PopupModal>
   <!-- <Loader :isLoading="loading" :fullPage="true" /> -->
 </template>
@@ -237,6 +235,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
+import StoreProductServices from '@/services/StoreProductServices';
 import ProductServices from '@/services/ProductServices';
 import AddEditForm from  './AddEditForm.vue'
 import { useRouter } from 'vue-router';
@@ -273,7 +272,7 @@ const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
 const productCategoryTypeTree = ref([]);
 const materialSwatchesList = ref([]);
-const MaterialTreeListData = ref([]);
+const apiCallStoreProduct = ref(true);
 
 const handelEditClick = (data) => {
   console.log("data",data);
@@ -328,7 +327,9 @@ const changePages = (page) => {
 const handleGetProduct = async (payload) => {
   getLoading.value = true;
   try {
-    const res = await ProductServices.getProduct(payload);
+    const service = apiCallStoreProduct.value ? StoreProductServices.getStoreProduct : ProductServices.getProduct
+      // console.log("service",service());
+    const res = await service(payload);
     if (res.status === 200 && res.data.success) {
       rows.value = res.data.data;
       totalRows.value = res.data.total_records;
@@ -343,7 +344,8 @@ const handleGetProduct = async (payload) => {
 const handleDeleteProduct = async () => {
   loading.value = true;
   try {
-    const res = await ProductServices.deleteProduct({ id: editData.value });
+    const service = apiCallStoreProduct.value ? StoreProductServices.deleteStoreProduct : ProductServices.deleteProduct
+    const res = await service({ id: editData.value });
     if (res.status === 200 && res.data.success) {
       rows.value = rows.value.filter(item => item.id !== editData.value)
       showToast(res.data.message, 'success');
@@ -368,7 +370,8 @@ const handleBulkActions = async () => {
   if (bulkActionSelected.value === 'Delete') {
     loading.value = true;
     try {
-      const res = await ProductServices.BulkDeleteProduct({ id: ids });
+      const service = apiCallStoreProduct.value ? StoreProductServices.bulkDeleteStoreProduct : ProductServices.BulkDeleteProduct
+      const res = await service({ id: ids });
       if (res.status === 200 && res.data.success) {
         showToast(res.data.message, 'success');
         await handleGetProduct();
@@ -394,13 +397,6 @@ const fetchTreeData = async (fetchFunction, payload) => {
   const treeData = await fetchFunction({ domain_id: payload });
   const item = treeData.find(item => item.id == payload);
   return item ? item.name : 'N/A';
-};
-
-const fetchSwatches = async (payload) => {
-  const swatchesRes = await CommonServices.getSwatchesMaterialList(payload);
-  if (swatchesRes.status === 200 && swatchesRes.data.success) {
-    materialSwatchesList.value = swatchesRes.data.data;
-  }
 };
 
 async function fetchData() {

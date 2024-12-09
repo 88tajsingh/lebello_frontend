@@ -153,8 +153,8 @@
                         <Accordion :open="true" header="Materials Template">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class=" m-auto ">
-                                    <singleCheckBox id="material_template" label="Use New Material Template"
-                                        v-model:modelValue="form.material_template"></singleCheckBox>
+                                    <SingleCheck id="material_template" label="Use New Material Template"
+                                        v-model:modelValue="form.material_template"></SingleCheck>
                                 </div>
                             </div>
                         </Accordion>
@@ -164,7 +164,7 @@
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">
                                   
-                                    <singleCheckBox v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></singleCheckBox>
+                                    <SingleCheck v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></SingleCheck>
                                     <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true"
                                         valueField="id" showField="name" :data="MaterialTreeListData"
                                         @checked-items="handleCheckedItems" />
@@ -236,7 +236,7 @@ import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
-import singleCheckBox from '@/components/Admin-components/form-components/SingleCheck.vue'
+import SingleCheck from '@/components/Admin-components/form-components/SingleCheck.vue'
 
 // Store and Router
 const store = useStore();
