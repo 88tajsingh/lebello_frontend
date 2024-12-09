@@ -99,7 +99,7 @@
     </div>
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed,watch } from "vue";
 
 const items = ref([
     {
@@ -195,17 +195,20 @@ const closePopup = () => {
     popupDescription.value = "";
     selectedChildImages.value = [];
 };
+
+// Watch for changes to selectedChildName and update selectedChildImages
+watch(selectedChildName, (newChildName) => {
+    const child = currentItem.value.children.find((c) => c.name === newChildName);
+    selectedChildImages.value = child ? child.images : [];
+});
 </script>
 
 <style>
 .outer,
 .inner {
-    /* background: #eee; */
     padding: 30px;
     min-height: 100px;
 }
-
-
 
 .nested-enter-active,
 .nested-leave-active {
