@@ -11,7 +11,7 @@
           :showDropDown="false" :showHeading="false" :downDropdown="true" />
       </div> -->
     </div>
-    <div class=" bg-white">
+    <div id='sideText' class=" bg-white">
     <!-- Breadcrumb -->
     <nav class="py-4 text-sm">
       <div class="flex items-center gap-2 ml-14">
@@ -139,7 +139,7 @@
     </section>
 
     <transition>
-      <div id="scrollTOadditional" v-scroll="-400" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
+      <div id="scrollTOadditiona" v-scroll="-400" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
         <div class="grid grid-cols-1 mt-[5px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div class="product-item p-0" v-for="(product, index) in products" :key="index">
             <div class="product_img overflow-hidden">
@@ -155,7 +155,7 @@
     </transition>
 
     <transition>
-      <div ref="scrollTOadditional"  v-scroll="-400" v-show="addiVisible"
+      <div ref="scrollTOadditiona"  v-scroll="-400" v-show="addiVisible"
         class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0">
         <div class="py-10 m-0 relative px-14 ld:w-1/2 font-light text-left text-white bg-orange">
           <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
@@ -400,11 +400,11 @@ const rotate = () => {
 const HandleAdditionalInfo = () => {
   addiVisible.value = !addiVisible.value;
   isVisible.value = false;
-  if (addiVisible.value) scrollToTarget('scrollTOadditional');
+  if (addiVisible.value) scrollToTarget('scrollTOadditiona');
 };
 
 const scrollToTarget = () => {
-  const targetDiv = document.getElementById('scrollTOadditional');
+  const targetDiv = document.getElementById('scrollTOadditiona');
   const startPosition = window.pageYOffset;
   const targetPosition = targetDiv.getBoundingClientRect().top + startPosition;
   const distance = targetPosition - startPosition;

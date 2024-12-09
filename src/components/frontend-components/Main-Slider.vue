@@ -100,8 +100,8 @@ onMounted(startAutoSwipe);
   </div>
 
   <!-- Side Menu -->
-  <div class="absolute top-48 right-0 pr-3">
-    <SideMenu>
+  <div class="absolute top-48 right-0">
+    <SideMenu  openClass="w-[300px] absolute z-50 top-0 right-0 " closeClass="w-[300px] absolute z-50 top-0 right-[-320px]">
       <div class="z-50">
         <div v-if="props.mainSlider" class="mx-7 mt-4 mb-2">
           <h3 class="text-[14px] uppercase font-graphikMedium">

@@ -41,7 +41,7 @@
 
         <!-- Popup -->
         <div v-if="showPopup" class="fixed inset-0  bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
-            <transition name="slide-in-right">
+            <transition name="slide-in">
                 <div 
                     v-if="showPopup"
                     class="absolute top-0 bottom-0 right-0 bg-white shadow-lg w-3/4 md:w-2/4 z-50 p-6"
