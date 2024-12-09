@@ -11,7 +11,7 @@
           :showDropDown="false" :showHeading="false" :downDropdown="true" />
       </div> -->
     </div>
-    <div id='scrollTOadditional' class=" bg-white">
+    <div id='sideText' class=" bg-white">
     <!-- Breadcrumb -->
     <nav class="py-4 text-sm">
       <div class="flex items-center gap-2 ml-14">
