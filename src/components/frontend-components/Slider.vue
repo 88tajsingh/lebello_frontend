@@ -26,10 +26,10 @@
           </div>
           <!-- Text on Carousel -->
           <div v-if="!disableSideText" :class="['absolute transition-all duration-2000  ease-in-out', { 'bottom-0': atBottom && !slide?.sub_heading_case, 'bottom-8': !atBottom && !slide?.sub_heading_title , 'bottom-20': slide?.sub_heading_case }]" class="text-white left-4 sm:left-14 md:left-20 capitalize opacity-80 font-graphikLight sm:text-[20px] md2:text-[40px]">
-            <div  class="font-graphik px-3 py-3 mb-4" :style="titleStyle(slide)">
+            <div  class="font-graphik px-3 py-1 lg:py-3 mb-4" :style="headingStyle(slide)">
               {{heading}}
             </div>
-            <span v-if="subHeading" class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
+            <span v-if="subHeading" class="font-graphikLight px-3 py-1 lg:py-2" :style="subHeadingStyle(slide)">
               {{subHeading}}
             </span>
          </div>
@@ -81,6 +81,14 @@ const props = defineProps({
   disableSideText: { type: Boolean, default: false },
 });
 
+const slide = ref({
+  heading_font_size: '30px',
+  sub_heading_font_size: '18px',
+});
+
+const windowWidth = ref(window.innerWidth);
+
+
 // :indicatorPosition="'bottom-5 left-1/2 transform -translate-x-1/2'"
 const startAutoSwipe = () => {
   setInterval(() => {
@@ -109,8 +117,15 @@ const next = () => {
   navColor.value = props.images[currentIndex.value]?.navColor || 'black';
 };
 
-onMounted(startAutoSwipe);
+const updateWindowWidth = () => {
+  windowWidth.value = window.innerWidth;
+};
 
+// Attach and detach resize listener
+onMounted(() => {
+  // window.addEventListener('resize', updateWindowWidth);
+  startAutoSwipe();
+});
 const hexToRgb = (hex) => {
   const defaultHex = '#ff9d0f';
 
@@ -131,9 +146,8 @@ const hexToRgb = (hex) => {
   return `${r}, ${g}, ${b}`;
 };
 
-const titleStyle = (slide) => {
+const headingStyle = (slide) => {
   const defaultHex = '';
-  console.log("slide", slide?.heading_font_size);
   const baseBackground = slide?.heading_background || defaultHex;
   const transparency = slide?.heading_transparent_percentage
     ? parseFloat(slide.heading_transparent_percentage) / 100
@@ -144,11 +158,9 @@ const titleStyle = (slide) => {
     : baseBackground;
 
   return {
-
     color: slide?.heading_text_color,
     background: rgbaBackground,
-    fontSize: `${slide?.heading_font_size || '25px'}`,
-
+    fontSize: `clamp(12px, ${slide?.heading_font_size || '40px'}, 4vw)`, 
   };
 };
 
@@ -162,11 +174,11 @@ const subHeadingStyle = (slide) => {
   const rgbaBackground = baseBackground.startsWith('#')
     ? `rgba(${hexToRgb(baseBackground)}, ${transparency})`
     : baseBackground;
-console.log("slide?.sub_heading_color",slide?.sub_heading_text_color);
+
   return {
     color: slide?.sub_heading_text_color,
     background: rgbaBackground,
-    fontSize: `${slide?.sub_heading_font_size || '17px'}`,
+    fontSize: `clamp(10px, ${slide?.sub_heading_font_size || '25px'}, 2vw)`, 
   };
 };
 

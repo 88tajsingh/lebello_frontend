@@ -66,16 +66,15 @@
         </SideMenu>
       </div>
     </div>
-
     <!-- Section: Video + Text -->
-    <div class="flex flex-wrap ml-5 mt-20 sm:ml-10 md:flex my-20 sm:pl-10 m-auto h-auto gap-10">
+    <div class="flex flex-wrap mx-6 mt-12 md:mt-20 gap-3 sm:ml-10 md:flex my-5 lg:my-20 sm:pl-10 m-auto h-auto  md:gap-10">
       <div class="max-w-[440px]">
-        <h1 class="text-orange  text-[28px] sm:text-[36px] md:text-[37px] leading-[46px]">
+        <h1 class="text-orange   text-[40px] sm:text-[36px] md:text-[37px] leading-[46px]">
           INNOVATIVE, CREATIVE OUTDOOR FURNITURE
         </h1>
       </div>
       <div>
-        <p class="md:text-[21px] max-w-[570px] text-textColorBlack leading-6 font-light">
+        <p class=" text-[13px] md:text-[21px] max-w-[570px] text-textColorBlack leading-6 font-light">
           Designer and manufacturer of exclusive outdoor furniture with performance vibrant materials. Bespoke outdoor
           contract furniture supplier for commercial and residential clients.
         </p>
@@ -83,7 +82,7 @@
     </div>
 
     <!-- Video Section -->
-    <div class="flex flex-col md:flex-row text-[#333] md:w-[1200px] gap-6 m-auto mt-14 overflow-auto">
+    <div class="flex flex-col px-5 md:flex-row text-[#333] md:w-[1200px] md:px-0 gap-6 m-auto mt-14 overflow-auto">
       <div class="md:w-3/5">
         <video autoplay muted loop controls class="w-full h-full object-cover">
           <source src="https://lebello.com/wp-content/uploads/2023/05/Spring%20Collection%20Highlights.mp4" type="video/mp4" />
@@ -91,7 +90,7 @@
       </div>
       <div class="bg-[#dcd6cd] p-5 md:w-2/5 lg:p-10 flex flex-col justify-center items-start">
         <img class="max-w-[166px] mb-5" src="https://lebello.com/wp-content/uploads/2023/05/video-logo.png" />
-        <h4 class="my-5 text-orange uppercase text-[32px] leading-10">“Spring Collection Highlights”</h4>
+        <h4 class="my-6 text-orange uppercase text-[24px] lg:text-[32px] leading-10">“Spring Collection Highlights”</h4>
         <p class="text-[21px]  font-thin pr-4">
           Watch our season collection and product highlights.
         </p>
@@ -117,13 +116,8 @@
 import VideoModal from "./VideoModal.vue";
 import SearchSvg from "./Svg/Search-Svg.vue";
 import CloseSvg from "./Svg/Close-Svg.vue";
-import { onClickOutside } from "@vueuse/core";
-import { ref } from "vue";
 import SideMenu from "./Side-Menu.vue";
-import MenuSvg from "./Svg/Menu-Svg.vue";
 import { useRouter } from 'vue-router';
-
-import FormDropdown from "./Form-components/Form-Dropdown.vue";
 
 const router = useRouter();
 const props = defineProps({
@@ -132,22 +126,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const open = ref(false);
-const handleModal = () => {
-  open.value = !open.value;
-};
-const isOpenSidebar = ref(false);
-const handleSideMenu = () => {
-  isOpenSidebar.value = !isOpenSidebar.value;
-};
-
-const closeMenu = ref(null);
-const closeSideMenu = () => {
-  isOpenSidebar.value = false;
-};
-onClickOutside(closeMenu, closeSideMenu);
-
 
 const handelProductSeriesNavigation = (prod) => {
   id.value = prod.id;
