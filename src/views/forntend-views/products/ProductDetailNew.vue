@@ -1,7 +1,7 @@
 <template>
     
   <div class="overflow-hidden">
-    <MainSlider :isAbsolute="false" :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
+    <MainSlider :isAbsolute="true" :list="sliderList" :mainSlider="true" :showDropDown="false" :showHeading="false"
     :sliderImages="landingPageData"
       :downDropdown="false" />
     <div class="flex relative">
@@ -13,7 +13,7 @@
     </div>
     <div id='sideText' class=" bg-white">
     <!-- Breadcrumb -->
-    <nav class="py-4 text-sm">
+    <nav class="py-5 text-sm">
       <div class="flex items-center gap-2 ml-14">
         <span class="text-gray-600 font-medium">Collection</span>
         <!-- Heroicon: ChevronRight -->
@@ -23,18 +23,16 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:flex lg:justify-between lg:px-10">
+    <div class="container mx-auto grid grid-cols-1 gap-8  lg:flex lg:justify-between lg:pr-10">
   <!-- Product Viewer (Image Section) -->
-  <div class="relative  max-h-[430px] mb-5 aspect-square bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
+  <div class="relative  max-h-[430px] aspect-square  bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
     <Images3DView/>
 
     <!-- Controls -->
     <div id="zoom-controls" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
       <!-- Fullscreen Icon -->
       <button id="fullscreen-toggle" class="rounded-full p-2">
-        <svg height="20px" width="20px" viewBox="0 0 512 512" fill="#000000">
-          <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
-        </svg>
+        <Icon.FullScreen size="20px" fillColor="#c2a02f" />
       </button>
 
       <!-- Zoom In and Out Icons -->
@@ -54,15 +52,13 @@
 
       <!-- Reset Icon -->
       <button id="zoom-reset" class="rounded-full p-2 ">
-        <svg width="28px" height="28px" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000">
-          <path fill="#c2a02f" d="M784.512 230.272v-50.56a32 32 0 1 1 64 0v149.056a32 32 0 0 1-32 32H667.52a32 32 0 1 1 0-64h92.992A320 320 0 1 0 524.8 833.152a320 320 0 0 0 320-320h64a384 384 0 0 1-384 384 384 384 0 0 1-384-384 384 384 0 0 1 643.712-282.88z"></path>
-        </svg>
+        <Icon.Reset size="20px" fillColor="#c2a02f" />
       </button>
     </div>
   </div>
 
   <!-- Configuration Panel -->
-  <div class=" flex flex-col h-full pl-14 lg:w-2/5">
+  <div class="text-black flex flex-col h-full pl-14 lg:w-2/5">
   <div>
     <h1 class="text-2xl font-semibold">3D CONFIGURATOR</h1>
   </div>
@@ -86,10 +82,10 @@
 
   <!-- Buttons at the bottom (added mt-auto for positioning) -->
   <div class="mt-[130px]  h-full flex gap-4 items-end"> 
-    <button @click="handleStoreClick" class="text-[#B88746] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full">
+    <button @click="handleStoreClick" class="text-[#B88746] text-[11px] hover:text-[#9E7339] border border-[#B88746] py-1 px-10 rounded-full">
       ENQUIRE/EMAIL
     </button>
-    <button @click="handleStoreClick" class="bg-[#B88746] text-white hover:bg-[#9E7339] py-1 px-10 rounded-full">
+    <button @click="handleStoreClick" class="bg-[#B88746] text-[11px] text-white hover:bg-[#9E7339] py-1 px-10 rounded-full">
       SEE AT STORE
     </button>
   </div>
@@ -117,7 +113,7 @@
           <div class="mt-10 flex hover:text-orange" :class="{ 'text-orange': addiVisible }" @click="HandleAdditionalInfo"
             @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#333')">
             <span class="ml-12 uppercase font-graphikMedium text-[13px]">Additional Product info</span>
-            <ArrowSvg class="mt-0 ml-3 self-center" size="15px"
+            <Icon.Arrow class="mt-0 ml-3 self-center" size="15px"
               :fillColor="addiVisible ? '#d98c3a' : '#64748b' " />
           </div>
 
@@ -128,8 +124,8 @@
             <img
               class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
               src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" />
-            <span v-scroll="isVisible ? arrowScroll : 0" class="absolute bottom-0 bg-orange p-5">
-              <ArrowSvg size="13px" fillColor="#ffffff" ref="arrowSvg" @click="rotate" />
+            <span v-scroll="isVisible ? arrowScroll : 0"  @click="rotate" class="absolute  bottom-0 bg-orange p-5">
+              <Icon.Arrow size="13px" fillColor="#ffffff" ref="arrowSvg" />
             </span>
           </div>
         </div>
@@ -162,11 +158,7 @@
             Crafted from our exclusive Ropetek® materials...
           </p>
           <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path fill="none" d="M0 0h24v24H0z" />
-              <path fill="#ffffff"
-                d="M12 10.586l4.293-4.293 1.414 1.414L13.414 12l4.293 4.293-1.414 1.414L12 13.414l-4.293 4.293-1.414-1.414L10.586 12 6.293 7.707l1.414-1.414L12 10.586z" />
-            </svg>
+            <Icon.Close size="20px" fillColor="#ffffff" />
           </div>
         </div>
       </div>
@@ -192,80 +184,7 @@
          
         </ul>
       </div>
-      <!-- social links -->
-      <!-- <ul class="flex justify-center space-x-1 pr-20 ">
-        <li> <a href="https://www.facebook.com/share.php?u=https://lebello.com/products/b-chair-1-2/&title=B Chair"
-            target="_blank" title="Facebook"
-            class="flex items-center justify-center w-11 h-11 bg-gray hover:bg-[#7bd923] rounded-full mx-3"> <svg
-              width="18px" height="18px" viewBox="-5 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fcfcfc" stroke="#fcfcfc">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                  <g id="Dribbble-Light-Preview" transform="translate(-385.000000, -7399.000000)" fill="#ffffff">
-                    <g id="icons" transform="translate(56.000000, 160.000000)">
-                      <path
-                        d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
-                        id="facebook-[#fcfcfc]"></path>
-                    </g>
-                  </g>
-                </g>
-              </g>
-            </svg> </a> </li>
-        <li> <a
-            href="https://www.houzz.com/imageClipperUpload?link=https://lebello.com/products/b-chair-1-2/&source=button&hzid=8628&imageUrl=https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg&title=B Chair&ref=https://lebello.com/products/b-chair-1-2/"
-            target="_blank" title="Houzz"
-            class="flex items-center justify-center w-11 h-11 bg-gray hover:bg-[#7bd923] rounded-full mx-3"> <svg
-              fill="#ffffff" width="18px" height="18px" viewBox="-5 0 24 24" xmlns="http://www.w3.org/2000/svg"
-              stroke="#ffffff">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path
-                  d="m6.926 15.991 6.927-3.991v7.995l-6.927 4.005zm-6.926-3.991v7.995l6.926-4.005zm6.926-12v7.995l-6.926 4.005v-7.995zm0 7.995 6.926-3.991v7.996z">
-                </path>
-              </g>
-            </svg> </a> </li>
-        <li> <a
-            href="https://pinterest.com/pin/create/bookmarklet/?media=https://lebello.com/wp-content/uploads/2019/12/b-chair-slider-gallery.jpg&url=https://lebello.com/products/b-chair-1-2/&is_video=false&description=B Chair"
-            target="_blank" title="Pinterest"
-            class="flex items-center justify-center w-11 h-11 bg-gray hover:bg-[#7bd923] rounded-full mx-3"> <svg
-              width="18px" height="18px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" fill="#f5f5f5" stroke="#f5f5f5">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <title>pinterest [#180]</title>
-                <desc>Created with Sketch.</desc>
-                <defs></defs>
-                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                  <g id="Dribbble-Light-Preview" transform="translate(-220.000000, -7399.000000)" fill="#ffffff">
-                    <g id="icons" transform="translate(56.000000, 160.000000)">
-                      <path
-                        d="M173.876,7239 C168.399,7239 164,7243.43481 164,7248.95866 C164,7253.05869 166.407,7256.48916 169.893,7258.07936 C169.893,7256.21186 169.88,7256.45286 171.303,7250.38046 C170.521,7248.80236 171.129,7246.19673 172.88,7246.19673 C175.31,7246.19673 173.659,7249.79964 173.378,7251.2174 C173.129,7252.30544 173.959,7253.14238 174.955,7253.14238 C176.864,7253.14238 178.108,7250.71524 178.108,7247.87063 C178.108,7245.69456 176.615,7244.10437 174.042,7244.10437 C169.467,7244.10437 168.307,7249.19966 169.893,7250.79893 C170.292,7251.40294 169.893,7251.43118 169.893,7252.22174 C169.616,7253.05768 167.403,7251.84259 167.403,7248.70757 C167.403,7245.86195 169.727,7242.51518 174.457,7242.51518 C178.191,7242.51518 180.681,7245.27609 180.681,7248.2054 C180.681,7252.13805 178.523,7254.98366 175.37,7254.98366 C174.291,7254.98366 173.295,7254.3978 172.963,7253.72824 C172.36,7256.07371 172.238,7257.26258 171.303,7258.58153 C172.216,7258.83261 173.129,7259 174.125,7259 C179.602,7259 184,7254.56519 184,7249.04235 C183.752,7243.43481 179.353,7239 173.876,7239"
-                        id="pinterest-[#180]"></path>
-                    </g>
-                  </g>
-                </g>
-              </g>
-            </svg> </a> </li>
-        <li> <a
-            href="https://twitter.com/intent/tweet?status=Discover Lebello - B Chair+https://lebello.com/products/b-chair-1-2/"
-            target="_blank" title="Twitter"
-            class="flex items-center justify-center w-11 h-11 bg-gray hover:bg-[#7bd923] rounded-full mx-3"> <img
-              class="w-[18px] h-[18px]"
-              src="https://lebello.com/wp-content/themes/lebello-ep/images/Lebello-twitterx-icon.svg"
-              alt="Social Icon" /> </a> </li>
-      </ul> -->
-
-      <!-- <div class="relative top-30 right-0 pr-3 self-center" ref="closeMenu2">
-        <SideMenu :list="list" :handleSideMenu="handleSideMenu2" :isOpen="isOpenSidebarSlider2" :mainSlider="false"
-          :showDropDown="false" :showHeading="false" :downDropdown="true" />
-      </div> -->
     </div>
-
-
     <!-- <AccordianSection /> -->
      <div class="mx-12">
        <AccordionNew />
@@ -280,8 +199,8 @@ import MainSlider from '@/components/frontend-components/Main-Slider.vue'
 import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import { ref,onMounted } from 'vue'
+import Icon from '@/components/frontend-components/Svg/Icons'
 import { scrollDown } from '@/helper/frontendHelpers'
-import ArrowSvg from '@/components/frontend-components/Svg/Arrow-Svg.vue'
 import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'
 import { onClickOutside } from '@vueuse/core'
 import BreadcrumbSection from '@/components/frontend-components/BreadcrumbSection.vue'

@@ -8,13 +8,9 @@
                 @click="toggleParent(index)"
             >
                 <div>
-                    <span class="text-gray-800 font-medium">{{ item.title }}</span>
+                    <span class="font-medium">{{ item.title }}</span>
                 </div>
-                <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
-                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24" width="24"
-                    transform="rotate(-90)">
-                    <path d="M6 9l6 6 6-6"></path>
-                </svg>
+                <Icons.Arrow size="13px" fillColor="#64748b" strokeWidth="22.77" direction="left" />
             </div>
 
             <!-- Child Items -->
@@ -27,12 +23,8 @@
                 >
                     <div class="flex items-center justify-between w-1/3 p-3 pl-6">
                         <span class="text-gray-700">{{ child.name }}</span>
-                        <span>
-                            <svg fill="none" height="24" shape-rendering="geometricPrecision" stroke="currentColor"
-                                stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewBox="0 0 24 24"
-                                width="24" transform="rotate(-90)">
-                                <path d="M6 9l6 6 6-6"></path>
-                            </svg>
+                        <span class="pr-1">
+                            <Icons.Arrow size="13px" fillColor="#64748b" strokeWidth="22.77" direction="left" />
                         </span>
                     </div>
                 </div>
@@ -54,22 +46,7 @@
                         <div class="flex gap-10">
                             <span>
                                 <button class="mb-4 flex pt-2 text-gray-500" @click="closePopup">
-                                    <span class="transition-all duration-300 ease-in-out rotate-180">
-                                        <svg
-                                            fill="none"
-                                            height="24"
-                                            shape-rendering="geometricPrecision"
-                                            stroke="currentColor"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="1.5"
-                                            viewBox="0 0 24 24"
-                                            width="24"
-                                            transform="rotate(-90)"
-                                        >
-                                            <path d="M6 9l6 6 6-6"></path>
-                                        </svg>
-                                    </span>
+                                    <Icons.Arrow size="20px" fillColor="#64748b" strokeWidth="22.77" direction="right" />
                                 </button>
                             </span>
                         <!-- Title -->
@@ -99,8 +76,8 @@
     </div>
 </template>
 <script setup>
-import { ref, computed,watch } from "vue";
-
+import { ref,watch } from "vue";
+import Icons from "./Svg/Icons";
 const items = ref([
     {
         title: "B Chair",
@@ -196,7 +173,6 @@ const closePopup = () => {
     selectedChildImages.value = [];
 };
 
-// Watch for changes to selectedChildName and update selectedChildImages
 watch(selectedChildName, (newChildName) => {
     const child = currentItem.value.children.find((c) => c.name === newChildName);
     selectedChildImages.value = child ? child.images : [];
@@ -212,12 +188,12 @@ watch(selectedChildName, (newChildName) => {
 
 .nested-enter-active,
 .nested-leave-active {
-    transition: all 0.5s ease-in-out;
+    transition: all 0.6s ease-in-out;
 }
 
 .nested-enter-from,
 .nested-leave-to {
-    transform: translateX(30px);
+    transform: translateX(50px);
     opacity: 0;
 }
 </style>

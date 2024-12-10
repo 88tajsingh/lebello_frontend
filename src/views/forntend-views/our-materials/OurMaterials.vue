@@ -36,7 +36,6 @@ const handleRoute = (sub) => {
   <Slider :images="ourMaterialData.swatch_data" imageKeyName='featured_image_data' :disableSideText="true"
     :navColor="'white'" sliderPageName="ourMaterials" :hasSidebar="true">
     <template #utility>
-      
       <!-- lebellow icon right top -->
       <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
         <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />

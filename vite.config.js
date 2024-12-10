@@ -12,18 +12,18 @@ export default defineConfig({
         },
       },
     }),
-    visualizer({ open: true }), // Visualizes the bundle
+    visualizer({ open: true }), 
   ],
   base: '/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      lodash: fileURLToPath(new URL('./node_modules/lodash', import.meta.url)), // Use URL-based path resolution
+      lodash: fileURLToPath(new URL('./node_modules/lodash', import.meta.url)), 
     },
   },
   build: {
     rollupOptions: {
-      external: ['lodash'], // Avoid bundling lodash
+      external: ['lodash'],
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
