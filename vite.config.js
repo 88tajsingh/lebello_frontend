@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
@@ -11,22 +12,28 @@ export default defineConfig({
         },
       },
     }),
+    visualizer({ open: true }), // Visualizes the bundle
   ],
   base: '/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      lodash: fileURLToPath(new URL('./node_modules/lodash', import.meta.url)), // Use URL-based path resolution
     },
   },
   build: {
     rollupOptions: {
+      external: ['lodash'], // Avoid bundling lodash
       output: {
-        // manualChunks(id) {
-        //   if (id.includes('node_modules')) {
-        //     const packageName = id.split('node_modules/')[1].split('/')[0];
-        //     return `npm.${packageName.replace('@', '')}`;
-        //   }
-        // },
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            const packageName = id.split('node_modules/')[1].split('/')[0];
+            if (['lodash', '@lodash'].includes(packageName)) {
+              return 'shared-libs';
+            }
+            return `npm.${packageName.replace('@', '')}`;
+          }
+        },
       },
     },
   },
