@@ -3,7 +3,7 @@
        <NavBar :absolute="true" :navColor="navColor" />
        <Slider :images="landingPageData.home_slider" imageKeyName='featured_image_data'  :navColor="'white'"
        openClass="w-[500px] fixed z-50 top-0 right-0 " closeClass="w-[500px] fixed z-50 top-0 right-[-520px]" height="100vh"
-       >
+       sliderPageName ="homeSlider">
        <template #sidebar>
       <div class="z-50 pl-16 pr-32 pt-10">
         <div  class=" mt-4 mb-2 gap-5  flex items-center">
@@ -38,7 +38,7 @@
        </template>
     </Slider> 
     <CollectionVideoc :sidebarList="landingPageData?.home_sidebar" />
-    <div class="block mx-4 lg:mx-7 md:flex md:gap-5 lg:gap-14 lg:mt-5 overflow-x-hidden">
+    <div id='sideText' class="block mx-4 lg:mx-7 md:flex md:gap-5 lg:gap-14 lg:mt-5 overflow-x-hidden">
     <div v-for="(data, index) in productdata" :key="index" class="flex m-auto md:w-4/12 bg-[#ddd7ce] mt-10">
       <div @click="index === 1 ? handleModal() : router.push(data.urlLink)" class="pb-1 text-textColorBlack hover:bg-[#c68d39] hover:text-white cursor-pointer">
         <div class="overflow-hidden">
