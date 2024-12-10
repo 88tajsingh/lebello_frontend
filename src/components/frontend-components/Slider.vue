@@ -2,7 +2,6 @@
   <div>
     <!-- Slider Section -->
     <div id="default-carousel" class="relative" data-carousel="static">
-
       <div class="overflow-hidden h-screen">
         <div v-for="(slide, index) in props.images" :key="index" class="w-full duration-1000 ease-in-out"
           v-show="currentIndex === index">
@@ -19,36 +18,23 @@
             <ArrowSvg size="20px" direction="left" :strokeWidth="17"
               :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
           </button>
-
-
-
-
           <!-- Carousel Indicators -->
           <div :class="['absolute space-x-2 z-30', indicatorPosition]">
             <button v-for="(slide, index) in props.images" :key="index" @click="changeSlide(index)"
               :class="{ 'bg-[#909090]': currentIndex === index, 'bg-[#626262]': currentIndex !== index }"
               class="w-2 h-2 rounded-full"></button>
           </div>
-
           <!-- Text on Carousel -->
-          <div :class="['absolute left-10 transition-all duration-2000 ease-in-out', { 'bottom-20': headingAndSubHeading, 'bottom-10': !headingAndSubHeading && atBottom, 'bottom-6': !headingAndSubHeading && !atBottom, }]">
-
-            <div class="font-graphik px-3 py-3 mb-4" :style="titleStyle(slide)">
-              
-              {{ camelCase(slide?.heading_case, slide.heading_title) }}
+          <div v-if="!disableSideText" :class="['absolute transition-all duration-2000  ease-in-out', { 'bottom-0': atBottom && !slide?.sub_heading_case, 'bottom-8': !atBottom && !slide?.sub_heading_title , 'bottom-20': slide?.sub_heading_case }]" class="text-white left-4 sm:left-14 md:left-20 capitalize opacity-80 font-graphikLight sm:text-[20px] md2:text-[40px]">
+            <div  class="font-graphik px-3 py-3 mb-4" :style="titleStyle(slide)">
+              {{heading}}
             </div>
-            <span v-if="slide?.sub_heading_title" class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
-              {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
+            <span v-if="subHeading" class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
+              {{subHeading}}
             </span>
-          </div>
-
-          <!-- <div :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-6': !atBottom, 'bottom-10': atBottom }]"
-                class="text-white left-6 sm:left-14 md:left-20 capitalize opacity-80 font-graphikLight sm:text-[20px] md2:text-[40px]">
-                {{ props?.images && props?.images[currentIndex]?.title || "default" }}
-            </div> -->
-
+         </div>
           <!-- Down Arrow -->
-          <div
+          <div v-if="props.sliderPageName === 'homeSlider' || props.sliderPageName === 'ourMaterials'"
             class="absolute left-1/2 bottom-5 animate-bounce text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5">
             <div @click="() => scrollDown('sideText')" class="px-3 py-1 cursor-pointer">
               <svg width="24px" height="24px" viewBox="0 0 1024 1024" fill="#fafafa">
@@ -58,9 +44,9 @@
           </div>
         </div>
       </div>
+      <slot name="utility"></slot>
     </div>
-
-    <div v-if="isSlider" class="absolute top-48 right-0 ">
+    <div v-if="hasSidebar" class="absolute top-48 right-0 ">
       <SideMenu :openClass="props.openClass" :closeClass="props.closeClass" :height="props.height">
         <slot name="sidebar"></slot>
       </SideMenu>
@@ -71,6 +57,7 @@
 <script setup>
 import { ref, onMounted, watch, defineProps, computed } from 'vue';
 import SideMenu from './Side-Menu.vue';
+import { scrollDown } from '@/helper/frontendHelpers';
 import ArrowSvg from './Svg/Arrow-Svg.vue';
 
 const currentIndex = ref(0);
@@ -83,20 +70,22 @@ const props = defineProps({
     required: true,
     default: () => [],
   },
-  isSlider: { type: Boolean, default: true },
+  hasSidebar: { type: Boolean, default: true },
   navColor: { type: String, default: 'black' },
   imageKeyName: { type: String, default: 'featured_image_data' },
   indicatorPosition: { type: String, default: 'top-1/2 left-0 transform rotate-90' },
   closeClass: { type: String, default: 'w-[230px] z-50 absolute right-[-250px]' },
   openClass: { type: String, default: 'w-[230px] absolute z-50 right-0' },
-  height: { type: String, default: '100vh' },
+  height: { type: String, default: '' },
+  sliderPageName: { type: String, default: 'homeSlider' },
+  disableSideText: { type: Boolean, default: false },
 });
 
 // :indicatorPosition="'bottom-5 left-1/2 transform -translate-x-1/2'"
 const startAutoSwipe = () => {
   setInterval(() => {
     // navColor.value = props.images[currentIndex.value]?.navColor || 'black';
-    atBottom.value = !atBottom.value;
+   props.sliderPageName === 'homeSlider' ? atBottom.value = !atBottom.value : ''
     next();
   }, 5000);
 };
@@ -173,9 +162,9 @@ const subHeadingStyle = (slide) => {
   const rgbaBackground = baseBackground.startsWith('#')
     ? `rgba(${hexToRgb(baseBackground)}, ${transparency})`
     : baseBackground;
-
+console.log("slide?.sub_heading_color",slide?.sub_heading_text_color);
   return {
-    color: slide?.sub_heading_color,
+    color: slide?.sub_heading_text_color,
     background: rgbaBackground,
     fontSize: `${slide?.sub_heading_font_size || '17px'}`,
   };
@@ -186,7 +175,35 @@ const headingAndSubHeading = computed(() => {
   const currentSlide = props.images[currentIndex.value];
   return currentSlide?.heading_title && currentSlide?.sub_heading_title;
 });
-9
+
+
+// left text 
+const heading = computed(() => {
+  const currentSlide = props.images[currentIndex.value];
+  if (props.sliderPageName === 'homeSlider') {
+    return camelCase(currentSlide.heading_case, currentSlide.heading_title);
+  } else if (props.sliderPageName === 'contractDesign') {
+    return camelCase(currentSlide.sub_heading_case, currentSlide.title);
+  } else {
+    return null;  
+  }
+});
+
+const subHeading = computed(() => {
+  const currentSlide = props.images[currentIndex.value];
+  // console.log("currentSlide", currentSlide.contract_info_location);
+  if (props.sliderPageName === 'contractDesign') {
+    return camelCase(currentSlide.heading_case, currentSlide.contract_info_location);
+  } 
+  // else if () {
+  //   return camelCase(currentSlide.sub_heading_case, currentSlide.title);
+  // } 
+  else {
+    return null;  // Fallback text if neither condition is met
+  }
+});
+
+
 // Function to convert text to camel case
 const camelCase = (capitalize, text) => {
   if (!text) return '';

@@ -70,53 +70,8 @@
     <div class="mx-5 mt-4 lg:mx-20">
        <!-- Slider -->
   <div id="default-carousel" class="relative">
-    <!-- Carousel Container -->
-    <!-- <Slider :images="contractDesignData.contract_design_slider" imageKeyName='contract_slider_image_data'  :navColor="'white'">
-    </Slider> -->
-    <div class="w-full h-full mx-0 overflow-hidden">
-      <div class="h-screen w-screen">
-        <!-- Slides -->
-        <div v-for="(slide, index) in contractDesignData.contract_design_slider" :key="index" 
-             v-show="currentIndex === index" class="w-full duration-700 ease-in-out">
-          <img :src="$filePath(slide?.contract_slider_image_data?.file_url)" 
-               class="absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2" 
-               :alt="slide.alt" />
-          <!-- Text Overlay -->
-          <div class="absolute bottom-20 left-14">
-            
-            <div class="font-graphik px-2 py-2 mb-4" :style="titleStyle(slide)">
-              {{ camelCase(slide?.heading_case, slide?.title) }}
-            </div>
-            <span class="font-graphikLight px-3 py-2" :style="subHeadingStyle(slide)">
-              {{ camelCase(slide?.sub_heading_case, slide?.contract_info_location) }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Navigation Dots -->
-        <div class="flex absolute bottom-1/3 right-0 space-x-2 -translate-x-1 rotate-90 z-30">
-          <button v-for="(slided, index) in contractDesignData.contract_design" :key="index" 
-                  type="button" 
-                  :class="{'bg-warmGray-600': currentIndex === index, 'bg-gray': currentIndex !== index}" 
-                  class="w-2 h-2 rounded-full" @click="changeSlide(index)"></button>
-        </div>
-
-        <!-- Previous Button -->
-        <button @click="previous" type="button" class="absolute left-10 top-1/2 z-30 p-3 text-white cursor-pointer group">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <!-- Next Button -->
-        <button @click="next" type="button" class="absolute right-10 top-1/2 z-30 p-4 text-white cursor-pointer group">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-    </div>
-
+    <Slider :images="contractDesignData.contract_design_slider" imageKeyName='contract_slider_image_data'  :navColor="'white'" sliderPageName ="contractDesign" :hasSidebar="false">
+    </Slider>
     <!-- Logo -->
     <div class="absolute top-3 right-0">
       <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png" alt="Contract Design" />
@@ -152,14 +107,10 @@
     </div>
   </div>
 </div>
-
-
     <!-- Footer -->
     <FooterSection />
   </div>
 </template>
-
-
 
 <script setup>
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
@@ -167,13 +118,11 @@ import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useRouter } from 'vue-router';
-import { onClickOutside } from "@vueuse/core";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 import { getContractDesignData } from "@/helper/frontendHelpers";
 import { useStore } from "vuex";
-import ArrowSvg from "@/components/frontend-components/Svg/Arrow-Svg.vue";
 import Slider from "@/components/frontend-components/Slider.vue";
 
 // Setup router and store
@@ -182,22 +131,9 @@ const store = useStore();
 
 // References
 const element = ref(null);
-const currentIndex = ref(0);
 const animationType = "fade-up";
-const active = ref(false);
-const isOpen = ref(false);
 const isHovered = ref([]);
-const closeMenu = ref(null);
 const contractDesignData = ref([]);
-const isOpenSidebar = ref(false);
-const handleSideMenu = () => {
-  isOpenSidebar.value = !isOpenSidebar.value;
-};
-
-const closeSideMenu = () => {
-  isOpenSidebar.value = false;
-};
-onClickOutside(closeMenu, closeSideMenu);
 
 
 // Navigation Handling
@@ -219,10 +155,8 @@ const handleClick = (sub) => {
   } else {
     sessionStorage.setItem('contract_location_id', sub.id);
   }
-
   router.push(route);
 };
-
 
 const handleRoute = (sub) => {
   sessionStorage.setItem('contract_design_id', sub.id);
@@ -234,23 +168,6 @@ const handleRoute = (sub) => {
 const handleContractDesignData = async () => {
   const { status, data } = await getContractDesignData();
   contractDesignData.value = (status === 200 && data.success) ? data.data : [];
-};
-
-// Auto Slider
-const startAutoSwipe = () => {
-  setInterval(next, 5000);
-};
-
-const changeSlide = (index) => {
-  currentIndex.value = index;
-};
-
-const previous = () => {
-  currentIndex.value = (currentIndex.value - 1 + contractDesignData.value.contract_design_slider.length) % contractDesignData.value.contract_design_slider.length;
-};
-
-const next = () => {
-  currentIndex.value = (currentIndex.value + 1) % contractDesignData.value.contract_design_slider.length;
 };
 
 // Accordion Management
@@ -272,79 +189,6 @@ const toggleOverlay = (index, show) => {
   isHovered.value[index] = show;
 };
 
-const hexToRgb = (hex) => {
-  const defaultHex = '#ff9d0f';
-
-  if (!hex || typeof hex !== 'string') {
-    hex = defaultHex;
-  }
-
-  hex = hex.replace(/^#/, '');
-
-  if (hex.length !== 6) {
-    hex = defaultHex.replace(/^#/, '');
-  }
-
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-
-  return `${r}, ${g}, ${b}`;
-};
-
-
-const titleStyle = (slide) => {
-  const defaultHex = '#ff9d0f';
-  console.log("slide",slide?.heading_font_size);
-  const baseBackground = slide?.heading_background || defaultHex;
-  const transparency = slide?.heading_transparent_percentage
-    ? parseFloat(slide.heading_transparent_percentage) / 100
-    : 1;
-
-  const rgbaBackground = baseBackground.startsWith('#')
-    ? `rgba(${hexToRgb(baseBackground)}, ${transparency})`
-    : baseBackground;
-
-  return {
-
-    color: slide?.heading_text_color,
-    background: rgbaBackground,
-    fontSize: `${slide?.heading_font_size || '25px'}`,
-
-  };
-};
-
-// Function to compute the subheading styles
-const subHeadingStyle = (slide) => {
-  const defaultHex = '#ff9d0f';
-  const baseBackground = slide?.sub_heading_background || defaultHex;
-  const transparency = slide?.sub_heading_transparent_percentage
-    ? parseFloat(slide.sub_heading_transparent_percentage) / 100
-    : 1;
-
-  const rgbaBackground = baseBackground.startsWith('#')
-    ? `rgba(${hexToRgb(baseBackground)}, ${transparency})`
-    : baseBackground;
-
-  return {
-    color: slide?.sub_heading_color,
-    background: rgbaBackground,
-    fontSize: `${slide?.sub_heading_font_size || '17px'}`,
-  };
-};
-
-// Function to convert text to camel case
-const camelCase = (capitalize, text) => {
-  if (!text) return '';
-  if (capitalize === 'No Caps' || capitalize === 'no caps')
-    return text
-  else
-    return text
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(' ');
-};
-
 // AOS Initialization
 onMounted(() => {
   window.scrollTo({
@@ -357,19 +201,11 @@ onMounted(() => {
   // Initialize hover states
   isHovered.value = new Array(contractDesignData.value?.contract_design?.length).fill(false);
   handleContractDesignData();
-  startAutoSwipe();
 });
 
 onUnmounted(() => {
   AOS.refreshHard();
 });
-
-// Open Navigation
-const openNav = () => {
-  active.value = true;
-  isOpen.value = true;
-};
-
 </script>
 
 <style scoped>

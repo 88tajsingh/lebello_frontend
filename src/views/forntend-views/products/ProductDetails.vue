@@ -79,8 +79,8 @@
              <span class="text-green font-medium">{{ productData.title }}</span>
            </div>
          </nav>
-         <div class="absolute top-5 right-0 pr-3 bg-transparent " ref="closeMenu">
-        <SideMenu key="firstKey1" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider">
+         <div class="absolute top-5 right-0 bg-transparent " ref="closeMenu">
+        <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]">
           <div  class="z-50">
             <div class="flex border border-[#686868] items-center">
               <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
@@ -95,13 +95,12 @@
               </div>
             </div> 
             <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
-                <PerfectScrollbar class="max-h-52">
+               
                   <li v-for="(listItem, index) in productTypes " :key="index" class="mt-1 border-b border-[#cdc6c6]">
                     <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange  cursor-pointer">
                       {{ listItem?.name }}
                     </a>
                   </li>
-                </PerfectScrollbar>
               </ul>
           </div>
         </SideMenu>

@@ -1,9 +1,9 @@
 <template>
-  <div ref="closeMenu" class="relative z-99999">
+  <div ref="closeMenu" class="relative ">
     <div
       :class="isOpen ? openClass : closeClass"
       :style="{ height: height }"
-      class="sidenav border bg-[#ededed] pb-2 transition-all duration-2000 ease-in-out"
+      class="sidenav border bg-[#ededed] z-99999 pb-2 transition-all duration-2000 ease-in-out"
     >
       <slot></slot>
     </div>

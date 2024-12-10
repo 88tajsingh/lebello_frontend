@@ -81,8 +81,7 @@
   </script>
   
   <style scoped>
-  /* Style for submenus */
-  .group:hover .scale-100 {
+    .group:hover .scale-100 {
     transform: scale(1);
   }
   .bg-opacity-5 {
