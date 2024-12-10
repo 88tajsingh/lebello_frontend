@@ -8,7 +8,6 @@
   let keyshotXR;
   
   const initKeyShotXR = () => {
-    console.log('keyshotXR:', keyshotXR); 
     if (typeof keyshotXR !== 'undefined' && keyshotXR) {
       const nameOfDiv = "KeyShotXR";
       const folderName = "src/assets/Stone Tables White Background.1";
@@ -31,7 +30,7 @@
       const downloadOnInteraction = false;
       const imageExtension = "png";
       const showLoading = true;
-      const loadingIcon = "src/assets/Stone Tables White Background.1/files/ks_logo.png"; 
+      const loadingIcon = "ks_logo.png"; 
       const allowFullscreen = true; 
       const uReverse = false;
       const vReverse = false;

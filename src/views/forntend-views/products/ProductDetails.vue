@@ -1,112 +1,87 @@
 <template>
-
   <div class="overflow-hidden ">
-    <!-- <MainSlider :isAbsolute="false" :list="sliderList" imageKeyName='file_url' :mainSlider="true" :showDropDown="false" :showHeading="false"
-    :sliderImages="productData.new_product_slider_url"
-      :downDropdown="false" /> -->
     <div>
-      <NavBar :absolute="true" :navColor="navColor"/>
-    <div id="default-carousel" class="relative" data-carousel="static">
-      <div class="w-full h-full  mx-0">
-        <div class="overflow-hidden  h-screen sm:h-screen xl:h-screen 2xl:h-screen">
-          <div v-show="currentIndex === index" v-for="(slide, index) in productData.gallery_urls" :key="index"
-            class="w-full duration-700 ease-in-out" data-carousel-item>
-            <img :src="$filePath(slide?.file_url)"
-              class="block  absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2 "
-              f />
-              <button @click="previous" type="button"
-          class="flex absolute left-10 z-30 justify-center items-center px-3 top-1/2 cursor-pointer group focus:outline-none"
-          data-carousel-prev>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" :stroke="navColor === 'white' ? '#ffffff' : '#000000'">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button @click="next" type="button"
-          class="flex absolute right-10 z-30 justify-center items-center px-4 top-1/2 cursor-pointer group focus:outline-none"
-          data-carousel-next>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" :stroke="navColor === 'white' ? '#ffffff' : '#000000'">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-          </div>
+      <NavBar :absolute="true" :navColor="navColor" />
+      <Slider :images="imageData" imageKeyName='gallery' :disableSideText="true"
+      :navColor="'white'" sliderPageName="productDetails  " :hasSidebar="true">
+      <template #utility>
+        <!-- lebellow icon right top -->
+        <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
+          <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+        </a>
+        <!-- text left bottom -->
+        <div  class="absolute bottom-10  mx-auto left-6 sm:left-14 md:left-20 "
+          :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-10': !atBottom, 'bottom-10': atBottom }]">
+          <div class=" capitalize opacity-80 text-[#686868] font-graphik sm:text-[20px] md2:text-[40px]  ">{{
+            productData.title }}</div>
         </div>
-        <div class="flex absolute bottom-1/2 rotate-90 z-30 left-7 space-x-2 -translate-x-1/2">
-          <button v-for="(slide, index) in productData.gallery_urls" :key="index" type="button"
-            :class="{ 'bg-gray-700': currentIndex === index, 'bg-gray-400': currentIndex !== index }"
-            class="w-2 h-2 rounded-full" aria-current="false" @click="changeSlide(index)"></button>
-        </div>
-       
-      </div>
-      <!-- lebellow icon right top -->
-      <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
-        <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
-      </a>
-      <!-- text left bottom -->
-      <div id="sideText" class="absolute bottom-10  mx-auto left-6 sm:left-14 md:left-20 "
-      :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-10': !atBottom, 'bottom-10': atBottom }]" 
-      >
-        <div class=" capitalize opacity-80 text-[#686868] font-graphik sm:text-[20px] md2:text-[40px]  ">{{ productData.title }}</div>
-      </div>
-      <!-- down arrow -->
-      <div class="absolute left-1/2 bottom-5 animate-bounce mx-auto">
-        <div @click="()=> scrollDown('sideText')"
-          class="text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5 ease-in duration-300 px-3 py-1">
-          <span href="#" class="transition  ease-out duration-1000	">
-            <svg width="24px" height="24px" viewBox="0 0 1024 1024" class="icon" version="1.1"
-              xmlns="http://www.w3.org/2000/svg" fill="#fafafa" stroke="#fafafa" stroke-width="73.728">
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" fill="#ffffff"></path>
-              </g>
-            </svg>
-          </span>
-        </div>
-      </div>
-      <!-- menu item -->
-    </div>
+        </template>
+        <template #sidebar>
+          <div class="z-50">
+              <div class="flex border border-[#686868] items-center">
+                <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
+                  <MenuSvg size="15px" fillColor="#000000" />
+                </span>
+                <div>
+                  <h3 class="text-[14px] font-medium">
+                    <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
+                      Collection 2024
+                    </a>
+                  </h3>
+                </div>
+              </div>
+              <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
+                <li v-for="(listItem, index) in productTypes " :key="index" class="mt-1 border-b border-[#cdc6c6]">
+                  <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange  cursor-pointer">
+                    {{ listItem?.name }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </template>
+      </Slider> 
     </div>
     <div class="flex relative">
     </div>
     <div class=" ">
       <!-- Breadcrumb -->
-       <div class="relative">
-         <nav class="py-6 font-graphik text-sm">
-           <div class="flex items-center  text-[16px] cursor-pointer gap-2 ml-14">
-             <span @click="() => $router.push('/products')" class="text-gray-600">Collection</span>
-             <!-- Heroicon: ChevronRight -->
-             /
-             <span class="text-green font-medium">{{ productData.title }}</span>
-           </div>
-         </nav>
-         <div class="absolute top-5 right-0 bg-transparent " ref="closeMenu">
-        <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]">
-          <div  class="z-50">
-            <div class="flex border border-[#686868] items-center">
-              <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
-                <MenuSvg size="15px" fillColor="#000000" />
-              </span>
-              <div>
-                <h3 class="text-[14px] font-medium">
-                  <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
-                    Collection 2024
-                  </a>
-                </h3>
-              </div>
-            </div> 
-            <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
-               
-                  <li v-for="(listItem, index) in productTypes " :key="index" class="mt-1 border-b border-[#cdc6c6]">
-                    <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange  cursor-pointer">
-                      {{ listItem?.name }}
-                    </a>
-                  </li>
-              </ul>
+      <div id="sideText" class="relative">
+        <nav class="py-6 font-graphik text-sm">
+          <div class="flex items-center  text-[16px] cursor-pointer gap-2 ml-14">
+            <span @click="() => $router.push('/products')" class="text-gray-600">Collection</span>
+            /
+            <span class="text-green font-medium">{{ productData.title }}</span>
           </div>
-        </SideMenu>
+        </nav>
+        <div class="absolute top-5 right-0 bg-transparent " ref="closeMenu">
+          <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 "
+            closeClass="w-[230px] absolute z-50 top-0 right-[-250px]">
+            <div class="z-50">
+              <div class="flex border border-[#686868] items-center">
+                <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
+                  <MenuSvg size="15px" fillColor="#000000" />
+                </span>
+                <div>
+                  <h3 class="text-[14px] font-medium">
+                    <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
+                      Collection 2024
+                    </a>
+                  </h3>
+                </div>
+              </div>
+              <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
+
+                <li v-for="(listItem, index) in productTypes " :key="index" class="mt-1 border-b border-[#cdc6c6]">
+                  <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange  cursor-pointer">
+                    {{ listItem?.name }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </SideMenu>
+        </div>
       </div>
-       </div>
-      
+
       <!-- Main Content -->
       <!-- <div class="container mx-auto grid grid-cols-1 gap-8 px-4 lg:flex lg:justify-between lg:px-10">
   <div class="relative aspect-square bg-gray-50 rounded-lg lg:w-3/5 overflow-y-hidden">
@@ -181,7 +156,7 @@
 </div> -->
 
     </div>
-    <div class="bg-white ">
+    <div  class="bg-white  ">
       <section class="bg-[#f3f3f3]">
         <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">
           <div class="lg:px-11 my-10">
@@ -362,7 +337,8 @@
 import MainSlider from '@/components/frontend-components/Main-Slider.vue'
 import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,computed } from 'vue'
+import Slider from '@/components/frontend-components/Slider.vue'
 import { scrollDown } from '@/helper/frontendHelpers'
 import ArrowSvg from '@/components/frontend-components/Svg/Arrow-Svg.vue'
 import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'
@@ -417,6 +393,12 @@ onMounted(() => {
   });
   handleProductDetailData()
 })
+
+const imageData = computed(() => {
+  return productData.value.gallery_urls?.map(item => ({
+    gallery: item
+  }));
+});
 
 const handleStoreClick = () => {
   console.log('Email:', email.value)
@@ -482,8 +464,8 @@ const handleProductNav = (nav) => {
 
 const startAutoSwipe = () => {
   setInterval(() => {
-    navColor.value=productData.value?.gallery_urls[currentIndex.value]?.navColor || '';
-    atBottom.value= !atBottom.value ;
+    navColor.value = productData.value?.gallery_urls[currentIndex.value]?.navColor || '';
+    atBottom.value = !atBottom.value;
     next()
   }, 5000)
 }
@@ -494,16 +476,16 @@ const changeSlide = (index) => {
 }
 
 const previous = () => {
-  navColor.value=productData.value?.gallery_urls[currentIndex.value].navColor;
+  navColor.value = productData.value?.gallery_urls[currentIndex.value].navColor;
   currentIndex.value = (currentIndex.value - 1 + productData.value?.gallery_urls.length) % productData.value?.gallery_urls.length
 }
 
 const next = () => {
   if (productData.value?.gallery_urls.length === 0) {
-        console.error("Slider images array is empty");
-        return;
-    }
-  navColor.value=productData.value?.gallery_urls[currentIndex.value].navColor;
+    console.error("Slider images array is empty");
+    return;
+  }
+  navColor.value = productData.value?.gallery_urls[currentIndex.value].navColor;
   currentIndex.value = (currentIndex.value + 1) % productData.value?.gallery_urls.length
 }
 
