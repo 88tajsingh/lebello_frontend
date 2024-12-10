@@ -21,12 +21,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            const packageName = id.split('node_modules/')[1].split('/')[0];
-            return `npm.${packageName.replace('@', '')}`;
-          }
-        },
+        // manualChunks(id) {
+        //   if (id.includes('node_modules')) {
+        //     const packageName = id.split('node_modules/')[1].split('/')[0];
+        //     return `npm.${packageName.replace('@', '')}`;
+        //   }
+        // },
       },
     },
   },

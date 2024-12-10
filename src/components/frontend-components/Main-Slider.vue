@@ -87,7 +87,7 @@ onMounted(startAutoSwipe);
     <!-- Text on Carousel -->
     <div :class="['absolute transition-all duration-1000 ease-in-out', { 'bottom-6': !atBottom, 'bottom-10': atBottom }]" class="text-white left-6 sm:left-14 md:left-20 capitalize opacity-80 font-graphikLight sm:text-[20px] md2:text-[40px]">
       {{ props.sliderImages[currentIndex]?.title || "default" }}
-    </div>
+    </div>  
 
     <!-- Down Arrow -->
     <div class="absolute left-1/2 bottom-5 animate-bounce text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5">
