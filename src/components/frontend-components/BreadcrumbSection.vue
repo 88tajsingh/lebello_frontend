@@ -5,7 +5,7 @@
         <li 
           v-for="(breadcrumb, index) in props?.breadcrumbData" 
           :key="`breadcrumb-${index}`"
-          class="text-Black666 text-[15px] font-graphik hover:text-blue" 
+          class="text-Black666 text-[15px] font-graphik cursor-pointer hover:text-blue" 
           :class="{ 'text-green text-[16px]': index == 0 }"
         >
           <p @click="onBreadcrumbClick(breadcrumb)">

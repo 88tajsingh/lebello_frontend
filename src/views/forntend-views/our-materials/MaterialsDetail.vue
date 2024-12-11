@@ -3,7 +3,7 @@
     <div class="mx-10">
         <div class="overflow-x-hidden md:mx-10 mx-5 pb-10 mt-4 border-t border-gray-4">
             <div
-                class="`overflow-x-hidden   grid grid-cols-1 ${contractDesignData.contract_design !== 'New Contract Design' ? 'lg:grid-cols-5' : 'lg:grid-cols-12'}`">
+                class="`overflow-x-hidden grid grid-cols-1 ${contractDesignData.contract_design !== 'New Contract Design' ? 'lg:grid-cols-5' : 'lg:grid-cols-12'}`">
                 <div class="col-span-12 lg:col-span-4 container pt-10 pb-3  ">
                     <div class="flex ">
                         <h1 class=" font-graphik text-[25px] font-medium text-black">
@@ -29,7 +29,6 @@
                     </ul>
                     <div v-html="swatchDetailData?.description"
                         class="text-[16px] text-Black666 font-medium font-graphikLight pt-2">
-
                     </div>
                     <div class="pt-16 pb-5 border border-b-gray-4 ">
                         <h1 class=" font-graphik text-[25px] text-black font-medium ">
@@ -40,7 +39,6 @@
                         <ul class="flex  list-none flex-row flex-wrap mb-3" role="tablist" data-twe-nav-ref>
                             <li v-for="(tab, tindex) in swatchDetailData.material_data" :key="tindex"
                                 role="presentation">
-
                                 <a :href="'#' + tab?.id" :class="{
                                     'mt-3 block  px-4 pt-3 text-[13px]  pb-4 uppercase leading-tight  hover:text-blue :text-primary': true,
                                     'disabled pointer-events-none': tab?.disabled,
@@ -48,12 +46,9 @@
                                 }" :data-twe-toggle="tab?.id" data-twe-nav-active role="tab" :aria-controls="tab?.id"
                                     :aria-selected="tab?.active" @click.prevent="activateTab(tab, tab.id)">{{ tab?.name
                                     }}</a>
-
                             </li>
                         </ul>
-
                         <!--Tabs content-->
-                        <!-- Tabs content -->
                         <div class="mb-6">
                             <div v-for="(tab, index) in swatchDetailData.material_data" :key="index">
                                 <!-- Display the tab content only if it's the active tab -->
@@ -93,89 +88,8 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                    <div v-show="isModalOpen"
-                        class="overflow-y-auto overflow-x-hidden fixed top-0 ml-auto z-50 justify-center items-center w-full max-h-full">
-                        <div class="justify-center items-center m-auto relative p-4 w-full max-w-2xl max-h-full">
-                            <!-- Modal content -->
-                            <div class="relative top-0 bg-white rounded-lg shadow ease-in duration-300">
-                                <div class="bg-[#f7f7f7] p-3">
-                                    <div id="carouselExampleControls" class="relative" data-twe-carousel-init
-                                        data-twe-ride="carousel">
-                                        <!--Carousel items-->
-                                        <div
-                                            class="relative w-full overflow-hidden after:clear-both after:block after:content-['']">
-                                            <!--First item-->
-                                            <div v-for="(item, index) in contractDesignData?.gallery_urls" :key="index"
-                                                :class="[
-                                                    'relative',
-                                                    'float-left',
-                                                    '-mr-[100%]',
-                                                    'w-full',
-                                                    'object-cover',
-                                                    'transition-transform',
-                                                    'duration-[600ms]',
-                                                    'ease-in-out',
-                                                    'motion-reduce:transition-none',
-                                                    { hidden: index !== modalactiveIndex },
-                                                ]">
-
-                                                <img :src="$filePath(item?.file_url)" :class="''"
-                                                    class="block  object-cover fadeimg ease-in  max-w-800 max-h-300 overflow-y-hidden transition-max-height duration-700 linear"
-                                                    :alt="item.alt" />
-
-                                                <div class="flex justify-between text-[#595b55]">
-                                                    <p class="mt-1 pr-4 text-sm">{{ item?.alt }}</p>
-                                                    <p class="mt-1 text-sm">
-                                                        image {{ index + 1 }} of {{
-                                                            contractDesignData?.gallery_urls?.length
-                                                        }}
-                                                        <span><img @click="toggleModal"
-                                                                src="https://lebello.com/wp-content/themes/lebello-ep/images/chocolat/close2.gif" />
-                                                        </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!--Carousel controls - prev item-->
-                                        <!-- v-if="!modalactiveIndex <= 0" -->
-                                        <button v-if="!modalactiveIndex <= 0"
-                                            class="absolute left-0 top-0 z-[1] flex w-[50%] items-center m-auto pb-20 h-[90%] align-center transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] text-white hover:text-white hover:opacity-90 focus:text-white"
-                                            type="button" @click="prevSlide">
-                                            <span class="inline-block h-8 w-8">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="0.5" stroke="currentColor" class="h-24 w-24">
-                                                    <!-- Increased height and width by 40px -->
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15.75 19.5L8.25 12l7.5-7.5" />
-                                                </svg>
-                                            </span>
-                                            <span
-                                                class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Previous</span>
-                                        </button>
-                                        <!--Carousel controls - next item-->
-                                        <button v-if="modalactiveIndex < contractDesignData?.gallery_urls?.length - 1"
-                                            class="absolute bottom-10 right-0 top-0 z-[1] flex w-[50%] justify-right content-right self-right pt-10 pl-auto h-[80%] align-center transition-opacity duration-150 ease-[cubic-bezier(0.25,0.1,0.25,1.0)] text-white hover:text-white hover:opacity-90 focus:text-white"
-                                            type="button" @click="nextSlide">
-                                            <span class="inline-block self-center pb-10 ml-auto">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="0.5" stroke="currentColor" class="h-24 w-24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                                </svg>
-                                            </span>
-                                            <span
-                                                class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Next</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
                 <!-- listing right -->
                 <div class="hidden lg:block pl-4 min-w-52">
                     <div class="font-graphik text-[20px] text-blue mx-auto px-auto border border-b-gray-4 font-medium ">
@@ -186,54 +100,27 @@
                                 :aria-controls="'collapse' + item.id"
                                 class="group relative flex  w-full items-center hover:text-orange border-0  py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
                                 :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === item.id }"
-                                type="button">
+                                type="button" @mouseover="hoverKey = key" @mouseleave="hoverKey = null">
                                 {{ item.title }}
-
                                 <span @click.stop="toggleAction(key, item)"
                                     class=" ms-auto  transition-transform duration-200 ease-in-out"
                                     :class="{ 'rotate-0': activeIndex !== item.id, 'rotate-[-180deg]': activeIndex === item.id }">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="6px" height="6px"
-                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4  w-4">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
+                                    <Icons.Arrow size="15px"
+                                        :fillColor="hoverKey === key ? '#d98c3a' : activeIndex === item.id ? '#3c50ec' : ''"
+                                        strokeWidth="22.77" direction="top" />
                                 </span>
                             </button>
-                        </h2>
 
+                        </h2>
                         <div :id="'collapse' + item.id" v-show="activeIndex === item.id" class="pl-7 py-0"
                             :aria-labelledby="'heading' + item.id" data-twe-collapse-item
                             data-twe-parent="#accordionExample">
-
-                            <div v-if="item" class="text-orange font-semibold">
-
-                                <ul class=''>
-                                    <!-- Overview -->
-
-                                    <!-- <li v-if="item.overview" class="">
-                                        <a @click.prevent="handleClick(item.overview)"
-                                            class="font-graphikLight text-[13px] cursor-pointer ">{{
-                                                item.overview.title }}</a>
-                                    </li> -->
-                                    <!-- Location -->
-
-                                    <!-- <template v-if="Array.isArray(item)">
-                                        <li v-for="(sub, itemIndex) in item" :key="itemIndex">
-                                            <a @click.prevent="handleClick(sub)"
-                                                class="font-graphikLight text-[13px] cursor-pointer">{{
-                                                    sub.contract_location || sub.title }}</a>
-                                        </li>
-                                    </template> -->
-                                    <!-- Contract designs -->
-
-                                    <div v-if="item.material_data">
-                                        <li v-for="(sub, itemIndex) in item.material_data" :key="itemIndex">
-                                            <a @click.prevent="handleClick(sub, item)"
-                                                class="font-graphikLight text-[13px] cursor-pointer">{{
-                                                    sub.name }}</a>
-                                        </li>
-                                    </div>
-                                </ul>
+                            <div v-if="item?.material_data" class="text-orange font-semibold">
+                                <li v-for="(sub, itemIndex) in item.material_data" :key="itemIndex" class="list-none">
+                                    <a @click.prevent="handleClick(sub, item)"
+                                        class="font-graphikLight text-[13px] cursor-pointer">
+                                        {{ sub.name }} </a>
+                                </li>
                             </div>
                         </div>
                     </div>
@@ -249,23 +136,20 @@
 <script setup>
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
-import BreadcrumbSection from "@/components/frontend-components/BreadcrumbSection.vue";
 import { onMounted, ref, watch } from "vue";
-import { useStore } from "vuex";
-import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
-import { onClickOutside } from "@vueuse/core";
+import Icons from "@/components/frontend-components/Svg/Icons";
 import { getSwatchDetail } from "@/helper/frontendHelpers";
 import { useRouter } from "vue-router";
-import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 
-const store = useStore();
 const router = useRouter();
 const materialDetailSidebar = ref([]);
 const swatchDetailData = ref([]);
 const breadcrumbData = ref([]);
 const loading = ref(true);
+const activeIndex = ref(null);
+const hoverKey = ref(null);
+const openSections = ref({});
 const id = ref(sessionStorage.getItem('materialDetail'));
-
 const activeTab = ref(0)
 
 const handleswatchDetailData = async () => {
@@ -277,8 +161,6 @@ const handleswatchDetailData = async () => {
         activeIndex.value = swatchDetailData.value.id;
     }
 }
-
-
 
 const activateTab = (tab, index) => {
     if (!tab.disabled) {
@@ -298,17 +180,6 @@ const activateTab = (tab, index) => {
     }
 };
 
-const isOpenSidebar = ref(false);
-const closeMenu = ref(null);
-const handleSideMenu = () => {
-    isOpenSidebar.value = !isOpenSidebar.value;
-};
-
-const closeSideMenu = () => {
-    isOpenSidebar.value = false;
-};
-onClickOutside(closeMenu, closeSideMenu);
-
 const handleClick = (sub, item) => {
 
     if (sub.id !== activeIndex.value) {
@@ -321,9 +192,9 @@ const handleClick = (sub, item) => {
 
 onMounted(() => {
     window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
+        top: 0,
+        behavior: 'smooth',
+    });
     handleswatchDetailData();
 });
 
@@ -364,57 +235,6 @@ watch(
         console.log("id", id.value);
     }
 );
-
-const activeIndex = ref(null);
-const modalactiveIndex = ref(0);
-
-const nextSlide = () => {
-    modalactiveIndex.value = (modalactiveIndex.value + 1) % swatchDetailData?.value?.gallery_urls?.length;
-};
-
-const prevSlide = () => {
-    modalactiveIndex.value =
-        (modalactiveIndex.value - 1 + swatchDetailData?.value?.gallery_urls?.length) %
-        swatchDetailData?.value?.gallery_urls?.length;
-};
-
-const isModalOpen = ref(false);
-
-const toggleModal = () => {
-    isModalOpen.value = !isModalOpen.value;
-};
-
-const openSections = ref({});
-
-const toggle = (key) => {
-    Object.keys(openSections.value).forEach((k) => {
-        openSections.value[k] = false;
-    });
-    openSections.value[key] = true;
-};
-
-const isOpen = (key) => {
-    return openSections.value[key];
-};
-
-const beforeEnter = async (el) => {
-    loading.value = true;
-    el.style.height = '0';
-    el.style.overflow = 'hidden';
-    await handleswatchDetailData();
-    loading.value = false;
-};
-
-const enter = (el) => {
-    el.offsetHeight; // Trigger reflow
-    el.style.height = `${el.scrollHeight}px`;
-};
-
-const leave = (el) => {
-    el.style.height = `${el.scrollHeight}px`;
-    el.offsetHeight; // Trigger reflow
-    el.style.height = '0';
-};
 </script>
 
 
@@ -434,7 +254,6 @@ const leave = (el) => {
 .expand-fade-enter-to,
 .expand-fade-leave {
     max-height: 500px;
-    /* Adjust this value to the maximum expected height */
     opacity: 1;
 }
 
@@ -444,10 +263,7 @@ const leave = (el) => {
 }
 
 .fade-enter,
-.fade-leave-to
-
-/* .fade-leave-active in <2.1.8 */
-    {
+.fade-leave-to {
     opacity: 0;
 }
 
@@ -455,8 +271,6 @@ const leave = (el) => {
     animation: fadeInAnimation ease 5s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
-
-
 }
 
 @keyframes fadeInAnimation {

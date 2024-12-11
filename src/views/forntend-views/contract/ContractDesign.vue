@@ -6,13 +6,13 @@
       <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" alt="Logo" />
     </div>
     <!-- Menu Icon -->
-    <div  class="absolute top-52 right-0 z-[9999]">
-      <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height=""
-      svgColor="#f9f9f9" 
-      menuClass="p-2 bg-[#9ce163]" >
+    <div class="absolute top-52 right-0 z-[9999]">
+      <SideMenu openClass="w-[230px] absolute z-50 top-0 right-0 "
+        closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height="" svgColor="#f9f9f9"
+        menuClass="p-2 bg-[#9ce163]">
         <div class="flex border border-gray-400 items-center">
           <div class="sticky top-3 p-4 border-r border-gray-400">
-            <MenuSvg size="15px" fillColor="black" />
+            <Icons.Menu size="15px" fillColor="black" />
           </div>
           <h3 class="text-sm font-medium">
             <a href="https://www.lebello.com/product/" class="uppercase">Collection 2024</a>
@@ -24,17 +24,17 @@
             <h2 :id="'heading' + key" class="mb-0">
               <button @click="toggleAccordion(key)" :aria-expanded="activeIndex === key"
                 :aria-controls="'collapse' + key"
-                class="group relative flex w-full items-center hover:text-orange border-0 px-5 py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
-                :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === key }" type="button">
+                class="group relative flex w-full items-center hover:text-orange border-0 px-4 py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
+                :class="{ 'text-orange dark:bg-surface-dark dark:text-orange': activeIndex === key }" type="button"
+                @mouseover="hoverKey = key" @mouseleave="hoverKey = null">
                 {{ key }}
-                <span class="-me-1 ms-auto h-5 w-5 transition-transform duration-200 ease-in-out"
-                    :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="10px" height="10px" viewBox="0 0 24 24"
-                      stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                    </svg>
-                  </span>
+                <span class="-me-1 ms-auto pt-1 transition-transform duration-200 ease-in-out"
+                  :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
+                  <Icons.Arrow size="15px" :fillColor="hoverKey === key ? '#d98c3a' : activeIndex === key ? '#d98c3a' : ''" strokeWidth="22.77"
+                    direction="top" />
+                </span>
               </button>
+
             </h2>
             <div :id="'collapse' + key" v-show="activeIndex === key" class="pl-7 py-0">
               <div v-if="item">
@@ -48,7 +48,7 @@
                     <li v-for="(sub, itemIndex) in item" :key="itemIndex">
                       <a @click.prevent="handleClick(sub)" class="font-graphikLight text-sm cursor-pointer">
                         {{ sub.contract_location || sub.title }}
-                          <!-- {{sub}} -->
+                        <!-- {{sub}} -->
                       </a>
                     </li>
                   </template>
@@ -66,47 +66,52 @@
         </div>
       </SideMenu>
     </div>
-   
+
     <div class="mx-5 mt-4 lg:mx-20">
-       <!-- Slider -->
-  <div id="default-carousel" class="relative">
-    <Slider :images="contractDesignData.contract_design_slider" imageKeyName='contract_slider_image_data'  :navColor="'white'" sliderPageName ="contractDesign" :hasSidebar="false">
-    </Slider>
-    <!-- Logo -->
-    <div class="absolute top-3 right-0">
-      <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png" alt="Contract Design" />
-    </div>
-  </div>
+      <!-- Slider -->
+      <div id="default-carousel" class="relative">
+        <Slider :images="contractDesignData.contract_design_slider" imageKeyName='contract_slider_image_data'
+          :navColor="'white'" sliderPageName="contractDesign" :hasSidebar="false">
+        </Slider>
+        <!-- Logo -->
+        <div class="absolute top-3 right-0">
+          <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png"
+            alt="Contract Design" />
+        </div>
+      </div>
 
-  <!-- Description -->
-  <div class="bg-[#f7f7f7] font-graphik text-sm text-[#4c4c4c]">
-    <p class="px-5 py-6">
-      Lebello contract design offers customized solutions for the hospitality, retail, and trade industry. We build
-      long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and
-      unique bespoke outdoor products.
-    </p>
-  </div>
+      <!-- Description -->
+      <div class="bg-[#f7f7f7] font-graphik text-sm text-[#4c4c4c]">
+        <p class="px-5 py-6">
+          Lebello contract design offers customized solutions for the hospitality, retail, and trade industry. We build
+          long-term partnerships with our clients and help bring their ideas to fruition by delivering personal and
+          unique bespoke outdoor products.
+        </p>
+      </div>
 
-  <!-- Image Gallery -->
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-0 py-3 md:py-0">
-    <div v-for="(images, index) in contractDesignData.contract_design" :key="index" class="prod_content overflow-hidden">
-      <div @click="handleRoute(images)" class="product_img relative w-full max-h-[190px] h-full"
-           :class="{'md:transition-transform md:duration-1000 md:ease-in-out md:transform scale-125': isHovered[index]}" 
-           @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
-        <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
-             class="aos-item w-full h-full object-cover" ref="element" :data-aos="animationType" 
-             :data-aos-duration="getAnimationDuration(index)" />
-        <div :class="{'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index]}"></div>
-        <div class="prod-overlay" :class="{'show-overlay': isHovered[index]}">
-          <div class="overlay-content">
-            <p class="text-[11px] font-graphik">{{ images?.title }}</p>
-            <p class="text-[11px] font-graphikLight">{{ images?.contract_info_location }}</p>
+      <!-- Image Gallery -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-0 py-3 md:py-0">
+        <div v-for="(images, index) in contractDesignData.contract_design" :key="index"
+          class="prod_content overflow-hidden">
+          <div @click="handleRoute(images)" class="product_img relative w-full max-h-[190px] h-full"
+            :class="{ 'md:transition-transform md:duration-1000 md:ease-in-out md:transform scale-125': isHovered[index] }"
+            @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
+            <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
+              class="aos-item w-full h-full object-cover" ref="element" :data-aos="animationType"
+              :data-aos-duration="getAnimationDuration(index)" />
+            <div
+              :class="{ 'absolute top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.4)] transition-colors duration-100 z-20': isHovered[index] }">
+            </div>
+            <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
+              <div class="overlay-content">
+                <p class="text-[11px] font-graphik">{{ images?.title }}</p>
+                <p class="text-[11px] font-graphikLight">{{ images?.contract_info_location }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
     <!-- Footer -->
     <FooterSection />
   </div>
@@ -114,7 +119,7 @@
 
 <script setup>
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
-import MenuSvg from "@/components/frontend-components/Svg/Menu-Svg.vue";
+import Icons from "@/components/frontend-components/Svg/Icons";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useRouter } from 'vue-router';
@@ -134,7 +139,7 @@ const element = ref(null);
 const animationType = "fade-up";
 const isHovered = ref([]);
 const contractDesignData = ref([]);
-
+const hoverKey = ref(null);
 
 // Navigation Handling
 const handleClick = (sub) => {
