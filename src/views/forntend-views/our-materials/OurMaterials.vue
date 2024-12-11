@@ -40,15 +40,14 @@ const handleRoute = (sub) => {
       <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
         <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
       </a>
-      <div class="absolute mx-auto top-1/2 w-[700px] left-20  transform -translate-y-1/2 "
+      <div class="absolute mx-auto top-1/2 w-auto lg:w-[700px] left-10 md:left-20   transform -translate-y-1/2 "
         :class="['absolute transition-all duration-1000 ease-in-out']">
-
         <div
-          class=" text-white font-graphik font-bold  uppercase opacity-90 sm:text-[20px] md2:text-[60px] leading-snug">
+          class=" text-white font-graphik font-bold pr-10 flex-wrap uppercase opacity-90 text-[30px] md:text-[44px] md2:text-[60px] leading-snug">
           Performance Outdoor Materials
         </div>
         <h6
-          class=" text-white font-graphik font-bold uppercase opacity-100 sm:text-[20px] md2:text-[40px] leading-snug">
+          class=" text-white font-graphik font-bold uppercase opacity-100 text-[20px] md:text-[24px] md2:text-[40px] leading-snug">
           #ENDLESSBESPOKE
         </h6>
       </div>
@@ -63,35 +62,34 @@ const handleRoute = (sub) => {
         </div>
         <div class="px-5">
           <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
-              <li class="mt-1" v-for="(listItem, index) in ourMaterialData.swatch_side_bar" :key="index">
-                <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.title }}</a>
-              </li>
+            <li class="mt-1" v-for="(listItem, index) in ourMaterialData.swatch_side_bar" :key="index">
+              <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.title }}</a>
+            </li>
           </ul>
         </div>
       </div>
     </template>
   </Slider>
 
-  <div id="sideText" class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 px-16">
+  <div id="sideText" class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-5 lg:px-16">
     <div v-for="collection in ourMaterialData.swatch_data" :key="collection.title"
       class="bg-gray-5 p-4 rounded-lg overflow-hidden shadow-lg">
       <div class="relative overflow-hidden group cursor-pointer" :onclick="() => handleRoute(collection)">
         <img :src="$filePath(collection?.featured_image_data?.file_url)" :alt="collection.title"
-          class="w-full h-48 object-cover filter grayscale transition duration-700 ease-in-out transform group-hover:scale-110 group-hover:filter-none">
+          class="w-full h-28 md:h-48 object-cover filter grayscale transition duration-700 ease-in-out transform group-hover:scale-110 group-hover:filter-none">
         <span class="absolute top-4 right-4 text-white font-bold text-lg">{{ collection.trade_mark_label ?
           collection.trade_mark_label.toUpperCase() : collection.title }}</span>
       </div>
 
       <div class="pt-5 flex justify-between items-center">
-        <h2 class="text-[26px] font-graphikLight text-[#070707]">{{ collection.title }}</h2>
+        <h2 class="text-[18px] lg:text-[26px] font-graphikLight text-[#070707]">{{ collection.title }}</h2>
         <button
-          class="px-4 p-[4px] bg-[#978b7a] text-[12px] uppercase font-graphik text-white rounded-full hover:bg-gray-500"
+          class="px-5 p-[4px] bg-[#978b7a] text-nowrap	 text-[13px] uppercase font-graphik text-white rounded-full hover:bg-gray-500"
           :onclick="() => handleRoute(collection)">
           View Collection
         </button>
       </div>
     </div>
-
   </div>
   <LogoSection />
   <FooterSection />

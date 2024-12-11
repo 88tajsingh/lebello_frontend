@@ -26,7 +26,7 @@ import MenuSvg from './Svg/Menu-Svg.vue';
 const { svgColor, svgSize = '30px', menuClass,openClass = 'w-[230px] z-50 right-0',
   closeClass = 'w-[230px] z-50 absolute right-[-250px]',
   height = '', } = defineProps({
-  svgColor: { type: String, required: true },
+  svgColor: { type: String, default: '#868383'},
   svgSize: { type: String, default: '30px' },
   menuClass: { type: String, default: '' },
   openClass: { type: String, default: 'w-[230px] absolute z-50 right-0' },
