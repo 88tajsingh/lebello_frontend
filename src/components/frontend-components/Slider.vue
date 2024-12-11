@@ -10,11 +10,11 @@
             :alt="slide[props.imageKeyName]?.file_url" />
           <!-- Navigation Buttons -->
          
-          <button @click="previous" class="absolute left-10 top-1/2 z-30 cursor-pointer">
+          <button @click="previous" class="hidden md:block absolute left-10 top-1/2 z-30 cursor-pointer">
             <ArrowSvg size="20px" direction="right" :strokeWidth="17"
               :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
           </button>
-          <button @click="next" class="absolute right-10 top-1/2 z-30 cursor-pointer">
+          <button @click="next" class="hidden md:block absolute right-10 top-1/2 z-30 cursor-pointer">
             <ArrowSvg size="20px" direction="left" :strokeWidth="17"
               :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
           </button>
@@ -81,12 +81,6 @@ const props = defineProps({
   disableSideText: { type: Boolean, default: false },
 });
 
-const slide = ref({
-  heading_font_size: '30px',
-  sub_heading_font_size: '18px',
-});
-
-const windowWidth = ref(window.innerWidth);
 
 
 // :indicatorPosition="'bottom-5 left-1/2 transform -translate-x-1/2'"
@@ -117,13 +111,7 @@ const next = () => {
   navColor.value = props.images[currentIndex.value]?.navColor || 'black';
 };
 
-const updateWindowWidth = () => {
-  windowWidth.value = window.innerWidth;
-};
-
-// Attach and detach resize listener
 onMounted(() => {
-  // window.addEventListener('resize', updateWindowWidth);
   startAutoSwipe();
 });
 const hexToRgb = (hex) => {
@@ -132,13 +120,11 @@ const hexToRgb = (hex) => {
   if (!hex || typeof hex !== 'string') {
     hex = defaultHex;
   }
-
   hex = hex.replace(/^#/, '');
 
   if (hex.length !== 6) {
     hex = defaultHex.replace(/^#/, '');
   }
-
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
@@ -160,7 +146,7 @@ const headingStyle = (slide) => {
   return {
     color: slide?.heading_text_color,
     background: rgbaBackground,
-    fontSize: `clamp(12px, ${slide?.heading_font_size || '40px'}, 4vw)`, 
+    fontSize: `clamp(12px, ${slide?.heading_font_size || '40px'}, 3vw)`, 
   };
 };
 
@@ -182,13 +168,6 @@ const subHeadingStyle = (slide) => {
   };
 };
 
-const headingAndSubHeading = computed(() => {
-  if (!props.images || props.images.length === 0) return false;
-  const currentSlide = props.images[currentIndex.value];
-  return currentSlide?.heading_title && currentSlide?.sub_heading_title;
-});
-
-
 // left text 
 const heading = computed(() => {
   const currentSlide = props.images[currentIndex.value];
@@ -203,18 +182,13 @@ const heading = computed(() => {
 
 const subHeading = computed(() => {
   const currentSlide = props.images[currentIndex.value];
-  // console.log("currentSlide", currentSlide.contract_info_location);
   if (props.sliderPageName === 'contractDesign') {
     return camelCase(currentSlide.heading_case, currentSlide.contract_info_location);
   } 
-  // else if () {
-  //   return camelCase(currentSlide.sub_heading_case, currentSlide.title);
-  // } 
   else {
-    return null;  // Fallback text if neither condition is met
+    return null;
   }
 });
-
 
 // Function to convert text to camel case
 const camelCase = (capitalize, text) => {
@@ -228,11 +202,7 @@ const camelCase = (capitalize, text) => {
       .join(' ');
 };
 
-// watch(() => props.images, () => {
-//   props.images = props.images;
-// });
 </script>
 
 <style scoped>
-/* Add any required styles for the slider */
 </style>

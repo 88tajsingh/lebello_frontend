@@ -16,25 +16,16 @@
     <svg
       :width="svgSize"
       :height="svgSize"
-      viewBox="-5 0 20 20"
+      viewBox="-5 0 24 24" 
       xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
       :fill="isHovered ? hoverSvgColor : svgColor"
       :stroke="isHovered ? hoverSvgColor : svgColor"
       :style="{ transition: 'all 0.3s ease' }"
     >
-      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
       <g id="SVGRepo_iconCarrier">
-        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <g id="Dribbble-Light-Preview" transform="translate(-385.000000, -7399.000000)" :fill="svgColor">
-            <g id="icons" transform="translate(56.000000, 160.000000)">
-              <path
-                d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z"
-              />
-            </g>
-          </g>
-        </g>
+        <path
+          d="m6.926 15.991 6.927-3.991v7.995l-6.927 4.005zm-6.926-3.991v7.995l6.926-4.005zm6.926-12v7.995l-6.926 4.005v-7.995zm0 7.995 6.926-3.991v7.996z"
+        ></path>
       </g>
     </svg>
   </a>
@@ -46,11 +37,11 @@ import { ref } from 'vue';
 const props = defineProps({
   href: {
     type: String,
-    default: 'https://www.facebook.com/',
+    default: 'https://www.houzz.com/',
   },
   title: {
     type: String,
-    default: 'Facebook',
+    default: 'Houzz',
   },
   bgColor: {
     type: String,
@@ -70,11 +61,11 @@ const props = defineProps({
   },
   hoverBgColor: {
     type: String,
-    default: '#3b5998', 
+    default: '#BBBBBB',
   },
   hoverSvgColor: {
     type: String,
-    default: '#ffffff',
+    default: '#000000',
   },
 });
 

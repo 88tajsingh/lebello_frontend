@@ -6,27 +6,21 @@ const  routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/forntend-views/Index-main.vue')
+    component: () => import('../views/forntend-views/Index-main.vue'),
+    meta: { title: 'Modern Outdoor Furniture : Lebello - Contract Outdoor Furniture | Design' },
+
   },
   {
     path: '/productDetailNew',
     name: 'productDetailNew',
-    component: () => import('../views/forntend-views/products/ProductDetailNew.vue')
+    component: () => import('../views/forntend-views/products/ProductDetailNew.vue'),
+    meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
   {
     path: '/products',
     name: 'products',
-    component: () => import('../views/forntend-views/products/ProductPage.vue')
-  },
-  {
-    path: '/products',
-    name: 'products',
-    component: () => import('../views/forntend-views/products/ProductPage.vue')
-  },
-  {
-    path: '/products',
-    name: 'products',
-    component: () => import('../views/forntend-views/products/ProductPage.vue')
+    component: () => import('../views/forntend-views/products/ProductPage.vue'),
+    meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
   {
     path: '/productDetail/:slug?',//done
@@ -61,12 +55,14 @@ const  routes = [
   {
     path: '/contactUs',//done
     name: 'contactUs',
-    component: () => import('../views/forntend-views/ContactUsPage.vue')
+    component: () => import('../views/forntend-views/ContactUsPage.vue'),
+    meta: { title: 'Outdoor Furniture Retailers : Lebello Exclusive Outdoor' },
   },
   {
-    path: '/contract_designs',
+    path: '/contract-designs',
     name: 'contractDesigns',
-    component: () => import('../views/forntend-views/contract/ContractDesign.vue')
+    component: () => import('../views/forntend-views/contract/ContractDesign.vue'),
+    meta: { title: 'Contract Outdoor Furniture Manufacturer : Outdoor Hospitality|Lebello	' },
   },
   {
     path: '/dealers',
@@ -74,7 +70,7 @@ const  routes = [
     component: () => import('../views/forntend-views/DealersPage.vue')
   },
   {
-    path: '/libraryandtools',//done
+    path: '/libraryandtools',
     name: 'library_and_tools',
     component: () => import('../views/forntend-views/library_and_tools.vue')
   },
@@ -96,8 +92,9 @@ const  routes = [
   {
     path: '/materials-shop',
     name: 'materialsShop',
-    component: () => import('../views/forntend-views/our-materials/OurMaterials.vue')
-  },
+    component: () => import('../views/forntend-views/our-materials/OurMaterials.vue'),
+    meta: { title: 'Modern Outdoor Furniture : Lebello - Contract Outdoor Furniture | Design' },
+  },  
   {
     path: '/material/:slug?',
     name: 'materialDetail',
@@ -582,6 +579,8 @@ const publicPaths = [
 ];
 
 router.beforeEach((to, from, next) => {
+  if(to.meta.title) document.title = to.meta.title;
+
   const token = store?.getters?.token || localStorage.getItem('token');
   const allowedPaths = store.getters.user?.modules?.route || [];
   const isAuthenticatedUser = isAuthenticated(token);

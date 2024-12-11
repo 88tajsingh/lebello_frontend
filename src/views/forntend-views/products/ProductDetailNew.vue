@@ -5,7 +5,6 @@
     :sliderImages="landingPageData"
       :downDropdown="false" />
     <div class="flex relative">
-     
       <!-- <div class="absolute top-30 right-0 pr-3" ref="closeMenu">
         <SideMenu :list="list" :handleSideMenu="handleSideMenu" :isOpen="isOpenSidebarSlider" :mainSlider="false"
           :showDropDown="false" :showHeading="false" :downDropdown="true" />
@@ -124,7 +123,7 @@
             <img
               class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
               src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" />
-            <span v-scroll="isVisible ? arrowScroll : 0"  @click="rotate" class="absolute  bottom-0 bg-orange p-5">
+            <span   @click="rotate" class="absolute  bottom-0 bg-orange p-5">
               <Icon.Arrow size="13px" fillColor="#ffffff" ref="arrowSvg" />
             </span>
           </div>
@@ -135,7 +134,7 @@
     </section>
 
     <transition>
-      <div id="scrollTOadditiona" v-scroll="-400" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
+      <div id="scrollTOadditiona" v-show="isVisible" class="container-fluid bg-[#d8d8d8] p-0">
         <div class="grid grid-cols-1 mt-[5px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <div class="product-item p-0" v-for="(product, index) in products" :key="index">
             <div class="product_img overflow-hidden">
@@ -151,7 +150,7 @@
     </transition>
 
     <transition>
-      <div ref="scrollTOadditiona"  v-scroll="-400" v-show="addiVisible"
+      <div ref="scrollTOadditiona"  v-show="addiVisible"
         class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0">
         <div class="py-10 m-0 relative px-14 ld:w-1/2 font-light text-left text-white bg-orange">
           <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
