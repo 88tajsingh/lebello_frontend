@@ -1,20 +1,16 @@
 <template>
   <nav class="z-[99999]">
     <div
-      class="mx-auto w-full top-0 self-start text-graphik text-white ease-in duration-300 z-50"
+      class="mx-auto w-full top-0 border-b  self-start text-graphik text-white ease-in duration-300 z-50"
       :class="{
-        'absolute pb-10 top-0 left-0 bg-transparent': absolute,
-        'hover:text-white': navColor === 'white',
+        'absolute pb-10 top-0 left-0 bg-transparent': props.absolute,
+        'hover:text-white': navbarColor === 'white',
       }"
     >
-      <div class="relative z-[9999999] h-16 items-center justify-between">
-        <!-- Mobile Menu Button -->
-        <!-- <MobileMenuButton /> -->
-        
+      <div class="relative z-[9999999]  h-16 items-center justify-between">
         <!-- Desktop Links -->
-        <div class="px-20 hidden md2:block" :class="{ 'hover:bg-[#0e0e0e89] bg-opacity-5': absolute }">
-          <div
-            :class="['flex', 'mt-auto', 'mb-0', absolute ? 'pt-8' : 'py-4']"
+        <div class="px-20 hidden md2:block" :class="props.absolute ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : 'border-b border-[#cacaca]'">
+          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8']"
             @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave"
           >
@@ -22,18 +18,18 @@
             <router-link to="/" class="col-span-1 flex">
               <img
                 class="h-8 w-full"
-                :src="navColor1 ? logoDark : navColor === 'white' ? logoDark : logoLight"
+                :src="navbarColor === '#ffffff' ? logoLight : logoDark"
                 alt="Lebello-global"
               />
             </router-link>
 
             <!-- Navigation Links -->
-            <NavigationLinks :links="links" :navColor="navColor" :navColor1="navColor1" />
+            <NavigationLinks :links="links" :navColor="navbarColor ? navbarColor : '#000000'" />
 
             <!-- Search Icon -->
             <div class="col-span-1 m-auto ml-0">
               <div @click="showModal = true">
-                <SearchSvg size="22px" fillColor="#000000" />
+                <SearchSvg size="22px" :fillColor="navColor ? navbarColor :'#000000'" />
               </div>
             </div>
           </div>
@@ -47,15 +43,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,watch } from 'vue';
 
 import NavigationLinks from './NavigationLinks.vue';
 import SearchSvg from './Svg/Search-Svg.vue';
 import SearchModal from './SearchModal.vue'
-import logoDark from '../../assets/logo/logo.png'
-import logoLight from '../../assets/logo/logo-header4.png'
+import logoLight from '../../assets/logo/logo.png'
+import logoDark from '../../assets/logo/logo-header4.png'
 
-const { absolute, navColor } = defineProps({
+const props = defineProps({
   absolute: Boolean,
   navColor: {
     type: String,
@@ -63,10 +59,24 @@ const { absolute, navColor } = defineProps({
   },
 });
 
-const navColor1 = ref(false)
+const navbarColor = ref(props.absolute === false ? '#000000' : props?.navColor);
 const showModal = ref(false);
 
+watch(
+  () => props.navColor,
+  (color) => {
+    navbarColor.value = color;
+  }
+);
 
+const handleMouseEnter = () => {
+  console.log("props.absolute",props.absolute);
+  navbarColor.value =  props.absolute === false ? '#000000' : '#ffffff';
+}
+
+const handleMouseLeave = () => {
+  navbarColor.value = props.navColor;
+}
 
 const links = [
   {
@@ -195,35 +205,5 @@ const links = [
 </script>
 
 <style>
-li>ul {
-  transform: translatex(105%) scale(0);
-}
 
-li:hover>ul {
-  transform: translatex(100%) scale(1);
-}
-
-li>button svg {
-  transform: rotate(-90deg);
-}
-
-.group:hover .group-hover\:scale-100 {
-  transform: scale(1);
-}
-
-.group:hover .group-hover\:-rotate-180 {
-  transform: rotate(180deg);
-}
-
-.scale-0 {
-  transform: scale(0);
-}
-
-.min-w-32 {
-  min-width: 1.6rem;
-}
-
-.list-wid {
-  width: 200px;
-}
 </style>

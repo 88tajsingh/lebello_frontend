@@ -145,10 +145,8 @@ const router = useRouter();
 const materialDetailSidebar = ref([]);
 const swatchDetailData = ref([]);
 const breadcrumbData = ref([]);
-const loading = ref(true);
 const activeIndex = ref(null);
 const hoverKey = ref(null);
-const openSections = ref({});
 const id = ref(sessionStorage.getItem('materialDetail'));
 const activeTab = ref(0)
 

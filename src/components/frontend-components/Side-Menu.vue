@@ -18,21 +18,21 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps,watch } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import MenuSvg from './Svg/Menu-Svg.vue';
 
 // Define props
 const { svgColor, svgSize = '30px', menuClass,openClass = 'w-[230px] z-50 right-0',
   closeClass = 'w-[230px] z-50 absolute right-[-250px]',
-  height = '', } = defineProps({
+  height = '',closeSidebar } = defineProps({
   svgColor: { type: String, default: '#868383'},
   svgSize: { type: String, default: '30px' },
   menuClass: { type: String, default: '' },
   openClass: { type: String, default: 'w-[230px] absolute z-50 right-0' },
   closeClass: { type: String, default: 'w-[230px] z-50 absolute right-[-250px]' },
   height: { type: String, default: '' },
-  
+  closeSidebar: { type: Boolean, default: null },
 });
 
 const isOpen = ref(false);
@@ -47,7 +47,16 @@ const closeSideMenu = () => {
 };
 
 onClickOutside(closeMenu, closeSideMenu); 
+
+watch(
+  () => closeSidebar, 
+  (newValue, oldValue) => {
+    console.log("closeSidebar",closeSidebar);
+      closeSideMenu(); 
+  }
+);
 </script>
+
 
 <style scoped>
 
