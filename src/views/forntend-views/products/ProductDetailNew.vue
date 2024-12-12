@@ -33,7 +33,6 @@
       <button id="fullscreen-toggle" class="rounded-full p-2">
         <Icon.FullScreen size="20px" fillColor="#c2a02f" />
       </button>
-
       <!-- Zoom In and Out Icons -->
       <div class="flex flex-col items-center bg-white rounded-full shadow-lg border border-yellow-600">
         <button id="zoom-in" class="py-2 px-[5px]">

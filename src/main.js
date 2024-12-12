@@ -58,7 +58,6 @@ const toastOptions = {
 // Create Vue app
 const app = createApp(App);
 
-
 app.use(HelpersPlugin);
 app.use(Toast, toastOptions);
 app.use(router);

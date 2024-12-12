@@ -9,14 +9,14 @@
             class="block absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2"
             :alt="slide[props.imageKeyName]?.file_url" />
           <!-- Navigation Buttons -->
-         
+
           <button @click="previous" class="hidden md:block absolute left-10 top-1/2 z-30 cursor-pointer">
             <ArrowSvg size="20px" direction="right" :strokeWidth="17"
-              :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
+              :fillColor="navColor" />
           </button>
           <button @click="next" class="hidden md:block absolute right-10 top-1/2 z-30 cursor-pointer">
             <ArrowSvg size="20px" direction="left" :strokeWidth="17"
-              :fillColor="navColor === 'white' ? '#ffffff' : '#000000'" />
+              :fillColor="navColor" />
           </button>
           <!-- Carousel Indicators -->
           <div :class="['absolute space-x-2 z-30', indicatorPosition]">
@@ -25,17 +25,19 @@
               class="w-2 h-2 rounded-full"></button>
           </div>
           <!-- Text on Carousel -->
-          <div v-if="!disableSideText" :class="['absolute transition-all duration-2000  ease-in-out', { 'bottom-0': atBottom && !slide?.sub_heading_case, 'bottom-8': !atBottom && !slide?.sub_heading_title , 'bottom-20': slide?.sub_heading_case }]" class="text-white left-4 sm:left-14 md:left-20 capitalize opacity-80 font-graphikLight sm:text-[20px] md2:text-[40px]">
-            <div  class="font-graphik px-3 py-1 lg:py-3 mb-4" :style="headingStyle(slide)">
-              {{heading}}
+          <div v-if="!disableSideText"
+            :class="['absolute transition-all duration-2000  ease-in-out', { 'bottom-0': atBottom && !slide?.sub_heading_case, 'bottom-8': !atBottom && !slide?.sub_heading_title, 'bottom-20': slide?.sub_heading_case }]"
+            class="text-white left-4 sm:left-14 md:left-20 capitalize opacity-80 font-graphikLight sm:text-[20px] md2:text-[40px]">
+            <div class="font-graphik px-3 py-1 lg:py-3 mb-4" :style="headingStyle(slide)">
+              {{ heading }}
             </div>
             <span v-if="subHeading" class="font-graphikLight px-3 py-1 lg:py-2" :style="subHeadingStyle(slide)">
-              {{subHeading}}
+              {{ subHeading }}
             </span>
-         </div>
+          </div>
           <!-- Down Arrow -->
           <div v-if="props.sliderPageName === 'homeSlider' || props.sliderPageName === 'ourMaterials'"
-            class="absolute left-1/2 bottom-5 animate-bounce text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5">
+            class="hidden md:block absolute left-1/2 bottom-5 animate-bounce text-5xl text-white font-sans hover:bg-[#0e0e0e89] bg-opacity-5">
             <div @click="() => scrollDown('sideText')" class="px-3 py-1 cursor-pointer">
               <svg width="24px" height="24px" viewBox="0 0 1024 1024" fill="#fafafa">
                 <path d="M903.232 256l56.768 50.432L512 768 64 306.432 120.768 256 512 659.072z" />
@@ -47,7 +49,8 @@
       <slot name="utility"></slot>
     </div>
     <div v-if="hasSidebar" class="absolute top-48 right-0 ">
-      <SideMenu :openClass="props.openClass" :closeClass="props.closeClass" :height="props.height">
+      <SideMenu :openClass="props.openClass" :closeClass="props.closeClass" :height="props.height"
+        :closeSidebar="closeSidebar">
         <slot name="sidebar"></slot>
       </SideMenu>
     </div>
@@ -62,7 +65,7 @@ import ArrowSvg from './Svg/Arrow-Svg.vue';
 
 const currentIndex = ref(0);
 const atBottom = ref(false);
-const navColor = ref('');
+const navColor = ref('#000000');
 
 const props = defineProps({
   images: {
@@ -79,41 +82,64 @@ const props = defineProps({
   height: { type: String, default: '' },
   sliderPageName: { type: String, default: 'homeSlider' },
   disableSideText: { type: Boolean, default: false },
+  closeSidebar: { type: Boolean, default: null },
 });
 
 
+const emit = defineEmits(['updateNavColor']);
 
 // :indicatorPosition="'bottom-5 left-1/2 transform -translate-x-1/2'"
 const startAutoSwipe = () => {
   setInterval(() => {
-    // navColor.value = props.images[currentIndex.value]?.navColor || 'black';
-   props.sliderPageName === 'homeSlider' ? atBottom.value = !atBottom.value : ''
+    props.sliderPageName === 'homeSlider' ? atBottom.value = !atBottom.value : ''
+    const color = props?.images[currentIndex.value]?.slider_menu_color
+    handleColorChange(color); 
     next();
   }, 5000);
 };
 
 const changeSlide = (index) => {
-  currentIndex.value = index;
-  navColor.value = props.images[currentIndex.value]?.navColor || 'black';
-};
+    currentIndex.value = index;
+    const color = props?.images[currentIndex.value]?.slider_menu_color
+    handleColorChange(color);
+  };
 
-const previous = () => {
-  currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
-  navColor.value = props.images[currentIndex.value]?.navColor || 'black';
-};
+  const previous = () => {
+    currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
+    const color = props?.images[currentIndex.value]?.slider_menu_color
+    handleColorChange(color);  };
 
-const next = () => {
-  if (props.images.length === 0) {
-    console.error('Slider images array is empty');
-    return;
-  }
-  currentIndex.value = (currentIndex.value + 1) % props.images.length;
-  navColor.value = props.images[currentIndex.value]?.navColor || 'black';
-};
+  const next = () => {
+    currentIndex.value = (currentIndex.value + 1) % props.images.length;
+    const color = props?.images[currentIndex.value]?.slider_menu_color
+    handleColorChange(color);  };
+
+  const handleColorChange = (color) => {
+    if (color === 'dark') {
+      navColor.value = '#000000';
+    } else if (color === 'light') {
+      navColor.value = '#ffffff';
+    } else if (color === 'gray') {
+      navColor.value = '#cccccc';
+    } else if (color === 'medium') {
+      navColor.value = '#777777';
+    } else {
+      navColor.value = '#000000';
+    }
+
+  };
 
 onMounted(() => {
   startAutoSwipe();
 });
+
+watch(
+  () => navColor.value,
+  (color) => {
+    emit('updateNavColor', color);
+  }
+);
+
 const hexToRgb = (hex) => {
   const defaultHex = '#ff9d0f';
 
@@ -146,7 +172,7 @@ const headingStyle = (slide) => {
   return {
     color: slide?.heading_text_color,
     background: rgbaBackground,
-    fontSize: `clamp(12px, ${slide?.heading_font_size || '40px'}, 3vw)`, 
+    fontSize: `clamp(16px, ${slide?.heading_font_size || '40px'}, 3vw)`,
   };
 };
 
@@ -164,7 +190,7 @@ const subHeadingStyle = (slide) => {
   return {
     color: slide?.sub_heading_text_color,
     background: rgbaBackground,
-    fontSize: `clamp(10px, ${slide?.sub_heading_font_size || '25px'}, 2vw)`, 
+    fontSize: `clamp(10px, ${slide?.sub_heading_font_size || '25px'}, 2vw)`,
   };
 };
 
@@ -176,7 +202,7 @@ const heading = computed(() => {
   } else if (props.sliderPageName === 'contractDesign') {
     return camelCase(currentSlide.sub_heading_case, currentSlide.title);
   } else {
-    return null;  
+    return null;
   }
 });
 
@@ -184,7 +210,7 @@ const subHeading = computed(() => {
   const currentSlide = props.images[currentIndex.value];
   if (props.sliderPageName === 'contractDesign') {
     return camelCase(currentSlide.heading_case, currentSlide.contract_info_location);
-  } 
+  }
   else {
     return null;
   }
@@ -204,5 +230,4 @@ const camelCase = (capitalize, text) => {
 
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

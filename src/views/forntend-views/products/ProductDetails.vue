@@ -20,7 +20,7 @@
           <div class="z-50">
               <div class="flex border border-[#686868] items-center">
                 <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
-                  <MenuSvg size="15px" fillColor="#000000" />
+                  <Menu size="15px" fillColor="#000000" />
                 </span>
                 <div>
                   <h3 class="text-[14px] font-medium">
@@ -59,7 +59,7 @@
             <div class="z-50">
               <div class="flex border border-[#686868] items-center">
                 <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
-                  <MenuSvg size="15px" fillColor="#000000" />
+                  <Menu size="15px" fillColor="#000000" />
                 </span>
                 <div>
                   <h3 class="text-[14px] font-medium">
@@ -95,7 +95,7 @@
             <span class="mt-10 flex hover:text-green" :class="{ 'text-green': addiVisible }"
               @click="HandleAdditionalInfo" @mouseenter="addiColor = true" @mouseleave="addiColor = false">
               <span class="ml-5 uppercase font-graphikMedium text-[13px]">Additional Product info</span>
-              <ArrowSvg class="mt-0 ml-3 self-center" size="15px" :fillColor="addiColor ? '#4dc45c' : addiVisible ? '#4dc45c' : '#64748b'" />
+              <Arrow class="mt-0 ml-3 self-center" size="15px" :fillColor="addiColor ? '#4dc45c' : addiVisible ? '#4dc45c' : '#64748b'" />
             </span>
           </div>
           <div class="hidden md:block">
@@ -104,8 +104,8 @@
               <img
                 class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
                 :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)" alt="B Chair" />
-              <span  class="absolute bottom-0 bg-green p-5">
-                <ArrowSvg size="13px" fillColor="#ffffff" ref="arrowSvg" @click="rotate" />
+              <span  class="absolute bottom-0 bg-green p-5" @click="rotate">
+                <Arrow size="13px" fillColor="#ffffff" ref="arrowSvg"  />
               </span>
             </div>
           </div>
@@ -135,11 +135,7 @@
               {{ productData?.new_product_additional_info }}
             </p>
             <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                <path fill="none" d="M0 0h24v24H0z" />
-                <path fill="#ffffff"
-                  d="M12 10.586l4.293-4.293 1.414 1.414L13.414 12l4.293 4.293-1.414 1.414L12 13.414l-4.293 4.293-1.414-1.414L10.586 12 6.293 7.707l1.414-1.414L12 10.586z" />
-              </svg>
+              <Close size="15px" fillColor="#ffffff" />
             </div>
           </div>
         </div>
@@ -175,13 +171,12 @@
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import { ref, onMounted,computed } from 'vue'
 import Slider from '@/components/frontend-components/Slider.vue'
-import ArrowSvg from '@/components/frontend-components/Svg/Arrow-Svg.vue'
 import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'
 import { onClickOutside } from '@vueuse/core'
 import NavBar from '@/components/frontend-components/Nav-bar.vue'
 import SideMenu from '@/components/frontend-components/Side-Menu.vue'
 import { getProductDetail } from '@/helper/frontendHelpers'
-import MenuSvg from '@/components/frontend-components/Svg/Menu-Svg.vue'
+import {Menu,Arrow,Close} from '@/components/frontend-components/Svg/Icons'
 
 const isOpenSidebarSlider = ref(false);
 const isOpenSidebarSlider2 = ref(false);

@@ -12,7 +12,7 @@ export const Printer = defineAsyncComponent(() => import('@/components/frontend-
 export const Houzz = defineAsyncComponent(() => import('@/components/frontend-components/Svg/Houzz.vue'));
 export const Pinterest = defineAsyncComponent(() => import('@/components/frontend-components/Svg/Pinterest.vue'));
 export const Twitter = defineAsyncComponent(() => import('@/components/frontend-components/Svg/Twitter.vue'));
-
+export const Instagram = defineAsyncComponent(() => import('@/components/frontend-components/Svg/Instagram.vue'));
 
 export default {
   Reset,
@@ -27,4 +27,5 @@ export default {
   Houzz,
   Pinterest,
   Twitter,
+  Instagram,
 };
