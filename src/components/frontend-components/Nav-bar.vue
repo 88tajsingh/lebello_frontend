@@ -32,9 +32,9 @@
     <!-- Search Modal -->
     <SearchModal :show="showModal" @close="showModal = false" />
   </nav>
-  <div class="md2:hidden relative pt-5 pl-6 z-99999"  :class="{
+  <div class="md2:hidden  pt-5 pl-6 z-99999"  :class="{
       'absolute top-0 left-0  bg-transparent': props.absolute,
-      'bg-white border-b pb-3 border-[#cacaca]': !props.absolute
+      'bg-white relative border-b pb-3 border-[#cacaca]': !props.absolute
     }">
     <div class="mb-3 "> <img class="h-9" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" /></div>
     <MobileNavbar :links="links" :navColor="navbarColor" />
