@@ -1,5 +1,5 @@
 <template>
-  <div class=" z-[9999999] bg-gray-50">
+  <div class=" z-[9999999]">
     <span @click="toggleMenu" class="z-30">
       <Menu size="26px" :fillColor="navColor || '#ffffff'" />
     </span>
