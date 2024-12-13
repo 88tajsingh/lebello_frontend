@@ -7,7 +7,7 @@
       <template #utility>
         <!-- lebellow icon right top -->
         <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
-          <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+          <img src="/src/assets/logo/logohori.png" />
         </a>
         <!-- text left bottom -->
         <div  class="absolute bottom-10  mx-auto left-6 sm:left-14 md:left-20 "
@@ -100,7 +100,7 @@
           </div>
           <div class="hidden md:block">
             <div></div>
-            <div class="relative overflow-hidden h-full max-h-[450px] w-full">
+            <div class="relative overflow-hidden  h-full max-h-[450px] w-full">
               <img
                 class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
                 :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)" alt="B Chair" />
@@ -283,35 +283,6 @@ const handleProductNav = (nav) => {
   sessionStorage.setItem('productDetail', nav.id);
   router.push({ name: 'productDetail', params: { slug: nav.slug } });
 }
-
-const startAutoSwipe = () => {
-  setInterval(() => {
-    navColor.value = productData.value?.gallery_urls[currentIndex.value]?.navColor || '';
-    atBottom.value = !atBottom.value;
-    next()
-  }, 5000)
-}
-
-const changeSlide = (index) => {
-  currentIndex.value = index
-  console.log(productData.value?.gallery_urls[currentIndex.value]?.navColor);
-}
-
-const previous = () => {
-  navColor.value = productData.value?.gallery_urls[currentIndex.value].navColor;
-  currentIndex.value = (currentIndex.value - 1 + productData.value?.gallery_urls.length) % productData.value?.gallery_urls.length
-}
-
-const next = () => {
-  if (productData.value?.gallery_urls.length === 0) {
-    console.error("Slider images array is empty");
-    return;
-  }
-  navColor.value = productData.value?.gallery_urls[currentIndex.value].navColor;
-  currentIndex.value = (currentIndex.value + 1) % productData.value?.gallery_urls.length
-}
-
-onMounted(startAutoSwipe)
 
 </script>
 

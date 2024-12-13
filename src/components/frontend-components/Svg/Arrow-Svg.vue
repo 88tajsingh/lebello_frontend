@@ -44,7 +44,7 @@ const props = defineProps({
     default: '#0fc000', 
   },
   strokeWidth: {
-    type: Number,
+    type: [Number,String],
     default: 77.824,
   },
 })

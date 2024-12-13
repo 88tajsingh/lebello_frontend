@@ -2,7 +2,7 @@
   <div class="relative">
     <NavBar :absolute="false" background="red" />
     <img class="absolute top-8 right-0 mx-auto"
-      src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+      src="/src/assets/logo/logohori.png" />
     <!-- side menu  -->
     <div class="relative">
       <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">
@@ -108,14 +108,14 @@
               class="invisible absolute bg-[#000000CC] z-50 flex w-full flex-col text-gray-800 shadow-xl group-hover:visible">
               <a v-for="link in products.product_types" :key="link.url" @click="handleProductType(link)"
                 class="block border-b text-[12px] border-[#000000AA] py-1 px-2 font-graphikLight text-white hover:text-green">
-                {{ link.name }}
+                {{ link?.name }}
               </a>
             </div>
           </div>
         </div>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
-        <div v-for="(product, index) in products.product_series_data" :key="product.id"
+        <div v-for="(product, index) in products?.product_series_data || []" :key="product.id"
           class="prod_content overflow-hidden pb-6 hover:bg-[#efefef]" @mouseenter="toggleOverlay(index, true)"
           @mouseleave="toggleOverlay(index, false)">
           <div class="relative overflow-hidden h-full max-h-[190px]">
@@ -127,12 +127,12 @@
             </a>
             <div class="prod-overlay" :class="{ 'show-overlay': isHovered[index] }">
               <div class="overlay-content">
-                <h1 class="hover:text-green text-[13px] font-graphik">{{ product.name }}</h1>
+                <h1 class="hover:text-green text-[13px] font-graphik">{{ product?.name }}</h1>
               </div>
             </div>
           </div>
           <p v-for="(prod, index) in product.products" @click="handelProductDetailNavigation(prod)"
-            class="pl-5 pt-1 cursor-pointer text-[#3d3d3d] font-graphikLight text-[13px]">{{ prod.title }}</p>
+            class="pl-5 pt-1 cursor-pointer text-[#3d3d3d] font-graphikLight text-[13px]">{{ prod?.title }}</p>
         </div>
       </div>
     </div>

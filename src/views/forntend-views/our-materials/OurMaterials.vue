@@ -38,7 +38,7 @@ const handleRoute = (sub) => {
     <template #utility>
       <!-- lebellow icon right top -->
       <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
-        <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+        <img src="/src/assets/logo/logohori.png" />
       </a>
       <div class="absolute mx-auto top-1/2 w-auto lg:w-[700px] left-10 md:left-20   transform -translate-y-1/2 "
         :class="['absolute transition-all duration-1000 ease-in-out']">

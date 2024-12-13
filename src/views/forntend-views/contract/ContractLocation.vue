@@ -2,7 +2,7 @@
   <div class="relative pb-20">
     <NavBar :absolute="false" />
     <div class="absolute z-999999 top-11 right-0 mx-auto">
-      <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+      <img src="/src/assets/logo/logohori.png" />
     </div>
     <!-- menu icon  -->
     <div ref="closeMenu" class="absolute z-999999 border mt-24 right-0 ">

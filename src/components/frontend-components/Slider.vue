@@ -92,7 +92,7 @@ const emit = defineEmits(['updateNavColor']);
 const startAutoSwipe = () => {
   setInterval(() => {
     props.sliderPageName === 'homeSlider' ? atBottom.value = !atBottom.value : ''
-    const color = props?.images[currentIndex.value]?.slider_menu_color
+    const color = props?.images[currentIndex?.value]?.slider_menu_color
     handleColorChange(color); 
     next();
   }, 5000);
@@ -106,11 +106,11 @@ const changeSlide = (index) => {
 
   const previous = () => {
     currentIndex.value = (currentIndex.value - 1 + props.images.length) % props.images.length;
-    const color = props?.images[currentIndex.value]?.slider_menu_color
+    const color = props?.images[currentIndex?.value]?.slider_menu_color
     handleColorChange(color);  };
 
   const next = () => {
-    currentIndex.value = (currentIndex.value + 1) % props.images.length;
+    currentIndex.value = (currentIndex.value + 1) % props?.images?.length;
     const color = props?.images[currentIndex.value]?.slider_menu_color
     handleColorChange(color);  };
 

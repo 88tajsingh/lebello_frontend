@@ -1,8 +1,8 @@
 <template>
   <div class="relative ">
     <NavBar :absolute="false" background="red" />
-    <img class="absolute top-8 right-0 mx-auto"
-      src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+    <img class="absolute top-8 right-0 z-99999 mx-auto"
+      src="/src/assets/logo/logohori.png" />
     <div class="relative">
       <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">
         <div class="">
@@ -44,13 +44,13 @@
                   </h3>
                 </div>
                 <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
-                  <PerfectScrollbar class="max-h-52">
-                    <li class="mt-1" v-for="(listItem, index) in []" :key="index">
+                  <div class="max-h-52">
+                    <li class="mt-1" v-for="(listItem, index) in productsSidebar" :key="index">
                       <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.name }}</a>
                     </li>
-                  </PerfectScrollbar>
+                  </div>
                 </ul>
-                <ul class="flex my-1">
+                <ul class="flex my-1  pt-3 border-t border-[#33333357]">
                   <!-- Facebook -->
                   <li>
                     <Facebook bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#ffffff"
@@ -101,9 +101,10 @@
             </div>
             <div @mouseenter="dropdownHoverColor = true" @mouseleave="dropdownHoverColor = false"
               class="invisible absolute bg-[#000000CC] z-50 flex w-full flex-col text-gray-800 shadow-xl group-hover:visible">
-              <a v-for="link in links" :key="link.url" :href="link.url"
+                
+              <a v-for="link in productTypeListing" :key="link.url" @click="handleProductType(link)"
                 class="block border-b text-[12px] border-[#000000AA] py-1 px-2 font-graphikLight text-white hover:text-green">
-                {{ link.name }}
+                {{ link?.name }}
               </a>
             </div>
           </div>
@@ -156,6 +157,8 @@ const closeMenu = ref(null);
 const isOpenSidebarSlider = ref(false);
 const id = ref(sessionStorage.getItem('Product_Type'));
 const productType = ref([]);
+const productTypeListing = ref([]);
+const productsSidebar = ref([]);
 
 const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
 onClickOutside(closeMenu, closeSideMenu);
@@ -167,8 +170,8 @@ const handleProductTypeData = async () => {
   if (status === 200 && data.success) {
     console.log("data", data);
     productType.value = data.data.product_types[0];
-    // productType.value = data.data.product_types;
-    // productsSidebar.value = data.data.product_series_sidebar;
+    productTypeListing.value = data.data.product_type_all_list;
+    productsSidebar.value = data.data.product_series_sidebar;
   }
 }
 
@@ -183,19 +186,11 @@ onMounted(() => {
   });
   handleProductTypeData();
 });
-const products = [
-  { id: 1, name: "Sandbar Jax Bch | Springhill Suites By Marriott", location: "Jacksonville Beach, FL", link: "https://lebello.com/contract_design/springhill-suites/", image: "http://lebello.com/wp-content/uploads/thumbs/SpringhillSuites-JacksonvilleFL-350X234.png" },
-  { id: 2, name: "Watt Plaza", location: "Los Angeles, CA", link: "https://lebello.com/contract_design/watt-plaza/", image: "http://lebello.com/wp-content/uploads/thumbs/watt-plaza-350X234.png" },
-  { id: 3, name: "Ebbdunedin", location: "EBB Bunded In, New Zealand", link: "https://lebello.com/contract_design/ebbdunedin/", image: "http://lebello.com/wp-content/uploads/thumbs/lebello-ebbdunedin-350X234.png" },
-];
 
-const links = [
-  { name: "Modular / Sofas", url: "https://lebello.com/product_type/modularsofas/" },
-  { name: "Lounge Poufs", url: "https://lebello.com/product_type/lounge-poufs/" },
-  { name: "Daybed", url: "https://lebello.com/product_type/daybed/" },
-  { name: "Outdoor Carpets", url: "https://lebello.com/product_type/outdoor-carpets/" },
-  { name: "Lounge Chairs", url: "https://lebello.com/product_type/lounge-chairs/" },
-];
+const handleProductType = (productType) => {
+  sessionStorage.setItem('Product_Type', productType.id);
+  router.push({ name: 'product_type', params: { slug: productType.slug } });
+}
 
 </script>
 

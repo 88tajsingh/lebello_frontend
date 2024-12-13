@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="absolute top-24 right-0 mx-auto">
-      <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+      <img src="/src/assets/logo/logohori.png" />
     </div>
     
     <div class="absolute top-64 right-0 pr-3 h-96 z-50" ref="closeMenu">

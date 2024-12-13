@@ -3,7 +3,7 @@
     <NavBar :absolute="false" />
     <!-- Logo -->
     <div class="absolute top-11 right-0 z-[9999] mx-auto">
-      <img src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" alt="Logo" />
+      <img src="/src/assets/logo/logohori.png" alt="Logo" />
     </div>
     <!-- Menu Icon -->
     <div class="absolute top-52 right-0 z-[9999]">
@@ -30,7 +30,7 @@
                 {{ key }}
                 <span class="-me-1 ms-auto pt-1 transition-transform duration-200 ease-in-out"
                   :class="{ 'rotate-0': activeIndex !== key, 'rotate-[-180deg]': activeIndex === key }">
-                  <Icons.Arrow size="15px" :fillColor="hoverKey === key ? '#d98c3a' : activeIndex === key ? '#d98c3a' : ''" strokeWidth="22.77"
+                  <Icons.Arrow size="15px" :fillColor="hoverKey === key ? '#d98c3a' : activeIndex === key ? '#d98c3a' : ''" :strokeWidth="22.77"
                     direction="top" />
                 </span>
               </button>
@@ -75,7 +75,7 @@
         </Slider>
         <!-- Logo -->
         <div class="absolute top-3 right-0">
-          <img src="https://lebello.com/wp-content/themes/lebello-ep/images/content/contract-design.png"
+          <img src="/src/assets/logo/contract-design.png"
             alt="Contract Design" />
         </div>
       </div>
