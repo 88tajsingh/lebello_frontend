@@ -1,35 +1,27 @@
 <template>
-  <nav class="z-[99999]">
-    <div
-      class="mx-auto w-full top-0 border-b  self-start text-graphik text-white ease-in duration-300 z-50"
-      :class="{
-        'absolute pb-10 top-0 left-0 bg-transparent': props.absolute,
-        'hover:text-white': navbarColor === 'white',
-      }"
-    >
+  <nav class="hidden md2:block z-[99999]">
+    <div class=" mx-auto w-full top-0 border-b  self-start text-graphik text-white ease-in duration-300 z-50" :class="{
+      'absolute pb-10 top-0 left-0 bg-transparent': props.absolute,
+      'bg-white': !props.absolute
+    }">
       <div class="relative z-[9999999]  h-16 items-center justify-between">
         <!-- Desktop Links -->
-        <div class="px-20 hidden md2:block" :class="props.absolute ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : 'border-b border-[#cacaca]'">
-          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8']"
-            @mouseenter="handleMouseEnter"
-            @mouseleave="handleMouseLeave"
-          >
+        <div class="px-20 hidden md2:block"
+          :class="props.absolute ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : 'border-b border-[#cacaca]'">
+          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8']" @mouseenter="handleMouseEnter"
+            @mouseleave="handleMouseLeave">
             <!-- Logo -->
             <router-link to="/" class="col-span-1 flex">
-              <img
-                class="h-8 w-full"
-                :src="navbarColor === '#ffffff' ? logoLight : logoDark"
-                alt="Lebello-global"
-              />
+              <img class="h-8 w-full" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" />
             </router-link>
 
             <!-- Navigation Links -->
             <NavigationLinks :links="links" :navColor="navbarColor ? navbarColor : '#000000'" />
 
             <!-- Search Icon -->
-            <div class="col-span-1 m-auto ml-0">
+            <div class="col-span-1 m-auto mr-20">
               <div @click="showModal = true">
-                <SearchSvg size="22px" :fillColor="navColor ? navbarColor :'#000000'" />
+                <SearchSvg size="22px" :fillColor="navColor ? navbarColor : '#000000'" />
               </div>
             </div>
           </div>
@@ -40,16 +32,24 @@
     <!-- Search Modal -->
     <SearchModal :show="showModal" @close="showModal = false" />
   </nav>
+  <div class="md2:hidden relative pt-5 pl-6 z-99999"  :class="{
+      'absolute top-0 left-0  bg-transparent': props.absolute,
+      'bg-white border-b pb-3 border-[#cacaca]': !props.absolute
+    }">
+    <div class="mb-3 "> <img class="h-9" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" /></div>
+    <MobileNavbar :links="links" :navColor="navbarColor" />
+  </div>
 </template>
 
 <script setup>
-import { ref,watch } from 'vue';
+import { ref, watch } from 'vue';
 
 import NavigationLinks from './NavigationLinks.vue';
 import SearchSvg from './Svg/Search-Svg.vue';
 import SearchModal from './SearchModal.vue'
 import logoLight from '../../assets/logo/logo.png'
 import logoDark from '../../assets/logo/logo-header4.png'
+import MobileNavbar from './MobileNavbar.vue';
 
 const props = defineProps({
   absolute: Boolean,
@@ -61,20 +61,25 @@ const props = defineProps({
 
 const navbarColor = ref(props.absolute === false ? '#000000' : props?.navColor);
 const showModal = ref(false);
+const hoverd = ref(false);
 
 watch(
   () => props.navColor,
   (color) => {
-    navbarColor.value = color;
+    if (!hoverd.value)
+      navbarColor.value = color;
+    else
+      navbarColor.value = '#ffffff';
   }
 );
 
 const handleMouseEnter = () => {
-  console.log("props.absolute",props.absolute);
-  navbarColor.value =  props.absolute === false ? '#000000' : '#ffffff';
+  hoverd.value = true;
+  navbarColor.value = props.absolute === false ? '#000000' : '#ffffff';
 }
 
 const handleMouseLeave = () => {
+  hoverd.value = false;
   navbarColor.value = props.navColor;
 }
 
@@ -204,6 +209,4 @@ const links = [
 ]
 </script>
 
-<style>
-
-</style>
+<style></style>

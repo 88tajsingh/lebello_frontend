@@ -290,9 +290,8 @@
                     <div class="flex justify-between text-[#595b55]">
                       <p class="mt-1 pr-4 text-sm">{{ item?.alt }}</p>
                       <p class="mt-1 text-sm">
-                        image {{ index + 1 }} of {{ contractDesignData?.gallery_urls?.length }}
-                        <span><img @click="toggleModal"
-                            src="https://lebello.com/wp-content/themes/lebello-ep/images/chocolat/close2.gif" />
+                        image {{ index + 1 }} of {{ contractDesignData?.gallery_urls?.length }}<br/>
+                        <span @click="toggleModal" class='flex ml-4 cursor-pointer   items-center gap-1'>Close <Close size="15px" fillColor="#000000" />
                         </span>
                       </p>
                     </div>
@@ -344,7 +343,7 @@ import FooterSection from "@/components/frontend-components/Footer-section.vue";
 import BreadcrumbSection from "@/components/frontend-components/BreadcrumbSection.vue";
 import { onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { Menu, Arrow, Mail, Printer, Facebook, Houzz, Pinterest, Twitter } from '@/components/frontend-components/Svg/Icons'
+import { Menu, Arrow, Mail, Printer,Close, Facebook, Houzz, Pinterest, Twitter } from '@/components/frontend-components/Svg/Icons'
 import { onClickOutside } from "@vueuse/core";
 import { getContractDesign } from "@/helper/frontendHelpers";
 import { useRouter } from "vue-router";

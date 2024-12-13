@@ -2,7 +2,7 @@
   <div class="relative">
     <NavBar :absolute="false" background="red" />
     <img class="absolute top-8 right-0 mx-auto"
-      src="https://lebello.com/wp-content/themes/lebello-ep/images/logo2.png" />
+      src="/src/assets/logo/logohori.png" />
 
     <div class="relative">
       <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">

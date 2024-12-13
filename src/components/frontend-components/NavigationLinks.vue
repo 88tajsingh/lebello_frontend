@@ -5,9 +5,9 @@
       <div v-for="link in props?.links" :key="link.text" class="relative group" @mouseenter="openMenu(link.text)"
         @mouseleave="closeMenu(link.text)">
         <router-link :to="link.to" class="flex items-center cursor-pointer lg:gap-2 xl:gap-5 py-1 pb-4 text-[15px] font-graphik"
-          :style="{ color: props?.navColor }" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+          :style="{ color: props?.navColor }" >
           <span>{{ link.text }}  </span>
-          <Arrow size="14px" direction="left" strokeWidth="22.5" :fillColor="'currentColor'" />
+          <Arrow size="14px" direction="left" :strokeWidth="22.5" :fillColor="'currentColor'" />
         </router-link>
         <!-- First Level Dropdown -->
         <div v-if="isMenuActive(link.text)" class="absolute left-0  top-full min-w-[200px] bg-[#000000CC] py-1">
@@ -16,7 +16,7 @@
             <router-link :to="sublink.to"
               class="flex items-center border-b border-[#D0D0D029] justify-between mx-4 py-1 text-[13px] font-graphik hover:text-blue">
               <span>{{ sublink.text }} </span>
-              <Arrow v-if="sublink.submenu" size="8px" direction="left" strokeWidth="22.5"
+              <Arrow v-if="sublink.submenu" size="8px" direction="left" :strokeWidth="22.5"
                 :fillColor="'currentColor'" />
             </router-link>
 
@@ -28,7 +28,7 @@
                 <router-link :to="submenuItem.to"
                   class="flex items-center justify-between mx-4 border-b border-[#D0D0D029] py-1 text-[13px] font-graphik hover:text-blue hover:bg-gray-800">
                   <span>{{ submenuItem.text }}</span>
-                  <Arrow v-if="submenuItem.supermenu" size="8px" strokeWidth="22.5" direction="left"
+                  <Arrow v-if="submenuItem.supermenu" size="8px" :strokeWidth="22.5" direction="left"
                     :fillColor="'currentColor'" />
                 </router-link>
 
