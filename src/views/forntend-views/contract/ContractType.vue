@@ -74,7 +74,7 @@
       <div class="custom-hidden custom-hidden-md-block">
         <ul class="flex">
           <li class="font-graphik text-[15px] hover:text-blue cursor-pointer text-green">
-            <a href="/contract_designs">Contract Design</a><span class="ml-3 mr-1">/</span>
+            <a href="/contract-designs">Contract Design</a><span class="ml-3 mr-1">/</span>
           </li>
           <li class="hover:text-blue font-graphik cursor-pointer text-[15px]">
             <a class="overview-jumper_s">{{ headerText }}</a>
@@ -84,10 +84,10 @@
     </div>
     <!-- images -->
     <div class="mx-5 md:mx-10 lg:mx-20 relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-0">
-      <!-- Loop through products -->
+      <!-- Loop through productfs -->
       <div v-for="(slide, index) in contractDesignData" :key="index" class=" ">
         <div @click.prevent="handleClick(slide)" class="prod_content h-full overflow-hidden">
-          <div @click="handleRoute(slide)" class="product_img holder relative w-full h-full object-cover max-h-[190px] "
+          <div class="product_img holder relative w-full h-full object-cover max-h-[190px] "
             :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
             @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
             <img :src="$filePath(slide?.featured_image_data?.file_url)" :alt="slide?.featured_image_data?.file_url"
@@ -115,7 +115,7 @@
 // Importing necessary components, libraries, and hooks
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
 import Icons from "@/components/frontend-components/Svg/Icons";
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed,watch } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
@@ -141,23 +141,22 @@ const isOpen = ref(false);
 const isHovered = ref([]);
 const closeMenu = ref(null);
 
-const id = ref(sessionStorage.getItem('contract_type_id'));
+const slug = ref(router.currentRoute.value.params.slug);
 const headerText = route?.params?.slug;
-console.log("headerText", headerText);
 
 // Function to close side menu when clicked outside
 const closeSideMenu = () => {
   isOpen.value = false;
   active.value = false;
 };
-onClickOutside(closeMenu, closeSideMenu);  // Set up click outside event listener
+onClickOutside(closeMenu, closeSideMenu); 
 
 const contractDesignSidebar = ref([]);
 const contractDesignData = ref([]);
 
 // Function to fetch contract design data
 const handleContractDesignData = async () => {
-  const { status, data } = await getContractType(id.value);
+  const { status, data } = await getContractType(slug.value);
   if (status === 200 && data.success) {
     contractDesignSidebar.value = data.data.contract_design_sidebar;
     contractDesignData.value = data.data.contract_desing;
@@ -169,10 +168,10 @@ const handleContractDesignData = async () => {
 onMounted(() => {
   handleContractDesignData();
 });
-
-const handleSideMenu = () => {
-  isOpen.value = !isOpen.value;
-};
+watch(() => route.params.slug, () => {
+  slug.value = route.params.slug;
+  handleContractDesignData();
+});
 
 const toggleOverlay = (index, show) => {
   isHovered.value[index] = show;
@@ -202,7 +201,6 @@ onMounted(() => {
 
 const handleClick = (sub) => {
   store.dispatch('setCurrentId', sub.id);
-
   let route;
   if (sub.title === 'overview' || sub.title === 'Overview') {
     route = { name: 'contractType', params: { slug: sub.slug } };
@@ -211,15 +209,6 @@ const handleClick = (sub) => {
   } else {
     route = { name: 'ContractLocation', params: { slug: sub.slug } };
   }
-
-  if (sub.title === 'overview' || sub.title === 'Overview') {
-    sessionStorage.setItem('contract_type_id', sub.id);
-  } else if (sub.title) {
-    sessionStorage.setItem('contract_design_id', sub.id);
-  } else {
-    sessionStorage.setItem('contract_location_id', sub.id);
-  }
-
   router.push(route);
 };
 
@@ -252,11 +241,6 @@ const getAnimationDuration = computed(() => {
   };
 });
 
-// Function to open the navigation menu
-const openNav = () => {
-  active.value = true;
-  isOpen.value = true;
-};
 
 </script>
 

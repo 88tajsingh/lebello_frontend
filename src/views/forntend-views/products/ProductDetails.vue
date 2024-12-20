@@ -88,8 +88,7 @@
             <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
               <h2 class="text-[24px] md:text-[18px] lg:text-[27px] pb-[35px] text-textColorBlack ">{{ productData.title
                 }}</h2>
-              <p v-html="productData.description"
-                class="sm:text-[15px] md:text-[15px] lg:text-[16px] lg:leading-[25px] text-[#666]"
+              <p v-html="productData.description" class="sm:text-[15px] md:text-[15px] lg:text-[16px] lg:leading-[25px] text-[#666]">
               </p>
             </div>
             <span class="mt-10 flex hover:text-green" :class="{ 'text-green': addiVisible }"
@@ -177,7 +176,9 @@ import NavBar from '@/components/frontend-components/Nav-bar.vue'
 import SideMenu from '@/components/frontend-components/Side-Menu.vue'
 import { getProductDetail } from '@/helper/frontendHelpers'
 import {Menu,Arrow,Close} from '@/components/frontend-components/Svg/Icons'
+import { useRouter } from 'vue-router'
 
+const router = useRouter();
 const isOpenSidebarSlider = ref(false);
 const isOpenSidebarSlider2 = ref(false);
 const addiVisible = ref(false);
@@ -195,17 +196,18 @@ const productData = ref([])
 const productTypes = ref([])
 const navColor = ref('')
 const atBottom = ref(false)
-const currentIndex = ref(0)
 
 
 
-const id = ref(sessionStorage.getItem('productDetail'));
+const slug = ref(router.currentRoute.value.params.slug);
 const handleProductDetailData = async () => {
-  const res = await getProductDetail(id.value)
+  const res = await getProductDetail(slug.value)
   if (res.status === 200 && res.data.success) {
     productData.value = res.data.data.product_data[0];
     productTypes.value = res.data.data?.product_types;
   }
+  else
+  router.push('/products')
 }
 
 onMounted(() => {

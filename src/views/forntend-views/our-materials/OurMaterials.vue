@@ -63,7 +63,7 @@ const handleRoute = (sub) => {
         <div class="px-5">
           <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
             <li class="mt-1" v-for="(listItem, index) in ourMaterialData.swatch_side_bar" :key="index">
-              <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.title }}</a>
+              <router-link :to="`/material/${listItem?.slug}`" class="hover:text-orange">{{ listItem?.title }}</router-link>
             </li>
           </ul>
         </div>

@@ -1,7 +1,8 @@
 <template>
-  <div id="collection" class="h-full bg-[#e3dbcf] overflow-hidden pb-16 mx-0 transition duration-1000 ease-in">
+  <div id="collection" class=" relative h-full bg-[#e3dbcf] overflow-hidden pb-16 mx-0 transition duration-1000 ease-in ">
+    <div class=" max-w-[1400px] mx-auto">
     <!-- Menu Icon and Sidebar -->
-    <div class="relative" id="sideText">
+    <div class=" " id="sideText">
       <div class="absolute top-5 right-0 bg-transparent" ref="closeMenu">
         <SideMenu :openClass="computedOpenClass" :closeClass="computedCloseClass" height="100vh"
         :closeSidebar ="closeSidebar" >
@@ -74,8 +75,8 @@
     </div>
     <!-- Section: Video + Text -->
     <div
-      class="flex flex-wrap mx-6 mt-12 md:mt-20 gap-3 sm:ml-10 md:flex my-5 lg:my-20 sm:pl-10 m-auto h-auto  md:gap-10">
-      <div class="max-w-[440px]">
+      class="flex flex-wrap mx-6 mt-12 md:mt-20 gap-3  md:flex my-5 lg:my-20 sm:pl-10 m-auto h-auto  md:gap-10 xl:gap-0 xl:mx-0 xl:pr-28">
+      <div class="max-w-[440px] lg:max-w-[3 00px]  mx-auto">
         <h1 class="text-orange   text-[40px] sm:text-[36px] md:text-[37px] leading-[46px]">
           INNOVATIVE, CREATIVE OUTDOOR FURNITURE
         </h1>
@@ -116,6 +117,7 @@
         <VideoModal :open="open" :handleClose="handleModal" />
       </div>
     </transition>
+    </div>
   </div>
 </template>
 
