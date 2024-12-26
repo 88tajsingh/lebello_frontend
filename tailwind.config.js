@@ -28,6 +28,7 @@ export default {
             xsm: '425px',
             md2: '880px', 
             '3xl': '2000px',
+            '1xl': '1400px',
             ...defaultTheme.screens,
           },
           colors: {

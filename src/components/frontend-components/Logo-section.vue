@@ -1,5 +1,5 @@
 <template>
-  <div class="grid place-items-center grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6 py-12 px-10 md:px-0 ">
+  <div class=" max-w-[1400px] mx-auto grid place-items-center grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6 py-12 px-10 md:px-0 ">
     <div v-for="(logo, index) in logoData" :key="index" class="flex justify-center items-center py-4">
       <a :href="logo.href">
         <img 

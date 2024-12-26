@@ -7,7 +7,7 @@
     <div class="relative">
       <div class="absolute top-44 right-0" ref="closeMenu" :class="{ 'w-0': isOpenSidebarSlider }">
         <div class="">
-          <SideMenu menuClass="p-2 bg-[#9ce163]" svgSize="30px" svgColor="white"  openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height="">
+          <SideMenu :closeSidebar="closeSidebar" menuClass="p-2 bg-[#9ce163]" svgSize="30px" svgColor="white"  openClass="w-[230px] absolute z-50 top-0 right-0 " closeClass="w-[230px] absolute z-50 top-0 right-[-250px]" height="">
             <div class="z-50">
               <div class="flex border border-[#33333357] items-center">
                 <span class="sticky top-3 p-4 border-r  mr-2 border-[#33333357] bg-transparent">
@@ -45,7 +45,7 @@
                 <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
                   <PerfectScrollbar class="max-h-52">
                     <li class="mt-1" v-for="(listItem, index) in productsSidebar" :key="index">
-                      <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">{{ listItem?.name }}</a>
+                      <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer" :class='slug === listItem.slug ? "text-black" :"" '>{{ listItem?.name }}</a>
                     </li>
                   </PerfectScrollbar>
                 </ul>
@@ -150,26 +150,24 @@ const isHovered = ref([]);
 const toggleOverlay = (index, show) => { isHovered.value[index] = show; };
 const dropdownHoverColor = ref(false);
 const closeMenu = ref(null);
-const isOpenSidebarSlider = ref(false);
-const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
-onClickOutside(closeMenu, closeSideMenu);
-const handleSideMenu = () => { isOpenSidebarSlider.value = true; };
-const id = ref(sessionStorage.getItem('Product_series'));
+const closeSidebar = ref(false);
+const slug = ref(router.currentRoute.value.params.slug);
 const productSeries = ref([]);
 const productType = ref([]);
 const productsSidebar = ref([]);
 
 const handleProductSeriesData = async () => {
-  const { status, data } = await getProductSeriesList(id.value);
+  const { status, data } = await getProductSeriesList(slug.value);
   if (status === 200 && data.success) {
     productSeries.value = data.data.product_series_data[0];
     productType.value = data.data.product_types;
     productsSidebar.value = data.data.product_series_sidebar;
   }
+  else
+  router.push('/products')
 }
 
 const handleProductType = (productType) => {
-  sessionStorage.setItem('Product_Type', productType.id);
   router.push({ name: 'product_type', params: { slug: productType.slug } });
 }
 onMounted(() => {
@@ -181,19 +179,20 @@ onMounted(() => {
 });
 
 const handleProductDetailNavigation = (product) => {
-  sessionStorage.setItem('productDetail', product.id);
   router.push({ name: 'productDetail', params: { slug: product.slug } });
 }
 
 const handelProductSeriesNavigation = (prod) => {
-  id.value = prod.id;
-  sessionStorage.setItem('Product_series', prod.id);
+  if(slug.value !== prod.slug){
+    closeSidebar.value = !closeSidebar.value;
+  }
+  slug.value = prod.slug;
   router.push( { name: 'product_series', params: { slug: prod.slug } });
+
 }
 
-watch(() => id.value, (newDomainId) => {
+watch(() => slug.value, (newDomainId) => {
     // Check if newDomainId is present in domains_data and fetch 
-   console.log("series id", id.value);
    handleProductSeriesData();
 });
 

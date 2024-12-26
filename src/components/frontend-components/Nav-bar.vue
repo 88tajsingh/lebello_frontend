@@ -1,12 +1,12 @@
 <template>
-  <nav class="hidden md2:block z-[99999]">
+  <nav class="hidden md2:block z-[99999] ">
     <div class=" mx-auto w-full top-0 border-b  self-start text-graphik text-white ease-in duration-300 z-50" :class="{
       'absolute pb-10 top-0 left-0 bg-transparent': props.absolute,
       'bg-white': !props.absolute
     }">
       <div class="relative z-[9999999]  h-16 items-center justify-between">
         <!-- Desktop Links -->
-        <div class="px-20 hidden md2:block"
+        <div class="px-20 hidden md2:block max-w-[1400px] mx-auto  " 
           :class="props.absolute ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : 'border-b border-[#cacaca]'">
           <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8']" @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave">

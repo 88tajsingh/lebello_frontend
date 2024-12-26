@@ -1,4 +1,5 @@
 <template>
+   
     <NavBar :absolute="false" />
     <div class="mx-10">
         <div class="overflow-x-hidden md:mx-10 mx-5 pb-10 mt-4 border-t border-gray-4">
@@ -98,7 +99,7 @@
                         <h2 :id="'heading' + item.id" class="mb-0 border border-b-gray-4">
                             <button @click="toggleAccordion(key, item)" :aria-expanded="activeIndex === item.id"
                                 :aria-controls="'collapse' + item.id"
-                                class="group relative flex  w-full items-center hover:text-orange border-0  py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
+                                class="group relative flex  w-full items-center hover:text-primary border-0  py-2 text-left transition hover:z-[2] focus:z-[3] focus:outline-none"
                                 :class="{ 'text-primary dark:bg-surface-dark dark:text-primary': activeIndex === item.id }"
                                 type="button" @mouseover="hoverKey = key" @mouseleave="hoverKey = null">
                                 {{ item.title }}
@@ -106,7 +107,7 @@
                                     class=" ms-auto  transition-transform duration-200 ease-in-out"
                                     :class="{ 'rotate-0': activeIndex !== item.id, 'rotate-[-180deg]': activeIndex === item.id }">
                                     <Icons.Arrow size="15px"
-                                        :fillColor="hoverKey === key ? '#d98c3a' : activeIndex === item.id ? '#3c50ec' : ''"
+                                        fillColor="currentColor"
                                         strokeWidth="22.77" direction="top" />
                                 </span>
                             </button>
@@ -115,7 +116,7 @@
                         <div :id="'collapse' + item.id" v-show="activeIndex === item.id" class="pl-7 py-0"
                             :aria-labelledby="'heading' + item.id" data-twe-collapse-item
                             data-twe-parent="#accordionExample">
-                            <div v-if="item?.material_data" class="text-orange font-semibold">
+                            <div v-if="item?.material_data" class="text-blue font-semibold">
                                 <li v-for="(sub, itemIndex) in item.material_data" :key="itemIndex" class="list-none">
                                     <a @click.prevent="handleClick(sub, item)"
                                         class="font-graphikLight text-[13px] cursor-pointer">
@@ -131,6 +132,7 @@
         </div>
     </div>
     <FooterSection />
+
 </template>
 
 <script setup>
@@ -147,17 +149,20 @@ const swatchDetailData = ref([]);
 const breadcrumbData = ref([]);
 const activeIndex = ref(null);
 const hoverKey = ref(null);
-const id = ref(sessionStorage.getItem('materialDetail'));
+const slug = ref(router.currentRoute.value.params.slug);
 const activeTab = ref(0)
+const loading = ref(false);
 
 const handleswatchDetailData = async () => {
-    const { status, data } = await getSwatchDetail(id.value);
+    loading.value = true;
+    const { status, data } = await getSwatchDetail(slug.value);
     if (status === 200 && data.success) {
         swatchDetailData.value = data.data.swatch_data[0];
         materialDetailSidebar.value = data.data.swatch_side_bar;
         activeTab.value = swatchDetailData.value?.material_data[0]?.id;
         activeIndex.value = swatchDetailData.value.id;
     }
+    loading.value = false;
 }
 
 const activateTab = (tab, index) => {
@@ -182,7 +187,7 @@ const handleClick = (sub, item) => {
 
     if (sub.id !== activeIndex.value) {
         sessionStorage.setItem('materialDetail', item.id);
-        id.value = item.id;
+        slug.value = item.slug;
         router.push({ name: 'materialDetail', params: { slug: item.slug } });
     }
     activeTab.value = sub.id;
@@ -202,7 +207,7 @@ const toggleAction = (index, sub) => {
 const toggleAccordion = (index, sub) => {
     activeIndex.value = activeIndex.value === sub.id ? null : sub.id;
     sessionStorage.setItem('materialDetail', sub.id);
-    id.value = sub.id;
+    slug.value = sub.slug;
     router.push({ name: 'materialDetail', params: { slug: sub.slug } });
 
 };
@@ -227,10 +232,9 @@ watch(
 );
 
 watch(
-    () => id.value,
+    () => slug.value,
     () => {
         handleswatchDetailData();
-        console.log("id", id.value);
     }
 );
 </script>
