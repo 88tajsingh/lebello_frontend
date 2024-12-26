@@ -1,0 +1,122 @@
+<!--
+  KeyShotXR
+  (c) Copyright 2012-2017 Luxion ApS - All Rights Reserved.
+-->
+
+<!DOCTYPE html>
+<html xmlns='http://www.w3.org/1999/xhtml'>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>KeyShotXR</title>
+    <style type="text/css">
+      body { -ms-touch-action: none; }
+
+    </style>
+    <script type="text/javascript" src="Stone Tables White Background.1/files/KeyShotXR.js"></script>
+    <script type="text/javascript">
+      var keyshotXR;
+
+      function initKeyShotXR() {
+        var nameOfDiv = "KeyShotXR";
+        var folderName = "Stone Tables White Background.1";
+        const viewPortWidth = window.innerWidth;
+        const viewPortHeight =  window.innerHeight
+        var backgroundColor = "#f2f2f1";
+        var uCount = 10;
+        var vCount = 10;
+        var uWrap = true;
+        var vWrap = true;
+        var uMouseSensitivity = -0.0277778;
+        var vMouseSensitivity = 0.0277778;
+        var uStartIndex = 5;
+        var vStartIndex = 0;
+        var minZoom = 1;
+        var maxZoom = 2;
+        var rotationDamping = 0.96;
+        var downScaleToBrowser = true;
+        var addDownScaleGUIButton = false;
+        var downloadOnInteraction = false;
+        var imageExtension = "png";
+        var showLoading = true;
+        var loadingIcon = "ks_logo.png"; // Set to empty string for default icon.
+        var allowFullscreen = true; // Double-click in desktop browsers for fullscreen.
+        var uReverse = false;
+        var vReverse = false;
+        var hotspots = {};
+        var isIBooksWidget = false;
+        
+        keyshotXR = new keyshotXR(nameOfDiv,folderName,viewPortWidth,viewPortHeight,backgroundColor,uCount,vCount,uWrap,vWrap,uMouseSensitivity,vMouseSensitivity,uStartIndex,vStartIndex,minZoom,maxZoom,rotationDamping,downScaleToBrowser,addDownScaleGUIButton,downloadOnInteraction,imageExtension,showLoading,loadingIcon,allowFullscreen,uReverse,vReverse,hotspots,isIBooksWidget);
+      }
+
+      window.onload = initKeyShotXR;
+    </script>
+    <style>
+      .threed_plus_mines {
+    width: 24px;
+    height: 62px;
+    border-radius: 12px;
+    border: 1px solid #c59233;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.threed_plus_mines button {
+    border: none;
+    background: none;
+    padding: 0px;
+    cursor: pointer;
+}
+.threed_plus_mines .border-t {
+    border-top: 1px solid #c59233;
+}
+.threed_plus_mines #zoom-in {
+    position: relative;
+    top: 9px;
+}
+.threed_plus_mines button#zoom-out {
+    position: relative;
+    bottom: 10px;
+}
+button#zoom-reset {
+    border: none;
+    cursor: pointer;
+    background: none;
+    width: 24px;
+    padding: 0px;
+    text-align: left;
+}
+div#zoom-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+    </style>
+  </head>
+  <body oncontextmenu="return false;">
+    <div id="KeyShotXR"></div>
+     <div id="zoom-controls" style="position:absolute; top:170px; z-index: 9999; left: 70px;" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
+                <!-- Fullscreen Icon -->
+                <button id="fullscreen-toggle" class="rounded-full p-2" style="padding: 0px;border: none;cursor: pointer; width: 24px; margin-bottom:50px;">
+                  <svg height="20px" width="20px" viewBox="0 0 512 512" fill="#000000">
+                    <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
+                  </svg>
+                </button>                
+                <div class="threed_plus_mines">
+                  <button id="zoom-in" class="plus_btn">
+                    <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 13" width="13" height="13"> <title>&lt;Group&gt;</title> <style> .s0 { fill: none;stroke: #c59233;stroke-miterlimit:10 } </style> <g id="&lt;Group&gt;"> <path id="&lt;Path&gt;" class="s0" d="m6.4 1.2v10.3"/> <path id="&lt;Path&gt;" class="s0" d="m1.3 6.4h10.3"/> </g> </svg>
+                  </button>
+                  <div class="border-t border-yellow-600 w-full"></div>
+                  <button id="zoom-out" class="mines_btn">
+                    <svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 3" width="14" height="3"> <title>&lt;Group&gt;</title> <style> .s0 { fill: none;stroke: #c59233;stroke-miterlimit:10 } </style> <g id="&lt;Group&gt;"> <path id="&lt;Path&gt;" class="s0" d="m1.9 2h10.2"/> </g> </svg>
+                  </button>
+                </div>
+
+                <button id="zoom-reset" class="rounded-full p-2 ">
+                  <img src="rest-icon.png">
+                </button>
+              </div>
+  </body>
+</html>

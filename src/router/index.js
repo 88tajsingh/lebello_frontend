@@ -90,6 +90,11 @@ const  routes = [
     component: () => import('../views/Auth/Register.vue')
   },
   {
+    path: '/store-product',
+    name: 'storeProduct',
+    component: () => import('../views/forntend-views/store/StoreProduct.vue')
+  },
+  {
     path: '/materials-shop',
     name: 'materialsShop',
     component: () => import('../views/forntend-views/our-materials/OurMaterials.vue'),
