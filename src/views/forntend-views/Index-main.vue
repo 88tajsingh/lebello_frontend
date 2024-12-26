@@ -20,6 +20,8 @@
               <form role="search">
                 <div class="relative border-b border-[#33333357] mt-2">
                   <input
+                    @keydown.enter="handleSearch"
+                    v-model="seacrh"
                     class="w-full py-[1px] font-graphikLight text-[20px] border-none bg-transparent focus:outline-none"
                     id="username" type="text" placeholder="Search" />
                   <div class="absolute right-2 top-1 flex items-center">
@@ -35,7 +37,7 @@
             <ul class="max-h-full  text-[19px]  text-[#363636] pt-1">
               <li v-for="(listItem, index) in landingPageData.home_sidebar_first" :key="index"
                 class="py-[9px] font-graphikLight">
-                <a @click="handleProductNav(listItem)" class="hover:text-orange ">{{ listItem?.title }}</a>
+              <router-link  :to="`/productDetail/${listItem?.slug}`" class="hover:text-orange">{{ listItem?.title }}</router-link>
               </li>
             </ul>
           </div>
@@ -110,7 +112,7 @@ import CollectionVideoc from '@/components/frontend-components/Collection-Video.
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import LogoSection from '@/components/frontend-components/Logo-section.vue'
 import { onMounted, ref, computed, onUnmounted } from 'vue'
-import { getLandingPageData } from '@/helper/frontendHelpers'
+import { getLandingPageData,globalSearch } from '@/helper/frontendHelpers'
 import { useRouter } from 'vue-router';
 
 const landingPageData = ref([])
@@ -118,6 +120,7 @@ const router = useRouter();
 const open = ref(false);
 const closeSidebar = ref(null)
 const navColor = ref('#000000');
+const search = ref('');
 
 const handleLandingPageData = async () => {
   const res = await getLandingPageData()
@@ -138,6 +141,10 @@ const embedPdfInNewTab = () => {
     <p><a href="${pdfUrl}" download="my-pdf-file.pdf">Download PDF</a></p>
   `;
 };
+
+const handleSearch = () => {
+  
+}
 
 const windowWidth = ref(window.innerWidth);
 

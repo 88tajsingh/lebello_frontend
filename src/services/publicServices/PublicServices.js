@@ -42,6 +42,9 @@ class PublicServices {
   frontendSwatchList(id) {
     return instance.get(ApiConfig.frontend_swatch_list, { params: {domain_id:id}, })
   }
+  globalSearch(id,payload) {
+    return instance.get(ApiConfig.globalSearch, { params: {domain_id:id,search:payload} })
+  }
  
 }
 

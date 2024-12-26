@@ -16,7 +16,7 @@
                 <a href="https://www.lebello.com/listItem/" class="text-orange">Collection 2024</a>
               </h3>
             </div>
-
+            <SelectDropdown />
 
             <!-- Search Section -->
             <div class="">
@@ -39,9 +39,9 @@
               <!-- Sidebar Navigation Links -->
               <ul class="max-h-full border-y border-[#33333357] text-[19px]  text-[#363636] pt-1">
                 <li v-for="(listItem, index) in props.sidebarList" :key="index" class="py-[9px] font-graphikLight">
-                  <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">
+                  <router-link  :to="`/productDetail/${listItem?.slug}`" class="hover:text-orange cursor-pointer">
                     {{ listItem?.name }}
-                  </a>
+                  </router-link>
                 </li>
               </ul>
 
@@ -127,6 +127,7 @@ import SearchSvg from "./Svg/Search-Svg.vue";
 import CloseSvg from "./Svg/Close-Svg.vue";
 import SideMenu from "./Side-Menu.vue";
 import { useRouter } from 'vue-router';
+import SelectDropdown from "./Form-components/SelectDropdown.vue";
 import { ref,computed,onMounted ,onUnmounted } from 'vue';
 
 const router = useRouter();
@@ -138,13 +139,7 @@ const props = defineProps({
   },
 });
 
-const handelProductSeriesNavigation = (prod) => {
-  id.value = prod.id;
-  sessionStorage.setItem('Product_series', prod.id);
-  router.push({ name: 'product_series', params: { slug: prod.slug } });
-}
-
-const windowWidth = ref(window.innerWidth);
+const windowWidth = ref(window?.innerWidth || 600);
 
 const handleResize = () => {
   windowWidth.value = window.innerWidth;
