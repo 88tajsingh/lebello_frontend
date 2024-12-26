@@ -22,21 +22,21 @@
                 </div>
               </div>
               <div class="px-4">
-                <div class="search">
-                  <form role="search">
-                    <div class="border ">
-                      <FormDropdown />
-                    </div>
-                    <div class="relative border-b border-gray-400 mt-2">
-                      <input
-                        class="appearance-none mt-2 border-none bg-transparent hover:border-gray-400 w-full py-[1px] pl-0 text-[14px] font-graphikLight ring-0 focus:outline-none focus:ring-0 focus:border-0"
-                        id="username" type="text" placeholder="Search" />
-                      <div class="absolute right-2 inset-y-0 flex items-center">
-                        <Search size="18px" fillColor="#000000" />
-                      </div>
-                    </div>
-                  </form>
+                <form  @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input
+                    @keydown.enter="handleSearch"
+                    v-model="search"
+                    class="w-full py-[1px] font-graphikLight text-[13px] px-0 border-none bg-transparent focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <Search size="22px" fillColor="#000000" />
+                  </div>
                 </div>
+              </form>
                 <div class="h-auto mb-2 border-y border-[#33333357] py-2 border-b border-gray-400">
                   <h3 class="text-[14px]">
                     <a href="https://www.lebello.com/listItem/"
@@ -158,6 +158,7 @@ const slug = ref(router.currentRoute.value.params.slug);
 const productType = ref([]);
 const productTypeListing = ref([]);
 const productsSidebar = ref([]);
+const search = ref([]);
 
 const handleProductTypeData = async () => {
   const { status, data } = await getProductTypeList(slug.value);
@@ -169,6 +170,17 @@ const handleProductTypeData = async () => {
   else
   router.push('/products')
 }
+
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
 
 const handleProductDetailNavigation = (product) => {
   router.push({ name: 'productDetail', params: { slug: product.slug } });

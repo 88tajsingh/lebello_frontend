@@ -16,21 +16,27 @@
                 <a href="https://www.lebello.com/listItem/" class="text-orange">Collection 2024</a>
               </h3>
             </div>
+
             <SelectDropdown />
 
             <!-- Search Section -->
             <div class="">
               <div class="search mt-4">
-                <form role="search">
-                  <div class="relative border-b border-[#33333357] mt-2  mx-0">
-                    <input
-                      class="w-full py-[1px] font-graphikLight text-[20px] px-0 border-none bg-transparent focus:outline-none"
-                      id="username" type="text" placeholder="Search" />
-                    <div class="absolute right-2 top-1 flex items-center">
-                      <SearchSvg size="22px" fillColor="#000000" />
-                    </div>
+                <form  @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input
+                    @keydown.enter="handleSearch"
+                    v-model="search"
+                    class="w-full py-[1px] font-graphikLight text-[20px] border-none bg-transparent focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <SearchSvg size="22px" fillColor="#000000" />
                   </div>
-                </form>
+                </div>
+              </form>
               </div>
               <div class="text-[#333]">
                 <h3 class="text-[19px] font-graphikMedium pb-2 pt-8 hover:text-orange cursor-pointer uppercase">
@@ -39,7 +45,7 @@
               <!-- Sidebar Navigation Links -->
               <ul class="max-h-full border-y border-[#33333357] text-[19px]  text-[#363636] pt-1">
                 <li v-for="(listItem, index) in props.sidebarList" :key="index" class="py-[9px] font-graphikLight">
-                  <router-link  :to="`/productDetail/${listItem?.slug}`" class="hover:text-orange cursor-pointer">
+                  <router-link  :to="`/product_series/${listItem?.slug}`" class="hover:text-orange cursor-pointer">
                     {{ listItem?.name }}
                   </router-link>
                 </li>
@@ -131,6 +137,7 @@ import SelectDropdown from "./Form-components/SelectDropdown.vue";
 import { ref,computed,onMounted ,onUnmounted } from 'vue';
 
 const router = useRouter();
+const search = ref([])
 const closeSidebar =ref(null)
 const props = defineProps({
   sidebarList: {
@@ -157,6 +164,17 @@ const computedCloseClass = computed(() => {
     return 'w-[500px] fixed z-50 top-0 right-[-520px]';
   }
 });
+
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
 
 onMounted(() => {
   window.addEventListener('resize', handleResize);

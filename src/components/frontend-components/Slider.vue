@@ -5,6 +5,7 @@
       <div class="overflow-hidden h-screen">
         <div v-for="(slide, index) in props.images" :key="index" class="w-full duration-1000 ease-in-out"
           v-show="currentIndex === index">
+          
           <img :src="$filePath(slide[props.imageKeyName]?.file_url)"
             class="block absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2"
             :alt="slide[props.imageKeyName]?.file_url" />

@@ -8,10 +8,10 @@
           class="text-Black666 text-[15px] font-graphik cursor-pointer hover:text-blue" 
           :class="{ 'text-green text-[16px]': index == 0 }"
         >
-          <p @click="onBreadcrumbClick(breadcrumb)">
+          <router-link :to='breadcrumb.link'>
             {{ breadcrumb?.name }}
             <span v-if="index < breadcrumbData?.length - 1" class="m-1">{{ props?.seprate }}</span>
-          </p>
+          </router-link>
         </li>
       </ul>
     </div>
@@ -24,19 +24,4 @@ import { useRouter } from 'vue-router';
 const props = defineProps(['breadcrumbData', 'seprate', 'color']);
 const emit = defineEmits(['setSessionData']);
 
-// Access the router instance
-const router = useRouter();
-
-// Handle click on breadcrumb and emit event to parent
-function onBreadcrumbClick(breadcrumb) {
-  // Store contract_type_id in sessionStorage
-  if (breadcrumb.contractTypeId) {
-    sessionStorage.setItem('contractTypeId', breadcrumb.contractTypeId);
-    router.push(breadcrumb.link);
-  }
-  else {
-    router.push(breadcrumb.link);
-  }
-  
-}
 </script>

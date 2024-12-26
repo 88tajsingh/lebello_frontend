@@ -93,7 +93,8 @@
       <div class="grid grid-cols-2 md:grid-cols-4 gap-0 py-3 md:py-0">
         <div v-for="(images, index) in contractDesignData.contract_design" :key="index"
           class="prod_content overflow-hidden">
-          <div @click="handleRoute(images)" class="product_img relative w-full max-h-[190px] h-full"
+          <router-link :to="`/contract_design/${images.slug}`" >
+          <div class="product_img relative w-full max-h-[190px] h-full"
             :class="{ 'md:transition-transform md:duration-1000 md:ease-in-out md:transform scale-125': isHovered[index] }"
             @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
             <img :src="$filePath(images?.featured_image_data?.file_url)" :alt="images?.featured_image_data?.file_url"
@@ -109,6 +110,7 @@
               </div>
             </div>
           </div>
+        </router-link>
         </div>
       </div>
     </div>
@@ -162,12 +164,6 @@ const handleClick = (sub) => {
   }
   router.push(route);
 };
-
-const handleRoute = (sub) => {
-  sessionStorage.setItem('contract_design_id', sub.id);
-  router.push({ name: 'contractDesign', params: { slug: sub.slug } });
-};
-
 
 // Fetch Contract Design Data
 const handleContractDesignData = async () => {

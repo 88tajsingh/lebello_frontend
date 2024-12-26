@@ -4,21 +4,24 @@
             <NavBar :absolute="true" :storePages='true' />
         </div>
         <!-- right logo -->
-        <div class="absolute top-16 right-0">
+        <div class="absolute z-[99999999] top-16 right-0">
             <img src="@/assets/logo/lebello-logo-right.png" alt="">
         </div>
         <!-- breadcrumbs -->
-        <div>
-            Home / <span class="text-[#c59233]">Tubo Sofa</span>
-        </div>
         <div class="swiper mySwiper">
             <div class="swiper-wrapper">
                 <div class="swiper-slide first_slide_body">
                     <div class="slider_main_img">
                         <div class="relative aspect-square bg-gray-50 rounded-lg overflow-y-hidden">
-                            <iframe :src="frame3d" allowfullscreen
-                                style="position: absolute; top: 0px; left: 0px; height: 100%; width: 1px; min-width: 100%; width:100%;"
-                                frameborder="0" scrolling="no"></iframe>
+                            <div class="relative w-full h-screen overflow-hidden">
+                                <div class="absolute top-28 left-20 z-[999999]">asdasd
+                                    Home / <span class="text-[#c59233]">Tubo Sofa</span>
+                                </div>
+                                <iframe
+                                    src="/src/assets/lebello/Stone Tables White Background.1/Stone Tables White Background.1.html"
+                                    allowfullscreen frameborder="0" scrolling="no"
+                                    class="absolute z-99999 top-0 left-0 w-full h-full border-none"></iframe>
+                            </div>
                             <div id="zoom-controls"
                                 class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
                                 <!-- Fullscreen Icon -->
@@ -89,7 +92,6 @@
 import NavBar from '@/components/frontend-components/Nav-bar.vue';
 import AccordionNew from '@/components/frontend-components/AccordionNew.vue';
 import Swiper from "swiper";
-import frame3d from '@/assets/lebello/Stone Tables White Background.1/Stone Tables White Background.1.html';
 import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -144,6 +146,6 @@ function resetZoom() {
 .custom-navigation .btn-prev:hover,
 .custom-navigation .btn-next:hover {
     background-color: #a7892f;
-    
+
 }
 </style>

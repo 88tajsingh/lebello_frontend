@@ -146,9 +146,9 @@
             <p>Product Featured:</p>
             <p class="text-[13px] lg:text-[15px] py-1 md:py-0 cursor-pointer text-blue"
               v-for="product in contractDesignData?.feature_products_data" :key="product.id">
-              <span
-                @click.prevent="() => { store.dispatch('setCurrentId', product.id); router.push({ name: 'ProductDetail', params: { slug: product.slug } }); }">{{
-                  product.name }}</span>
+              <router-link :to="`/productDetail/${product.slug}`"
+               >{{
+                  product?.name }}</router-link>
             </p>
           </div>
         </div>

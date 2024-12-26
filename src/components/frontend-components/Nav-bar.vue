@@ -6,13 +6,13 @@
     }">
       <div class="relative z-[9999999]  h-16 items-center justify-between">
         <!-- Desktop Links -->
-        <div class="px-20 hidden md2:block max-w-[1400px] mx-auto  " 
-          :class="props.absolute ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : 'border-b border-[#cacaca]'">
-          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8']" @mouseenter="handleMouseEnter"
-            @mouseleave="handleMouseLeave">
+        <div class="  px-20 hidden md2:block max-w-[1400px] mx-auto  " 
+          :class="props.absolute  ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : 'border-b border-[#cacaca]'">
+          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8', storePages && 'border-b border-[#333333]']" @mouseenter="handleMouseEnter"
+            @mouseleave="handleMouseLeave" class="">
             <!-- Logo -->
             <router-link to="/" class="col-span-1 flex">
-              <img class="h-8 w-full" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" />
+              <img class="h-8 w-52" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" />
             </router-link>
 
             <!-- Navigation Links -->
@@ -30,10 +30,10 @@
                 </a>
               </div>
             </div>
-            
             <!-- border -->
-            <div v-if="storePages" class="absolute bg-black w-[92%] h-[1px] top-20 z-[9999999]" :class="hoverd ? 'text-white' : 'text-black'" >
-            </div>
+            <!-- <div v-if="storePages" class="absolute bg-black w-[92%] h-[1px] top-20 z-[9999999]" :class="hoverd ? 'text-white' : 'text-black'" >
+            </div> -->
+            
 
 
             <!-- Search Icon -->

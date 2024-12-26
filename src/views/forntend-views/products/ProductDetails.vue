@@ -31,6 +31,21 @@
                 </div>
               </div>
               <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
+                <form  @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input
+                    @keydown.enter="handleSearch"
+                    v-model="search"
+                    class="w-full py-[1px] px-0 font-graphikLight text-[13px] border-none bg-transparent focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <Search size="22px" fillColor="currentColor" />
+                  </div>
+                </div>
+              </form>
                 <li v-for="(listItem, index) in productTypes " :key="index" class="mt-1 border-b border-[#cdc6c6]">
                   <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange  cursor-pointer">
                     {{ listItem?.name }}
@@ -70,6 +85,21 @@
                 </div>
               </div>
               <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
+                <form  @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input
+                    @keydown.enter="handleSearch"
+                    v-model="search"
+                    class="w-full py-[1px] font-graphikLight text-[13px] px-0 border-none bg-transparent focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <Search size="22px" fillColor="#000000" />
+                  </div>
+                </div>
+              </form>
                 <li v-for="(listItem, index) in productTypes " :key="index" class="mt-1 border-b border-[#cdc6c6]">
                   <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange  cursor-pointer">
                     {{ listItem?.name }}
@@ -175,7 +205,7 @@ import { onClickOutside } from '@vueuse/core'
 import NavBar from '@/components/frontend-components/Nav-bar.vue'
 import SideMenu from '@/components/frontend-components/Side-Menu.vue'
 import { getProductDetail } from '@/helper/frontendHelpers'
-import {Menu,Arrow,Close} from '@/components/frontend-components/Svg/Icons'
+import {Menu,Arrow,Close,Search} from '@/components/frontend-components/Svg/Icons'
 import { useRouter } from 'vue-router'
 
 const router = useRouter();
@@ -196,6 +226,7 @@ const productData = ref([])
 const productTypes = ref([])
 const navColor = ref('')
 const atBottom = ref(false)
+const search = ref('')
 
 
 
@@ -227,6 +258,18 @@ const imageData = computed(() => {
 const handleStoreClick = () => {
   console.log('Email:', email.value)
 }
+
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
+
 
 const setArrowFillColor = (color) => arrowFillColor.value = color;
 const setArrowFillColor2 = (color) => arrowFillColor2.value = color;

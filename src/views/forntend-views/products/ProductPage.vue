@@ -23,25 +23,21 @@
                 </div>
               </div>
               <div class="px-4">
-                <div class="search">
-                  <form role="search">
-                    <div class="border ">
-                      <FormDropdown />
-                    </div>
-                    <div class="relative border-b border-gray-400 mt-2">
-                      <input
-                        class="appearance-none mt-2 border-none bg-transparent hover:border-gray-400 w-full py-[1px] pl-0 text-[14px] font-graphikLight ring-0 focus:outline-none focus:ring-0 focus:border-0"
-                        id="username" type="text" placeholder="Search" />
-                      <div class="absolute right-2 inset-y-0 flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-3 text-gray-400 hover:text-gray-500"
-                          fill="none" viewBox="0 0 24 24" stroke="currentColor" transform="scale(-1, 1)">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </form>
+                <form  @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input
+                    @keydown.enter="handleSearch"
+                    v-model="search"
+                    class="w-full py-[1px] font-graphikLight text-[13px] px-0 border-none bg-transparent focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <Search size="22px" fillColor="#000000" />
+                  </div>
                 </div>
+              </form>
                 <div class="h-auto mb-2 border-y border-[#33333357] py-2 border-b border-gray-400">
                   <h3 class="text-[14px]">
                     <a href="https://www.lebello.com/listItem/"
@@ -144,7 +140,7 @@
 <script setup>
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
-import { Arrow, Menu, Facebook, Twitter, Houzz, Pinterest, Instagram } from "@/components/frontend-components/Svg/Icons";
+import { Arrow, Menu, Facebook, Twitter,Search, Houzz, Pinterest, Instagram } from "@/components/frontend-components/Svg/Icons";
 import LogoSection from "@/components/frontend-components/Logo-section.vue";
 import SideMenu from '@/components/frontend-components/Side-Menu.vue';
 import { ref, onMounted } from "vue";
@@ -159,6 +155,9 @@ const dropdownHoverColor = ref(false);
 const closeMenu = ref(null);
 const products = ref([]);
 const isOpenSidebarSlider = ref(false);
+const search = ref('');
+
+
 const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
 onClickOutside(closeMenu, closeSideMenu);
 const handleSideMenu = () => { isOpenSidebarSlider.value = true; };
@@ -183,6 +182,17 @@ const handelProductSeriesNavigation = (prod) => {
   sessionStorage.setItem('Product_series', prod.id);
   router.push({ name: 'product_series', params: { slug: prod.slug } });
 }
+
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
 
 const handelProductDetailNavigation = (prod) => {
   // window.location.href = prod.link;

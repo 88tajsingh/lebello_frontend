@@ -1,5 +1,5 @@
 <template>
-    <div class=" mx-auto border border-[#33333357] rounded-sm text-[16px]">
+    <div class=" mx-auto my-4 border border-[#33333357] rounded-sm text-[16px]">
       <!-- Dropdown Header -->
       <div 
         class="flex justify-between hover:text-orange items-center px-4 py-3 cursor-pointer font-graphik"

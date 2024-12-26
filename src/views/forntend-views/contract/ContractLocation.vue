@@ -74,7 +74,7 @@
       <div class="custom-hidden custom-hidden-md-block">
     <ul class="flex">
       <li class="font-graphik text-[15px] hover:text-blue text-green">
-        <a href="/contract-designs">Contract Design</a><span class="ml-3 mr-1">/</span>
+        <router-link to="/contract-designs">Contract Design</router-link><span class="ml-3 mr-1">/</span>
       </li>
       <li class="hover:text-blue font-graphik text-[15px]">
         <a class="overview-jumper_s">{{ headerText }}</a>
@@ -87,7 +87,7 @@
       <!-- Loop through products -->
       <div v-for="(slide, index) in contractLocationData" :key="index" class=" ">
         <div @click.prevent="handleClick(slide)" class="prod_content h-full overflow-hidden">
-          <div @click="handleRoute(slide)" class="product_img holder relative w-full h-full object-cover max-h-[190px] "
+          <div  class="product_img holder relative w-full h-full object-cover max-h-[190px] "
             :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
             @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
             <img class="aos-item w-full h-full object-cover" ref="element" :data-aos="animationType"
@@ -134,16 +134,8 @@ const animationType = "fade-up";
 const active = ref(false);
 const isOpen = ref(false);
 const isHovered = ref([]);
-const closeMenu = ref(null);
 const slug = ref(route?.params?.slug ?? '');
 const headerText = ref(route?.params?.slug ?? '')
-
-
-const closeSideMenu = () => {
-  isOpen.value = false;
-  active.value = false;
-};
-onClickOutside(closeMenu, closeSideMenu);
 
 const contractLocationSidebar = ref([]);
 const contractLocationData = ref([]);
@@ -170,11 +162,6 @@ watch(() => route.params.slug, async (newVal) => {
   slug.value = newVal;
   handleContractLocationData();
 });
-
-const handleSideMenu = () => {
-  isOpen.value = !isOpen.value;
-};
-
 
 const toggleOverlay = (index, show) => {
   isHovered.value[index] = show;
