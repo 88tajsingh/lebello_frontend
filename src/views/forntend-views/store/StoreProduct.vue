@@ -131,7 +131,7 @@ function resetZoom() {
 <style scoped>
 .custom-navigation .btn-prev,
 .custom-navigation .btn-next {
-    background-color: ;
+    background-color: #000000;
     color: #fff;
     border: none;
     padding: 10px 20px;
