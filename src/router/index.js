@@ -97,7 +97,7 @@ const  routes = [
   {
     path: '/store-product',
     name: 'storeProduct',
-    component: () => import('../views/forntend-views/store/StoreProduct.vue')
+    component: () => import('../views/store/StoreProduct.vue')
   },
   {
     path: '/materials-shop',

@@ -7,7 +7,7 @@
       <div class="relative z-[9999999]  h-16 items-center justify-between">
         <!-- Desktop Links -->
         <div class="  px-20 hidden md2:block max-w-[1400px] mx-auto  " 
-          :class="props.absolute  ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : 'border-b border-[#cacaca]'">
+          :class="props.absolute && !storePages && 'hover:bg-[#0e0e0e89] bg-opacity-5'">
           <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8', storePages && 'border-b border-[#333333]']" @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave" class="">
             <!-- Logo -->
@@ -16,11 +16,11 @@
             </router-link>
 
             <!-- Navigation Links -->
-            <NavigationLinks :links="links" :navColor="navbarColor ? navbarColor : '#000000'"
+            <NavigationLinks :links="links" :navColor="navbarColor ? navbarColor : storePages ? '#4b4b4b' : '#000000'"
               :storePages="storePages" />
 
               <!-- for product page -->
-            <div v-if="storePages" class="flex justify-center items-center gap-10 pb-3" :class="hoverd ? 'text-white' : 'text-black'" >
+            <div v-if="storePages" class="flex justify-center items-center gap-10 pb-3 text-[#4b4b4b] " >
               <div class="w-full">CONTACT&nbsp;/&nbsp;HELP&nbsp;?</div>
               <div class="flex">
                 <a class="flex justify-center gap-2 items-center p-1" href="#">
@@ -91,14 +91,18 @@ watch(
   (color) => {
     if (!hoverd.value)
       navbarColor.value = color;
-    else
+    else if(props.storePages)
+      {
+        navbarColor.value = '#4b4b4b  ';
+      }
+      else
       navbarColor.value = '#ffffff';
   }
 );
 
 const handleMouseEnter = () => {
   hoverd.value = true;
-  navbarColor.value = props.absolute === false ? '#000000' : '#ffffff';
+  navbarColor.value = props.absolute === false ? '#000000' : props.storePages ? '#4b4b4b  ':'#ffffff';
 }
 
 const handleMouseLeave = () => {

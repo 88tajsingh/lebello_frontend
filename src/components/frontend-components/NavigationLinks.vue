@@ -1,14 +1,15 @@
 <template>
   <div class="flex w-full px-10 pt-1 text-[13px]">
     <!-- Desktop Navigation -->
-    <div class="hidden lg:flex items-center w-full" :class="storePages ? 'justify-start gap-16' : 'justify-between'">
+    <div class="hidden lg:flex items-center w-full" :class="storePages ? 'justify-start gap-6' : 'justify-between'">
       <div v-for="link in props?.links" :key="link.text" class="relative group" @mouseenter="openMenu(link.text)"
         @mouseleave="closeMenu(link.text)">
         <router-link :to="link.to"
-          class="flex items-center cursor-pointer lg:gap-2 xl:gap-5 py-1 pb-4 text-[15px] font-graphik"
+          class="flex items-center cursor-pointer py-1 pb-4 text-[15px] font-graphik"
+          :class="storePages ? 'gap-2' : 'lg:gap-2 xl:gap-3'"
           :style="{ color: props?.navColor }">
           <span>{{ link.text }} </span>
-          <Arrow v-if="link.sublinks" size="14px" direction="left" :strokeWidth="22.5" :fillColor="'currentColor'" />
+          <Arrow v-if="link.sublinks" :size="storePages? '11px' : '12px'" direction="left" :strokeWidth="22.5" :fillColor="'currentColor'" />
         </router-link>
         <!-- First Level Dropdown -->
         <div v-if="link.sublinks" >

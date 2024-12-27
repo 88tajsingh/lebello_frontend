@@ -19,9 +19,10 @@ export default {
         fontFamily: {
             satoshi: ['Satoshi', 'sans-serif'],
             sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            graphik: ['GraphikRegular', 'sans-serif'],
-            graphikLight: ['GraphikLight', 'sans-serif'],
-            graphikMedium: ['GraphikMedium', 'sans-serif'],
+            graphik: ['GraphikRegular',],
+            graphikLight: ['GraphikLight',],
+            graphikMedium: ['GraphikMedium',],
+            MyriadPro: ['Myriad Pro'],
         },
         screens: {
             '2xsm': '375px',
