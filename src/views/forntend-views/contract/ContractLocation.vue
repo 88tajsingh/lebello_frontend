@@ -74,7 +74,7 @@
       <div class="custom-hidden custom-hidden-md-block">
     <ul class="flex">
       <li class="font-graphik text-[15px] hover:text-blue text-green">
-        <a href="/contract_location">Contract Location</a><span class="ml-3 mr-1">/</span>
+        <router-link to="/contract-designs">Contract Design</router-link><span class="ml-3 mr-1">/</span>
       </li>
       <li class="hover:text-blue font-graphik text-[15px]">
         <a class="overview-jumper_s">{{ headerText }}</a>
@@ -87,7 +87,7 @@
       <!-- Loop through products -->
       <div v-for="(slide, index) in contractLocationData" :key="index" class=" ">
         <div @click.prevent="handleClick(slide)" class="prod_content h-full overflow-hidden">
-          <div @click="handleRoute(slide)" class="product_img holder relative w-full h-full object-cover max-h-[190px] "
+          <div  class="product_img holder relative w-full h-full object-cover max-h-[190px] "
             :class="{ 'md:transition-transform md:duration-1000  md:ease-in-out md:transform scale-125': isHovered[index] }"
             @mouseenter="toggleOverlay(index, true)" @mouseleave="toggleOverlay(index, false)">
             <img class="aos-item w-full h-full object-cover" ref="element" :data-aos="animationType"
@@ -114,7 +114,7 @@
 <script setup>
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
 import Icons from "@/components/frontend-components/Svg/Icons";
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed,watch } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import SideMenu from "@/components/frontend-components/Side-Menu.vue";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
@@ -134,30 +134,19 @@ const animationType = "fade-up";
 const active = ref(false);
 const isOpen = ref(false);
 const isHovered = ref([]);
-const closeMenu = ref(null);
-const id = sessionStorage.getItem('contract_location_id');
+const slug = ref(route?.params?.slug ?? '');
 const headerText = ref(route?.params?.slug ?? '')
-console.log("headerText", headerText);
-
-
-const closeSideMenu = () => {
-  isOpen.value = false;
-  active.value = false;
-};
-onClickOutside(closeMenu, closeSideMenu);
 
 const contractLocationSidebar = ref([]);
 const contractLocationData = ref([]);
-const handleContractLocationData = async (id) => {
+const handleContractLocationData = async () => {
 
-  const { status, data } = await getContractLocation(id);
+  const { status, data } = await getContractLocation(slug.value);
   if (status === 200 && data.success) {
-    console.log("data", data);
     contractLocationSidebar.value = data.data.contract_design_sidebar;
     contractLocationData.value = data.data.contract_desing;
     headerText.value = route?.params?.slug
   } else {
-    console.log("error");
     contractLocationData.value = [];
   }
 };
@@ -166,12 +155,13 @@ onMounted(() => {
     top: 0,
     behavior: 'smooth',
   });
-  handleContractLocationData(id);
+  handleContractLocationData();
 });
-const handleSideMenu = () => {
-  isOpen.value = !isOpen.value;
-};
 
+watch(() => route.params.slug, async (newVal) => {
+  slug.value = newVal;
+  handleContractLocationData();
+});
 
 const toggleOverlay = (index, show) => {
   isHovered.value[index] = show;

@@ -327,7 +327,7 @@ const ApiConfig = {
   getRole: '/role-list',
 
 
-  // public  routes ---------------------------------
+  // -------------------------------------------------- public  routes ---------------------------------
   getDomain:'/get-domain',
   getLandingPageData: '/get-landing-page-data',
   getContractDesign: '/front-end-contract-design-data',
@@ -340,7 +340,7 @@ const ApiConfig = {
   product_series_list: '/front-end-product-series-data',
   product_Type_list: '/front-end-product-type-data',
   product_Detail: '/front-end-product-data',
-
+  globalSearch:'/global-search'
 
 
 }

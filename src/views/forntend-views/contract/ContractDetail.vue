@@ -1,4 +1,5 @@
 <template>
+  <div v-if='!loading'>
   <NavBar :absolute="false" />
   <div class="overflow-x-hidden md:mx-10 pb-10">
     <div
@@ -145,9 +146,9 @@
             <p>Product Featured:</p>
             <p class="text-[13px] lg:text-[15px] py-1 md:py-0 cursor-pointer text-blue"
               v-for="product in contractDesignData?.feature_products_data" :key="product.id">
-              <span
-                @click.prevent="() => { store.dispatch('setCurrentId', product.id); router.push({ name: 'ProductDetail', params: { slug: product.slug } }); }">{{
-                  product.name }}</span>
+              <router-link :to="`/productDetail/${product.slug}`"
+               >{{
+                  product?.name }}</router-link>
             </p>
           </div>
         </div>
@@ -334,7 +335,7 @@
     </div>
   </div>
   <FooterSection />
-
+</div>
 </template>
 
 <script setup>
@@ -354,30 +355,26 @@ const router = useRouter();
 const contractDesignSidebar = ref([]);
 const contractDesignData = ref([]);
 const breadcrumbData = ref([]);
-const loading = ref(true);
-const id = sessionStorage.getItem('contract_design_id');
+const loading = ref(false);
+const slug = ref(router.currentRoute.value.params.slug);
 
 const handleContractDesignData = async () => {
-  const { status, data } = await getContractDesign(id);
+  loading.value = true;
+  const { status, data } = await getContractDesign(slug.value);
   if (status === 200 && data.success) {
     contractDesignSidebar.value = data.data.contract_design_sidebar;
     contractDesignData.value = data.data.contract_desing[0];
+    loading.value = false;
   } else {
     console.log("error");
     contractDesignData.value = [];
+    loading.value = false;
   }
+  loading.value = false;
+
 };
 
-const isOpenSidebar = ref(false);
-const closeMenu = ref(null);
-const handleSideMenu = () => {
-  isOpenSidebar.value = !isOpenSidebar.value;
-};
 
-const closeSideMenu = () => {
-  isOpenSidebar.value = false;
-};
-onClickOutside(closeMenu, closeSideMenu);
 
 const handleClick = (sub) => {
   let route;
@@ -388,14 +385,6 @@ const handleClick = (sub) => {
   } else {
     route = { name: 'ContractLocation', params: { slug: sub.slug } };
   }
-  if (sub.title === 'overview' || sub.title === 'Overview') {
-    sessionStorage.setItem('contract_type_id', sub.id);
-  } else if (sub.title) {
-    sessionStorage.setItem('contract_design_id', sub.id);
-  } else {
-    sessionStorage.setItem('contract_location_id', sub.id);
-  }
-
   router.push(route);
 };
 
@@ -404,6 +393,8 @@ onMounted(() => {
     top: 0,
     behavior: 'smooth',
   });
+  // const slug =router.currentRoute.value.params.slug;
+  // console.log("slug", slug);
   handleContractDesignData();
 });
 
@@ -414,9 +405,8 @@ const toggleAccordion = (index) => {
 watch(
   () => contractDesignData.value,
   () => {
-
     breadcrumbData.value = [
-      { name: 'Contract Design', link: '/contract_designs' },
+      { name: 'Contract Design', link: '/contract-designs' },
       {
         name: contractDesignData.value?.contract_type_data?.[0]?.contract_name,
         link: `/contract_type/${contractDesignData.value?.contract_type_data?.[0]?.slug}`,
@@ -427,6 +417,13 @@ watch(
         link: `/contract_design/${contractDesignData.value?.slug || 'default-slug'}`
       }
     ];
+  }
+);
+watch(
+  () => router.currentRoute.value.params.slug,
+  () => {
+    slug.value = router.currentRoute.value.params.slug;
+    handleContractDesignData();
   }
 );
 
@@ -447,38 +444,6 @@ const isModalOpen = ref(false);
 
 const toggleModal = () => {
   isModalOpen.value = !isModalOpen.value;
-};
-
-const openSections = ref({});
-
-const toggle = (key) => {
-  Object.keys(openSections.value).forEach((k) => {
-    openSections.value[k] = false;
-  });
-  openSections.value[key] = true;
-};
-
-const isOpen = (key) => {
-  return openSections.value[key];
-};
-
-const beforeEnter = async (el) => {
-  loading.value = true;
-  el.style.height = '0';
-  el.style.overflow = 'hidden';
-  await handleContractDesignData();
-  loading.value = false;
-};
-
-const enter = (el) => {
-  el.offsetHeight; // Trigger reflow
-  el.style.height = `${el.scrollHeight}px`;
-};
-
-const leave = (el) => {
-  el.style.height = `${el.scrollHeight}px`;
-  el.offsetHeight; // Trigger reflow
-  el.style.height = '0';
 };
 </script>
 

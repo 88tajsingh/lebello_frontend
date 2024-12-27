@@ -1,7 +1,8 @@
 <template>
-  <div id="collection" class="h-full bg-[#e3dbcf] overflow-hidden pb-16 mx-0 transition duration-1000 ease-in">
+  <div id="collection" class=" relative h-full bg-[#e3dbcf] overflow-hidden pb-16 mx-0 transition duration-1000 ease-in ">
+    <div class=" max-w-[1400px] mx-auto">
     <!-- Menu Icon and Sidebar -->
-    <div class="relative" id="sideText">
+    <div class=" " id="sideText">
       <div class="absolute top-5 right-0 bg-transparent" ref="closeMenu">
         <SideMenu :openClass="computedOpenClass" :closeClass="computedCloseClass" height="100vh"
         :closeSidebar ="closeSidebar" >
@@ -16,20 +17,26 @@
               </h3>
             </div>
 
+            <SelectDropdown />
 
             <!-- Search Section -->
             <div class="">
               <div class="search mt-4">
-                <form role="search">
-                  <div class="relative border-b border-[#33333357] mt-2  mx-0">
-                    <input
-                      class="w-full py-[1px] font-graphikLight text-[20px] px-0 border-none bg-transparent focus:outline-none"
-                      id="username" type="text" placeholder="Search" />
-                    <div class="absolute right-2 top-1 flex items-center">
-                      <SearchSvg size="22px" fillColor="#000000" />
-                    </div>
+                <form  @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input
+                    @keydown.enter="handleSearch"
+                    v-model="search"
+                    class="w-full py-[1px] font-graphikLight text-[20px] border-none bg-transparent focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <SearchSvg size="22px" fillColor="#000000" />
                   </div>
-                </form>
+                </div>
+              </form>
               </div>
               <div class="text-[#333]">
                 <h3 class="text-[19px] font-graphikMedium pb-2 pt-8 hover:text-orange cursor-pointer uppercase">
@@ -38,9 +45,9 @@
               <!-- Sidebar Navigation Links -->
               <ul class="max-h-full border-y border-[#33333357] text-[19px]  text-[#363636] pt-1">
                 <li v-for="(listItem, index) in props.sidebarList" :key="index" class="py-[9px] font-graphikLight">
-                  <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">
+                  <router-link  :to="`/product_series/${listItem?.slug}`" class="hover:text-orange cursor-pointer">
                     {{ listItem?.name }}
-                  </a>
+                  </router-link>
                 </li>
               </ul>
 
@@ -74,8 +81,8 @@
     </div>
     <!-- Section: Video + Text -->
     <div
-      class="flex flex-wrap mx-6 mt-12 md:mt-20 gap-3 sm:ml-10 md:flex my-5 lg:my-20 sm:pl-10 m-auto h-auto  md:gap-10">
-      <div class="max-w-[440px]">
+      class="flex flex-wrap mx-6 mt-12 md:mt-20 gap-3  md:flex my-5 lg:my-20 sm:pl-10 m-auto h-auto  md:gap-10 xl:gap-0 xl:mx-0 xl:pr-28">
+      <div class="max-w-[440px] lg:max-w-[3 00px]  mx-auto">
         <h1 class="text-orange   text-[40px] sm:text-[36px] md:text-[37px] leading-[46px]">
           INNOVATIVE, CREATIVE OUTDOOR FURNITURE
         </h1>
@@ -116,6 +123,7 @@
         <VideoModal :open="open" :handleClose="handleModal" />
       </div>
     </transition>
+    </div>
   </div>
 </template>
 
@@ -125,9 +133,11 @@ import SearchSvg from "./Svg/Search-Svg.vue";
 import CloseSvg from "./Svg/Close-Svg.vue";
 import SideMenu from "./Side-Menu.vue";
 import { useRouter } from 'vue-router';
+import SelectDropdown from "./Form-components/SelectDropdown.vue";
 import { ref,computed,onMounted ,onUnmounted } from 'vue';
 
 const router = useRouter();
+const search = ref([])
 const closeSidebar =ref(null)
 const props = defineProps({
   sidebarList: {
@@ -136,13 +146,7 @@ const props = defineProps({
   },
 });
 
-const handelProductSeriesNavigation = (prod) => {
-  id.value = prod.id;
-  sessionStorage.setItem('Product_series', prod.id);
-  router.push({ name: 'product_series', params: { slug: prod.slug } });
-}
-
-const windowWidth = ref(window.innerWidth);
+const windowWidth = ref(window?.innerWidth || 600);
 
 const handleResize = () => {
   windowWidth.value = window.innerWidth;
@@ -160,6 +164,17 @@ const computedCloseClass = computed(() => {
     return 'w-[500px] fixed z-50 top-0 right-[-520px]';
   }
 });
+
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
 
 onMounted(() => {
   window.addEventListener('resize', handleResize);

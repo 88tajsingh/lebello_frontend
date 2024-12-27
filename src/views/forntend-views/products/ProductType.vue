@@ -22,21 +22,21 @@
                 </div>
               </div>
               <div class="px-4">
-                <div class="search">
-                  <form role="search">
-                    <div class="border ">
-                      <FormDropdown />
-                    </div>
-                    <div class="relative border-b border-gray-400 mt-2">
-                      <input
-                        class="appearance-none mt-2 border-none bg-transparent hover:border-gray-400 w-full py-[1px] pl-0 text-[14px] font-graphikLight ring-0 focus:outline-none focus:ring-0 focus:border-0"
-                        id="username" type="text" placeholder="Search" />
-                      <div class="absolute right-2 inset-y-0 flex items-center">
-                        <Search size="18px" fillColor="#000000" />
-                      </div>
-                    </div>
-                  </form>
+                <form  @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input
+                    @keydown.enter="handleSearch"
+                    v-model="search"
+                    class="w-full py-[1px] font-graphikLight text-[13px] px-0 border-none bg-transparent focus:outline-none"
+                    id="username"
+                    type="text"
+                    placeholder="Search"
+                  />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <Search size="22px" fillColor="#000000" />
+                  </div>
                 </div>
+              </form>
                 <div class="h-auto mb-2 border-y border-[#33333357] py-2 border-b border-gray-400">
                   <h3 class="text-[14px]">
                     <a href="https://www.lebello.com/listItem/"
@@ -46,7 +46,7 @@
                 <ul class="font-graphikLight text-[13px] my-1 text-textColorBlack overflow-auto max-h-52 ">
                   <div class="max-h-52">
                     <li class="mt-1" v-for="(listItem, index) in productsSidebar" :key="index">
-                      <a :href="listItem?.link" class="hover:text-orange">{{ listItem?.name }}</a>
+                      <router-link :to="`/product_series/${listItem?.slug}`" class="hover:text-orange">{{ listItem?.name }}</router-link>
                     </li>
                   </div>
                 </ul>
@@ -154,29 +154,35 @@ const isHovered = ref([]);
 const toggleOverlay = (index, show) => { isHovered.value[index] = show; };
 const dropdownHoverColor = ref(false);
 const closeMenu = ref(null);
-const isOpenSidebarSlider = ref(false);
-const id = ref(sessionStorage.getItem('Product_Type'));
+const slug = ref(router.currentRoute.value.params.slug);
 const productType = ref([]);
 const productTypeListing = ref([]);
 const productsSidebar = ref([]);
-
-const closeSideMenu = () => { isOpenSidebarSlider.value = false; };
-onClickOutside(closeMenu, closeSideMenu);
-const handleSideMenu = () => { isOpenSidebarSlider.value = true; };
-console.log("Product_Type id", id.value);
+const search = ref([]);
 
 const handleProductTypeData = async () => {
-  const { status, data } = await getProductTypeList(id.value);
+  const { status, data } = await getProductTypeList(slug.value);
   if (status === 200 && data.success) {
-    console.log("data", data);
     productType.value = data.data.product_types[0];
     productTypeListing.value = data.data.product_type_all_list;
     productsSidebar.value = data.data.product_series_sidebar;
   }
+  else
+  router.push('/products')
 }
 
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
+
 const handleProductDetailNavigation = (product) => {
-  sessionStorage.setItem('productDetail', product.id);
   router.push({ name: 'productDetail', params: { slug: product.slug } });
 }
 onMounted(() => {
@@ -188,7 +194,6 @@ onMounted(() => {
 });
 
 const handleProductType = (productType) => {
-  sessionStorage.setItem('Product_Type', productType.id);
   router.push({ name: 'product_type', params: { slug: productType.slug } });
 }
 

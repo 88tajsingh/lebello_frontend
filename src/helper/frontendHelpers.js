@@ -54,16 +54,18 @@ export const scrollDown = (id) => {
 // with domain apis 
   export const getLandingPageData = () => withDomain(PublicServices.getLandingPageData,null,false);
   export const getContractDesignData = () => withDomain(PublicServices.getContractDesign,null,false);
-  export const getContractDesign = (id) => withDomain(PublicServices.contractDesign,id,false);
-  export const getContractType = (id) => withDomain(PublicServices.contractType,id,false);
-  export const getContractLocation = (id) => withDomain(PublicServices.contractLocation,id,false);
+  export const getContractDesign = (slug) => withDomain(PublicServices.contractDesign,slug,false);
+  export const getContractType = (slug) => withDomain(PublicServices.contractType,slug,false);
+  export const getContractLocation = (slug) => withDomain(PublicServices.contractLocation,slug,false);
   export const getSwatchList = () => withDomain(PublicServices.frontendSwatchList,null,false);
-  export const getSwatchDetail = (id) => withDomain(PublicServices.swatchDetail,id,false);
-  export const getProductList = (id) => withDomain(PublicServices.product_list,id,false);
-  export const getProductSeriesList = (id) => withDomain(PublicServices.productSeriesList,id,false);
-  export const getProductTypeList = (id) => withDomain(PublicServices.productTypeList,id,false);
-  export const getProductDetail = (id) => withDomain(PublicServices.productDetail,id,false);
+  export const getSwatchDetail = (slug) => withDomain(PublicServices.swatchDetail,slug,false);
+  export const getProductList = (slug) => withDomain(PublicServices.product_list,slug,false);
+  export const getProductSeriesList = (slug) => withDomain(PublicServices.productSeriesList,slug,false);
+  export const getProductTypeList = (slug) => withDomain(PublicServices.productTypeList,slug,false);
+  export const getProductDetail = (slug) => withDomain(PublicServices.productDetail,slug,false);
+  export const globalSearch = (slug) => withDomain(PublicServices.globalSearch,slug,false);
 
 
   // without domain apis
   // export const getSwatchList = (id) => withoutDomain(PublicServices.swatchDetail,id);
+  // export const getProductList = (id) => withoutDomain(PublicServices.product_list,id);

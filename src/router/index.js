@@ -85,9 +85,19 @@ const  routes = [
     component: () => import('../views/Auth/ForgotPassword.vue')
   },
   {
+    path: '/search/:search?',
+    name: 'search',
+    component: () => import('../views/forntend-views/SearchGlobal.vue')
+  },
+  {
     path: '/register',
     name: 'register',
     component: () => import('../views/Auth/Register.vue')
+  },
+  {
+    path: '/store-product',
+    name: 'storeProduct',
+    component: () => import('../views/store/StoreProduct.vue')
   },
   {
     path: '/materials-shop',
