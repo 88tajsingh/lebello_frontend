@@ -4,7 +4,7 @@
             <div class=" relative grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <!-- Left Column -->
                 <div class=" border  min-h-[400px] lg:col-span-7 px-10 ">
-                    <div class="text-black">
+                    <div class="text-black pl-7">
                         <nav class="border-b">
                             <div class="flex text-[16px] font-graphik">
                                 <button v-for="tab in tabs" :key="tab.id"

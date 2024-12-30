@@ -5,7 +5,7 @@
     <div class="absolute z-[999] top-16 right-0">
       <img src="@/assets/logo/lebello-logo-right.png" alt="Lebello Logo">
     </div>
-
+    <!-- <StoreSwiper/> -->
     <div class="swiper mySwiper">
       <div class="swiper-wrapper">
         <div v-for="(slide, index) in slides" :key="index" class="swiper-slide">
@@ -65,6 +65,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
+import StoreSwiper from '@/components/store-components/StoreSlider.vue';
 import NavBar from '@/components/frontend-components/Nav-bar.vue';
 import StoreProduct from '@/components/store-components/StoreProductDetail.vue';
 import StoreAccordion from '@/components/store-components/StoreAccordion.vue';
@@ -97,6 +98,7 @@ const familyProducts = ref([
 
 let swiper: Swiper;
 let zoomLevel = ref(1);
+
 const maxZoom = 3;
 const minZoom = 0.5;
 const zoomStep = 0.1;
@@ -125,6 +127,27 @@ onMounted(() => {
 </script>
 
 <style scoped>
+:deep(.swiper-pagination) {
+  padding-left: 68px;
+  display:flex;
+  justify-content: flex-start;
+  padding-bottom: 20px;
+  opacity: 0.7;
+}
+:deep(.swiper-pagination-bullet) {
+  border: 1px solid #c59233 ;
+  background-color: #eee;
+  opacity: 0.7;
+}
+:deep(.swiper-pagination-bullet-active) {
+  background-color: #c59233 ;
+  opacity: 0.7;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  opacity: 1;
+}
+
 .swiper-slide {
   opacity: 0;
   transition: opacity 0.3s ease;
