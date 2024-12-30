@@ -3,6 +3,8 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
+
 import HelpersPlugin from './helper/helperPlugin';
 import Toast from 'vue-toastification';
 
@@ -13,6 +15,8 @@ import './assets/css/style.css';
 import '@bhplugin/vue3-datatable/dist/style.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import 'vue-toastification/dist/index.css';
+import 'vue3-perfect-scrollbar/style.css';
+
 
 // import Loader from '@/components/Admin-components/Loader.vue';
 
@@ -62,6 +66,7 @@ const app = createApp(App);
 app.use(HelpersPlugin);
 app.use(Toast, toastOptions);
 app.use(router);
+app.use(PerfectScrollbarPlugin);
 app.use(store);
 app.use(createPinia());
 

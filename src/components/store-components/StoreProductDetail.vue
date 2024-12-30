@@ -3,7 +3,7 @@
         <div class="container mx-auto">
             <div class=" relative grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <!-- Left Column -->
-                <div class=" border  min-h-[400px] lg:col-span-7 px-10">
+                <div class=" border  min-h-[400px] lg:col-span-7 px-10 ">
                     <div class="text-black">
                         <nav class="border-b">
                             <div class="flex text-[16px] font-graphik">
