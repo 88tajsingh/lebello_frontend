@@ -184,8 +184,8 @@
       </div>
     </div>
     <!-- <AccordianSection /> -->
-     <div class="mx-12">
-       <AccordionNew />
+     <div class="mx-12 pb-12">
+       <StoreAccordion />
      </div>
   </div>
     <FooterSection />
@@ -197,6 +197,7 @@ import MainSlider from '@/components/frontend-components/Main-Slider.vue'
 import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import { ref,onMounted } from 'vue'
+import StoreAccordion from '@/components/store-components/StoreAccordion.vue'
 import Icon from '@/components/frontend-components/Svg/Icons'
 import { scrollDown } from '@/helper/frontendHelpers'
 import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'

@@ -3,8 +3,8 @@
         <div class="container mx-auto">
             <div class=" relative grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <!-- Left Column -->
-                <div class=" border  min-h-[400px] lg:col-span-7 px-10">
-                    <div class="text-black">
+                <div class=" border  min-h-[400px] lg:col-span-7 px-10 ">
+                    <div class="text-black pl-7">
                         <nav class="border-b">
                             <div class="flex text-[16px] font-graphik">
                                 <button v-for="tab in tabs" :key="tab.id"
@@ -118,10 +118,23 @@
                                             </option>
                                         </select>
                                     </div>
+                                    <div class="space-y-1">
+                                        <p class="text-xs text-[#4b4b4b] font-light">
+                                            Hardware <br />
+                                            Select Legs Tip
+                                            
+                                        </p>
+                                        <select
+                                            class="w-full max-w-[204px] p-2 border border-[#cccccc] rounded-md bg-transparent text-xs text-[#4b4b4b]">
+                                            <option v-for="option in cushionOptions" :key="option">
+                                                {{ option }}
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Price Section -->
-                            <div class="px-[26px]  pb-[30px]" :class="isOpen ? 'pt-[153px]' : 'pt-[190px]'">
+                            <div class="px-[26px]  pb-[30px]" :class="isOpen ? 'pt-[50px]' : 'pt-[190px]'">
                                 <div class="flex justify-end items-center gap-2 text-[#c59233]">
                                     <span class="text-xl">Price:</span>
                                     <strong class="text-xl font-medium">$845</strong>

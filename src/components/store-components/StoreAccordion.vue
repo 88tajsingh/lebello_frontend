@@ -1,0 +1,191 @@
+<template>
+    <div class="w-full mx-auto border-t border-gray-4">
+        <!-- Accordion -->
+        <div v-for="(item, index) in items" :key="index" class="border-b border-gray-4">
+            <!-- Parent Item -->
+            <div class="flex w-full md:w-1/3 border justify-between items-center p-4 cursor-pointer  transition-all duration-300"
+                @click="toggleParent(index)">
+                <div>
+                    <span :class="activeParent === index ? 'text-orange' : 'text-black'">{{ item.title }}</span>
+                </div>
+                <div :class="[
+                    'w-3 h-3 transition-transform duration-300',
+                    activeParent === index ? 'rotate-90' : ''
+                ]">
+                    <Arrow direction="left" :strokeWidth="22.5" :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
+                </div>
+            </div>
+
+            <!-- Child Items -->
+            <TransitionRoot as="template" :show="activeParent === index" enter="transition-all duration-1000 ease-in"
+                enterFrom="max-h-0 overflow-hidden" enterTo="max-h-screen overflow-hidden"
+                leave="transition-all duration-700 ease-out" leaveFrom="max-h-screen overflow-hidden"
+                leaveTo="max-h-0 overflow-hidden">
+                <div class="">
+                    <div v-for="(child, childIndex) in item.children" :key="childIndex"
+                        class="border-t  cursor-pointer transition-colors hover:bg-gray-100"
+                        @click="openPopup(item, child,childIndex)">
+                        <div class="flex items-center justify-between w-full pr-10 md:w-1/3 p-3 pl-6"
+                            :class="activeChild  === childIndex ? 'text-orange' :'text-black'">
+                            <span >{{ child.name }}</span>
+                            <Arrow direction="left" :strokeWidth="22.5" :fillColor="'currentColor'" />
+                        </div>
+                    </div>
+                </div>
+            </TransitionRoot>
+        </div>
+
+        <!-- Popup/Drawer -->
+        <TransitionRoot as="template" :show="showPopup" enter="transition-opacity duration-1500" enterFrom="opacity-0"
+            enterTo="opacity-100" leave="transition-opacity duration-1500" leaveFrom="opacity-100"
+            leaveTo="opacity-100">
+            <div class="fixed inset-0 px-10 bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
+                <TransitionChild as="template" enter="transition transform duration-1500 ease-in-out"
+                    enterFrom="translate-x-full" enterTo="translate-x-0"
+                    leave="transition transform duration-1500 ease-in-out" leaveFrom="translate-x-0"
+                    leaveTo="translate-x-full">
+                    <div v-if="showPopup"
+                        class="absolute px-24 pl-10 top-0 bottom-0 right-0 bg-white shadow-xl w-full md:w-2/3 lg:w-4/6 z-50"
+                        @click.stop>
+                        <div ref="closeMenu" class="flex  mx-auto gap-10  py-16 pb-20">
+                            <!-- Back button -->
+                            <div class="flex ">
+                                <button class="mt-4 flex text-black" @click="closePopup">
+                                    <Arrow direction="right" :strokeWidth="22.5" :fillColor="'currentColor'" />
+                                </button>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="text-black font-graphik w-full">
+                                <h1 class="text-4xl mb-4">{{ popupTitle }}</h1>
+                                <p class=" font-MyriadPro text-md mb-6">{{ popupDescription }}</p>
+
+                                <!-- Dropdown -->
+                                <select v-model="selectedChildName" @change="updateSelectedChild"
+                                    class="text-black rounded px-4 py-2 w-36 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                                    <option v-for="child in currentItem.children" :key="child.name" :value="child.name">
+                                        {{ child.name }}
+                                    </option>
+                                </select>
+
+                                <!-- Images Grid -->
+                                <PerfectScrollbar class="ps">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                                        <div v-for="image in selectedChildImages" :key="image"
+                                            class="aspect-square">
+                                            <img :src="image" alt="Selected image"
+                                                class="w-[150px] h-[150px] object-cover" />
+                                        </div>
+                                    </div>
+                                </PerfectScrollbar>
+                            </div>
+                        </div>
+                    </div>
+                </TransitionChild>
+            </div>
+        </TransitionRoot>
+    </div>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue'
+import { TransitionRoot, TransitionChild } from '@headlessui/vue'
+import { Arrow } from '../frontend-components/Svg/Icons'
+import { onClickOutside } from '@vueuse/core';
+
+const items = ref([
+    {
+        title: "Surface Materials",
+        description: "The Surface-Tex is an exclusive collection of high-performance technical outdoor fabrics designed exclusively by Lebello. We offer the Structures G4 and Surface-Tech G5 line, along with the knitted Crochet. All cushions inserts are available with Uracel QDF or with Breath Air. For additional questions email samples@lebello.com",
+        children: [
+            {
+                name: "Galfasa G4",
+                images: Array(24).fill("/src/assets//lebello/images/1_Gafsa.png")
+            },
+            {
+                name: "Structures G4",
+                images: Array(2).fill("/src/assets//lebello/images/1_Gafsa.png")
+            }
+        ]
+    },
+    {
+        title: "Frame Colors",
+        description: "Premium powder-coated aluminum frames.",
+        children: [
+            {
+                name: "Metallic Collection",
+                images: Array(4).fill("/src/assets//lebello/images/1_Gafsa.png")
+            },
+            {
+                name: "Earth Tones",
+                images: Array(6).fill("/src/assets//lebello/images/1_Gafsa.png")
+            }
+        ]
+    }
+])
+
+const closeMenu = ref(null);
+const closeSideMenu = () => {
+    showPopup.value = false;
+    activeChild.value= null
+};
+
+onClickOutside(closeMenu, closeSideMenu);
+
+
+const activeParent = ref(null)
+const activeChild = ref(null)
+const showPopup = ref(false)
+const popupTitle = ref('')
+const popupDescription = ref('')
+const currentItem = ref({})
+const selectedChildName = ref('')
+const selectedChildImages = ref([])
+
+const toggleParent = (index) => {
+    activeParent.value = activeParent.value === index ? null : index
+}
+
+const openPopup = (parent, child,childIndex) => {
+    currentItem.value = parent
+    activeChild.value=childIndex
+    popupTitle.value = parent.title
+    popupDescription.value = parent.description
+    selectedChildName.value = child.name
+    selectedChildImages.value = child.images
+    showPopup.value = true
+}
+
+const closePopup = () => {
+    showPopup.value = false
+    activeChild.value= null
+}
+
+watch(selectedChildName, (newChildName) => {
+    const child = currentItem.value.children.find(c => c.name === newChildName)
+    if (child) {
+        selectedChildImages.value = child.images
+    }
+})
+</script>
+
+<style scoped>
+.ps {
+    max-height: 400px;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f5f5f5;
+}
+
+.ps::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ps::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.ps::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+</style>
