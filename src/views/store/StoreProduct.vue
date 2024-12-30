@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import StoreSwiper from '@/components/store-components/StoreSlider.vue';
+// import StoreSwiper from '@/components/store-components/StoreSlider.vue';
 import NavBar from '@/components/frontend-components/Nav-bar.vue';
 import StoreProduct from '@/components/store-components/StoreProductDetail.vue';
 import StoreAccordion from '@/components/store-components/StoreAccordion.vue';
