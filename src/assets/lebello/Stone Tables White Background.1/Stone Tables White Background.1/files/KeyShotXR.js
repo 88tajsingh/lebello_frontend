@@ -19,30 +19,6 @@ window.keyshotXR = function (X, w, G, Y, wa, D, xa, ya, za, Aa, Ba, L, M, Z, $, 
         na();
     }
 
-    function toggleFullScreen() {
-        if (!document.fullscreenElement) {
-            if (l.requestFullscreen) {
-                l.requestFullscreen();
-            } else if (l.mozRequestFullScreen) {
-                l.mozRequestFullScreen();
-            } else if (l.webkitRequestFullscreen) {
-                l.webkitRequestFullscreen();
-            } else if (l.msRequestFullscreen) {
-                l.msRequestFullscreen();
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        }
-    }
-
     document.getElementById('zoom-in').addEventListener('click', zoomIn);
     document.getElementById('zoom-out').addEventListener('click', zoomOut);
     document.getElementById('zoom-reset').addEventListener('click', resetZoom);

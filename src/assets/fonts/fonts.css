@@ -1,0 +1,17 @@
+@import './Satoshi/stylesheet.css';
+@import './PT Serif/stylesheet.css';
+@import './MyriadPro/stylesheet.css';
+
+
+@font-face {
+  font-family: 'GraphikRegular';
+  src: url('GraphikRegular.otf') format('opentype');
+}
+@font-face {
+  font-family: 'GraphikLight';
+  src: url('GraphikLight.otf') format('opentype');
+}
+@font-face {
+  font-family: 'GraphikMedium';
+  src: url('GraphikMedium.otf') format('opentype');
+}

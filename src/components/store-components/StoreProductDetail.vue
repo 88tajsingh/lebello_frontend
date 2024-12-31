@@ -134,10 +134,10 @@
                                 </div>
                             </div>
                             <!-- Price Section -->
-                            <div class="px-[26px]  pb-[30px]" :class="isOpen ? 'pt-[50px]' : 'pt-[190px]'">
-                                <div class="flex justify-end items-center gap-2 text-[#c59233]">
-                                    <span class="text-xl">Price:</span>
-                                    <strong class="text-xl font-medium">$845</strong>
+                            <div class="px-[26px] pr-[70px] pb-[30px]" :class="isOpen ? 'pt-[50px]' : 'pt-[190px]'">
+                                <div class="flex  justify-end items-center gap-2 text-[22px] font-medium text-[#c59233]">
+                                    <span class="font-bold">Price:</span>
+                                    <strong class="">$845</strong>
                                 </div>
 
                                 <div class="flex justify-end items-end gap-3 mt-4 mb-2">

@@ -78,7 +78,7 @@
 }
 .threed_plus_mines button#zoom-out {
     position: relative;
-    bottom: 10px;
+    bottom: 10px;   
 }
 button#zoom-reset {
     border: none;
@@ -96,13 +96,11 @@ div#zoom-controls {
     </style>
   </head>
   <body oncontextmenu="return false;">
-    <div id="KeyShotXR" style="width: 100%; height: 100%; margin: auto" ></div>
-     <div id="zoom-controls" style="position:absolute; top:170px; z-index: 9999; left: 70px;" class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600">
-                <!-- Fullscreen Icon -->
-                <button id="fullscreen-toggle" class="rounded-full p-2" style="padding: 0px;border: none;cursor: pointer; width: 24px; margin-bottom:50px;">
-                  <svg height="20px" width="20px" viewBox="0 0 512 512" fill="#000000">
-                    <polygon fill="#c2a02f" points="481.706,337.186 481.711,460.288 277.415,256 481.711,51.704 481.711,174.821 511.996,174.821 512,0 337.175,0 337.175,30.294 460.292,30.294 256,234.588 51.704,30.294 174.817,30.294 174.817,0 0,0 0.004,174.821 30.289,174.821 30.289,51.704 234.581,256 30.289,460.288 30.289,337.17 0.004,337.179 0,512 174.817,512 174.817,481.706 51.704,481.706 256,277.419 460.292,481.706 337.175,481.706 337.175,512 512,512 511.996,337.179" />
-                  </svg>
+    <div id="KeyShotXR" style="width: 100%; height: 100%;" ></div>
+     <div id="zoom-controls" style="position:absolute; top:20px; z-index: 9999; right: 30px;">
+                <!-- Fullscreen Icon -->    
+                <button id="fullscreen-toggle" class="rounded-full p-2" style="padding: 0px;border: none;cursor: pointer; width: 24px; margin-bottom:15px ;">
+                  <img src="../3D Icon.png" width="28px" height="28px" alt="Fullscreen Icon">
                 </button>                
                 <div class="threed_plus_mines">
                   <button id="zoom-in" class="plus_btn">

@@ -77,7 +77,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 const slides = ref([
-  {
+  { 
     type: 'iframe',
     src: '/src/assets/lebello/Stone Tables White Background.1/Stone Tables White Background.1.html',
     name: 'Tubo Sofa'
@@ -97,12 +97,6 @@ const familyProducts = ref([
 ]);
 
 let swiper: Swiper;
-let zoomLevel = ref(1);
-
-const maxZoom = 3;
-const minZoom = 0.5;
-const zoomStep = 0.1;
-
 onMounted(() => {
   swiper = new Swiper(".mySwiper", {
     modules: [Navigation, Pagination],
