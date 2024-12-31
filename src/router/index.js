@@ -100,6 +100,16 @@ const  routes = [
     component: () => import('../views/store/StoreProduct.vue')
   },
   {
+    path: '/new-product-series',
+    name: 'newProductSeries',
+    component: () => import('../views/forntend-views/products/NewProductSeries.vue')
+  },
+  {
+    path: '/new-product',
+    name: 'newProduct',
+    component: () => import('../views/forntend-views/products/NewProduct.vue')
+  },
+  {
     path: '/materials-shop',
     name: 'materialsShop',
     component: () => import('../views/forntend-views/our-materials/OurMaterials.vue'),

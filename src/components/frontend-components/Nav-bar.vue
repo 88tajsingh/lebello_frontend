@@ -232,8 +232,10 @@ const lebello = [
     text: 'STORE',
     sublinks: [
       { to: '/productDetailNew', text: 'Product Detail' },
-      { to: '/store-product', text: 'Store Page' }
-
+      { to: '/store-product', text: 'Store Page' },
+      { to: '/new-product-series', text: 'Product series' },
+      { to: '/new-product', text: 'Product Listing' },
+      
     ]
   }
 ]
