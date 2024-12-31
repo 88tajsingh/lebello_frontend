@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isClient" class="overflow-x-hidden">
+  <div  class="overflow-x-hidden">
     <NavBar :absolute="true" :navColor="navColor" />
     <Slider
       :images="landingPageData.home_slider || []"
@@ -158,13 +158,14 @@ import NavBar from '@/components/frontend-components/Nav-bar.vue'
 import CollectionVideo from '@/components/frontend-components/Collection-Video.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import LogoSection from '@/components/frontend-components/Logo-section.vue'
+import { getLandingPageData } from '@/helper/frontendHelpers'
 import { onMounted, ref, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useExtraData } from '@/composables/useExtraData'
+// import { useExtraData } from '@/composables/useExtraData'
 
-const { extraData } = useExtraData()
-const landingPageData = ref(extraData)
-const isClient = ref(false)
+// const { extraData } = useExtraData()
+// const landingPageData = ref(extraData)
+// const isClient = ref(false)
 
 const router = useRouter()
 const open = ref(false)
@@ -172,6 +173,7 @@ const closeSidebar = ref(null)
 const navColor = ref('#000000')
 // This is a better way to handle window-related logic
 const windowWidth = ref(0)
+const landingPageData = ref({})
 const navigation = (url) => {
   // window.location.href = url
   router.push(url);
@@ -199,7 +201,7 @@ const computedCloseClass = computed(() => {
 
 // A single `onMounted` hook should handle all initialization
 onMounted(() => {
-  isClient.value = true
+  // isClient.value = true
   if (typeof window !== 'undefined') {
     window.addEventListener('resize', handleResize)
     window.scrollTo({
@@ -208,6 +210,7 @@ onMounted(() => {
     })
     windowWidth.value = window.innerWidth // Set initial width
   }
+  handleLandingPageData()
 })
 
 // Cleanup on unmount
@@ -217,13 +220,13 @@ onUnmounted(() => {
   }
 })
 
-// const handleLandingPageData = async () => {
-//   const res = await getLandingPageData();
-//   if (res.status === 200 && res.data.success) {
-//     landingPageData.value = res.data.data;
+const handleLandingPageData = async () => {
+  const res = await getLandingPageData();
+  if (res.status === 200 && res.data.success) {
+    landingPageData.value = res.data.data;
 
-//   }
-// };
+  }
+};
 
 // Handle navigation color updates
 const updateNavColor = (newColor) => {
