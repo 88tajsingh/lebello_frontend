@@ -9,8 +9,8 @@ import HelpersPlugin from './helper/helperPlugin';
 import Toast from 'vue-toastification';
 
 // CSS Imports
+import './assets/fonts/fonts.css';
 import './assets/main.css';
-import './assets/css/satoshi.css';
 import './assets/css/style.css';
 import '@bhplugin/vue3-datatable/dist/style.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';

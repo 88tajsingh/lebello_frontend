@@ -6,7 +6,7 @@
     }">
       <div class="relative z-[9999999]  h-16 items-center justify-between">
         <!-- Desktop Links -->
-        <div class="  px-20 hidden md2:block max-w-[1400px] mx-auto  " 
+        <div class="  px-20 hidden md2:block  mx-auto  " 
           :class="props.absolute && !storePages && 'hover:bg-[#0e0e0e89] bg-opacity-5'">
           <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8', storePages && 'border-b border-[#333333]']" @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave" class="">
