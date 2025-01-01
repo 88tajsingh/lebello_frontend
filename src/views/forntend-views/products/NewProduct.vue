@@ -87,7 +87,7 @@
                 </div>
             </div>
         </div>
-        <div class="py-5 mx-7 md:mx-20">
+        <div class="py-5 mx-7 md:mx-18 sm:mx-10">
 
             <!-- banner -->
             <div class="flex items-center h-fit justify-center mx-7 z-1">
@@ -95,7 +95,7 @@
                 <div class="w-full flex items-start justify-start relative">
                     <img class="w-full object-contain" src="/src/assets/images/NewImages/NewProductBanner.png" alt="">
                     <div
-                        class="absolute flex flex-col gap-2 justify-around z-9 p-10 w-[722px] h-[168px] bg-white text-[40px] font-serif text-black font-semibold bottom-12 left-0">
+                        class="absolute flex flex-col gap-2 justify-around z-9 p-10 w-[500px] md:w-[700px] h-[140px] md:h-[168px] bg-white text-[30px] md:text-[40px] font-serif text-black font-semibold bottom-12 left-0">
                         <div>
                             2024 OUTDOOR FURNITURE &nbsp;
                         </div>
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-
+                
             </div>
             <!-- main page  -->
             <div class="py-10 ">
@@ -143,21 +143,29 @@
                     <div>View more ></div>
                 </div>
 
-                <div class="flex justify-between mt-5 group">
-                    <div class="w-[30%] border border-white group-hover:border-[#cc9933]">
+                <div class="flex flex-col sm:flex-row justify-between mt-5 bg-[#FFFFFF]">
+                    <!-- First Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
                         <img src="/src/assets/images/NewImages/4lseries.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black group-hover:text-[#cc9933] p-2">4L Series</div>
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Chair 7 Club
+                            Series</div>
                     </div>
-                    <div class="w-[30%] border border-white hover:border-[#cc9933]">
+
+                    <!-- Second Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
                         <img src="/src/assets/images/NewImages/collection2.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black p-2 group-hover:text-[#cc9933]">4L Lounger Series</div>
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Mogul Series
+                        </div>
                     </div>
-                    <div class="w-[30%] border border-white hover:border-[#cc9933]">
+
+                    <!-- Third Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
                         <img src="/src/assets/images/NewImages/collection3.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black p-2 group-hover:text-[#cc9933]">4L Pixie Series</div>
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Roots Series
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,51 +177,66 @@
                     <div>View more ></div>
                 </div>
 
-                <div class="flex justify-between mt-5 group">
-                    <div class="w-[30%] border border-white group-hover:border-[#cc9933]">
-                        <img src="/src/assets/images/NewImages/4lseries.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black group-hover:text-[#cc9933] p-2">Chair 7 Club Series</div>
+                <div class="flex flex-col sm:flex-row justify-between mt-5">
+                    <!-- First Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
+                        <img src="/src/assets/images/NewImages/series1.png"
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Chair 7 Club
+                            Series</div>
                     </div>
-                    <div class="w-[30%] border border-white hover:border-[#cc9933]">
-                        <img src="/src/assets/images/NewImages/collection2.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black p-2 group-hover:text-[#cc9933]">Mogul Series</div>
+
+                    <!-- Second Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
+                        <img src="/src/assets/images/NewImages/series2.png"
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Mogul Series
+                        </div>
                     </div>
-                    <div class="w-[30%] border border-white hover:border-[#cc9933]">
-                        <img src="/src/assets/images/NewImages/collection3.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black p-2 group-hover:text-[#cc9933]">Roots Series</div>
+
+                    <!-- Third Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
+                        <img src="/src/assets/images/NewImages/series3.png"
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Roots Series
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- category -->
+            <!-- category --> 
             <div>
                 <div class="flex justify-between text-black text-xl mt-5 px-6 py-4 bg-[#EEE8E1] ">
                     <div>Category</div>
                     <div> ></div>
                 </div>
 
-                <div class="flex justify-between mt-5 group">
-                    <div class="w-[30%] border border-white group-hover:border-[#cc9933]">
-                        <img src="/src/assets/images/NewImages/4lseries.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black group-hover:text-[#cc9933] p-2">Chaise Loungers  </div>
+                <div class="flex flex-col sm:flex-row justify-between mt-5">
+                    <!-- First Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
+                        <img src="/src/assets/images/NewImages/category1.png"
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Chair 7 Club
+                            Series</div>
                     </div>
-                    <div class="w-[30%] border border-white hover:border-[#cc9933]">
-                        <img src="/src/assets/images/NewImages/collection2.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black p-2 group-hover:text-[#cc9933]">Lounge Poufs</div>
+
+                    <!-- Second Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
+                        <img src="/src/assets/images/NewImages/category2.png"
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Mogul Series
+                        </div>
                     </div>
-                    <div class="w-[30%] border border-white hover:border-[#cc9933]">
-                        <img src="/src/assets/images/NewImages/collection3.png"
-                            class="hover:border-[#cc9933] object-contain w-full cursor-pointer" alt="">
-                        <div class="text-[20px] font-medium text-black p-2 group-hover:text-[#cc9933]">Coffe / side Table</div>
+
+                    <!-- Third Card -->
+                    <div class="w-full sm:w-[30%] border border-white group hover:border-[#cc9933]">
+                        <img src="/src/assets/images/NewImages/category3.png"
+                            class="object-contain w-full cursor-pointer" alt="">
+                        <div class="text-[20px] font-medium text-black p-5 group-hover:text-[#cc9933]">Roots Series
+                        </div>
                     </div>
                 </div>
             </div>
-
 
             <LogoSection />
             <FooterSection />

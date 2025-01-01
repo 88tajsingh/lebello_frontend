@@ -2,47 +2,32 @@
   <div class="overflow-hidden">
     <div>
       <NavBar :absolute="true" :navColor="'#000000'" />
-      <Slider
-        :images="landingPageData"
-        imageKeyName="featured_image_data"
-        :disableSideText="true"
-        :navColor="'white'"
-        sliderPageName="homeSlider"
-        :hasSidebar="true"
-        @updateNavColor="updateNavColor"
-      >
+      <Slider :images="landingPageData" imageKeyName="featured_image_data" :disableSideText="true" :navColor="'white'"
+        sliderPageName="homeSlider" :hasSidebar="true" @updateNavColor="updateNavColor">
         <template #utility>
           <!-- lebellow icon right top -->
           <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
             <img src="/src/assets/logo/lebello-logo-right.png" />
           </a>
           <!-- text left bottom -->
-          <div
-            class="absolute bottom-10 mx-auto left-6 sm:left-14 md:left-20"
-            :class="[
-              'absolute transition-all duration-1000 ease-in-out',
-              { 'bottom-10': !atBottom, 'bottom-10': atBottom }
-            ]"
-          >
-            <div
-              class="capitalize opacity-80 text-[#686868] font-graphik sm:text-[20px] md2:text-[40px]"
-            >
+          <div class="absolute bottom-10 mx-auto left-6 sm:left-14 md:left-20" :class="[
+            'absolute transition-all duration-1000 ease-in-out',
+            { 'bottom-10': !atBottom, 'bottom-10': atBottom }
+          ]">
+            <div class="capitalize opacity-80 text-[#686868] font-graphik sm:text-[20px] md2:text-[40px]">
               {{ productData?.title }}
             </div>
           </div>
         </template>
         <template #sidebar>
           <div class="z-50">
-            <div class="flex border border-[#686868] items-center">
+            <div class="flex items-center">
               <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
                 <Menu size="15px" fillColor="#000000" />
               </span>
               <div>
                 <h3 class="text-[14px] font-medium">
-                  <a
-                    href="https://www.lebello.com/listItem/"
-                    class="uppercase text-[14px] text-textColorBlack"
-                  >
+                  <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
                     Collection 2024
                   </a>
                 </h3>
@@ -51,28 +36,16 @@
             <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
               <form @submit.prevent="handleSearch" role="search">
                 <div class="relative border-b border-[#33333357] mt-2">
-                  <input
-                    @keydown.enter="handleSearch"
-                    v-model="search"
+                  <input @keydown.enter="handleSearch" v-model="search"
                     class="w-full py-[1px] px-0 font-graphikLight text-[13px] border-none bg-transparent focus:outline-none"
-                    id="username"
-                    type="text"
-                    placeholder="Search"
-                  />
+                    id="username" type="text" placeholder="Search" />
                   <div class="absolute right-2 top-1 flex items-center">
                     <Search size="22px" fillColor="currentColor" />
                   </div>
                 </div>
               </form>
-              <li
-                v-for="(listItem, index) in productTypes"
-                :key="index"
-                class="mt-1 border-b border-[#cdc6c6]"
-              >
-                <a
-                  @click="handelProductSeriesNavigation(listItem)"
-                  class="hover:text-orange cursor-pointer"
-                >
+              <li v-for="(listItem, index) in productTypes" :key="index" class="mt-1 border-b border-[#cdc6c6]">
+                <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">
                   {{ listItem?.name }}
                 </a>
               </li>
@@ -83,96 +56,72 @@
     </div>
     <div id="sideText" class="bg-white">
       <!-- Breadcrumb -->
-      <nav class="py-5 text-sm">
-        <div class="flex items-center gap-2 ml-14">
+      <nav class="py-5 text-[16px] leading-[39px] text-black font-graphik">
+        <div class="flex items-center gap-2 ml-16">
           <span class="text-gray-600 font-medium">Collection</span>
           <!-- Heroicon: ChevronRight -->
           /
           <span class="text-yellow-600 font-medium">Tubo Sofa Exposed</span>
         </div>
       </nav>
-
       <!-- Main Content -->
-      <div class="container grid grid-cols-1 h-[450px] lg:flex lg:justify-between w-screen lg:pr-2">
-        <!-- Product Viewer (Image Section) -->
+      <div className="grid grid-cols-1 lg:flex lg:justify-between w-full">
         <div
-          class="relative aspect-square  w-screen bg-gray-50  overflow-y-hidden"
-        >
-          <iframe
-            src="/src/assets/lebello/Stone Tables White Background.1/StoreProduct.html"
-            allowfullscreen
-            style="
-              position: absolute;
-              z-index: 9999;
-              top: 0px;
-              left: 0px;
-              height: 100%;
-              width: 1px;
-              min-width: 100%;
-              width: 100%;
-            "
-            frameborder="0"
-            scrolling="no"
-          >
-          </iframe>
+          className="relative aspect-square w-screen overflow-auto h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] bg-gray-100 overflow-y-hidden">
+          <iframe src="/src/assets/lebello/Stone Tables White Background.1/StoreProduct.html" allowFullScreen
+            className="absolute z-[9999] aspect-ratio top-0 left-0 w-full h-full border-none" frameborder="0"
+            scrolling="no" />
         </div>
 
-        <!-- Configuration Panel -->
-        <div class="text-black flex font-graphik flex-col pb-14 h-full pl-14 lg:w-3/6">
+        <div className="text-black flex flex-col pb-14 w-full h-full pl-4 md:pl-14 lg:w-3/6">
           <div>
-            <h1 class="text-[21px] leading-[92px] text-[#333333] font-[500] font-[Graphik]">
-  3D CONFIGURATOR
-</h1>
-
+            <h1 className="text-[21px] leading-[60px] lg:leading-[92px] text-[#333333] font-medium font-graphik">
+              3D CONFIGURATOR
+            </h1>
           </div>
 
-          <div class=" ">
+          <div>
             <div>
-              <h2 class="text-[16px] text-[#000000] font-medium font-[Graphik]">Recommended Configuration</h2>
-  <p class="text-[16px] text-[#000000] font-light font-[Graphik] mb-3">Please select the configuration</p>
+              <h2 className="text-[16px] text-[#000000] font-medium font-graphik">Recommended Configuration</h2>
+              <p className="text-[16px] text-[#000000] font-light font-graphik mb-3">Please select the configuration</p>
             </div>
-
-            <!-- Select Dropdown -->
-            <div class="relative">
-  <select v-model="configuration" id="configuration" class="w-[228px] h-[46px] border border-[#cecece] rounded-[6px]  text-[14px] p-2">
-    <option value="1">Configuration 1</option>
-    <option value="2">Configuration 2</option>
-    <option value="3">Configuration 3</option>
-  </select>
-</div>
-
+            <div className="relative">
+              <select v-model="configuration" id="configuration"
+                class="w-[228px] h-[46px]  rounded-[6px] text-[14px] p-2">
+                <option value="1">Configuration 1</option>
+                <option value="2">Configuration 2</option>
+                <option value="3">Configuration 3</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Buttons at the bottom (added mt-auto for positioning) -->
-          <div class="mt-[130px] h-full flex gap-4 items-end">
-            <button
-  @click="handleStoreClick"
-  class="text-[#333333] opacity-[0.400] text-[10px] font-light leading-7 font-[Graphik] border border-black h-[27px] w-[133px] rounded-full hover:text-[#9E7339]"
->
-  ENQUIRE/EMAIL
-</button>
+          <div class="mt-10 sm:mt-[70px] md:mt-[130px] lg:mt-[170px] h-full flex gap-4 md:items-end md:flex-row">
+            <button @click="handleStoreClick"
+              class="text-[#333333] opacity-[0.400] text-[10px] font-light leading-7 font-[Graphik] border border-black h-[27px] w-[133px] rounded-full hover:text-[#9E7339]">
+              ENQUIRE/EMAIL
+            </button>
 
-<button
-  @click="handleStoreClick"
-  class="bg-[#B88746] uppercase text-[10px] font-light leading-7 text-white font-[Graphik] hover:bg-[#9E7339] h-[27px] px-2 rounded-full"
->
-  save configuration
-</button>
+            <button @click="handleStoreClick"
+              class="bg-[#B88746] uppercase text-[10px] font-light leading-7 text-white font-[Graphik] hover:bg-[#9E7339] h-[27px] px-2 rounded-full w-[133px]">
+              save configuration
+            </button>
 
           </div>
         </div>
       </div>
+
     </div>
 
     <div class="bg-[#f3f3f3]">
       <section class="">
         <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">
-          <div class="lg:px-11 my-10">
+          <div class="lg:px-11  ">
             <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
-              <h2 class="text-[24px] md:text-[18px] text-textColorBlack pb-4">
+              <h2 class="text-[26px] md:text-[25px] leading-[84px] text-[#333333] font-light font-graphik">
                 B Chair 1/2 & Pixie
               </h2>
-              <p class="sm:text-[15px] md:text-[15px] lg:text-[16px] text-[#666]">
+              <p
+                class="text-[#555555] text-[16px] leading-[26px] font-light font-graphik sm:text-[15px] md:text-[15px] lg:text-[16px]">
                 B Chair is now available in our exclusive timeless pixie weave design language. A
                 chair that provides functionality with its open frame design allowing access to a
                 self-storage compartment for personal belongings. The pixie design pattern embodies
@@ -181,36 +130,24 @@
                 solutions tailored towards your design requirements. The B Chair comes in a low and
                 high-back model.
               </p>
-            </div>
-            <div
-              class="mt-10 flex hover:text-orange"
-              :class="{ 'text-orange': addiVisible }"
-              @click="HandleAdditionalInfo"
-              @mouseenter="setAddiColor('#000000')"
-              @mouseleave="setAddiColor('#333')"
-            >
-              <span class="ml-12 uppercase font-graphikMedium text-[13px]"
-                >Additional Product info</span
-              >
-              <Icon.Arrow
-                class="mt-0 ml-3 self-center"
-                size="15px"
-                :fillColor="addiVisible ? '#d98c3a' : '#64748b'"
-              />
+              <span class="inline-flex my-10 text-[#333333] leading-[21px] hover:text-orange" :class="{ 'text-orange': addiVisible }"
+                @click="HandleAdditionalInfo" @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#33333')">
+                <span class="uppercase cursor-pointer font-graphikMedium text-[13px] leading-[21px] font-medium">
+                  INSPIRATIONAL SCENE
+                </span>
+                <Icon.Arrow class="mt-0 ml-3 self-center" size="15px" fillColor="currentColor" />
+              </span>
             </div>
           </div>
-
           <div class="hidden md:block">
             <div></div>
             <div class="relative h-full overflow-hidden">
               <img
                 class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
-                src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg"
-                alt="B Chair"
-              />
-              <span @click="rotate" class="absolute bottom-0 bg-orange p-5">
+                src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" />
+              <!-- <span @click="rotate" class="absolute bottom-0 bg-orange p-5">
                 <Icon.Arrow size="13px" fillColor="#ffffff" ref="arrowSvg" />
-              </span>
+              </span> -->
             </div>
           </div>
         </div>
@@ -224,9 +161,7 @@
                 <a :title="product.title" :href="product.image" rel="pro-gallery">
                   <img
                     class="w-full h-auto opacity-55 hover:opacity-100 transition-transform duration-700 ease-in-out transform hover:scale-125"
-                    :src="product.thumbnail"
-                    :alt="product.alt"
-                  />
+                    :src="product.thumbnail" :alt="product.alt" />
                 </a>
               </div>
             </div>
@@ -235,16 +170,10 @@
       </transition>
 
       <transition>
-        <div
-          ref="scrollTOadditiona"
-          v-show="addiVisible"
-          class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0"
-        >
-          <div class="py-10 m-0 relative px-14 ld:w-1/2 font-light text-left text-white bg-orange">
-            <p
-              id="directTO"
-              class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9"
-            >
+        <div ref="scrollTOadditiona" v-show="addiVisible"
+          class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0">
+          <div class="py-10 m-0 relative px-14 md:w-1/2 font-light text-left text-white bg-orange">
+            <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
               Crafted from our exclusive Ropetek® materials...
             </p>
             <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
@@ -254,70 +183,40 @@
         </div>
       </transition>
 
-      <div class="flex justify-between uppercase py-4">
-        <div class="ml-16 flex self-center">
-          <ul
-            class="flex font-graphikMedium text-[14px] text-[#64748b] hover:text-orange"
-            @mouseenter="setArrowFillColor('#3399ff')"
-            @mouseleave="setArrowFillColor('#4dc45c')"
-          >
-            <li class="mr-2">
-              <a class="font-graphikMedium text-[14px]" href="https://www.lebello.com/product/"
-                >Enquire</a
-              >
-              <span class="mx-1">/</span>
-            </li>
-            <li class="active">Email</li>
-          </ul>
-          <ul
-            class="flex font-medium ml-20 text-[#64748b] hover:text-orange"
-            @mouseenter="setArrowFillColor2('#3399ff')"
-            @mouseleave="setArrowFillColor2('#4dc45c')"
-          >
-            <li class="mr-2 ml-2">
-              <a
-                class="underline font-graphikMedium text-[14px]"
-                target="_blank"
-                href="https://lebello.com/wp-content/uploads/2013/09/B-Chair_Cutsheet.pdf"
-                >Download Cut Sheet</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
+      <div class="flex justify-between uppercase">
+  <div class="ml-5 md:ml-16 md:flex self-center">
+    <div class="flex items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium hover:text-orange"
+      @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
+      Materials
+    </div>
+
+    <div class="md:flex md:items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium md:ml-20 hover:text-orange"
+      @mouseenter="setArrowFillColor2('#3399ff')" @mouseleave="setArrowFillColor2('#4dc45c')">
+      <a class="underline font-graphikMedium text-[16px]" target="_blank"
+        href="https://lebello.com/wp-content/uploads/2013/09/B-Chair_Cutsheet.pdf">Download Cut Sheet</a>
+    </div>
+  </div>
+</div>
+
+
       <!-- <AccordianSection /> -->
-      <div class="mx-12 pb-12">
+      <div class="mx-5 md:mx-10 lg:mx-12  pb-12">
         <StoreAccordion />
       </div>
     </div>
-    <FooterSection />
+    <FooterSection :extraClasses="['px-10', 'text-black', 'bg-[#dad6cd]']" />
   </div>
 </template>
 
 <script setup>
-import MainSlider from '@/components/frontend-components/Main-Slider.vue'
-import NavMainSlider from '@/components/frontend-components/Nav-MainSlider.vue'
-import NavBar from '@/components/frontend-components/Nav-bar.vue'
-import SideBar from '@/components/frontend-components/Side-Menu.vue'
-import Slider from '@/components/frontend-components/Slider.vue'
-import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import { ref, onMounted } from 'vue'
-import StoreAccordion from '@/components/store-components/StoreAccordion.vue'
-import Icon, { Menu, Search } from '@/components/frontend-components/Svg/Icons'
-import { scrollDown } from '@/helper/frontendHelpers'
-import AccordianSection from '@/components/frontend-components/Accordian-Section.vue'
 import { onClickOutside } from '@vueuse/core'
-import BreadcrumbSection from '@/components/frontend-components/BreadcrumbSection.vue'
-import SideMenu from '@/components/frontend-components/Side-Menu.vue'
-import Images3DView from '@/components/frontend-components/Images3DView.vue'
-import ThreeDAnimaation from '@/components/Admin-components/ThreeDAnimaation.vue'
+import Icon, { Menu, Search } from '@/components/frontend-components/Svg/Icons'
+import NavBar from '@/components/frontend-components/Nav-bar.vue'
+import Slider from '@/components/frontend-components/Slider.vue'
+import StoreAccordion from '@/components/store-components/StoreAccordion.vue'
+import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import { getLandingPageData } from '@/helper/frontendHelpers'
-import AccordionNew from '@/components/frontend-components/AccordionNew.vue'
-
-const sliderList = [
-  { name: 'B Chair Series', link: 'https://lebello.com/products/trixie-lounger/' },
-  { name: 'B Chair', link: 'https://lebello.com/products/4l-pixie-arms-chair/' }
-]
 
 const products = ref([
   {

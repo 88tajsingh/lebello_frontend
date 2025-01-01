@@ -1,5 +1,5 @@
 <template>
-  <footer :class="[bgColor, textColor, 'font-graphikLight']">
+  <footer :class="[...extraClasses,'font-graphikLight']">
     <div class="sm:m-0 md2:flex md2:mx-12   xl:mx-auto">
       <div id="app" class="xl:flex mx-5">
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-1 md:grid-cols-4 py-5 w-full md:gap-6 md2:py-12">
@@ -96,13 +96,9 @@ const sections = ref([
 ]);
 
 const props = defineProps({
-  bgColor: {
-    type: String,
-    default: 'bg-[rgb(255,255,255)]',
-  },
-  textColor: {
-    type: String,
-    default: 'text-black',
+  extraClasses:{
+    type: Array,
+    default: () => ['text-black','bg-[#ddd7ce]'],  
   },
 });
 </script>
