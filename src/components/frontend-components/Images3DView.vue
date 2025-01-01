@@ -1,12 +1,12 @@
 <template>
-    <div id="KeyShotXR" class=' overflow-hidden overflow-x-hidden z-[999] overflow-y-hidden bg-white'></div>
+    <div id="KeyShotXR" class='border border-red w-full z-[999] overflow-y-hidden bg-white'></div>
   </template>
   
   <script setup>
   import { onMounted } from 'vue';
   
   let keyshotXR;
-  
+    console.log('window.innerWidth', window.innerWidth);
   const initKeyShotXR = () => {
     if (typeof keyshotXR !== 'undefined' && keyshotXR) {
       const nameOfDiv = "KeyShotXR";

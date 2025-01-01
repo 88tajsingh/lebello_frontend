@@ -1,11 +1,11 @@
 <template>
-  <div class="overflow-x-hidden">
+  <div  class="overflow-x-hidden">
     <NavBar :absolute="true" :navColor="navColor" />
     <Slider
-      :images="landingPageData.home_slider"
+      :images="landingPageData.home_slider || []"
       imageKeyName="featured_image_data"
       :navColor="'white'"
-      :openClass="computedOpenClass"  
+      :openClass="computedOpenClass"
       :closeClass="computedCloseClass"
       height="100vh"
       :closeSidebar="closeSidebar"
@@ -24,11 +24,9 @@
           </div>
           <div class="">
             <div class="search mt-4">
-              <form  @submit.prevent="handleSearch" role="search">
+              <form role="search">
                 <div class="relative border-b border-[#33333357] mt-2">
                   <input
-                    @keydown.enter="handleSearch"
-                    v-model="search"
                     class="w-full py-[1px] font-graphikLight text-[20px] border-none bg-transparent focus:outline-none"
                     id="username"
                     type="text"
@@ -49,23 +47,23 @@
             </div>
             <ul class="max-h-full text-[19px] text-[#363636] pt-1">
               <li
-                v-for="(listItem, index) in landingPageData.home_sidebar_first"
+                v-for="(listItem, index) in landingPageData.home_sidebar_first || []"
                 :key="index"
                 class="py-[9px] font-graphikLight"
               >
-                <router-link :to="`/productDetail/${listItem?.slug}`" class="hover:text-orange">{{
+                <a @click="handleProductNav(listItem)" class="hover:text-orange">{{
                   listItem?.title
-                }}</router-link>
+                }}</a>
               </li>
             </ul>
           </div>
         </div>
       </template>
     </Slider>
-    <CollectionVideoc :sidebarList="landingPageData?.home_sidebar" />
+    <CollectionVideo :sidebarList="landingPageData?.home_sidebar || []" />
     <div
       id="sideText"
-      class="block mx-4 lg:mx-7 md:flex md:gap-5 lg:gap-14 lg:mt-5 overflow-x-hidden max-w-[1400px] xl:mx-9 "
+      class="block mx-4 lg:mx-7 md:flex md:gap-5 lg:gap-14 lg:mt-5 overflow-x-hidden"
     >
       <div
         v-for="(data, index) in productdata"
@@ -73,7 +71,7 @@
         class="flex m-auto md:w-4/12 bg-[#ddd7ce] mt-10"
       >
         <div
-          @click="index === 1 ? handleModal() : router.push(data.urlLink)"
+          @click="index === 1 ? handleModal() : navigation(data.urlLink)"
           class="pb-1 text-textColorBlack hover:bg-[#c68d39] hover:text-white cursor-pointer"
         >
           <div class="overflow-hidden">
@@ -157,57 +155,36 @@ import CloseSvg from '@/components/frontend-components/Svg/Close-Svg.vue'
 import SearchSvg from '@/components/frontend-components/Svg/Search-Svg.vue'
 import Slider from '@/components/frontend-components/Slider.vue'
 import NavBar from '@/components/frontend-components/Nav-bar.vue'
-import CollectionVideoc from '@/components/frontend-components/Collection-Video.vue'
+import CollectionVideo from '@/components/frontend-components/Collection-Video.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import LogoSection from '@/components/frontend-components/Logo-section.vue'
-import { onMounted, ref, computed, onUnmounted } from 'vue'
 import { getLandingPageData } from '@/helper/frontendHelpers'
+import { onMounted, ref, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+// import { useExtraData } from '@/composables/useExtraData'
 
-const landingPageData = ref([])
+// const { extraData } = useExtraData()
+// const landingPageData = ref(extraData)
+// const isClient = ref(false)
+
 const router = useRouter()
 const open = ref(false)
 const closeSidebar = ref(null)
 const navColor = ref('#000000')
-const search = ref('')
-
-const handleLandingPageData = async () => {
-  const res = await getLandingPageData()
-  if (res.status === 200 && res.data.success) {
-    landingPageData.value = res.data.data
-  }
+// This is a better way to handle window-related logic
+const windowWidth = ref(0)
+const landingPageData = ref({})
+const navigation = (url) => {
+  // window.location.href = url
+  router.push(url);
 }
-
-const updateNavColor = (newColor) => {
-  navColor.value = newColor
-}
-
-const embedPdfInNewTab = () => {
-  const pdfUrl = '/src/assets/sample.pdf'
-  const newTab = window.open()
-  newTab.document.body.innerHTML = `
-    <iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
-    <p><a href="${pdfUrl}" download="my-pdf-file.pdf">Download PDF</a></p>
-  `
-}
-
-const handleSearch = (event) => {
-  if (event) event.preventDefault(); 
-  if (search.value.trim() !== '') {
-    console.log('Searching for:', search.value);
-    router.push({ name: 'search', query: { search: search.value } });
-    search.value = ''; 
-  } else {
-    console.log('Search query is empty!');
-  }
-};
-
-
-const windowWidth = ref(window.innerWidth)
-
+// Handle resize events only in the client-side
 const handleResize = () => {
-  windowWidth.value = window.innerWidth
+  if (typeof window !== 'undefined') {
+    windowWidth.value = window.innerWidth
+  }
 }
+
 const computedOpenClass = computed(() =>
   windowWidth.value < 768
     ? 'w-screen fixed z-50 top-0 right-0'
@@ -216,19 +193,60 @@ const computedOpenClass = computed(() =>
 
 const computedCloseClass = computed(() => {
   if (windowWidth.value < 768) {
-    return `w-screen fixed z-50 top-0 right-[-700px]`
+    return `w-screen fixed z-50 top-0 right-[-720px]`
   } else {
-    return 'w-[500px] fixed z-50 top-0 right-[-520px]'
+    return 'w-[500px] fixed z-50 top-0 right-[-550px]'
   }
 })
 
+// A single `onMounted` hook should handle all initialization
 onMounted(() => {
-  window.addEventListener('resize', handleResize)
+  // isClient.value = true
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', handleResize)
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+    windowWidth.value = window.innerWidth // Set initial width
+  }
+  handleLandingPageData()
 })
 
+// Cleanup on unmount
 onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', handleResize)
+  }
 })
+
+const handleLandingPageData = async () => {
+  const res = await getLandingPageData();
+  if (res.status === 200 && res.data.success) {
+    landingPageData.value = res.data.data;
+
+  }
+};
+
+// Handle navigation color updates
+const updateNavColor = (newColor) => {
+  navColor.value = newColor
+}
+
+const embedPdfInNewTab = () => {
+  if (typeof window !== 'undefined') {
+    const pdfUrl = '/src/assets/sample.pdf'
+    const newTab = window.open()
+    if (newTab) {
+      newTab.document.body.innerHTML = `
+        <iframe src="${pdfUrl}" width="100%" height="100%" style="border:none;"></iframe>
+        <p><a href="${pdfUrl}" download="my-pdf-file.pdf">Download PDF</a></p>
+      `
+    }
+  }
+}
+
+// Product data for the view
 const productdata = ref([
   {
     img: 'https://lebello.com/wp-content/uploads/2022/09/Contract-Design-image-2.png',
@@ -240,7 +258,7 @@ const productdata = ref([
     img: 'https://lebello.com/wp-content/uploads/2022/09/Product-Catalog-image.jpg',
     heading: 'Product Catalog',
     peragraph: 'Download our latest product',
-    urlLink: '/productCatalog'
+    urlLink: '/'
   },
   {
     img: 'https://lebello.com/wp-content/uploads/2023/05/our-material-lebello-1.jpg',
@@ -250,6 +268,7 @@ const productdata = ref([
   }
 ])
 
+// Handle modal open and close
 const handleModal = () => {
   open.value = !open.value
 }
@@ -257,12 +276,4 @@ const handleModal = () => {
 const handleClose = () => {
   open.value = false
 }
-
-onMounted(() => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
-  handleLandingPageData()
-})
 </script>
