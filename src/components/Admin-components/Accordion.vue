@@ -1,6 +1,8 @@
 <template>
-    <div class="mx-auto bg-white border border-[#e6e3e3] rounded-md " >
-        <div class="grid divide-y divide-neutral-100  ">
+    <div class=" border border-[#e6e3e3] rounded-md "
+     
+    >
+        <div class="grid divide-y divide-neutral-100  " >
             <div class=" ">
                 <details class="group " :open='toggle'>
                     <summary @click="toggleFAQ()"
@@ -31,7 +33,7 @@
 
                         </span>
                     </summary>
-                    <div class="border mb-4 " >
+                    <div class="border mb-4 " :class="[containerClass]" >
                     <slot />
                     </div>
                 </details>
@@ -41,16 +43,35 @@
 </template>
 
 <script setup>
-
-import { ref } from 'vue'
+import { ref } from 'vue';
 import CheckBox from './form-components/CheckBox.vue';
-const {open = true, header,checkBox=false}= defineProps(['open', 'header',"checkBox"])
-const toggle = ref(open)
+
+const props = defineProps({
+  open: {
+    type: Boolean,
+    default: true
+  },
+  header: {
+    type: String,
+    required: true
+  },
+  checkBox: {
+    type: Boolean,
+    default: false
+  },
+  containerClass: {
+    type: String,
+    default: ''
+  }
+});
+
+const toggle = ref(props.open);
 
 const toggleFAQ = () => {
-    toggle.value = !toggle.value
-}
+  toggle.value = !toggle.value;
+};
 </script>
+
 
 <style scoped>
 

@@ -1,4 +1,4 @@
-  <template>
+<template>
   <transition name="fade">
     <div v-if="show" class="fixed inset-0 flex justify-center items-center z-50">
       <div class="bg-black bg-opacity-50 w-1/3 rounded-sm pt-10 shadow-lg overflow-hidden">

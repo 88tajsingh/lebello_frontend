@@ -3,88 +3,78 @@
 
         <!-- domain select delete master delete  -->
         <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
-            :deleteService="form.is_store_product ? StoreProductServices.deleteStoreProduct : ProductServices.deleteProduct" masterKey='master_product_id'
-            :masterDeleteService="form.is_store_product ? StoreProductServices.masterDeleteStoreProduct : ProductServices.mastetrDeleteProduct" routeTo="product">
+            :deleteService="form.is_store_product ? StoreProductServices.deleteStoreProduct : ProductServices.deleteProduct"
+            masterKey='master_product_id'
+            :masterDeleteService="form.is_store_product ? StoreProductServices.masterDeleteStoreProduct : ProductServices.mastetrDeleteProduct"
+            routeTo="product">
         </DomainComponent>
         <!-- slug update  -->
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm :form="form" @update-slug="fetchProductData"
-                :SlugUpdateservices="form.is_store_product ?StoreProductServices.masterSlugStoreProduct : ProductServices.masterSlugUpdateProduct" masteridKeyName="master_product_id" />
+                :SlugUpdateservices="form.is_store_product ? StoreProductServices.masterSlugStoreProduct : ProductServices.masterSlugUpdateProduct"
+                masteridKeyName="master_product_id" />
         </template>
 
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
-
-                    <div>
-                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Title" placeholder="Add title"
+                    <Accordion :open="true" header="Title" containerClass="px-4">
+                        <TextInput type="text" class="block mb-2 h-[40px] w-full" label="Title" placeholder="Add title"
                             v-model="form.title" :errMessage="errors.title" :errors="errors" :hasCheckBox="checkBoxFlag"
                             @update:checkValue="value => checkedFields.title = value" />
-                        <div class="mt-3">
-                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Slug (Read Only)"
-                                placeholder="Slug" disabled="true" v-model="form.slug" :errMessage="errors.slug" />
-                        </div>
-                        <div class="mt-3">
-                            <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Trade Mark Label"
-                                placeholder="Trade Mark Label" v-model="form.trade_mark_label"
-                                :hasCheckBox="checkBoxFlag"
-                                @update:checkValue="value => checkedFields.trade_mark_label = value" />
-                        </div>
-                    </div>
+
+                        <TextInput type="text" class="block h-[40px] w-full" label="Trade Mark Label"
+                            placeholder="Trade Mark Label" v-model="form.trade_mark_label" :hasCheckBox="checkBoxFlag"
+                            @update:checkValue="value => checkedFields.trade_mark_label = value" />
+
+                    </Accordion>
                     <div class="mt-5">
-                        <Accordion :open="true" header="Description">
-                            <div class="px-5 pt-2">
-                                <div class="px-2 flex w-full">
+                        <Accordion :open="true" header="Description" containerClass="px-4">
+                                <div class=" flex w-full">
                                     <SingleCheck v-if="form.id" label="" v-model="checkedFields.description">
                                     </SingleCheck>
                                     <TinyMCE v-model="form.description" />
                                 </div>
                                 <span class="text-sm pl-2">Put Material Description.</span>
-                            </div>
                         </Accordion>
                     </div>
                     <!-- seo option -->
                     <div class="mt-5">
-                        <Accordion :open="true" header="Seo Options">
-                            <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
-                                <TextInput id="TitleTag" type="text" class="block w-[180px] mr-2 h-[33px]"
+                        <Accordion :open="true" header="Seo Options" containerClass="px-4">
+                                <TextInput id="TitleTag" type="text" class="block w-[180px] h-[33px]"
                                     v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.seo_title = value" />
-                                <span>Custom title tag.</span>
-                            </div>
-                            <div class="px-6 mt-3 items-center text-gray-600 text-sm">
+                                <span :class="[form.id ? 'pl-8' :'']" >Custom title tag.</span>
+                            
                                 <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
-                                    class="block w-[180px] mr-2 " v-model="form.meta_description"
+                                    class="block w-[180px] " v-model="form.meta_description"
                                     placeholder="Meta Description" label="Meta Description" :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.meta_description = value" />
-                                <span>Most search engines use a maximum of 160 chars for the description.
+                                <span :class="[form.id ? 'pl-8' :'']" >Most search engines use a maximum of 160 chars for the description.
                                 </span>
-                            </div>
-                            <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
+
                                 <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text"
-                                    class="block w-[180px] mr-2 " v-model="form.meta_keywords"
+                                    class="block w-[180px] " v-model="form.meta_keywords"
                                     placeholder="Meta Keywords" label="Meta Keywords" :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.meta_keywords = value" />
-                                <span>Seperate each term with comma.</span>
-                            </div>
+                                <span :class="[form.id ? 'pl-8' :'']" >Seperate each term with comma.</span>
                         </Accordion>
                     </div>
-
                     <div class="mt-5">
-                        <Accordion :open="true" header="New Product Options">
-                            <div class="my-3 mx-3">
-                                <!-- <SingleCheck v-if="form.id" label="" v-model="checkedFields.new_product_slider">
-                                </SingleCheck> -->
-                                <TextInput type="text" class="block mr-2 h-[40px] w-full" label="Product Title"
+                        <Accordion :open="true" header="New Product Options" containerClass="px-4">    
+                                <TextInput type="text" class="block mb-2 h-[40px] w-full" label="Product Title"
                                     placeholder="Product Title" v-model="form.new_product_title"
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.new_product_title = value" />
-                            </div>
-                            <div class="flex col-span-2 px-4">
+                           
+                            <div class="flex col-span-2 ">
+                                <!-- <SingleCheck v-if="form.id" label=""
+                                                v-model="checkedFields.new_product_additional_bg_image">
+                                            </SingleCheck> -->
                                 <div v-if="form.new_product_slider !== null"
                                     class="col-span-2 w-full border border-stroke rounded-lg">
-                                    <div class="mt-2 mx-3  ">
+                                    <div class="mt-2 mx-3">
                                         <input-label for="slides" value="Slider " />
                                         <div class="text-gray-4 text-[13px]">Minimum Size 1600 x 700px</div>
                                         <div class=" flex flex-wrap">
@@ -114,12 +104,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='mx-5 my-2'>
-                                <TextInput id="TitleBackground" type="text" class="block w-full mr-2 mb-2 h-[33px]"
+                                <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
                                     v-model="form.new_product_additional_info" placeholder="" label="Additional Product Info	
-                          " :hasCheckBox="checkBoxFlag"
+                                    " :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.new_product_additional_info = value" />
-                                <div>
                                     <div class="flex flex-col w-full">
                                         <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
                                             value="Additional Product BG Image" />
@@ -138,8 +126,7 @@
                                             v-for="file in imageData.new_product_additional_bg_image.images" :key="file"
                                             :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
                                             :alt="file?.alternative_text || 'img'">
-                                    </div>
-                                </div>
+                                    </div> 
                                 <div class="mt-3">
                                     <div class="flex flex-col w-full">
                                         <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
@@ -162,7 +149,7 @@
                                             :alt="file?.alternative_text || 'img'">
                                     </div>
                                 </div>
-                            </div>
+                            
                         </Accordion>
                     </div>
                     <div class="mt-5">
@@ -196,7 +183,6 @@
                             </div>
                         </Accordion>
                     </div>
-
                     <div class="mt-3">
                         <Accordion :open="true" header="Material Swatches">
                             <div class="bg-white border-2   px-4">
@@ -885,15 +871,17 @@ const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_a
 
 // Image data for various categories
 
-const imageData = ref({ featured_image: { isOpen: false, mediaName: 'Feature Image', images: [], selectedFiles: handleFeatureFiles, singleFile: true },
- gallery: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handlegalleryFiles, singleFile: false }, 
- new_product_slider: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handleProductSliderFiles, singleFile: false }, 
- new_product_additional_bg_image: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handleAdditionalBgImageFiles, singleFile: true },
- contract_logo: { isOpen: false, mediaName: 'Logo Image', images: [], selectedFiles: handleContractLogoFiles, singleFile: true }, 
- new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleAdditionalRightBoxImageFiles, singleFile: true }, 
- downloadable_files: { isOpen: false, mediaName: 'Main Slider Image',images: [], selectedFiles: handleDownloadablemageFiles, singleFile: false }, 
- image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleImageFiles, singleFile: true }, 
- video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true }, }); 
+const imageData = ref({
+    featured_image: { isOpen: false, mediaName: 'Feature Image', images: [], selectedFiles: handleFeatureFiles, singleFile: true },
+    gallery: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handlegalleryFiles, singleFile: false },
+    new_product_slider: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handleProductSliderFiles, singleFile: false },
+    new_product_additional_bg_image: { isOpen: false, mediaName: 'Gallery Image', images: [], selectedFiles: handleAdditionalBgImageFiles, singleFile: true },
+    contract_logo: { isOpen: false, mediaName: 'Logo Image', images: [], selectedFiles: handleContractLogoFiles, singleFile: true },
+    new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleAdditionalRightBoxImageFiles, singleFile: true },
+    downloadable_files: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleDownloadablemageFiles, singleFile: false },
+    image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleImageFiles, singleFile: true },
+    video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true },
+});
 
 // remove image form gallery
 const handleRemoveSliderImage = (slide) => {
@@ -971,7 +959,7 @@ const handleSubmit = async () => {
     form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length > 0) || [];
 
     const { domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
-        downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data,store_category_data,tags_data, contract_type_data, ...payload } = form.value;
+        downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, store_category_data, tags_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
     try {
         const service = store.getters.editData ? form.value.is_store_product ? StoreProductServices.editStoreProduct : ProductServices.editProduct : form.value.is_store_product ? StoreProductServices.addStoreProduct : ProductServices.addProduct;
