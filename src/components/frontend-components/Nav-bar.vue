@@ -1,43 +1,42 @@
 <template>
   <nav class="hidden md2:block z-[99999] ">
-    <div class=" mx-auto w-full top-0 border-b  self-start text-graphik text-white ease-in duration-300 z-50" :class="{
-      'absolute pb-10 top-0 left-0 bg-transparent': props.absolute,
+    <div class=" mx-auto w-full self-start text-graphik  text-white z-50" :class="{
+      'absolute  top-0 left-0 bg-transparent': props.absolute,
       'bg-white': !props.absolute
     }">
-      <div class="relative z-[9999999]  h-16 items-center justify-between">
+      <div class="relative z-[9999999] items-center justify-between">
         <!-- Desktop Links -->
-        <div class="  px-20 hidden md2:block  mx-auto  " 
-          :class="props.absolute && !storePages && 'hover:bg-[#0e0e0e89] bg-opacity-5'">
-          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-8' : 'pt-8', storePages && 'border-b border-[#333333]']" @mouseenter="handleMouseEnter"
+        <div class="   hidden md2:block  mx-auto  " :class="[...extraClass,
+        props.absolute ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : '',
+        storePages ? 'bg-[#0e0e0e89] bg-opacity-5' : ''
+        ]">
+          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-6' : 'pt-6',]" @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave" class="">
             <!-- Logo -->
-            <router-link to="/" class="col-span-1 flex">
-              <img class="h-8 w-52" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" />
+            <router-link to="/" class=" flex ">
+              <!-- <img class="h-8 w-52" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" /> -->
+              <div class="text-[15px] w-[160px] leading-[15px] font-helvetica text-left "
+                :style="{ color: navbarColor }">
+                Forever<br>
+                Summer Collection™
+              </div>
+
             </router-link>
 
             <!-- Navigation Links -->
-            <NavigationLinks :links="links" :navColor="navbarColor ? navbarColor : storePages ? '#4b4b4b' : '#000000'"
+            <NavigationLinks :links="links" :navColor="navbarColor ? navbarColor : '#000000'"
               :storePages="storePages" />
 
-              <!-- for product page -->
-            <div v-if="storePages" class="flex justify-center items-center gap-10 pb-3 text-[#4b4b4b] " >
-              <div class="w-full">CONTACT&nbsp;/&nbsp;HELP&nbsp;?</div>
-              <div class="flex">
-                <a class="flex justify-center gap-2 items-center p-1" href="#">
-                  <span>CHECKOUT</span>
-                  <span>|</span>
-                  <i class="fa fa-shopping-bag" aria-hidden="true"></i>
-                </a>
-              </div>
-            </div>
+            <!-- for product page -->
+
             <!-- border -->
             <!-- <div v-if="storePages" class="absolute bg-black w-[92%] h-[1px] top-20 z-[9999999]" :class="hoverd ? 'text-white' : 'text-black'" >
             </div> -->
-            
+
 
 
             <!-- Search Icon -->
-            <div  :class="storePages ? 'absolute right-20 top-22' : 'col-span-1 m-auto mr-20' ">
+            <div :class="storePages ? 'absolute right-20 top-22' : 'col-span-1 m-auto mr-20'">
               <div @click="showModal = true">
                 <SearchSvg size="18px" :fillColor="navColor ? navbarColor : '#000000'" />
               </div>
@@ -72,6 +71,10 @@ import MobileNavbar from './MobileNavbar.vue';
 
 const props = defineProps({
   absolute: Boolean,
+  extraClass: {
+    type: Array,
+    default: () => ['px-10']
+  },
   storePages: {
     type: Boolean,
     default: false
@@ -91,18 +94,18 @@ watch(
   (color) => {
     if (!hoverd.value)
       navbarColor.value = color;
-    else if(props.storePages)
-      {
-        navbarColor.value = '#4b4b4b  ';
-      }
-      else
+    // else if(props.storePages)
+    //   {
+    //     navbarColor.value = '#4b4b4b  ';
+    //   }
+    else
       navbarColor.value = '#ffffff';
   }
 );
 
 const handleMouseEnter = () => {
   hoverd.value = true;
-  navbarColor.value = props.absolute === false ? '#000000' : props.storePages ? '#4b4b4b  ':'#ffffff';
+  navbarColor.value = props.absolute === false ? '#000000' : '#ffffff';
 }
 
 const handleMouseLeave = () => {
@@ -235,7 +238,7 @@ const lebello = [
       { to: '/store-product', text: 'Store Page' },
       { to: '/new-product-series', text: 'Product series' },
       { to: '/new-product', text: 'Product Listing' },
-      
+
     ]
   }
 ]

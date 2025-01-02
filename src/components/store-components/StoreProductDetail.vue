@@ -63,8 +63,8 @@
                         <button @click="toggleAccordion"
                             class="w-full flex items-center justify-between p-6 text-left bg-[#e7e3de] font-['PT_Serif']">
                             <span class="text-2xl text-[#776352]">TUBO DOUBLE SOFA</span>
-                            <div class="transition-transform duration-500" :class="{ 'rotate-180': isOpen }">
-                                <Arrow size="28px" direction="top" :strokeWidth="22.5" fillColor="#c59233" />
+                            <div class="transition-transform text-[#776352] duration-500" :class="{ 'rotate-180': isOpen }">
+                                <Arrow size="28px" direction="top" :strokeWidth="22.5" fillColor="currentColor" />
                             </div>
                         </button>
 

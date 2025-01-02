@@ -18,7 +18,8 @@ export default {
         graphikLight: ['GraphikLight'],
         graphikMedium: ['GraphikMedium'],
         MyriadPro: ['Myriad Pro'],
-        ptSerif: ['PT Serif']
+        ptSerif: ['PT Serif'],
+        helvetica: ['Helvetica Rounded LT Std'],
       },
       screens: {
         '2xsm': '375px',

@@ -5,7 +5,7 @@
       <div v-for="link in props?.links" :key="link.text" class="relative group" @mouseenter="openMenu(link.text)"
         @mouseleave="closeMenu(link.text)">
         <router-link :to="link.to"
-          class="flex items-center cursor-pointer py-1 pb-4 text-[15px] font-graphik"
+          class="flex items-center cursor-pointer leading-9 text-[14px]  font-graphik"
           :class="storePages ? 'gap-2' : 'lg:gap-2 xl:gap-3'"
           :style="{ color: props?.navColor }">
           <span>{{ link.text }} </span>
@@ -49,10 +49,24 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
+  <div 
+  v-if="storePages" 
+  :style="{ color: props?.navColor }"
+  class="flex justify-center items-center pt-1 gap-10  text-[14px] leading-[35px] uppercase text-white font-['Graphik'] text-left"
+>
+  <div class="w-full">CONTACT&nbsp;/&nbsp;HELP&nbsp;?</div>
+  <div class="flex">
+    <a class="flex justify-center gap-2 items-center" href="#">
+      <span>CHECKOUT</span>
+      <span>|</span>
+      <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+    </a>
+  </div>
+</div>
+
 </template>
 
 

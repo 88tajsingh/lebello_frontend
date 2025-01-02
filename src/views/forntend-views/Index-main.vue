@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-x-hidden">
-    <NavBar :absolute="true" :navColor="navColor" />
+    <NavBar :absolute="true" :navColor="navColor" :extraClass="['px-20']" />
     <Slider
       :images="landingPageData.home_slider"
       imageKeyName="featured_image_data"

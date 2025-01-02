@@ -1,6 +1,6 @@
 <template>
   <div class="relative min-h-screen">
-    <NavBar :absolute="true" :storePages="true" />
+    <NavBar :absolute="true" :storePages="true" :extraClass="['px-20']" :navColor="'#ffffff'" />
     <!-- right logo -->
     <div class="absolute z-[999] top-16 right-0">
       <img src="@/assets/logo/lebello-logo-right.png" alt="Lebello Logo">
@@ -56,10 +56,8 @@
           </div>
         </div>
       </div>
-    </section >
-    <div class="px-10">
-      <FooterSection color="#ffffff" textColor="000000" />
-    </div>
+    </section >   
+      <FooterSection :extraClasses="['bg-[#ffffff]','px-10','text-black']" />
   </div>
 </template>
 

@@ -24,9 +24,9 @@
         </TransitionRoot>
       </div>
       <!-- Popup/Drawer -->
-      <TransitionRoot as="template" :show="showPopup" enter="transition-opacity duration-1000" enterFrom="opacity-0" enterTo="opacity-100" leave="transition-opacity duration-1000" leaveFrom="opacity-100" leaveTo="opacity-100">
+      <TransitionRoot as="template" :show="showPopup" enter="transition-opacity duration-700" enterFrom="opacity-0" enterTo="opacity-100" leave="transition-opacity duration-700" leaveFrom="opacity-100" leaveTo="opacity-100">
         <div class="fixed inset-0 px-10 bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
-          <TransitionChild as="template" enter="transition transform duration-1500 ease-in-out" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out" leaveFrom="translate-x-0" leaveTo="translate-x-full">
+          <TransitionChild as="template" enter="transition transform duration-1000 ease-in-out" enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out" leaveFrom="translate-x-0" leaveTo="translate-x-full">
             <div v-if="showPopup" class="absolute px-24 pl-10 top-0 bottom-0 right-0 bg-white shadow-xl w-full md:w-2/3 lg:w-4/6 z-50" @click.stop>
               <div ref="closeMenu" class="flex mx-auto gap-10 py-16 pb-20">
                 <!-- Back button -->

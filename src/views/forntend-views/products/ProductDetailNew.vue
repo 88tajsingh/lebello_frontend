@@ -83,9 +83,9 @@
           <div>
             <div>
               <h2 className="text-[16px] text-[#000000] font-medium font-graphik">Recommended Configuration</h2>
-              <p className="text-[16px] text-[#000000] font-light font-graphik mb-3">Please select the configuration</p>
+              <p className="text-[16px] text-[#000000] font-light font-graphikLight mb-3">Please select the configuration</p>
             </div>
-            <div className="relative">
+            <div className="relative">  
               <select v-model="configuration" id="configuration"
                 class="w-[228px] h-[46px]  rounded-[6px] text-[14px] p-2">
                 <option value="1">Configuration 1</option>
