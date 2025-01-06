@@ -71,7 +71,7 @@
   const items = ref([
     {
       title: "Surface Materials",
-      description: "The Surface-Tex is an exclusive collection of high-performance technical outdoor fabrics...",
+      description: "Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy",
       children: [
         { name: "Galfasa G4", images: Array(24).fill("/src/assets//lebello/images/1_Gafsa.png") },
         { name: "Structures G4", images: Array(2).fill("/src/assets//lebello/images/1_Gafsa.png") }
@@ -79,7 +79,7 @@
     },
     {
       title: "Frame Colors",
-      description: "Premium powder-coated aluminum frames.",
+      description: "Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy",
       children: [
         { name: "Metallic Collection", images: Array(4).fill("/src/assets//lebello/images/1_Gafsa.png") },
         { name: "Earth Tones", images: Array(6).fill("/src/assets//lebello/images/1_Gafsa.png") }

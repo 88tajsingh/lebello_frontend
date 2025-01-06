@@ -82,7 +82,7 @@
 
           <div>
             <div>
-              <h2 className="text-[16px] text-[#000000] font-medium font-graphik">Recommended Configuration</h2>
+              <h2 className="text-[16px]  text-[#000000] font-medium font-graphik">Recommended Configuration</h2>
               <p className="text-[16px] text-[#000000] font-light font-graphikLight mb-3">Please select the configuration</p>
             </div>
             <div className="relative">  
@@ -140,7 +140,6 @@
             </div>
           </div>
           <div class="hidden md:block">
-            <div></div>
             <div class="relative h-full overflow-hidden">
               <img
                 class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"

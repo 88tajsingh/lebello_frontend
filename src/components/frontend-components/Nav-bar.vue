@@ -234,13 +234,14 @@ const lebello = [
     to: '/productDetailNew',
     text: 'STORE',
     sublinks: [
+      { to: '/productDetailNew2', text: 'Product Detail 2' },
       { to: '/productDetailNew', text: 'Product Detail' },
       { to: '/store-product', text: 'Store Page' },
       { to: '/new-product-series', text: 'Product series' },
       { to: '/new-product', text: 'Product Listing' },
 
     ]
-  }
+  },
 ]
 
 const storeLinks = [
