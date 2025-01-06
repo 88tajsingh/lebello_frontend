@@ -31,6 +31,50 @@
         </div>
       </TransitionRoot>
     </div>
+<<<<<<< HEAD
+  </template>
+  
+  <script setup>
+  import { ref, watch } from 'vue'
+  import { TransitionRoot, TransitionChild } from '@headlessui/vue'
+  import { Arrow, Close } from '../frontend-components/Svg/Icons'
+  import { onClickOutside } from '@vueuse/core'
+  
+  const items = ref([
+    {
+      title: "Surface Materials",
+      description: "Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy",
+      children: [
+        { name: "Galfasa G4", images: Array(24).fill("/src/assets//lebello/images/1_Gafsa.png") },
+        { name: "Structures G4", images: Array(2).fill("/src/assets//lebello/images/1_Gafsa.png") }
+      ]
+    },
+    {
+      title: "Frame Colors",
+      description: "Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy",
+      children: [
+        { name: "Metallic Collection", images: Array(4).fill("/src/assets//lebello/images/1_Gafsa.png") },
+        { name: "Earth Tones", images: Array(6).fill("/src/assets//lebello/images/1_Gafsa.png") }
+      ]
+    }
+  ])
+  
+  const closeMenu = ref(null)
+  const closeSideMenu = () => { showPopup.value = false; activeChild.value = null }
+  onClickOutside(closeMenu, closeSideMenu)
+  
+  const activeParent = ref(null)
+  const activeChild = ref(null)
+  const showPopup = ref(false)
+  const popupTitle = ref('')
+  const popupDescription = ref('')
+  const currentItem = ref({})
+  const selectedChildName = ref('')
+  const selectedChildImages = ref([])
+  
+  const toggleParent = (index) => {
+    activeParent.value = activeParent.value === index ? null : index
+=======
     <!-- Popup/Drawer -->
     <TransitionRoot as="template" :show="showPopup" enter="transition-opacity duration-1000" enterFrom="opacity-0"
       enterTo="opacity-100" leave="transition-opacity duration-1000" leaveFrom="opacity-100" leaveTo="opacity-100">
@@ -88,6 +132,7 @@ const props = defineProps({
   accordionData: {
     type: Array,
     required: true
+>>>>>>> 535ece4835a4694d46e179c5250a0109a7d426cf
   }
 })
 
