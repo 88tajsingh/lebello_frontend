@@ -1,6 +1,7 @@
 <template>
 <section class="product_banner">
     <div class="slider_main">
+        
         <swiper :effect="fade" :navigation="{prevEl: '.custom-prev',
         nextEl: '.custom-next'}" :modules="[Navigation]" class="mySwiper">
             <swiper-slide>
