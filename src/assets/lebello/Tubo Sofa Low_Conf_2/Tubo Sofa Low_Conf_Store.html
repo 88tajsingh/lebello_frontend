@@ -13,7 +13,7 @@
     <style type="text/css">
       body {
         -ms-touch-action: none;
-        touch-action: none; 
+        touch-action: none;
       }
     </style>
     <script type="text/javascript" src="Tubo Sofa Low_Conf_2/files/KeyShotXR.js"></script>
@@ -23,8 +23,8 @@
       function initKeyShotXR() {
         var nameOfDiv = 'KeyShotXR'
         var folderName = 'Tubo Sofa Low_Conf_2'
-        const viewPortWidth = window.innerWidth
-        const viewPortHeight = window.innerHeight
+        var viewPortWidth = 720
+        var viewPortHeight = 480
         var backgroundColor = '#FFFFFF'
         var uCount = 20
         var vCount = 10
@@ -82,52 +82,56 @@
 
       window.onload = initKeyShotXR
     </script>
-    <style>
-      .threed_plus_mines {
-        width: 24px;
-        height: 62px;
-        border-radius: 12px;
-        border: 1px solid #c59233;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        margin-bottom: 12px;
-      }
-      .threed_plus_mines button {
-        border: none;
-        background: none;
-        padding: 0px;
-        cursor: pointer;
-      }
-      .threed_plus_mines .border-t {
-        border-top: 1px solid #c59233;
-      }
-      .threed_plus_mines #zoom-in {
-        position: relative;
-        top: 9px;
-      }
-      .threed_plus_mines button#zoom-out {
-        position: relative;
-        bottom: 10px;
-      }
-      button#zoom-reset {
-        border: none;
-        cursor: pointer;
-        background: none;
-        width: 24px;
-        padding: 0px;
-        text-align: left;
-      }
-      div#zoom-controls {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-    </style>
   </head>
+  <style>
+    .threed_plus_mines {
+      width: 24px;
+      height: 62px;
+      border-radius: 12px;
+      border: 1px solid #c59233;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .threed_plus_mines button {
+      border: none;
+      background: none;
+      padding: 0px;
+      cursor: pointer;
+    }
+    .threed_plus_mines .border-t {
+      border-top: 1px solid #c59233;
+    }
+    .threed_plus_mines #zoom-in {
+      position: relative;
+      top: 9px;
+    }
+    .threed_plus_mines button#zoom-out {
+      position: relative;
+      bottom: 10px;
+    }
+    button#zoom-reset {
+      border: none;
+      cursor: pointer;
+      background: none;
+      width: 24px;
+      padding: 0px;
+      text-align: left;
+    }
+    div#zoom-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
   <body oncontextmenu="return false;">
     <div id="KeyShotXR"></div>
-    <div id="zoom-controls" style="position: absolute; top: 20px; z-index: 9999; right: 30px">
+    <div
+      id="zoom-controls"
+      style="position: absolute; top: 170px; z-index: 9999; left: 70px"
+      class="absolute right-4 top-2 flex flex-col items-center gap-4 z-[9999] text-yellow-600"
+    >
       <!-- Fullscreen Icon -->
       <button
         id="fullscreen-toggle"
@@ -137,7 +141,7 @@
           border: none;
           cursor: pointer;
           width: 24px;
-          margin-bottom: 15px;
+          margin-bottom: 50px;
           background: none;
         "
       >
