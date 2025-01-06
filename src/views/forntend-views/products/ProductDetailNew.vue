@@ -2,7 +2,7 @@
   <div class="overflow-hidden">
     <div>
       <NavBar :absolute="true" :navColor="'#000000'" />
-      <Slider :images="landingPageData" imageKeyName="featured_image_data" :disableSideText="true" :navColor="'white'"
+      <Slider :images="imageData" imageKeyName="gallery" :disableSideText="true" :navColor="'white'"
         sliderPageName="homeSlider" :hasSidebar="true" @updateNavColor="updateNavColor">
         <template #utility>
           <!-- lebellow icon right top -->
@@ -56,24 +56,25 @@
     </div>
     <div id="sideText" class="bg-white">
       <!-- Breadcrumb -->
+       
       <nav class="py-5 text-[16px] leading-[39px] text-black font-graphik">
         <div class="flex items-center gap-2 ml-16">
           <span class="text-gray-600 font-medium">Collection</span>
           <!-- Heroicon: ChevronRight -->
           /
-          <span class="text-yellow-600 font-medium">Tubo Sofa Exposed</span>
+          <span class="text-yellow-600 font-medium">{{ productData?.title }}</span>
         </div>
       </nav>
       <!-- Main Content -->
       <div className="grid grid-cols-1 lg:flex lg:justify-between w-full">
         <div
           className="relative aspect-square w-screen overflow-auto h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] bg-gray-100 overflow-y-hidden">
-          <iframe src="/src/assets/lebello/Stone Tables White Background.1/StoreProduct.html" allowFullScreen
+          <iframe src="/src/assets/lebello/Tubo Sofa Low_Conf_2/Tubo Sofa Low_Conf_2_Product_detail.html" allowFullScreen
             className="absolute z-[9999] aspect-ratio top-0 left-0 w-full h-full border-none" frameborder="0"
             scrolling="no" />
         </div>
 
-        <div className="text-black flex flex-col pb-14 w-full h-full pl-4 md:pl-14 lg:w-3/6">
+        <div className="text-black flex flex-col pb-14 w-full h-full pl-4 md:pl-14 lg:w-4/6">
           <div>
             <h1 className="text-[21px] leading-[60px] lg:leading-[92px] text-[#333333] font-medium font-graphik">
               3D CONFIGURATOR
@@ -118,17 +119,11 @@
           <div class="lg:px-11  ">
             <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
               <h2 class="text-[26px] md:text-[25px] leading-[84px] text-[#333333] font-light font-graphik">
-                B Chair 1/2 & Pixie
+               {{ productData?.title }}
               </h2>
-              <p
+              <p v-html="productData?.description"
                 class="text-[#555555] text-[16px] leading-[26px] font-light font-graphik sm:text-[15px] md:text-[15px] lg:text-[16px]">
-                B Chair is now available in our exclusive timeless pixie weave design language. A
-                chair that provides functionality with its open frame design allowing access to a
-                self-storage compartment for personal belongings. The pixie design pattern embodies
-                our authentic superior woven craftsmanship through which clients can opt for our LSO
-                option. Lebello Special Operations provides enhanced bespoke design customization
-                solutions tailored towards your design requirements. The B Chair comes in a low and
-                high-back model.
+              
               </p>
               <span class="inline-flex my-10 text-[#333333] leading-[21px] hover:text-orange" :class="{ 'text-orange': addiVisible }"
                 @click="HandleAdditionalInfo" @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#33333')">
@@ -170,10 +165,11 @@
 
       <transition>
         <div ref="scrollTOadditiona" v-show="addiVisible"
-          class="container-fluid mt-1 h-[450px] bg-[url('https://lebello.com/wp-content/uploads/2019/12/Additional-Information-e1707234297556.jpg')] p-0">
+          class="container-fluid mt-1 h-[450px]  p-0"
+          :style="{ backgroundImage: 'url(' + $filePath(productData?.new_product_additional_bg_image_url?.file_url) + ')' }">
           <div class="py-10 m-0 relative px-14 md:w-1/2 font-light text-left text-white bg-orange">
             <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
-              Crafted from our exclusive Ropetek® materials...
+             {{ productData?.new_product_additional_info }}
             </p>
             <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
               <Icon.Close size="20px" fillColor="#ffffff" />
@@ -184,15 +180,16 @@
 
       <div class="flex justify-between uppercase">
   <div class="ml-5 md:ml-16 md:flex self-center">
-    <div class="flex items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium hover:text-orange"
+    <div class="flex items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium "
       @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
       Materials
     </div>
 
     <div class="md:flex md:items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium md:ml-20 hover:text-orange"
       @mouseenter="setArrowFillColor2('#3399ff')" @mouseleave="setArrowFillColor2('#4dc45c')">
+      <!-- {{ productData.downloadable_files_url[0].file_url}} -->
       <a class="underline font-graphikMedium text-[16px]" target="_blank"
-        href="https://lebello.com/wp-content/uploads/2013/09/B-Chair_Cutsheet.pdf">Download Cut Sheet</a>
+        blank :href="$filePath(productData?.downloadable_files_url && productData?.downloadable_files_url[0]?.file_url) ">Download Cut Sheet</a>
     </div>
   </div>
 </div>
@@ -200,7 +197,7 @@
 
       <!-- <AccordianSection /> -->
       <div class="mx-5 md:mx-10 lg:mx-12  pb-12">
-        <StoreAccordion />
+        <StoreAccordion :accordionData="productData?.material_swatche_data" />
       </div>
     </div>
     <FooterSection :extraClasses="['px-10', 'text-black', 'bg-[#dad6cd]']" />
@@ -208,14 +205,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted,computed  } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import Icon, { Menu, Search } from '@/components/frontend-components/Svg/Icons'
 import NavBar from '@/components/frontend-components/Nav-bar.vue'
 import Slider from '@/components/frontend-components/Slider.vue'
 import StoreAccordion from '@/components/store-components/StoreAccordion.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
-import { getLandingPageData } from '@/helper/frontendHelpers'
+import { getLandingPageData,getProductDetail } from '@/helper/frontendHelpers'
+import { useRouter } from 'vue-router'
 
 const products = ref([
   {
@@ -240,7 +238,8 @@ const products = ref([
     alt: 'B Chair Piie Low & High Lounger Chair'
   }
 ])
-
+// 4l-pixie-arms-chair
+const router = useRouter();
 const isOpenSidebarSlider = ref(false)
 const isOpenSidebarSlider2 = ref(false)
 const addiVisible = ref(false)
@@ -255,8 +254,11 @@ const closeMenu = ref(null)
 const closeMenu2 = ref(null)
 const configuration = ref('1')
 const email = ref('')
+const productData = ref([])
+const productTypes = ref([])
 const navColor = ref('#000000')
-
+const slug = ref(router.currentRoute.value?.params?.slug);
+if(!slug.value) slug.value = '4l-pixie-arms-chair'; 
 const handleLandingPageData = async () => {
   const res = await getLandingPageData()
   console.log('getLandingPageData', res.data.data.home_slider)
@@ -265,12 +267,43 @@ const handleLandingPageData = async () => {
   }
 }
 
+const handleProductDetailData = async () => {
+  const res = await getProductDetail(slug.value)
+  if (res.status === 200 && res.data.success) {
+    productData.value = res.data.data.product_data[0];
+    productTypes.value = res.data.data?.product_types;
+
+    console.log('productData', productData.value)
+    console.log('productTypes', productTypes.value)
+  }
+  else
+  router.push('/products')
+}
+
+const imageData = computed(() => {
+  return productData.value.gallery_urls?.map(item => ({
+    gallery: item
+  }));
+});
+
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
+
 const updateNavColor = (newColor) => {
   navColor.value = newColor
   console.log('navColor', newColor)
 }
 onMounted(() => {
   handleLandingPageData()
+  handleProductDetailData()
 })
 
 const handleStoreClick = () => {

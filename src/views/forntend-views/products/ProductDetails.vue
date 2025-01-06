@@ -208,6 +208,7 @@ import { getProductDetail } from '@/helper/frontendHelpers'
 import {Menu,Arrow,Close,Search} from '@/components/frontend-components/Svg/Icons'
 import { useRouter } from 'vue-router'
 
+
 const router = useRouter();
 const isOpenSidebarSlider = ref(false);
 const isOpenSidebarSlider2 = ref(false);
