@@ -11,7 +11,7 @@ const  routes = [
 
   },
   {
-    path: '/productDetailNew/:slug?',
+    path: '/productDetailNew/',
     name: 'productDetailNew',
     component: () => import('../views/forntend-views/products/ProductDetailNew.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
