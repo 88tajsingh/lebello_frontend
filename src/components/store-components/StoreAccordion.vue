@@ -1,16 +1,14 @@
 <template>
-  <div class="w-full mx-auto border-t border-gray-4">
+  <div class="faq_main_div ">
     <!-- Accordion -->
-    <div v-for="(item, index) in items" :key="index" class="border-b border-gray-4">
+    <div v-for="(item, index) in items" :key="index" class="faq_title">
       <!-- Parent Item -->
-      <div
-        class="flex w-full md:w-1/3 border justify-between items-center p-4 cursor-pointer transition-all duration-300"
-        @click="toggleParent(index)">
-        <div>
+      <div class="faq_head_mian cursor-pointer transition-all duration-300" @click="toggleParent(index)">
+        <div class="faq_haed">
           <span :class="activeParent === index ? 'text-orange' : 'text-black'">{{ item.swatch.title }}</span>
-        </div>
-        <div :class="['w-3 h-3 transition-transform duration-300', activeParent === index ? 'rotate-90' : '']">
-          <Arrow direction="left" :strokeWidth="22.5" :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
+          <div>
+            <Arrow direction="left" :strokeWidth="22.5" :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
+          </div>
         </div>
       </div>
       <!-- Child Items -->
@@ -18,14 +16,13 @@
         enterFrom="max-h-0 overflow-hidden" enterTo="max-h-screen overflow-hidden"
         leave="transition-all duration-700 ease-out" leaveFrom="max-h-screen overflow-hidden"
         leaveTo="max-h-0 overflow-hidden">
-        <div class="">
-          <div v-for="(child, childIndex) in item.swatch.materials" :key="childIndex"
-            class="border-t cursor-pointer transition-colors hover:bg-gray-100"
+        <div class="inner_faq">
+          <div v-for="(child, childIndex) in item.swatch.materials" :key="childIndex" class="faq_inner_cont"
             @click="openPopup(item, child, childIndex)">
-            <div class="flex items-center justify-between w-full pr-10 md:w-1/3 p-3 pl-6"
+            <div class="inner_faq_head"
               :class="activeChild === childIndex ? 'text-orange' : 'text-black'">
               <span>{{ child.name }}</span>
-              <Arrow direction="left" :strokeWidth="22.5" :fillColor="'currentColor'" />
+              <Arrow :strokeWidth="22.5" :fillColor="'currentColor'" />
             </div>
           </div>
         </div>
@@ -44,29 +41,32 @@
             <div ref="closeMenu" class="flex mx-auto gap-10 py-16 pb-20">
               <!-- Back button -->
               <div class="flex">
-                <button class="mt-2 flex text-black" @click="closePopup">
-                  <Close size="24px" :fillColor="'currentColor'" />
+                <button class="mt-2 flex text-black"  @click="closePopup">
+                  <Arrow size="40px" direction="right" fillColor="#000000" strokeWidth="2px" />
                 </button>
               </div>
               <!-- Content -->
               <div class="text-black font-graphik w-full">
-                <h1 class="text-4xl leading-[55px] text-black">{{ popupTitle }}</h1>
-                <p class="font-MyriadPro leading-[31px] text-[16px]" v-html="popupDescription"></p>
+                <h1 class="popup_title">{{ popupTitle }}</h1>
+                <p class="font-MyriadPro popup_desc" v-html="popupDescription"></p>
                 <!-- Dropdown -->
                 <select v-model="selectedMaterialName" @change="updateSelectedMaterial"
-                  class="text-black my-5 leading-[16px] text-[14px] w-36 rounded-full focus:outline-none focus:ring-0 focus:ring-black">
+                  class="popup_select_box">
                   <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
                     {{ material.name }}
                   </option>
                 </select>
-
                 <!-- Images Grid -->
+                 
                 <div class="image-scrollbar max-h-[350px] overflow-y-auto">
+                 
                   <div class="grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
                       <img :src="$filePath(image.file_url)" :alt="image.name" class="object-cover w-full h-full" />
                     </div>
                   </div>
+              
+                  
                 </div>
 
               </div>
@@ -83,12 +83,401 @@ import { ref, watch } from 'vue'
 import { TransitionRoot, TransitionChild } from '@headlessui/vue'
 import { Arrow, Close } from '../frontend-components/Svg/Icons'
 import { onClickOutside } from '@vueuse/core'
+import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 
 const props = defineProps({
   accordionData: {
     type: Array,
     required: true,
-    default: () => [ { "swatch": { "id": 7, "title": "RopeTek", "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>", "materials": [ { "id": 7, "name": "Mini Ropes", "children": [ { "id": 8, "name": "Breeze", "media_id": 49, "media_data": { "id": 49, "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg" } }, { "id": 9, "name": "Cactus", "media_id": 50, "media_data": { "id": 50, "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg" } }, { "id": 10, "name": "Ruby", "media_id": 51, "media_data": { "id": 51, "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg" } }, { "id": 11, "name": "Bronze", "media_id": 52, "media_data": { "id": 52, "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg" } } ], "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>" } ] } }, { "swatch": { "id": 8, "title": "Lebello Fibers", "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>", "materials": [ { "id": 12, "name": "Peel Fibers", "children": [ { "id": 13, "name": "Beige", "media_id": 53, "media_data": { "id": 53, "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png" } }, { "id": 14, "name": "Curacao", "media_id": 55, "media_data": { "id": 55, "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png" } } ], "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>" } ] } } ]
+    default: () => [
+  {
+    "swatch": {
+      "id": 7,
+      "title": "RopeTek",
+      "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>",
+      "materials": [
+        {
+          "id": 7,
+          "name": "Mini Ropes",
+          "children": [
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            }
+          ],
+          "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>"
+        },   {
+          "id": 7,
+          "name": "Mini Ropes",
+          "children": [
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            }
+          ],
+          "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>"
+        }
+      ]
+    }
+  },
+  {
+    "swatch": {
+      "id": 8,
+      "title": "Lebello Fibers",
+      "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>",
+      "materials": [
+        {
+          "id": 12,
+          "name": "Peel Fibers",
+          "children": [
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 13,
+              "name": "Beige",
+              "media_id": 53,
+              "media_data": {
+                "id": 53,
+                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+              }
+            },
+            {
+              "id": 14,
+              "name": "Curacao",
+              "media_id": 55,
+              "media_data": {
+                "id": 55,
+                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
+              }
+            }
+          ],
+          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
+        }, {
+          "id": 12,
+          "name": "Peel Fibers",
+          "children": [
+            {
+              "id": 13,
+              "name": "Beige",
+              "media_id": 53,
+              "media_data": {
+                "id": 53,
+                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+              }
+            },
+            {
+              "id": 14,
+              "name": "Curacao",
+              "media_id": 55,
+              "media_data": {
+                "id": 55,
+                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
+              }
+            }
+          ],
+          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
+        }
+      ]
+    }
+  },  {
+    "swatch": {
+      "id": 8,
+      "title": "Lebello Fibers",
+      "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>",
+      "materials": [
+        {
+          "id": 12,
+          "name": "Peel Fibers",
+          "children": [
+            {
+              "id": 13,
+              "name": "Beige",
+              "media_id": 53,
+              "media_data": {
+                "id": 53,
+                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+              }
+            },
+            {
+              "id": 14,
+              "name": "Curacao",
+              "media_id": 55,
+              "media_data": {
+                "id": 55,
+                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
+              }
+            }, {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            }
+          ],
+          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
+        }, {
+          "id": 12,
+          "name": "Peel Fibers",
+          "children": [
+            {
+              "id": 13,
+              "name": "Beige",
+              "media_id": 53,
+              "media_data": {
+                "id": 53,
+                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+              }
+            },
+            {
+              "id": 14,
+              "name": "Curacao",
+              "media_id": 55,
+              "media_data": {
+                "id": 55,
+                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
+              }
+            }, {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            }
+          ],
+          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
+        }
+      ]
+    }
+  }
+]
   }
 })
 
