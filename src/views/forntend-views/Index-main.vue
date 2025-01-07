@@ -45,7 +45,7 @@
       </template>
     </Slider>
     <CollectionVideoc :sidebarList="landingPageData?.home_sidebar" />
-    <div v-if="landingPageData"  id="sideText"
+    <div v-if="!loading &&landingPageData"  id="sideText"
       class="block mx-4 lg:mx-7 md:flex md:gap-5 lg:gap-14 lg:mt-5 overflow-x-hidden max-w-[1400px] xl:mx-9 ">
       <div v-for="(data, index) in productdata" :key="index" class="flex m-auto md:w-4/12 bg-[#ddd7ce] mt-10">
         <div @click="index === 1 ? handleModal() : router.push(data.urlLink)"
