@@ -197,8 +197,7 @@
           </div>
         </div>
       </div>
-      
-
+ 
       <!-- <AccordianSection /> -->
       <div class="mx-5 md:mx-10 lg:mx-12  pb-12">
         <StoreAccordion :accordionData="productData?.material_swatche_data" />
