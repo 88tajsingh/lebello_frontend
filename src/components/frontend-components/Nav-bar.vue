@@ -1,16 +1,16 @@
 <template>
-  <nav class="hidden md2:block z-[99999] ">
-    <div class=" mx-auto w-full self-start text-graphik  text-white z-50" :class="{
+  <nav class="hidden md2:block z-[99999]  ">
+    <div class=" mx-auto w-full self-start text-graphik text-white z-50" :class="{
       'absolute  top-0 left-0 bg-transparent': props.absolute,
       'bg-white': !props.absolute
     }">
       <div class="relative z-[9999999] items-center justify-between">
         <!-- Desktop Links -->
-        <div class="   hidden md2:block  mx-auto  " :class="[...extraClass,
+        <div class="   hidden md2:block h-[88px] mx-auto  " :class="[...extraClass,
         props.absolute ? navBackgroundColor : '',
         storePages ? navBackgroundColor : ''
         ]">
-          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-6' : 'pt-6',]" @mouseenter="handleMouseEnter"
+          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-9' : 'pt-9',]" @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave" class="">
             <!-- Logo -->
             <router-link to="/" class=" flex ">
@@ -60,14 +60,19 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-
-import NavigationLinks from './NavigationLinks.vue';
-import SearchSvg from './Svg/Search-Svg.vue';
-import SearchModal from './SearchModal.vue'
-import logoLight from '../../assets/logo/logo.png'
-import logoDark from '../../assets/logo/logo-header4.png'
-import MobileNavbar from './MobileNavbar.vue';
+import { ref, watch, defineAsyncComponent } from 'vue';
+const NavigationLinks = defineAsyncComponent(() =>
+  import('./NavigationLinks.vue')
+);
+const SearchSvg = defineAsyncComponent(() =>
+  import('./Svg/Search-Svg.vue')
+);
+const SearchModal = defineAsyncComponent(() =>
+  import('./SearchModal.vue')
+);
+const MobileNavbar = defineAsyncComponent(() =>
+  import('./MobileNavbar.vue')
+);
 
 const props = defineProps({
   absolute: Boolean,
@@ -86,7 +91,7 @@ const props = defineProps({
   hovrednavColor: {
     type: String,
     required: false,
-    default: '#000000'
+    default: '#ffffff'
   },
   navBackgroundColor: {
     type: String,

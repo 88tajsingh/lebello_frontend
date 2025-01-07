@@ -76,7 +76,6 @@
   </template>
   
   <script setup>
-//   const props = defineProps(['breadcrumbData', 'seprate','color']);
   const props = defineProps({
       breadcrumbData :Array,
       seprate:String,

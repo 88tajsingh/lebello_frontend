@@ -1,11 +1,11 @@
 <template>
-  <div class="flex w-full px-10 pt-1 text-[13px]">
+  <div class="flex w-full px-10 z-[999999] pt-1 text-[13px]">
     <!-- Desktop Navigation -->
     <div class="hidden lg:flex items-center w-full" :class="storePages ? 'justify-start gap-6' : 'justify-between'">
       <div v-for="link in props?.links" :key="link.text" class="relative group" @mouseenter="openMenu(link.text)"
         @mouseleave="closeMenu(link.text)">
         <router-link :to="link.to"
-          class="flex items-center cursor-pointer leading-9 text-[14px]  font-graphik"
+          class="flex items-center cursor-pointer py-1 pb-2  leading-9 text-[14px]  font-graphik"
           :class="storePages ? 'gap-2' : 'lg:gap-2 xl:gap-3'"
           :style="{ color: props?.navColor }">
           <span>{{ link.text }} </span>

@@ -1,6 +1,6 @@
 <template>
   <div class="relative min-h-screen">
-    <NavBar :absolute="true" :storePages="true" :extraClass="['px-20']" :navColor="'#ffffff'" />
+    <NavBar :absolute="true" :storePages="true" :extraClass="['px-20']" :navColor="'#000000'" />
     <!-- right logo -->
     <div class="absolute z-[999] top-16 right-0">
       <img src="@/assets/logo/lebello-logo-right.png" alt="Lebello Logo">
