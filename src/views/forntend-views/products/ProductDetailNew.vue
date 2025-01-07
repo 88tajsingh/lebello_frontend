@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-hidden">
+  <div v-if="!loading" class="overflow-hidden">
     <div class="relative overflow-hidden">
       <NavBar :absolute="true" :navColor="'#000000'" navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000"/>
       <SwiperSlider :images="imageData" imageKeyName="gallery">
@@ -72,14 +72,12 @@
             allowFullScreen className="absolute z-[9999] aspect-ratio top-0 left-0 w-full h-full border-none"
             frameborder="0" scrolling="no" />
         </div>
-
         <div className="text-black flex flex-col pb-14 w-full h-full pl-4 md:pl-14 lg:w-4/6">
           <div>
             <h1 className="text-[21px] leading-[60px] lg:leading-[92px] text-[#333333] font-medium font-graphik">
               3D CONFIGURATOR
             </h1>
           </div>
-
           <div>
             <div>
               <h2 className="text-[16px]  text-[#000000] font-medium font-graphik">Recommended Configuration</h2>
@@ -96,24 +94,19 @@
               </select>
             </div>
           </div>
-
           <div class="mt-10 sm:mt-[70px] md:mt-[130px] lg:mt-[170px] h-full flex gap-4 md:items-end md:flex-row">
             <button @click="handleStoreClick"
               class="text-[#333333] opacity-[0.400] text-[10px] font-light leading-7 font-[Graphik] border border-black h-[27px] w-[133px] rounded-full hover:text-[#9E7339]">
               ENQUIRE/EMAIL
             </button>
-
             <button @click="handleStoreClick"
               class="bg-[#B88746] uppercase text-[10px] font-light leading-7 text-white font-[Graphik] hover:bg-[#9E7339] h-[27px] px-2 rounded-full w-[133px]">
               save configuration
             </button>
-
           </div>
         </div>
       </div>
-
     </div>
-
     <div class="bg-[#f3f3f3]">
       <section class="">
         <div class="grid sm:grid-cols-1 md:grid-cols-2 md:gap-4">
@@ -197,7 +190,6 @@
           </div>
         </div>
       </div>
- 
       <!-- <AccordianSection /> -->
       <div class="mx-5 md:mx-10 lg:mx-12  pb-12">
         <StoreAccordion :accordionData="productData?.material_swatche_data" />
@@ -208,17 +200,17 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed,defineAsyncComponent } from 'vue'
 import { onClickOutside } from '@vueuse/core'
-import SideMenu from '@/components/frontend-components/Side-Menu.vue'
-import SwiperSlider from '@/components/frontend-components/SwiperSlider.vue'
-import Icon, { Menu, Search } from '@/components/frontend-components/Svg/Icons'
-import NavBar from '@/components/frontend-components/Nav-bar.vue'
-import Slider from '@/components/frontend-components/Slider.vue'
-import StoreAccordion from '@/components/store-components/StoreAccordion.vue'
-import FooterSection from '@/components/frontend-components/Footer-section.vue'
 import { getLandingPageData, getProductDetail } from '@/helper/frontendHelpers'
 import { useRouter } from 'vue-router'
+const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
+const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'))
+const Icon = defineAsyncComponent(() => import('@/components/frontend-components/Svg/Icons'))
+const NavBar = defineAsyncComponent(() => import('@/components/frontend-components/Nav-bar.vue'))
+const StoreAccordion = defineAsyncComponent(() => import('@/components/store-components/StoreAccordion.vue'))
+const FooterSection = defineAsyncComponent(() => import('@/components/frontend-components/Footer-section.vue'))
+
 
 const products = ref([
   {
@@ -262,6 +254,7 @@ const email = ref('')
 const productData = ref([])
 const productTypes = ref([])
 const navColor = ref('#000000')
+const loading = ref(false)
 const slug = ref(router.currentRoute.value?.params?.slug);
 if (!slug.value) slug.value = '4l-pixie-arms-chair';
 const handleLandingPageData = async () => {
@@ -273,17 +266,27 @@ const handleLandingPageData = async () => {
 }
 
 const handleProductDetailData = async () => {
-  const res = await getProductDetail(slug.value)
-  if (res.status === 200 && res.data.success) {
-    productData.value = res.data.data.product_data[0];
-    productTypes.value = res.data.data?.product_types;
+  try {
+    loading.value = true
+    const res = await getProductDetail(slug.value)
+    if (res.status === 200 && res.data.success) {
+      productData.value = res.data.data.product_data[0];
+      productTypes.value = res.data.data?.product_types;
 
-    console.log('productData', productData.value)
-    console.log('productTypes', productTypes.value)
+      console.log('productData', productData.value)
+      console.log('productTypes', productTypes.value)
+    } else {
+      router.push('/products')
+    }
+  } catch (error) {
+    console.error('Error fetching product details:', error)
+    // router.push('/error') // Redirect to an error page or handle it accordingly
+  } finally {
+    loading.value = false
+    console.log('Product detail data fetch attempt complete')
   }
-  else
-    router.push('/products')
 }
+
 
 const imageData = computed(() => {
   return productData.value.gallery_urls?.map(item => ({

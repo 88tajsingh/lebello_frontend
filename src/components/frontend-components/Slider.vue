@@ -59,9 +59,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, defineProps, computed } from 'vue';
-import SideMenu from './Side-Menu.vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { scrollDown } from '@/helper/frontendHelpers';
+import SideMenu from './Side-Menu.vue';
 import ArrowSvg from './Svg/Arrow-Svg.vue';
 
 const currentIndex = ref(0);

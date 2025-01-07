@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps,watch } from 'vue';
+import { ref,watch } from 'vue';
 import { onClickOutside } from '@vueuse/core';
 import MenuSvg from './Svg/Menu-Svg.vue';
 
