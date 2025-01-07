@@ -242,12 +242,13 @@
             <FooterSection />
         </div>
 
-
+<StoreAccordion/>
     </div>
 </template>
 
 <script setup>
 import NavBar from "@/components/frontend-components/Nav-bar.vue";
+import StoreAccordion from "@/components/store-components/StoreAccordion.vue";
 import FooterSection from "@/components/frontend-components/Footer-section.vue";
 import { Arrow, Menu, Facebook, Twitter, Search, Houzz, Pinterest, Instagram } from "@/components/frontend-components/Svg/Icons";
 import LogoSection from "@/components/frontend-components/Logo-section.vue";

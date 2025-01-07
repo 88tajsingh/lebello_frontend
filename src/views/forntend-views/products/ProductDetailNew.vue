@@ -1,26 +1,24 @@
 <template>
   <div class="overflow-hidden">
-    <div>
-      <NavBar :absolute="true" :navColor="'#000000'" />
-      <Slider :images="imageData" imageKeyName="gallery" :disableSideText="true" :navColor="'white'"
-        sliderPageName="homeSlider" :hasSidebar="true" @updateNavColor="updateNavColor">
+    <div class="relative overflow-hidden">
+      <NavBar :absolute="true" :navColor="'#000000'" navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000"/>
+      <SwiperSlider :images="imageData" imageKeyName="gallery">
         <template #utility>
           <!-- lebellow icon right top -->
           <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
             <img src="/src/assets/logo/lebello-logo-right.png" />
           </a>
           <!-- text left bottom -->
-          <div class="absolute bottom-10 mx-auto left-6 sm:left-14 md:left-20" :class="[
-            'absolute transition-all duration-1000 ease-in-out',
-            { 'bottom-10': !atBottom, 'bottom-10': atBottom }
-          ]">
-            <div class="capitalize opacity-80 text-[#686868] font-graphik sm:text-[20px] md2:text-[40px]">
-              {{ productData?.title }}
-            </div>
-          </div>
+          <span class="slider_text">
+            <h1> {{ productData?.title }}
+            </h1>
+          </span>
         </template>
-        <template #sidebar>
-          <div class="z-50">
+      </SwiperSlider>
+      <div class="absolute top-48 right-0" >
+      <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]" height=""
+      :closeSidebar ="closeSidebar" >
+      <div class="z-50">
             <div class="flex items-center">
               <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
                 <Menu size="15px" fillColor="#000000" />
@@ -51,15 +49,16 @@
               </li>
             </ul>
           </div>
-        </template>
-      </Slider>
+      </SideMenu>
+      </div>
+      
     </div>
     <div id="sideText" class="bg-white">
       <!-- Breadcrumb -->
-       
+
       <nav class="py-5 text-[16px] leading-[39px] text-black font-graphik">
         <div class="flex items-center gap-2 ml-16">
-          <span class="text-gray-600 font-medium">Collection</span>
+          <span class=" font-medium">Collection</span>
           <!-- Heroicon: ChevronRight -->
           /
           <span class="text-yellow-600 font-medium">{{ productData?.title }}</span>
@@ -69,9 +68,9 @@
       <div className="grid grid-cols-1 lg:flex lg:justify-between w-full">
         <div
           className="relative aspect-square w-screen overflow-auto h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] bg-gray-100 overflow-y-hidden">
-          <iframe src="/src/assets/lebello/Tubo Sofa Low_Conf_2/Tubo Sofa Low_Conf_2_Product_detail.html" allowFullScreen
-            className="absolute z-[9999] aspect-ratio top-0 left-0 w-full h-full border-none" frameborder="0"
-            scrolling="no" />
+          <iframe src="/src/assets/lebello/Tubo Sofa Low_Conf_2/Tubo Sofa Low_Conf_2_Product_detail.html"
+            allowFullScreen className="absolute z-[9999] aspect-ratio top-0 left-0 w-full h-full border-none"
+            frameborder="0" scrolling="no" />
         </div>
 
         <div className="text-black flex flex-col pb-14 w-full h-full pl-4 md:pl-14 lg:w-4/6">
@@ -84,9 +83,11 @@
           <div>
             <div>
               <h2 className="text-[16px]  text-[#000000] font-medium font-graphik">Recommended Configuration</h2>
-              <p className="text-[16px] text-[#000000] font-light font-graphikLight mb-3">Please select the configuration</p>
+              <p className="text-[16px] text-[#000000] font-light font-graphikLight mb-3">Please select the
+                configuration
+              </p>
             </div>
-            <div className="relative">  
+            <div className="relative">
               <select v-model="configuration" id="configuration"
                 class="w-[228px] h-[46px]  rounded-[6px] text-[14px] p-2">
                 <option value="1">Configuration 1</option>
@@ -119,14 +120,15 @@
           <div class="lg:px-11  ">
             <div class="mx-4 md:mx-12 lg:mx-6 font-graphikLight">
               <h2 class="text-[26px] md:text-[25px] leading-[84px] text-[#333333] font-light font-graphik">
-               {{ productData?.title }}
+                {{ productData?.title }}
               </h2>
               <p v-html="productData?.description"
                 class="text-[#555555] text-[16px] leading-[26px] font-light font-graphik sm:text-[15px] md:text-[15px] lg:text-[16px]">
-              
+
               </p>
-              <span class="inline-flex my-10 text-[#333333] leading-[21px] hover:text-orange" :class="{ 'text-orange': addiVisible }"
-                @click="HandleAdditionalInfo" @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#33333')">
+              <span class="inline-flex my-10 text-[#333333] leading-[21px] hover:text-orange"
+                :class="{ 'text-orange': addiVisible }" @click="HandleAdditionalInfo"
+                @mouseenter="setAddiColor('#000000')" @mouseleave="setAddiColor('#33333')">
                 <span class="uppercase cursor-pointer font-graphikMedium text-[13px] leading-[21px] font-medium">
                   INSPIRATIONAL SCENE
                 </span>
@@ -164,12 +166,11 @@
       </transition>
 
       <transition>
-        <div ref="scrollTOadditiona" v-show="addiVisible"
-          class="container-fluid mt-1 h-[450px]  p-0"
+        <div ref="scrollTOadditiona" v-show="addiVisible" class="container-fluid mt-1 h-[450px]  p-0"
           :style="{ backgroundImage: 'url(' + $filePath(productData?.new_product_additional_bg_image_url?.file_url) + ')' }">
           <div class="py-10 m-0 relative px-14 md:w-1/2 font-light text-left text-white bg-orange">
             <p id="directTO" class="font-graphikLight sm:text-[20px] md:text-[24px] lg:text-[27px] leading-9">
-             {{ productData?.new_product_additional_info }}
+              {{ productData?.new_product_additional_info }}
             </p>
             <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
               <Icon.Close size="20px" fillColor="#ffffff" />
@@ -179,21 +180,24 @@
       </transition>
 
       <div class="flex justify-between uppercase">
-  <div class="ml-5 md:ml-16 md:flex self-center">
-    <div class="flex items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium "
-      @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
-      Materials
-    </div>
+        <div class="ml-5 md:ml-16 md:flex self-center">
+          <div
+            class="flex items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium "
+            @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
+            Materials
+          </div>
 
-    <div class="md:flex md:items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium md:ml-20 hover:text-orange"
-      @mouseenter="setArrowFillColor2('#3399ff')" @mouseleave="setArrowFillColor2('#4dc45c')">
-      <!-- {{ productData.downloadable_files_url[0].file_url}} -->
-      <a class="underline font-graphikMedium text-[16px]" target="_blank"
-        blank :href="$filePath(productData?.downloadable_files_url && productData?.downloadable_files_url[0]?.file_url) ">Download Cut Sheet</a>
-    </div>
-  </div>
-</div>
-
+          <div
+            class="md:flex md:items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium md:ml-20 hover:text-orange"
+            @mouseenter="setArrowFillColor2('#3399ff')" @mouseleave="setArrowFillColor2('#4dc45c')">
+            <!-- {{ productData.downloadable_files_url[0].file_url}} -->
+            <a class="underline font-graphikMedium text-[16px]" target="_blank" blank
+              :href="$filePath(productData?.downloadable_files_url && productData?.downloadable_files_url[0]?.file_url)">Download
+              Cut Sheet</a>
+          </div>
+        </div>
+      </div>
+      
 
       <!-- <AccordianSection /> -->
       <div class="mx-5 md:mx-10 lg:mx-12  pb-12">
@@ -205,14 +209,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted,computed  } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { onClickOutside } from '@vueuse/core'
+import SideMenu from '@/components/frontend-components/Side-Menu.vue'
+import SwiperSlider from '@/components/frontend-components/SwiperSlider.vue'
 import Icon, { Menu, Search } from '@/components/frontend-components/Svg/Icons'
 import NavBar from '@/components/frontend-components/Nav-bar.vue'
 import Slider from '@/components/frontend-components/Slider.vue'
 import StoreAccordion from '@/components/store-components/StoreAccordion.vue'
 import FooterSection from '@/components/frontend-components/Footer-section.vue'
-import { getLandingPageData,getProductDetail } from '@/helper/frontendHelpers'
+import { getLandingPageData, getProductDetail } from '@/helper/frontendHelpers'
 import { useRouter } from 'vue-router'
 
 const products = ref([
@@ -258,7 +264,7 @@ const productData = ref([])
 const productTypes = ref([])
 const navColor = ref('#000000')
 const slug = ref(router.currentRoute.value?.params?.slug);
-if(!slug.value) slug.value = '4l-pixie-arms-chair'; 
+if (!slug.value) slug.value = '4l-pixie-arms-chair';
 const handleLandingPageData = async () => {
   const res = await getLandingPageData()
   console.log('getLandingPageData', res.data.data.home_slider)
@@ -277,7 +283,7 @@ const handleProductDetailData = async () => {
     console.log('productTypes', productTypes.value)
   }
   else
-  router.push('/products')
+    router.push('/products')
 }
 
 const imageData = computed(() => {
@@ -287,11 +293,11 @@ const imageData = computed(() => {
 });
 
 const handleSearch = (event) => {
-  if (event) event.preventDefault(); 
+  if (event) event.preventDefault();
   if (search.value.trim() !== '') {
     console.log('Searching for:', search.value);
     router.push({ name: 'search', query: { search: search.value } });
-    search.value = ''; 
+    search.value = '';
   } else {
     console.log('Search query is empty!');
   }
@@ -375,11 +381,28 @@ const toggleVisibility = () => {
 <style scoped>
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 1s ease;
-}
+transition: opacity 1s ease;
+}   
 
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+.slider_text {
+  position: absolute;
+  z-index: 999;
+  display: inline-block;
+  bottom: 0;
+  left: 104px;
+}
+
+.slider_text h1 {
+  font-size: 40px;
+  display: inline-block;
+  line-height: 113px;
+  color: #ffffff;
+  font-weight: 400;
+  font-family: "PT Serif";
 }
 </style>

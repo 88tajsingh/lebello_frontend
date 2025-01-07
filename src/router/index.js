@@ -11,14 +11,15 @@ const  routes = [
 
   },
   {
-    path: '/productDetailNew/',
+    path: '/productDetailNew',
     name: 'productDetailNew',
     component: () => import('../views/forntend-views/products/ProductDetailNew.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
+  
   {
     path: '/productDetailNew2',
-    name: 'productDetailNew',
+    name: 'product-DetailNew2',
     component: () => import('../views/forntend-views/products/NewProductPage.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
@@ -590,6 +591,7 @@ const publicPaths = [
   '/forget-password',
   '/register',
   '/', 
+  '/productDetailNew',
   '/swatches',
   '/products',
   '/contract_location',
@@ -606,7 +608,7 @@ const publicPaths = [
 
 router.beforeEach((to, from, next) => {
   if(to.meta.title) document.title = to.meta.title;
-
+  console.log("to", to);
   const token = store?.getters?.token || localStorage.getItem('token');
   const allowedPaths = store.getters.user?.modules?.route || [];
   const isAuthenticatedUser = isAuthenticated(token);

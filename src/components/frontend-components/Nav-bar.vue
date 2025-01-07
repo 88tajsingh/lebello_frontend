@@ -7,8 +7,8 @@
       <div class="relative z-[9999999] items-center justify-between">
         <!-- Desktop Links -->
         <div class="   hidden md2:block  mx-auto  " :class="[...extraClass,
-        props.absolute ? 'hover:bg-[#0e0e0e89] bg-opacity-5' : '',
-        storePages ? 'bg-[#0e0e0e89] bg-opacity-5' : ''
+        props.absolute ? navBackgroundColor : '',
+        storePages ? navBackgroundColor : ''
         ]">
           <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-6' : 'pt-6',]" @mouseenter="handleMouseEnter"
             @mouseleave="handleMouseLeave" class="">
@@ -83,6 +83,16 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  hovrednavColor: {
+    type: String,
+    required: false,
+    default: '#000000'
+  },
+  navBackgroundColor: {
+    type: String,
+    default: 'hover:bg-[#0e0e0e89] bg-opacity-5'
+  },
+
 });
 
 const navbarColor = ref(props.absolute === false ? '#000000' : props?.navColor);
@@ -105,7 +115,7 @@ watch(
 
 const handleMouseEnter = () => {
   hoverd.value = true;
-  navbarColor.value = props.absolute === false ? '#000000' : '#ffffff';
+  navbarColor.value = props?.hovrednavColor ? props?.hovrednavColor : props.absolute === false ? '#000000' : '#ffffff';
 }
 
 const handleMouseLeave = () => {
@@ -196,7 +206,7 @@ const lebello = [
     ]
   },
   {
-    to: 'contract_type/scqasdc',
+    to: '/contract_type',
     text: 'CONTRACT',
     sublinks: [
       { text: "Hotels Restaurants", to: "contract_type/scqasdc" },
