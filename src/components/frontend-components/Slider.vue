@@ -7,7 +7,7 @@
           v-show="currentIndex === index">
           
           <img :src="$filePath(slide[props.imageKeyName]?.file_url)"
-            class="block absolute top-1/2 left-1/2 w-full h-screen -translate-x-1/2 -translate-y-1/2"
+            class=" h-full w-full object-cover "
             :alt="slide[props.imageKeyName]?.file_url" />
           <!-- Navigation Buttons -->
 
@@ -59,9 +59,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, defineProps, computed } from 'vue';
-import SideMenu from './Side-Menu.vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { scrollDown } from '@/helper/frontendHelpers';
+import SideMenu from './Side-Menu.vue';
 import ArrowSvg from './Svg/Arrow-Svg.vue';
 
 const currentIndex = ref(0);
