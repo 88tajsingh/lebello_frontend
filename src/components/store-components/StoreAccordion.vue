@@ -31,12 +31,12 @@
     <!-- Popup/Drawer -->
     <TransitionRoot as="template" :show="showPopup" enter="transition-opacity duration-1000" enterFrom="opacity-0"
       enterTo="opacity-100" leave="transition-opacity duration-1000" leaveFrom="opacity-100" leaveTo="opacity-100">
-      <div class="fixed inset-0 px-10 bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
+      <div class="gallery_popup_main fixed inset-0 px-10 bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
         <TransitionChild as="template" enter="transition transform duration-1500 ease-in-out"
           enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out"
           leaveFrom="translate-x-0" leaveTo="translate-x-full">
           <div v-if="showPopup"
-            class="popup_gallery_cont absolute top-0 bottom-0 right-0 bg-white shadow-xl w-full md:w-2/3 lg:w-4/6 z-50"
+            class="popup_gallery_cont absolute top-0 bottom-0 right-0 bg-white"
             @click.stop>
             <div ref="closeMenu" class="flex mx-auto">
               <!-- Back button -->
@@ -46,7 +46,7 @@
                 </button>
               </div>
               <!-- Content -->
-              <div class="text-black font-graphik w-full">
+              <div class="text-black font-graphik w-full gallery_popup_imgs">
                 <h1 class="popup_title">{{ popupTitle }}</h1>
                 <p class="font-MyriadPro popup_desc" v-html="popupDescription"></p>
                 <!-- Dropdown -->
@@ -58,9 +58,9 @@
                 </select>
                 <!-- Images Grid -->
                  
-                <div class="image-scrollbar max-h-[350px] overflow-y-auto">
+                <div class="gallery_images_height image-scrollbar overflow-y-auto">
                  
-                  <div class="grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                  <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
                       <img :src="$filePath(image.file_url)" :alt="image.name" class="object-cover w-full h-full" />
                     </div>
