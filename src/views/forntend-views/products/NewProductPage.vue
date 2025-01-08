@@ -48,7 +48,8 @@
       frameborder="0"
       scrolling="no"
     />
-    <button v-if="!isIframeVisible" @click="toggleIframe">
+    <!-- @click="toggleIframe" -->
+    <button v-if="!isIframeVisible">
       <img src="../../../assets/images/product/3D Icon.png" alt="" />
     </button>
   </div>
