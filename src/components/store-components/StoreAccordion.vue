@@ -36,13 +36,13 @@
           enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out"
           leaveFrom="translate-x-0" leaveTo="translate-x-full">
           <div v-if="showPopup"
-            class="absolute px-24 pl-10 top-0 bottom-0 right-0 bg-white shadow-xl w-full md:w-2/3 lg:w-4/6 z-50"
+            class="popup_gallery_cont absolute top-0 bottom-0 right-0 bg-white shadow-xl w-full md:w-2/3 lg:w-4/6 z-50"
             @click.stop>
-            <div ref="closeMenu" class="flex mx-auto gap-10 py-16 pb-20">
+            <div ref="closeMenu" class="flex mx-auto">
               <!-- Back button -->
               <div class="flex">
                 <button class="mt-2 flex text-black"  @click="closePopup">
-                  <Arrow size="40px" direction="right" fillColor="#000000" strokeWidth="2px" />
+                  <Arrow size="40px" direction="right" fillColor="#000000" strokeWidth="1px" />
                 </button>
               </div>
               <!-- Content -->

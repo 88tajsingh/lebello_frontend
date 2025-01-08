@@ -532,7 +532,22 @@ p.popup_desc {
     }
 }
 
-@media(max-width:1339px){
+@media(max-width:1599px){
+    .product_inner_cont p {
+        max-width: 506px;
+        font-size: 18px;
+        line-height: 30px;
+    }
+    .product_inner_cont button {
+        margin-top: 44px;
+    }
+    .threed_inner_main .threed_cont {
+        max-width: 510px;
+        padding: 30px 60px 72px;
+    }
+}
+
+@media(max-width:1399px){
     .slider_text h1 {
         font-size: 40px;
         line-height: 40px;
