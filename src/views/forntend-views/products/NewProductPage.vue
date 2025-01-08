@@ -121,22 +121,21 @@
   </section>
 </template>
 <script setup>
+import { ref,defineAsyncComponent} from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import 'swiper/css/effect-fade'
-import 'swiper/css'
+import { Navigation } from 'swiper/modules'
 import { Arrow } from '@/components/frontend-components/Svg/Icons'
 import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
 import 'swiper/css/navigation'
-import { Navigation } from 'swiper/modules'
-import { ref,defineAsyncComponent  } from 'vue'
-
+import 'swiper/css/effect-fade'
+import 'swiper/css'
 const StoreAccordion = defineAsyncComponent(() =>
   import('@/components/store-components/StoreAccordion.vue')
 )
 
-const isVisible = ref(false) // Initially hidden
+const isVisible = ref(false) 
 const isIframeVisible = ref(false);
 
 const toggleVisibility = () => {
