@@ -465,11 +465,14 @@ p.popup_desc {
     margin-top: 0px;
 }
 .popup_gallery_cont button {
-    margin-top: 10px;
+    margin-top: 6px;
 }
 .gallery_images_height {
     height: 50vh;
 }
+.gallery_images_height::-webkit-scrollbar {
+    width: 10px;
+  }
 
 /* media css start */
 @media (max-width: 1879px) {
@@ -740,10 +743,10 @@ p.popup_desc {
     margin-bottom: 34px;
 }
 .popup_gallery_cont svg.icon {
-    height: 22px;
+    height: 28px;
 }
 .popup_gallery_cont button {
-    margin-top: 12px;
+    margin-top: 8px;
 }
 .gallery_images_height {
     height: 60vh;
