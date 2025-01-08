@@ -57,7 +57,9 @@
 <section class="three_d_section_main">
     <div class="threed_inner_main">
         <div class="threed_img">
-            <iframe src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html" allowFullScreen frameborder="0" scrolling="no" />
+            <img src="../../../assets/images/product/lebello-3d-image.png" alt="">
+            <button><img src="../../../assets/images/product/3D Icon.png" alt=""></button>
+            <!-- <iframe src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html" allowFullScreen frameborder="0" scrolling="no" /> -->
         </div>
         <div class="threed_cont">
             <div class="product_top_cont">
@@ -193,6 +195,7 @@ button.slider_arrow.custom-next {
 .threed_inner_main .threed_img {
     width: 100%;
     max-width: 1202px;
+    position: relative;
 }
 .threed_inner_main .threed_img iframe {
     width: 100%;
@@ -400,6 +403,15 @@ p.popup_desc {
     color: #000000;
     margin-top: 10px;
 }
+.threed_inner_main .threed_img button {
+    position: absolute;
+    top: 16px;
+    right: 14px;
+    cursor: pointer;
+}
+.threed_inner_main .threed_img button img {
+    max-width: 36px;
+}
 
 /* media css start */
 @media(max-width:1879px){
@@ -520,7 +532,7 @@ p.popup_desc {
     }
 }
 
-@media(max-width:1499px){
+@media(max-width:1339px){
     .slider_text h1 {
         font-size: 40px;
         line-height: 40px;

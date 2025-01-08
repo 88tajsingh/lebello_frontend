@@ -93,13 +93,85 @@ const props = defineProps({
   {
     "swatch": {
       "id": 7,
-      "title": "RopeTek",
-      "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>",
+      "title": "SurfaceTex",
+      "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy</p>",
       "materials": [
         {
           "id": 7,
-          "name": "Mini Ropes",
+          "name": "Gafasa G4",
           "children": [
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
             {
               "id": 8,
               "name": "Breeze",
@@ -176,8 +248,312 @@ const props = defineProps({
           "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>"
         },   {
           "id": 7,
-          "name": "Mini Ropes",
+          "name": "Structures G4",
           "children": [
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            }
+          ],
+          "description": `Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.`
+        }
+      ]
+    }
+  },
+  {
+    "swatch": {
+      "id": 8,
+      "title": "Aqua Weave G4",
+      "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy</p>",
+      "materials": [
+        {
+          "id": 7,
+          "name": "Gafasa G4",
+          "children": [
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
             {
               "id": 8,
               "name": "Breeze",
@@ -252,19 +628,9 @@ const props = defineProps({
             }
           ],
           "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>"
-        }
-      ]
-    }
-  },
-  {
-    "swatch": {
-      "id": 8,
-      "title": "Lebello Fibers",
-      "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>",
-      "materials": [
-        {
-          "id": 12,
-          "name": "Peel Fibers",
+        },   {
+          "id": 7,
+          "name": "Structures G4",
           "children": [
             {
               "id": 8,
@@ -303,80 +669,237 @@ const props = defineProps({
               }
             },
             {
-              "id": 13,
-              "name": "Beige",
-              "media_id": 53,
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
               "media_data": {
-                "id": 53,
-                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
               }
             },
             {
-              "id": 14,
-              "name": "Curacao",
-              "media_id": 55,
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
               "media_data": {
-                "id": 55,
-                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
-              }
-            }
-          ],
-          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
-        }, {
-          "id": 12,
-          "name": "Peel Fibers",
-          "children": [
-            {
-              "id": 13,
-              "name": "Beige",
-              "media_id": 53,
-              "media_data": {
-                "id": 53,
-                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
               }
             },
             {
-              "id": 14,
-              "name": "Curacao",
-              "media_id": 55,
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
               "media_data": {
-                "id": 55,
-                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
               }
             }
           ],
-          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
+          "description": `Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.`
         }
       ]
     }
   },  {
     "swatch": {
       "id": 8,
-      "title": "Lebello Fibers",
-      "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>",
+      "title": "Colored Surfaces",
+      "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy</p>",
       "materials": [
         {
-          "id": 12,
-          "name": "Peel Fibers",
+          "id": 7,
+          "name": "Gafasa G4",
           "children": [
             {
-              "id": 13,
-              "name": "Beige",
-              "media_id": 53,
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
               "media_data": {
-                "id": 53,
-                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
               }
             },
             {
-              "id": 14,
-              "name": "Curacao",
-              "media_id": 55,
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
               "media_data": {
-                "id": 55,
-                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
               }
-            }, {
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
               "id": 8,
               "name": "Breeze",
               "media_id": 49,
@@ -413,29 +936,120 @@ const props = defineProps({
               }
             }
           ],
-          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
-        }, {
-          "id": 12,
-          "name": "Peel Fibers",
+          "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.</p>\n<p>&lt;strong&gt;Composition:&lt;/strong&gt; 100% Polyolefin<br>Made in Italy</p>"
+        },   {
+          "id": 7,
+          "name": "Structures G4",
           "children": [
             {
-              "id": 13,
-              "name": "Beige",
-              "media_id": 53,
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
               "media_data": {
-                "id": 53,
-                "file_url": "materials/peel fiber/Beige-peel-fibre-185x185-185X185.png"
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
               }
             },
             {
-              "id": 14,
-              "name": "Curacao",
-              "media_id": 55,
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
               "media_data": {
-                "id": 55,
-                "file_url": "materials/peel fiber/Curacao-peel-fibre-185x185-185X185.png"
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
               }
-            }, {
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
+              "id": 8,
+              "name": "Breeze",
+              "media_id": 49,
+              "media_data": {
+                "id": 49,
+                "file_url": "materials/mini ropes/lebello_breeze-75x75.jpg"
+              }
+            },
+            {
+              "id": 9,
+              "name": "Cactus",
+              "media_id": 50,
+              "media_data": {
+                "id": 50,
+                "file_url": "materials/mini ropes/Cactus-g3-2-150x150.jpeg"
+              }
+            },
+            {
+              "id": 10,
+              "name": "Ruby",
+              "media_id": 51,
+              "media_data": {
+                "id": 51,
+                "file_url": "materials/mini ropes/lebello-ruby-75x75.jpg"
+              }
+            },
+            {
+              "id": 11,
+              "name": "Bronze",
+              "media_id": 52,
+              "media_data": {
+                "id": 52,
+                "file_url": "materials/mini ropes/lebello_bronze-75x75.jpg"
+              }
+            },
+            {
               "id": 8,
               "name": "Breeze",
               "media_id": 49,
@@ -472,7 +1086,7 @@ const props = defineProps({
               }
             }
           ],
-          "description": "<p>Our outdoor materials are made from HDPE - High Density Polyethylene synthetic fibers. The material has a high UV and weather resistants. The fibers are characterized by there durability and performance during temperature fluctuations. Resistant to pool water, sea salt, and changes in climate with a high tensile strength of &amp;gt; 230 kg/cm2. Easy maintenance and free of toxins that is 100% recyclable and friendly on the environment. Our products can be left outside all year round and is able to withstand temperatures from -20&deg;C to +55&deg;C. We offer two types of material sizes Round and Peel Fibers. Please refer to the color chart to view the available product options. Fibers exceed ISO 4892-2 Compliance. Our Fibers are 100% recyclable and are non-toxic to the environment.</p>"
+          "description": `Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity.`
         }
       ]
     }
