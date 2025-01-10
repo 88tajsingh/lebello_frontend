@@ -60,6 +60,10 @@ defineProps({
 .breadcrem_section {
   padding: 38px 0px;
 }
+.breadcrem_text ul li {
+    display: flex;
+    column-gap: 10px;
+}
 
 @media (max-width: 1699px) {
   .breadcrem_section {
@@ -75,5 +79,31 @@ defineProps({
     font-size: 16px;
     line-height: 18px;
   }
+}
+
+@media(max-width:1199px){
+  .product_container {
+    padding: 0px 52px;
+}
+}
+
+@media(max-width:991px){
+  .product_container {
+    padding: 0px 32px;
+}
+
+}
+
+@media(max-width:574px){
+  .breadcrem_section {
+    padding: 22px 0px;
+}
+.product_container {
+    padding: 0px 22px;
+}
+.breadcrem_text ul li[data-v-1680cfa2] {
+    font-size: 14px;
+    line-height: 14px;
+}
 }
 </style>
