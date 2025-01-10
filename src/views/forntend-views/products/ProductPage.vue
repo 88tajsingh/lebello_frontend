@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <NavBar :absolute="false" background="red" />
+    <NavBar :absolute="false" navColor="#000000"  hovrednavColor="#000000" />
     <img class="absolute top-8 right-0 mx-auto"
       src="/src/assets/logo/logohori.png" />
     <!-- side menu  -->

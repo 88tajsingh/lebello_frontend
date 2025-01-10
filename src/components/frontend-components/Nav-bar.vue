@@ -4,19 +4,19 @@
       'absolute  top-0 left-0 bg-transparent': props.absolute,
       'bg-white': !props.absolute
     }">
-      <div class="relative z-[9999999] items-center justify-between">
+      <div class="relative z-[9999999]  items-center justify-between">
         <!-- Desktop Links -->
         <div class="   hidden md2:block h-[88px] mx-auto  " :class="[...extraClass,
         props.absolute ? navBackgroundColor : '',
         storePages ? navBackgroundColor : ''
         ]">
-          <div :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-9' : 'pt-9',]" @mouseenter="handleMouseEnter"
-            @mouseleave="handleMouseLeave" class="">
+          <div class="" :class="['flex', 'mt-auto', 'mb-0', props.absolute ? 'pt-9' : 'pt-9 border-b  border-[#aaaaaa]',]" @mouseenter="handleMouseEnter"
+            @mouseleave="handleMouseLeave">
             <!-- Logo -->
             <router-link to="/" class=" flex ">
               <!-- <img class="h-8 w-52" :src="navbarColor === '#ffffff' ? logoLight : logoDark" alt="Lebello-global" /> -->
               <div class="text-[15px] w-[160px] leading-[15px] font-helvetica text-left "
-                :style="{ color: navbarColor }">
+                :style="{ color:-hovrednavColor? hovrednavColor : navbarColor }">
                 Forever<br>
                 Summer Collection™
               </div>
