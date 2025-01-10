@@ -6,13 +6,14 @@
         <swiper-slide v-for="(slide, index) in images" :key="index">
           <div class="product_slide">
             <div class="slider_img h-screen w-full">
-              <img :src="$filePath(slide[props.imageKeyName]?.file_url)" :alt="slide[props?.imageKeyName]?.file_url" class="h-full w-full object-cover " />
+              <div v-if="loading" class="absolute inset-0 bg-gray-4 animate-pulse"></div>
+              <img loading="lazy" :src="$filePath(slide[props.imageKeyName]?.file_url)" :alt="slide[props?.imageKeyName]?.file_url" class="h-full w-full object-cover "  @load="handleImageLoad"/>
             </div>
-            <!-- <div class="absolute bottom-0 z-[999] w-full px-[124px] pb-[60px]">
+            <div class="absolute bottom-0 z-[999] w-full px-[124px] pb-[60px]">
               <h1 class="text-white font-ptSerif text-[60px] leading-[74px] font-normal">
                 {{ slide?.title }}
               </h1>
-            </div> -->
+            </div>
           </div>
         </swiper-slide>
       </swiper>
@@ -28,6 +29,7 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -40,7 +42,11 @@ import image2 from "@/assets/images/product/lebello_tubo_sofa_outdoor.jpg";
 import image3 from "@/assets/images/product/lebello-tubo-sofa-exposed.jpg";
 
 const modules = [Navigation];
+const loading = ref(true);
 
+const handleImageLoad = () => {
+  loading.value = false
+}
 const props = defineProps({
   images: {
     type: Array,

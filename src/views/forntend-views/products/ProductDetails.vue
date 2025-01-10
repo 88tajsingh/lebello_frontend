@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-hidden ">
-    <div>
-      <NavBar :absolute="true" :navColor="navColor" />
+    <div>{{ navColor }}
+      <NavBar :absolute="true"  navColor="#000000"  hovrednavColor="#ffffff"/>
       <Slider :images="imageData" imageKeyName='gallery' :disableSideText="true"
       :navColor="'white'" sliderPageName="productDetails  " :hasSidebar="true">
       <template #utility>

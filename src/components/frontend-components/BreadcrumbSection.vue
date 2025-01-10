@@ -1,27 +1,109 @@
 <template>
-  <div>
-    <div class="text-lg breadcrumbs py-[3px] lg:py-1">
-      <ul class="flex">
-        <li 
-          v-for="(breadcrumb, index) in props?.breadcrumbData" 
-          :key="`breadcrumb-${index}`"
-          class="text-Black666 text-[15px] font-graphik cursor-pointer hover:text-blue" 
-          :class="{ 'text-green text-[16px]': index == 0 }"
-        >
-          <router-link :to='breadcrumb.link'>
-            {{ breadcrumb?.name }}
-            <span v-if="index < breadcrumbData?.length - 1" class="m-1">{{ props?.seprate }}</span>
-          </router-link>
-        </li>
-      </ul>
+  <section class="breadcrem_section">
+    <div class="product_container">
+      <nav class="breadcrem_text">
+        <ul >
+          <li
+            v-for="(item, index) in breadcrumbData"
+            :key="index"
+            class=""
+          >
+            <span v-if="index > 0" class="">/</span>
+            <router-link
+              :to="item.href"
+              :class="[
+                'transition-colors duration-500 hover:text-[#cc9933]',
+                { 'text-[#cc9933]': item.isActive }
+              ]"
+            >
+              {{ item.label }}
+            </router-link>
+          </li>
+        </ul>
+      </nav>
     </div>
-  </div>
+  </section>
 </template>
+
 <script setup>
-import { useRouter } from 'vue-router';
+import { defineProps } from 'vue';
 
-// Define the props passed into the component
-const props = defineProps(['breadcrumbData', 'seprate', 'color']);
-const emit = defineEmits(['setSessionData']);
-
+// Define props
+defineProps({
+  breadcrumbData: {
+    type: Array,
+    required: true,
+  },
+});
 </script>
+<style scoped>
+
+.breadcrem_text ul {
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+}
+.breadcrem_text ul li {
+  font-size: 24px;
+  line-height: 27px;
+  color: #000000;
+}
+.breadcrem_text ul li a.active_link {
+  color: #cc9933;
+}
+.breadcrem_text ul li a {
+  transition: all 0.5s;
+}
+.breadcrem_text ul li a:hover {
+  color: #cc9933;
+}
+.breadcrem_section {
+  padding: 38px 0px;
+}
+.breadcrem_text ul li {
+    display: flex;
+    column-gap: 10px;
+}
+
+@media (max-width: 1699px) {
+  .breadcrem_section {
+    padding: 28px 0px;
+  }
+  .breadcrem_text ul li {
+    font-size: 18px;
+    line-height: 18px;
+  }  
+}
+@media (max-width: 1399px) {
+  .breadcrem_text ul li {
+    font-size: 16px;
+    line-height: 18px;
+  }
+}
+
+@media(max-width:1199px){
+  .product_container {
+    padding: 0px 52px;
+}
+}
+
+@media(max-width:991px){
+  .product_container {
+    padding: 0px 32px;
+}
+
+}
+
+@media(max-width:574px){
+  .breadcrem_section {
+    padding: 22px 0px;
+}
+.product_container {
+    padding: 0px 22px;
+}
+.breadcrem_text ul li[data-v-1680cfa2] {
+    font-size: 14px;
+    line-height: 14px;
+}
+}
+</style>

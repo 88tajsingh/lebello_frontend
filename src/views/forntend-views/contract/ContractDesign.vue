@@ -1,6 +1,6 @@
 <template>
   <div class="relative overflow-hidden">
-    <NavBar :absolute="false" />
+    <NavBar :absolute="false" navColor="#000000"  hovrednavColor="#000000"/>
     <!-- Logo -->
     <div class="absolute top-11 right-0 z-[9999] mx-auto">
       <img src="/src/assets/logo/logohori.png" alt="Logo" />
