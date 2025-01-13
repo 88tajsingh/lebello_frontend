@@ -41,7 +41,7 @@
     <div class="threed_inner_main">
         <div class="threed_img">
     <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
-    <iframe
+    <iframe class="w-full max-h-[546px] h-[546px]"
       v-if="isIframeVisible"
       src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html"
       allowfullscreen
@@ -235,10 +235,10 @@ button.slider_arrow.custom-next {
   max-width: 1202px;
   position: relative;
 }
-.threed_inner_main .threed_img iframe {
+/*.threed_inner_main .threed_img iframe {
   width: 100%;
   height: 647px;
-}
+} */
 .threed_inner_main .threed_cont {
   width: 100%;
   max-width: 718px;
@@ -482,9 +482,9 @@ p.popup_desc {
   .product_container {
     padding: 0px 94px;
   }
-  .threed_inner_main .threed_img iframe {
+  /*.threed_inner_main .threed_img iframe {
     height: 577px;
-  }
+  }*/
   .slider_arrow.custom-prev {
     left: 50px;
   }
@@ -675,9 +675,9 @@ p.popup_desc {
     font-size: 11px;
     padding: 1px 23px;
   }
-  .threed_inner_main .threed_img iframe {
+  /*.threed_inner_main .threed_img iframe {
     height: 533px;
-  }
+  }*/
   .product_inner_cont p {
     max-width: 456px;
     font-size: 16px;
