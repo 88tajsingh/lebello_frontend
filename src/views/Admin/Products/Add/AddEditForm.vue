@@ -1,6 +1,5 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
-
         <!-- domain select delete master delete  -->
         <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
             :deleteService="form.is_store_product ? StoreProductServices.deleteStoreProduct : ProductServices.deleteProduct"
@@ -40,27 +39,8 @@
                     </div>
                     <!-- seo option -->
                     <div class="mt-5">
-                        <Accordion :open="true" header="Seo Options" containerClass="px-4">
-                            <TextInput id="TitleTag" type="text" class="block w-[180px] h-[33px]"
-                                v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                :hasCheckBox="checkBoxFlag"
-                                @update:checkValue="value => checkedFields.seo_title = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Custom title tag.</span>
-
-                            <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
-                                class="block w-[180px] " v-model="form.meta_description" placeholder="Meta Description"
-                                label="Meta Description" :hasCheckBox="checkBoxFlag"
-                                @update:checkValue="value => checkedFields.meta_description = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for the
-                                description.
-                            </span>
-
-                            <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text" class="block w-[180px] "
-                                v-model="form.meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
-                                :hasCheckBox="checkBoxFlag"
-                                @update:checkValue="value => checkedFields.meta_keywords = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Seperate each term with comma.</span>
-                        </Accordion>
+                        <CommonSection :form="form" :fields="seoFields" :hasCheckBox="checkBoxFlag"                    
+                        :checkedFields="checkedFields"/>
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="New Product Options" containerClass="px-4">
@@ -364,16 +344,9 @@
                 </div>
                 <!-- right panel -->
                 <div class="col-span-4">
-                    <PublishAccordion
-    header="Publish"
-    :open="false"
-    :options="statusData"
-    :form="form"
-    :hasCheckBox="checkBoxFlag"
-    :onSubmitHandler="handleSubmit"
-    :onCheckboxUpdate="handleCheckboxUpdate"
-  />
-
+                    <PublishAccordion header="Publish" :="false" :options="statusData" :form="form"
+                        :hasCheckBox="checkBoxFlag" :onSubmitHandler="handleSubmit"
+                        :checkedFields="checkedFields" />
                     <div class="mt-5">
                         <Accordion :open="true" header="Select Template">
                             <div class="mt-2 px-6  h-auto">
@@ -855,8 +828,10 @@ import StoreProductServices from '@/services/StoreProductServices';
 import { MaterialTreeList, getStoreCategoryTree, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import { statusData, trueFalse, productOptionsType, withBgWithoutBg, capsNOCaps, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
+import { seoFields } from '@/json/fields';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
+import CommonSection from '@/components/Admin-components/common/CommonSection.vue';
 import ProductServices from '@/services/ProductServices';
 import PublishAccordion from '@/components/Admin-components/common/PublishAccordion.vue';
 
@@ -895,7 +870,6 @@ const formItems = ref(
         export_field: false
     }
 );
-
 const handleImageFiles = (data) => {
     const media_titles = data.map((item) => item.title);
     imageData.value.image.mediaName = media_titles.join(", ");

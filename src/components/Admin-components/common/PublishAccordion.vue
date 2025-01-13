@@ -3,9 +3,9 @@
         <div class="px-1 py-3">
             <div class="px-4">
                 <div class="flex flex-col">
-                    <Select :options="options" :title="selectTitle" showfield="name" class="w-full" valueField="value"
+                    <Select :options="options" :title="selectTitle" showfield="name" class="w-full"     valueField="value"
                         :label="selectLabel" v-model="form.status" :hasCheckBox="hasCheckBox"
-                        @update:checkValue="onCheckboxUpdate" />
+                        @update:checkValue="value => checkedFields.status = value" />
                 </div>
             </div>
         </div>
@@ -30,6 +30,10 @@ const props = defineProps({
     open: {
         type: Boolean,
         default: true,
+    },
+    checkedFields: {
+        type: Object,
+        required: false,
     },
     options: {
         type: Array,
@@ -66,4 +70,9 @@ const buttonText = computed(() => (props?.form.id ? "Update" : "Submit"));
 const onSubmit = () => {
     onSubmitHandler(form);
 };
+
+const updateCheckedField = (key, value) => {
+    checkedFields[key] = value;
+};
+
 </script>

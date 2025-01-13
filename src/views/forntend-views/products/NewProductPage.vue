@@ -148,7 +148,7 @@ const products = ref([
 ])
 </script>
 
-<style>
+<style >
 .product_banner {
   height: 100vh;
   overflow: hidden;
