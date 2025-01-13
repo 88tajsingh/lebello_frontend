@@ -1,7 +1,8 @@
 <template>
   <div v-if="!loading" class="overflow-hidden">
-    <div class="relative overflow-hidden">
-      <NavBar :absolute="true" :navColor="'#000000'" navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000"/>
+    <div class="relative overflow-hidden ">
+      <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']" navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5"
+        hovrednavColor="#000000" />
       <SwiperSlider :images="imageData" imageKeyName="gallery">
         <template #utility>
           <!-- lebellow icon right top -->
@@ -9,16 +10,15 @@
             <img src="/src/assets/logo/lebello-logo-right.png" />
           </a>
           <!-- text left bottom -->
-          <span class="slider_text">
-            <h1> {{ productData?.title }}
-            </h1>
+          <span class="slider_text left-0">
+            <h1> {{ productData?.title }} </h1>
           </span>
         </template>
       </SwiperSlider>
-      <div class="absolute top-48 right-0" >
-      <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]" height=""
-      :closeSidebar ="closeSidebar" >
-      <div class="z-50">
+      <div class="absolute top-48 right-0">
+        <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]"
+          height="" :closeSidebar="closeSidebar">
+          <div class="z-50">
             <div class="flex items-center">
               <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
                 <Menu size="15px" fillColor="#000000" />
@@ -49,63 +49,12 @@
               </li>
             </ul>
           </div>
-      </SideMenu>
+        </SideMenu>
       </div>
-      
-    </div>
-    <div id="sideText" class="bg-white">
-      <!-- Breadcrumb -->
 
-      <nav class="py-5 text-[16px] leading-[39px] text-black font-graphik">
-        <div class="flex items-center gap-2 ml-16">
-          <span class=" font-medium">Collection</span>
-          <!-- Heroicon: ChevronRight -->
-          /
-          <span class="text-yellow-600 font-medium">{{ productData?.title }}</span>
-        </div>
-      </nav>
-      <!-- Main Content -->
-      <div className="grid grid-cols-1 lg:flex lg:justify-between w-full">
-        <div
-          className="relative aspect-square w-screen overflow-auto h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] bg-gray-100 overflow-y-hidden">
-          <iframe src="/src/assets/lebello/Tubo Sofa Low_Conf_2/Tubo Sofa Low_Conf_2_Product_detail.html"
-            allowFullScreen className="absolute z-[9999] aspect-ratio top-0 left-0 w-full h-full border-none"
-            frameborder="0" scrolling="no" />
-        </div>
-        <div className="text-black flex flex-col pb-14 w-full h-full pl-4 md:pl-14 lg:w-4/6">
-          <div>
-            <h1 className="text-[21px] leading-[60px] lg:leading-[92px] text-[#333333] font-medium font-graphik">
-              3D CONFIGURATOR
-            </h1>
-          </div>
-          <div>
-            <div>
-              <h2 className="text-[16px]  text-[#000000] font-medium font-graphik">Recommended Configuration</h2>
-              <p className="text-[16px] text-[#000000] font-light font-graphikLight mb-3">Please select the
-                configuration
-              </p>
-            </div>
-            <div className="relative">
-              <select v-model="configuration" id="configuration"
-                class="w-[228px] h-[46px]  rounded-[6px] text-[14px] p-2">
-                <option value="1">Configuration 1</option>
-                <option value="2">Configuration 2</option>
-                <option value="3">Configuration 3</option>
-              </select>
-            </div>
-          </div>
-          <div class="mt-10 sm:mt-[70px] md:mt-[130px] lg:mt-[170px] h-full flex gap-4 md:items-end md:flex-row">
-            <button @click="handleStoreClick"
-              class="text-[#333333] opacity-[0.400] text-[10px] font-light leading-7 font-[Graphik] border border-black h-[27px] w-[133px] rounded-full hover:text-[#9E7339]">
-              ENQUIRE/EMAIL
-            </button>
-            <button @click="handleStoreClick"
-              class="bg-[#B88746] uppercase text-[10px] font-light leading-7 text-white font-[Graphik] hover:bg-[#9E7339] h-[27px] px-2 rounded-full w-[133px]">
-              save configuration
-            </button>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="mx-5 md:mx-12 lg:mx-16 " >
+      <Breadcrumb :breadcrumbData="breadcrumbData" />
     </div>
     <div class="bg-[#f3f3f3]">
       <section class="">
@@ -125,7 +74,7 @@
                 <span class="uppercase cursor-pointer font-graphikMedium text-[13px] leading-[21px] font-medium">
                   INSPIRATIONAL SCENE
                 </span>
-                <Icon.Arrow class="mt-0 ml-3 self-center" size="15px" fillColor="currentColor" />
+                <Arrow class="mt-0 ml-3 self-center" size="15px" fillColor="currentColor" />
               </span>
             </div>
           </div>
@@ -135,7 +84,7 @@
                 class="object-cover h-full w-full transition-transform duration-700 ease-in-out transform hover:scale-105"
                 src="https://lebello.com/wp-content/uploads/2019/12/b_chair_slider_gallery.jpg" alt="B Chair" />
               <!-- <span @click="rotate" class="absolute bottom-0 bg-orange p-5">
-                <Icon.Arrow size="13px" fillColor="#ffffff" ref="arrowSvg" />
+                <Arrow size="13px" fillColor="#ffffff" ref="arrowSvg" />
               </span> -->
             </div>
           </div>
@@ -166,14 +115,14 @@
               {{ productData?.new_product_additional_info }}
             </p>
             <div class="absolute right-3 top-3" @click="HandleAdditionalInfo">
-              <Icon.Close size="20px" fillColor="#ffffff" />
+              <Close size="20px" fillColor="#ffffff" />
             </div>
           </div>
         </div>
       </transition>
 
       <div class="flex justify-between uppercase">
-        <div class="ml-5 md:ml-16 md:flex self-center">
+        <div class="ml-5 md:ml-12 lg:ml-16 md:flex self-center">
           <div
             class="flex items-center font-graphikMedium text-[16px] text-[#333333] py-2 md:py-0 md:leading-[68px] font-medium "
             @mouseenter="setArrowFillColor('#3399ff')" @mouseleave="setArrowFillColor('#4dc45c')">
@@ -191,7 +140,7 @@
         </div>
       </div>
       <!-- <AccordianSection /> -->
-      <div class="mx-5 md:mx-10 lg:mx-12  pb-12">
+      <div class="mx-5 md:mx-12 lg:mx-16  pb-12">
         <StoreAccordion :accordionData="productData?.material_swatche_data" />
       </div>
     </div>
@@ -200,17 +149,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed,defineAsyncComponent } from 'vue'
+import { ref, onMounted, computed, defineAsyncComponent } from 'vue'
 import { onClickOutside } from '@vueuse/core'
 import { getLandingPageData, getProductDetail } from '@/helper/frontendHelpers'
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import { Arrow,Close } from '@/components/frontend-components/Svg/Icons'
 const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
 const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'))
-const Icon = defineAsyncComponent(() => import('@/components/frontend-components/Svg/Icons'))
 const NavBar = defineAsyncComponent(() => import('@/components/frontend-components/Nav-bar.vue'))
 const StoreAccordion = defineAsyncComponent(() => import('@/components/store-components/StoreAccordion.vue'))
 const FooterSection = defineAsyncComponent(() => import('@/components/frontend-components/Footer-section.vue'))
+const Breadcrumb = defineAsyncComponent(() => import('@/components/frontend-components/BreadcrumbSection.vue'))
 
+const breadcrumbData = ref([
+  {
+    label: 'Collection Tubo Sofa Exposed',
+    href: '#',
+    isActive: false,
+  },
+  {
+    label: 'Tubo Sofa Exposed',
+    href: '#',
+    isActive: true,
+  },
+])
 
 const products = ref([
   {
@@ -235,6 +197,7 @@ const products = ref([
     alt: 'B Chair Piie Low & High Lounger Chair'
   }
 ])
+
 // 4l-pixie-arms-chair
 const router = useRouter();
 const isOpenSidebarSlider = ref(false)
@@ -383,8 +346,8 @@ const toggleVisibility = () => {
 <style scoped>
 .v-enter-active,
 .v-leave-active {
-transition: opacity 1s ease;
-}   
+  transition: opacity 1s ease;
+}
 
 .v-enter-from,
 .v-leave-to {

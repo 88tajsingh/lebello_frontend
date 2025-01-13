@@ -30,44 +30,44 @@
                     </Accordion>
                     <div class="mt-5">
                         <Accordion :open="true" header="Description" containerClass="px-4">
-                                <div class=" flex w-full">
-                                    <SingleCheck v-if="form.id" label="" v-model="checkedFields.description">
-                                    </SingleCheck>
-                                    <TinyMCE v-model="form.description" />
-                                </div>
-                                <span class="text-sm pl-2">Put Material Description.</span>
+                            <div class=" flex w-full">
+                                <SingleCheck v-if="form.id" label="" v-model="checkedFields.description">
+                                </SingleCheck>
+                                <TinyMCE v-model="form.description" />
+                            </div>
+                            <span class="text-sm pl-2">Put Material Description.</span>
                         </Accordion>
                     </div>
                     <!-- seo option -->
                     <div class="mt-5">
                         <Accordion :open="true" header="Seo Options" containerClass="px-4">
-                                <TextInput id="TitleTag" type="text" class="block w-[180px] h-[33px]"
-                                    v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                    :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.seo_title = value" />
-                                <span :class="[form.id ? 'pl-8' :'']" >Custom title tag.</span>
-                            
-                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
-                                    class="block w-[180px] " v-model="form.meta_description"
-                                    placeholder="Meta Description" label="Meta Description" :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.meta_description = value" />
-                                <span :class="[form.id ? 'pl-8' :'']" >Most search engines use a maximum of 160 chars for the description.
-                                </span>
+                            <TextInput id="TitleTag" type="text" class="block w-[180px] h-[33px]"
+                                v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
+                                :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="value => checkedFields.seo_title = value" />
+                            <span :class="[form.id ? 'pl-8' : '']">Custom title tag.</span>
 
-                                <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text"
-                                    class="block w-[180px] " v-model="form.meta_keywords"
-                                    placeholder="Meta Keywords" label="Meta Keywords" :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.meta_keywords = value" />
-                                <span :class="[form.id ? 'pl-8' :'']" >Seperate each term with comma.</span>
+                            <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
+                                class="block w-[180px] " v-model="form.meta_description" placeholder="Meta Description"
+                                label="Meta Description" :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="value => checkedFields.meta_description = value" />
+                            <span :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for the
+                                description.
+                            </span>
+
+                            <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text" class="block w-[180px] "
+                                v-model="form.meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
+                                :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="value => checkedFields.meta_keywords = value" />
+                            <span :class="[form.id ? 'pl-8' : '']">Seperate each term with comma.</span>
                         </Accordion>
                     </div>
                     <div class="mt-5">
-                        <Accordion :open="true" header="New Product Options" containerClass="px-4">    
-                                <TextInput type="text" class="block mb-2 h-[40px] w-full" label="Product Title"
-                                    placeholder="Product Title" v-model="form.new_product_title"
-                                    :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.new_product_title = value" />
-                           
+                        <Accordion :open="true" header="New Product Options" containerClass="px-4">
+                            <TextInput type="text" class="block mb-2 h-[40px] w-full" label="Product Title"
+                                placeholder="Product Title" v-model="form.new_product_title" :hasCheckBox="checkBoxFlag"
+                                @update:checkValue="value => checkedFields.new_product_title = value" />
+
                             <div class="flex col-span-2 ">
                                 <!-- <SingleCheck v-if="form.id" label=""
                                                 v-model="checkedFields.new_product_additional_bg_image">
@@ -104,52 +104,51 @@
                                     </div>
                                 </div>
                             </div>
-                                <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
-                                    v-model="form.new_product_additional_info" placeholder="" label="Additional Product Info	
+                            <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
+                                v-model="form.new_product_additional_info" placeholder="" label="Additional Product Info	
                                     " :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="value => checkedFields.new_product_additional_info = value" />
-                                    <div class="flex flex-col w-full">
-                                        <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                            value="Additional Product BG Image" />
-                                        <div class=" flex  w-full h-auto ">
-                                            <SingleCheck v-if="form.id" label=""
-                                                v-model="checkedFields.new_product_additional_bg_image">
-                                            </SingleCheck>
-                                            <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
-                                                @click="() => imageData.new_product_additional_bg_image.isOpen = true">
-                                                {{
-                                                    imageData.new_product_additional_bg_image.mediaName }}</div>
-                                        </div>
-                                    </div>
-                                    <div class=" mt-3 flex overflow-x-auto">
-                                        <img v-if="imageData.new_product_additional_bg_image.images[0]"
-                                            v-for="file in imageData.new_product_additional_bg_image.images" :key="file"
-                                            :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || 'img'">
-                                    </div> 
-                                <div class="mt-3">
-                                    <div class="flex flex-col w-full">
-                                        <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                            value="Right Box Image" />
-                                        <div class=" flex  w-full h-auto ">
-                                            <SingleCheck v-if="form.id" label=""
-                                                v-model="checkedFields.new_product_additional_right_box_image">
-                                            </SingleCheck>
-                                            <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
-                                                @click="() => imageData.new_product_additional_right_box_image.isOpen = true">
-                                                {{
-                                                    imageData.new_product_additional_right_box_image.mediaName }}</div>
-                                        </div>
-                                    </div>
-                                    <div class=" mt-3 flex overflow-x-auto">
-                                        <img v-if="imageData.new_product_additional_right_box_image.images[0]"
-                                            v-for="file in imageData.new_product_additional_right_box_image.images"
-                                            :key="file" :src="$filePath(file?.file_url)"
-                                            class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || 'img'">
+                                @update:checkValue="value => checkedFields.new_product_additional_info = value" />
+                            <div class="flex flex-col w-full">
+                                <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
+                                    value="Additional Product BG Image" />
+                                <div class=" flex  w-full h-auto ">
+                                    <SingleCheck v-if="form.id" label=""
+                                        v-model="checkedFields.new_product_additional_bg_image">
+                                    </SingleCheck>
+                                    <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
+                                        @click="() => imageData.new_product_additional_bg_image.isOpen = true">
+                                        {{
+                                            imageData.new_product_additional_bg_image.mediaName }}</div>
+                                </div>
+                            </div>
+                            <div class=" mt-3 flex overflow-x-auto">
+                                <img v-if="imageData.new_product_additional_bg_image.images[0]"
+                                    v-for="file in imageData.new_product_additional_bg_image.images" :key="file"
+                                    :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                    :alt="file?.alternative_text || 'img'">
+                            </div>
+                            <div class="mt-3">
+                                <div class="flex flex-col w-full">
+                                    <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
+                                        value="Right Box Image" />
+                                    <div class=" flex  w-full h-auto ">
+                                        <SingleCheck v-if="form.id" label=""
+                                            v-model="checkedFields.new_product_additional_right_box_image">
+                                        </SingleCheck>
+                                        <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
+                                            @click="() => imageData.new_product_additional_right_box_image.isOpen = true">
+                                            {{
+                                                imageData.new_product_additional_right_box_image.mediaName }}</div>
                                     </div>
                                 </div>
-                            
+                                <div class=" mt-3 flex overflow-x-auto">
+                                    <img v-if="imageData.new_product_additional_right_box_image.images[0]"
+                                        v-for="file in imageData.new_product_additional_right_box_image.images"
+                                        :key="file" :src="$filePath(file?.file_url)"
+                                        class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'img'">
+                                </div>
+                            </div>
+
                         </Accordion>
                     </div>
                     <div class="mt-5">
@@ -365,24 +364,15 @@
                 </div>
                 <!-- right panel -->
                 <div class="col-span-4">
-                    <Accordion header="Publish" open="false">
-                        <div class="px-1 py-3">
-                            <div class="px-4">
-                                <div class="flex flex-col ">
-                                    <Select :options="statusData" title="Status" showfield="name" class="w-full"
-                                        valueField="value" label="Select Status" v-model="form.status"
-                                        :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="value => checkedFields.status = value" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-[#f6f7f7] flex py-3">
-                            <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                                class=" text-sm ml-auto px-3 py-2">
-                                {{ buttonText }}
-                            </Button>
-                        </div>
-                    </Accordion>
+                    <PublishAccordion
+    header="Publish"
+    :open="false"
+    :options="statusData"
+    :form="form"
+    :hasCheckBox="checkBoxFlag"
+    :onSubmitHandler="handleSubmit"
+    :onCheckboxUpdate="handleCheckboxUpdate"
+  />
 
                     <div class="mt-5">
                         <Accordion :open="true" header="Select Template">
@@ -583,6 +573,39 @@
                             </div>
                         </Accordion>
                     </div>
+                    <div class="mt-5">
+                        <Accordion :open="true" header="Product Slider Heading">
+                            <div class="mt-2 px-6  h-auto">
+                                <div class="flex flex-col w-full">
+                                    <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
+                                        value="Right Box Image" />
+                                    <div class=" flex  w-full h-auto ">
+                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_image">
+                                        </SingleCheck>
+                                        <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
+                                            @click="() => imageData.product_image.isOpen = true">
+                                            {{
+                                                imageData.product_image.mediaName }}</div>
+                                        <div class=" mt-3 flex overflow-x-auto">
+
+                                        </div>
+                                    </div>
+                                    <img v-for="file in imageData.product_image.images" :key="file"
+                                        :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                        :alt="file?.alternative_text || ''">
+
+                                    <div class="mt-2">
+                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="product 3D Url"
+                                            placeholder="" v-model="form.product_url_for_three_d"
+                                            :hasCheckBox="checkBoxFlag"
+                                            @update:checkValue="(value) => { checkedFields.product_url_for_three_d = value }" />
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </Accordion>
+                    </div>
                 </div>
             </div>
             <div v-if='form.is_store_product'>
@@ -768,6 +791,40 @@
                                 </div>
                             </Accordion>
                         </div>
+                        <div class="mt-5">
+                            <Accordion :open="true" header="Product Slider Heading">
+                                <div class="mt-2 px-6  h-auto">
+                                    <div class="flex flex-col w-full">
+                                        <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
+                                            value="Right Box Image" />
+                                        <div class=" flex  w-full h-auto ">
+                                            <SingleCheck v-if="form.id" label=""
+                                                v-model="checkedFields.store_product_image">
+                                            </SingleCheck>
+                                            <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
+                                                @click="() => imageData.store_product_image.isOpen = true">
+                                                {{
+                                                    imageData.store_product_image.mediaName }}</div>
+                                            <div class=" mt-3 flex overflow-x-auto">
+
+                                            </div>
+                                        </div>
+                                        <img v-for="file in imageData.store_product_image.images" :key="file"
+                                            :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
+                                            :alt="file?.alternative_text || ''">
+
+                                        <div class="mt-2">
+                                            <TextInput type="text" class="block mr-2 h-[40px] w-full"
+                                                label="product 3D Url" placeholder=""
+                                                v-model="form.store_product_url_for_three_d" :hasCheckBox="checkBoxFlag"
+                                                @update:checkValue="(value) => { checkedFields.store_product_url_for_three_d = value }" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </Accordion>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -801,6 +858,7 @@ import { useStore } from 'vuex';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
 import ProductServices from '@/services/ProductServices';
+import PublishAccordion from '@/components/Admin-components/common/PublishAccordion.vue';
 
 // store and router
 const router = useRouter();
@@ -866,6 +924,8 @@ const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_add
 const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
 const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
 // const handleImageFiles = (data) => handleFileUpdate('image', data, imageData, form,false);
+const handleProductImageFiles = (data) => handleFileUpdate('product_image', data, imageData, form, false);
+const handleStoreImageFiles = (data) => handleFileUpdate('store_product_image', data, imageData, form, false);
 const handleContractLogoFiles = (data) => handleFileUpdate('contract_logo', data, imageData, form, false);
 const handleContractSliderImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
 
@@ -880,6 +940,8 @@ const imageData = ref({
     new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleAdditionalRightBoxImageFiles, singleFile: true },
     downloadable_files: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleDownloadablemageFiles, singleFile: false },
     image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleImageFiles, singleFile: true },
+    product_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleProductImageFiles, singleFile: true },
+    store_product_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleStoreImageFiles, singleFile: true },
     video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true },
 });
 
@@ -1078,7 +1140,7 @@ const fetchAllData = async (payload) => {
 onMounted(() => {
     if (store.getters.editData) {
 
-        const { featured_image_url, contract_logo_data, new_product_slider_url,
+        const { featured_image_url, contract_logo_data, new_product_slider_url, store_product_image_data, product_image_data,
             new_product_additional_bg_image_url, new_product_additional_right_box_image_url, downloadable_files_url, gallery_urls, material_swatches } = store.getters.editData;
         imageData.value.featured_image.images = [featured_image_url];
         imageData.value.featured_image.mediaName = featured_image_url?.file_url || 'featured images';
@@ -1090,7 +1152,10 @@ onMounted(() => {
         imageData.value.downloadable_files.mediaName = downloadable_files_url?.map(item => item?.file_url).join(', ') || 'featured images';
         imageData.value.new_product_slider.images = new_product_slider_url;
         imageData.value.new_product_slider.mediaName = new_product_slider_url?.map(item => item?.file_url).join(', ') || 'featured images';
-
+        imageData.value.store_product_image.images = [store_product_image_data];
+        imageData.value.store_product_image.mediaName = store_product_image_data?.file_url || 'featured images';
+        imageData.value.product_image.images = [product_image_data];
+        imageData.value.product_image.mediaName = product_image_data?.file_url || 'featured images';
         imageData.value.contract_logo.images = [contract_logo_data];
         imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
         // imageData.value.contract_slider_image.images = [contract_slider_image_data] ||[];
