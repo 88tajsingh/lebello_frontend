@@ -84,7 +84,7 @@ const props = defineProps({
       {
         "swatch": {
           "id": 7,
-          "title": "SurfaceTex",
+          "title": "Colored Surfaces",
           "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy</p>",
           "materials": [
             {
@@ -394,7 +394,7 @@ const props = defineProps({
       {
         "swatch": {
           "id": 8,
-          "title": "Aqua Weave G4",
+          "title": "SurfaceTex",
           "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy</p>",
           "materials": [
             {
@@ -775,7 +775,7 @@ const props = defineProps({
       }, {
         "swatch": {
           "id": 8,
-          "title": "Colored Surfaces",
+          "title": "Aqua Weave G4",
           "description": "<p>Lebello RopeTek is our exclusive design of outdoor ropes. They have been designed exclusively for the Lebello collection and are available on many pieces where they are woven directly onto the product. Customization might be available for large contract applications.Our Gildo Rope is a larger knotted ropes that adds visual texture and complexity. Composition: 100% Polyolefin Made in Italy</p>",
           "materials": [
             {
