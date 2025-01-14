@@ -56,16 +56,19 @@
   <Breadcrumb :breadcrumbData="breadcrumbData" />
   <section class="three_d_section_main">
     <div class="threed_inner_main">
-      <div class="threed_img"> 
-        <!-- product_image_data -->
-        <img v-if="!isIframeVisible" :src="$filePath(productData?.product_image_data && productData?.product_image_data[0].file_url)" alt="" />
-        <iframe v-if="isIframeVisible"
-          :src="productData?.product_url_for_three_d"
-          allowfullscreen frameborder="0" scrolling="no" />
-        <button v-if="!isIframeVisible" @click="toggleIframe">
-          <img src="../../../assets/images/product/3D Icon.png" alt="" />
-        </button>
-      </div>
+        <div class="threed_img">
+    <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
+    <iframe class="w-full max-h-[546px] h-[546px]"
+      v-if="isIframeVisible"
+      src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html"
+      allowfullscreen
+      frameborder="0"
+      scrolling="no"
+    />
+    <button v-if="!isIframeVisible" @click="toggleIframe">
+      <img src="../../../assets/images/product/3D Icon.png" alt="" />
+    </button>
+  </div>
       <div class="threed_cont">
         <div class="product_top_cont">
           <h2>3D CONFIGURATOR</h2>
