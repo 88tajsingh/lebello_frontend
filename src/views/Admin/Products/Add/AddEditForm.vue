@@ -551,7 +551,7 @@
                             <div class="mt-2 px-6  h-auto">
                                 <div class="flex flex-col w-full">
                                     <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                        value="Right Box Image" />
+                                        value="product Image" />
                                     <div class=" flex  w-full h-auto ">
                                         <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_image">
                                         </SingleCheck>
@@ -769,7 +769,7 @@
                                 <div class="mt-2 px-6  h-auto">
                                     <div class="flex flex-col w-full">
                                         <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                            value="Right Box Image" />
+                                            value="store Product Image" />
                                         <div class=" flex  w-full h-auto ">
                                             <SingleCheck v-if="form.id" label=""
                                                 v-model="checkedFields.store_product_image">
@@ -914,8 +914,8 @@ const imageData = ref({
     new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleAdditionalRightBoxImageFiles, singleFile: true },
     downloadable_files: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleDownloadablemageFiles, singleFile: false },
     image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleImageFiles, singleFile: true },
-    product_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleProductImageFiles, singleFile: true },
-    store_product_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleStoreImageFiles, singleFile: true },
+    product_image: { isOpen: false, mediaName: 'Product Image', images: [], selectedFiles: handleProductImageFiles, singleFile: true },
+    store_product_image: { isOpen: false, mediaName: 'Store Image', images: [], selectedFiles: handleStoreImageFiles, singleFile: true },
     video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true },
 });
 
@@ -1129,9 +1129,9 @@ onMounted(() => {
         imageData.value.store_product_image.images = [store_product_image_data];
         imageData.value.store_product_image.mediaName = store_product_image_data?.file_url || 'featured images';
         imageData.value.product_image.images = [product_image_data];
-        imageData.value.product_image.mediaName = product_image_data?.file_url || 'featured images';
+        imageData.value.product_image.mediaName = product_image_data?.file_url || 'Product Images';
         imageData.value.contract_logo.images = [contract_logo_data];
-        imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
+        imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Store Product image';
         // imageData.value.contract_slider_image.images = [contract_slider_image_data] ||[];
         // imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
         imageData.value.gallery.images = gallery_urls;

@@ -6,22 +6,25 @@
         <swiper-slide v-for="(slide, index) in images" :key="index">
           <div class="product_slide">
             <div class="slider_img h-screen w-full">
-              <div v-if="loading" class="absolute inset-0 bg-gray-4 animate-pulse"></div>
-              <img loading="lazy" :src="$filePath(slide[props.imageKeyName]?.file_url)" :alt="slide[props?.imageKeyName]?.file_url" class="h-full w-full object-cover "  @load="handleImageLoad"/>
+              <!-- <div v-if="loading" class="absolute inset-0 bg-gray-4 animate-pulse"></div> -->
+              <img loading="lazy" :src="$filePath(slide[props.imageKeyName]?.file_url)"
+                :alt="slide[props?.imageKeyName]?.file_url" class="h-full w-full object-cover "
+                 />
             </div>
-            <div class="absolute bottom-0 z-[999] w-full px-[124px] pb-[60px]">
-              <h1 class="text-white font-ptSerif text-[60px] leading-[74px] font-normal">
-                {{ slide?.title }}
-              </h1>
+            <div v-if="slide?.title" class="slider_text">
+              <h1>{{ slide?.title }}</h1>
             </div>
           </div>
         </swiper-slide>
       </swiper>
-        <slot name="utility"></slot>
-      <button class="slider_arrow custom-prev" aria-label="Previous">
+      <slot name="utility"></slot>
+
+      <button class="slider_arrow absolute top-1/2 z-99999 left-[50px] transform translate-y-1/2
+        custom-prev" aria-label="Previous">
         <Arrow size="23px" direction="right" :strokeWidth="26.8" fillColor="#ffffff" />
       </button>
-      <button class="slider_arrow custom-next" aria-label="Next">
+      <button class="slider_arrow absolute top-1/2 z-99999 right-[50px] transform translate-y-1/2
+        custom-next" aria-label="Next">
         <Arrow size="23px" direction="left" :strokeWidth="26.8" fillColor="#ffffff" />
       </button>
     </div>
@@ -61,21 +64,76 @@ if (props?.pagination) {
   modules.push(Pagination);
 }
 
-const slides = [
-  { image: image1, title: "Tubo Sofa Exposed" },
-  { image: image2, title: "Tubo Sofa Outdoor" },
-  { image: image3, title: "Tubo Sofa Exposed" },
-
-];
 </script>
 
 <style scoped>
-
 .slider_main {
   position: relative;
   width: 100%;
   height: 100vh;
   overflow: hidden;
+}
+.slider_text {
+  padding: 0px 124px 60px;
+  position: absolute;
+  z-index: 999;
+  bottom: 0;
+  width: 100%;
+}
+.slider_text h1 {
+  font-size: 60px;
+  line-height: 74px;
+  color: #ffffff;
+  font-weight: 400;
+  font-family: 'PT Serif';
+}
+@media (max-width: 1879px) {
+  .slider_text {
+    padding: 0px 94px 60px;
+  }
+}
+@media (max-width: 1699px) {
+  .slider_text {
+    padding: 0px 82px 45px;
+  }
+  .slider_text h1 {
+    font-size: 50px;
+    line-height: 50px;
+  }
+}
+@media (max-width: 1399px) {
+  .slider_text h1 {
+    font-size: 40px;
+    line-height: 40px;
+  }
+}
+@media(max-width:1199px) {
+  .slider_text {
+    padding: 0px 52px 45px;
+  }
+}
+@media(max-width:991px) {
+  .slider_text {
+    padding: 0px 32px 35px;
+  }
+}
+@media(max-width:574px) {
+  .slider_text {
+    padding: 0px 22px 35px;
+  }
+  .slider_text h1 {
+    font-size: 30px;
+    line-height: 20px;
+  }
+}
+@media(max-width:767px) {
+  .threed_inner_main {
+    flex-direction: column;
+  }
+  .slider_text h1 {
+    font-size: 36px;
+    line-height: 32px;
+  }
 }
 
 ::v-deep(.swiper-pagination) {
@@ -103,17 +161,5 @@ const slides = [
   background-color: #626262;
   width: 8px;
   height: 8px;
-}
-button.slider_arrow {
-    position: absolute;
-    z-index: 99999;
-    top: 50%;
-    transform: translate(0px, -50%);
-}
-button.slider_arrow.custom-next {
-    right: 60px;
-}
-.slider_arrow.custom-prev {
-    left: 60px;
 }
 </style>
