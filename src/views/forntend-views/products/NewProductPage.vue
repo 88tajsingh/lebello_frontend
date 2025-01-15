@@ -515,7 +515,6 @@ button.slider_arrow.custom-next {
     font-size: 40px;
     line-height: 40px;
   }
-
   .threed_inner_main .threed_cont {
     max-width: 480px;
     padding: 30px 60px 55px;
