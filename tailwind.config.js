@@ -12,9 +12,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        graphik: ['GraphikRegular'],
         satoshi: ['Satoshi', 'sans-serif'],
         sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-        graphik: ['GraphikRegular'],
         graphikLight: ['GraphikLight'],
         graphikMedium: ['GraphikMedium'],
         MyriadPro: ['Myriad Pro'],

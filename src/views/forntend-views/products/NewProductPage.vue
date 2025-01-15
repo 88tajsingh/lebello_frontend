@@ -1,5 +1,5 @@
 <template>
-  <section class="product_banner">
+  <section class="product_banner font-graphik">
     <div class="slider_main">
       <swiper :effect="fade" :navigation="{ prevEl: '.custom-prev', nextEl: '.custom-next' }" :modules="[Navigation]"
         class="mySwiper">
@@ -40,7 +40,7 @@
   </div>
       <div class="threed_cont">
         <div class="product_top_cont">
-          <h2>3D CONFIGURATOR</h2>
+          <h2 >3D CONFIGURATOR</h2>
           <p><span>Recomended Configuration</span> Please select the configuration</p>
           <select id="configuration">
             <option value="1">Configuration 1</option>
@@ -155,6 +155,9 @@ const products = ref([
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
+body{
+  font-family: 'GraphikRegular';
+}
 .product_banner {
   height: 100vh;
   overflow: hidden;
@@ -234,12 +237,12 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont p {
-  font-size: 24px;
-  color: #000000;
-  font-weight: 300;
-  line-height: 34px;
-  max-width: 340px;
-  margin: 50px 0px 16px;
+    font-size: 18px;
+    color: #000000;
+    font-weight: 300;
+    line-height: 26px;
+    max-width: 270px;
+    margin: 36px 0px 16px;
 }
 
 .threed_inner_main .threed_cont select {
@@ -305,29 +308,29 @@ button.slider_arrow.custom-next {
 }
 
 .product_inner_cont h2 {
-  font-size: 40px;
-  line-height: 46px;
+  font-size: 31px;
+  line-height: 36px;
   color: #333333;
   font-weight: 300;
-  margin-bottom: 60px;
+  margin-bottom: 24px;
 }
 
 .product_inner_cont p {
-  font-size: 24px;
-  line-height: 39px;
-  color: #555555;
-  font-weight: 300;
+    font-size: 18px;
+    line-height: 29px;
+    color: #555555;
+    font-weight: 300;
 }
 
 .product_inner_cont button {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 20px;
   color: #333333;
   font-weight: 600;
   display: flex;
   align-items: center;
   column-gap: 16px;
-  margin-top: 96px;
+  margin-top: 46px;
 }
 
 .product_text_img {
@@ -398,19 +401,6 @@ button.slider_arrow.custom-next {
     padding: 44px 90px 46px 94px;
   }
 
-  .product_inner_cont button {
-    margin-top: 76px;
-  }
-
-  .product_inner_cont h2 {
-    font-size: 40px;
-    margin-bottom: 40px;
-  }
-
-  .product_inner_cont p {
-    max-width: 666px;
-  }
-
 }
 
 @media (max-width: 1699px) {
@@ -435,40 +425,13 @@ button.slider_arrow.custom-next {
     padding: 40px 60px 82px;
   }
 
-  .threed_inner_main .threed_cont h2 {
-    font-size: 26px;
-  }
-
-  .threed_inner_main .threed_cont p {
-    font-size: 19px;
-    line-height: 28px;
-    max-width: 300px;
-    margin: 40px 0px 16px;
-  }
-
   /* .threed_inner_main .threed_cont select {
     font-size: 18px;
     padding: 15.5px 102px 17.5px 20px;
   } */
 
-  .product_inner_cont h2 {
-    font-size: 36px;
-    margin-bottom: 30px;
-  }
-
-  .product_inner_cont p {
-    max-width: 586px;
-    font-size: 21px;
-    line-height: 35px;
-  }
-
-  .product_inner_cont button {
-    margin-top: 56px;
-    font-size: 18px;
-  }
-
   .product_inner_cont {
-    padding: 40px 82px 40px 82px;
+    padding: 40px 47px 0px 82px;
   }
 
   .materils_cut_top ul li {
@@ -490,15 +453,8 @@ button.slider_arrow.custom-next {
 }
 
 @media(max-width:1599px) {
-  .product_inner_cont p {
-    max-width: 506px;
-    font-size: 18px;
-    line-height: 30px;
-  }
+  
 
-  .product_inner_cont button {
-    margin-top: 44px;
-  }
 
   .threed_inner_main .threed_cont {
     max-width: 510px;
@@ -514,17 +470,7 @@ button.slider_arrow.custom-next {
     padding: 30px 60px 55px;
   }
 
-  .threed_inner_main .threed_cont h2 {
-    font-size: 21px;
-    line-height: 21px;
-  }
-
-  .threed_inner_main .threed_cont p {
-    font-size: 16px;
-    line-height: 21px;
-    max-width: 250px;
-    margin: 40px 0px 16px;
-  }
+  
 
   /* .threed_inner_main .threed_cont select {
     font-size: 14px;
@@ -540,22 +486,6 @@ button.slider_arrow.custom-next {
     height: 533px;
   }
 
-  .product_inner_cont p {
-    max-width: 456px;
-    font-size: 16px;
-    line-height: 26px;
-  }
-
-  .product_inner_cont h2 {
-    font-size: 26px;
-    margin-bottom: 30px;
-    line-height: 26px;
-  }
-
-  .product_inner_cont button {
-    margin-top: 50px;
-    font-size: 13px;
-  }
 
   .product_inner_cont button svg {
     width: 21px;
