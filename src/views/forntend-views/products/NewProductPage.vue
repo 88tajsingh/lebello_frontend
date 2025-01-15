@@ -174,8 +174,8 @@ const products = ref([
 }
 
 .slider_text h1 {
-  font-size: 57px;
-  line-height: 74px;
+  font-size: 50px;
+  line-height: 54px;
   color: #ffffff;
   font-weight: 400;
   font-family: 'PT Serif';
@@ -416,11 +416,6 @@ button.slider_arrow.custom-next {
     padding: 0px 82px 45px;
   }
 
-  .slider_text h1 {
-    font-size: 57px;
-    line-height: 74px;
-  }
-
   .slider_arrow.custom-prev {
     left: 40px;
   }
@@ -511,10 +506,7 @@ button.slider_arrow.custom-next {
 }
 
 @media (max-width: 1399px) {
-  .slider_text h1 {
-    font-size: 40px;
-    line-height: 40px;
-  }
+  
   .threed_inner_main .threed_cont {
     max-width: 480px;
     padding: 30px 60px 55px;
