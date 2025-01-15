@@ -241,15 +241,15 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont select {
-  border-radius: 6px;
-  border: 1px solid #cecece;
-  font-size: 21px;
-  color: #000000;
-  padding: 20.5px 147px 21.5px 20px;
-  background-image: url(/src/assets/images/product/select-arrow.svg);
-  line-height: 25px;
-  background-position: 95% 50%;
-  background-size: 7% 20%;
+    border-radius: 6px;
+    border: 1px solid #cecece;
+    font-size: 17px;
+    color: #000000;
+    padding: 10.5px 67px 12.5px 20px;
+    background-image: url(/src/assets/images/product/select-arrow.svg);
+    line-height: 25px;
+    background-position: 95% 50%;
+    background-size: 7% 20%;
 }
 
 .threed_btns {
@@ -444,10 +444,10 @@ button.slider_arrow.custom-next {
     margin: 40px 0px 16px;
   }
 
-  .threed_inner_main .threed_cont select {
+  /* .threed_inner_main .threed_cont select {
     font-size: 18px;
     padding: 15.5px 102px 17.5px 20px;
-  }
+  } */
 
   .product_inner_cont h2 {
     font-size: 36px;
@@ -524,10 +524,10 @@ button.slider_arrow.custom-next {
     margin: 40px 0px 16px;
   }
 
-  .threed_inner_main .threed_cont select {
+  /* .threed_inner_main .threed_cont select {
     font-size: 14px;
     padding: 8.5px 97px 11.5px 14px;
-  }
+  } */
 
   .threed_btns a {
     font-size: 11px;
