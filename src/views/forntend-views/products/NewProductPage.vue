@@ -58,6 +58,7 @@
   <section class="product_text_img">
     <div class="text_img_inner_main">
       <div class="product_inner_cont">
+        <div>
         <h2>Tubo Sofa Exposed</h2>
         <p>
           The modern Tubo sofa and club loungers features a soft curved and classical shapes with a
@@ -68,6 +69,8 @@
           Tubo sofa and loungers’ collection is designed by French designer Christophe Pillet. 100%
           Made in Italy.
         </p>
+        </div>
+
         <button @click="toggleVisibility " class="hover:text-orange">
           <span>INSPIRATIONAL SCENE</span>
           <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
@@ -318,6 +321,7 @@ button.slider_arrow.custom-next {
     line-height: 36px;
     color: #333333;
     font-family: 'GraphikMedium';
+    margin-bottom: 40px;
 }
 
 .product_inner_cont p {
