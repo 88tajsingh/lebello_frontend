@@ -1221,7 +1221,7 @@ h1.popup_title {
 
 .popup_gallery_cont {
   max-width: 1471px;
-  padding: 100px 240px 0px 100px;
+  padding: 35px 148px 0px 30px;
 }
 
 .gallery_popup_imgs {
@@ -1238,7 +1238,7 @@ h1.popup_title {
 }
 
 .gallery_images_height {
-  height: 50vh;
+  height: 61vh;
 }
 
 .gallery_images_height::-webkit-scrollbar {
@@ -1246,13 +1246,13 @@ h1.popup_title {
 }
 
 .popup_select_box {
-    margin-top: 28px;
+    margin-top: 16px;
     font-size: 16px;
     color: #000000;
     line-height: 25px;
-    border-radius: 16px;
+    border-radius: 6px;
     padding: 9px 64px 9px 20px;
-    margin-bottom: 42px;
+    margin-bottom: 28px;
     background-image: url(/src/assets/images/product/select-arrow.svg);
     background-position: 95% 50%;
     background-size: 12% 30%;
@@ -1268,7 +1268,6 @@ p.popup_desc {
 @media (max-width: 1879px) {
   .popup_gallery_cont {
     max-width: 1340px;
-    padding: 80px 140px 0px 80px;
   }
 }
 
@@ -1284,7 +1283,6 @@ p.popup_desc {
 
   .popup_gallery_cont {
     max-width: 1230px;
-    padding: 80px 157px 0px 80px;
   }
 
 }
@@ -1296,7 +1294,6 @@ p.popup_desc {
 
   .popup_gallery_cont {
     max-width: 1130px;
-    padding: 66px 148px 0px 60px;
   }
 
   .gallery_popup_imgs {
@@ -1339,7 +1336,6 @@ p.popup_desc {
 
   .popup_gallery_cont {
     max-width: 982px;
-    padding: 66px 130px 0px 60px;
   }
 
 
@@ -1352,12 +1348,11 @@ p.popup_desc {
   }
 
   .gallery_images_height {
-    height: 44vh;
+    height: 51vh;
   }
 
   .popup_gallery_cont {
     max-width: 982px;
-    padding: 66px 164px 0px 60px;
   }
 
 }
