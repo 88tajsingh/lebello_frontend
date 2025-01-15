@@ -174,7 +174,7 @@ const products = ref([
 }
 
 .slider_text h1 {
-  font-size: 60px;
+  font-size: 57px;
   line-height: 74px;
   color: #ffffff;
   font-weight: 400;
@@ -417,8 +417,8 @@ button.slider_arrow.custom-next {
   }
 
   .slider_text h1 {
-    font-size: 50px;
-    line-height: 50px;
+    font-size: 57px;
+    line-height: 74px;
   }
 
   .slider_arrow.custom-prev {
