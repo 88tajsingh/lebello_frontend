@@ -1154,7 +1154,7 @@ watch(() => props.accordionData, (newData) => {
 .faq_main_div .faq_haed {
   display: flex;
   align-items: center;
-  max-width: 574px;
+  max-width: 378px;
   justify-content: space-between;
   font-size: 16px;
   line-height: 21px;
@@ -1189,7 +1189,7 @@ watch(() => props.accordionData, (newData) => {
 .inner_faq .faq_inner_cont .inner_faq_head {
   display: flex;
   align-items: center;
-  max-width: 544px;
+  max-width: 356px;
   justify-content: space-between;
   font-size: 16px;
   line-height: 21px;
