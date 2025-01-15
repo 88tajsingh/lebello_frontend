@@ -250,11 +250,13 @@ button.slider_arrow.custom-next {
     border: 1px solid #cecece;
     font-size: 16px;
     color: #000000;
-    padding: 10.5px 67px 12.5px 20px;
+    padding: 10.5px 0px 12.5px 20px;
     background-image: url(/src/assets/images/product/select-arrow.svg);
     line-height: 25px;
     background-position: 95% 50%;
     background-size: 7% 20%;
+    width: 100%;
+    max-width: 340px;
 }
 
 .threed_btns {
