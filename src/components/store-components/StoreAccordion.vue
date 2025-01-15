@@ -1191,8 +1191,8 @@ watch(() => props.accordionData, (newData) => {
   align-items: center;
   max-width: 544px;
   justify-content: space-between;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 16px;
+  line-height: 21px;
   color: #000000;
   cursor: pointer;
   transition: all 0.5s;
@@ -1286,11 +1286,6 @@ p.popup_desc {
     padding: 24px 0px 30px 24px;
   }
 
-  .inner_faq .faq_inner_cont .inner_faq_head {
-    font-size: 19px;
-    line-height: 22px;
-    max-width: 550px;
-  }
 
   .popup_gallery_cont {
     max-width: 1230px;
@@ -1360,12 +1355,6 @@ p.popup_desc {
     width: 16px;
     height: 16px;
     transform: rotate(-91deg);
-  }
-
-  .inner_faq .faq_inner_cont .inner_faq_head {
-    font-size: 16px;
-    line-height: 21px;
-    max-width: 365px;
   }
 
   .popup_gallery_cont {
