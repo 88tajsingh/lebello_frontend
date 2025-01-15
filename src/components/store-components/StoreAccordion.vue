@@ -1156,8 +1156,8 @@ watch(() => props.accordionData, (newData) => {
   align-items: center;
   max-width: 574px;
   justify-content: space-between;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 16px;
+  line-height: 21px;
   color: #000000;
 }
 
@@ -1282,11 +1282,6 @@ p.popup_desc {
     padding: 24px 0px;
   }
 
-  .faq_main_div .faq_haed {
-    font-size: 19px;
-    line-height: 22px;
-  }
-
   .inner_faq .faq_inner_cont {
     padding: 24px 0px 30px 24px;
   }
@@ -1346,12 +1341,6 @@ p.popup_desc {
 
   .faq_main_div {
     margin-top: 28px;
-  }
-
-  .faq_main_div .faq_haed {
-    font-size: 16px;
-    line-height: 21px;
-    max-width: 384px;
   }
 
   .faq_head_mian {

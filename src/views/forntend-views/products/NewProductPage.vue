@@ -321,7 +321,6 @@ button.slider_arrow.custom-next {
     color: #555555;
     font-weight: 300;
     font-family: 'GraphikLight';
-    max-width: 470px;
 }
 
 .product_inner_cont button {
@@ -433,7 +432,7 @@ button.slider_arrow.custom-next {
   } */
 
   .product_inner_cont {
-    padding: 40px 47px 0px 82px;
+    padding: 40px 65px 0px 82px;
   }
 
   
