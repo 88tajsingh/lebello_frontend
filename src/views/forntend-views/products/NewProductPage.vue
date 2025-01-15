@@ -179,8 +179,8 @@ body{
 }
 
 .slider_text h1 {
-  font-size: 40px;
-  line-height: 44px;
+  font-size: 45px;
+  line-height: 49px;
   color: #ffffff;
   font-weight: 400;
   font-family: "Noto Serif", serif;
