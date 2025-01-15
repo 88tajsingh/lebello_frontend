@@ -3,11 +3,11 @@
     <!-- Accordion -->
     <div v-for="(item, index) in items" :key="index" class="faq_title">
       <!-- Parent Item -->
-      <div class="faq_head_mian cursor-pointer transition-all duration-300" @click="toggleParent(index)">
-        <div class="faq_haed">
+      <div class="faq_head_mian  transition-all duration-300">
+        <div class="faq_haed cursor-pointer"  @click="toggleParent(index)">
           <span :class="activeParent === index ? 'text-orange' : 'text-black'">{{ item.swatch.title }}</span>
           <div>
-            <Arrow direction="left" :strokeWidth="22.5" :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
+            <Arrow :direction="activeParent === index ? 'up' : 'left'" :strokeWidth="10.5" :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
           </div>
         </div>
       </div>
@@ -18,10 +18,10 @@
         leaveTo="max-h-0 overflow-hidden">
         <div class="inner_faq">
           <div v-for="(child, childIndex) in item.swatch.materials" :key="childIndex" class="faq_inner_cont"
-            @click="openPopup(item, child, childIndex)">
-            <div class="inner_faq_head" :class="activeChild === childIndex ? 'text-orange' : 'text-black'">
+            >
+            <div class="inner_faq_head" @click="openPopup(item, child, childIndex)" :class="activeChild === childIndex ? 'text-orange' : 'text-black'">
               <span>{{ child.name }}</span>
-              <Arrow :strokeWidth="22.5" :fillColor="'currentColor'" />
+              <Arrow :strokeWidth="10.5" :fillColor="'currentColor'" direction="left" />
             </div>
           </div>
         </div>
@@ -38,15 +38,15 @@
             <div ref="closeMenu" class="flex mx-auto">
               <!-- Back button -->
               <div class="flex">
-                <button class="mt-2 flex text-black" @click="closePopup">
-                  <Arrow size="40px" direction="right" fillColor="#000000" strokeWidth="1px" />
+                <button class="mt-1 flex text-black" @click="closePopup">
+                  <Close size="30px" fillColor="#000000" />
                 </button>
               </div>
               <!-- Content -->
               <div class="text-black font-graphik w-full gallery_popup_imgs">
                 <h1 class="popup_title">{{ popupTitle }}</h1>
                 <p class="font-MyriadPro popup_desc" v-html="popupDescription"></p>
-                 <!-- Dropdown -->
+                <!-- Dropdown -->
                 <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
                   <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
                     {{ material.name }}
@@ -1133,7 +1133,7 @@ const updateSelectedMaterial = () => {
 const closePopup = () => {
   showPopup.value = false
 }
-  
+
 
 
 watch(selectedMaterialName, () => {
@@ -1145,7 +1145,7 @@ watch(() => props.accordionData, (newData) => {
 }, { immediate: true })
 </script>
 
- <style scoped>
+<style scoped>
 .faq_main_div {
   margin-top: 44px;
   border-top: 1px solid #7c7369;
@@ -1411,7 +1411,7 @@ p.popup_desc {
   }
 
   .gallery_images_height {
-    height: 60vh;
+    height: 44vh;
   }
 
   .popup_gallery_cont {
@@ -1421,77 +1421,93 @@ p.popup_desc {
 
 }
 
-@media(max-width:1199px){
+@media(max-width:1199px) {
   .popup_gallery_cont {
     max-width: 832px;
     padding: 46px 40px 0px 30px;
-}
-.gallery_popup_imgs {
+  }
+
+  .gallery_popup_imgs {
     padding-left: 32px;
-}
-h1.popup_title {
+  }
+
+  h1.popup_title {
     font-size: 32px;
     line-height: 40px;
-}
-.popup_gallery_cont button {
+  }
+
+  .popup_gallery_cont button {
     margin-top: 0px;
-}
+  }
 
 }
 
-@media(max-width:991px){
+@media(max-width:991px) {
   .popup_gallery_cont {
     max-width: 682px;
     padding: 46px 40px 0px 30px;
-}
-.gallery_images_main {
+  }
+
+  .gallery_images_main {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.product_container {
+  }
+
+  .product_container {
     padding: 0px 42px;
-}
-.materils_main_sec {
+  }
+
+  .materils_main_sec {
     background-color: #eae6e1;
     padding: 30px 0px 60px;
-}
-.product_container {
+  }
+
+  .product_container {
     padding: 0px 32px;
-}
+  }
 }
 
-@media(max-width:574px){
+@media(max-width:574px) {
   .product_container {
     padding: 0px 22px;
-}
-.materils_cut_top ul {
+  }
+
+  .materils_cut_top ul {
     column-gap: 40px;
-}
-.popup_gallery_cont {
+  }
+
+  .popup_gallery_cont {
     padding: 36px 22px 0px 22px;
-}
-.gallery_popup_imgs {
+  }
+
+  .gallery_popup_imgs {
     padding-left: 22px;
-}
-h1.popup_title {
+  }
+
+  h1.popup_title {
     font-size: 26px;
     line-height: 32px;
-}
-.popup_gallery_cont button svg {
+  }
+
+  .popup_gallery_cont button svg {
     width: 18px;
-}
-.popup_gallery_cont button {
+  }
+
+  .popup_gallery_cont button {
     margin-top: -4px;
-}
-p.popup_desc{
+  }
+
+  p.popup_desc {
     font-size: 14px;
     line-height: 26px;
-}
-.gallery_images_main {
+  }
+
+  .gallery_images_main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 15px;
-}
-.gallery_images_height {
+  }
+
+  .gallery_images_height {
     height: 43vh;
+  }
 }
-}
-</style> 
+</style>

@@ -68,9 +68,9 @@
           Tubo sofa and loungers’ collection is designed by French designer Christophe Pillet. 100%
           Made in Italy.
         </p>
-        <button @click="toggleVisibility">
+        <button @click="toggleVisibility " class="hover:text-orange">
           <span>INSPIRATIONAL SCENE</span>
-          <Arrow class="mt-0 ml-3 self-center" size="16px" fillColor="currentColor" />
+          <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
         </button>
       </div>
       <div class="product_inner_img">
@@ -86,7 +86,7 @@
       <div class="materils_cut_top">
         <ul>
           <li>MATERIALS</li>
-          <li><router-link to="#">DOWNLOAD CUT SHEET</router-link></li>
+          <li><router-link to="#" class="hover:text-orange hover:border-orange">DOWNLOAD CUT SHEET</router-link></li>
         </ul>
       </div>
       <StoreAccordion />
