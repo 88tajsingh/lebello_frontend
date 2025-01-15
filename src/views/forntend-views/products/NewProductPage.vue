@@ -261,10 +261,10 @@ button.slider_arrow.custom-next {
   border-radius: 13px;
   background-color: #ffffff;
   border: 1px solid #bcb3a6;
-  font-size: 15px;
+  font-size: 14px;
   color: #333333;
   font-weight: 300;
-  padding: 7px 35px;
+  padding: 5px 23px;
   text-transform: uppercase;
   transition: all 0.5s;
 }
@@ -529,10 +529,10 @@ button.slider_arrow.custom-next {
     padding: 8.5px 97px 11.5px 14px;
   } */
 
-  .threed_btns a {
+  /* .threed_btns a {
     font-size: 11px;
     padding: 1px 23px;
-  }
+  } */
 
   .threed_inner_main .threed_img iframe {
     height: 533px;
