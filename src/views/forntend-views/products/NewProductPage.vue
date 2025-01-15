@@ -230,10 +230,10 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont h2 {
-  font-size: 31px;
-  line-height: 30px;
-  color: #333333;
-  font-weight: 600;
+    font-size: 31px;
+    line-height: 30px;
+    color: #333333;
+    font-family: 'GraphikMedium';
 }
 
 .threed_inner_main .threed_cont p {
@@ -320,6 +320,8 @@ button.slider_arrow.custom-next {
     line-height: 28px;
     color: #555555;
     font-weight: 300;
+    font-family: 'GraphikLight';
+    max-width: 470px;
 }
 
 .product_inner_cont button {
@@ -360,7 +362,7 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont p span {
-  font-weight: 600;
+    font-family: 'GraphikMedium';
 }
 
 
