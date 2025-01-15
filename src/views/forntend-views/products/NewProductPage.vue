@@ -308,11 +308,11 @@ button.slider_arrow.custom-next {
 }
 
 .product_inner_cont h2 {
-  font-size: 31px;
-  line-height: 36px;
-  color: #333333;
-  font-weight: 300;
-  margin-bottom: 24px;
+    font-size: 31px;
+    line-height: 36px;
+    color: #333333;
+    margin-bottom: 24px;
+    font-family: 'GraphikMedium';
 }
 
 .product_inner_cont p {
@@ -351,10 +351,10 @@ button.slider_arrow.custom-next {
 }
 
 .materils_cut_top ul li {
-  font-size: 16px;
-  line-height: 24px;
-  color: #333333;
-  font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #333333;
+    font-family: 'GraphikMedium';
 }
 
 .materils_cut_top ul li a {
