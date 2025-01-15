@@ -432,7 +432,7 @@ button.slider_arrow.custom-next {
   } */
 
   .product_inner_cont {
-    padding: 40px 65px 0px 82px;
+    padding: 40px 67px 0px 82px;
   }
 
   
