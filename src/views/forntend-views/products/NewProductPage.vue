@@ -237,18 +237,18 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont p {
-    font-size: 18px;
+    font-size: 16px;
     color: #000000;
     font-weight: 300;
-    line-height: 26px;
-    max-width: 270px;
+    line-height: 24px;
+    max-width: 240px;
     margin: 36px 0px 16px;
 }
 
 .threed_inner_main .threed_cont select {
     border-radius: 6px;
     border: 1px solid #cecece;
-    font-size: 17px;
+    font-size: 16px;
     color: #000000;
     padding: 10.5px 67px 12.5px 20px;
     background-image: url(/src/assets/images/product/select-arrow.svg);
@@ -316,14 +316,14 @@ button.slider_arrow.custom-next {
 }
 
 .product_inner_cont p {
-    font-size: 18px;
-    line-height: 29px;
+    font-size: 16px;
+    line-height: 28px;
     color: #555555;
     font-weight: 300;
 }
 
 .product_inner_cont button {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 20px;
   color: #333333;
   font-weight: 600;
@@ -349,7 +349,7 @@ button.slider_arrow.custom-next {
 }
 
 .materils_cut_top ul li {
-  font-size: 24px;
+  font-size: 16px;
   line-height: 24px;
   color: #333333;
   font-weight: 600;
@@ -434,21 +434,14 @@ button.slider_arrow.custom-next {
     padding: 40px 47px 0px 82px;
   }
 
-  .materils_cut_top ul li {
-    font-size: 18px;
-    line-height: 24px;
-    color: #333333;
-    font-weight: 600;
-  }
+  
 
   .materils_cut_top ul {
     column-gap: 100px;
   }
 
-  .materils_cut_top ul li {
-    font-size: 16px;
-    line-height: 24px;
-  }
+  
+  
 
 }
 
