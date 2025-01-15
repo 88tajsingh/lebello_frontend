@@ -153,6 +153,8 @@ const products = ref([
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
 .product_banner {
   height: 100vh;
   overflow: hidden;
@@ -174,11 +176,11 @@ const products = ref([
 }
 
 .slider_text h1 {
-  font-size: 50px;
-  line-height: 54px;
+  font-size: 40px;
+  line-height: 44px;
   color: #ffffff;
   font-weight: 400;
-  font-family: 'PT Serif';
+  font-family: "Noto Serif", serif;
 }
 
 button.slider_arrow {
