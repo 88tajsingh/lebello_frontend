@@ -1209,15 +1209,10 @@ watch(() => props.accordionData, (newData) => {
 }
 
 h1.popup_title {
-  font-size: 62px;
-  line-height: 62px;
+  font-size: 31px;
+  line-height: 42px;
   color: #000000;
-}
-
-h1.popup_title {
-  font-size: 62px;
-  line-height: 62px;
-  color: #000000;
+  font-family: 'GraphikMedium';
 }
 
 .gallery_popup_main {
@@ -1251,21 +1246,21 @@ h1.popup_title {
 }
 
 .popup_select_box {
-  margin-top: 34px;
-  font-size: 20px;
-  color: #000000;
-  line-height: 30px;
-  border-radius: 16px;
-  padding: 9px 109px 9px 20px;
-  margin-bottom: 42px;
-  background-image: url(/src/assets/images/product/select-arrow.svg);
-  background-position: 95% 50%;
-  background-size: 12% 30%;
+    margin-top: 28px;
+    font-size: 16px;
+    color: #000000;
+    line-height: 25px;
+    border-radius: 16px;
+    padding: 9px 64px 9px 20px;
+    margin-bottom: 42px;
+    background-image: url(/src/assets/images/product/select-arrow.svg);
+    background-position: 95% 50%;
+    background-size: 12% 30%;
 }
 
 p.popup_desc {
-  font-size: 24px;
-  line-height: 46px;
+  font-size: 16px;
+  line-height: 30px;
   color: #000000;
   margin-top: 10px;
 }
@@ -1292,16 +1287,6 @@ p.popup_desc {
     padding: 80px 157px 0px 80px;
   }
 
-  h1.popup_title {
-    font-size: 46px;
-    line-height: 46px;
-  }
-
-  p.popup_desc {
-    font-size: 21px;
-    line-height: 40px;
-  }
-
 }
 
 @media(max-width:1599px) {
@@ -1316,11 +1301,6 @@ p.popup_desc {
 
   .gallery_popup_imgs {
     padding-left: 80px;
-  }
-
-  p.popup_desc {
-    font-size: 20px;
-    line-height: 38px;
   }
 
   .gallery_images_main {
@@ -1362,23 +1342,6 @@ p.popup_desc {
     padding: 66px 130px 0px 60px;
   }
 
-  h1.popup_title {
-    font-size: 42px;
-    line-height: 42px;
-  }
-
-  p.popup_desc {
-    font-size: 16px;
-    line-height: 31px;
-  }
-
-  .popup_select_box {
-    margin-top: 24px;
-    font-size: 14px;
-    line-height: 26px;
-    padding: 3px 46px 3px 16px;
-    margin-bottom: 34px;
-  }
 
   .popup_gallery_cont svg.icon {
     height: 28px;
@@ -1407,11 +1370,6 @@ p.popup_desc {
 
   .gallery_popup_imgs {
     padding-left: 32px;
-  }
-
-  h1.popup_title {
-    font-size: 32px;
-    line-height: 40px;
   }
 
   .popup_gallery_cont button {
