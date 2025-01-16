@@ -77,7 +77,7 @@
         </button>
       </div>
       <div class="product_inner_img">
-        <img src="../../../assets/images/product/lebello-tubo-sofa-exposed-feature.jpg" />
+        <!-- <img src="../../../assets/images/product/lebello-tubo-sofa-exposed-feature.jpg" /> -->
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -300,14 +300,7 @@ button.slider_arrow.custom-next {
 .text_img_inner_main {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  align-items: center;
 }
-
-.text_img_inner_main .product_inner_img {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .product_inner_cont {
     padding: 64px 150px 0px 124px;
     display: flex;
@@ -339,7 +332,9 @@ button.slider_arrow.custom-next {
   font-weight: 600;
   display: flex;
   align-items: center;
+  -moz-column-gap: 16px;
   column-gap: 16px;
+  margin-top: 60px;
 }
 
 .product_text_img {
@@ -348,7 +343,7 @@ button.slider_arrow.custom-next {
 
 .materils_main_sec {
   background-color: #eae6e1;
-  padding: 70px 0px;
+  padding: 50px 0px 70px;
 }
 
 .materils_cut_top ul {
@@ -382,6 +377,13 @@ button.slider_arrow.custom-next {
 
 .threed_inner_main .threed_img button img {
   max-width: 36px;
+}
+
+.text_img_inner_main .product_inner_img {
+  background-image: url(/src/assets/images/product/lebello-tubo-sofa-exposed-feature.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 /* media css start */
@@ -512,20 +514,15 @@ button.slider_arrow.custom-next {
     height: auto;
 }
 .product_inner_cont {
-    padding: 40px 52px 40px 52px;
+    padding: 40px 52px 0px 52px;
 }
 .product_inner_cont p {
-    max-width: 390px;
     font-size: 14px;
     line-height: 24px;
 }
 .product_inner_cont button {
     margin-top: 40px;
     font-size: 13px;
-}
-.text_img_inner_main .product_inner_img img {
-    height: 420px;
-    object-fit: cover;
 }
 .product_container {
     padding: 0px 52px;
@@ -541,13 +538,16 @@ button.slider_arrow.custom-next {
     padding: 20px 32px 35px;
 }
 .product_inner_cont {
-    padding: 34px 32px 30px 32px;
-}
-.text_img_inner_main {
-    align-items: flex-start;
+    padding: 40px 32px 0px 32px;
 }
 .popup_gallery_cont button svg {
     width: 26px;
+}
+.threed_btns {
+  column-gap: 18px;
+}
+.threed_btns a {
+  padding: 5px 18px;
 }
 }
 
@@ -580,6 +580,9 @@ button.slider_arrow.custom-next {
 }
 .product_container {
     padding: 0px 32px;
+}
+.text_img_inner_main .product_inner_img {
+  height: 290px;
 }
 }
 
