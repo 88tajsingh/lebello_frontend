@@ -76,6 +76,8 @@ import { Arrow, Close } from '../frontend-components/Svg/Icons'
 import { onClickOutside } from '@vueuse/core'
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 
+
+const height= ref(null)
 const props = defineProps({
   accordionData: {
     type: Array,
@@ -1134,6 +1136,10 @@ const closePopup = () => {
   showPopup.value = false
 }
 
+watch(window.innerHeight, () => {
+  height.value=window.innerHeight
+  console.log("height ", height.value)
+})
 
 
 watch(selectedMaterialName, () => {
@@ -1147,7 +1153,7 @@ watch(() => props.accordionData, (newData) => {
 
 <style scoped>
 .faq_main_div {
-  margin-top: 44px;
+  margin-top: 28px;
   border-top: 1px solid #7c7369;
 }
 
@@ -1164,7 +1170,7 @@ watch(() => props.accordionData, (newData) => {
 .faq_head_mian {
   border-bottom: 1px solid #7c7369;
   border-left: none;
-  padding: 30px 0px;
+  padding: 20px 0px;
 }
 
 .faq_main_div .faq_haed span {
