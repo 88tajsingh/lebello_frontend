@@ -1,9 +1,11 @@
 <template>
-  <div class=" overflow-x-hidden bg-white">
-    <RouterView />
-  </div>
+  <router-view v-slot="{ Component }">
+    <Suspense>
+      <component :is="Component" />
+    </Suspense>
+  </router-view>
 </template>
 
 <script setup>
-import { RouterView } from 'vue-router'
+
 </script>
