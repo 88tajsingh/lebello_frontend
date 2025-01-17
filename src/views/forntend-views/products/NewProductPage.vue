@@ -314,7 +314,7 @@ button.slider_arrow.custom-next {
     line-height: 36px;
     color: #333333;
     font-family: 'GraphikMedium';
-    margin-bottom: 20px;
+    margin-bottom: 34px;
 }
 
 .product_inner_cont p {
