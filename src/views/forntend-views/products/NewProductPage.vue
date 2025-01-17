@@ -1,20 +1,22 @@
 <template>
   <div class="relative overflow-hidden ">
-       <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']" navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5"
-       hovrednavColor="#000000" />
-  <section class="product_banner">
-    <SwiperSlider :images="imageData" imageKeyName="gallery">
+    <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']"
+      navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000" />
+    <section class="product_banner font-graphik">
+      <SwiperSlider :images="imageData" imageKeyName="gallery">
         <template #utility>
           <!-- lebellow icon right top -->
           <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
             <img src="/src/assets/logo/lebello-logo-right.png" />
           </a>
           <!-- text left bottom -->
-          <span class="slider_text left-0">
-            <h1> {{ productData?.title }} </h1>
-          </span>
+          <div class="slider_text">
+            <h1>{{ product?.title }}</h1>
+          </div>
+
         </template>
       </SwiperSlider>
+
       <div class="absolute top-48 right-0">
         <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]"
           height="" :closeSidebar="closeSidebar">
@@ -51,24 +53,20 @@
           </div>
         </SideMenu>
       </div>
-  </section>
+    </section>
   </div>
   <Breadcrumb :breadcrumbData="breadcrumbData" />
   <section class="three_d_section_main">
     <div class="threed_inner_main">
-        <div class="threed_img">
-    <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
-    <iframe class="w-full max-h-[546px] h-[546px]"
-      v-if="isIframeVisible"
-      src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html"
-      allowfullscreen
-      frameborder="0"
-      scrolling="no"
-    />
-    <button v-if="!isIframeVisible" @click="toggleIframe">
-      <img src="../../../assets/images/product/3D Icon.png" alt="" />
-    </button>
-  </div>
+      <div class="threed_img">
+        <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
+        <iframe class="w-full max-h-[546px] h-[546px]" v-if="isIframeVisible"
+          src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html"
+          allowfullscreen frameborder="0" scrolling="no" />
+        <button v-if="!isIframeVisible" @click="toggleIframe">
+          <img src="../../../assets/images/product/3D Icon.png" alt="" />
+        </button>
+      </div>
       <div class="threed_cont">
         <div class="product_top_cont">
           <h2>3D CONFIGURATOR</h2>
@@ -89,16 +87,19 @@
   <section class="product_text_img">
     <div class="text_img_inner_main">
       <div class="product_inner_cont">
-        <h2>{{ productData?.title }}</h2>
-        <p v-html="productData?.description"></p>
-        <button @click="toggleVisibility">
+        <div>
+          <h2>{{ productData?.title }}</h2>
+          <p v-html="productData?.description"></p>
+        </div>
+        <button @click="toggleVisibility" class="hover:text-orange">
           <span>INSPIRATIONAL SCENE</span>
-          <Arrow class="mt-0 ml-3 self-center" size="16px" fillColor="currentColor" />
+          <Arrow class="mt-0 ml-3 self-center" size="16px" :strokeWidth="20.8" fillColor="currentColor" />
         </button>
       </div>
       <div class="product_inner_img">
         {{ productData?.new_product_additional_right_box_image_url?.alternative_text }}
-        <img :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)" :alt="productData?.new_product_additional_right_box_image_url?.alternative_text || 'lebello'" />
+        <img :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)"
+          :alt="productData?.new_product_additional_right_box_image_url?.alternative_text || 'lebello'" />
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -110,7 +111,7 @@
       <div class="materils_cut_top">
         <ul>
           <li>MATERIALS</li>
-          <li> <a class="uppercase" target="_blank" blank
+          <li> <a class="hover:text-orange hover:border-orange uppercase" target="_blank" blank
               :href="$filePath(productData?.downloadable_files_url && productData?.downloadable_files_url[0]?.file_url)">Download
               Cut Sheet</a></li>
         </ul>
@@ -124,7 +125,7 @@ import { ref, onMounted, computed, defineAsyncComponent } from 'vue'
 import SwiperSlider from '@/components/frontend-components/SwiperSlider.vue'
 import { getProductDetail } from '@/helper/frontendHelpers'
 import { useRouter } from 'vue-router';
-import { Arrow } from '@/components/frontend-components/Svg/Icons'
+import { Arrow,Menu } from '@/components/frontend-components/Svg/Icons'
 import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
@@ -227,7 +228,15 @@ const products = ref([
 ])
 </script>
 
-<style  scoped>
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+
+  font-family: 'GraphikRegular';
+
+}
+
 .product_banner {
   height: 100vh;
   overflow: hidden;
@@ -249,12 +258,15 @@ const products = ref([
 }
 
 .slider_text h1 {
-  font-size: 60px;
-  line-height: 74px;
+  font-size: 45px;
+  line-height: 49px;
   color: #ffffff;
   font-weight: 400;
-  font-family: 'PT Serif';
+  font-family: "Noto Serif", serif;
+
 }
+
+
 
 button.slider_arrow {
   position: absolute;
@@ -303,28 +315,34 @@ button.slider_arrow.custom-next {
   font-size: 31px;
   line-height: 30px;
   color: #333333;
-  font-weight: 600;
+  font-family: 'GraphikMedium';
 }
 
+
 .threed_inner_main .threed_cont p {
-  font-size: 24px;
+  font-size: 16px;
   color: #000000;
   font-weight: 300;
-  line-height: 34px;
-  max-width: 340px;
-  margin: 50px 0px 16px;
+  line-height: 24px;
+  max-width: 240px;
+  margin: 36px 0px 16px;
+
 }
+
 
 .threed_inner_main .threed_cont select {
   border-radius: 6px;
   border: 1px solid #cecece;
-  font-size: 21px;
+  font-size: 16px;
   color: #000000;
-  padding: 20.5px 147px 21.5px 20px;
+  padding: 10.5px 0px 12.5px 20px;
   background-image: url(/src/assets/images/product/select-arrow.svg);
   line-height: 25px;
   background-position: 95% 50%;
   background-size: 7% 20%;
+  width: 100%;
+  max-width: 340px;
+
 }
 
 .threed_btns {
@@ -336,10 +354,10 @@ button.slider_arrow.custom-next {
   border-radius: 13px;
   background-color: #ffffff;
   border: 1px solid #bcb3a6;
-  font-size: 15px;
+  font-size: 14px;
   color: #333333;
   font-weight: 300;
-  padding: 7px 35px;
+  padding: 5px 23px;
   text-transform: uppercase;
   transition: all 0.5s;
 }
@@ -365,42 +383,47 @@ button.slider_arrow.custom-next {
 .text_img_inner_main {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  align-items: center;
 }
 
-.text_img_inner_main .product_inner_img {
-  display: flex;
-  justify-content: flex-end;
-}
 
 .product_inner_cont {
-  padding: 64px 150px 56px 124px;
+  padding: 64px 150px 0px 124px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
 }
 
 .product_inner_cont h2 {
-  font-size: 40px;
-  line-height: 46px;
+  font-size: 31px;
+  line-height: 36px;
   color: #333333;
-  font-weight: 300;
-  margin-bottom: 60px;
+  font-family: 'GraphikMedium';
+  margin-bottom: 34px;
+
 }
 
+
 .product_inner_cont p {
-  font-size: 24px;
-  line-height: 39px;
+  font-size: 16px;
+  line-height: 28px;
   color: #555555;
   font-weight: 300;
+  font-family: 'GraphikLight';
+
 }
 
 .product_inner_cont button {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 20px;
   color: #333333;
   font-weight: 600;
   display: flex;
   align-items: center;
+  -moz-column-gap: 16px;
   column-gap: 16px;
-  margin-top: 96px;
+  margin-top: 60px;
 }
 
 .product_text_img {
@@ -409,7 +432,8 @@ button.slider_arrow.custom-next {
 
 .materils_main_sec {
   background-color: #eae6e1;
-  padding: 70px 0px;
+  padding: 50px 0px 70px;
+
 }
 
 .materils_cut_top ul {
@@ -418,11 +442,13 @@ button.slider_arrow.custom-next {
   column-gap: 130px;
 }
 
+
 .materils_cut_top ul li {
-  font-size: 24px;
+  font-size: 16px;
   line-height: 24px;
   color: #333333;
-  font-weight: 600;
+  font-family: 'GraphikMedium';
+
 }
 
 .materils_cut_top ul li a {
@@ -430,7 +456,7 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont p span {
-  font-weight: 600;
+  font-family: 'GraphikMedium';
 }
 
 
@@ -444,6 +470,14 @@ button.slider_arrow.custom-next {
 .threed_inner_main .threed_img button img {
   max-width: 36px;
 }
+.text_img_inner_main .product_inner_img {
+  background-image: url(/src/assets/images/product/lebello-tubo-sofa-exposed-feature.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+}
+
 
 /* media css start */
 @media (max-width: 1879px) {
@@ -468,7 +502,7 @@ button.slider_arrow.custom-next {
   }
 
   .product_inner_cont {
-    padding: 44px 90px 46px 94px;
+    padding: 44px 90px 0px 94px;
   }
 
   .product_inner_cont button {
@@ -491,11 +525,6 @@ button.slider_arrow.custom-next {
     padding: 0px 82px 45px;
   }
 
-  .slider_text h1 {
-    font-size: 50px;
-    line-height: 50px;
-  }
-
   .slider_arrow.custom-prev {
     left: 40px;
   }
@@ -513,70 +542,22 @@ button.slider_arrow.custom-next {
     padding: 40px 60px 82px;
   }
 
-  .threed_inner_main .threed_cont h2 {
-    font-size: 26px;
-  }
-
-  .threed_inner_main .threed_cont p {
-    font-size: 19px;
-    line-height: 28px;
-    max-width: 300px;
-    margin: 40px 0px 16px;
-  }
-
-  .threed_inner_main .threed_cont select {
+  /* .threed_inner_main .threed_cont select {
     font-size: 18px;
     padding: 15.5px 102px 17.5px 20px;
-  }
-
-  .product_inner_cont h2 {
-    font-size: 36px;
-    margin-bottom: 30px;
-  }
-
-  .product_inner_cont p {
-    max-width: 586px;
-    font-size: 21px;
-    line-height: 35px;
-  }
-
-  .product_inner_cont button {
-    margin-top: 56px;
-    font-size: 18px;
-  }
+  } */
 
   .product_inner_cont {
-    padding: 40px 82px 40px 82px;
-  }
-
-  .materils_cut_top ul li {
-    font-size: 18px;
-    line-height: 24px;
-    color: #333333;
-    font-weight: 600;
+    padding: 40px 67px 0px 82px;
   }
 
   .materils_cut_top ul {
     column-gap: 100px;
   }
 
-  .materils_cut_top ul li {
-    font-size: 16px;
-    line-height: 24px;
-  }
-
 }
 
 @media(max-width:1599px) {
-  .product_inner_cont p {
-    max-width: 506px;
-    font-size: 18px;
-    line-height: 30px;
-  }
-
-  .product_inner_cont button {
-    margin-top: 44px;
-  }
 
   .threed_inner_main .threed_cont {
     max-width: 510px;
@@ -586,57 +567,24 @@ button.slider_arrow.custom-next {
 }
 
 @media (max-width: 1399px) {
-  .slider_text h1 {
-    font-size: 40px;
-    line-height: 40px;
-  }
 
   .threed_inner_main .threed_cont {
     max-width: 480px;
     padding: 30px 60px 55px;
   }
 
-  .threed_inner_main .threed_cont h2 {
-    font-size: 21px;
-    line-height: 21px;
-  }
-
-  .threed_inner_main .threed_cont p {
-    font-size: 16px;
-    line-height: 21px;
-    max-width: 250px;
-    margin: 40px 0px 16px;
-  }
-
-  .threed_inner_main .threed_cont select {
+  /* .threed_inner_main .threed_cont select {
     font-size: 14px;
     padding: 8.5px 97px 11.5px 14px;
-  }
+  } */
 
-  .threed_btns a {
+  /* .threed_btns a {
     font-size: 11px;
     padding: 1px 23px;
-  }
+  } */
 
   .threed_inner_main .threed_img iframe {
     height: 533px;
-  }
-
-  .product_inner_cont p {
-    max-width: 456px;
-    font-size: 16px;
-    line-height: 26px;
-  }
-
-  .product_inner_cont h2 {
-    font-size: 26px;
-    margin-bottom: 30px;
-    line-height: 26px;
-  }
-
-  .product_inner_cont button {
-    margin-top: 50px;
-    font-size: 13px;
   }
 
   .product_inner_cont button svg {
@@ -644,160 +592,199 @@ button.slider_arrow.custom-next {
   }
 }
 
-@media(max-width:1199px){
+@media(max-width:1199px) {
   .slider_arrow.custom-prev {
     left: 20px;
   }
+
   button.slider_arrow.custom-next {
     right: 20px;
   }
+
   .slider_text {
     padding: 0px 52px 45px;
   }
+
   .threed_inner_main .threed_img img {
     height: 350px;
     object-fit: cover;
-}
-.threed_inner_main .threed_img button img {
+  }
+
+  .threed_inner_main .threed_img button img {
     height: auto;
-}
-.product_inner_cont {
-    padding: 40px 52px 40px 52px;
-}
-.product_inner_cont h2 {
-    margin-bottom: 24px;
-}
-.product_inner_cont p {
-    max-width: 390px;
+  }
+
+  .product_inner_cont {
+    padding: 40px 52px 0px 52px;
+  }
+
+  .product_inner_cont p {
     font-size: 14px;
     line-height: 24px;
-}
-.product_inner_cont button {
+  }
+
+  .product_inner_cont button {
     margin-top: 40px;
     font-size: 13px;
-}
-.text_img_inner_main .product_inner_img img {
-    height: 420px;
-    object-fit: cover;
-}
-.product_container {
+  }
+
+  .product_container {
     padding: 0px 52px;
-}
+  }
 }
 
-  @media(max-width:991px){
-    .slider_text {
-      padding: 0px 32px 35px;
+@media(max-width:991px) {
+  .slider_text {
+    padding: 0px 32px 35px;
   }
-.threed_inner_main .threed_cont {
+
+  .threed_inner_main .threed_cont {
     max-width: 370px;
     padding: 20px 32px 35px;
-}
-.product_inner_cont {
-    padding: 34px 32px 30px 32px;
-}
-.text_img_inner_main {
+  }
+
+  .product_inner_cont {
+    padding: 40px 32px 0px 32px;
+  }
+
+  .text_img_inner_main {
     align-items: flex-start;
-}
-.popup_gallery_cont button svg {
+  }
+
+  .popup_gallery_cont button svg {
     width: 26px;
-}
+  }
+
+  .threed_btns {
+    column-gap: 18px;
+
+  }
+
+  .threed_btns a {
+    padding: 5px 18px;
+
+  }
 }
 
-@media(max-width:767px){
+@media(max-width:767px) {
   .threed_inner_main {
     flex-direction: column;
-}
-.slider_text h1 {
+  }
+
+  .slider_text h1 {
     font-size: 36px;
     line-height: 32px;
-}
-.threed_inner_main .threed_cont {
+  }
+
+  .threed_inner_main .threed_cont {
     max-width: 100%;
     padding: 50px 32px 50px;
     row-gap: 80px;
-}
-.text_img_inner_main {
+  }
+
+  .text_img_inner_main {
     display: flex;
     flex-direction: column-reverse;
-}
-.text_img_inner_main .product_inner_img img {
+  }
+
+  .text_img_inner_main .product_inner_img img {
     height: auto;
     -o-object-fit: cover;
     object-fit: cover;
-}
-.threed_inner_main .threed_img img {
+  }
+
+  .threed_inner_main .threed_img img {
     height: auto;
     -o-object-fit: cover;
     object-fit: cover;
-}
-.product_container {
+  }
+
+  .product_container {
     padding: 0px 32px;
-}
+  }
+  .text_img_inner_main .product_inner_img {
+
+    height: 290px;
+
+  }
 }
 
-@media(max-width:574px){
+@media(max-width:574px) {
   .slider_text {
     padding: 0px 22px 35px;
-}
-.slider_text h1 {
+  }
+
+  .slider_text h1 {
     font-size: 30px;
     line-height: 20px;
-}
-.slider_arrow.custom-prev {
+  }
+
+  .slider_arrow.custom-prev {
     left: 15px;
-}
-button.slider_arrow.custom-next {
+  }
+
+  button.slider_arrow.custom-next {
     right: 15px;
-}
-.threed_inner_main .threed_cont {
+  }
+
+  .threed_inner_main .threed_cont {
     max-width: 100%;
     padding: 40px 22px 40px;
     row-gap: 60px;
-}
-.threed_inner_main .threed_cont h2 {
+  }
+
+  .threed_inner_main .threed_cont h2 {
     font-size: 20px;
     line-height: 20px;
-}
-.threed_inner_main .threed_cont p {
+  }
+
+  .threed_inner_main .threed_cont p {
     font-size: 15px;
     line-height: 21px;
     max-width: 220px;
     margin: 24px 0px 15px;
-}
-.threed_btns {
+  }
+
+  .threed_btns {
     column-gap: 16px;
-}
-.product_inner_cont {
+  }
+
+  .product_inner_cont {
     padding: 34px 22px 0px 22px;
-}
-.product_inner_cont h2 {
+  }
+
+  .product_inner_cont h2 {
     margin-bottom: 18px;
     font-size: 24px;
-}
-.product_inner_cont button svg {
+  }
+
+  .product_inner_cont button svg {
     width: 12px;
-}
-.product_inner_cont button {
+  }
+
+  .product_inner_cont button {
     margin-top: 30px;
     font-size: 13px;
-}
-.materils_main_sec {
+  }
+
+  .materils_main_sec {
     padding: 40px 0px;
-}
-.product_container {
+  }
+
+  .product_container {
     padding: 0px 22px;
-}
-.materils_cut_top ul {
+  }
+
+  .materils_cut_top ul {
     column-gap: 40px;
-}
-.materils_cut_top ul li {
+  }
+
+  .materils_cut_top ul li {
     font-size: 14px;
     line-height: 18px;
-}
-.popup_gallery_cont button svg {
+  }
+  .popup_gallery_cont button svg {
     width: 18px;
-}
-
+  }
 }
 </style>
