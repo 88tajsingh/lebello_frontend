@@ -12,9 +12,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        graphik: ['GraphikRegular'],
         satoshi: ['Satoshi', 'sans-serif'],
         sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-        graphik: ['GraphikRegular'],
         graphikLight: ['GraphikLight'],
         graphikMedium: ['GraphikMedium'],
         MyriadPro: ['Myriad Pro'],
@@ -55,7 +55,7 @@ export default {
         paritGreen: '#7bd924',
         blue: '#3399ff',
         darkTrasparent: '#0e0e0e89',
-        orange: '#d98c3a',
+        orange: '#cc9933',
 
         // Theme colors
         current: 'currentColor',

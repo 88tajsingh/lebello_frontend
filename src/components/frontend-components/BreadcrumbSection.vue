@@ -47,8 +47,8 @@ defineProps({
   column-gap: 12px;
 }
 .breadcrem_text ul li {
-  font-size: 24px;
-  line-height: 27px;
+  font-size: 16px;
+  line-height: 18px;
   color: #000000;
 }
 .breadcrem_text ul li a.active_link {
@@ -81,16 +81,6 @@ defineProps({
   .breadcrem_section {
     padding: 28px 0px;
   }
-  .breadcrem_text ul li {
-    font-size: 18px;
-    line-height: 18px;
-  }  
-}
-@media (max-width: 1399px) {
-  .breadcrem_text ul li {
-    font-size: 16px;
-    line-height: 18px;
-  }
 }
 
 @media(max-width:1199px){
@@ -114,9 +104,9 @@ defineProps({
 .product_container {
     padding: 0px 22px;
 }
-.breadcrem_text ul li[data-v-1680cfa2] {
+/* .breadcrem_text ul li[data-v-1680cfa2] {
     font-size: 14px;
     line-height: 14px;
-}
+} */
 }
 </style>

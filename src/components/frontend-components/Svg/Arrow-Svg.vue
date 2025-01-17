@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ transform: `rotate(${rotation}deg)` }">
+  <div :style="{ transform: `rotate(${rotation}deg)` }" class="transition-transform duration-300">
     <svg
       :width="props?.size"
       :height="props?.size"
@@ -89,5 +89,7 @@ defineExpose({
 </script>
 
 <style scoped>
-/* Additional styles */
+.icon {
+  transition: transform 0.3s ease; /* Smooth rotation transition */
+}
 </style>

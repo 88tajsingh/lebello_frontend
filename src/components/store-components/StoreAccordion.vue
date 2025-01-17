@@ -3,11 +3,11 @@
     <!-- Accordion -->
     <div v-for="(item, index) in items" :key="index" class="faq_title">
       <!-- Parent Item -->
-      <div class="faq_head_mian cursor-pointer transition-all duration-300" @click="toggleParent(index)">
-        <div class="faq_haed">
+      <div class="faq_head_mian  transition-all duration-300">
+        <div class="faq_haed cursor-pointer"  @click="toggleParent(index)">
           <span :class="activeParent === index ? 'text-orange' : 'text-black'">{{ item.swatch.title }}</span>
           <div>
-            <Arrow direction="left" :strokeWidth="22.5" :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
+            <Arrow :direction="activeParent === index ? 'up' : 'left'" :strokeWidth="10.5" :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
           </div>
         </div>
       </div>
@@ -18,10 +18,10 @@
         leaveTo="max-h-0 overflow-hidden">
         <div class="inner_faq">
           <div v-for="(child, childIndex) in item.swatch.materials" :key="childIndex" class="faq_inner_cont"
-            @click="openPopup(item, child, childIndex)">
-            <div class="inner_faq_head" :class="activeChild === childIndex ? 'text-orange' : 'text-black'">
+            >
+            <div class="inner_faq_head" @click="openPopup(item, child, childIndex)" :class="activeChild === childIndex ? 'text-orange' : 'text-black'">
               <span>{{ child.name }}</span>
-              <Arrow :strokeWidth="22.5" :fillColor="'currentColor'" />
+              <Arrow :strokeWidth="10.5" :fillColor="'currentColor'" direction="left" />
             </div>
           </div>
         </div>
@@ -38,15 +38,15 @@
             <div ref="closeMenu" class="flex mx-auto">
               <!-- Back button -->
               <div class="flex">
-                <button class="mt-2 flex text-black" @click="closePopup">
-                  <Arrow size="40px" direction="right" fillColor="#000000" strokeWidth="1px" />
+                <button class="mt-1 flex text-black" @click="closePopup">
+                  <Close size="30px" fillColor="#000000" />
                 </button>
               </div>
               <!-- Content -->
               <div class="text-black font-graphik w-full gallery_popup_imgs">
                 <h1 class="popup_title">{{ popupTitle }}</h1>
                 <p class="font-MyriadPro popup_desc" v-html="popupDescription"></p>
-                 <!-- Dropdown -->
+                <!-- Dropdown -->
                 <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
                   <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
                     {{ material.name }}
@@ -76,6 +76,8 @@ import { Arrow, Close } from '../frontend-components/Svg/Icons'
 import { onClickOutside } from '@vueuse/core'
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 
+
+const height= ref(null)
 const props = defineProps({
   accordionData: {
     type: Array,
@@ -1133,7 +1135,11 @@ const updateSelectedMaterial = () => {
 const closePopup = () => {
   showPopup.value = false
 }
-  
+
+watch(window.innerHeight, () => {
+  height.value=window.innerHeight
+  console.log("height ", height.value)
+})
 
 
 watch(selectedMaterialName, () => {
@@ -1145,26 +1151,26 @@ watch(() => props.accordionData, (newData) => {
 }, { immediate: true })
 </script>
 
- <style scoped>
+<style scoped>
 .faq_main_div {
-  margin-top: 44px;
+  margin-top: 28px;
   border-top: 1px solid #7c7369;
 }
 
 .faq_main_div .faq_haed {
   display: flex;
   align-items: center;
-  max-width: 574px;
+  max-width: 378px;
   justify-content: space-between;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 16px;
+  line-height: 21px;
   color: #000000;
 }
 
 .faq_head_mian {
   border-bottom: 1px solid #7c7369;
   border-left: none;
-  padding: 30px 0px;
+  padding: 20px 0px;
 }
 
 .faq_main_div .faq_haed span {
@@ -1189,10 +1195,10 @@ watch(() => props.accordionData, (newData) => {
 .inner_faq .faq_inner_cont .inner_faq_head {
   display: flex;
   align-items: center;
-  max-width: 544px;
+  max-width: 356px;
   justify-content: space-between;
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 16px;
+  line-height: 21px;
   color: #000000;
   cursor: pointer;
   transition: all 0.5s;
@@ -1209,15 +1215,10 @@ watch(() => props.accordionData, (newData) => {
 }
 
 h1.popup_title {
-  font-size: 62px;
-  line-height: 62px;
+  font-size: 31px;
+  line-height: 42px;
   color: #000000;
-}
-
-h1.popup_title {
-  font-size: 62px;
-  line-height: 62px;
-  color: #000000;
+  font-family: 'GraphikMedium';
 }
 
 .gallery_popup_main {
@@ -1226,7 +1227,7 @@ h1.popup_title {
 
 .popup_gallery_cont {
   max-width: 1471px;
-  padding: 100px 240px 0px 100px;
+  padding: 35px 148px 0px 30px;
 }
 
 .gallery_popup_imgs {
@@ -1243,7 +1244,7 @@ h1.popup_title {
 }
 
 .gallery_images_height {
-  height: 50vh;
+  height: 61vh;
 }
 
 .gallery_images_height::-webkit-scrollbar {
@@ -1251,21 +1252,21 @@ h1.popup_title {
 }
 
 .popup_select_box {
-  margin-top: 34px;
-  font-size: 20px;
-  color: #000000;
-  line-height: 30px;
-  border-radius: 16px;
-  padding: 9px 109px 9px 20px;
-  margin-bottom: 42px;
-  background-image: url(/src/assets/images/product/select-arrow.svg);
-  background-position: 95% 50%;
-  background-size: 12% 30%;
+    margin-top: 16px;
+    font-size: 16px;
+    color: #000000;
+    line-height: 25px;
+    border-radius: 6px;
+    padding: 9px 64px 9px 20px;
+    margin-bottom: 28px;
+    background-image: url(/src/assets/images/product/select-arrow.svg);
+    background-position: 95% 50%;
+    background-size: 12% 30%;
 }
 
 p.popup_desc {
-  font-size: 24px;
-  line-height: 46px;
+  font-size: 16px;
+  line-height: 30px;
   color: #000000;
   margin-top: 10px;
 }
@@ -1273,7 +1274,6 @@ p.popup_desc {
 @media (max-width: 1879px) {
   .popup_gallery_cont {
     max-width: 1340px;
-    padding: 80px 140px 0px 80px;
   }
 }
 
@@ -1282,34 +1282,13 @@ p.popup_desc {
     padding: 24px 0px;
   }
 
-  .faq_main_div .faq_haed {
-    font-size: 19px;
-    line-height: 22px;
-  }
-
   .inner_faq .faq_inner_cont {
     padding: 24px 0px 30px 24px;
   }
 
-  .inner_faq .faq_inner_cont .inner_faq_head {
-    font-size: 19px;
-    line-height: 22px;
-    max-width: 550px;
-  }
 
   .popup_gallery_cont {
     max-width: 1230px;
-    padding: 80px 157px 0px 80px;
-  }
-
-  h1.popup_title {
-    font-size: 46px;
-    line-height: 46px;
-  }
-
-  p.popup_desc {
-    font-size: 21px;
-    line-height: 40px;
   }
 
 }
@@ -1321,16 +1300,10 @@ p.popup_desc {
 
   .popup_gallery_cont {
     max-width: 1130px;
-    padding: 66px 148px 0px 60px;
   }
 
   .gallery_popup_imgs {
     padding-left: 80px;
-  }
-
-  p.popup_desc {
-    font-size: 20px;
-    line-height: 38px;
   }
 
   .gallery_images_main {
@@ -1346,12 +1319,6 @@ p.popup_desc {
 
   .faq_main_div {
     margin-top: 28px;
-  }
-
-  .faq_main_div .faq_haed {
-    font-size: 16px;
-    line-height: 21px;
-    max-width: 384px;
   }
 
   .faq_head_mian {
@@ -1373,34 +1340,10 @@ p.popup_desc {
     transform: rotate(-91deg);
   }
 
-  .inner_faq .faq_inner_cont .inner_faq_head {
-    font-size: 16px;
-    line-height: 21px;
-    max-width: 365px;
-  }
-
   .popup_gallery_cont {
     max-width: 982px;
-    padding: 66px 130px 0px 60px;
   }
 
-  h1.popup_title {
-    font-size: 42px;
-    line-height: 42px;
-  }
-
-  p.popup_desc {
-    font-size: 16px;
-    line-height: 31px;
-  }
-
-  .popup_select_box {
-    margin-top: 24px;
-    font-size: 14px;
-    line-height: 26px;
-    padding: 3px 46px 3px 16px;
-    margin-bottom: 34px;
-  }
 
   .popup_gallery_cont svg.icon {
     height: 28px;
@@ -1411,87 +1354,97 @@ p.popup_desc {
   }
 
   .gallery_images_height {
-    height: 60vh;
+    height: 51vh;
   }
 
   .popup_gallery_cont {
     max-width: 982px;
-    padding: 66px 164px 0px 60px;
   }
 
 }
 
-@media(max-width:1199px){
+@media(max-width:1199px) {
   .popup_gallery_cont {
     max-width: 832px;
     padding: 46px 40px 0px 30px;
-}
-.gallery_popup_imgs {
+  }
+
+  .gallery_popup_imgs {
     padding-left: 32px;
-}
-h1.popup_title {
-    font-size: 32px;
-    line-height: 40px;
-}
-.popup_gallery_cont button {
+  }
+
+  .popup_gallery_cont button {
     margin-top: 0px;
-}
+  }
 
 }
 
-@media(max-width:991px){
+@media(max-width:991px) {
   .popup_gallery_cont {
     max-width: 682px;
     padding: 46px 40px 0px 30px;
-}
-.gallery_images_main {
+  }
+
+  .gallery_images_main {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.product_container {
+  }
+
+  .product_container {
     padding: 0px 42px;
-}
-.materils_main_sec {
+  }
+
+  .materils_main_sec {
     background-color: #eae6e1;
     padding: 30px 0px 60px;
-}
-.product_container {
+  }
+
+  .product_container {
     padding: 0px 32px;
-}
+  }
 }
 
-@media(max-width:574px){
+@media(max-width:574px) {
   .product_container {
     padding: 0px 22px;
-}
-.materils_cut_top ul {
+  }
+
+  .materils_cut_top ul {
     column-gap: 40px;
-}
-.popup_gallery_cont {
+  }
+
+  .popup_gallery_cont {
     padding: 36px 22px 0px 22px;
-}
-.gallery_popup_imgs {
+  }
+
+  .gallery_popup_imgs {
     padding-left: 22px;
-}
-h1.popup_title {
+  }
+
+  h1.popup_title {
     font-size: 26px;
     line-height: 32px;
-}
-.popup_gallery_cont button svg {
+  }
+
+  .popup_gallery_cont button svg {
     width: 18px;
-}
-.popup_gallery_cont button {
+  }
+
+  .popup_gallery_cont button {
     margin-top: -4px;
-}
-p.popup_desc{
+  }
+
+  p.popup_desc {
     font-size: 14px;
     line-height: 26px;
-}
-.gallery_images_main {
+  }
+
+  .gallery_images_main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 15px;
-}
-.gallery_images_height {
+  }
+
+  .gallery_images_height {
     height: 43vh;
+  }
 }
-}
-</style> 
+</style>
