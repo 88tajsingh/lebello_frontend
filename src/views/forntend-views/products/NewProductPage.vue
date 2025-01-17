@@ -98,7 +98,7 @@
       </div>
       <div class="product_inner_img">
         {{ productData?.new_product_additional_right_box_image_url?.alternative_text }}
-        <img :src="$filePath(productData?.new_product_additional_right_box_image_url.file_url)" :alt="productData?.new_product_additional_right_box_image_url?.alternative_text || 'lebello'" />
+        <img :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)" :alt="productData?.new_product_additional_right_box_image_url?.alternative_text || 'lebello'" />
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
