@@ -1,7 +1,8 @@
 <template>
     <DefaultCard :cardTitle="store.getters.editData ? `Edit Swatches` : `Add Swatches`">
-        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array" :deleteService="SwatchesServices.deleteSwatches"
-            masterKey="master_swatch_id" :masterDeleteService="SwatchesServices.deleteMasterSwatch" routeTo="swatches">
+        <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
+            :deleteService="SwatchesServices.deleteSwatches" masterKey="master_swatch_id"
+            :masterDeleteService="SwatchesServices.deleteMasterSwatch" routeTo="swatches">
         </DomainComponent>
         <template v-if="form.id" v-slot:header>
             <MasterSlugForm :form="form" @update-slug="() => fetchSwatchData()"
@@ -25,7 +26,9 @@
                                 <SingleCheck v-if="form.id" label="" v-model="checkedFields.description"></SingleCheck>
                                 <div class="w-full">
                                     <TinyMCE v-model="form.description" />
-                                    <span class="text-sm pl-2">The material term id. This is generated from material taxonomy. Please do not make any changes here.</span>
+                                    <span class="text-sm pl-2">The material term id. This is generated from material
+                                        taxonomy.
+                                        Please do not make any changes here.</span>
                                 </div>
                             </div>
                         </Accordion>
@@ -33,7 +36,8 @@
                     <div class="mt-5 ">
                         <Accordion :open="true" header=" Material teaser text ">
                             <div class="px-3 pt-2 flex">
-                                <SingleCheck v-if="form.id" label="" v-model="checkedFields.material_text_overlay"></SingleCheck>
+                                <SingleCheck v-if="form.id" label="" v-model="checkedFields.material_text_overlay">
+                                </SingleCheck>
                                 <div class="w-full">
                                     <TinyMCE v-model="form.material_text_overlay" />
                                     <span class="text-sm pl-2">Put Material Description.</span>
@@ -52,62 +56,12 @@
                         </Accordion>
                     </div>
                     <div class="mt-5">
-                        <Accordion :open="true" header="Material Options">
-                            <div class="my-5 px-6 flex h-auto items-center">
-                                <div class=" items-center text-gray-600 text-sm">
-                                    <TextInput type="number" class="block w-[180px] mr-2 h-[33px]"
-                                        v-model="form.material_term_key" placeholder="Term key" label="Term key"
-                                        :message="errors.material_term_key" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="(value) => { checkedFields.material_term_key = value }" />
-                                    <span>The material term id. This is generated from material taxonomy.
-                                        Please do not make any changes here.
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="px-6 items-center text-gray-600 text-sm">
-                                <TextInput id="material_item" type="number" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.material_item" placeholder="Material item" label="Material item"
-                                    :message="errors.material_item" :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="(value) => { checkedFields.material_item = value }" />
-
-                                <span>Put material taxonomy term id. Seperate with commas.</span>
-                            </div>
-                            <div class="px-6 mt-2 items-center text-gray-600 text-sm">
-                                <TextInput id="material_group_name" type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.material_group_name" placeholder="Group Name" label="Group Name"
-                                    :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="(value) => { checkedFields.material_group_name = value }" />
-                            </div>
-                        </Accordion>
+                        <CommonSection header="Material Options" :form="form" :fields="materialOptionsFields"
+                            :hasCheckBox="checkBoxFlag" :checkedFields="checkedFields" />
                     </div>
                     <div class="mt-5">
-                        <Accordion :open="true" header="Seo Options">
-
-                            <div class=" px-6 mt-2 items-center text-gray-600 text-sm">
-                                <TextInput id="seo_title" type="text" class="block w-[180px] mr-2 h-[33px]"
-                                    v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                    :message="errors.seo_title" :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="(value) => { checkedFields.seo_title = value }" />
-                                <span>Custom title tag.</span>
-                            </div>
-                            <div class="px-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
-                                    class="block w-[180px] mr-2 " v-model="form.seo_meta_description"
-                                    placeholder="Meta Description" label="Meta Description"
-                                    :message="errors.seo_meta_description" :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="(value) => { checkedFields.seo_meta_description = value }" />
-                                <span>Most search engines use a maximum of 160 chars for the description.
-                                </span>
-                            </div>
-                            <div class="mx-6 mt-3 items-center text-gray-600 text-sm">
-                                <TextInput id="seo_meta_keywords" :isTextarea="true" :='4' type="text"
-                                    class="block w-[180px] mr-2 " v-model="form.seo_meta_keywords"
-                                    placeholder="Meta Keywords" label="Meta Keywords"
-                                    :message="errors.seo_meta_keywords" :hasCheckBox="checkBoxFlag"
-                                    @update:checkValue="(value) => { checkedFields.seo_meta_keywords = value }" />
-                                <span>Seperate each term with comma.</span>
-                            </div>
-                        </Accordion>
+                        <CommonSection :form="form" :fields="swatchSeoFields" :hasCheckBox="checkBoxFlag"
+                            :checkedFields="checkedFields" />
                     </div>
                     <div class="mt-5">
                     </div>
@@ -120,35 +74,9 @@
                         </Accordion>
                     </div>
                 </div>
-
                 <div class="col-span-4">
-                    <Accordion header="Publish" open="false">
-                        <div class="px-1 py-3">
-                            <div class="flex justify-between mb-2 px-2">
-                              
-                            </div>
-                            <div class="px-2">
-                                <div>
-                                    <InputLabel for="status" value="Status" />
-                                    <Select :options="statusData" showfield="name" class="w-full" valueField="value"
-                                        label="Select an option" v-model="form.status" :hasCheckBox="checkBoxFlag"
-                                        @update:checkValue="(value) => { checkedFields.status = value }"
-                                        :errorClass='errors.status'
-                                        :errMessage="errors.status"
-                                        @update:modelValue="$clearError(errors, 'status')"
-                                        />
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <div class="bg-[#f6f7f7] flex py-3">
-                            <Button type="submit" bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
-                                class=" text-sm ml-auto px-3 py-2">
-                                {{ buttonText }}
-                            </Button>
-                        </div>
-                    </Accordion>
+                    <PublishAccordion header="Publish" :="false" :options="statusData" :form="form"
+                        :hasCheckBox="checkBoxFlag" :onSubmitHandler="handleSubmit" :checkedFields="checkedFields" />
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Materials Template">
                             <div class="mt-2 px-6 flex h-auto ">
@@ -163,8 +91,9 @@
                         <Accordion :open="true" header="Materials">
                             <div class="mt-2 px-6 flex h-auto ">
                                 <div class="w-full">
-                                  
-                                    <SingleCheck v-if="form.id" label="Select for global update" v-model="checkedFields.materials"></SingleCheck>
+
+                                    <SingleCheck v-if="form.id" label="Select for global update"
+                                        v-model="checkedFields.materials"></SingleCheck>
                                     <Checkbox :nexted=true :checkedData="form.materials" :dropdown="true"
                                         valueField="id" showField="name" :data="MaterialTreeListData"
                                         @checked-items="handleCheckedItems" />
@@ -172,13 +101,6 @@
                             </div>
                         </Accordion>
                     </div>
-
-                    <!-- <div class="mt-3 ">
-                        <Accordion :open="true" header="Tab Posiotion Options">
-                            <div class="mt-2 px-6 flex h-auto ">
-                            </div>
-                        </Accordion>
-                    </div> -->
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Swatches Options Material">
                             <div class="my-5 px-6  h-auto ">
@@ -224,12 +146,13 @@
 
 <script setup>
 import _ from 'lodash';
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { useStore } from 'vuex';
 import { ref, onMounted, watch, computed } from "vue";
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
 import { MaterialTreeList } from '@/helper/Apis';
-import {statusData } from '@/json/data';
+import { statusData } from '@/json/data';
+import { materialOptionsFields, swatchSeoFields } from '@/json/fields';
 import SwatchesServices from '@/services/SwatchesServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
@@ -237,7 +160,8 @@ import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import SingleCheck from '@/components/Admin-components/form-components/SingleCheck.vue'
-
+import PublishAccordion from '@/components/Admin-components/common/PublishAccordion.vue';
+import CommonSection from '@/components/Admin-components/common/CommonSection.vue';
 // Store and Router
 const store = useStore();
 const router = useRouter();
@@ -256,7 +180,7 @@ const imageData = ref({
 });
 
 // Image Handlers
-const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form,false);
+const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
 
 // Form Validation
 const validateForm = () => {
@@ -265,7 +189,7 @@ const validateForm = () => {
         errors.value.title = 'Title is required';
         return false;
     }
-    if (form.value.status=== null || form.value.status=== undefined || form.value.status=== '') {
+    if (form.value.status === null || form.value.status === undefined || form.value.status === '') {
         errors.value.status = 'Please select status';
         return false;
     }
@@ -284,7 +208,7 @@ const handleSubmit = async () => {
     loading.value = true;
     try {
         const action = store.getters.editData ? SwatchesServices.editSwatches : SwatchesServices.addSwatches;
-        const { deleted_at,domain, created_at, updated_at, featured_image_url, ...payload } = form.value;
+        const { deleted_at, domain, created_at, updated_at, featured_image_url, ...payload } = form.value;
         if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id
         const { status, data } = await action(payload);
         if (status === 200 && data.success) {
@@ -297,9 +221,9 @@ const handleSubmit = async () => {
                 router.push('/swatches');
             }
         }
-        else if(status === 400 ||status === 403) {
+        else if (status === 400 || status === 403) {
             showToast(data.message, 'error');
-        } 
+        }
     } catch (e) {
         console.error(`Error ${store.getters.editData ? 'editing' : 'adding'} swatches:`, e);
         showToast(e, 'error');
@@ -337,7 +261,6 @@ const handleGlobalUpdate = async () => {
 const fetchSwatchData = async () => {
     loading.value = true
     const payload = { master_swatch_id: form.value.master_swatch_id, domain_id: form.value.domain_id }
-    console.log('payload', payload);
     try {
         const { status, data } = await SwatchesServices.getSwatches(payload)
         if (status === 200 && data.success) {

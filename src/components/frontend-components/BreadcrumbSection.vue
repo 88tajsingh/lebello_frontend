@@ -1,5 +1,5 @@
 <template>
-  <section class="breadcrem_section">
+  <section class="breadcrem_section bg-white">
     <div class="product_container">
       <nav class="breadcrem_text">
         <ul >
@@ -38,6 +38,9 @@ defineProps({
 </script>
 <style scoped>
 
+.product_container {
+    padding: 0px 124px;
+}
 .breadcrem_text ul {
   display: flex;
   align-items: center;
@@ -65,7 +68,15 @@ defineProps({
     column-gap: 10px;
 }
 
+@media (max-width: 1879px) {
+    .product_container {
+        padding: 0px 94px;
+    }
+}
 @media (max-width: 1699px) {
+  .product_container {
+        padding: 0px 82px;
+    }
   .breadcrem_section {
     padding: 28px 0px;
   }
@@ -76,17 +87,17 @@ defineProps({
     padding: 0px 52px;
 }
 }
-
 @media(max-width:991px){
   .product_container {
     padding: 0px 32px;
 }
-
 }
+
 
 @media(max-width:574px){
   .breadcrem_section {
-    padding: 22px 0px;
+padding: 22px 0px;
+
 }
 .product_container {
     padding: 0px 22px;

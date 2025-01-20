@@ -1,6 +1,5 @@
 <template>
     <DefaultCard :cardTitle="form.id ? `Edit Product` : `Add New Product`">
-
         <!-- domain select delete master delete  -->
         <DomainComponent @customChange="(id) => form.domain_id = id" @domainArray="(array) => form.domain_all = array"
             :deleteService="form.is_store_product ? StoreProductServices.deleteStoreProduct : ProductServices.deleteProduct"
@@ -40,27 +39,8 @@
                     </div>
                     <!-- seo option -->
                     <div class="mt-5">
-                        <Accordion :open="true" header="Seo Options" containerClass="px-4">
-                            <TextInput id="TitleTag" type="text" class="block w-[180px] h-[33px]"
-                                v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
-                                :hasCheckBox="checkBoxFlag"
-                                @update:checkValue="value => checkedFields.seo_title = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Custom title tag.</span>
-
-                            <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
-                                class="block w-[180px] " v-model="form.meta_description" placeholder="Meta Description"
-                                label="Meta Description" :hasCheckBox="checkBoxFlag"
-                                @update:checkValue="value => checkedFields.meta_description = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for the
-                                description.
-                            </span>
-
-                            <TextInput id="MetaKeywords" :isTextarea="true" :='4' type="text" class="block w-[180px] "
-                                v-model="form.meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
-                                :hasCheckBox="checkBoxFlag"
-                                @update:checkValue="value => checkedFields.meta_keywords = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Seperate each term with comma.</span>
-                        </Accordion>
+                        <CommonSection :form="form" :fields="seoFields" :hasCheckBox="checkBoxFlag"                    
+                        :checkedFields="checkedFields"/>
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="New Product Options" containerClass="px-4">
@@ -364,16 +344,9 @@
                 </div>
                 <!-- right panel -->
                 <div class="col-span-4">
-                    <PublishAccordion
-    header="Publish"
-    :open="false"
-    :options="statusData"
-    :form="form"
-    :hasCheckBox="checkBoxFlag"
-    :onSubmitHandler="handleSubmit"
-    :onCheckboxUpdate="handleCheckboxUpdate"
-  />
-
+                    <PublishAccordion header="Publish" :="false" :options="statusData" :form="form"
+                        :hasCheckBox="checkBoxFlag" :onSubmitHandler="handleSubmit"
+                        :checkedFields="checkedFields" />
                     <div class="mt-5">
                         <Accordion :open="true" header="Select Template">
                             <div class="mt-2 px-6  h-auto">
@@ -578,7 +551,7 @@
                             <div class="mt-2 px-6  h-auto">
                                 <div class="flex flex-col w-full">
                                     <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                        value="Right Box Image" />
+                                        value="product Image" />
                                     <div class=" flex  w-full h-auto ">
                                         <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_image">
                                         </SingleCheck>
@@ -796,7 +769,7 @@
                                 <div class="mt-2 px-6  h-auto">
                                     <div class="flex flex-col w-full">
                                         <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                            value="Right Box Image" />
+                                            value="store Product Image" />
                                         <div class=" flex  w-full h-auto ">
                                             <SingleCheck v-if="form.id" label=""
                                                 v-model="checkedFields.store_product_image">
@@ -855,8 +828,10 @@ import StoreProductServices from '@/services/StoreProductServices';
 import { MaterialTreeList, getStoreCategoryTree, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import { statusData, trueFalse, productOptionsType, withBgWithoutBg, capsNOCaps, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
 import { useStore } from 'vuex';
+import { seoFields } from '@/json/fields';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
+import CommonSection from '@/components/Admin-components/common/CommonSection.vue';
 import ProductServices from '@/services/ProductServices';
 import PublishAccordion from '@/components/Admin-components/common/PublishAccordion.vue';
 
@@ -895,7 +870,6 @@ const formItems = ref(
         export_field: false
     }
 );
-
 const handleImageFiles = (data) => {
     const media_titles = data.map((item) => item.title);
     imageData.value.image.mediaName = media_titles.join(", ");
@@ -940,8 +914,8 @@ const imageData = ref({
     new_product_additional_right_box_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleAdditionalRightBoxImageFiles, singleFile: true },
     downloadable_files: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleDownloadablemageFiles, singleFile: false },
     image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleImageFiles, singleFile: true },
-    product_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleProductImageFiles, singleFile: true },
-    store_product_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleStoreImageFiles, singleFile: true },
+    product_image: { isOpen: false, mediaName: 'Product Image', images: [], selectedFiles: handleProductImageFiles, singleFile: true },
+    store_product_image: { isOpen: false, mediaName: 'Store Image', images: [], selectedFiles: handleStoreImageFiles, singleFile: true },
     video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true },
 });
 
@@ -1155,9 +1129,9 @@ onMounted(() => {
         imageData.value.store_product_image.images = [store_product_image_data];
         imageData.value.store_product_image.mediaName = store_product_image_data?.file_url || 'featured images';
         imageData.value.product_image.images = [product_image_data];
-        imageData.value.product_image.mediaName = product_image_data?.file_url || 'featured images';
+        imageData.value.product_image.mediaName = product_image_data?.file_url || 'Product Images';
         imageData.value.contract_logo.images = [contract_logo_data];
-        imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Contract logo image';
+        imageData.value.contract_logo.mediaName = contract_logo_data?.file_url || 'Store Product image';
         // imageData.value.contract_slider_image.images = [contract_slider_image_data] ||[];
         // imageData.value.contract_slider_image.mediaName = contract_slider_image_data?.file_url || 'Slider image';;
         imageData.value.gallery.images = gallery_urls;
