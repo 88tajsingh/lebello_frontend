@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden ">
+  <div class="relative overflow-hidden bg-white ">
     <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']"
       navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000" />
     <section class="product_banner font-graphik">
@@ -56,7 +56,7 @@
     </section>
   </div>
   <Breadcrumb :breadcrumbData="breadcrumbData" />
-  <section class="three_d_section_main">
+  <section class="three_d_section_main bg-white">
     <div class="threed_inner_main">
       <div class="threed_img">
         <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
@@ -91,10 +91,12 @@
           <h2>{{ productData?.title }}</h2>
           <p v-html="productData?.description"></p>
         </div>
-        <button @click="toggleVisibility" class="hover:text-orange">
+        <button class="hover:text-orange"  >
           <span>INSPIRATIONAL SCENE</span>
-          <Arrow class="mt-0 ml-3 self-center" size="16px" :strokeWidth="20.8" fillColor="currentColor" />
+          <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
+        
         </button>
+
       </div>
       <div class="product_inner_img">
         {{ productData?.new_product_additional_right_box_image_url?.alternative_text }}
@@ -125,7 +127,7 @@ import { ref, onMounted, computed, defineAsyncComponent } from 'vue'
 import SwiperSlider from '@/components/frontend-components/SwiperSlider.vue'
 import { getProductDetail } from '@/helper/frontendHelpers'
 import { useRouter } from 'vue-router';
-import { Arrow,Menu } from '@/components/frontend-components/Svg/Icons'
+import { Arrow, Menu } from '@/components/frontend-components/Svg/Icons'
 import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
@@ -234,7 +236,7 @@ const products = ref([
 body {
 
   font-family: 'GraphikRegular';
-
+  background-color: #ffffff;
 }
 
 .product_banner {
@@ -392,7 +394,6 @@ button.slider_arrow.custom-next {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-
 }
 
 .product_inner_cont h2 {
@@ -424,6 +425,10 @@ button.slider_arrow.custom-next {
   -moz-column-gap: 16px;
   column-gap: 16px;
   margin-top: 60px;
+}
+
+.product_inner_cont button:hover {
+  color: #cc9933;
 }
 
 .product_text_img {
@@ -470,6 +475,7 @@ button.slider_arrow.custom-next {
 .threed_inner_main .threed_img button img {
   max-width: 36px;
 }
+
 .text_img_inner_main .product_inner_img {
   background-image: url(/src/assets/images/product/lebello-tubo-sofa-exposed-feature.jpg);
   background-repeat: no-repeat;
@@ -503,15 +509,6 @@ button.slider_arrow.custom-next {
 
   .product_inner_cont {
     padding: 44px 90px 0px 94px;
-  }
-
-  .product_inner_cont button {
-    margin-top: 76px;
-  }
-
-  .product_inner_cont h2 {
-    font-size: 40px;
-    margin-bottom: 40px;
   }
 
   .product_inner_cont p {
@@ -702,6 +699,7 @@ button.slider_arrow.custom-next {
   .product_container {
     padding: 0px 32px;
   }
+
   .text_img_inner_main .product_inner_img {
 
     height: 290px;
@@ -783,6 +781,7 @@ button.slider_arrow.custom-next {
     font-size: 14px;
     line-height: 18px;
   }
+
   .popup_gallery_cont button svg {
     width: 18px;
   }

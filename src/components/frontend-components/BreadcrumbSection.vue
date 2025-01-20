@@ -1,5 +1,5 @@
 <template>
-  <section class="py-[22px] ">
+  <section class="breadcrem_section bg-white">
     <div class="product_container">
       <nav class="breadcrem_text">
         <ul >
@@ -39,7 +39,7 @@ defineProps({
 <style scoped>
 
 .product_container {
-  padding: 0px 124px;
+    padding: 0px 124px;
 }
 .breadcrem_text ul {
   display: flex;
@@ -69,15 +69,14 @@ defineProps({
 }
 
 @media (max-width: 1879px) {
-  .product_container {
-    padding: 0px 94px;
-  }
+    .product_container {
+        padding: 0px 94px;
+    }
 }
-
 @media (max-width: 1699px) {
   .product_container {
-    padding: 0px 82px;
-  }
+        padding: 0px 82px;
+    }
   .breadcrem_section {
     padding: 28px 0px;
   }
@@ -93,14 +92,13 @@ defineProps({
     padding: 0px 32px;
 }
 }
-@media(max-width:767px){
-  .product_container {
-    padding: 0px 32px;
-}
-}
+
 
 @media(max-width:574px){
- 
+  .breadcrem_section {
+padding: 22px 0px;
+
+}
 .product_container {
     padding: 0px 22px;
 }
