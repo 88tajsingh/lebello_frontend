@@ -1,75 +1,46 @@
 <template>
-  <div class="relative overflow-hidden bg-white ">
-    <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']"
-      navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000" />
-    <section class="product_banner font-graphik">
-      <SwiperSlider :images="imageData" imageKeyName="gallery">
-        <template #utility>
-          <!-- lebellow icon right top -->
-          <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
-            <img src="/src/assets/logo/lebello-logo-right.png" />
-          </a>
-          <!-- text left bottom -->
-          <div class="slider_text">
-            <h1>{{ product?.title }}</h1>
-          </div>
-
-        </template>
-      </SwiperSlider>
-
-      <div class="absolute top-48 right-0">
-        <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]"
-          height="" :closeSidebar="closeSidebar">
-          <div class="z-50">
-            <div class="flex items-center">
-              <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
-                <Menu size="15px" fillColor="#000000" />
-              </span>
-              <div>
-                <h3 class="text-[14px] font-medium">
-                  <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
-                    Collection 2024
-                  </a>
-                </h3>
-              </div>
+  <section class="product_banner font-graphik">
+    <div class="slider_main">
+      <swiper :effect="fade" :navigation="{ prevEl: '.custom-prev', nextEl: '.custom-next' }" :modules="[Navigation]"
+        class="mySwiper">
+        <swiper-slide v-for="(product, index) in products" :key="index">
+          <div class="product_slide">
+            <div class="slider_img">
+              <img :src="product.image" :alt="product.altText" />
             </div>
-            <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
-              <form @submit.prevent="handleSearch" role="search">
-                <div class="relative border-b border-[#33333357] mt-2">
-                  <input @keydown.enter="handleSearch" v-model="search"
-                    class="w-full py-[1px] px-0 font-graphikLight text-[13px] border-none bg-transparent focus:outline-none"
-                    id="username" type="text" placeholder="Search" />
-                  <div class="absolute right-2 top-1 flex items-center">
-                    <Search size="22px" fillColor="currentColor" />
-                  </div>
-                </div>
-              </form>
-              <li v-for="(listItem, index) in productTypes" :key="index" class="mt-1 border-b border-[#cdc6c6]">
-                <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">
-                  {{ listItem?.name }}
-                </a>
-              </li>
-            </ul>
+            <div class="slider_text">
+              <h1>{{ product.title }}</h1>
+            </div>
           </div>
-        </SideMenu>
-      </div>
-    </section>
-  </div>
+        </swiper-slide>
+      </swiper>
+      <button class="slider_arrow custom-prev" aria-label="Previous">
+        <Arrow size="23px" direction="right" :strokeWidth="26.8" fillColor="#ffffff" />
+      </button>
+      <button class="slider_arrow custom-next" aria-label="Next">
+        <Arrow size="23px" direction="left" :strokeWidth="26.8" fillColor="#ffffff" />
+      </button>
+    </div>
+  </section>
   <Breadcrumb :breadcrumbData="breadcrumbData" />
-  <section class="three_d_section_main bg-white">
+  <section class="three_d_section_main">
     <div class="threed_inner_main">
-      <div class="threed_img">
-        <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
-        <iframe class="w-full max-h-[546px] h-[546px]" v-if="isIframeVisible"
-          src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html"
-          allowfullscreen frameborder="0" scrolling="no" />
-        <button v-if="!isIframeVisible" @click="toggleIframe">
-          <img src="../../../assets/images/product/3D Icon.png" alt="" />
-        </button>
-      </div>
+        <div class="threed_img">
+    <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
+    <iframe class="w-full max-h-[546px] h-[546px]"
+      v-if="isIframeVisible"
+      src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html"
+      allowfullscreen
+      frameborder="0"
+      scrolling="no"
+    />
+    <button v-if="!isIframeVisible" @click="toggleIframe">
+      <img src="../../../assets/images/product/3D Icon.png" alt="" />
+    </button>
+  </div>
       <div class="threed_cont">
         <div class="product_top_cont">
-          <h2>3D CONFIGURATOR</h2>
+          <h2 >3D CONFIGURATOR</h2>
           <p><span>Recomended Configuration</span> Please select the configuration</p>
           <select id="configuration">
             <option value="1">Configuration 1</option>
@@ -88,20 +59,25 @@
     <div class="text_img_inner_main">
       <div class="product_inner_cont">
         <div>
-          <h2>{{ productData?.title }}</h2>
-          <p v-html="productData?.description"></p>
+        <h2>Tubo Sofa Exposed</h2>
+        <p>
+          The modern Tubo sofa and club loungers features a soft curved and classical shapes with a
+          simple elegant frame and large round cushions.Available in a range of technical fabrics
+          Tubo features a cataphorese metal powder-coated frame. The design evokes a classical yet
+          timeless feel with large tall privacy options and additional curved pillow options –
+          suitable for both residential or commercial contracts with endless bespoke options. The
+          Tubo sofa and loungers’ collection is designed by French designer Christophe Pillet. 100%
+          Made in Italy.
+        </p>
         </div>
-        <button class="hover:text-orange"  >
+
+        <button @click="toggleVisibility " class="hover:text-orange">
           <span>INSPIRATIONAL SCENE</span>
           <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
-        
         </button>
-
       </div>
       <div class="product_inner_img">
-        {{ productData?.new_product_additional_right_box_image_url?.alternative_text }}
-        <img :src="$filePath(productData?.new_product_additional_right_box_image_url?.file_url)"
-          :alt="productData?.new_product_additional_right_box_image_url?.alternative_text || 'lebello'" />
+        <!-- <img src="../../../assets/images/product/lebello-tubo-sofa-exposed-feature.jpg" /> -->
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -113,27 +89,24 @@
       <div class="materils_cut_top">
         <ul>
           <li>MATERIALS</li>
-          <li> <a class="hover:text-orange hover:border-orange uppercase" target="_blank" blank
-              :href="$filePath(productData?.downloadable_files_url && productData?.downloadable_files_url[0]?.file_url)">Download
-              Cut Sheet</a></li>
+          <li><router-link to="#" class="hover:text-orange hover:border-orange">DOWNLOAD CUT SHEET</router-link></li>
         </ul>
       </div>
-      <StoreAccordion :accordionData="productData?.material_swatche_data" />
+      <StoreAccordion />
     </div>
   </section>
 </template>
 <script setup>
-import { ref, onMounted, computed, defineAsyncComponent } from 'vue'
-import SwiperSlider from '@/components/frontend-components/SwiperSlider.vue'
-import { getProductDetail } from '@/helper/frontendHelpers'
-import { useRouter } from 'vue-router';
-import { Arrow, Menu } from '@/components/frontend-components/Svg/Icons'
+import { ref, defineAsyncComponent } from 'vue'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Navigation } from 'swiper/modules'
+import { Arrow } from '@/components/frontend-components/Svg/Icons'
 import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
-import NavBar from '@/components/frontend-components/Nav-bar.vue';
-const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
-
+import 'swiper/css/navigation'
+import 'swiper/css/effect-fade'
+import 'swiper/css'
 const StoreAccordion = defineAsyncComponent(() =>
   import('@/components/store-components/StoreAccordion.vue')
 )
@@ -151,14 +124,10 @@ const breadcrumbData = ref([
     isActive: true,
   },
 ])
-const router = useRouter();
+
 const isVisible = ref(false)
-const productData = ref([])
-const productTypes = ref([])
-const loading = ref(true)
 const isIframeVisible = ref(false);
-const slug = ref(router.currentRoute.value?.params?.slug);
-if (!slug.value) slug.value = '4l-pixie-arms-chair';
+
 const toggleVisibility = () => {
   isVisible.value = !isVisible.value
 }
@@ -166,50 +135,6 @@ const toggleVisibility = () => {
 const toggleIframe = () => {
   isIframeVisible.value = !isIframeVisible.value;
 };
-
-const handleProductDetailData = async () => {
-  try {
-    loading.value = true
-    const res = await getProductDetail(slug.value)
-    if (res.status === 200 && res.data.success) {
-      productData.value = res.data.data.product_data[0];
-      productTypes.value = res.data.data?.product_types;
-
-      console.log('productData', productData.value)
-      console.log('productTypes', productTypes.value)
-    } else {
-      router.push('/products')
-    }
-  } catch (error) {
-    console.error('Error fetching product details:', error)
-    // router.push('/error') // Redirect to an error page or handle it accordingly
-  } finally {
-    loading.value = false
-    console.log('Product detail data fetch attempt complete')
-  }
-}
-
-
-const imageData = computed(() => {
-  return productData.value.gallery_urls?.map(item => ({
-    gallery: item
-  }));
-});
-
-const handleSearch = (event) => {
-  if (event) event.preventDefault();
-  if (search.value.trim() !== '') {
-    console.log('Searching for:', search.value);
-    router.push({ name: 'search', query: { search: search.value } });
-    search.value = '';
-  } else {
-    console.log('Search query is empty!');
-  }
-};
-
-onMounted(() => {
-  handleProductDetailData()
-})
 
 const products = ref([
   {
@@ -230,15 +155,12 @@ const products = ref([
 ])
 </script>
 
-<style scoped>
+<style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
-body {
-
+body{
   font-family: 'GraphikRegular';
-  background-color: #ffffff;
 }
-
 .product_banner {
   height: 100vh;
   overflow: hidden;
@@ -265,10 +187,7 @@ body {
   color: #ffffff;
   font-weight: 400;
   font-family: "Noto Serif", serif;
-
 }
-
-
 
 button.slider_arrow {
   position: absolute;
@@ -314,37 +233,33 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont h2 {
-  font-size: 31px;
-  line-height: 30px;
-  color: #333333;
-  font-family: 'GraphikMedium';
+    font-size: 31px;
+    line-height: 30px;
+    color: #333333;
+    font-family: 'GraphikMedium';
 }
-
 
 .threed_inner_main .threed_cont p {
-  font-size: 16px;
-  color: #000000;
-  font-weight: 300;
-  line-height: 24px;
-  max-width: 240px;
-  margin: 36px 0px 16px;
-
+    font-size: 16px;
+    color: #000000;
+    font-weight: 300;
+    line-height: 24px;
+    max-width: 240px;
+    margin: 36px 0px 16px;
 }
 
-
 .threed_inner_main .threed_cont select {
-  border-radius: 6px;
-  border: 1px solid #cecece;
-  font-size: 16px;
-  color: #000000;
-  padding: 10.5px 0px 12.5px 20px;
-  background-image: url(/src/assets/images/product/select-arrow.svg);
-  line-height: 25px;
-  background-position: 95% 50%;
-  background-size: 7% 20%;
-  width: 100%;
-  max-width: 340px;
-
+    border-radius: 6px;
+    border: 1px solid #cecece;
+    font-size: 16px;
+    color: #000000;
+    padding: 10.5px 0px 12.5px 20px;
+    background-image: url(/src/assets/images/product/select-arrow.svg);
+    line-height: 25px;
+    background-position: 95% 50%;
+    background-size: 7% 20%;
+    width: 100%;
+    max-width: 340px;
 }
 
 .threed_btns {
@@ -386,33 +301,28 @@ button.slider_arrow.custom-next {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
-
-
 .product_inner_cont {
-  padding: 64px 150px 0px 124px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+    padding: 64px 150px 0px 124px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
 
 .product_inner_cont h2 {
-  font-size: 31px;
-  line-height: 36px;
-  color: #333333;
-  font-family: 'GraphikMedium';
-  margin-bottom: 34px;
-
+    font-size: 31px;
+    line-height: 36px;
+    color: #333333;
+    font-family: 'GraphikMedium';
+    margin-bottom: 34px;
 }
 
-
 .product_inner_cont p {
-  font-size: 16px;
-  line-height: 28px;
-  color: #555555;
-  font-weight: 300;
-  font-family: 'GraphikLight';
-
+    font-size: 16px;
+    line-height: 28px;
+    color: #555555;
+    font-weight: 300;
+    font-family: 'GraphikLight';
 }
 
 .product_inner_cont button {
@@ -427,10 +337,6 @@ button.slider_arrow.custom-next {
   margin-top: 60px;
 }
 
-.product_inner_cont button:hover {
-  color: #cc9933;
-}
-
 .product_text_img {
   background-color: #eae6e1;
 }
@@ -438,7 +344,6 @@ button.slider_arrow.custom-next {
 .materils_main_sec {
   background-color: #eae6e1;
   padding: 50px 0px 70px;
-
 }
 
 .materils_cut_top ul {
@@ -447,13 +352,11 @@ button.slider_arrow.custom-next {
   column-gap: 130px;
 }
 
-
 .materils_cut_top ul li {
-  font-size: 16px;
-  line-height: 24px;
-  color: #333333;
-  font-family: 'GraphikMedium';
-
+    font-size: 16px;
+    line-height: 24px;
+    color: #333333;
+    font-family: 'GraphikMedium';
 }
 
 .materils_cut_top ul li a {
@@ -461,7 +364,7 @@ button.slider_arrow.custom-next {
 }
 
 .threed_inner_main .threed_cont p span {
-  font-family: 'GraphikMedium';
+    font-family: 'GraphikMedium';
 }
 
 
@@ -481,9 +384,7 @@ button.slider_arrow.custom-next {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-
 }
-
 
 /* media css start */
 @media (max-width: 1879px) {
@@ -509,10 +410,6 @@ button.slider_arrow.custom-next {
 
   .product_inner_cont {
     padding: 44px 90px 0px 94px;
-  }
-
-  .product_inner_cont p {
-    max-width: 666px;
   }
 
 }
@@ -548,13 +445,20 @@ button.slider_arrow.custom-next {
     padding: 40px 67px 0px 82px;
   }
 
+  
+
   .materils_cut_top ul {
     column-gap: 100px;
   }
 
+  
+  
+
 }
 
 @media(max-width:1599px) {
+  
+
 
   .threed_inner_main .threed_cont {
     max-width: 510px;
@@ -564,11 +468,13 @@ button.slider_arrow.custom-next {
 }
 
 @media (max-width: 1399px) {
-
+  
   .threed_inner_main .threed_cont {
     max-width: 480px;
     padding: 30px 60px 55px;
   }
+
+  
 
   /* .threed_inner_main .threed_cont select {
     font-size: 14px;
@@ -584,206 +490,164 @@ button.slider_arrow.custom-next {
     height: 533px;
   }
 
+
   .product_inner_cont button svg {
     width: 21px;
   }
 }
 
-@media(max-width:1199px) {
+@media(max-width:1199px){
   .slider_arrow.custom-prev {
     left: 20px;
   }
-
   button.slider_arrow.custom-next {
     right: 20px;
   }
-
   .slider_text {
     padding: 0px 52px 45px;
   }
-
   .threed_inner_main .threed_img img {
     height: 350px;
     object-fit: cover;
-  }
-
-  .threed_inner_main .threed_img button img {
+}
+.threed_inner_main .threed_img button img {
     height: auto;
-  }
-
-  .product_inner_cont {
+}
+.product_inner_cont {
     padding: 40px 52px 0px 52px;
-  }
-
-  .product_inner_cont p {
+}
+.product_inner_cont p {
     font-size: 14px;
     line-height: 24px;
-  }
-
-  .product_inner_cont button {
+}
+.product_inner_cont button {
     margin-top: 40px;
     font-size: 13px;
-  }
-
-  .product_container {
+}
+.product_container {
     padding: 0px 52px;
-  }
+}
 }
 
-@media(max-width:991px) {
+@media(max-width:991px){
   .slider_text {
     padding: 0px 32px 35px;
-  }
-
-  .threed_inner_main .threed_cont {
+}
+.threed_inner_main .threed_cont {
     max-width: 370px;
     padding: 20px 32px 35px;
-  }
-
-  .product_inner_cont {
+}
+.product_inner_cont {
     padding: 40px 32px 0px 32px;
-  }
-
-  .text_img_inner_main {
-    align-items: flex-start;
-  }
-
-  .popup_gallery_cont button svg {
+}
+.popup_gallery_cont button svg {
     width: 26px;
-  }
-
-  .threed_btns {
-    column-gap: 18px;
-
-  }
-
-  .threed_btns a {
-    padding: 5px 18px;
-
-  }
+}
+.threed_btns {
+  column-gap: 18px;
+}
+.threed_btns a {
+  padding: 5px 18px;
+}
 }
 
-@media(max-width:767px) {
+@media(max-width:767px){
   .threed_inner_main {
     flex-direction: column;
-  }
-
-  .slider_text h1 {
+}
+.slider_text h1 {
     font-size: 36px;
     line-height: 32px;
-  }
-
-  .threed_inner_main .threed_cont {
+}
+.threed_inner_main .threed_cont {
     max-width: 100%;
     padding: 50px 32px 50px;
     row-gap: 80px;
-  }
-
-  .text_img_inner_main {
+}
+.text_img_inner_main {
     display: flex;
     flex-direction: column-reverse;
-  }
-
-  .text_img_inner_main .product_inner_img img {
+}
+.text_img_inner_main .product_inner_img img {
     height: auto;
     -o-object-fit: cover;
     object-fit: cover;
-  }
-
-  .threed_inner_main .threed_img img {
+}
+.threed_inner_main .threed_img img {
     height: auto;
     -o-object-fit: cover;
     object-fit: cover;
-  }
-
-  .product_container {
+}
+.product_container {
     padding: 0px 32px;
-  }
-
-  .text_img_inner_main .product_inner_img {
-
-    height: 290px;
-
-  }
+}
+.text_img_inner_main .product_inner_img {
+  height: 290px;
+}
 }
 
-@media(max-width:574px) {
+@media(max-width:574px){
   .slider_text {
     padding: 0px 22px 35px;
-  }
-
-  .slider_text h1 {
+}
+.slider_text h1 {
     font-size: 30px;
     line-height: 20px;
-  }
-
-  .slider_arrow.custom-prev {
+}
+.slider_arrow.custom-prev {
     left: 15px;
-  }
-
-  button.slider_arrow.custom-next {
+}
+button.slider_arrow.custom-next {
     right: 15px;
-  }
-
-  .threed_inner_main .threed_cont {
+}
+.threed_inner_main .threed_cont {
     max-width: 100%;
     padding: 40px 22px 40px;
     row-gap: 60px;
-  }
-
-  .threed_inner_main .threed_cont h2 {
+}
+.threed_inner_main .threed_cont h2 {
     font-size: 20px;
     line-height: 20px;
-  }
-
-  .threed_inner_main .threed_cont p {
+}
+.threed_inner_main .threed_cont p {
     font-size: 15px;
     line-height: 21px;
     max-width: 220px;
     margin: 24px 0px 15px;
-  }
-
-  .threed_btns {
+}
+.threed_btns {
     column-gap: 16px;
-  }
-
-  .product_inner_cont {
+}
+.product_inner_cont {
     padding: 34px 22px 0px 22px;
-  }
-
-  .product_inner_cont h2 {
+}
+.product_inner_cont h2 {
     margin-bottom: 18px;
     font-size: 24px;
-  }
-
-  .product_inner_cont button svg {
+}
+.product_inner_cont button svg {
     width: 12px;
-  }
-
-  .product_inner_cont button {
+}
+.product_inner_cont button {
     margin-top: 30px;
     font-size: 13px;
-  }
-
-  .materils_main_sec {
+}
+.materils_main_sec {
     padding: 40px 0px;
-  }
-
-  .product_container {
+}
+.product_container {
     padding: 0px 22px;
-  }
-
-  .materils_cut_top ul {
+}
+.materils_cut_top ul {
     column-gap: 40px;
-  }
-
-  .materils_cut_top ul li {
+}
+.materils_cut_top ul li {
     font-size: 14px;
     line-height: 18px;
-  }
-
-  .popup_gallery_cont button svg {
+}
+.popup_gallery_cont button svg {
     width: 18px;
-  }
+}
+
 }
 </style>
