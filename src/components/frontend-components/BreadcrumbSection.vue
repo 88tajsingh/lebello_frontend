@@ -1,5 +1,5 @@
 <template>
-  <section class="breadcrem_section">
+  <section class="breadcrem_section bg-white">
     <div class="product_container">
       <nav class="breadcrem_text">
         <ul >
@@ -36,6 +36,7 @@ defineProps({
   },
 });
 </script>
+
 <style scoped>
 
 .breadcrem_text ul {
