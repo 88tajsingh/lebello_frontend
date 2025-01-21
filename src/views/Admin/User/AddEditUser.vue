@@ -126,7 +126,7 @@ const handleSubmit = async () => {
             })
 
         if (status === 200 && data.success) {
-            $showToast(data.message, 'success');
+            showToast(data.message, 'success');
             router.push('/users')
         } else if (status === 400) {
             showToast(data.message, 'error')
