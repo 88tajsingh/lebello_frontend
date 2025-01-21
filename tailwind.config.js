@@ -12,14 +12,14 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        graphik: ['GraphikRegular'],
-        satoshi: ['Satoshi', 'sans-serif'],
+        graphik: ['GraphikRegular','sans-serif'],
+        // satoshi: ['Satoshi', 'sans-serif'],
         sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-        graphikLight: ['GraphikLight'],
-        graphikMedium: ['GraphikMedium'],
-        MyriadPro: ['Myriad Pro'],
-        ptSerif: ['PT Serif'],
-        helvetica: ['Helvetica Rounded LT Std'],
+        graphikLight: ['GraphikLight','sans-serif'],
+        graphikMedium: ['GraphikMedium','sans-serif'],
+        MyriadPro: ['Myriad Pro','sans-serif'],
+        ptSerif: ['PT Serif','sans-serif'],
+        helvetica: ['Helvetica Rounded LT Std','sans-serif'],
       },
       screens: {
         '2xsm': '375px',
