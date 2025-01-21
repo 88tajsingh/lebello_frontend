@@ -17,7 +17,7 @@
       </SwiperSlider>
       <div class="absolute top-48 right-0">
         <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]"
-          height="" :closeSidebar="closeSidebar">
+          height="" >
           <div class="z-50">
             <div class="flex items-center">
               <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
@@ -220,13 +220,7 @@ const navColor = ref('#000000')
 const loading = ref(false)
 const slug = ref(router.currentRoute.value?.params?.slug);
 if (!slug.value) slug.value = '4l-pixie-arms-chair';
-const handleLandingPageData = async () => {
-  const res = await getLandingPageData()
-  console.log('getLandingPageData', res.data.data.home_slider)
-  if (res.status === 200 && res.data.success) {
-    landingPageData.value = res.data.data.home_slider
-  }
-}
+
 
 const handleProductDetailData = async () => {
   try {
@@ -273,7 +267,6 @@ const updateNavColor = (newColor) => {
   console.log('navColor', newColor)
 }
 onMounted(() => {
-  handleLandingPageData()
   handleProductDetailData()
 })
 
