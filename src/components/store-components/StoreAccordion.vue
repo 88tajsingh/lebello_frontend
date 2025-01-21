@@ -12,7 +12,7 @@
         </div>
         
       </div>
-      <!-- Child Items -->`
+      <!-- Child Items -->
       <TransitionRoot as="template" :show="activeParent === index" enter="transition-all duration-1000 ease-in"
         enterFrom="max-h-0 overflow-hidden" enterTo="max-h-screen overflow-hidden"
         leave="transition-all duration-700 ease-out" leaveFrom="max-h-screen overflow-hidden"
