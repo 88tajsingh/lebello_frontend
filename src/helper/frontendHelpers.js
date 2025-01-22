@@ -24,6 +24,32 @@ export const scrollDown = (id) => {
     requestAnimationFrame(animateScroll);
   }
 
+  export const scrollUp = (id) => {
+    const targetDiv = document.getElementById(id);
+    const startPosition = window.pageYOffset;
+    const targetPosition = targetDiv.getBoundingClientRect().top + window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    const duration = 1500;
+    let startTime = null;
+  
+    const easeInOutQuad = (t) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
+  
+    const animateScroll = (currentTime) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const run = easeInOutQuad(timeElapsed / duration) * distance + startPosition;
+      window.scrollTo(0, run);
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animateScroll);
+      } else {
+        window.scrollTo(0, targetPosition);
+      }
+    };
+  
+    requestAnimationFrame(animateScroll);
+  };
+  
+
   const withDomain = async (service,payload,single=false) => {
     try {
       const {status,data} = await PublicServices.getDomainData();
