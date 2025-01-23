@@ -71,8 +71,8 @@
         </p>
         </div>
 
-        <button @click="toggleVisibility " class="hover:text-orange">
-          <span>INSPIRATIONAL SCENE</span>
+        <button @click="isExpanded = !isExpanded" class="hover:text-orange">
+          <span>INSPIRATIONAL SCENE </span>
           <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
         </button>
       </div>
@@ -84,6 +84,97 @@
       <p></p>
     </div>
   </section>
+  <section class="product_text_img">
+    <TransitionExpand :isExpanded="isExpanded">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
+          <div class="product_img max-h-[250px] h-full overflow-hidden cursor-pointer"
+            @click="openModal(product, index)">
+            <img
+              class="w-full h-full opacity-75 hover:opacity-100 object-cover transition-transform duration-700 ease-in-out transform hover:scale-125"
+              :src="$filePath(product?.file_url)" :alt="product?.title" />
+          </div>
+        </div>
+      </div>
+    </TransitionExpand>
+  </section>
+  <Transition name="modal-fade">
+    <section class="modal popup" v-if="isModalOpen">
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeModal">
+        <div class="bg-white p-4 rounded shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
+          <div class="relative w-full h-full" :style="{
+            maxWidth: `${modalWidth} px`,
+            maxHeight: '85vh',
+            height: `${modalHeight}px`
+          }">
+            <!-- Navigation Buttons -->
+            <button
+              class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full transition-opacity duration-300 z-10"
+              @click.stop="prevImage" aria-label="Previous image">
+              <Arrow class="mt-0 ml-3 self-center" direction="right" :strokeWidth="20.8" size="22px"
+                fillColor="#000000" />
+            </button>
+            <button
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full transition-opacity duration-300 z-10"
+              @click.stop="nextImage" aria-label="Next image">
+              <Arrow class="mt-0 ml-3 self-center" direction="left" :strokeWidth="20.8" size="22px"
+                fillColor="#000000" />
+            </button>
+
+            <!-- Image Display -->
+            <Transition name="fade" mode="out-in">
+              <img :key="$filePath(activeImage?.file_url)" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
+                class="w-full h-full object-contain" @load="adjustModalSize" />
+            </Transition>
+          </div>
+          <div class="bg-gray-800 text-black p-4 flex items-center justify-between">
+            <!-- Left Text -->
+            <div class="text-sm">
+              Circle XK Side T.
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center space-x-4">
+              <!-- Download Button -->
+              <a href="#" class="flex items-center text-blue-400 text-sm hover:underline">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-5 h-5 mr-1">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
+                </svg>
+                Download
+              </a>
+
+              <!-- Social Media Icons -->
+              <ul class="flex">
+                <!-- Facebook -->
+                <li>
+                  <Facebook bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#ffffff"
+                    boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)" title="Facebook" hoverBgColor="#ce8d39"
+                    href="https://www.houzz.com" hoverSvgColor="#000000" />
+                </li>
+                <!-- Houzz -->
+                <li>
+                  <Houzz bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#FFFFFF" hoverBgColor="#ce8d39"
+                    hoverSvgColor="#ffffff" href="https://www.houzz.com" title="Houzz Share" />
+                </li>
+                <!-- Pinterest -->
+                <li>
+                  <Pinterest bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#ffffff" hoverBgColor="#ce8d39"
+                    hoverSvgColor="#ffffff" href="https://pinterest.com" title="Pinterest" />
+                </li>
+                <!-- Twitter -->
+                <li>
+                  <Instagram bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#ffffff" hoverBgColor="#ce8d39"
+                    hoverSvgColor="#ffffff" href="https://instagram.com" title="Instagram" />
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </Transition>
   <section class="materils_main_sec">
     <div class="product_container">
       <div class="materils_cut_top">
@@ -97,13 +188,15 @@
   </section>
 </template>
 <script setup>
-import { ref, defineAsyncComponent } from 'vue'
+import { ref, defineAsyncComponent, onMounted, onUnmounted,watch  } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation } from 'swiper/modules'
-import { Arrow } from '@/components/frontend-components/Svg/Icons'
+import { Arrow, Facebook, Menu, Instagram, Houzz, Pinterest, } from '@/components/frontend-components/Svg/Icons';
 import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
+import TransitionExpand from '@/components/TransitionExpand.vue';
+
 import 'swiper/css/navigation'
 import 'swiper/css/effect-fade'
 import 'swiper/css'
@@ -111,7 +204,50 @@ const StoreAccordion = defineAsyncComponent(() =>
   import('@/components/store-components/StoreAccordion.vue')
 )
 const Breadcrumb = defineAsyncComponent(() => import('@/components/frontend-components/BreadcrumbSection.vue'))
-
+const isExpanded = ref(false)
+const isModalOpen = ref(false);
+const activeImage = ref(null);
+const activeIndex = ref(0);
+const modalWidth = ref(0);
+const modalHeight = ref(0);
+const productData = ref(
+ {gallery_urls: [
+    {
+        "id": 25,
+        "file_url": "products/lebello_4l-arrow.jpg",
+        "title": "lebello_4l-arrow.jpg",
+        "alternative_text": null,
+        "description": null
+    },
+    {
+        "id": 26,
+        "file_url": "products/lebello-4l_arrow.jpg",
+        "title": "lebello-4l_arrow.jpg",
+        "alternative_text": null,
+        "description": null
+    },
+    {
+        "id": 27,
+        "file_url": "products/lebello-4l-arrow.jpg",
+        "title": "lebello-4l-arrow.jpg",
+        "alternative_text": null,
+        "description": null
+    },
+    {
+        "id": 32,
+        "file_url": "products/lebello_4l-arrow-detailed.jpg",
+        "title": "lebello_4l-arrow-detailed.jpg",
+        "alternative_text": null,
+        "description": null
+    },
+    {
+        "id": 33,
+        "file_url": "products/lebello_4l_arrowdetail.jpg",
+        "title": "lebello_4l_arrowdetail.jpg",
+        "alternative_text": null,
+        "description": null
+    }
+]})
 const breadcrumbData = ref([
   {
     label: 'Collection Tubo Sofa Exposed',
@@ -136,6 +272,86 @@ const toggleIframe = () => {
   isIframeVisible.value = !isIframeVisible.value;
 };
 
+
+const openModal = (product, index) => {
+  activeImage.value = product;
+  activeIndex.value = index;
+  isModalOpen.value = true;
+  // Set initial modal size
+  modalWidth.value = window.innerWidth * 0.9;
+  modalHeight.value = window.innerHeight * 0.9;
+  // Use nextTick to ensure the modal is rendered before adjusting size
+  nextTick(() => {
+    adjustModalSize();
+  });
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  activeImage.value = null;
+  activeIndex.value = 0;
+};
+
+const nextImage = () => {
+  if (activeIndex.value < productData.value.gallery_urls.length - 1) {
+    activeIndex.value++;
+    activeImage.value = productData.value.gallery_urls[activeIndex.value];
+    adjustModalSize();
+  }
+};
+
+const prevImage = () => {
+  if (activeIndex.value > 0) {
+    activeIndex.value--;
+    activeImage.value = productData.value.gallery_urls[activeIndex.value];
+    adjustModalSize();
+  }
+};
+
+const adjustModalSize = () => {
+  if (activeImage.value) {
+    const img = new Image();
+    img.onload = () => {
+      const maxWidth = Math.min(window.innerWidth * 0.9, img.width);
+      const maxHeight = Math.min(window.innerHeight * 0.9, img.height);
+      const aspectRatio = img.width / img.height;
+
+      if (img.width / maxWidth > img.height / maxHeight) {
+        modalWidth.value = maxWidth;
+        modalHeight.value = Math.min(maxWidth / aspectRatio, maxHeight);
+      } else {
+        modalHeight.value = maxHeight;
+        modalWidth.value = Math.min(maxHeight * aspectRatio, maxWidth);
+      }
+    };
+    img.src = activeImage.value.file_url;
+  }
+};
+
+const handleResize = () => {
+  if (isModalOpen.value) {
+    adjustModalSize();
+  }
+};
+onUnmounted(() => {
+  document.body.style.overflow = '';
+});
+
+// Watch for changes in the active image and adjust modal size
+watch(activeImage, adjustModalSize);
+watch(isModalOpen, (newVal) => {
+  console.log('Modal state changed:', newVal);
+  document.body.style.overflow = newVal ? 'hidden' : '';
+});
+// Lifecycle hooks for window resize event
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
 const products = ref([
   {
     image: Image1,
@@ -153,6 +369,10 @@ const products = ref([
     title: 'Tubo Sofa Exposed'
   }
 ])
+
+
+
+
 </script>
 
 <style>
