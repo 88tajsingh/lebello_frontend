@@ -250,7 +250,7 @@ const productData = ref(
 ]})
 const breadcrumbData = ref([
   {
-    label: 'Collection Tubo Sofa Exposed',
+    label: 'Collection',
     href: '#',
     isActive: false,
   },
@@ -548,7 +548,7 @@ button.slider_arrow.custom-next {
   grid-template-columns: repeat(2, 1fr);
 }
 .product_inner_cont {
-    padding: 64px 150px 0px 124px;
+    padding: 80px 150px 0px 124px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -630,6 +630,7 @@ button.slider_arrow.custom-next {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  height: 500px;
 }
 
 /* media css start */
@@ -655,7 +656,7 @@ button.slider_arrow.custom-next {
   }
 
   .product_inner_cont {
-    padding: 44px 90px 0px 94px;
+    padding: 80px 90px 0px 94px;
   }
 
 }
@@ -688,7 +689,7 @@ button.slider_arrow.custom-next {
   } */
 
   .product_inner_cont {
-    padding: 40px 67px 0px 82px;
+    padding: 80px 67px 0px 82px;
   }
 
   
@@ -760,7 +761,7 @@ button.slider_arrow.custom-next {
     height: auto;
 }
 .product_inner_cont {
-    padding: 40px 52px 0px 52px;
+    padding: 60px 52px 0px 52px;
 }
 .product_inner_cont p {
     font-size: 14px;
@@ -772,6 +773,9 @@ button.slider_arrow.custom-next {
 }
 .product_container {
     padding: 0px 52px;
+}
+.text_img_inner_main .product_inner_img {
+  height: 430px;
 }
 }
 
@@ -833,6 +837,9 @@ button.slider_arrow.custom-next {
 }
 
 @media(max-width:574px){
+  .breadcrem_text ul li {
+    font-size: 15px;
+}
   .slider_text {
     padding: 0px 22px 35px;
 }
