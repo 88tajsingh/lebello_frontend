@@ -1186,9 +1186,7 @@ watch(() => props.accordionData, (newData) => {
     </TransitionRoot>
   </div>
 </template>
-
-
-
+  
 <style scoped>
 .expand-enter-active,
 .expand-leave-active {

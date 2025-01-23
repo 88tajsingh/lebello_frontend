@@ -29,7 +29,7 @@
     <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
     <iframe class="w-full max-h-[546px] h-[546px]"
       v-if="isIframeVisible"
-      src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20Low_Conf_2/Tubo%20Sofa%20Low_Conf_2_Product_detail.html"
+      src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20LOW%20TESTTT_1/Tubo%20Sofa%20LOW%20TESTTT_1.html"
       allowfullscreen
       frameborder="0"
       scrolling="no"
