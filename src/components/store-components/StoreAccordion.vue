@@ -14,6 +14,7 @@ const closeSideMenu = () => {
   activeChild.value = null 
 }
 onClickOutside(closeMenu, closeSideMenu)
+
 const props = defineProps({
   accordionData: {
     type: Array,
@@ -144,8 +145,6 @@ watch(() => props.accordionData, (newData) => {
     </TransitionRoot>
   </div>
 </template>
-
-
 
 <style scoped>
 .no-scroll {

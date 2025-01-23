@@ -180,6 +180,9 @@
 
 <script setup>
 import _ from 'lodash';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { onMounted, ref, watch, computed } from 'vue'
+import { useStore } from 'vuex';
 import SingleCheck from '@/components/Admin-components/form-components/SingleCheck.vue';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
@@ -189,15 +192,13 @@ import InputLabel from '@/components/Admin-components/form-components/InputLabel
 import { MaterialTreeList } from '@/helper/Apis'
 import MaterialsServices from '@/services/MaterialsServices'
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
-import { onMounted, ref, watch, computed } from 'vue'
 import { trueFalse, colors, } from '@/json/data'
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
-import { useStore } from 'vuex';
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 // Store and router
 const store = useStore();
 const router = useRouter();
-
+const { handleGlobalUpdate  } = useGlobalUpdate(MaterialsServices.globalMaterialUpdate,'master_material_id')
 // Reactive state
 const errors = ref({});
 
@@ -259,7 +260,7 @@ const handleSubmit = async () => {
 
         if (status === 200 && data.success) {
             if (hasCheckedFields) {
-                handleGlobalUpdate();
+                handleGlobalUpdate(form,checkedFields,'/materials');
             }
             else {
                 showToast(data.message, 'success');
@@ -277,29 +278,6 @@ const handleSubmit = async () => {
         loading.value = false;
     }
 };
-
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-    if (_.isEmpty(globalUpdate)) return
-
-    const payload = {
-        master_material_id: form.value.master_material_id,
-        global_keys: globalUpdate
-    }
-    try {
-        const { status, data } = await MaterialsServices.globalMaterialUpdate(payload)
-        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/materials')
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-    } finally {
-        loading.value = false
-    }
-}
-
 
 // Fetch Perticular Domain Data
 const fetchMaterialData = async () => {

@@ -89,16 +89,18 @@ import _ from 'lodash'
 import { useStore } from 'vuex'
 import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { ref, onMounted, watch, computed } from 'vue'
-import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
+import { showToast, handleFileUpdate } from '@/helper/functions'
 import { PublishOptions, statusData } from '@/json/data'
 import Accordion from '@/components/Admin-components/Accordion.vue'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import MaterialSliderServices from '@/services/MaterialSliderServices.js'
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate'
 
 // store and router
 const store = useStore()
 const router = useRouter()
+const { handleGlobalUpdate  } = useGlobalUpdate(MaterialSliderServices.globalMaterialSliderUpdate,'master_material_slider_id')
 
 // reactive state
 const errors = ref({})
@@ -155,7 +157,7 @@ const handleSubmit = async () => {
     const res = await action({ ...payload })
     if (res.status === 200 && res.data.success) {
       if (hasCheckedFields) {
-        handleGlobalUpdate()
+        handleGlobalUpdate(form,checkedFields,'/material-slider')
       } else {
         showToast(res.data.message, 'success')
         router.push('/material-slider')
@@ -166,33 +168,6 @@ const handleSubmit = async () => {
     console.error(
       `Error while ${store.getters.editData ? 'editing' : 'adding'} Material Sliders:`,
       e
-    )
-  } finally {
-    loading.value = false
-  }
-}
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-  if (_.isEmpty(globalUpdate)) return
-
-  const payload = {
-    master_material_slider_id: form.value.master_material_slider_id,
-    global_keys: globalUpdate
-  }
-
-  try {
-    const { status, data } = await MaterialSliderServices.globalMaterialSliderUpdate(payload)
-    status === 200 && data.success
-      ? showToast(data.message, 'success')
-      : showToast(data.message, 'error')
-    if (status === 200 && data.success) router.push('/material-slider')
-  } catch (error) {
-    showToast('Something went wrong', 'error')
-    console.error(
-      `Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`,
-      error
     )
   } finally {
     loading.value = false

@@ -92,19 +92,22 @@
 </template>
 
 <script setup>
+import _ from 'lodash';
+import { onMounted, ref, watch, computed } from 'vue'
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { useStore } from 'vuex';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { contractTypeTreeList } from '@/helper/Apis'
 import ContractServices from '@/services/ContractServices'
-import _ from 'lodash';
 import { showToast, getGlobalUpdateData } from '@/helper/functions'
-import { onMounted, ref, watch, computed } from 'vue'
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
-import { useStore } from 'vuex';
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 // Reactive state
 const store = useStore();
 const router = useRouter();
+const { handleGlobalUpdate  } = useGlobalUpdate(ContractServices.globalContractTypeUpdate,'master_contract_type_id');
+
 const errors = ref({});
 const selectError = ref(false);
 const loading = ref(false);
@@ -147,8 +150,10 @@ const handleSubmit = async () => {
     const { status, data } = await service(payload);
 
     if (status === 200 && data.success) {
-      hasCheckedFields ? handleGlobalUpdate() : router.push('/contract-type');
-      showToast(data.message, 'success');
+      hasCheckedFields ? handleGlobalUpdate(form,checkedFields,'/contract-type')
+      : router.push('/contract-type');
+      
+      !hasCheckedFields && showToast(data.message, 'success');
     } else {
       handleErrorResponse(status, data);
     }
@@ -168,35 +173,6 @@ const handleErrorResponse = (status, data) => {
     showToast(message, 'error');
   }
 };
-
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value);
-  if (_.isEmpty(globalUpdate)) return;
-
-  const payload = {
-    master_contract_type_id: form.value.master_contract_type_id,
-    global_keys: globalUpdate,
-  };
-
-  try {
-    const { status, data } = await ContractServices.globalContractTypeUpdate(payload);
-    const messageType = status === 200 && data.success ? 'success' : 'error';
-    showToast(data.message, messageType);
-
-    if (status === 200 && data.success) {
-      router.push('/contract-type');
-    } else if (status === 400 || status === 403) {
-      showToast(data.error || 'Something went wrong', 'error');
-    }
-  } catch (error) {
-    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error);
-    showToast('Something went wrong', 'error');
-  } finally {
-    loading.value = false;
-  }
-};
-
-
 
 // fetch the data 
 const fetchContractTypeData = async () => {

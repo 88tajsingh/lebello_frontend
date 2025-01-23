@@ -65,19 +65,20 @@
 
 <script setup>
 import _ from 'lodash';
+import { onMounted, ref, watch, computed } from 'vue';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { useStore } from 'vuex';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
 import { getProductContractTree } from '@/helper/Apis';
 import ProductServices from '@/services/ProductServices';
 import { showToast, getGlobalUpdateData } from '@/helper/functions';
-import { onMounted, ref, watch, computed } from 'vue';
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
-import { useStore } from 'vuex';
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 // Store and Router
 const store = useStore();
 const router = useRouter();
-
+const { handleGlobalUpdate  } = useGlobalUpdate(ProductServices.globalUpdateProductContract,'master_contract_id');
 // Reactive State
 const errors = ref({});
 const loading = ref(false);
@@ -117,7 +118,7 @@ const handleSubmit = async () => {
       const { status, data } = await action(payload);
       if (status === 200 && data.success) {
         if (hasCheckedFields) {
-          handleGlobalUpdate();
+          handleGlobalUpdate(form, checkedFields, '/product-contract');
         }
         else {
           showToast(data.message, 'success');
@@ -133,27 +134,6 @@ const handleSubmit = async () => {
     } finally {
       loading.value = false;
     }
-  }
-};
-
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value);
-  if (_.isEmpty(globalUpdate)) return;
-
-  const payload = {
-    master_contract_id: form.value.master_contract_id,
-    global_keys: globalUpdate
-  };
-
-  try {
-    const { status, data } = await ProductServices.globalUpdateProductContract(payload);
-    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error');
-    if (status === 200 && data.success) router.push('/product-contract');
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error);
-  } finally {
-    loading.value = false;
   }
 };
 
