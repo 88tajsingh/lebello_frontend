@@ -378,6 +378,32 @@ const products = ref([
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Smooth width and height transition */
+.modal.popup .bg-white {
+  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
+}
+
 body{
   font-family: 'GraphikRegular';
 }
