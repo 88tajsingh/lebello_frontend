@@ -455,6 +455,8 @@
 <script setup>
 import _ from 'lodash';
 import { ref, onMounted, watch, computed } from "vue";
+import { useStore } from 'vuex';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { showToast, getGlobalUpdateData, handleFileUpdate } from '@/helper/functions'
 import ContractServices from '@/services/ContractServices';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
@@ -464,12 +466,13 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { contractLocationTreeList, contractTypeTreeList } from '@/helper/Apis'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { trueFalse, withBgWithoutBg, capsNOCaps, statusData } from '@/json/data';
-import { useStore } from 'vuex';
-import { useRouter, onBeforeRouteLeave } from 'vue-router';
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
+
 
 // store and router
 const router = useRouter();
 const store = useStore();
+const { handleGlobalUpdate  } = useGlobalUpdate(ContractServices.globalContractDesignUpdate,'master_contract_design_id');
 
 // Reactive state
 const errors = ref({});
@@ -533,7 +536,7 @@ const handleSubmit = async () => {
 
         if (res.status === 200 && res.data.success) {
             if (hasCheckedFields) {
-                handleGlobalUpdate();
+                handleGlobalUpdate(form,checkedFields,'/Contract-Design');
             }
             else {
                 showToast(res.data.message, 'success');
@@ -550,28 +553,6 @@ const handleSubmit = async () => {
         loading.value = false;
     }
 };
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-    if (_.isEmpty(globalUpdate)) return
-
-    const payload = {
-        master_contract_design_id: form.value.master_contract_design_id,
-        global_keys: globalUpdate
-    }
-
-    try {
-        const { status, data } = await ContractServices.globalContractDesignUpdate(payload)
-        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/Contract-Design')
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-    } finally {
-        loading.value = false
-    }
-}
 
 // Fetch Perticular Domain Data
 const fetchDomainContractData = async () => {

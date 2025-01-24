@@ -155,24 +155,22 @@
 import _ from 'lodash'
 import { ref, onMounted, watch, computed } from 'vue'
 import { handleFileUpdate } from '@/helper/functions'
-import { showToast, getGlobalUpdateData } from '@/helper/functions'
+import { showToast } from '@/helper/functions'
 import TinyMCE from '@/components/Admin-components/TinyMCE.vue'
 import Accordion from '@/components/Admin-components/Accordion.vue'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import { getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
-import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import DesignerServices from '@/services/DesignerServices'
-import { PublishOptions, statusData } from '@/json/data'
+import { statusData } from '@/json/data'
 import { useStore } from 'vuex'
 import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import CommonServices from '@/services/CommonServices'
-import DealersServices from '@/services/DealersServices'
-
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate'
 // store and router
 const router = useRouter()
 const store = useStore()
-
+const { handleGlobalUpdate  } = useGlobalUpdate(DesignerServices.globalDesignersUpdate,'master_designer_id')
 // Reactive state
 const errors = ref({})
 const loading = ref(false)
@@ -239,7 +237,7 @@ const handleSubmit = async () => {
 
     if (res.status === 200 && res.data.success) {
       if (hasCheckedFields) {
-        handleGlobalUpdate()
+        handleGlobalUpdate(form,checkedFields,'/designer')
       } else  {
         showToast(res.data.message, 'success')
         router.push('/designer')
@@ -251,33 +249,6 @@ const handleSubmit = async () => {
   } catch (e) {
     showToast('Something went wrong', 'error')
     console.error('Error:', e)
-  } finally {
-    loading.value = false
-  }
-}
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-  if (_.isEmpty(globalUpdate)) return
-
-  const payload = {
-    master_designer_id: form.value.master_designer_id,
-    global_keys: globalUpdate
-  }
-
-  try {
-    const { status, data } = await DesignerServices.globalDesignersUpdate(payload)
-    status === 200 && data.success
-      ? showToast(data.message, 'success')
-      : showToast(data.message, 'error')
-    if (status === 200 && data.success) router.push('/designer')
-  } catch (error) {
-    showToast('Something went wrong', 'error')
-    console.error(
-      `Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`,
-      error
-    )
   } finally {
     loading.value = false
   }

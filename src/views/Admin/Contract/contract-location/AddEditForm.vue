@@ -69,18 +69,20 @@
 
 <script setup>
 import _ from 'lodash';
+import { onMounted, ref, watch, computed } from 'vue'
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { useStore } from 'vuex';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { contractLocationTreeList } from '@/helper/Apis'
 import ContractServices from '@/services/ContractServices'
 import { showToast, getGlobalUpdateData } from '@/helper/functions'
-import { onMounted, ref, watch, computed } from 'vue'
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
-import { useStore } from 'vuex';
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 //store and router 
 const store = useStore();
 const router = useRouter();
+const { handleGlobalUpdate  } = useGlobalUpdate(ContractServices.globalContractLocationUpdate,'master_contract_location_id');
 
 // Reactive state
 const errors = ref({});
@@ -122,7 +124,7 @@ const handleSubmit = async () => {
     if (res.status === 200 && res.data.success) {
 
       if (hasCheckedFields)
-        handleGlobalUpdate();
+      handleGlobalUpdate(form,checkedFields,'/contract-location');
       else {
         showToast(res.data.message, 'success');
         router.push('/contract-location');
@@ -139,26 +141,6 @@ const handleSubmit = async () => {
   }
 };
 
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value);
-  if (_.isEmpty(globalUpdate)) return;
-
-  const payload = {
-    master_contract_location_id: form.value.master_contract_location_id,
-    global_keys: globalUpdate
-  };
-
-  try {
-    const { status, data } = await ContractServices.globalContractLocationUpdate(payload);
-    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error');
-    if (status === 200 && data.success) router.push('/contract-location');
-  } catch (error) {
-    showToast('Something went wrong', 'error');
-    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error);
-  } finally {
-    loading.value = false;
-  }
-};
 
 // fetch the data 
 const fetchContractLocationData = async () => {

@@ -54,19 +54,20 @@
 </template>
 
 <script setup>
+import _ from 'lodash'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
+import { useStore } from 'vuex'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import CommonServices from '@/services/CommonServices'
 import { getGlobalUpdateData, validateForm, checkForGlobalUpdate } from '@/helper/functions'
 import { commonApiCalls, } from '@/helper/Apis'
 import { showToast } from '@/helper/functions'
 import { onMounted, ref, watch, computed } from 'vue'
-import _ from 'lodash'
-import { useRouter,onBeforeRouteLeave } from 'vue-router'
-import { useStore } from 'vuex'
-
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate'
 // Access the Vuex store
 const store = useStore()
 const router = useRouter()
+const { handleGlobalUpdate  } = useGlobalUpdate(CommonServices.globalUpdateTags,'master_tag_id', 'tag_keys')
 
 // Reactive state variables
 const loading = ref(false)
@@ -114,7 +115,7 @@ const handleFormSubmit = async () => {
     const res = await service(payload);
     if (res.status === 200) {
       if (hasCheckedFields) {
-        handleGlobalUpdate();
+        handleGlobalUpdate(form, checkedFields, '/tags');
       }
       else {
         showToast(res.data.message, 'success')
@@ -135,18 +136,6 @@ const handleFormSubmit = async () => {
     loading.value = false
   }
 
-}
-
-// Function to handle global updates based on checked fields
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-  if (!_.isEmpty(globalUpdate)) {
-    const payload = {
-      master_tag_id: form.value.master_tag_id,
-      tag_keys: globalUpdate
-    }
-    commonApiCalls(CommonServices.globalUpdateTags, payload, 'tags', loading)
-  }
 }
 
 // master slug update

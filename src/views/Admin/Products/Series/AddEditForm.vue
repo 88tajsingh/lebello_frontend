@@ -134,20 +134,22 @@
 
 <script setup>
 import _ from 'lodash';
+import { onMounted, ref, watch, computed } from 'vue'
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { useStore } from 'vuex';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getProductSeriesTree } from '@/helper/Apis'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import ProductServices from '@/services/ProductServices'
 import { showToast, handleFileUpdate, getGlobalUpdateData } from '@/helper/functions'
-import { onMounted, ref, watch, computed } from 'vue'
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
-import { useStore } from 'vuex';
 import { trueFalse } from '@/json/data'
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 // Store and Router
 const store = useStore()
 const router = useRouter()
+const { handleGlobalUpdate  } = useGlobalUpdate(ProductServices.globalProductSeriesUpdate,'master_product_series_id');
 
 // Reactive State
 const form = ref({
@@ -200,7 +202,7 @@ const handleSubmit = async () => {
     const { status, data } = await action(payload)
     if (status === 200 && data.success) {
       if (hasCheckedFields) {
-        handleGlobalUpdate();
+        handleGlobalUpdate(form, checkedFields, '/product-series');
       }
       else {
         store.dispatch('clearEditData');
@@ -214,28 +216,6 @@ const handleSubmit = async () => {
   } catch (error) {
     showToast('Something went wrong', 'error')
     console.error(`Error ${store.getters.editData ? 'editing' : 'adding'} product series:`, error)
-  } finally {
-    loading.value = false
-  }
-}
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-  if (_.isEmpty(globalUpdate)) return
-
-  const payload = {
-    master_product_series_id: form.value.master_product_series_id,
-    global_keys: globalUpdate
-  }
-
-  try {
-    const { status, data } = await ProductServices.globalProductSeriesUpdate(payload)
-    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-    if (status === 200 && data.success) router.push('/product-series')
-  } catch (error) {
-    showToast('Something went wrong', 'error')
-    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
   } finally {
     loading.value = false
   }

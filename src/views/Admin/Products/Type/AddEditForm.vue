@@ -67,20 +67,20 @@
 </template>
 
 <script setup>
+import _ from 'lodash'
+import { onMounted, ref, watch, computed } from 'vue'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
+import { useStore } from 'vuex'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getProductTypeTree } from '@/helper/Apis'
 import ProductServices from '@/services/ProductServices'
 import { clearError, showToast, getGlobalUpdateData, } from '@/helper/functions'
-import { onMounted, ref, watch, computed } from 'vue'
-import _ from 'lodash'
-import { useRouter,onBeforeRouteLeave } from 'vue-router'
-import { useStore } from 'vuex'
-
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate'
 // Store and Router
 const store = useStore()
 const router = useRouter()
-
+const { handleGlobalUpdate  } = useGlobalUpdate(ProductServices.globalUpdateProductType,'master_product_type_id');
 // Reactive State
 const errors = ref({})
 const loading = ref(false)
@@ -125,7 +125,7 @@ const handleFormSubmit = async () => {
 
     if (status === 200 && data.success) {
       if (hasCheckedFields) {
-        handleGlobalUpdate();
+        handleGlobalUpdate(form, checkedFields, '/product-type');
       }
       else {
         store.dispatch('clearEditData');
@@ -136,28 +136,6 @@ const handleFormSubmit = async () => {
     else if(status === 400 || status === 403) { 
       showToast(data.message, 'error')
     }
-  } catch (error) {
-    showToast('Something went wrong', 'error')
-    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-  } finally {
-    loading.value = false
-  }
-}
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-  if (_.isEmpty(globalUpdate)) return
-
-  const payload = {
-    master_product_type_id: form.value.master_product_type_id,
-    global_keys: globalUpdate
-  }
-
-  try {
-    const { status, data } = await ProductServices.globalUpdateProductType(payload)
-    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-    if (status === 200 && data.success) router.push('/product-type')
   } catch (error) {
     showToast('Something went wrong', 'error')
     console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)

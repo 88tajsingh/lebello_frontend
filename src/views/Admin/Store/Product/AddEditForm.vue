@@ -526,6 +526,10 @@
 </template>
 
 <script setup>
+import _ from 'lodash';
+import { computed, onMounted, ref, watch } from "vue";
+import { useRouter,onBeforeRouteLeave } from "vue-router";
+import { useStore } from 'vuex';
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue';
@@ -537,15 +541,12 @@ import { productOptionsType, statusData } from '@/json/data';
 import CommonServices from '@/services/CommonServices';
 import StoreServices from '@/services/StoreServices';
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue';
-import _ from 'lodash';
-import { computed, onMounted, ref, watch } from "vue";
-import { useRouter,onBeforeRouteLeave } from "vue-router";
-import { useStore } from 'vuex';
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 //Store and router
 const store = useStore();
 const router = useRouter();
-
+const { handleGlobalUpdate } = useGlobalUpdate(StoreServices.globalStoreProductUpdate, 'master_store_product_id');
 // Reactive references
 const errors = ref({});
 const MaterialTreeListData = ref([]);
@@ -694,7 +695,7 @@ const handleSubmit = async () => {
 
         if (status === 200 && data.success) {
             if (hasCheckedFields) {
-                handleGlobalUpdate();
+                handleGlobalUpdate(form, checkedFields,'/store-product') ;
             }
             else {
                 showToast(data.message, 'success');
@@ -713,29 +714,6 @@ const handleSubmit = async () => {
     }
 
 };
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-    if (_.isEmpty(globalUpdate)) return
-
-    const payload = {
-        master_store_product_id: form.value.master_store_product_id,
-        global_keys: globalUpdate
-    }
-
-    try {
-        const { status, data } = await StoreServices.globalStoreProductUpdate(payload)
-        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/store-product')
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-    } finally {
-        loading.value = false
-    }
-}
-
 
 // Fetch Perticular Domain Data
 const fetchStoreProductData = async () => {

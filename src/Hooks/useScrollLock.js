@@ -1,4 +1,3 @@
-import { watchEffect } from 'vue'
 
 export function useScrollLock() {
   const lockScroll = () => {

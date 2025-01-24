@@ -199,6 +199,8 @@
 <script setup>
 import _ from 'lodash';
 import { ref, onMounted, watch, computed } from "vue";
+import { useStore } from 'vuex';
+import { useRouter,onBeforeRouteLeave } from "vue-router";
 import { handleFileUpdate } from '@/helper/functions';
 import { showToast, getGlobalUpdateData } from '@/helper/functions'
 import HomeSliderServices from '@/services/HomeSliderServices';
@@ -209,12 +211,12 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
 import RadioButton from '@/components/Admin-components/form-components/RadioButton.vue';
 import { PublishOptions, trueFalse, withBgWithoutBg, capsNOCaps, statusData } from '@/json/data';
-import { useStore } from 'vuex';
-import { useRouter,onBeforeRouteLeave } from "vue-router";
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 // Setup router and store
 const router = useRouter();
 const store = useStore();
+const { handleGlobalUpdate  } = useGlobalUpdate(HomeSliderServices.globalHomeSliderUpdate,'master_home_slider_id')
 
 // Reactive state
 const errors = ref({});
@@ -274,7 +276,7 @@ const handleSubmit = async () => {
 
         if (res.status === 200 && res.data.success) {
             if (hasCheckedFields) {
-                handleGlobalUpdate();
+                handleGlobalUpdate(form,checkedFields,'/home-slider');
             }
             else {
                 showToast(res.data.message, 'success');
@@ -286,29 +288,6 @@ const handleSubmit = async () => {
         console.error('Error:', e);
     } finally {
         loading.value = false;
-    }
-};
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-    loading.value = true;
-    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-    if (_.isEmpty(globalUpdate)) return
-
-    const payload = {
-        master_home_slider_id: form.value.master_home_slider_id,
-        global_keys: globalUpdate
-    }
-
-    try {
-        const { status, data } = await HomeSliderServices.globalHomeSliderUpdate(payload)
-        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/home-slider')
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-    } finally {
-        loading.value = false
     }
 }
 

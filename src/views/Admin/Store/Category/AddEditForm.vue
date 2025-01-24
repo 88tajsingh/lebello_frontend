@@ -131,10 +131,12 @@ import StoreServices from '@/services/StoreServices'
 import { clearError, showToast, getGlobalUpdateData } from '@/helper/functions'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate'
 
 // Store and Router
 const store = useStore()
 const router = useRouter()
+const { handleGlobalUpdate  } = useGlobalUpdate(StoreServices.globalProductCategoryUpdate,'master_store_category_id')
 
 // Reactive State
 const errors = ref({})
@@ -176,7 +178,7 @@ const handleSubmit = async () => {
       const { status, data } = await action(payload)
       if (status === 200 && data.success) {
         if (hasCheckedFields) {
-          handleGlobalUpdate();
+          handleGlobalUpdate(form, checkedFields, '/store-category');
         }
         else {
           showToast(data.message, 'success');
@@ -196,33 +198,6 @@ const handleSubmit = async () => {
     } finally {
       loading.value = false
     }
-  }
-}
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-  if (_.isEmpty(globalUpdate)) return
-
-  const payload = {
-    master_store_category_id: form.value.master_store_category_id,
-    global_keys: globalUpdate
-  }
-
-  try {
-    const { status, data } = await StoreServices.globalProductCategoryUpdate(payload)
-    status === 200 && data.success
-      ? showToast(data.message, 'success')
-      : showToast(data.message, 'error')
-    if (status === 200 && data.success) router.push('/store-category')
-  } catch (error) {
-    showToast('Something went wrong', 'error')
-    console.error(
-      `Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`,
-      error
-    )
-  } finally {
-    loading.value = false
   }
 }
 
