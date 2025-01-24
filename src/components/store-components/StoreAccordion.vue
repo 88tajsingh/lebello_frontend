@@ -119,12 +119,12 @@ const handleAdjustHeight = () => {
   calculateHeight();
 };
 
-onMounted(async () => {
-  window.addEventListener("resize", calculateHeight);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", calculateHeight);
-});
+// onMounted(async () => {
+//   window.addEventListener("resize", calculateHeight);
+// });
+// onBeforeUnmount(() => {
+//   window.removeEventListener("resize", calculateHeight);
+// });
 
 const truncatedHtml = computed(() => {
   const tempDiv = document.createElement('div');
