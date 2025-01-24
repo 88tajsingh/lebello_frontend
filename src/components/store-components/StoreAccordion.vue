@@ -1,6 +1,5 @@
 <template>
   <div class="faq_main_div" :class="{ 'no-scroll': isModalOpen }">
-  <div class="faq_main_div" :class="{ 'no-scroll': isModalOpen }">
     <!-- Accordion -->
     <div v-for="(item, index) in items" :key="index" class="faq_title">
       <!-- Parent Item -->
