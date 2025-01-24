@@ -92,7 +92,7 @@
           <h2>{{ productData.title }}</h2>
           <p v-html="productData.description"></p>
         </div>
-        <button @click="isExpanded = !isExpanded" class="hover:text-orange">
+        <button @click="isExpanded = !isExpanded" class=" flex pb-5 hover:text-orange">
           <span>INSPIRATIONAL SCENE</span>
           <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
         </button>
@@ -635,6 +635,9 @@ button.slider_arrow.custom-next {
   column-gap: 16px;
   margin-top: 60px;
   margin-bottom: 44px;
+}
+.product_inner_cont button:hover  {
+    color: #cc9933;
 }
 
 .product_text_img {
