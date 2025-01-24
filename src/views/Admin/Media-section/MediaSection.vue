@@ -249,7 +249,7 @@ const store = useStore();
 const SelectedFolder = ref({ id: 0 })
 const newFolder = ref()
 const permissions = store.getters.user.permissions;
-const mediaFIle = ref()
+const mediaFIle = ref([])
 const errorMessage = ref()
 const breadcrumbData = ref([])
 const selectedMedia = ref(props.selected || [])
@@ -338,6 +338,7 @@ const MediaModal = () => {
     mediaModalflag.value.open = true
 }
 const handleFileUpload = (file) => {
+    console.log("file", file)
     mediaFIle.value = file
 }
 const editMediaData = ref(null)
@@ -507,7 +508,7 @@ const handleAddMedia = async () => {
     try {
         loading.value = true
         const payload = { image: mediaFIle.value, folder_id: SelectedFolder.value.id }
-        const res = await FolderServices.AddMedia(payload)
+        const res = await FolderServices.addBulkMedia(payload)
         if (res.status === 200) {
             loading.value = false
             handleGetMediaChild({ id: SelectedFolder.value.id });

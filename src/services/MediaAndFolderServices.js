@@ -9,8 +9,8 @@ class MediaAndFoldersService {
   GetMediaChild(payload) {
     return instance.get(ApiConfig.getMediaChild, {params: {...payload}})
   }
-  AddMedia(payload) {
-    return instance.post(ApiConfig.addMedia,payload)
+  addBulkMedia(payload) {
+    return instance.post(ApiConfig.addBulkMedia,payload)
   }
   EditMedia(payload) {
     return instance.post(ApiConfig.editMedia,payload)

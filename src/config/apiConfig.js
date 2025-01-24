@@ -47,7 +47,7 @@ const ApiConfig = {
   // media
   getMedia: '/get-media',
   getMediaChild: '/get-media-items',
-  addMedia: '/add-media',
+  addBulkMedia: '/add-bulk-media',
   editMedia: '/update-media',
   deleteMedia: '/delete-media',
 
