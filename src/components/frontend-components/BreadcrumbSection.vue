@@ -36,7 +36,6 @@ defineProps({
   },
 });
 </script>
-
 <style scoped>
 
 .breadcrem_text ul {
@@ -66,12 +65,22 @@ defineProps({
     column-gap: 10px;
 }
 
+@media (max-width: 1879px) {
+  .product_container {
+    padding: 0px 94px;
+}
+}
+
 @media (max-width: 1699px) {
   .breadcrem_section {
     padding: 28px 0px;
   }
 }
-
+@media (max-width: 1699px) {
+    .product_container {
+        padding: 0px 82px;
+    }
+}
 @media(max-width:1199px){
   .product_container {
     padding: 0px 52px;
@@ -83,6 +92,11 @@ defineProps({
     padding: 0px 32px;
 }
 
+}
+@media (max-width: 767px) {
+    .product_container {
+        padding: 0px 32px;
+    }
 }
 
 @media(max-width:574px){

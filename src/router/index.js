@@ -11,14 +11,14 @@ const  routes = [
 
   },
   {
-    path: '/productDetailNew',
+    path: '/productDetailNew/:slug?',
     name: 'productDetailNew',
     component: () => import('../views/forntend-views/products/ProductDetailNew.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
   
   {
-    path: '/productDetailNew2',
+    path: '/productDetailNew2/:slug?',
     name: 'product-DetailNew2',
     component: () => import('../views/forntend-views/products/NewProductPage.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
@@ -32,7 +32,7 @@ const  routes = [
   {
     path: '/productDetail/:slug?',
     name: 'productDetail',
-    component: () => import('../views/forntend-views/products/ProductDetails.vue')
+    component: () => import('../views/forntend-views/products/NewProductPage.vue')
   },
   {
     path: '/product_type/:slug?',//done
