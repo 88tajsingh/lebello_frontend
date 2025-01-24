@@ -58,19 +58,21 @@
 </template>
 
 <script setup>
+import { onMounted, ref, watch, computed } from 'vue'
+import _ from 'lodash';
+import { useStore } from 'vuex';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import InputLabel from '@/components/Admin-components/form-components/InputLabel.vue'
 import { getProductCategoryTypeTree } from '@/helper/Apis'
 import { clearError, showToast, getGlobalUpdateData } from '@/helper/functions'
-import { onMounted, ref, watch, computed } from 'vue'
 import { useRouter,onBeforeRouteLeave } from 'vue-router';
-import _ from 'lodash';
-import { useStore } from 'vuex';
 import ProductServices from '@/services/ProductServices'
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 
 // Store and Router
 const store = useStore()
 const router = useRouter()
+const { handleGlobalUpdate  } = useGlobalUpdate(ProductServices.globalUpdateProductCategoryType,'master_product_category_type_id');
 
 // Reactive State
 const errors = ref({})
@@ -116,7 +118,7 @@ const handleSubmit = async () => {
     const { status, data } = await action(payload)
     if (status === 200 && data.success) {
       if (hasCheckedFields) {
-        handleGlobalUpdate();
+        handleGlobalUpdate(form, checkedFields, '/product-category-type');
       }
       else {
         showToast(data.message, 'success')
@@ -133,29 +135,6 @@ const handleSubmit = async () => {
     loading.value = false
   }
 }
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-  const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-  if (_.isEmpty(globalUpdate)) return
-
-  const payload = {
-    master_product_category_type_id: form.value.master_product_category_type_id,
-    global_keys: globalUpdate
-  }
-
-  try {
-    const { status, data } = await ProductServices.globalUpdateProductCategoryType(payload)
-    status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-    if (status === 200 && data.success) router.push('/product-category-type')
-  } catch (error) {
-    showToast('Something went wrong', 'error')
-    console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-  } finally {
-    loading.value = false
-  }
-}
-
 
 // Fetch get Data
 const fetchProductCategoryTypeData = async () => {

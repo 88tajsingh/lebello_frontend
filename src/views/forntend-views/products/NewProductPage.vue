@@ -1,46 +1,74 @@
 <template>
   <section class="product_banner font-graphik">
-    <div class="slider_main">
-      <swiper :effect="fade" :navigation="{ prevEl: '.custom-prev', nextEl: '.custom-next' }" :modules="[Navigation]"
-        class="mySwiper">
-        <swiper-slide v-for="(product, index) in products" :key="index">
-          <div class="product_slide">
-            <div class="slider_img">
-              <img :src="product.image" :alt="product.altText" />
+    <div class="relative overflow-hidden ">
+      <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']"
+        navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000" />
+      <SwiperSlider :images="imageData" imageKeyName="gallery">
+        <template #utility>
+          <!-- lebellow icon right top -->
+          <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
+            <img src="/src/assets/logo/lebello-logo-right.png" />
+          </a>
+          <!-- text left bottom -->
+          <span class="slider_text ">
+            <h1> {{ productData?.title }} </h1>
+          </span>
+        </template>
+      </SwiperSlider>
+      <!-- <div class="absolute top-48 right-0">
+        <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]"
+          height="">
+          <div class="z-50">
+            <div class="flex items-center">
+              <span class="sticky top-3 p-4 border-r mr-4 border-[#686868] bg-transparent">
+                <Menu size="15px" fillColor="#000000" />
+              </span>
+              <div>
+                <h3 class="text-[14px] font-medium">
+                  <a href="https://www.lebello.com/listItem/" class="uppercase text-[14px] text-textColorBlack">
+                    Collection 2024
+                  </a>
+                </h3>
+              </div>
             </div>
-            <div class="slider_text">
-              <h1>{{ product.title }}</h1>
-            </div>
+            <ul class="font-light text-[13px] my-1 px-5 text-textColorBlack overflow-auto max-h-52">
+              <form @submit.prevent="handleSearch" role="search">
+                <div class="relative border-b border-[#33333357] mt-2">
+                  <input @keydown.enter="handleSearch" v-model="search"
+                    class="w-full py-[1px] px-0 font-graphikLight text-[13px] border-none bg-transparent focus:outline-none"
+                    id="username" type="text" placeholder="Search" />
+                  <div class="absolute right-2 top-1 flex items-center">
+                    <Search size="22px" fillColor="currentColor" />
+                  </div>
+                </div>
+              </form>
+              <li v-for="(listItem, index) in productTypes" :key="index" class="mt-1 border-b border-[#cdc6c6]">
+                <a @click="handelProductSeriesNavigation(listItem)" class="hover:text-orange cursor-pointer">
+                  {{ listItem?.name }}
+                </a>
+              </li>
+            </ul>
           </div>
-        </swiper-slide>
-      </swiper>
-      <button class="slider_arrow custom-prev" aria-label="Previous">
-        <Arrow size="23px" direction="right" :strokeWidth="26.8" fillColor="#ffffff" />
-      </button>
-      <button class="slider_arrow custom-next" aria-label="Next">
-        <Arrow size="23px" direction="left" :strokeWidth="26.8" fillColor="#ffffff" />
-      </button>
+        </SideMenu>
+      </div> -->
     </div>
   </section>
   <Breadcrumb :breadcrumbData="breadcrumbData" />
-  <section class="three_d_section_main">
+  <section class="three_d_section_main bg-white">
     <div class="threed_inner_main">
-        <div class="threed_img">
-    <img v-if="!isIframeVisible" src="../../../assets/images/product/lebello-3d-image.png" alt="" />
-    <iframe class="w-full max-h-[546px] h-[546px]"
-      v-if="isIframeVisible"
-      src="http://172.105.152.65/lebello_products/Tubo%20Sofa%20LOW%20TESTTT_1/Tubo%20Sofa%20LOW%20TESTTT_1.html"
-      allowfullscreen
-      frameborder="0"
-      scrolling="no"
-    />
-    <button v-if="!isIframeVisible" @click="toggleIframe">
-      <img src="../../../assets/images/product/3D Icon.png" alt="" />
-    </button>
-  </div>
+      <div class="threed_img">
+        <img v-if="!isIframeVisible"
+          :src="$filePath(productData?.product_image_data && productData.product_image_data?.[0]?.file_url, true)"
+          :alt="productData?.product_image_data && productData.product_image_data?.[0]?.alternative_text" />
+        <iframe class="w-full max-h-[546px] h-[546px]" v-if="isIframeVisible"
+          :src="productData?.product_url_for_three_d" allowfullscreen frameborder="0" scrolling="no" />
+        <button v-if=" product_url_for_three_d && !isIframeVisible" @click="toggleIframe">
+          <img src="../../../assets/images/product/3D Icon.png" alt="" />
+        </button>
+      </div>
       <div class="threed_cont">
         <div class="product_top_cont">
-          <h2 >3D CONFIGURATOR</h2>
+          <h2>3D CONFIGURATOR</h2>
           <p><span>Recomended Configuration</span> Please select the configuration</p>
           <select id="configuration">
             <option value="1">Configuration 1</option>
@@ -55,29 +83,26 @@
       </div>
     </div>
   </section>
+  
   <section class="product_text_img">
     <div class="text_img_inner_main">
       <div class="product_inner_cont">
         <div>
-        <h2>Tubo Sofa Exposed</h2>
-        <p>
-          The modern Tubo sofa and club loungers features a soft curved and classical shapes with a
-          simple elegant frame and large round cushions.Available in a range of technical fabrics
-          Tubo features a cataphorese metal powder-coated frame. The design evokes a classical yet
-          timeless feel with large tall privacy options and additional curved pillow options –
-          suitable for both residential or commercial contracts with endless bespoke options. The
-          Tubo sofa and loungers’ collection is designed by French designer Christophe Pillet. 100%
-          Made in Italy.
-        </p>
-        </div>
 
+          <h2>{{ productData.title }}</h2>
+          <p v-html="productData.description"></p>
+        </div>
         <button @click="isExpanded = !isExpanded" class="hover:text-orange">
-          <span>INSPIRATIONAL SCENE </span>
+          <span>INSPIRATIONAL SCENE</span>
           <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
         </button>
       </div>
-      <div class="product_inner_img">
-        <!-- <img src="../../../assets/images/product/lebello-tubo-sofa-exposed-feature.jpg" /> -->
+      <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
+      <div class="product_inner_img aspect-square"
+        >
+        <img
+                class="object-cover h-full z-99999 w-full overflow-hidden"
+                :src="$filePath(rightBoxImage,true)" alt="B Chair" />
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -180,74 +205,55 @@
       <div class="materils_cut_top">
         <ul>
           <li>MATERIALS</li>
-          <li><router-link to="#" class="hover:text-orange hover:border-orange">DOWNLOAD CUT SHEET</router-link></li>
+          <li><a :href="$filePath(productData?.downloadable_files_url?.[0].file_url, true)"
+              class="hover:text-orange border-b border-black hover:border-orange" target="_blank">
+              DOWNLOAD CUT SHEET
+            </a></li>
         </ul>
       </div>
-      <StoreAccordion />
+      <StoreAccordion :accordionData="productData?.material_swatche_data" />
     </div>
+  </section>
+  <section class="footer_section">
+    <FooterSection :extraClasses="['text-black','bg-[#eae6e1]']"/>
   </section>
 </template>
 <script setup>
-import { ref, defineAsyncComponent, onMounted, onUnmounted,watch  } from 'vue'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Navigation } from 'swiper/modules'
+import { ref, onMounted, onUnmounted, computed, watch, defineAsyncComponent, nextTick } from 'vue'
+import { useRouter } from 'vue-router';
 import { Arrow, Facebook, Menu, Instagram, Houzz, Pinterest, } from '@/components/frontend-components/Svg/Icons';
+import { getProductDetail } from '@/helper/frontendHelpers'
 import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
 import TransitionExpand from '@/components/TransitionExpand.vue';
 
-import 'swiper/css/navigation'
-import 'swiper/css/effect-fade'
-import 'swiper/css'
-const StoreAccordion = defineAsyncComponent(() =>
-  import('@/components/store-components/StoreAccordion.vue')
-)
+
+const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
+const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'))
+const NavBar = defineAsyncComponent(() => import('@/components/frontend-components/Nav-bar.vue'))
+const FooterSection = defineAsyncComponent(() => import('@/components/frontend-components/Footer-section.vue'))
+const StoreAccordion = defineAsyncComponent(() =>import('@/components/store-components/StoreAccordion.vue'))
 const Breadcrumb = defineAsyncComponent(() => import('@/components/frontend-components/BreadcrumbSection.vue'))
+
+
+
+const router = useRouter();
+const isVisible = ref(false)
+const isIframeVisible = ref(false);
+const loading = ref(false)
 const isExpanded = ref(false)
+const productData = ref([])
+const rightBoxImage= ref('')
+const productTypes = ref([])
 const isModalOpen = ref(false);
 const activeImage = ref(null);
 const activeIndex = ref(0);
 const modalWidth = ref(0);
 const modalHeight = ref(0);
-const productData = ref(
- {gallery_urls: [
-    {
-        "id": 25,
-        "file_url": "products/lebello_4l-arrow.jpg",
-        "title": "lebello_4l-arrow.jpg",
-        "alternative_text": null,
-        "description": null
-    },
-    {
-        "id": 26,
-        "file_url": "products/lebello-4l_arrow.jpg",
-        "title": "lebello-4l_arrow.jpg",
-        "alternative_text": null,
-        "description": null
-    },
-    {
-        "id": 27,
-        "file_url": "products/lebello-4l-arrow.jpg",
-        "title": "lebello-4l-arrow.jpg",
-        "alternative_text": null,
-        "description": null
-    },
-    {
-        "id": 32,
-        "file_url": "products/lebello_4l-arrow-detailed.jpg",
-        "title": "lebello_4l-arrow-detailed.jpg",
-        "alternative_text": null,
-        "description": null
-    },
-    {
-        "id": 33,
-        "file_url": "products/lebello_4l_arrowdetail.jpg",
-        "title": "lebello_4l_arrowdetail.jpg",
-        "alternative_text": null,
-        "description": null
-    }
-]})
+const slug = ref(router.currentRoute.value?.params?.slug);
+if (!slug.value) slug.value = '4l-pixie-arms-chair';
+console.log('slug',router.currentRoute.value?.params?.slug)
 const breadcrumbData = ref([
   {
     label: 'Collection',
@@ -255,15 +261,53 @@ const breadcrumbData = ref([
     isActive: false,
   },
   {
-    label: 'Tubo Sofa Exposed',
+    label: `${productData.value?.name}`,
     href: '#',
     isActive: true,
   },
 ])
+const handleProductDetailData = async () => {
+  try {
+    console.log('Fetching product details...',slug.value)
+    loading.value = true
+    const res = await getProductDetail(slug.value)
+    if (res.status === 200 && res.data.success) {
+      productData.value = res.data.data.product_data[0];
+      productTypes.value = res.data.data?.product_types;
+      rightBoxImage.value = productData.value?.new_product_additional_right_box_image_url?.file_url
+      console.log('productData', rightBoxImage.value)
+    } else {
+      router.push('/products')
+    }
+  } catch (error) {
+    console.error('Error fetching product details:', error)
+    // router.push('/error') // Redirect to an error page or handle it accordingly
+  } finally {
+    loading.value = false
+    console.log('Product detail data fetch attempt complete')
+  }
+}
 
-const isVisible = ref(false)
-const isIframeVisible = ref(false);
 
+const imageData = computed(() => {
+  return productData.value.gallery_urls?.map(item => ({
+    gallery: item
+  }));
+});
+
+const handleSearch = (event) => {
+  if (event) event.preventDefault();
+  if (search.value.trim() !== '') {
+    console.log('Searching for:', search.value);
+    router.push({ name: 'search', query: { search: search.value } });
+    search.value = '';
+  } else {
+    console.log('Search query is empty!');
+  }
+};
+onMounted(() => {
+  handleProductDetailData()
+})
 const toggleVisibility = () => {
   isVisible.value = !isVisible.value
 }
@@ -271,86 +315,6 @@ const toggleVisibility = () => {
 const toggleIframe = () => {
   isIframeVisible.value = !isIframeVisible.value;
 };
-
-
-const openModal = (product, index) => {
-  activeImage.value = product;
-  activeIndex.value = index;
-  isModalOpen.value = true;
-  // Set initial modal size
-  modalWidth.value = window.innerWidth * 0.9;
-  modalHeight.value = window.innerHeight * 0.9;
-  // Use nextTick to ensure the modal is rendered before adjusting size
-  nextTick(() => {
-    adjustModalSize();
-  });
-};
-
-const closeModal = () => {
-  isModalOpen.value = false;
-  activeImage.value = null;
-  activeIndex.value = 0;
-};
-
-const nextImage = () => {
-  if (activeIndex.value < productData.value.gallery_urls.length - 1) {
-    activeIndex.value++;
-    activeImage.value = productData.value.gallery_urls[activeIndex.value];
-    adjustModalSize();
-  }
-};
-
-const prevImage = () => {
-  if (activeIndex.value > 0) {
-    activeIndex.value--;
-    activeImage.value = productData.value.gallery_urls[activeIndex.value];
-    adjustModalSize();
-  }
-};
-
-const adjustModalSize = () => {
-  if (activeImage.value) {
-    const img = new Image();
-    img.onload = () => {
-      const maxWidth = Math.min(window.innerWidth * 0.9, img.width);
-      const maxHeight = Math.min(window.innerHeight * 0.9, img.height);
-      const aspectRatio = img.width / img.height;
-
-      if (img.width / maxWidth > img.height / maxHeight) {
-        modalWidth.value = maxWidth;
-        modalHeight.value = Math.min(maxWidth / aspectRatio, maxHeight);
-      } else {
-        modalHeight.value = maxHeight;
-        modalWidth.value = Math.min(maxHeight * aspectRatio, maxWidth);
-      }
-    };
-    img.src = activeImage.value.file_url;
-  }
-};
-
-const handleResize = () => {
-  if (isModalOpen.value) {
-    adjustModalSize();
-  }
-};
-onUnmounted(() => {
-  document.body.style.overflow = '';
-});
-
-// Watch for changes in the active image and adjust modal size
-watch(activeImage, adjustModalSize);
-watch(isModalOpen, (newVal) => {
-  console.log('Modal state changed:', newVal);
-  document.body.style.overflow = newVal ? 'hidden' : '';
-});
-// Lifecycle hooks for window resize event
-onMounted(() => {
-  window.addEventListener('resize', handleResize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
-});
 
 const products = ref([
   {
@@ -375,7 +339,7 @@ const products = ref([
 
 </script>
 
-<style>
+<style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
 
@@ -627,7 +591,7 @@ button.slider_arrow.custom-next {
 }
 
 .text_img_inner_main .product_inner_img {
-  background-image: url(/src/assets/images/product/lebello-tubo-sofa-exposed-feature.jpg);
+  /* background-image: url(/src/assets/images/product/lebello-tubo-sofa-exposed-feature.jpg); */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

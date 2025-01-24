@@ -410,27 +410,21 @@
 <script setup>
 import _ from 'lodash'
 import { ref, onMounted, watch, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { handleFileUpdate, getGlobalUpdateData, showToast } from '@/helper/functions'
 import TinyMCE from '@/components/Admin-components/TinyMCE.vue'
 import DealersServices from '@/services/DealersServices'
 import Accordion from '@/components/Admin-components/Accordion.vue'
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue'
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
-import DatePicker from '@/components/Admin-components/form-components/DatePicker.vue'
-import {
-    PublishOptions,
-    statusData,
-    dealerTerritory,
-    TemplateVersion,
-    trueFalse
-} from '@/json/data'
-import { useStore } from 'vuex'
-import { useRouter,onBeforeRouteLeave } from 'vue-router'
+import {PublishOptions,statusData,dealerTerritory,TemplateVersion,trueFalse} from '@/json/data'
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate'
 
 // store and router
 const store = useStore()
 const router = useRouter()
-
+const { handleGlobalUpdate  } = useGlobalUpdate(DealersServices.globalDealerUpdate,'master_dealer_id')
 // reactive state
 const errors = ref({})
 const loading = ref(false)
@@ -511,7 +505,7 @@ const handleSubmit = async () => {
         const { status, data } = await action(payload)
         if (status === 200 && data.success) {
             if (hasCheckedFields) {
-                handleGlobalUpdate()
+                handleGlobalUpdate(form,checkedFields,'/dealer')
             } else {
                 showToast(data.message, 'success')
                 router.push('/dealer')
@@ -522,34 +516,6 @@ const handleSubmit = async () => {
 
     } catch (e) {
         console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} Dealers:`, e)
-    } finally {
-        loading.value = false
-    }
-}
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-    loading.value = true
-    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-    if (_.isEmpty(globalUpdate)) return
-
-    const payload = {
-        master_dealer_id: form.value.master_dealer_id,
-        global_keys: globalUpdate
-    }
-
-    try {
-        const { status, data } = await DealersServices.globalDealerUpdate(payload)
-        status === 200 && data.success
-            ? showToast(data.message, 'success')
-            : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/dealer')
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error(
-            `Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`,
-            error
-        )
     } finally {
         loading.value = false
     }

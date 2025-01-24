@@ -846,6 +846,8 @@
 import _ from 'lodash';
 import SwatchMaterial from '@/components/Admin-components/SwatchMaterial.vue';
 import { ref, onMounted, watch, computed } from "vue";
+import { useStore } from 'vuex';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import { showToast, getGlobalUpdateData, handleFileUpdate } from '@/helper/functions'
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import Accordion from "@/components/Admin-components/Accordion.vue";
@@ -854,12 +856,10 @@ import DefaultCard from '@/components/Admin-components/DefaultCard.vue'
 import StoreProductServices from '@/services/StoreProductServices';
 import { MaterialTreeList, getStoreCategoryTree, getProductSeriesTree, getProductContractTree, getProductCategoryTypeTree, getProductTypeTree } from '@/helper/Apis'
 import { statusData, trueFalse, productOptionsType, withBgWithoutBg, capsNOCaps, SimpleFieldsProduct, rightNavSettings, darkLight, productTemplate } from '@/json/data';
-import { useStore } from 'vuex';
-import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import CommonServices from '@/services/CommonServices';
 import ProductServices from '@/services/ProductServices';
 import PublishAccordion from '@/components/Admin-components/common/PublishAccordion.vue';
-
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 // store and router
 const router = useRouter();
 const store = useStore();
@@ -870,6 +870,7 @@ const loading = ref(false);
 const tagsData = ref([]);
 const storeCategoryTree = ref([]);
 const form = ref(store.getters.editData || { simple_field: 0, product_option: [], is_store_product: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+const GlobalUpdateService = form.value.is_store_product ? StoreProductServices.globalUpdateStoreProduct : ProductServices.globalUpdateProduct;
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
 const productTypeTree = ref([]);
@@ -882,6 +883,8 @@ const logo_right_nav = ref('default')
 const iswithBg = ref(0)
 const iswithBgHeading = ref(0)
 const checkBoxFlag = ref(Boolean(form.value.id))
+const { handleGlobalUpdate  } = useGlobalUpdate(GlobalUpdateService,'master_product_id');
+
 const formItems = ref(
     {
         sku_number: '',
@@ -1029,7 +1032,8 @@ const handleSubmit = async () => {
 
         if (res.status === 200 && res.data.success) {
             if (hasCheckedFields) {
-                handleGlobalUpdate();
+                console.log('global update');
+                handleGlobalUpdate(form, checkedFields, '/product');
             }
             else {
                 showToast(res.data.message, 'success');
@@ -1042,28 +1046,6 @@ const handleSubmit = async () => {
         loading.value = false;
     }
 };
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-    if (_.isEmpty(globalUpdate)) return
-
-    const payload = {
-        master_product_id: form.value.master_product_id,
-        global_keys: globalUpdate
-    }
-    const service = form.value.is_store_product ? StoreProductServices.globalUpdateStoreProduct : ProductServices.globalUpdateProduct;
-    try {
-        const { status, data } = await service(payload)
-        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/product')
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-    } finally {
-        loading.value = false
-    }
-}
 
 // Fetch Perticular Domain Data
 const fetchProductData = async () => {

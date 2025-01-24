@@ -84,7 +84,7 @@ const handelEditClick =(data)=>{
   store.dispatch('setEdit', data) 
   const id =data.domain_id
   store.dispatch('setDomain', {id:id});
-  router.push({ name: 'post-form' });
+  router.push({ name:'pages-form'})
 }
 
 const openDeleteModal = (data) => {

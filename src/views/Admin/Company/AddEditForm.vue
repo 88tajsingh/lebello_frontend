@@ -142,21 +142,23 @@
 </template>
 
 <script setup>
-import _ from 'lodash';
 import { ref, onMounted, computed, watch } from "vue";
-import { showToast, handleFileUpdate, getGlobalUpdateData, } from '@/helper/functions';
+import _ from 'lodash';
+import { useStore } from 'vuex';
+import { useRouter,onBeforeRouteLeave } from 'vue-router';
+import { showToast, handleFileUpdate } from '@/helper/functions';
+import { useGlobalUpdate } from '@/Hooks/useGlobalupdate';
 import TinyMCE from "@/components/Admin-components/TinyMCE.vue";
 import CompanyServices from '@/services/CompanyServices';
 import Accordion from "@/components/Admin-components/Accordion.vue";
 import GetLibrary from '@/views/Admin/Media-section/MediaSection.vue';
 import DefaultCard from '@/components/Admin-components/DefaultCard.vue';
 import { statusData } from '@/json/data';
-import { useStore } from 'vuex';
-import { useRouter,onBeforeRouteLeave } from 'vue-router';
 
 // store and router
 const router = useRouter();
 const store = useStore();
+const { handleGlobalUpdate  } = useGlobalUpdate(CompanyServices.globalCompanyUpdate,'master_company_id');
 // Reactive state
 const errors = ref({});
 const loading = ref(false);
@@ -210,7 +212,7 @@ const handleSubmit = async () => {
         if (res.status === 200 && res.data.success) {
             store.dispatch('clearEditData');
             if (hasCheckedFields) {
-                handleGlobalUpdate();
+                handleGlobalUpdate(form,checkedFields,'/company');
             }
             else {
                 showToast(res.data.message, 'success');
@@ -226,29 +228,6 @@ const handleSubmit = async () => {
         loading.value = false;
     }
 };
-
-// Global Update Handler
-const handleGlobalUpdate = async () => {
-    const globalUpdate = getGlobalUpdateData(form.value, checkedFields.value)
-    if (_.isEmpty(globalUpdate)) return
-
-    const payload = {
-        master_company_id: form.value.master_company_id,
-        global_keys: globalUpdate
-    }
-
-    try {
-        const { status, data } = await CompanyServices.globalCompanyUpdate(payload)
-        status === 200 && data.success ? showToast(data.message, 'success') : showToast(data.message, 'error')
-        if (status === 200 && data.success) router.push('/company')
-    } catch (error) {
-        showToast('Something went wrong', 'error')
-        console.error(`Error while ${store.getters.editData ? 'editing' : 'adding'} product type:`, error)
-    } finally {
-        loading.value = false
-    }
-}
-
 
 // Fetch Perticular Domain Data
 const fetchMaterialSliderData = async () => {
