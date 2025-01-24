@@ -1,45 +1,63 @@
 <template>
   <div class="relative">
-    <input ref="fileInput" type="file" @change="handleFileInputChange"
+    <!-- Input allows multiple file selection -->
+    <input 
+      ref="fileInput" 
+      type="file" 
+      @change="handleFileInputChange" 
       accept=".jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx, .mp4, .avi, .mkv, .mov"
-      class="py-2 px-4 border rounded-lg bg-white shadow-sm focus:outline-none focus:ring-0 ">
-    <button v-if="imageUrl" @click="clearImage" class="absolute top-0 right-0 p-2 pt-3 text-red-600 hover:text-red-800">
-      &#10006;
-    </button>
+      class="py-2 px-4 border rounded-lg bg-white  focus:outline-none focus:ring-0 outline-none border-none" 
+      multiple>
+      
+    <!-- Display the selected files -->
+    <div v-if="imageUrls.length > 0" class="absolute top-0 right-0 p-2 pt-3 text-red">
+      <button @click="clearImages">
+        &#10006;
+      </button>
+    </div>
+    
+    <!-- Show selected image previews -->
+    <!-- <div v-if="imageUrls.length > 0" class="mt-4">
+      <div v-for="(url, index) in imageUrls" :key="index" class="inline-block mr-2">
+        <img :src="url" alt="Uploaded Image" class="max-w-xs max-h-48" />
+      </div>
+    </div> -->
   </div>
-  <!-- <div v-if="imageUrl">
-    <img :src="imageUrl" alt="Uploaded Image" class="mt-4 max-w-xs max-h-48">
-  </div> -->
 </template>
-
 <script setup>
 import { ref } from 'vue';
 
 const emits = defineEmits(['file-selected']);
-const imageUrl = ref('');
+const imageUrls = ref([]);  
 const fileInput = ref(null);
-let selectedFile = null;
+let selectedFiles = ref([]);
 
 const handleFileInputChange = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    selectedFile = file;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      imageUrl.value = reader.result;
-    };
-    reader.readAsDataURL(file);
-
-    emits('file-selected', file);
+  const files = event.target.files;
+  
+  if (files.length > 0) {
+    selectedFiles.value = Array.from(files); 
+    
+    imageUrls.value = [];
+    
+    selectedFiles.value.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        imageUrls.value.push(reader.result);  
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    emits('file-selected', selectedFiles.value);
   }
 };
 
-const clearImage = () => {
-  imageUrl.value = '';
-  selectedFile = null;
+const clearImages = () => {
+  emits('file-selected', []);
+  imageUrls.value = [];  
+  selectedFiles.value = []; 
   if (fileInput.value) {
-    fileInput.value.value = '';
+    fileInput.value.value = '';  
   }
 };
 </script>
