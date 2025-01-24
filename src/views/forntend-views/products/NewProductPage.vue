@@ -109,7 +109,7 @@
       <p></p>
     </div>
   </section>
-  <section class="product_new_gallery bg-white">
+  <section class="product_text_img">
     <TransitionExpand :isExpanded="isExpanded">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
@@ -148,7 +148,7 @@
 
             <!-- Image Display -->
             <Transition name="fade" mode="out-in">
-              <img :key="$filePath(activeImage?.file_url)" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
+              <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
                 class="w-full h-full object-contain" @load="adjustModalSize" />
             </Transition>
           </div>
@@ -316,6 +316,99 @@ const toggleIframe = () => {
   isIframeVisible.value = !isIframeVisible.value;
 };
 
+const openModal = (product, index) => {
+  activeImage.value = product;
+  activeIndex.value = index;
+  isModalOpen.value = true;
+  // Set initial modal size
+  modalWidth.value = window.innerWidth * 0.9;
+  modalHeight.value = window.innerHeight * 0.9;
+  // Use nextTick to ensure the modal is rendered before adjusting size
+  nextTick(() => {
+    adjustModalSize();
+  });
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  activeImage.value = null;
+  activeIndex.value = 0;
+};
+
+const nextImage = () => {
+  if (activeIndex.value < productData.value.gallery_urls.length - 1) {
+    activeIndex.value++;
+    activeImage.value = productData.value.gallery_urls[activeIndex.value];
+    adjustModalSize();
+  }
+};
+
+const prevImage = () => {
+  if (activeIndex.value > 0) {
+    activeIndex.value--;
+    activeImage.value = productData.value.gallery_urls[activeIndex.value];
+    adjustModalSize();
+  }
+};
+
+const adjustModalSize = () => {
+  if (activeImage.value) {
+    const img = new Image();
+    img.onload = () => {
+      const maxWidth = Math.min(window.innerWidth * 0.9, img.width);
+      const maxHeight = Math.min(window.innerHeight * 0.9, img.height);
+      const aspectRatio = img.width / img.height;
+
+      if (img.width / maxWidth > img.height / maxHeight) {
+        modalWidth.value = maxWidth;
+        modalHeight.value = Math.min(maxWidth / aspectRatio, maxHeight);
+      } else {
+        modalHeight.value = maxHeight;
+        modalWidth.value = Math.min(maxHeight * aspectRatio, maxWidth);
+      }
+    };
+    img.src = activeImage.value.file_url;
+  }
+};
+
+const handleResize = () => {
+  if (isModalOpen.value) {
+    adjustModalSize();
+  }
+};
+onUnmounted(() => {
+  document.body.style.overflow = '';
+});
+
+// Watch for changes in the active image and adjust modal size
+watch(activeImage, adjustModalSize);
+watch(isModalOpen, (newVal) => {
+  console.log('Modal state changed:', newVal);
+  document.body.style.overflow = newVal ? 'hidden' : '';
+});
+watch(productData, (newVal) => {
+  console.log('entred', newVal)
+  breadcrumbData.value=[
+  {
+    label: 'Collection',
+    href: '#',
+    isActive: false,
+  },
+  {
+    label: `${newVal?.title}`,
+    href: '#',
+    isActive: true,
+  },
+]
+});
+// Lifecycle hooks for window resize event
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
 const products = ref([
   {
     image: Image1,
@@ -333,10 +426,6 @@ const products = ref([
     title: 'Tubo Sofa Exposed'
   }
 ])
-
-
-
-
 </script>
 
 <style scoped>
