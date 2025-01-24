@@ -84,7 +84,7 @@
       <p></p>
     </div>
   </section>
-  <section class="product_text_img">
+  <section class="product_new_gallery bg-white">
     <TransitionExpand :isExpanded="isExpanded">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
@@ -581,6 +581,7 @@ button.slider_arrow.custom-next {
   -moz-column-gap: 16px;
   column-gap: 16px;
   margin-top: 60px;
+  margin-bottom: 44px;
 }
 
 .product_text_img {
@@ -589,7 +590,7 @@ button.slider_arrow.custom-next {
 
 .materils_main_sec {
   background-color: #eae6e1;
-  padding: 50px 0px 70px;
+  padding: 30px 0px 70px;
 }
 
 .materils_cut_top ul {
@@ -630,7 +631,7 @@ button.slider_arrow.custom-next {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  height: 500px;
+  height: 527px;
 }
 
 /* media css start */

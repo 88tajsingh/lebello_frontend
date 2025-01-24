@@ -1,4 +1,4 @@
-``<template>
+<template>
   <div class="faq_main_div" :class="{ 'no-scroll': isModalOpen }">
     <!-- Accordion -->
     <div v-for="(item, index) in items" :key="index" class="faq_title">
@@ -69,7 +69,7 @@
               </div>
                 <!-- Images Grid -->
                 <div 
-      class=" overflow-y-auto transition-all duration-300"
+      class="gallery_new_scrool overflow-y-auto transition-all duration-300"
       :style="{ height: adjustedHeight + 'px' }"
     >
                   <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
@@ -1352,6 +1352,11 @@ p.popup_desc {
   line-height: 30px;
   color: #000000;
   margin-top: 10px;
+}
+
+.gallery_new_scrool::-webkit-scrollbar {
+  width: 0em;
+  height: 0em
 }
 
 @media (max-width: 1879px) {
