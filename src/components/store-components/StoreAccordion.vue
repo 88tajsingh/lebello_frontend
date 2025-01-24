@@ -1,17 +1,130 @@
+``<template>
+  <div class="faq_main_div" :class="{ 'no-scroll': isModalOpen }">
+    <!-- Accordion -->
+    <div v-for="(item, index) in items" :key="index" class="faq_title">
+      <!-- Parent Item -->
+      <div class="faq_head_mian   transition-all duration-300">
+        <div class="faq_haed cursor-pointer" @click="toggleParent(index)">
+          <span :class="activeParent === index ? 'text-orange' : 'text-black'">{{ item.swatch.title }}</span>
+          <div>
+            <Arrow :direction="activeParent === index ? 'up' : 'left'" :strokeWidth="10.5"
+              :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
+          </div>
+        </div>
+
+      </div>
+      <!-- Child Items -->
+      <TransitionRoot as="template" :show="activeParent === index" enter="transition-all duration-1000 ease-in"
+        enterFrom="max-h-0 overflow-hidden" enterTo="max-h-screen overflow-hidden"
+        leave="transition-all duration-700 ease-out" leaveFrom="max-h-screen overflow-hidden"
+        leaveTo="max-h-0 overflow-hidden">
+        <div class="inner_faq">
+          <div v-for="(child, childIndex) in item.swatch.materials" :key="childIndex" class="faq_inner_cont">
+            <div class="inner_faq_head" @click="openPopup(item, child, childIndex)"
+              :class="activeChild === childIndex ? 'text-orange' : 'text-black'">
+              <span>{{ child.name }}</span>
+              <Arrow :strokeWidth="10.5" :fillColor="'currentColor'" direction="left" />
+            </div>
+          </div>
+        </div>
+      </TransitionRoot>
+    </div>
+    <!-- Popup/Drawer -->
+    <TransitionRoot as="template" :show="isModalOpen" enter="transition-opacity duration-1000" enterFrom="opacity-0"
+      enterTo="opacity-100" leave="transition-opacity duration-1000" leaveFrom="opacity-100" leaveTo="opacity-100" @before-enter="calculateHeight"  >
+      <div class="gallery_popup_main fixed inset-0 px-10 bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
+        <TransitionChild as="template" enter="transition transform duration-1500 ease-in-out"
+          enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out"
+          leaveFrom="translate-x-0" leaveTo="translate-x-full">
+          <div v-if="isModalOpen" class="popup_gallery_cont fixed  top-0 bottom-0 right-0 bg-white" @click.stop>
+            <div ref="closeMenu" class="flex mx-auto">
+              <!-- Back button -->
+              <div class="flex">
+                <button class="mt-1 flex text-black" @click="closeModal">
+                  <Close size="30px" fillColor="#000000" />
+                </button>
+              </div>
+              <!-- Content -->
+              <div class="text-black font-graphik w-full gallery_popup_imgs">
+                <div class="resizeDiv">
+                <h1 class="popup_title">{{ popupTitle }}</h1>
+                <div v-show="!isExpanded" class="overflow-hidden sm:hidden" v-html="truncatedHtml"></div>
+                <div v-show="!isExpanded" class="hidden overflow-hidden sm:block" v-html="text"></div>
+                <transition name="expand" @enter="setHeight" @leave="setHeight">
+                  <div v-show="isExpanded" ref="content" class="overflow-hidden" v-html="text"></div>
+                </transition>
+                <div>
+                  <button @click="isExpanded = !isExpanded"
+                    class=" mt-2 text-blue underline focus:outline-none sm:hidden">
+                    {{ isExpanded ? 'Read Less' : 'Read More' }}
+                  </button>
+                </div>
+
+                <!-- Dropdown -->
+                <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
+                  <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
+                    {{ material.name }}
+                  </option>
+                </select>
+              </div>
+                <!-- Images Grid -->
+                <div 
+      class=" overflow-y-auto transition-all duration-300"
+      :style="{ height: adjustedHeight + 'px' }"
+    >
+                  <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                    <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
+                      <img :src="$filePath(image.file_url)" :alt="image.name" class="object-cover w-full h-full" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </TransitionChild>
+      </div>
+    </TransitionRoot>
+  </div>
+</template>
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onBeforeUnmount, onMounted, nextTick    } from 'vue'
 import { TransitionRoot, TransitionChild } from '@headlessui/vue'
 import { Arrow, Close } from '../frontend-components/Svg/Icons'
 import { onClickOutside } from '@vueuse/core'
 import { useModal } from '@/Hooks/useModals.js'
 
 const height = ref(null)
+const adjustedHeight = ref(0);
+
 const { isModalOpen, openModal, closeModal } = useModal()
-const text= ref('')
+const text = ref('')
 const closeMenu = ref(null)
 const isExpanded = ref(false);
 const content = ref(null);
 
+
+const calculateHeight = async () => {
+  await nextTick();
+  
+  const staticContent = document.querySelector(".resizeDiv");
+  if (staticContent) {
+    const staticContentHeight = staticContent.offsetHeight;
+    const viewportHeight = window.innerHeight;
+    adjustedHeight.value = viewportHeight - staticContentHeight -40;
+  }
+};
+
+// Handle the button click
+const handleAdjustHeight = () => {
+  calculateHeight();
+};
+
+onMounted(async () => {
+  window.addEventListener("resize", calculateHeight);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", calculateHeight);
+});
 
 const truncatedHtml = computed(() => {
   const tempDiv = document.createElement('div');
@@ -36,9 +149,9 @@ const setHeight = (el, done) => {
 };
 
 // -------------------------------------------
-const closeSideMenu = () => { 
+const closeSideMenu = () => {
   closeModal()
-  activeChild.value = null 
+  activeChild.value = null
 }
 onClickOutside(closeMenu, closeSideMenu)
 const props = defineProps({
@@ -1049,9 +1162,9 @@ const props = defineProps({
       }
     ]
   },
-  maxLength:{
+  maxLength: {
     type: Number,
-    default: 200
+    default: 130
   }
 })
 const items = ref(props.accordionData ? props.accordionData : [])
@@ -1067,6 +1180,7 @@ const toggleParent = (index) => {
 }
 
 const openPopup = (item, child) => {
+  handleAdjustHeight();
   currentItem.value = item.swatch;
   popupTitle.value = item.swatch.title;
   text.value = item.swatch.description;
@@ -1104,99 +1218,18 @@ watch(() => props.accordionData, (newData) => {
   items.value = newData
 }, { immediate: true })
 </script>
-
-<template>
-  <div  class="faq_main_div" :class="{ 'no-scroll': isModalOpen }">
-    <!-- Accordion -->
-    <div v-for="(item, index) in items" :key="index" class="faq_title">
-      <!-- Parent Item -->
-      <div class="faq_head_mian   transition-all duration-300">
-        <div class="faq_haed cursor-pointer" @click="toggleParent(index)">
-          <span :class="activeParent === index ? 'text-orange' : 'text-black'">{{ item.swatch.title }}</span>
-          <div>
-            <Arrow :direction="activeParent === index ? 'up' : 'left'" :strokeWidth="10.5"
-              :fillColor="activeParent === index ? '#d98c3a' : '#000000'" />
-          </div>
-        </div>
-
-      </div>
-      <!-- Child Items -->
-      <TransitionRoot as="template" :show="activeParent === index" enter="transition-all duration-1000 ease-in"
-        enterFrom="max-h-0 overflow-hidden" enterTo="max-h-screen overflow-hidden"
-        leave="transition-all duration-700 ease-out" leaveFrom="max-h-screen overflow-hidden" leaveTo="max-h-0 overflow-hidden">
-        <div class="inner_faq">
-          <div v-for="(child, childIndex) in item.swatch.materials" :key="childIndex" class="faq_inner_cont">
-            <div class="inner_faq_head" @click="openPopup(item, child, childIndex)"
-              :class="activeChild === childIndex ? 'text-orange' : 'text-black'">
-              <span>{{ child.name }}</span>
-              <Arrow :strokeWidth="10.5" :fillColor="'currentColor'" direction="left" />
-            </div>
-          </div>
-        </div>
-      </TransitionRoot>
-    </div>
-    <!-- Popup/Drawer -->
-    <TransitionRoot as="template" :show="isModalOpen" enter="transition-opacity duration-1000" enterFrom="opacity-0"
-      enterTo="opacity-100" leave="transition-opacity duration-1000" leaveFrom="opacity-100" leaveTo="opacity-100">
-      <div class="gallery_popup_main fixed inset-0 px-10 bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
-        <TransitionChild as="template" enter="transition transform duration-1500 ease-in-out" enterFrom="translate-x-full"
-          enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out" leaveFrom="translate-x-0"
-          leaveTo="translate-x-full">
-          <div v-if="isModalOpen" class="popup_gallery_cont fixed  top-0 bottom-0 right-0 bg-white" @click.stop>
-            <div ref="closeMenu" class="flex mx-auto">
-              <!-- Back button -->
-              <div class="flex">
-                <button class="mt-1 flex text-black" @click="closeModal">
-                  <Close size="30px" fillColor="#000000" />
-                </button>
-              </div>
-              <!-- Content -->
-              <div class="text-black font-graphik w-full gallery_popup_imgs">
-                <h1 class="popup_title">{{ popupTitle }}</h1>
-                <div v-show="!isExpanded" class="overflow-hidden" v-html="truncatedHtml"></div>
-    <transition name="expand" @enter="setHeight" @leave="setHeight">
-      <div v-show="isExpanded" ref="content" class="overflow-hidden" v-html="text"></div>
-    </transition>
-    <button
-      @click="isExpanded = !isExpanded"
-      class="mt-2 text-blue underline focus:outline-none"
-    >
-      {{ isExpanded ? 'Read Less' : 'Read More' }}
-    </button>
-                <p class="font-MyriadPro popup_desc" v-html="popupDescription"></p>
-                <!-- Dropdown -->
-                <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
-                  <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
-                    {{ material.name }}
-                  </option>
-                </select>
-                <!-- Images Grid -->
-                <div class="gallery_images_height image-scrollbar overflow-y-auto">
-                  <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                    <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
-                      <img :src="$filePath(image.file_url)" :alt="image.name" class="object-cover w-full h-full" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </TransitionChild>
-      </div>
-    </TransitionRoot>
-  </div>
-</template>
-  
 <style scoped>
 .expand-enter-active,
 .expand-leave-active {
   transition: height 0.7s ease;
   overflow: hidden;
 }
+
 .expand-enter-from,
 .expand-leave-to {
   height: 0;
 }
+
 .no-scroll {
   overflow: hidden;
 }
@@ -1272,7 +1305,7 @@ h1.popup_title {
 
 .gallery_popup_main {
   background-color: #c3c1beb5;
-  
+
 }
 
 .popup_gallery_cont {
@@ -1302,16 +1335,16 @@ h1.popup_title {
 }
 
 .popup_select_box {
-    margin-top: 16px;
-    font-size: 16px;
-    color: #000000;
-    line-height: 25px;
-    border-radius: 6px;
-    padding: 9px 64px 9px 20px;
-    margin-bottom: 28px;
-    background-image: url(/src/assets/images/product/select-arrow.svg);
-    background-position: 95% 50%;
-    background-size: 12% 30%;
+  margin-top: 16px;
+  font-size: 16px;
+  color: #000000;
+  line-height: 25px;
+  border-radius: 6px;
+  padding: 9px 64px 9px 20px;
+  margin-bottom: 28px;
+  background-image: url(/src/assets/images/product/select-arrow.svg);
+  background-position: 95% 50%;
+  background-size: 12% 30%;
 }
 
 p.popup_desc {
