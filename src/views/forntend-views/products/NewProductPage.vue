@@ -99,9 +99,9 @@
       <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
       <div v-if="rightBoxImage" class="product_inner_img aspect-square"
       :style="imageStyleObject">
-        <img
+        <!-- <img
                 class="object-cover h-full z-99999 w-full overflow-hidden"
-                :src="$filePath(rightBoxImage,true)" alt="B Chair" />
+                :src="$filePath(rightBoxImage,true)" alt="B Chair" /> -->
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -397,9 +397,9 @@ onUnmounted(() => {
 });
 
 const imageStyleObject = computed(() => ({
-  backgroundImage: `url(${filePath(rightBoxImage.value)})`,
-  // add other styles here if needed
+  backgroundImage: `url("http://172.105.152.65/lebello_backend/storage/app/public/Products Images/Pisa Dining T/Lebello-Outdoor-Pisa_DiningT_ContentImage.jpg")`,
 }));
+
 
 // Watch for changes in the active image and adjust modal size
 watch(activeImage, adjustModalSize);
