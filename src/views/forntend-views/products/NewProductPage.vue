@@ -98,11 +98,11 @@
       </div>
       <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
       <div class="product_inner_img aspect-square"
-      :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }"
+      :style="product_inner_img"
         >
-        <img
+        <!-- <img
                 class="object-cover h-full z-99999 w-full overflow-hidden"
-                :src="$filePath(rightBoxImage,true)" alt="B Chair" />
+                :src="$filePath(rightBoxImage,true)" alt="B Chair" /> -->
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -115,9 +115,10 @@
         <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
           <div class="product_img max-h-[250px] h-full overflow-hidden cursor-pointer"
             @click="openModal(product, index)">
+           
             <img
               class="w-full h-full opacity-75 hover:opacity-100 object-cover transition-transform duration-700 ease-in-out transform hover:scale-125"
-              :src="$filePath(product?.file_url)" :alt="product?.title" />
+              :src="$filePath(product?.file_url)" :alt="product?.title"  :title="product?.title"/>
           </div>
         </div>
       </div>
@@ -125,78 +126,153 @@
   </section>
   <Transition name="modal-fade">
     <section class="modal popup" v-if="isModalOpen">
-      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click.self="closeModal">
+      <div class="fixed inset-0 bg-[#c3c1be] bg-opacity-1 flex items-center justify-center z-50" @click.self="closeModal">
+        
         <div class="bg-white p-4 rounded shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
-          <div class="relative w-full h-full" :style="{
-            maxWidth: `${modalWidth} px`,
-            maxHeight: '85vh',
-            height: `${modalHeight}px`
-          }">
-            <!-- Navigation Buttons -->
-            <button
-              class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full transition-opacity duration-300 z-10"
-              @click.stop="prevImage" aria-label="Previous image">
-              <Arrow class="mt-0 ml-3 self-center" direction="right" :strokeWidth="20.8" size="22px"
-                fillColor="#000000" />
-            </button>
-            <button
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full transition-opacity duration-300 z-10"
-              @click.stop="nextImage" aria-label="Next image">
-              <Arrow class="mt-0 ml-3 self-center" direction="left" :strokeWidth="20.8" size="22px"
-                fillColor="#000000" />
-            </button>
+    <div class="relative w-full h-full" :style="{
+      maxWidth: `${modalWidth}px`,
+      maxHeight: '85vh',
+      height: `${modalHeight}px`
+    }">
+      <!-- Close Button -->
+      <button 
+        @click="closeModal"
+        class="absolute top-[10] z-999999 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-all duration-300"
+      >
+       X
+      </button>
 
-            <!-- Image Display -->
-            <Transition name="fade" mode="out-in">
-              <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
-                class="w-full h-full object-contain" @load="adjustModalSize" />
-            </Transition>
-          </div>
-          <div class="bg-gray-800 text-black p-4 flex items-center justify-between">
-            <!-- Left Text -->
-            <div class="text-sm">
-              Circle XK Side T.
-            </div>
-
-            <!-- Right Actions -->
-            <div class="flex items-center space-x-4">
-              <!-- Download Button -->
-              <a href="#" class="flex items-center text-blue-400 text-sm hover:underline">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="w-5 h-5 mr-1">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
-                </svg>
-                Download
-              </a>
-
-              <!-- Social Media Icons -->
-              <ul class="flex">
-                <!-- Facebook -->
-                <li>
-                  <Facebook bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#ffffff"
-                    boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)" title="Facebook" hoverBgColor="#ce8d39"
-                    href="https://www.houzz.com" hoverSvgColor="#000000" />
-                </li>
-                <!-- Houzz -->
-                <li>
-                  <Houzz bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#FFFFFF" hoverBgColor="#ce8d39"
-                    hoverSvgColor="#ffffff" href="https://www.houzz.com" title="Houzz Share" />
-                </li>
-                <!-- Pinterest -->
-                <li>
-                  <Pinterest bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#ffffff" hoverBgColor="#ce8d39"
-                    hoverSvgColor="#ffffff" href="https://pinterest.com" title="Pinterest" />
-                </li>
-                <!-- Twitter -->
-                <li>
-                  <Instagram bgColor="#333333" bgSize="33px" svgSize="15px" svgColor="#ffffff" hoverBgColor="#ce8d39"
-                    hoverSvgColor="#ffffff" href="https://instagram.com" title="Instagram" />
-                </li>
-              </ul>
-            </div>
-          </div>
+      <!-- Navigation Buttons -->
+      <div class="absolute justify-between inset-0 z-10 flex">
+        <button 
+          @click.stop="prevImage" 
+          @mouseenter="hoveredSide = 'left'" 
+          @mouseleave="hoveredSide = null" 
+          class="w-1/3"
+        >
+          <button 
+            v-if="hoveredSide === 'left'"
+            class="absolute left-2 h-full top-1/2 transform -translate-y-1/2 text-white transition-opacity duration-300 z-10"
+            aria-label="Previous image"
+          >
+            <Arrow class="mt-0 ml-3 self-center" direction="right" :strokeWidth="20.8" size="22px" fillColor="#000000" />
+          </button>
+        </button>
+        <div 
+          class="w-1/3" 
+          @click.stop="nextImage" 
+          @mouseenter="hoveredSide = 'right'"
+          @mouseleave="hoveredSide = null"
+        >
+          <button
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-full transition-opacity duration-300 z-10"
+            aria-label="Next image"
+          >
+            <Arrow 
+              v-if="hoveredSide === 'right'" 
+              class="mt-0 ml-3 self-center" 
+              direction="left" 
+              :strokeWidth="20.8" 
+              size="22px"
+              fillColor="#000000" 
+            />
+          </button>
         </div>
+      </div>
+
+      <!-- Image Display -->
+      <Transition name="fade" mode="out-in">
+        <img 
+          :key="activeImage?.file_url" 
+          :src="$filePath(activeImage?.file_url)" 
+          :alt="activeImage?.title"
+          class="w-full h-full object-contain" 
+          @load="adjustModalSize" 
+        />
+      </Transition>
+    </div>
+    <div class="bg-gray-800 text-black p-4 flex items-center justify-between">
+      <!-- Left Text -->
+      <div class="text-sm">
+       {{ activeImage?.title || productData?.title }}
+      </div>
+
+      <!-- Right Actions -->
+      <div class="flex items-center space-x-4">
+        <!-- Download Button -->
+        <a href="#" class="flex items-center text-blue-400 text-sm hover:underline">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5"
+            stroke="currentColor" 
+            class="w-5 h-5 mr-1"
+          >
+            <path 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+              d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" 
+            />
+          </svg>
+          Download
+        </a>
+
+        <!-- Social Media Icons -->
+        <ul class="flex">
+          <li>
+            <Facebook 
+              bgColor="#333333" 
+              bgSize="33px" 
+              svgSize="15px" 
+              svgColor="#ffffff"
+              boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)" 
+              title="Facebook" 
+              hoverBgColor="#ce8d39"
+              href="https://www.houzz.com" 
+              hoverSvgColor="#000000" 
+            />
+          </li>
+          <li>
+            <Houzz 
+              bgColor="#333333" 
+              bgSize="33px" 
+              svgSize="15px" 
+              svgColor="#FFFFFF" 
+              hoverBgColor="#ce8d39"
+              hoverSvgColor="#ffffff" 
+              href="https://www.houzz.com" 
+              title="Houzz Share" 
+            />
+          </li>
+          <li>
+            <Pinterest 
+              bgColor="#333333" 
+              bgSize="33px" 
+              svgSize="15px" 
+              svgColor="#ffffff" 
+              hoverBgColor="#ce8d39"
+              hoverSvgColor="#ffffff" 
+              href="https://pinterest.com" 
+              title="Pinterest" 
+            />
+          </li>
+          <li>
+            <Instagram 
+              bgColor="#333333" 
+              bgSize="33px" 
+              svgSize="15px" 
+              svgColor="#ffffff" 
+              hoverBgColor="#ce8d39"
+              hoverSvgColor="#ffffff" 
+              href="https://instagram.com" 
+              title="Instagram" 
+            />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
       </div>
     </section>
   </Transition>
@@ -228,7 +304,7 @@ import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
 import TransitionExpand from '@/components/TransitionExpand.vue';
 import NavbarStatic from '@/components/frontend-components/NavbarStatic.vue';
-
+import { filePath } from '@/helper/functions';
 
 const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
 const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'))
@@ -250,6 +326,7 @@ const productTypes = ref([])
 const isModalOpen = ref(false);
 const activeImage = ref(null);
 const activeIndex = ref(0);
+const hoveredSide = ref(null);
 const modalWidth = ref(0);
 const modalHeight = ref(0);
 const slug = ref(router.currentRoute.value?.params?.slug);
@@ -309,7 +386,7 @@ const handleSearch = (event) => {
 onMounted(() => {
   handleProductDetailData()
 })
-const toggleVisibility = () => {
+const toggleVisibility = () =>   {
   isVisible.value = !isVisible.value
 }
 
@@ -329,6 +406,13 @@ const openModal = (product, index) => {
     adjustModalSize();
   });
 };
+
+const product_inner_img = computed(() => ({
+  backgroundImage: `url(${filePath(rightBoxImage.value,true)})`,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundRepeat: 'no-repeat',
+}))
 
 const closeModal = () => {
   isModalOpen.value = false;
@@ -383,6 +467,9 @@ onUnmounted(() => {
 
 // Watch for changes in the active image and adjust modal size
 watch(activeImage, adjustModalSize);
+watch(rightBoxImage, (newVal) => {
+  rightBoxImage.value = newVal
+});
 watch(isModalOpen, (newVal) => {
   console.log('Modal state changed:', newVal);
   document.body.style.overflow = newVal ? 'hidden' : '';

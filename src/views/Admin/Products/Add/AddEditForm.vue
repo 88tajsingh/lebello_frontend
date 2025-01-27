@@ -104,7 +104,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
+                            <!-- <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
                                 v-model="form.new_product_additional_info" placeholder="" label="Additional Product Info	
                                     " :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="value => checkedFields.new_product_additional_info = value" />
@@ -120,22 +120,22 @@
                                         {{
                                             imageData.new_product_additional_bg_image.mediaName }}</div>
                                 </div>
-                            </div>
-                            <div class=" mt-3 flex overflow-x-auto">
+                            </div> -->
+                            <!-- <div class=" mt-3 flex overflow-x-auto">
                                 <img v-if="imageData.new_product_additional_bg_image.images[0]"
                                     v-for="file in imageData.new_product_additional_bg_image.images" :key="file"
                                     :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
                                     :alt="file?.alternative_text || 'img'">
-                            </div>
+                            </div> -->
                             <div class="mt-3">
                                 <div class="flex flex-col w-full">
-                                    <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                        value="Right Box Image" />
+                                    <InputLabel for="" :class="{ 'ml-8': form.id }"
+                                        value="Right Content Image" />
                                     <div class=" flex  w-full h-auto ">
                                         <SingleCheck v-if="form.id" label=""
                                             v-model="checkedFields.new_product_additional_right_box_image">
                                         </SingleCheck>
-                                        <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
+                                        <div :class="{ 'ml-8': form.id }" class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
                                             @click="() => imageData.new_product_additional_right_box_image.isOpen = true">
                                             {{
                                                 imageData.new_product_additional_right_box_image.mediaName }}</div>
