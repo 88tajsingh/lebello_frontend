@@ -84,7 +84,7 @@
     </div>
   </section>
   
-  <section class="product_text_img">
+  <section class="product_text_img" :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }">
     <div class="text_img_inner_main">
       <div class="product_inner_cont">
         <div>
@@ -97,12 +97,12 @@
           <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
         </button>
       </div>
-      <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
       <div class="product_inner_img aspect-square"
+      :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }"
         >
-        <img
+        <!-- <img
                 class="object-cover h-full z-99999 w-full overflow-hidden"
-                :src="$filePath(rightBoxImage,true)" alt="B Chair" />
+                :src="$filePath(rightBoxImage,true)" alt="B Chair" /> -->
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
