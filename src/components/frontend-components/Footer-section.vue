@@ -1,9 +1,9 @@
 <template>
-  <footer :class="[...extraClasses,'font-graphikLight']">
-    <div class="sm:m-0 md2:flex md2:mx-12">
-      <div id="app" class="xl:flex mx-5">
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-1 md:grid-cols-4 py-5 w-full md:gap-6 md2:py-12">
-          <div class="px-1 min-w-[400px]" v-for="(section, index) in sections" :key="index">
+  <footer class="main_footer">
+    <div class="sm:m-0 md2:flex footer_container">
+      <div id="app" class="xl:flex">
+        <div class="footer_new_grid grid grid-cols-1 gap-5 sm:grid-cols-1 md:grid-cols-4 w-full md:gap-6">
+          <div class="menu_main_foot px-0 min-w-[400px]" v-for="(section, index) in sections" :key="index">
             <h3 class="mb-2 text-[16px] text-current font-graphikMedium">
               {{ section?.title }}
             </h3>
@@ -19,7 +19,7 @@
           </div>
         </div>
       </div>
-      <div class="pb-10 ml-2 px-2 lg:px-1 m-auto md:ml-10">
+      <div class="right_news">
         <h3 class="mb-3 text-[15px] text-current font-graphikMedium">
           Newsletter Sign Up
         </h3>
@@ -103,4 +103,89 @@ const props = defineProps({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.main_footer {
+  background-color: #dad6cd;
+  color: #514f4c;
+  padding: 56px 0px;
+}
+.main_footer .footer_container {
+  padding: 0px 124px;
+}
+.right_news input#mc-embedded-subscribe:hover {
+  background: #ce8d39 !important;
+  color: #fff !important;
+  border: 1px solid #ce8d39 !important;
+}
+.right_news input#mc-embedded-subscribe {
+  background: none !important;
+  border: 1px solid #333333 !important;
+  color: #333333 !important;
+  transition: all 0.5s;
+  cursor: pointer;
+}
+
+@media (max-width: 1879px) {
+  .main_footer .footer_container {
+    padding: 0px 94px;
+  }
+}
+
+@media (max-width: 1699px) {
+  .main_footer .footer_container {
+    padding: 0px 82px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .main_footer .footer_container{
+    padding: 0px 52px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+}
+
+@media (max-width: 991px) {
+  .main_footer .footer_container {
+    padding: 0px 32px;
+  }
+}
+
+@media(max-width:767px){
+  .right_news {
+    margin-top: 20px;
+    row-gap: 0px;
+}
+.main_footer .footer_container{
+  row-gap: 0px;
+}
+.main_footer p {
+  margin-top: 0px !important;
+}
+.main_footer p {
+  margin-top: 0px !important;
+}
+.footer_new_grid {
+  row-gap: 0px !important;
+}
+.footer_new_grid .menu_main_foot {
+  margin-bottom: 20px;
+}
+.footer_new_grid .menu_main_foot:nth-child(3), .footer_new_grid .menu_main_foot:nth-child(4) {
+  margin-bottom: 0px;
+}
+.footer_new_grid .menu_main_foot:nth-child(4) h3 {
+  margin: 0px !important;
+}
+.main_footer {
+  padding: 36px 0px;
+}
+}
+
+@media (max-width: 574px) {
+  .main_footer .footer_container {
+    padding: 0px 22px;
+  }
+}
+</style>

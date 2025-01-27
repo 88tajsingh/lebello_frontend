@@ -97,14 +97,14 @@
                                         </div>
                                         <button @click="() => imageData.new_product_slider.isOpen = true" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
-                                            Gallery
+                                            Slider Images
                                         </button>
                                     </div>
                                     <div>
                                     </div>
                                 </div>
                             </div>
-                            <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
+                            <!-- <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
                                 v-model="form.new_product_additional_info" placeholder="" label="Additional Product Info	
                                     " :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="value => checkedFields.new_product_additional_info = value" />
@@ -120,29 +120,29 @@
                                         {{
                                             imageData.new_product_additional_bg_image.mediaName }}</div>
                                 </div>
-                            </div>
-                            <div class=" mt-3 flex overflow-x-auto">
+                            </div> -->
+                            <!-- <div class=" mt-3 flex overflow-x-auto">
                                 <img v-if="imageData.new_product_additional_bg_image.images[0]"
                                     v-for="file in imageData.new_product_additional_bg_image.images" :key="file"
                                     :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
                                     :alt="file?.alternative_text || 'img'">
-                            </div>
+                            </div> -->
                             <div class="mt-3">
                                 <div class="flex flex-col w-full">
-                                    <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                        value="Right Box Image" />
+                                    <InputLabel for="" :class="{ 'ml-8': form.id }"
+                                        value="Right Content Image" />
                                     <div class=" flex  w-full h-auto ">
                                         <SingleCheck v-if="form.id" label=""
                                             v-model="checkedFields.new_product_additional_right_box_image">
                                         </SingleCheck>
-                                        <div class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
+                                        <div :class="{ 'ml-8': form.id }" class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
                                             @click="() => imageData.new_product_additional_right_box_image.isOpen = true">
                                             {{
                                                 imageData.new_product_additional_right_box_image.mediaName }}</div>
                                     </div>
                                 </div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-if="imageData.new_product_additional_right_box_image.images[0]"
+                                    <img v-if="imageData?.new_product_additional_right_box_image.images[0]"
                                         v-for="file in imageData.new_product_additional_right_box_image.images"
                                         :key="file" :src="$filePath(file?.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'img'">
@@ -302,19 +302,20 @@
                         </Accordion>
                     </div>
                     <div class="mt-3">
-                        <Accordion :open="true" header="Downloadable Files">
+                        <Accordion :open="true" header="Cut Sheet">
                             <div class="flex pl-2">
                                 <SingleCheck v-if="form.id" label="" v-model="checkedFields.downloadable_files">
                                 </SingleCheck>
-                                <div class="col-span-2 w-full border border-gray rounded-lg">
-                                    <div class="mt-2 ml-3">
+                                <div class=" w-full border border-gray rounded-lg">
+                                    <div class="">
                                         <div class="flex flex-wrap">
-                                            <div class="relative p-1"
+                                            <div class="relative"
                                                 v-for="(file, index) in imageData?.downloadable_files?.images"
                                                 :key="`file-${index}`">
-                                                <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
-                                                    :src="$filePath(file.file_url)" alt="img" />
-                                                <div @click="() => handleRemoveDownloadable(file)"
+
+                                                <!-- <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
+                                                    :src="$filePath(file.file_url)" alt="img" /> -->
+                                                <!-- <div @click="() => handleRemoveDownloadable(file)"
                                                     class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -322,13 +323,17 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                     </svg>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
-                                        <button @click="() => imageData.downloadable_files.isOpen = true" type="button"
+                                        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                            @click="() => { imageData.downloadable_files.isOpen = true;}">
+                                            {{ imageData.downloadable_files?.mediaName }}
+                                        </div>
+                                        <!-- <button @click="() => imageData.downloadable_files.isOpen = true" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
-                                            Gallery
-                                        </button>
+                                            Cut Sheet
+                                        </button> -->
                                     </div>
                                 </div>
 
@@ -575,10 +580,10 @@
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Product Slider Heading">
-                            <div class="mt-2 px-6  h-auto">
+                            <div class="mt-2 px-6 space-y-2  h-auto">
                                 <div class="flex flex-col w-full">
                                     <InputLabel for="SliderImage" :class="{ 'ml-8': form.id }"
-                                        value="Right Box Image" />
+                                        value="Product 3d Image" />
                                     <div class=" flex  w-full h-auto ">
                                         <SingleCheck v-if="form.id" label="" v-model="checkedFields.product_image">
                                         </SingleCheck>
@@ -1023,7 +1028,7 @@ const handleSubmit = async () => {
     loading.value = true;
     form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length > 0) || [];
 
-    const { domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
+    const { domain, featured_image_url,product_image_data, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
         downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, store_category_data, tags_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
     try {

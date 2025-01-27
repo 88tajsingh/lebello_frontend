@@ -1,5 +1,5 @@
 <template>
-  <div class="faq_main_div" :class="{ 'no-scroll': isModalOpen }">
+  <div class="faq_main_div " :class="{ 'no-scroll': isModalOpen }">
     <!-- Accordion -->
     <div v-for="(item, index) in items" :key="index" class="faq_title">
       <!-- Parent Item -->
@@ -31,13 +31,14 @@
     </div>
     <!-- Popup/Drawer -->
     <TransitionRoot as="template" :show="isModalOpen" enter="transition-opacity duration-1000" enterFrom="opacity-0"
-      enterTo="opacity-100" leave="transition-opacity duration-1000" leaveFrom="opacity-100" leaveTo="opacity-100" @before-enter="calculateHeight"  >
+      enterTo="opacity-100" leave="transition-opacity duration-1000" leaveFrom="opacity-100" leaveTo="opacity-100"
+      @before-enter="calculateHeight">
       <div class="gallery_popup_main fixed inset-0 px-10 bg-black bg-opacity-50 flex items-center justify-end z-[9999]">
         <TransitionChild as="template" enter="transition transform duration-1500 ease-in-out"
           enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out"
           leaveFrom="translate-x-0" leaveTo="translate-x-full">
-          <div v-if="isModalOpen" class="popup_gallery_cont fixed  top-0 bottom-0 right-0 bg-white" @click.stop>
-            <div ref="closeMenu" class="flex mx-auto">
+          <div v-if="isModalOpen" class=" popup_gallery_cont fixed  top-0 bottom-0 right-0 bg-white" @click.stop>
+            <div ref="closeMenu" class="flex mx-auto z-999999">
               <!-- Back button -->
               <div class="flex">
                 <button class="mt-1 flex text-black" @click="closeModal">
@@ -47,31 +48,29 @@
               <!-- Content -->
               <div class="text-black font-graphik w-full gallery_popup_imgs">
                 <div class="resizeDiv">
-                <h1 class="popup_title">{{ popupTitle }}</h1>
-                <div v-show="!isExpanded" class="overflow-hidden sm:hidden" v-html="truncatedHtml"></div>
-                <div v-show="!isExpanded" class="hidden overflow-hidden sm:block" v-html="text"></div>
-                <transition name="expand" @enter="setHeight" @leave="setHeight">
-                  <div v-show="isExpanded" ref="content" class="overflow-hidden" v-html="text"></div>
-                </transition>
-                <div>
-                  <button @click="isExpanded = !isExpanded"
-                    class=" mt-2 text-blue underline focus:outline-none sm:hidden">
-                    {{ isExpanded ? 'Read Less' : 'Read More' }}
-                  </button>
-                </div>
+                  <h1 class="popup_title">{{ popupTitle }}</h1>
+                  <div v-show="!isExpanded" class="overflow-hidden sm:hidden" v-html="truncatedHtml"></div>
+                  <div v-show="!isExpanded" class="hidden overflow-hidden sm:block" v-html="text"></div>
+                  <transition name="expand" @enter="setHeight" @leave="setHeight">
+                    <div v-show="isExpanded" ref="content" class="overflow-hidden" v-html="text"></div>
+                  </transition>
+                  <div>
+                    <button @click="isExpanded = !isExpanded"
+                      class=" mt-2 text-blue underline focus:outline-none sm:hidden">
+                      {{ isExpanded ? 'Read Less' : 'Read More' }}
+                    </button>
+                  </div>
 
-                <!-- Dropdown -->
-                <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
-                  <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
-                    {{ material.name }}
-                  </option>
-                </select>
-              </div>
+                  <!-- Dropdown -->
+                  <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
+                    <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
+                      {{ material.name }}
+                    </option>
+                  </select>
+                </div>
                 <!-- Images Grid -->
-                <div 
-      class="gallery_new_scrool overflow-y-auto transition-all duration-300"
-      :style="{ height: adjustedHeight + 'px' }"
-    >
+                <div class="gallery_new_scrool overflow-y-auto transition-all duration-300"
+                  :style="{ height: adjustedHeight + 'px' }">
                   <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
                       <img :src="$filePath(image.file_url)" :alt="image.name" class="object-cover w-full h-full" />
@@ -87,7 +86,7 @@
   </div>
 </template>
 <script setup>
-import { ref, watch, computed, onBeforeUnmount, onMounted, nextTick    } from 'vue'
+import { ref, watch, computed, onBeforeUnmount, onMounted, nextTick } from 'vue'
 import { TransitionRoot, TransitionChild } from '@headlessui/vue'
 import { Arrow, Close } from '../frontend-components/Svg/Icons'
 import { onClickOutside } from '@vueuse/core'
@@ -98,19 +97,19 @@ const adjustedHeight = ref(0);
 
 const { isModalOpen, openModal, closeModal } = useModal()
 const text = ref('')
-const closeMenu = ref(null) 
+const closeMenu = ref(null)
 const isExpanded = ref(false);
 const content = ref(null);
 
 
 const calculateHeight = async () => {
   await nextTick();
-  
+
   const staticContent = document.querySelector(".resizeDiv");
   if (staticContent) {
     const staticContentHeight = staticContent.offsetHeight;
     const viewportHeight = window.innerHeight;
-    adjustedHeight.value = viewportHeight - staticContentHeight -40;
+    adjustedHeight.value = viewportHeight - staticContentHeight - 40;
   }
 };
 
@@ -1236,6 +1235,7 @@ watch(() => props.accordionData, (newData) => {
 
 .faq_main_div {
   margin-top: 28px;
+  z-index: 99999999;
   border-top: 1px solid #7c7369;
 }
 
@@ -1305,6 +1305,7 @@ h1.popup_title {
 
 .gallery_popup_main {
   background-color: #c3c1beb5;
+  z-index: 9999999;
 
 }
 
