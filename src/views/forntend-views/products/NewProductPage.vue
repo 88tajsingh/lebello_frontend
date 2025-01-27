@@ -129,17 +129,15 @@
         @click.self="closeModal">
 
         <!-- Modal Content (Full opacity) -->
-        <div class="bg-white p-4 rounded shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
-          <div class="relative w-full h-full" :style="{
-            maxWidth: `${modalWidth}px`,
-            maxHeight: '85vh',
-            height: `${modalHeight}px`
-          }">
-            <!-- Close Button -->
-            <button @click="closeModal"
-              class="absolute top-[10] z-999999 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-all duration-300">
-              X
-            </button>
+        <div class="bg-white p-4 rounded shadow-lg  transition-all duration-300 ease-in-out">
+          <div class="relative">
+            
+            <button 
+        @click="closeModal"
+        class="close_btn_popup"
+      >
+       <img src="/public/close-button.png">
+      </button>
 
             <!-- Navigation Buttons -->
             <div class="absolute justify-between inset-0 z-10 flex">
@@ -149,7 +147,7 @@
                   class="absolute left-2 h-full top-1/2 transform -translate-y-1/2 text-white transition-opacity duration-300 z-10"
                   aria-label="Previous image">
                   <Arrow class="mt-0 ml-3 self-center" direction="right" :strokeWidth="20.8" size="22px"
-                    fillColor="#000000" />
+                    fillColor="#FFF" />
                 </button>
               </button>
               <div class="w-1/3 cursor-pointer" @click.stop="nextImage" @mouseenter="hoveredSide = 'right'"
@@ -158,7 +156,7 @@
                   class="absolute right-2 top-1/2  transform -translate-y-1/2 p-2 rounded-full transition-opacity duration-300 z-10"
                   aria-label="Next image">
                   <Arrow v-if="hoveredSide === 'right'" class="mt-0 ml-3 self-center" direction="left"
-                    :strokeWidth="20.8" size="22px" fillColor="#000000" />
+                    :strokeWidth="20.8" size="22px" fillColor="#FFF" />
                 </button>
               </div>
             </div>
@@ -464,6 +462,7 @@ const products = ref([
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
 
 
+
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.3s ease;
@@ -683,7 +682,15 @@ button.slider_arrow.custom-next {
   background-color: #eae6e1;
   padding: 30px 0px 70px;
 }
-
+.close_btn_popup {
+  position: absolute;
+  top: -38px;
+  z-index: 99999;
+  right: -15px;
+}
+.close_btn_popup img {
+  max-width: 20px;
+}
 .materils_cut_top ul {
   display: flex;
   align-items: center;
