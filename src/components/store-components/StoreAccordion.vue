@@ -1,5 +1,5 @@
 <template>
-  <div class="faq_main_div" :class="{ 'no-scroll': isModalOpen }">
+  <div class="faq_main_div " :class="{ 'no-scroll': isModalOpen }">
     <!-- Accordion -->
     <div v-for="(item, index) in items" :key="index" class="faq_title">
       <!-- Parent Item -->
@@ -36,8 +36,8 @@
         <TransitionChild as="template" enter="transition transform duration-1500 ease-in-out"
           enterFrom="translate-x-full" enterTo="translate-x-0" leave="transition transform duration-1500 ease-in-out"
           leaveFrom="translate-x-0" leaveTo="translate-x-full">
-          <div v-if="isModalOpen" class="popup_gallery_cont fixed  top-0 bottom-0 right-0 bg-white" @click.stop>
-            <div ref="closeMenu" class="flex mx-auto">
+          <div v-if="isModalOpen" class=" popup_gallery_cont fixed  top-0 bottom-0 right-0 bg-white" @click.stop>
+            <div ref="closeMenu" class="flex mx-auto z-999999">
               <!-- Back button -->
               <div class="flex">
                 <button class="mt-1 flex text-black" @click="closeModal">
@@ -1236,6 +1236,7 @@ watch(() => props.accordionData, (newData) => {
 
 .faq_main_div {
   margin-top: 28px;
+  z-index: 99999999;
   border-top: 1px solid #7c7369;
 }
 
@@ -1305,6 +1306,7 @@ h1.popup_title {
 
 .gallery_popup_main {
   background-color: #c3c1beb5;
+  z-index: 9999999;
 
 }
 
