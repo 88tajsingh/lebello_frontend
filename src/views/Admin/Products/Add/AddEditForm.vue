@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-if="imageData.new_product_additional_right_box_image.images[0]"
+                                    <img v-if="imageData?.new_product_additional_right_box_image.images[0]"
                                         v-for="file in imageData.new_product_additional_right_box_image.images"
                                         :key="file" :src="$filePath(file?.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'img'">

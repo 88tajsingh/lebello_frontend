@@ -1,12 +1,11 @@
 <template>
   <section class="product_banner font-graphik">
     <div class="relative overflow-hidden ">
-      <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']"
-        navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000" />
+<NavbarStatic/>     
       <SwiperSlider :images="imageData" imageKeyName="gallery">
         <template #utility>
           <!-- lebellow icon right top -->
-          <a href="#" class="absolute z-50 top-11 right-0 mx-auto">
+          <a href="#" class="absolute top-11 right-0 mx-auto" style="z-index:9999999999999;">
             <img src="/src/assets/logo/lebello-logo-right.png" />
           </a>
           <!-- text left bottom -->
@@ -109,7 +108,7 @@
       <p></p>
     </div>
   </section>
-  <section class="product_text_img">
+  <section class="product_text_img product_new_gallery">
     <TransitionExpand :isExpanded="isExpanded">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
@@ -126,7 +125,7 @@
   <Transition name="modal-fade">
     <section class="modal popup" v-if="isModalOpen">
       <!-- Background Overlay with Opacity -->
-      <div class="fixed inset-0 bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
+      <div class=" popup_inner fixed inset-0 bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
         @click.self="closeModal">
 
         <!-- Modal Content (Full opacity) -->
@@ -244,6 +243,7 @@ import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
 import TransitionExpand from '@/components/TransitionExpand.vue';
+import NavbarStatic from '@/components/frontend-components/NavbarStatic.vue';
 import { filePath } from '@/helper/functions';
 
 const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
@@ -306,7 +306,7 @@ const handleProductDetailData = async () => {
 
 
 const imageData = computed(() => {
-  return productData.value.gallery_urls?.map(item => ({
+  return productData.value.new_product_slider_url?.map(item => ({
     gallery: item
   }));
 });
@@ -724,6 +724,29 @@ button.slider_arrow.custom-next {
   background-position: center;
   height: 527px;
 }
+.product_new_gallery .product_img {
+  max-height: initial !important;
+  height: 280px;
+  object-fit: cover !important;
+}
+.product_new_gallery {
+  background: #fff !important;
+}
+.popup_inner {
+  background: #c3c1beb5;
+  padding: 0px 20px;
+  z-index: 99999999999 !important;
+}
+.close_btn_popup {
+  position: absolute;
+  top: -38px;
+  z-index: 99999;
+  right: -15px;
+}
+.close_btn_popup img {
+  max-width: 20px;
+}
+
 
 /* media css start */
 @media (max-width: 1879px) {
@@ -803,7 +826,7 @@ button.slider_arrow.custom-next {
     max-width: 510px;
     padding: 30px 60px 72px;
   }
-
+  
 }
 
 @media (max-width: 1399px) {
@@ -813,8 +836,10 @@ button.slider_arrow.custom-next {
     padding: 30px 60px 55px;
   }
 
-
-
+  
+  .product_new_gallery .product_img[data-v-0cdd39bd] {
+    height: 220px;
+}
   /* .threed_inner_main .threed_cont select {
     font-size: 14px;
     padding: 8.5px 97px 11.5px 14px;
@@ -847,13 +872,8 @@ button.slider_arrow.custom-next {
   .slider_text {
     padding: 0px 52px 45px;
   }
-
-  .threed_inner_main .threed_img img {
-    height: 350px;
-    object-fit: cover;
-  }
-
-  .threed_inner_main .threed_img button img {
+  
+.threed_inner_main .threed_img button img {
     height: auto;
   }
 
@@ -896,15 +916,16 @@ button.slider_arrow.custom-next {
 
   .popup_gallery_cont button svg {
     width: 26px;
-  }
-
-  .threed_btns {
-    column-gap: 18px;
-  }
-
-  .threed_btns a {
-    padding: 5px 18px;
-  }
+}
+.threed_btns {
+  column-gap: 18px;
+}
+.threed_btns a {
+  padding: 5px 18px;
+}
+.product_container {
+  padding: 0px 32px;
+}
 }
 
 @media(max-width:767px) {
@@ -942,11 +963,13 @@ button.slider_arrow.custom-next {
 
   .product_container {
     padding: 0px 32px;
-  }
-
-  .text_img_inner_main .product_inner_img {
-    height: 290px;
-  }
+}
+.text_img_inner_main .product_inner_img {
+  height: 290px;
+}
+.product_inner_cont button[data-v-0cdd39bd] {
+  margin-bottom: 0px;
+}
 }
 
 @media(max-width:574px) {
