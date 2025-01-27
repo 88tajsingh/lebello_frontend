@@ -386,7 +386,7 @@ const handleSearch = (event) => {
 onMounted(() => {
   handleProductDetailData()
 })
-const toggleVisibility = () => {
+const toggleVisibility = () =>   {
   isVisible.value = !isVisible.value
 }
 
@@ -408,7 +408,7 @@ const openModal = (product, index) => {
 };
 
 const product_inner_img = computed(() => ({
-  backgroundImage: rightBoxImage.value ? `url(${filePath(rightBoxImage.value,true)})` : 'none',
+  backgroundImage: `url(${filePath(rightBoxImage.value,true)})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
@@ -467,6 +467,9 @@ onUnmounted(() => {
 
 // Watch for changes in the active image and adjust modal size
 watch(activeImage, adjustModalSize);
+watch(rightBoxImage, (newVal) => {
+  rightBoxImage.value = newVal
+});
 watch(isModalOpen, (newVal) => {
   console.log('Modal state changed:', newVal);
   document.body.style.overflow = newVal ? 'hidden' : '';
