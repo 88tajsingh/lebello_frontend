@@ -142,7 +142,7 @@
                                     </div>
                                 </div>
                                 <div class=" mt-3 flex overflow-x-auto">
-                                    <img v-if="imageData.new_product_additional_right_box_image.images[0]"
+                                    <img v-if="imageData?.new_product_additional_right_box_image.images[0]"
                                         v-for="file in imageData.new_product_additional_right_box_image.images"
                                         :key="file" :src="$filePath(file?.file_url)"
                                         class="inline-block w-auto h-34 mr-4" :alt="file?.alternative_text || 'img'">
@@ -1023,7 +1023,7 @@ const handleSubmit = async () => {
     loading.value = true;
     form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length > 0) || [];
 
-    const { domain, featured_image_url, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
+    const { domain, featured_image_url, new_product_slider_url,product_image_data, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
         downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, store_category_data, tags_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
     try {
