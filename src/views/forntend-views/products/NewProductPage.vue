@@ -1,8 +1,7 @@
 <template>
   <section class="product_banner font-graphik">
     <div class="relative overflow-hidden ">
-      <NavBar :absolute="true" :navColor="'#000000'" :extraClass="['px-16']"
-        navBackgroundColor="hover:bg-[#ffffff] bg-opacity-5" hovrednavColor="#000000" />
+<NavbarStatic/>     
       <SwiperSlider :images="imageData" imageKeyName="gallery">
         <template #utility>
           <!-- lebellow icon right top -->
@@ -228,6 +227,7 @@ import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
 import TransitionExpand from '@/components/TransitionExpand.vue';
+import NavbarStatic from '@/components/frontend-components/NavbarStatic.vue';
 
 
 const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
@@ -811,10 +811,7 @@ button.slider_arrow.custom-next {
   .slider_text {
     padding: 0px 52px 45px;
   }
-  .threed_inner_main .threed_img img {
-    height: 350px;
-    object-fit: cover;
-}
+  
 .threed_inner_main .threed_img button img {
     height: auto;
 }
