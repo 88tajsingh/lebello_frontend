@@ -99,9 +99,9 @@
       <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
       <div v-if="rightBoxImage" class="product_inner_img aspect-square"
       :style="imageStyleObject">
-        <!-- <img
+        <img
                 class="object-cover h-full z-99999 w-full overflow-hidden"
-                :src="$filePath(rightBoxImage,true)" alt="B Chair" /> -->
+                :src="$filePath(rightBoxImage,true)" alt="B Chair" />
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
