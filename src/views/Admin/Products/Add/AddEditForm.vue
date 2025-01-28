@@ -944,7 +944,7 @@ const handleVideoSource = (data) => {
 // Handle file updates for different image types
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
 const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
-const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
+const handleProductSliderFiles  = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
 const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form, false);
 const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
 const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
