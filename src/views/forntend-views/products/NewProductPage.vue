@@ -57,11 +57,11 @@
     <div class="threed_inner_main">
       <div class="threed_img">
         <img v-if="!isIframeVisible"
-          :src="$filePath(productData?.product_image_data && productData.product_image_data?.[0]?.file_url, true)"
+          :src="$filePath(productData?.product_image_data && productData.product_image_data?.[0]?.file_url,true)"
           :alt="productData?.product_image_data && productData.product_image_data?.[0]?.alternative_text" />
         <iframe class="w-full max-h-[546px] h-[546px]" v-if="isIframeVisible"
           :src="productData?.product_url_for_three_d" allowfullscreen frameborder="0" scrolling="no" />
-        <button v-if="product_url_for_three_d && !isIframeVisible" @click="toggleIframe">
+        <button v-if="!isIframeVisible && productData?.product_url_for_three_d" @click="toggleIframe">
           <img src="../../../assets/images/product/3D Icon.png" alt="" />
         </button>
       </div>
@@ -98,7 +98,7 @@
       </div>
       <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
       <div v-if="rightBoxImage" class="product_inner_img aspect-square"
-      :style="imageStyleObject">
+      :style="{ backgroundImage: `url(${rightBoxImage})` }" >
         <!-- <img
                 class="object-cover h-full z-99999 w-full overflow-hidden"
                 :src="$filePath(rightBoxImage,true)" alt="B Chair" /> -->
@@ -139,8 +139,16 @@
        <img src="/public/close-button.png">
       </button>
 
-            <!-- Navigation Buttons -->
-            <div class="absolute justify-between inset-0 z-10 flex">
+           
+
+            <!-- Image Display -->
+            <Transition name="fade" mode="out-in">
+              <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
+                class=" object-contain" @load="adjustModalSize" />
+            </Transition>
+
+             <!-- Navigation Buttons -->
+             <div class="absolute justify-between inset-0 z-10 flex">
               <button @click.stop="prevImage" @mouseenter="hoveredSide = 'left'" @mouseleave="hoveredSide = null"
                 class="w-1/3 cursor-pointer">
                 <button v-if="hoveredSide === 'left'"
@@ -160,16 +168,10 @@
                 </button>
               </div>
             </div>
-
-            <!-- Image Display -->
-            <Transition name="fade" mode="out-in">
-              <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
-                class="w-full h-full object-contain" @load="adjustModalSize" />
-            </Transition>
           </div>
 
           <!-- Modal Footer -->
-          <div class="bg-gray-800 text-black pt-4 flex items-center justify-between">
+          <div class="bg-gray-800  text-black pt-4 flex items-center justify-between">
             <!-- Left Text -->
             <div class="text-sm">
               {{ activeImage?.title || productData?.title }}
@@ -288,8 +290,8 @@ const handleProductDetailData = async () => {
     if (res.status === 200 && res.data.success) {
       productData.value = res.data.data.product_data[0];
       productTypes.value = res.data.data?.product_types;
-      rightBoxImage.value = productData.value?.new_product_additional_right_box_image_url?.file_url
-      console.log('productData', rightBoxImage.value)
+      rightBoxImage.value = filePath(productData.value?.new_product_additional_right_box_image_url?.file_url)
+      console.log('sdfsdfsdfsdfsdfsdfdsfsd', rightBoxImage.value)
     } else {
       router.push('/products')
     }
@@ -395,7 +397,8 @@ onUnmounted(() => {
 });
 
 const imageStyleObject = computed(() => ({
-  backgroundImage: `url("http://172.105.152.65/lebello_backend/storage/app/public/Products Images/Pisa Dining T/Lebello-Outdoor-Pisa_DiningT_ContentImage.jpg")`,
+  // backgroundImage: `url("http://172.105.152.65/lebello_backend/storage/app/public/Products Images/Pisa Dining T/Lebello-Outdoor-Pisa_DiningT_ContentImage.jpg")`,
+  backgroundImage: `url(${filePath(rightBoxImage.value)})`,
 }));
 
 
@@ -403,10 +406,8 @@ const imageStyleObject = computed(() => ({
 watch(activeImage, adjustModalSize);
 watch(rightBoxImage, (newVal) => {
   rightBoxImage.value = newVal
-  console.log('rightBoxImage updated', rightBoxImage.value)
 });
 watch(isModalOpen, (newVal) => {
-  console.log('Modal state changed:', newVal);
   document.body.style.overflow = newVal ? 'hidden' : '';
 });
 watch(isModalOpen, (newVal) => {
@@ -417,7 +418,6 @@ watch(isModalOpen, (newVal) => {
   }
 });
 watch(productData, (newVal) => {
-  console.log('entred', newVal)
   breadcrumbData.value = [
     {
       label: 'Collection',
