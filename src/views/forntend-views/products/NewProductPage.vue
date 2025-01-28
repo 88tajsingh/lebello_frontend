@@ -940,6 +940,14 @@ button.slider_arrow.custom-next {
 .text_img_inner_main .product_inner_img {
   height: 430px;
 }
+.threed_inner_main .threed_img img {
+  height: 360px;
+  object-fit: cover;
+  width: 100%;
+}
+.threed_inner_main .threed_cont  {
+  margin: 24px 0px 16px;
+}
 }
 
 @media(max-width:991px){
