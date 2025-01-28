@@ -51,7 +51,8 @@
                                 class="block w-[180px] " v-model="form.meta_description" placeholder="Meta Description"
                                 label="Meta Description" :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="value => checkedFields.meta_description = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for the
+                            <span :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for
+                                the
                                 description.
                             </span>
 
@@ -77,15 +78,21 @@
                                     <div class="mt-2 mx-3">
                                         <input-label for="slides" value="Slider " />
                                         <div class="text-gray-4 text-[13px]">Minimum Size 1600 x 700px</div>
-                                        <div class=" flex flex-wrap">
+                                        <div class="flex flex-wrap">
                                             <div class="relative p-1"
                                                 v-for="(slide, index) in imageData.new_product_slider.images"
                                                 :key="`slide-${index}`">
-
                                                 <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
                                                     :src="$filePath(slide?.file_url)" :alt="slide?.alternative_text">
+                                                <!-- Order Input -->
+                                                <input type="number"
+                                                    class="w-full mt-2 border border-gray-4 rounded-md p-1"
+                                                    v-model.number="slide.order"
+                                                    @change="updateOrdering('new_product_slider')"
+                                                    placeholder="Order" />
+                                                <!-- Remove Icon -->
                                                 <div @click="() => handleRemoveSliderImage(slide)"
-                                                    class=" absolute top-2 right-2">
+                                                    class="absolute top-2 right-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                         class="size-6">
@@ -96,13 +103,12 @@
                                             </div>
                                         </div>
                                         <button @click="() => imageData.new_product_slider.isOpen = true" type="button"
-                                            class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
+                                            class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
                                             Slider Images
                                         </button>
                                     </div>
-                                    <div>
-                                    </div>
                                 </div>
+
                             </div>
                             <!-- <TextInput id="TitleBackground" type="text" class="block w-full  mb-2 h-[33px]"
                                 v-model="form.new_product_additional_info" placeholder="" label="Additional Product Info	
@@ -129,13 +135,13 @@
                             </div> -->
                             <div class="mt-3">
                                 <div class="flex flex-col w-full">
-                                    <InputLabel for="" :class="{ 'ml-8': form.id }"
-                                        value="Right Content Image" />
+                                    <InputLabel for="" :class="{ 'ml-8': form.id }" value="Right Content Image" />
                                     <div class=" flex  w-full h-auto ">
                                         <SingleCheck v-if="form.id" label=""
                                             v-model="checkedFields.new_product_additional_right_box_image">
                                         </SingleCheck>
-                                        <div :class="{ 'ml-8': form.id }" class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
+                                        <div :class="{ 'ml-8': form.id }"
+                                            class="py-2 rounded-lg w-full mb-2 px-2 border border-stroke"
                                             @click="() => imageData.new_product_additional_right_box_image.isOpen = true">
                                             {{
                                                 imageData.new_product_additional_right_box_image.mediaName }}</div>
@@ -151,6 +157,41 @@
 
                         </Accordion>
                     </div>
+                    <div class="mt-5">
+                        <div class="mt-4">
+                            <Accordion :open="true" header="Gallery">
+                                <div class="px-6  h-auto ">
+                                    <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
+                                    <div class=" flex  w-full h-auto ">
+                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.gallery">
+                                        </SingleCheck>
+                                        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
+                                            @click="() => imageData.gallery.isOpen = true"> {{
+                                                imageData.gallery.images.length > 0 ? imageData.gallery.images.length : 'Add gallery' }} files </div>
+                                    </div>
+                                    <div
+                                        class="mt-3 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">                                        
+                                        <img v-for="file in imageData.gallery.images" :key="file.id"
+                                            :src="$filePath(file?.file_url)" class="relative object-cover"
+                                            :alt="file?.alternative_text || ''" />
+                                        
+                                            <div @click="() => handleRemoveSliderImage(slide)"
+                                                    class="absolute top-2 right-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="size-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                    </svg>
+                                                    
+                                                </div>
+                                    </div>
+
+                                    <InputError class="mt-2" :message="errors?.featured_image" />
+                                </div>
+                            </Accordion>
+                        </div>
+                        </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Product Options :Set as Featured ">
                             <div class="flex px-3 flex-col ">
@@ -327,7 +368,7 @@
                                             </div>
                                         </div>
                                         <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                            @click="() => { imageData.downloadable_files.isOpen = true;}">
+                                            @click="() => { imageData.downloadable_files.isOpen = true; }">
                                             {{ imageData.downloadable_files?.mediaName }}
                                         </div>
                                         <!-- <button @click="() => imageData.downloadable_files.isOpen = true" type="button"
@@ -369,15 +410,9 @@
                 </div>
                 <!-- right panel -->
                 <div class="col-span-4">
-                    <PublishAccordion
-    header="Publish"
-    :open="false"
-    :options="statusData"
-    :form="form"
-    :hasCheckBox="checkBoxFlag"
-    :onSubmitHandler="handleSubmit"
-    :onCheckboxUpdate="handleCheckboxUpdate"
-  />
+                    <PublishAccordion header="Publish" :open="false" :options="statusData" :form="form"
+                        :hasCheckBox="checkBoxFlag" :onSubmitHandler="handleSubmit"
+                        :onCheckboxUpdate="handleCheckboxUpdate" />
 
                     <div class="mt-5">
                         <Accordion :open="true" header="Select Template">
@@ -457,26 +492,7 @@
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
-                        <div class="mt-4">
-                            <Accordion :open="true" header="Gallery">
-                                <div class="px-6  h-auto ">
-                                    <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                    <div class=" flex  w-full h-auto ">
-                                        <SingleCheck v-if="form.id" label="" v-model="checkedFields.gallery">
-                                        </SingleCheck>
-                                        <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                            @click="() => imageData.gallery.isOpen = true"> {{
-                                                imageData.gallery.mediaName }}</div>
-                                    </div>
-                                    <div class=" mt-3 flex overflow-x-auto">
-                                        <img v-for="file in imageData.gallery.images" :key="file"
-                                            :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
-                                            :alt="file?.alternative_text || ''">
-                                    </div>
-                                    <InputError class="mt-2" :message="errors?.featured_image" />
-                                </div>
-                            </Accordion>
-                        </div>
+                       
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Simple Fields">
@@ -888,7 +904,7 @@ const logo_right_nav = ref('default')
 const iswithBg = ref(0)
 const iswithBgHeading = ref(0)
 const checkBoxFlag = ref(Boolean(form.value.id))
-const { handleGlobalUpdate  } = useGlobalUpdate(GlobalUpdateService,'master_product_id');
+const { handleGlobalUpdate } = useGlobalUpdate(GlobalUpdateService, 'master_product_id');
 
 const formItems = ref(
     {
@@ -924,10 +940,11 @@ const handleVideoSource = (data) => {
 
 };
 
+
 // Handle file updates for different image types
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
 const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
-const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
+const handleProductSliderFiles  = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
 const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form, false);
 const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
 const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
@@ -952,6 +969,23 @@ const imageData = ref({
     store_product_image: { isOpen: false, mediaName: 'Main Slider Image', images: [], selectedFiles: handleStoreImageFiles, singleFile: true },
     video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true },
 });
+
+function updateOrdering(type) {
+    if (!form.value.ordering_images) {
+        form.value.ordering_images = {};
+    }
+
+    const orderedImages = imageData.value[type]?.images
+        .map((image, index) => ({
+            id: image.id,
+            order: image.order
+        }))
+        .sort((a, b) => a.order - b.order);
+
+    form.value.ordering_images[type] = orderedImages.map((image) => image);
+    console.log("Updated ordering:", form.value.ordering_images);
+}
+
 
 // remove image form gallery
 const handleRemoveSliderImage = (slide) => {
@@ -1028,7 +1062,7 @@ const handleSubmit = async () => {
     loading.value = true;
     form.value.material_swatches = selectedSwatchesData.value?.filter(swatch => swatch.materials.length > 0) || [];
 
-    const { domain, featured_image_url,product_image_data, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
+    const { domain, featured_image_url, product_image_data, new_product_slider_url, new_product_additional_bg_image_url, new_product_additional_right_box_image_url,
         downloadable_files_url, product_series_data, contracts_data, product_types_data, product_category_types_data, slug, domains_data, contract_logo_data, default_domain, gallery_urls, contract_location_data, store_category_data, tags_data, contract_type_data, ...payload } = form.value;
     if (!form.value?.domains_data?.includes(form.value.domain_id)) delete payload.id;
     try {

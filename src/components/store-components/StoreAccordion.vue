@@ -109,7 +109,7 @@ const calculateHeight = async () => {
   if (staticContent) {
     const staticContentHeight = staticContent.offsetHeight;
     const viewportHeight = window.innerHeight;
-    adjustedHeight.value = viewportHeight - staticContentHeight - 40;
+    adjustedHeight.value = viewportHeight - staticContentHeight;
   }
 };
 
@@ -118,29 +118,40 @@ const handleAdjustHeight = () => {
   calculateHeight();
 };
 
-// onMounted(async () => {
-//   window.addEventListener("resize", calculateHeight);
-// });
-// onBeforeUnmount(() => {
-//   window.removeEventListener("resize", calculateHeight);
-// });
+onMounted(async () => {
+  window.addEventListener("resize", calculateHeight);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", calculateHeight);
+});
+
+const toggleExpand = () => {
+  isExpanded.value = !isExpanded.value;
+}
 
 const truncatedHtml = computed(() => {
   const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = text.value;
+  tempDiv.innerHTML = text.value; // Assuming `text` is your full HTML content
   const textContent = tempDiv.textContent || tempDiv.innerText;
+  
+  // If the content is smaller than the maxLength, just return it
   if (textContent.length <= props.maxLength) {
     return text.value;
   }
+
+  // Otherwise, truncate and add "Read More" button
   let truncated = textContent.slice(0, props.maxLength);
-  // Find the last space within the truncated text
+  
+  // Avoid cutting off words by trimming to the last space
   const lastSpace = truncated.lastIndexOf(' ');
   if (lastSpace > 0) {
     truncated = truncated.substr(0, lastSpace);
   }
-  return truncated + '...';
-});
+  return `${truncated}...`;
+  // Now append the Read More button inside the truncated content
+  // return `${truncated}... <button @click="isExpanded = !isExpanded.value" class="mt-2 no-underline text-orange underline focus:outline-none sm:hidden">${isExpanded ? `Read less ${isExpanded.value}`  : 'Read more'}</button>`;
 
+});
 const setHeight = (el, done) => {
   const height = isExpanded.value ? el.scrollHeight : 0;
   el.style.height = height + 'px';
@@ -1206,7 +1217,6 @@ const updateSelectedMaterial = () => {
 
 watch(window.innerHeight, () => {
   height.value = window.innerHeight
-  console.log("height ", height.value)
 })
 
 watch(selectedMaterialName, () => {

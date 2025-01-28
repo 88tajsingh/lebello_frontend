@@ -27,12 +27,15 @@ export const isChecked = (variable, id) => variable.value.some(item => item.id =
  * @param {string} fileUrl - The URL of the file
  * @returns {string} - The full URL of the file
  */
-export const filePath = (fileUrl,frontend) =>{
+export const filePath = (fileUrl, frontend) => {
+  const encodedUrl = fileUrl ? fileUrl.replace(/\s/g, '%20') : '';
+
   if (frontend) {
-    return `${import.meta.env.VITE_FILES_PATH}${fileUrl}`;
+    return encodedUrl && `${import.meta.env.VITE_FILES_PATH}${encodedUrl}`;
   }
-  return fileUrl ? `${import.meta.env.VITE_FILES_PATH}${fileUrl}` : import.meta.env.VITE_DEFAULT_IMAGE;
-}
+  return encodedUrl ? `${import.meta.env.VITE_FILES_PATH}${encodedUrl}` : import.meta.env.VITE_DEFAULT_IMAGE;
+};
+
 export const normalFilePath = (fileUrl) =>`${import.meta.env.VITE_FILES_PATH}${fileUrl}`
 
 /**
@@ -50,8 +53,7 @@ export const handleFileUpdate = (type, data, imageData, form, multiple = false) 
   const media_ids = data.map((item) => item.id);
   imageData.value[type] = { isOpen: false, mediaName, images: data };
   form.value[type] = multiple ? media_ids : media_ids[0];
-  console.log('multiple', form.value[type]);
-  console.log('single', form.value[type]);
+  console.log(imageData.value[type]);
 };
 
 /**
