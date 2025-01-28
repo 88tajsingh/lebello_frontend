@@ -96,12 +96,8 @@
           <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
         </button>
       </div>
-      <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
       <div v-if="rightBoxImage" class="product_inner_img aspect-square"
       :style="{ backgroundImage: `url(${rightBoxImage})` }" >
-        <!-- <img
-                class="object-cover h-full z-99999 w-full overflow-hidden"
-                :src="$filePath(rightBoxImage,true)" alt="B Chair" /> -->
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -124,89 +120,66 @@
   </section>
   <Transition name="modal-fade">
     <section class="modal popup" v-if="isModalOpen">
-      <!-- Background Overlay with Opacity -->
-      <div class=" popup_inner fixed inset-0 bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
-        @click.self="closeModal">
-
-        <!-- Modal Content (Full opacity) -->
-        <div class="bg-white p-4 rounded shadow-lg  transition-all duration-300 ease-in-out">
+      <div class="popup_inner fixed inset-0 bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
+           @click.self="closeModal">
+        <div class="bg-white rounded shadow-lg transition-all duration-300 ease-in-out"
+             :style="modalStyle">
           <div class="relative">
+            <button @click="closeModal" class="close_btn_popup absolute top-2 right-2 z-10">
+              <img src="/public/close-button.png" alt="Close" class="w-6 h-6">
+            </button>
             
-            <button 
-        @click="closeModal"
-        class="close_btn_popup"
-      >
-       <img src="/public/close-button.png">
-      </button>
-
-           
-
-            <!-- Image Display -->
             <Transition name="fade" mode="out-in">
-              <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
-                class=" object-contain" @load="adjustModalSize" />
+              <img :key="activeImage?.file_url" 
+                   :src="$filePath(activeImage?.file_url)" 
+                   :alt="activeImage?.title"
+                   class="w-full h-full object-contain"
+                   @load="adjustModalSizeModal"
+                   ref="imageRef" />
             </Transition>
 
-             <!-- Navigation Buttons -->
-             <div class="absolute justify-between inset-0 z-10 flex">
-              <button @click.stop="prevImage" @mouseenter="hoveredSide = 'left'" @mouseleave="hoveredSide = null"
-                class="w-1/3 cursor-pointer">
-                <button v-if="hoveredSide === 'left'"
-                  class="absolute left-2 h-full top-1/2 transform -translate-y-1/2 text-white transition-opacity duration-300 z-10"
-                  aria-label="Previous image">
-                  <Arrow class="mt-0 ml-3 self-center" direction="right" :strokeWidth="20.8" size="22px"
-                    fillColor="#FFF" />
-                </button>
+            <div class="absolute inset-0 z-10 flex justify-between">
+              <button @click.stop="prevImage" 
+                      @mouseenter="hoveredSide = 'left'" 
+                      @mouseleave="hoveredSide = null"
+                      class="w-1/3 h-full cursor-pointer flex items-center justify-start">
+                <Arrow v-if="hoveredSide === 'left'"
+                       class="ml-3" 
+                       direction="right" 
+                       :strokeWidth="20.8" 
+                       size="22px"
+                       fillColor="#FFF" />
               </button>
-              <div class="w-1/3 cursor-pointer" @click.stop="nextImage" @mouseenter="hoveredSide = 'right'"
-                @mouseleave="hoveredSide = null">
-                <button
-                  class="absolute right-2 top-1/2  transform -translate-y-1/2 p-2 rounded-full transition-opacity duration-300 z-10"
-                  aria-label="Next image">
-                  <Arrow v-if="hoveredSide === 'right'" class="mt-0 ml-3 self-center" direction="left"
-                    :strokeWidth="20.8" size="22px" fillColor="#FFF" />
-                </button>
-              </div>
+              <button @click.stop="nextImage" 
+                      @mouseenter="hoveredSide = 'right'" 
+                      @mouseleave="hoveredSide = null"
+                      class="w-1/3 h-full cursor-pointer flex items-center justify-end">
+                <Arrow v-if="hoveredSide === 'right'"
+                       class="mr-3" 
+                       direction="left" 
+                       :strokeWidth="20.8" 
+                       size="22px"
+                       fillColor="#FFF" />
+              </button>
             </div>
           </div>
 
-          <!-- Modal Footer -->
-          <div class="bg-gray-800  text-black pt-4 flex items-center justify-between">
-            <!-- Left Text -->
+          <div class="bg-gray-800 text-black font-graphik p-4 flex items-center justify-between">
             <div class="text-sm">
               {{ activeImage?.description || productData?.title }}
             </div>
-
-            <!-- Right Actions -->
             <div class="flex items-center space-x-4">
-              <!-- Download Button -->
               <a href="#" class="flex items-center text-sm hover:underline">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="w-5 h-5 mr-1">
+                     stroke="currentColor" class="w-5 h-5 mr-1">
                   <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
+                        d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
                 </svg>
                 Download
               </a>
-
-              <!-- Social Media Icons -->
-              <ul class="flex">
-                <li>
-                  <Facebook bgColor="#333333" bgSize="  28px" svgSize="15px" svgColor="#ffffff"
-                    boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1)" title="Facebook" hoverBgColor="#ce8d39"
-                    href="https://www.houzz.com" hoverSvgColor="#000000" />
-                </li>
-                <li>
-                  <Houzz bgColor="#333333" bgSize="  28px" svgSize="15px" svgColor="#FFFFFF" hoverBgColor="#ce8d39"
-                    hoverSvgColor="#ffffff" href="https://www.houzz.com" title="Houzz Share" />
-                </li>
-                <li>
-                  <Pinterest bgColor="#333333" bgSize="  28px" svgSize="15px" svgColor="#ffffff" hoverBgColor="#ce8d39"
-                    hoverSvgColor="#ffffff" href="https://pinterest.com" title="Pinterest" />
-                </li>
-                <li>
-                  <Instagram bgColor="#333333" bgSize="  28px" svgSize="15px" svgColor="#ffffff" hoverBgColor="#ce8d39"
-                    hoverSvgColor="#ffffff" href="https://instagram.com" title="Instagram" />
+              <ul class="flex space-x-2">
+                <li v-for="social in socialIcons" :key="social.name">
+                  <component :is="social.component" v-bind="social.props" />
                 </li>
               </ul>
             </div>
@@ -214,7 +187,6 @@
         </div>
       </div>
     </section>
-
   </Transition>
   <section class="materils_main_sec">
     <div class="product_container">
@@ -264,13 +236,23 @@ const productData = ref([])
 const rightBoxImage = ref('')
 const productTypes = ref([])
 const isModalOpen = ref(false);
+const imageRef = ref(null);
+const modalStyle = ref({});
+const hoveredSide = ref(null);
 const activeImage = ref(null);
 const activeIndex = ref(0);
-const hoveredSide = ref(null);
 const modalWidth = ref(0);
 const modalHeight = ref(0);
 const slug = ref(router.currentRoute.value?.params?.slug);
 if (!slug.value) slug.value = '4l-pixie-arms-chair';
+
+const socialIcons = computed(() => [
+  { name: 'Facebook', component: Facebook, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#000000", href: "https://www.facebook.com", title: "Facebook" } },
+  { name: 'Houzz', component: Houzz, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#FFFFFF", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://www.houzz.com", title: "Houzz Share" } },
+  { name: 'Pinterest', component: Pinterest, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://pinterest.com", title: "Pinterest" } },
+  { name: 'Instagram', component: Instagram, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://instagram.com", title: "Instagram" } },
+]);
+
 const breadcrumbData = ref([
   {
     label: 'Collection',
@@ -321,9 +303,50 @@ const handleSearch = (event) => {
     console.log('Search query is empty!');
   }
 };
+
+const adjustModalSizeModal = () => {
+  if (!imageRef.value) return;
+
+  const img = imageRef.value;
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  const imageAspectRatio = img.naturalWidth / img.naturalHeight;
+
+  let modalWidth, modalHeight;
+
+  if (imageAspectRatio > screenWidth / screenHeight) {
+    // Image is wider relative to the screen
+    modalWidth = Math.min(img.naturalWidth, screenWidth * 0.8);
+    modalHeight = modalWidth / imageAspectRatio;
+  } else {
+    // Image is taller relative to the screen
+    modalHeight = Math.min(img.naturalHeight, screenHeight * 0.7);
+    modalWidth = modalHeight * imageAspectRatio;
+  }
+
+  modalStyle.value = {
+    width: `${modalWidth}px`,
+    height: `${modalHeight + 80}px`,
+    maxWidth: '80vw',
+    maxHeight: '80vh',
+  };
+};
+
 onMounted(() => {
   handleProductDetailData()
+  window.addEventListener('resize', adjustModalSizeModal);
 })
+
+onUnmounted(() => {
+  window.removeEventListener('resize', adjustModalSizeModal);
+});
+watch([() => isModalOpen, () => activeImage], () => {
+  if (isModalOpen) {
+    nextTick(() => {
+      adjustModalSizeModal();
+    });
+  }
+});
 const toggleVisibility = () => {
   isVisible.value = !isVisible.value
 }
@@ -341,7 +364,7 @@ const openModal = (product, index) => {
   modalHeight.value = window.innerHeight * 0.9;
   // Use nextTick to ensure the modal is rendered before adjusting size
   nextTick(() => {
-    adjustModalSize();
+    adjustModalSizeModal();
   });
 };
 
@@ -355,7 +378,7 @@ const nextImage = () => {
   if (activeIndex.value < productData.value.gallery_urls.length - 1) {
     activeIndex.value++;
     activeImage.value = productData.value.gallery_urls[activeIndex.value];
-    adjustModalSize();
+    adjustModalSizeModal();
   }
 };
 
@@ -363,47 +386,14 @@ const prevImage = () => {
   if (activeIndex.value > 0) {
     activeIndex.value--;
     activeImage.value = productData.value.gallery_urls[activeIndex.value];
-    adjustModalSize();
-  }
-};
-
-const adjustModalSize = () => {
-  if (activeImage.value) {
-    const img = new Image();
-    img.onload = () => {
-      const maxWidth = Math.min(window.innerWidth * 0.9, img.width);
-      const maxHeight = Math.min(window.innerHeight * 0.9, img.height);
-      const aspectRatio = img.width / img.height;
-
-      if (img.width / maxWidth > img.height / maxHeight) {
-        modalWidth.value = maxWidth;
-        modalHeight.value = Math.min(maxWidth / aspectRatio, maxHeight);
-      } else {
-        modalHeight.value = maxHeight;
-        modalWidth.value = Math.min(maxHeight * aspectRatio, maxWidth);
-      }
-    };
-    img.src = activeImage.value.file_url;
-  }
-};
-
-const handleResize = () => {
-  if (isModalOpen.value) {
-    adjustModalSize();
+    adjustModalSizeModal();
   }
 };
 onUnmounted(() => {
   document.body.style.overflow = '';
 });
 
-const imageStyleObject = computed(() => ({
-  // backgroundImage: `url("http://172.105.152.65/lebello_backend/storage/app/public/Products Images/Pisa Dining T/Lebello-Outdoor-Pisa_DiningT_ContentImage.jpg")`,
-  backgroundImage: `url(${filePath(rightBoxImage.value)})`,
-}));
-
-
 // Watch for changes in the active image and adjust modal size
-watch(activeImage, adjustModalSize);
 watch(rightBoxImage, (newVal) => {
   rightBoxImage.value = newVal
 });
@@ -430,14 +420,6 @@ watch(productData, (newVal) => {
       isActive: true,
     },
   ]
-});
-// Lifecycle hooks for window resize event
-onMounted(() => {
-  window.addEventListener('resize', handleResize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
 });
 const products = ref([
   {

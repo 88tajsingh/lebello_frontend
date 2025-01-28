@@ -49,17 +49,7 @@
               <div class="text-black font-graphik w-full gallery_popup_imgs">
                 <div class="resizeDiv">
                   <h1 class="popup_title">{{ popupTitle }}</h1>
-                  <div v-show="!isExpanded" class="overflow-hidden sm:hidden" v-html="truncatedHtml"></div>
-                  <div v-show="!isExpanded" class="hidden overflow-hidden sm:block" v-html="text"></div>
-                  <transition name="expand" @enter="setHeight" @leave="setHeight">
-                    <div v-show="isExpanded" ref="content" class="overflow-hidden" v-html="text"></div>
-                  </transition>
-                  <div>
-                    <button @click="isExpanded = !isExpanded"
-                      class=" mt-2 text-blue underline focus:outline-none sm:hidden">
-                      {{ isExpanded ? 'Read Less' : 'Read More' }}
-                    </button>
-                  </div>
+                 <ReadMoreLess :text="text" :maxLength="140" />                
 
                   <!-- Dropdown -->
                   <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
@@ -69,7 +59,7 @@
                   </select>
                 </div>
                 <!-- Images Grid -->
-                <div class="gallery_new_scrool overflow-y-auto transition-all duration-300"
+                <div class="gallery_new_scrool  overflow-y-auto transition-all duration-300"
                   :style="{ height: adjustedHeight + 'px' }">
                   <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
@@ -91,6 +81,7 @@ import { TransitionRoot, TransitionChild } from '@headlessui/vue'
 import { Arrow, Close } from '../frontend-components/Svg/Icons'
 import { onClickOutside } from '@vueuse/core'
 import { useModal } from '@/Hooks/useModals.js'
+import ReadMoreLess from './ReadMoreLess.vue'
 
 const height = ref(null)
 const adjustedHeight = ref(0);
