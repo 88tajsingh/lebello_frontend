@@ -1305,7 +1305,7 @@ h1.popup_title {
 
 .gallery_popup_main {
   background-color: #c3c1beb5;
-  z-index: 9999999;
+  z-index: 99999999999999999;
 
 }
 

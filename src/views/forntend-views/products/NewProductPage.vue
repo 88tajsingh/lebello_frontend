@@ -99,9 +99,9 @@
       <!-- :style="{ backgroundImage: `url(${$filePath(rightBoxImage,true)})` }" -->
       <div v-if="rightBoxImage" class="product_inner_img aspect-square"
       :style="imageStyleObject">
-        <img
+        <!-- <img
                 class="object-cover h-full z-99999 w-full overflow-hidden"
-                :src="$filePath(rightBoxImage,true)" alt="B Chair" />
+                :src="$filePath(rightBoxImage,true)" alt="B Chair" /> -->
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -110,7 +110,7 @@
   </section>
   <section class="product_text_img product_new_gallery">
     <TransitionExpand :isExpanded="isExpanded">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
           <div class="product_img max-h-[250px] h-full overflow-hidden cursor-pointer"
             @click="openModal(product, index)">
@@ -129,17 +129,15 @@
         @click.self="closeModal">
 
         <!-- Modal Content (Full opacity) -->
-        <div class="bg-white p-4 rounded shadow-lg overflow-hidden transition-all duration-300 ease-in-out">
-          <div class="relative w-full h-full" :style="{
-            maxWidth: `${modalWidth}px`,
-            maxHeight: '85vh',
-            height: `${modalHeight}px`
-          }">
-            <!-- Close Button -->
-            <button @click="closeModal"
-              class="absolute top-[10] z-999999 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black bg-opacity-50 hover:bg-opacity-70 transition-all duration-300">
-              X
-            </button>
+        <div class="bg-white p-4 rounded shadow-lg  transition-all duration-300 ease-in-out">
+          <div class="relative">
+            
+            <button 
+        @click="closeModal"
+        class="close_btn_popup"
+      >
+       <img src="/public/close-button.png">
+      </button>
 
             <!-- Navigation Buttons -->
             <div class="absolute justify-between inset-0 z-10 flex">
@@ -149,7 +147,7 @@
                   class="absolute left-2 h-full top-1/2 transform -translate-y-1/2 text-white transition-opacity duration-300 z-10"
                   aria-label="Previous image">
                   <Arrow class="mt-0 ml-3 self-center" direction="right" :strokeWidth="20.8" size="22px"
-                    fillColor="#000000" />
+                    fillColor="#FFF" />
                 </button>
               </button>
               <div class="w-1/3 cursor-pointer" @click.stop="nextImage" @mouseenter="hoveredSide = 'right'"
@@ -158,7 +156,7 @@
                   class="absolute right-2 top-1/2  transform -translate-y-1/2 p-2 rounded-full transition-opacity duration-300 z-10"
                   aria-label="Next image">
                   <Arrow v-if="hoveredSide === 'right'" class="mt-0 ml-3 self-center" direction="left"
-                    :strokeWidth="20.8" size="22px" fillColor="#000000" />
+                    :strokeWidth="20.8" size="22px" fillColor="#FFF" />
                 </button>
               </div>
             </div>
@@ -397,9 +395,9 @@ onUnmounted(() => {
 });
 
 const imageStyleObject = computed(() => ({
-  backgroundImage: `url(${filePath(rightBoxImage.value)})`,
-  // add other styles here if needed
+  backgroundImage: `url("http://172.105.152.65/lebello_backend/storage/app/public/Products Images/Pisa Dining T/Lebello-Outdoor-Pisa_DiningT_ContentImage.jpg")`,
 }));
+
 
 // Watch for changes in the active image and adjust modal size
 watch(activeImage, adjustModalSize);
@@ -462,6 +460,7 @@ const products = ref([
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap');
+
 
 
 .modal-fade-enter-active,
@@ -683,7 +682,15 @@ button.slider_arrow.custom-next {
   background-color: #eae6e1;
   padding: 30px 0px 70px;
 }
-
+.close_btn_popup {
+  position: absolute;
+  top: -38px;
+  z-index: 99999;
+  right: -15px;
+}
+.close_btn_popup img {
+  max-width: 20px;
+}
 .materils_cut_top ul {
   display: flex;
   align-items: center;
@@ -893,11 +900,22 @@ button.slider_arrow.custom-next {
 
   .product_container {
     padding: 0px 52px;
-  }
-
-  .text_img_inner_main .product_inner_img {
-    height: 430px;
-  }
+}
+.text_img_inner_main .product_inner_img {
+  height: 430px;
+}
+.threed_inner_main .threed_img img {
+  height: 360px;
+  object-fit: cover;
+  width: 100%;
+}
+.threed_inner_main .threed_cont h2 {
+  font-size: 24px;
+  line-height: 30px;
+}
+.threed_inner_main .threed_cont p {
+  margin: 26px 0px 16px;
+}
 }
 
 @media(max-width:991px) {
@@ -970,6 +988,7 @@ button.slider_arrow.custom-next {
 .product_inner_cont button[data-v-0cdd39bd] {
   margin-bottom: 0px;
 }
+
 }
 
 @media(max-width:574px) {
@@ -1054,6 +1073,14 @@ button.slider_arrow.custom-next {
   .popup_gallery_cont button svg {
     width: 18px;
   }
-
+  button.slider_arrow.custom-next {
+    right: 16px;
+  }
+  .slider_arrow.custom-prev {
+    left: 16px;
+  }
+  .product_new_gallery .product_img {
+    height: 130px !important;
+}
 }
 </style>
