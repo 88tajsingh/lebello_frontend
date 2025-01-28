@@ -1,17 +1,17 @@
 <template>
   <transition name="fade">
-    <div v-if="show" class="fixed inset-0 flex justify-center items-center z-50">
-      <div class="bg-black bg-opacity-50 w-1/3 rounded-sm pt-10 shadow-lg overflow-hidden">
-        <button @click="closeModal" class="text-gray-600 float-right mr-2 mt-2">
+    <div v-if="show" class="fixed inset-0 flex justify-center items-center z-50 search_popup_main">
+      <div class="product_form_new">
+        <button @click="closeModal" class="">
           <svg class="w-6 h-6" fill="none" stroke="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
         <form  @submit.prevent="handleSearch" role="search">
-        <div class="flex items-center border-b border-white mb-4 ml-4">
+        <div>
           <input type="text" placeholder="Search"
            @keydown.enter="handleSearch"
-            class="flex-grow p-2 bg-transparent text-white placeholder-white border-none focus-visible:ring-0"
+            class=""
             v-model="searchQuery" style="caret-color: white;" />
 
           <svg @click="handleSearch" width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -77,5 +77,50 @@ const handleSearch = (event) => {
 input::placeholder {
   color: white;
   font-size: 14px;
+}
+.product_form_new {
+  width: 100% !important;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: none;
+  border: none;
+  border-radius: 0px;
+  max-width: 500px;
+  padding: 30px 28px 15px;
+  position: relative;
+}
+.product_form_new input {
+  width: 100%;
+  background: none !important;
+  color: white;
+  height: 42px;
+  border: 0;
+  font-size: 14px;
+  border-bottom: 1px solid #fff;
+  transition-delay: 99999s;
+  font-weight: 400;
+  font-family: 'GraphikLight';
+  caret-color: unset !important;
+  padding: 0px 0px !important;
+}
+.product_form_new form div {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.product_form_new form div svg {
+  position: absolute;
+  right: 0;
+}
+.product_form_new button {
+  text-align: right;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  right: 12px;
+  top: 8px;
+}
+.search_popup_main {
+  padding: 22px;
 }
 </style>

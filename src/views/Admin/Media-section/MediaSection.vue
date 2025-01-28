@@ -72,19 +72,6 @@
                                 @change="toggleSelection(media)" />
 
                         </div>
-
-                        <!-- <div class="flex gap-1 py-1 pb-2 justify-center">
-                    <EditSvg @click="() => {
-                        handleFolderInfo(folder)
-                        editModal()
-                        }
-                        " size="18px" />
-                    <DeleteSvg @click="() => {
-                            handleFolderInfo(folder)
-                            deleteModal()
-                        }
-                        " size="18px" />
-                </div> -->
                     </label>
                 </div>
             </div>
@@ -235,7 +222,7 @@ const props = defineProps({
         type: Function,
     },
     selectedFiles: {
-        type: Function,
+        type: Array,
     },
     selected: {
         type: Array,
@@ -338,7 +325,6 @@ const MediaModal = () => {
     mediaModalflag.value.open = true
 }
 const handleFileUpload = (file) => {
-    console.log("file", file)
     mediaFIle.value = file
 }
 const editMediaData = ref(null)

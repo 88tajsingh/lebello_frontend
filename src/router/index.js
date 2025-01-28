@@ -24,9 +24,9 @@ const  routes = [
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
   {
-    path: '/products',
+    path: '/products/:slug?',
     name: 'products',
-    component: () => import('../views/forntend-views/products/ProductPage.vue'),
+    component: () => import('../views/forntend-views/products/NewProductPage.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
   {
