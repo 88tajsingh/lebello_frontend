@@ -110,7 +110,7 @@
   </section>
   <section class="product_text_img product_new_gallery">
     <TransitionExpand :isExpanded="isExpanded">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
           <div class="product_img max-h-[250px] h-full overflow-hidden cursor-pointer"
             @click="openModal(product, index)">
@@ -900,11 +900,22 @@ button.slider_arrow.custom-next {
 
   .product_container {
     padding: 0px 52px;
-  }
-
-  .text_img_inner_main .product_inner_img {
-    height: 430px;
-  }
+}
+.text_img_inner_main .product_inner_img {
+  height: 430px;
+}
+.threed_inner_main .threed_img img {
+  height: 360px;
+  object-fit: cover;
+  width: 100%;
+}
+.threed_inner_main .threed_cont h2 {
+  font-size: 24px;
+  line-height: 30px;
+}
+.threed_inner_main .threed_cont p {
+  margin: 26px 0px 16px;
+}
 }
 
 @media(max-width:991px) {
@@ -977,6 +988,7 @@ button.slider_arrow.custom-next {
 .product_inner_cont button[data-v-0cdd39bd] {
   margin-bottom: 0px;
 }
+
 }
 
 @media(max-width:574px) {
@@ -1061,6 +1073,14 @@ button.slider_arrow.custom-next {
   .popup_gallery_cont button svg {
     width: 18px;
   }
-
+  button.slider_arrow.custom-next {
+    right: 16px;
+  }
+  .slider_arrow.custom-prev {
+    left: 16px;
+  }
+  .product_new_gallery .product_img {
+    height: 130px !important;
+}
 }
 </style>

@@ -116,4 +116,13 @@ button.slider_arrow.custom-next {
 .slider_arrow.custom-prev {
     left: 60px;
 }
+
+@media(max-width:767px){
+  button.slider_arrow.custom-next {
+    right: 16px !important;
+  }
+  .slider_arrow.custom-prev {
+    left: 16px !important;
+  }
+}
 </style>
