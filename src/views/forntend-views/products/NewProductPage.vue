@@ -174,7 +174,7 @@
           <div class="bg-gray-800  text-black pt-4 flex items-center justify-between">
             <!-- Left Text -->
             <div class="text-sm">
-              {{ activeImage?.title || productData?.title }}
+              {{ activeImage?.description || productData?.title }}
             </div>
 
             <!-- Right Actions -->
