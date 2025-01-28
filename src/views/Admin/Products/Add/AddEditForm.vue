@@ -90,7 +90,7 @@
                                                     v-model.number="form.ordering_images['new_product_slider'][index]"
                                                     @change="updateOrdering('new_product_slider')"
                                                     placeholder="Order" />
-                                                 
+
                                                 <!-- Remove Icon -->
                                                 <div @click="() => handleRemoveSliderImage(slide)"
                                                     class="absolute top-2 right-2">
@@ -171,28 +171,25 @@
                                                 imageData.gallery.images.length > 0 ? imageData.gallery.images.length : 'Add gallery' }} files </div>
                                     </div>
                                     <div
-                                        class="mt-3 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">                                        
-                                        <img v-for="file in imageData.gallery.images" :key="file.id"
-                                            :src="$filePath(file?.file_url)" class="relative object-cover"
-                                            :alt="file?.alternative_text || ''" />
-                                        
-                                            <div @click="() => handleRemoveSliderImage(slide)"
-                                                    class="absolute top-2 right-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                    </svg>
-                                                    
-                                                </div>
+                                        class="mt-3 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                        <div v-for="file in imageData.gallery.images" :key="file.id" class="relative">
+                                            <img :src="$filePath(file?.file_url)" class="object-cover w-full h-full"
+                                                :alt="file?.alternative_text || ''" />
+                                            <div @click="() => handleRemoveSliderImage(file)"
+                                                class="absolute top-2 right-2 z-10 cursor-pointer">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                                </svg>
+                                            </div>
+                                        </div>
                                     </div>
-
                                     <InputError class="mt-2" :message="errors?.featured_image" />
                                 </div>
                             </Accordion>
                         </div>
-                        </div>
+                    </div>
                     <div class="mt-5">
                         <Accordion open="false" header="Product Options :Set as Featured ">
                             <div class="flex px-3 flex-col ">
@@ -493,7 +490,7 @@
                                 <InputError class="mt-2" :message="errors?.featured_image" />
                             </div>
                         </Accordion>
-                       
+
                     </div>
                     <div class="mt-5">
                         <Accordion :open="true" header="Simple Fields">
@@ -891,7 +888,7 @@ const errors = ref({});
 const loading = ref(false);
 const tagsData = ref([]);
 const storeCategoryTree = ref([]);
-const form = ref(store.getters.editData ||  {ordering_images:{new_product_slider:[],gallery:[]}, simple_field: 0, product_option: [], is_store_product: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+const form = ref(store.getters.editData || { ordering_images: { new_product_slider: [], gallery: [] }, simple_field: 0, product_option: [], is_store_product: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
 const GlobalUpdateService = form.value.is_store_product ? StoreProductServices.globalUpdateStoreProduct : ProductServices.globalUpdateProduct;
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
@@ -945,7 +942,7 @@ const handleVideoSource = (data) => {
 // Handle file updates for different image types
 const handleFeatureFiles = (data) => handleFileUpdate('featured_image', data, imageData, form, false);
 const handlegalleryFiles = (data) => handleFileUpdate('gallery', data, imageData, form, true);
-const handleProductSliderFiles  = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
+const handleProductSliderFiles = (data) => handleFileUpdate('new_product_slider', data, imageData, form, true);
 const handleAdditionalBgImageFiles = (data) => handleFileUpdate('new_product_additional_bg_image', data, imageData, form, false);
 const handleAdditionalRightBoxImageFiles = (data) => handleFileUpdate('new_product_additional_right_box_image', data, imageData, form, false);
 const handleDownloadablemageFiles = (data) => handleFileUpdate('downloadable_files', data, imageData, form, true);
@@ -1164,13 +1161,13 @@ const fetchAllData = async (payload) => {
 
 // Initialize component state
 onMounted(() => {
-//     if (!form.ordering_images.new_product_slider || !form.ordering_images['new_product_slider']) {
-//     form.ordering_images['new_product_slider'] = []; 
-//   }
+    //     if (!form.ordering_images.new_product_slider || !form.ordering_images['new_product_slider']) {
+    //     form.ordering_images['new_product_slider'] = []; 
+    //   }
     if (store.getters.editData) {
-//         if (!form.ordering_images?.new_product_slider) {
-//     form.ordering_images.new_product_slider = []; 
-//   }
+        //         if (!form.ordering_images?.new_product_slider) {
+        //     form.ordering_images.new_product_slider = []; 
+        //   }
         const { featured_image_url, contract_logo_data, new_product_slider_url, store_product_image_data, product_image_data,
             new_product_additional_bg_image_url, new_product_additional_right_box_image_url, downloadable_files_url, gallery_urls, material_swatches } = store.getters.editData;
         imageData.value.featured_image.images = [featured_image_url];
