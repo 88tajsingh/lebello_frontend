@@ -14,7 +14,10 @@
                 :SlugUpdateservices="form.is_store_product ? StoreProductServices.masterSlugStoreProduct : ProductServices.masterSlugUpdateProduct"
                 masteridKeyName="master_product_id" />
         </template>
-
+        <!-- http://localhost:5173/products/%7B%7Bform.slug%7D%7D -->
+        <a v-if="form.id" :href="$router.resolve(`/products/${form.slug}`).href" target="_blank">
+    Preview Link:-<router-link :to="`/products/${form.slug}`"><span class="text-blue font-graphik text-[16px]">www.lebello.com/products/{{ form.slug }}</span></router-link>
+  </a>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5 ">
                 <div class="col-span-8">
@@ -78,22 +81,21 @@
                                     <div class="mt-2 mx-3">
                                         <input-label for="slides" value="Slider " />
                                         <div class="text-gray-4 text-[13px]">Minimum Size 1600 x 700px</div>
-                                        <div class="flex flex-wrap">
+                                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                             <div class="relative p-1"
                                                 v-for="(slide, index) in imageData.new_product_slider.images"
                                                 :key="`slide-${index}`">
-                                                <img class="border border-gray-4 m-1 p-2 h-[168px] w-[156px]"
+                                                <img class="border border-gray-4 m-1 p-3 h-[168px]"
                                                     :src="$filePath(slide?.file_url)" :alt="slide?.alternative_text">
                                                 <!-- Order Input -->
                                                 <input type="number"
                                                     class="w-full mt-2 border border-gray-4 rounded-md p-1"
-                                                    v-model.number="form.ordering_images['new_product_slider'][index]"
-                                                    @change="updateOrdering('new_product_slider')"
+                                                    :value="getSortOrder(slide.id, 'new_product_slider')"
+                                                    @input="updateSortOrder(slide.id, 'new_product_slider', $event.target.value)"
                                                     placeholder="Order" />
-
                                                 <!-- Remove Icon -->
-                                                <div @click="() => handleRemoveSliderImage(slide)"
-                                                    class="absolute top-2 right-2">
+                                                <div @click="() => handleRemoveFiles(slide, 'new_product_slider')"
+                                                    class="absolute top-0 right-0">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                         class="size-6">
@@ -103,6 +105,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <button @click="() => imageData.new_product_slider.isOpen = true" type="button"
                                             class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
                                             Slider Images
@@ -161,31 +164,38 @@
                     <div class="mt-5">
                         <div class="mt-4">
                             <Accordion :open="true" header="Gallery">
-                                <div class="px-6  h-auto ">
-                                    <!-- <InputLabel for="Featured_image" value="Featured_image" /> -->
-                                    <div class=" flex  w-full h-auto ">
+                                <div class="px-6 h-auto">
+                                    <div class="flex w-full h-auto">
                                         <SingleCheck v-if="form.id" label="" v-model="checkedFields.gallery">
                                         </SingleCheck>
                                         <div class="py-2 rounded-lg w-full px-2 border border-stroke"
-                                            @click="() => imageData.gallery.isOpen = true"> {{
-                                                imageData.gallery.images.length > 0 ? imageData.gallery.images.length : 'Add gallery' }} files </div>
+                                            @click="() => imageData.gallery.isOpen = true">
+                                            {{ imageData.gallery.images.length > 0 ? imageData.gallery.images.length :                                            
+                                           `Add gallery` }} files
+                                        </div>
                                     </div>
                                     <div
-                                        class="mt-3 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                        <div v-for="file in imageData.gallery.images" :key="file.id" class="relative">
-                                            <img :src="$filePath(file?.file_url)" class="object-cover w-full h-full"
+                                        class="mt-3 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+                                        <div v-for="(file, index) in imageData.gallery.images" :key="file.id"
+                                            class="relative">
+                                            <img :src="$filePath(file?.file_url)"
+                                                class="border border-gray-4 m-1 p-3 h-[168px] w-full object-cover"
                                                 :alt="file?.alternative_text || ''" />
-                                            <div @click="() => handleRemoveSliderImage(file)"
-                                                class="absolute top-2 right-2 z-10 cursor-pointer">
+                                            <div @click="() => handleRemoveFiles(file, 'gallery')"
+                                                class="absolute top-0 right-0 z-10 cursor-pointer">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                                 </svg>
                                             </div>
+                                            <input type="number" class="w-full mt-2 border border-gray-4 rounded-md p-1"
+                                                :value="getSortOrder(file.id, 'gallery')"
+                                                @input="updateSortOrder(file.id, 'gallery', $event.target.value)"
+                                                placeholder="Order" />
                                         </div>
                                     </div>
-                                    <InputError class="mt-2" :message="errors?.featured_image" />
+                                    <InputError class="mt-2" :message="errors?.gallery" />
                                 </div>
                             </Accordion>
                         </div>
@@ -968,37 +978,44 @@ const imageData = ref({
     video_source: { isOpen: false, mediaName: 'Add Video Source', images: [], selectedFiles: handleVideoSource, singleFile: true },
 });
 
-function updateOrdering(type) {
-    if (!form.value.ordering_images) {
-        form.value.ordering_images = {};
+const getSortOrder = (imageId, type) => {
+    if (form.value?.ordering_images?.[type]) {
+        const item = form.value.ordering_images[type].find(item => item.id === imageId)
+        return item?.sort_order ?? 0
     }
-
-    const images = imageData.value?.[type]?.images;
-    if (!Array.isArray(images)) {
-        console.error(`No images found for type: ${type}`);
-        return;
-    }
-
-    const orderedImages = images.map((image, index) => ({
-        id: image.id,
-        order: form.value?.ordering_images?.[type]?.[index] ?? index,
-    }));
-
-    form.value.ordering_images[type] = orderedImages.map(image => image.order);
-
-    console.log("Updated ordering:", form.value?.ordering_images);
+    return 0
 }
 
-
+const updateSortOrder = (imageId, type, newValue) => {
+    if (!form.value?.ordering_images) {
+        form.value.ordering_images = {}
+    }
+    if (!form.value.ordering_images[type]) {
+        form.value.ordering_images[type] = []
+    }
+    const index = form.value.ordering_images[type].findIndex(item => item.id === imageId)
+    const sortOrder = Number(newValue)
+    if (index === -1) {
+        form.value.ordering_images[type].push({
+            id: imageId,
+            sort_order: sortOrder
+        })
+    } else {
+        form.value.ordering_images[type][index].sort_order = sortOrder
+    }
+}
 
 // remove image form gallery
-const handleRemoveSliderImage = (slide) => {
-    const index = imageData.value.new_product_slider.images.findIndex(item => item.id === slide.id);
+const handleRemoveFiles = (slide, key) => {
+    const index = imageData.value[key].images.findIndex(item => item.id === slide.id);
+
     if (index !== -1) {
-        imageData.value.new_product_slider.images.splice(index, 1);
-        form.value.new_product_slider.splice(index, 1);
+        form.value.ordering_images[key] = form.value.ordering_images[key].filter(item => item.id !== slide.id);
+        imageData.value[key].images.splice(index, 1);
+        form.value[key].splice(index, 1);
     }
 }
+
 
 const handleCheckedItems = (checkedItems) => {
     form.value = { ...form.value, materials: checkedItems }
