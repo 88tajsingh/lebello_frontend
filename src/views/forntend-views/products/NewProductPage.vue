@@ -59,7 +59,7 @@
         <img v-if="!isIframeVisible"
           :src="$filePath(productData?.product_image_data && productData.product_image_data?.[0]?.file_url, true)"
           :alt="productData?.product_image_data && productData.product_image_data?.[0]?.alternative_text" />
-        <iframe class="w-full max-h-[546px] h-[546px]" v-if="isIframeVisible"
+        <iframe class="w-full h-full" v-if="isIframeVisible"
           :src="productData?.product_url_for_three_d" allowfullscreen frameborder="0" scrolling="no" />
         <button v-if="!isIframeVisible && productData?.product_url_for_three_d" @click="toggleIframe">
           <img src="../../../assets/images/product/3D Icon.png" alt="" />
@@ -520,13 +520,13 @@ button.slider_arrow.custom-next {
 
 .threed_inner_main .threed_img {
   width: 100%;
-  max-width: 1202px;
+  /* max-width: 1202px; */
   position: relative;
 }
 
 .threed_inner_main .threed_img iframe {
   width: 100%;
-  height: 647px;
+  /* height: 647px; */
 }
 
 .threed_inner_main .threed_cont {
@@ -753,7 +753,7 @@ button.slider_arrow.custom-next {
   }
 
   .threed_inner_main .threed_img iframe {
-    height: 577px;
+    /* height: 577px; */
   }
 
   .slider_arrow.custom-prev {
@@ -846,7 +846,7 @@ button.slider_arrow.custom-next {
   } */
 
   .threed_inner_main .threed_img iframe {
-    height: 533px;
+    /* height: 533px; */
   }
 
 

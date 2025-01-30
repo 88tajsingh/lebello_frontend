@@ -119,8 +119,8 @@
     </DeleteModal>
 
     <!-- media poups -->
-    <PopupModal modalTitle="Add File" custonClasses="w-[500px] h-[200px] " v-model:isOpen="mediaModalflag.open">
-        <div class="mx-3 pt-4">
+    <PopupModal modalTitle="Add File" custonClasses="w-[800px] h-auto" v-model:isOpen="mediaModalflag.open">
+        <div class="mx-3 py-4">
             <div class="border border-black rounded-md">
                 <ImageUpload @file-selected="handleFileUpload" />
             </div>
