@@ -17,13 +17,13 @@
   </template> -->
   <template>
     <nav
-      class="flex px-5 py-2 text-graydark border border-graydark rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+      class="flex px-5 py-2 text-graydark border border-graydark rounded-lg  dark:bg-gray-800 dark:border-gray-700"
       aria-label="Breadcrumb"
     >
       <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
         <li @click="()=>handlePopFunction(-1)" class="inline-flex items-center">
           <span
-            class="inline-flex items-center text-sm font-medium text-gray-700  dark:text-gray-400 dark:hover:text-white"
+            class="inline-flex items-center text-sm font-medium   dark:text-gray-400 dark:hover:text-white"
           >
             <svg
               class="w-3 h-3 me-2.5"

@@ -10,7 +10,7 @@
     <button
       type="submit"
       :disabled="slugUpdateValue === form.slug || loading"
-      class="flex px-5 items-center justify-center rounded bg-primary text-[15px] font-sm text-gray hover:bg-opacity-90"
+      class="flex px-5 items-center justify-center rounded bg-primary text-[15px] font-sm text-white hover:bg-opacity-90"
     >
       Update Slug
     </button>

@@ -22,7 +22,6 @@
           type="submit"
           bg_th_color="text-white bg-[#2271B1] hover:bg-[#0a4b78]"
           class="text-sm ml-auto px-3 py-2"
-          @click="onSubmit"
         >
           {{ buttonText }}
         </Button>
@@ -64,10 +63,6 @@
       type: String,
       default: "Select an Option",
     },
-    onSubmitHandler: {
-      type: Function,
-      required: true, // Changed to required to ensure it's passed from the parent
-    },
     onCheckboxUpdate: {
       type: Function,
       default: () => {},
@@ -76,13 +71,6 @@
   
   // Computed value for button text
   const buttonText = computed(() => (props?.form.id ? "Update" : "Submit"));
-  
-  // Define onSubmit method
-  const onSubmit = () => {
-    if (props.onSubmitHandler) {
-      props.onSubmitHandler(props.form);
-    }
-  };
   
   // Optional: Event handler for the checkbox update
   const onCheckboxUpdate = (value) => {

@@ -38,23 +38,23 @@
                                 </SingleCheck>
                                 <TinyMCE v-model="form.description" />
                             </div>
-                            <span class="text-sm pl-2">Put Material Description.</span>
+                            <span class="text-sm" :class="[form.id ? 'pl-8' : ' pl-2']">Put Material Description.</span>
                         </Accordion>
                     </div>
                     <!-- seo option -->
                     <div class="mt-5">
-                        <Accordion :open="true" header="Seo Options" containerClass="px-4">
+                        <Accordion :open="true" header="Seo Options" containerClass="px-4 space-y-2">
                             <TextInput id="TitleTag" type="text" class="block w-[180px] h-[33px]"
                                 v-model="form.seo_title" placeholder="Title Tag" label="Title Tag"
                                 :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="value => checkedFields.seo_title = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Custom title tag.</span>
+                            <span class="text-sm" :class="[form.id ? 'pl-8' : '']">Custom title tag.</span>
 
                             <TextInput id="seo_meta_description" :isTextarea="true" :rows=4 type="text"
                                 class="block w-[180px] " v-model="form.meta_description" placeholder="Meta Description"
                                 label="Meta Description" :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="value => checkedFields.meta_description = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for
+                            <span class="text-sm" :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for
                                 the
                                 description.
                             </span>
@@ -63,7 +63,7 @@
                                 v-model="form.meta_keywords" placeholder="Meta Keywords" label="Meta Keywords"
                                 :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="value => checkedFields.meta_keywords = value" />
-                            <span :class="[form.id ? 'pl-8' : '']">Seperate each term with comma.</span>
+                            <span class="text-sm" :class="[form.id ? 'pl-8' : '']">Seperate each term with comma.</span>
                         </Accordion>
                     </div>
                     <div class="mt-5">
@@ -107,7 +107,7 @@
                                         </div>
 
                                         <button @click="() => imageData.new_product_slider.isOpen = true" type="button"
-                                            class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-gray hover:bg-opacity-90">
+                                            class="flex px-3 py-1 col-span-2 mt-5 mb-4 ml-4 justify-center rounded bg-primary font-medium text-white hover:bg-opacity-90">
                                             Slider Images
                                         </button>
                                     </div>
@@ -275,7 +275,7 @@
                                 </div>
                             </div>
                             <button @click="product_specs" type="button"
-                                class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-gray hover:bg-opacity-90">
+                                class="flex px-3 py-1 col-span-2 mt-5  mb-4 ml-4  justify-center rounded bg-primary  font-medium text-white hover:bg-opacity-90">
                                 Add
                             </button>
                         </Accordion>
@@ -471,8 +471,7 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Product Label ">
                             <div class="px-3">
-                                <TextInput id="Enter Highlight title" type="text" class="block mr-2 h-[33px]"
-                                    v-model="form.product_label" placeholder="" label="Text Label"
+                                <TextInput id="Enter Highlight title" type="text" class="block mr-2 h-[33px]" v-model="form.product_label" placeholder="" label="Text Label"
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.product_label = value" />
                                 <p>Enter your product label here.</p>

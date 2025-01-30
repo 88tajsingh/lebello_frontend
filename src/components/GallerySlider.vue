@@ -47,7 +47,7 @@
             </div>
   
             <!-- Modal Footer -->
-            <div class="bg-gray-800 text-white p-4 flex items-center justify-between">
+            <div class=" text-white p-4 flex items-center justify-between">
               <div class="text-sm">
                 {{ activeImage?.description || productData?.title }}
               </div>
