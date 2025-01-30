@@ -50,16 +50,23 @@ export const scrollDown = (id) => {
   };
   
 
-  const withDomain = async (service,payload,single=false) => {
+  const withDomain = async (service,payload,single=false,domainId) => {
     try {
-      const {status,data} = await PublicServices.getDomainData();
-      if (single) {
-        return { status, data };
-      } else if(status === 200){
-      const secondResponse = await service(data.data.id,payload);
-      return secondResponse;       
-    }else{
-      console.log("Something went wrong",status,data);
+      if(!domainId){
+        const {status,data} = await PublicServices.getDomainData();
+        if (single) {
+          return { status, data };
+        } else if(status === 200){
+        const secondResponse = await service(data.data.id,payload);
+        return secondResponse;       
+      }
+      else{
+        const secondResponse = await service(domainId,payload);
+        return secondResponse;   
+      }
+      }
+      else{
+      console.log("Something went wrong",data);
     }
     } catch (error) {
       console.error(` call error:`, error);

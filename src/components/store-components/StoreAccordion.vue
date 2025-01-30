@@ -50,8 +50,6 @@
                 <div class="resizeDiv">
                   <h1 class="popup_title">{{ popupTitle }}</h1>
                  <ReadMoreLess :text="text" :maxLength="140" />                
-
-                  <!-- Dropdown -->
                   <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
                     <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
                       {{ material.name }}

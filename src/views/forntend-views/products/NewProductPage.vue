@@ -1,7 +1,7 @@
 <template>
   <section class="product_banner font-graphik">
     <div class="relative overflow-hidden ">
-<NavbarStatic/>     
+      <NavbarStatic />
       <SwiperSlider :images="imageData" imageKeyName="gallery">
         <template #utility>
           <!-- lebellow icon right top -->
@@ -57,7 +57,7 @@
     <div class="threed_inner_main">
       <div class="threed_img">
         <img v-if="!isIframeVisible"
-          :src="$filePath(productData?.product_image_data && productData.product_image_data?.[0]?.file_url,true)"
+          :src="$filePath(productData?.product_image_data && productData.product_image_data?.[0]?.file_url, true)"
           :alt="productData?.product_image_data && productData.product_image_data?.[0]?.alternative_text" />
         <iframe class="w-full max-h-[546px] h-[546px]" v-if="isIframeVisible"
           :src="productData?.product_url_for_three_d" allowfullscreen frameborder="0" scrolling="no" />
@@ -97,7 +97,7 @@
         </button>
       </div>
       <div v-if="rightBoxImage" class="product_inner_img aspect-square"
-      :style="{ backgroundImage: `url(${rightBoxImage})` }" >
+        :style="{ backgroundImage: `url(${rightBoxImage})` }">
       </div>
     </div>
     <div v-if="isVisible" class="info_div_product">
@@ -121,63 +121,46 @@
   <Transition name="modal-fade">
     <section class="modal popup" v-if="isModalOpen">
       <div class="popup_inner fixed inset-0 bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
-           @click.self="closeModal">
-        <div class="bg-white rounded shadow-lg transition-all duration-300 ease-in-out"
-             :style="modalStyle">
-          <div class="relative">
-            <button @click="closeModal" class="close_btn_popup absolute top-2 right-2 z-10">
-              <img src="/public/close-button.png" alt="Close" class="w-6 h-6">
+        @click.self="closeModal">
+        <div class="bg-white rounded shadow-lg transition-all  pt-[15px] duration-300 ease-in-out" :style="modalStyle">
+          <div class="relative px-[15px]">
+            <button @click="closeModal" class="close_btn_popup absolute top-5 right-0 z-10">
+              <img src="/public/close-button.png" alt="Close">
             </button>
-            
+
             <Transition name="fade" mode="out-in">
-              <img :key="activeImage?.file_url" 
-                   :src="$filePath(activeImage?.file_url)" 
-                   :alt="activeImage?.title"
-                   class="w-full h-full object-contain"
-                   @load="adjustModalSizeModal"
-                   ref="imageRef" />
+              <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
+                class="w-full h-full object-contain" @load="adjustModalSize" ref="imageRef" />
             </Transition>
 
-            <div class="absolute inset-0 z-10 flex justify-between">
-              <button @click.stop="prevImage" 
-                      @mouseenter="hoveredSide = 'left'" 
-                      @mouseleave="hoveredSide = null"
-                      class="w-1/3 h-full cursor-pointer flex items-center justify-start">
-                <Arrow v-if="hoveredSide === 'left'"
-                       class="ml-3" 
-                       direction="right" 
-                       :strokeWidth="20.8" 
-                       size="22px"
-                       fillColor="#FFF" />
+            <div class="absolute mx-4 inset-0 z-10 flex justify-between">
+              <button @click.stop="prevImage" @mouseenter="hoveredSide = 'left'" @mouseleave="hoveredSide = null"
+                class="w-1/3 h-full cursor-pointer flex items-center justify-start">
+                <Arrow v-if="hoveredSide === 'left'" class="ml-2" direction="right" :strokeWidth="20.8" size="22px"
+                  fillColor="#FFF" />
               </button>
-              <button @click.stop="nextImage" 
-                      @mouseenter="hoveredSide = 'right'" 
-                      @mouseleave="hoveredSide = null"
-                      class="w-1/3 h-full cursor-pointer flex items-center justify-end">
-                <Arrow v-if="hoveredSide === 'right'"
-                       class="mr-3" 
-                       direction="left" 
-                       :strokeWidth="20.8" 
-                       size="22px"
-                       fillColor="#FFF" />
+              <button @click.stop="nextImage" @mouseenter="hoveredSide = 'right'" @mouseleave="hoveredSide = null"
+                class="w-1/3 h-full cursor-pointer flex items-center justify-end">
+                <Arrow v-if="hoveredSide === 'right'" class="mr-2" direction="left" :strokeWidth="20.8" size="22px"
+                  fillColor="#FFF" />
               </button>
             </div>
           </div>
-
-          <div class="bg-gray-800 text-black font-graphik p-4 flex items-center justify-between">
+          <div
+            class="bg-white rounded-b-lg text-black w-full font-graphik p-4 flex flex-wrap justify-between sm:flex  sm:items-center sm:justify-between sm:space-y-0">
             <div class="text-sm">
-              {{ activeImage?.description || productData?.title }}
+             {{ activeImage?.description || productData?.title }}
             </div>
-            <div class="flex items-center space-x-4">
-              <a href="#" class="flex items-center text-sm hover:underline">
+            <div class="flex flex-wrap  sm:flex-row items-end justify-center sm:items-end  sm:space-y-0 ">
+              <a href="#" class="flex items-end text-sm hover:underline">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                     stroke="currentColor" class="w-5 h-5 mr-1">
+                  stroke="currentColor" class="w-5 h-5 mr-1">
                   <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
+                    d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
                 </svg>
                 Download
               </a>
-              <ul class="flex space-x-2">
+              <ul class="hidden md:flex space-x-1 ">
                 <li v-for="social in socialIcons" :key="social.name">
                   <component :is="social.component" v-bind="social.props" />
                 </li>
@@ -211,6 +194,7 @@ import { ref, onMounted, onUnmounted, computed, watch, defineAsyncComponent, nex
 import { useRouter } from 'vue-router';
 import { Arrow, Facebook, Menu, Instagram, Houzz, Pinterest, } from '@/components/frontend-components/Svg/Icons';
 import { getProductDetail } from '@/helper/frontendHelpers'
+import { useStore } from 'vuex'
 import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
 import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
 import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
@@ -226,7 +210,8 @@ const StoreAccordion = defineAsyncComponent(() => import('@/components/store-com
 const Breadcrumb = defineAsyncComponent(() => import('@/components/frontend-components/BreadcrumbSection.vue'))
 
 
-
+const store = useStore();
+console.log('store', store.getters);
 const router = useRouter();
 const isVisible = ref(false)
 const isIframeVisible = ref(false);
@@ -244,7 +229,8 @@ const activeIndex = ref(0);
 const modalWidth = ref(0);
 const modalHeight = ref(0);
 const slug = ref(router.currentRoute.value?.params?.slug);
-if (!slug.value) slug.value = '4l-pixie-arms-chair';
+console.log('slug', router.currentRoute.value?.params);
+if (!slug.value) slug.value = 'pisa-dining-t';
 
 const socialIcons = computed(() => [
   { name: 'Facebook', component: Facebook, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#000000", href: "https://www.facebook.com", title: "Facebook" } },
@@ -273,13 +259,11 @@ const handleProductDetailData = async () => {
       productData.value = res.data.data.product_data[0];
       productTypes.value = res.data.data?.product_types;
       rightBoxImage.value = filePath(productData.value?.new_product_additional_right_box_image_url?.file_url)
-      console.log('sdfsdfsdfsdfsdfsdfdsfsd', rightBoxImage.value)
     } else {
-      router.push('/products')
+      window.location.href = 'https://lebello.com/product/';
     }
   } catch (error) {
     console.error('Error fetching product details:', error)
-    // router.push('/error') // Redirect to an error page or handle it accordingly
   } finally {
     loading.value = false
     console.log('Product detail data fetch attempt complete')
@@ -304,7 +288,7 @@ const handleSearch = (event) => {
   }
 };
 
-const adjustModalSizeModal = () => {
+const adjustModalSize = () => {
   if (!imageRef.value) return;
 
   const img = imageRef.value;
@@ -315,35 +299,44 @@ const adjustModalSizeModal = () => {
   let modalWidth, modalHeight;
 
   if (imageAspectRatio > screenWidth / screenHeight) {
-    // Image is wider relative to the screen
     modalWidth = Math.min(img.naturalWidth, screenWidth * 0.8);
     modalHeight = modalWidth / imageAspectRatio;
   } else {
-    // Image is taller relative to the screen
     modalHeight = Math.min(img.naturalHeight, screenHeight * 0.7);
     modalWidth = modalHeight * imageAspectRatio;
   }
 
   modalStyle.value = {
     width: `${modalWidth}px`,
-    height: `${modalHeight + 80}px`,
+    height: `${modalHeight}px`,
     maxWidth: '80vw',
     maxHeight: '80vh',
   };
 };
 
+const isSmallScreen = computed(() => {
+  return window.innerWidth < 640;
+});
+
+const footerClasses = computed(() => {
+  return {
+    'flex flex-col space-y-4': isSmallScreen.value,
+    'flex items-center justify-between': !isSmallScreen.value
+  };
+});
+
 onMounted(() => {
   handleProductDetailData()
-  window.addEventListener('resize', adjustModalSizeModal);
+  window.addEventListener('resize', adjustModalSize);
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', adjustModalSizeModal);
+  window.removeEventListener('resize', adjustModalSize);
 });
 watch([() => isModalOpen, () => activeImage], () => {
   if (isModalOpen) {
     nextTick(() => {
-      adjustModalSizeModal();
+      adjustModalSize();
     });
   }
 });
@@ -364,7 +357,7 @@ const openModal = (product, index) => {
   modalHeight.value = window.innerHeight * 0.9;
   // Use nextTick to ensure the modal is rendered before adjusting size
   nextTick(() => {
-    adjustModalSizeModal();
+    adjustModalSize();
   });
 };
 
@@ -378,7 +371,7 @@ const nextImage = () => {
   if (activeIndex.value < productData.value.gallery_urls.length - 1) {
     activeIndex.value++;
     activeImage.value = productData.value.gallery_urls[activeIndex.value];
-    adjustModalSizeModal();
+    adjustModalSize();
   }
 };
 
@@ -386,7 +379,7 @@ const prevImage = () => {
   if (activeIndex.value > 0) {
     activeIndex.value--;
     activeImage.value = productData.value.gallery_urls[activeIndex.value];
-    adjustModalSizeModal();
+    adjustModalSize();
   }
 };
 onUnmounted(() => {
@@ -402,9 +395,9 @@ watch(isModalOpen, (newVal) => {
 });
 watch(isModalOpen, (newVal) => {
   if (newVal) {
-    document.body.style.overflow = 'hidden'; 
+    document.body.style.overflow = 'hidden';
   } else {
-    document.body.style.overflow = ''; 
+    document.body.style.overflow = '';
   }
 });
 watch(productData, (newVal) => {
@@ -664,15 +657,18 @@ button.slider_arrow.custom-next {
   background-color: #eae6e1;
   padding: 30px 0px 70px;
 }
+
 .close_btn_popup {
   position: absolute;
   top: -38px;
   z-index: 99999;
   right: -15px;
 }
+
 .close_btn_popup img {
   max-width: 20px;
 }
+
 .materils_cut_top ul {
   display: flex;
   align-items: center;
@@ -713,25 +709,30 @@ button.slider_arrow.custom-next {
   background-position: center;
   height: 527px;
 }
+
 .product_new_gallery .product_img {
   max-height: initial !important;
   height: 280px;
   object-fit: cover !important;
 }
+
 .product_new_gallery {
   background: #fff !important;
 }
+
 .popup_inner {
   background: #c3c1beb5;
   padding: 0px 20px;
   z-index: 99999999999 !important;
 }
+
 .close_btn_popup {
   position: absolute;
   top: -38px;
   z-index: 99999;
   right: -15px;
 }
+
 .close_btn_popup img {
   max-width: 20px;
 }
@@ -815,7 +816,7 @@ button.slider_arrow.custom-next {
     max-width: 510px;
     padding: 30px 60px 72px;
   }
-  
+
 }
 
 @media (max-width: 1399px) {
@@ -825,10 +826,11 @@ button.slider_arrow.custom-next {
     padding: 30px 60px 55px;
   }
 
-  
+
   .product_new_gallery .product_img[data-v-0cdd39bd] {
     height: 220px;
-}
+  }
+
   /* .threed_inner_main .threed_cont select {
     font-size: 14px;
     padding: 8.5px 97px 11.5px 14px;
@@ -861,8 +863,8 @@ button.slider_arrow.custom-next {
   .slider_text {
     padding: 0px 52px 45px;
   }
-  
-.threed_inner_main .threed_img button img {
+
+  .threed_inner_main .threed_img button img {
     height: auto;
   }
 
@@ -882,22 +884,26 @@ button.slider_arrow.custom-next {
 
   .product_container {
     padding: 0px 52px;
-}
-.text_img_inner_main .product_inner_img {
-  height: 430px;
-}
-.threed_inner_main .threed_img img {
-  height: 360px;
-  object-fit: cover;
-  width: 100%;
-}
-.threed_inner_main .threed_cont h2 {
-  font-size: 24px;
-  line-height: 30px;
-}
-.threed_inner_main .threed_cont p {
-  margin: 26px 0px 16px;
-}
+  }
+
+  .text_img_inner_main .product_inner_img {
+    height: 430px;
+  }
+
+  .threed_inner_main .threed_img img {
+    height: 360px;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .threed_inner_main .threed_cont h2 {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .threed_inner_main .threed_cont p {
+    margin: 26px 0px 16px;
+  }
 }
 
 @media(max-width:991px) {
@@ -916,16 +922,19 @@ button.slider_arrow.custom-next {
 
   .popup_gallery_cont button svg {
     width: 26px;
-}
-.threed_btns {
-  column-gap: 18px;
-}
-.threed_btns a {
-  padding: 5px 18px;
-}
-.product_container {
-  padding: 0px 32px;
-}
+  }
+
+  .threed_btns {
+    column-gap: 18px;
+  }
+
+  .threed_btns a {
+    padding: 5px 18px;
+  }
+
+  .product_container {
+    padding: 0px 32px;
+  }
 }
 
 @media(max-width:767px) {
@@ -963,13 +972,15 @@ button.slider_arrow.custom-next {
 
   .product_container {
     padding: 0px 32px;
-}
-.text_img_inner_main .product_inner_img {
-  height: 290px;
-}
-.product_inner_cont button[data-v-0cdd39bd] {
-  margin-bottom: 0px;
-}
+  }
+
+  .text_img_inner_main .product_inner_img {
+    height: 290px;
+  }
+
+  .product_inner_cont button[data-v-0cdd39bd] {
+    margin-bottom: 0px;
+  }
 
 }
 
@@ -1055,14 +1066,17 @@ button.slider_arrow.custom-next {
   .popup_gallery_cont button svg {
     width: 18px;
   }
+
   button.slider_arrow.custom-next {
     right: 16px;
   }
+
   .slider_arrow.custom-prev {
     left: 16px;
   }
+
   .product_new_gallery .product_img {
     height: 130px !important;
-}
+  }
 }
 </style>

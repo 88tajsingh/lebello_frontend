@@ -16,7 +16,6 @@ const  routes = [
     component: () => import('../views/forntend-views/products/ProductDetailNew.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
-  
   {
     path: '/productDetailNew2/:slug?',
     name: 'product-DetailNew2',
@@ -26,6 +25,12 @@ const  routes = [
   {
     path: '/products/:slug?',
     name: 'products',
+    component: () => import('../views/forntend-views/products/NewProductPage.vue'),
+    meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
+  },
+  {
+    path: '/products-preview/:slug?:domainId?',
+    name: 'products-preview',
     component: () => import('../views/forntend-views/products/NewProductPage.vue'),
     meta: { title: 'Modern Exclusive Outdoor Furniture: Lebello Innovative Outdoor Furnishings' },
   },
