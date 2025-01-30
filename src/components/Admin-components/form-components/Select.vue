@@ -10,7 +10,7 @@
     <div class="w-full">
       <select 
         ref="selectElement"
-        class="rounded-lg border bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary text-black dark:text-white"
+        class="rounded-lg border text-sm text-[#334155] bg-white border-stroke bg-transparent outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary  dark:text-white"
         v-bind="$attrs"
         v-model="selectedOption"
         :class="[cusClass, { 'border-red': errorClass }]"

@@ -10,7 +10,7 @@
         <form @submit.prevent="handleSubmit">
         <div class="p-6.5 grid grid-cols-2 gap-6">
             <div class="flex flex-col">
-                <TextInput ref="nameInput" type="text" label='Name' :class="{ 'border-red': errors.name }"
+                <TextInput ref="nameInput" type="text" label='Name' class="block h-[40px] w-full" :class="{ 'border-red': errors.name }"
                     placeholder="" v-model="form.name" :errMessage="errors.name"
                     @update:modelValue="$clearError(errors, 'name')" :hasCheckBox="checkBoxFlag"
                     @update:checkValue="(value) => { checkedFields.name = value }" 
@@ -24,12 +24,9 @@
                     :class="{ 'border-red-500': errors.slug }" placeholder="" v-model="form.slug"
                     :errMessage="errors.slug" @update:model="clearError(errors, 'slug')" 
                     :id="'slug-input'" />
-                <p class="text-sm text-[#646970] text-[11.5px]">
-                    The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains
-                    only letters, numbers, and hyphens.
-                </p>
+                
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col" :class="{ 'pl-6': form.parent_material }">
                 <Select ref="parentInput" :options="MaterialTreeListData" title="Parent Material" showfield="name"
                     class="w-full" :defaultZero='true' valueField="id" label="Select Parent Material"
                     v-model="form.parent_material" :errorClass='errors.parent_material'
@@ -114,6 +111,7 @@
                     :id="'trade-mark-label-input'" />
             </div>
             <div class="flex flex-col">
+               
                 <Select ref="badgeInput" :options="trueFalse" title="Show New Badge 2021" showfield="name"
                     class="w-full" valueField="value" label="Select an option" v-model="form.show_new_badge_2021"
                     :hasCheckBox="checkBoxFlag"
@@ -164,7 +162,7 @@
         </div>
 
         <button type="submit"
-            class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90">
+            class="flex mt-5 px-10 mb-10 ml-10 justify-center rounded bg-primary p-3 font-medium text-white hover:bg-opacity-90">
             {{ buttonText }}
         </button>
     </form>
@@ -209,7 +207,7 @@ const form = ref(store.getters.editData || {
     yellow_banner_material_image: null,
     show_new_badge: null,
     single_color: null,
-    show_new_badge_2021: null
+    show_new_badge_2021: 0,
 });
 const checkedFields = ref({})
 const checkBoxFlag = ref(Boolean(form.value.id))

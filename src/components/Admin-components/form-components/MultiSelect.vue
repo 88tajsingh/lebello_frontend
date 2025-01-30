@@ -15,7 +15,7 @@
         class="flex  items-center justify-between	 border rounded-lg p-2 cursor-pointer bg-transparent border-stroke dark:border-form-strokedark dark:bg-form-input dark:text-white"
       >
       <span class="flex ">
-        <span v-if="selectedOptions.length === 0" class="text-gray-500 dark:text-gray-400">
+        <span v-if="selectedOptions.length === 0" class="text-[#334155] text-sm dark:text-gray-400">
           {{ placeHolder }}
         </span>
         <span v-else>{{ selectedOptions.join(', ') }}</span>

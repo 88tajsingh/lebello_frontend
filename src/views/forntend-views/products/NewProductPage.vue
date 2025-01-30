@@ -177,7 +177,7 @@
         <ul>
           <li>MATERIALS</li>
           <li><a :href="$filePath(productData?.downloadable_files_url?.[0].file_url, true)"
-              class="hover:text-orange border-b border-black hover:border-orange" target="_blank">
+              class="hover:text-orange border-b hover:border-orange" target="_blank">
               DOWNLOAD CUT SHEET
             </a></li>
         </ul>
@@ -684,6 +684,10 @@ button.slider_arrow.custom-next {
 
 .materils_cut_top ul li a {
   border-bottom: 1px solid #7c7369;
+}
+
+.materils_cut_top ul li a:hover {
+  border-bottom: 1px solid #cc9933;
 }
 
 .threed_inner_main .threed_cont p span {

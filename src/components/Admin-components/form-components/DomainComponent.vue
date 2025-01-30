@@ -9,7 +9,7 @@
     <div class="flex flex-wrap">
       <div v-for="(item, index) in domainsArray" @click="emitItemClick(item)" :key="item.id"
         class="badge py-1 border border-black relative bg-blue-500 px-2 rounded-lg flex items-center mb-2 mr-2 cursor-pointer"
-        :class="{ 'border-primary bg-primary text-gray': item.id === selectedDomain?.id }">
+        :class="{ 'border-primary bg-primary text-white': item.id === selectedDomain?.id }">
         {{ item.name }} ({{ item.country ? item.country.code : 'N/A' }})
         {{ isDefaultDomain(item.id) ? '*' : '' }}
         <button type="button" @click.stop="handleDeleteData(index)" class="ml-2 hover:text-red-500 focus:outline-none">
