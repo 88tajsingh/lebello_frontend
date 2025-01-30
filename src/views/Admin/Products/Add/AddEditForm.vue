@@ -16,10 +16,10 @@
         </template>
         <!-- http://localhost:5173/products/%7B%7Bform.slug%7D%7D -->
         <a v-if="form.id" :href="$router.resolve(`/products/${form.slug}`).href" target="_blank">
-    Preview Link:-<router-link :to="`/products/${form.slug}`"><span class="text-blue font-graphik text-[16px]">www.lebello.com/products/{{ form.slug }}</span></router-link>
+    Preview Link:-<span class="text-blue font-graphik text-[16px]">www.lebello.com/products/{{ form.slug }}</span>
   </a>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
-            <div class="grid grid-cols-12 gap-4 mt-5 ">
+            <div class="grid grid-cols-12 gap-4 mt-5">
                 <div class="col-span-8">
                     <Accordion :open="true" header="Title" containerClass="px-4">
                         <TextInput type="text" class="block mb-2 h-[40px] w-full" label="Title" placeholder="Add title"
