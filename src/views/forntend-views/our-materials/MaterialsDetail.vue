@@ -63,7 +63,7 @@
                                                     v-for="(itr, index) in tab.material_children" :key="index">
                                                     <div class="mb-10">
                                                         <div class="w-full h-full relative overflow-hidden">
-                                                            <img :src="$filePath(itr.media_data.file_url)"
+                                                            <img :src="$filePath(itr?.media_data?.file_url)"
                                                                 alt="Material Image"
                                                                 class="object-cover w-[185px] h-[185px]" />
                                                             <div class="text-center absolute bottom-1">
@@ -80,7 +80,7 @@
                                                                 class="float-right bg-[#70d94c] text-white rounded-lg px-2 border border-[#70d94c] hover:bg-white hover:text-[#70d94c]">
                                                                 order </span>
                                                         </p>
-                                                        <span class="text-[#70d94c] text-[13px]">2024 NEW</span>
+                                                        <span class="text-[#70d94c] text-[13px]">2025 NEW</span>
                                                     </div>
                                                 </div>
                                             </div>
