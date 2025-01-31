@@ -4,8 +4,6 @@ import vue from '@vitejs/plugin-vue';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
-  assetsInclude: ['**/*.html'],
-
   plugins: [
     vue({
       template: {
@@ -14,31 +12,36 @@ export default defineConfig({
         },
       },
     }),
-    visualizer({ open: true }), 
+    visualizer({ open: false }),
   ],
+
+  // Change base to absolute path
   base: '/',
+  
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      lodash: fileURLToPath(new URL('./node_modules/lodash', import.meta.url)), 
     },
   },
+
   build: {
+    emptyOutDir: true,
     rollupOptions: {
-      external: ['lodash'],
+      input: 'index.html',
       output: {
+        assetFileNames: 'assets/[name].[hash][extname]',
+        chunkFileNames: 'assets/[name].[hash].js',
+        entryFileNames: 'assets/[name].[hash].js',
         manualChunks(id) {
           if (id.includes('node_modules')) {
             const packageName = id.split('node_modules/')[1].split('/')[0];
-            if (['lodash', '@lodash'].includes(packageName)) {
-              return 'shared-libs';
-            }
-            return `npm.${packageName.replace('@', '')}`;
+            return `vendor-${packageName.replace('@', '')}`;
           }
         },
       },
     },
   },
+
   server: {
     host: '0.0.0.0',
     port: 5173,
