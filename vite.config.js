@@ -29,7 +29,6 @@ export default defineConfig({
     rollupOptions: {
       input: 'index.html',
       output: {
-        // Ensure assets are emitted with proper paths
         assetFileNames: 'assets/[name].[hash][extname]',
         chunkFileNames: 'assets/[name].[hash].js',
         entryFileNames: 'assets/[name].[hash].js',
