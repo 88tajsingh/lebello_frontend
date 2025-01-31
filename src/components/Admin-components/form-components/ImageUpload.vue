@@ -50,7 +50,6 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { createHash } from 'crypto';
 
 const emits = defineEmits(['file-selected']);
 const imageUrls = ref([]);
@@ -81,31 +80,21 @@ const handleDrop = (event) => {
   }
 };
 
-const calculateHash = (file) => {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const hash = createHash('sha256');
-      hash.update(e.target.result);
-      resolve(hash.digest('hex'));
-    };
-    reader.onerror = (error) => reject(error);
-    reader.readAsArrayBuffer(file);
-  });
+const isFileDuplicate = (file) => {
+  return selectedFiles.value.some(f => f.name === file.name && f.size === file.size);
 };
 
-const addFiles = async (files) => {
-  for (const file of files) {
-    const hash = await calculateHash(file);
-    if (!selectedFiles.value.some(f => f.name === file.name && f.hash === hash)) {
-      selectedFiles.value.push({ ...file, hash });
+const addFiles = (files) => {
+  files.forEach(file => {
+    if (!isFileDuplicate(file)) {
+      selectedFiles.value.push(file);
       const reader = new FileReader();
       reader.onload = () => {
         imageUrls.value.push(reader.result);
       };
       reader.readAsDataURL(file);
     }
-  }
+  });
   emits('file-selected', selectedFiles.value);
 };
 
