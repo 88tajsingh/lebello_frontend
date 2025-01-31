@@ -1,4 +1,5 @@
 <template>
+    <!-- display  the folders and files -->
     <div class="bg-white pb-5 px-6 min-h-[78vh]">
         <div v-if="getFlag == false" class="pt-4">
             <PageHeader> Media Library </PageHeader>
@@ -7,8 +8,11 @@
             <div class="my-2 flex p-auto">
                 <Breadcrumb :breadcrumbData="breadcrumbData" :handlePopFunction="handlePopFunction" />
             </div>
-            <div v-if="permissions.write">
+            <div v-if="permissions.write" class="flex gap-2 justify-center items-center">
+                <TextInput id="0" type="text" class="block w-[180px] mr-2 h-[33px]" v-model="searchTerm"
+                placeholder="Enter File Name" />
                 <div v-if="getFlag == false" class='my-auto'>
+
                     <Button class="px-2 m-0" bg_th_color="py-2 text-white bg-[#2271B1] hover:bg-[#0a4b78]"
                         @click="openModal">
                         + Add Folder</Button>
@@ -84,8 +88,6 @@
                 Cancel</Button>
         </div>
     </div>
-
-
     <!-- folders popups -->
     <PopupModal modalTitle="Add Folder" custonClasses="w-[400px] h-[200px] " v-model:isOpen="modalflag.open">
         <div class="mx-3 pt-4">
@@ -101,6 +103,7 @@
             </div>
         </div>
     </PopupModal>
+    <!-- edit folders popups -->
     <PopupModal modalTitle="Edit Folder" custonClasses="w-[400px] h-[200px] " v-model:isOpen="modalflag.edit">
         <div class="mx-3 pt-4">
             <TextInput id="0" type="text" class="block w-[180px] mr-2 h-[33px]" v-model="newFolder"
@@ -114,12 +117,13 @@
             </div>
         </div>
     </PopupModal>
-    <DeleteModal v-model:isOpen="modalflag.delete" :modalTitle="'Delete Swatches'" @delete="handleDeleteFolders">
+    <!-- delete folder  -->
+    <DeleteModal v-model:isOpen="modalflag.delete" :modalTitle="'Delete Folder'" @delete="handleDeleteFolders">
         Do you want to delete ?
     </DeleteModal>
 
-    <!-- media poups -->
-    <PopupModal modalTitle="Add File" custonClasses="w-[800px] h-auto" v-model:isOpen="mediaModalflag.open">
+    <!--upload  media popups -->
+    <PopupModal modalTitle="Add Files" custonClasses="w-[800px] h-auto" v-model:isOpen="mediaModalflag.open">
         <div class="mx-3 py-4">
             <div class="border border-black rounded-md">
                 <ImageUpload @file-selected="handleFileUpload" />
@@ -133,6 +137,7 @@
             </div>
         </div>
     </PopupModal>
+
     <!-- Inside the Edit Media PopupModal -->
     <PopupModal modalTitle="Edit Media" customClasses="w-[1000px] h-[570px]" v-model:isOpen="mediaModalflag.edit">
         <div class="mx-3 pt-4">
@@ -185,7 +190,7 @@
             </div>
         </div>
     </PopupModal>
-
+    <!-- delete media -->
     <DeleteModal v-model:isOpen="mediaModalflag.delete" :modalTitle="'Delete Media File'" @delete="handleDeleteMedia">
         Do you want to delete Media File ?
     </DeleteModal>
@@ -196,6 +201,7 @@
 </template>
 
 <script setup>
+import { ref, onMounted, computed,watch } from 'vue'
 import { FolderIcon } from '@heroicons/vue/20/solid'
 import { filePath } from '@/helper/functions'
 import { showToast } from '@/helper/functions'
@@ -203,7 +209,7 @@ import { useStore } from 'vuex'
 import Breadcrumb from '@/components/Admin-components/Breadcrumb.vue'
 import FolderServices from '@/services/MediaAndFolderServices'
 import ImageUpload from '@/components/Admin-components/form-components/ImageUpload.vue'
-import { ref, onMounted, computed } from 'vue'
+import TextInput from '@/components/Admin-components/form-components/TextInput.vue'
 
 
 const props = defineProps({
@@ -229,6 +235,8 @@ const props = defineProps({
     }
 })
 
+const searchTerm = ref('')
+const status = ref('Idle')
 const loading = ref(false)
 const folders = ref([])
 const mediaData = ref([])
@@ -240,7 +248,6 @@ const mediaFIle = ref([])
 const errorMessage = ref()
 const breadcrumbData = ref([])
 const selectedMedia = ref(props.selected || [])
-const breadcrumbFlag = ref(true)
 const errors = ref({})
 
 
@@ -253,6 +260,54 @@ const handleValidation = () => {
   }
   return isValid;
 };
+
+
+// -------------------------- bouncy value handle -------------------------- //
+
+// Debounce function
+const debounce = (fn, delay) => {
+  let timeoutId
+  return (...args) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => fn(...args), delay)
+  }
+}
+
+// API call function
+const fetchData = async (term) => {
+  if (!term) {
+    status.value = 'Idle'
+    result.value = null
+    return
+  }
+
+  try {
+        await FolderServices.GetMediaChild({ search: searchTerm.value })
+            .then((res) => {
+                console.log('res', res)
+                if (res.status === 200 && res.data.success === true) {
+                    mediaData.value = res.data.data
+                }
+            })
+            .catch((e) => {
+                console.error('Error while folder get:', e)
+            })
+    } catch (e) {
+        console.error('Error while folder get:', e)
+    } finally {
+        loading.value = false;
+    }
+}
+
+// Debounced API call
+const debouncedFetchData = debounce(fetchData, 300)
+
+// Watch for changes in searchTerm
+watch(searchTerm, (newValue) => {
+  debouncedFetchData(newValue)
+})
+// ---------------------------------------------------
+
 
 const isSelected = (media) => {
     if (!Array.isArray(selectedMedia.value)) {
