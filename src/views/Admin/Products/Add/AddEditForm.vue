@@ -16,8 +16,9 @@
         </template>
         <!-- http://localhost:5173/products/%7B%7Bform.slug%7D%7D -->
         <a v-if="form.id" :href="$router.resolve(`/products/${form.slug}`).href" target="_blank">
-    Preview Link:-<span class="text-blue font-graphik text-[16px]">www.lebello.com/products/{{ form.slug }}</span>
-  </a>
+            Preview Link:-<span class="text-blue font-graphik text-[16px]">www.lebello.com/products/{{ form.slug
+                }}</span>
+        </a>
         <form @submit.prevent="handleSubmit" class="mb-5 m-5">
             <div class="grid grid-cols-12 gap-4 mt-5">
                 <div class="col-span-8">
@@ -54,7 +55,9 @@
                                 class="block w-[180px] " v-model="form.meta_description" placeholder="Meta Description"
                                 label="Meta Description" :hasCheckBox="checkBoxFlag"
                                 @update:checkValue="value => checkedFields.meta_description = value" />
-                            <span class="text-sm" :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of 160 chars for
+                            <span class="text-sm" :class="[form.id ? 'pl-8' : '']">Most search engines use a maximum of
+                                160
+                                chars for
                                 the
                                 description.
                             </span>
@@ -170,8 +173,8 @@
                                         </SingleCheck>
                                         <div class="py-2 rounded-lg w-full px-2 border border-stroke"
                                             @click="() => imageData.gallery.isOpen = true">
-                                            {{ imageData.gallery.images.length > 0 ? imageData.gallery.images.length :                                            
-                                           `Add gallery` }} files
+                                            {{ imageData.gallery.images.length > 0 ? imageData.gallery.images.length :
+                                                `Add gallery` }} files
                                         </div>
                                     </div>
                                     <div
@@ -471,7 +474,8 @@
                     <div class="mt-3 ">
                         <Accordion :open="true" header="Product Label ">
                             <div class="px-3">
-                                <TextInput id="Enter Highlight title" type="text" class="block mr-2 h-[33px]" v-model="form.product_label" placeholder="" label="Text Label"
+                                <TextInput id="Enter Highlight title" type="text" class="block mr-2 h-[33px]"
+                                    v-model="form.product_label" placeholder="" label="Text Label"
                                     :hasCheckBox="checkBoxFlag"
                                     @update:checkValue="value => checkedFields.product_label = value" />
                                 <p>Enter your product label here.</p>
@@ -621,12 +625,30 @@
                                     <img v-for="file in imageData.product_image.images" :key="file"
                                         :src="$filePath(file?.file_url)" class="inline-block w-auto h-34 mr-4"
                                         :alt="file?.alternative_text || ''">
-
                                     <div class="mt-2">
-                                        <TextInput type="text" class="block mr-2 h-[40px] w-full" label="product 3D Url"
-                                            placeholder="" v-model="form.product_url_for_three_d"
-                                            :hasCheckBox="checkBoxFlag"
-                                            @update:checkValue="(value) => { checkedFields.product_url_for_three_d = value }" />
+                                        <div v-for="(item, index) in form.product_url_for_three_d" :key="index"
+                                            class=" items-center gap-2">
+                                            <label class="w-32">Product 3D Url</label>
+                                            <TextInput type="text" class="block h-[40px] w-full"
+                                                label="Configuration Name" placeholder="Enter config name" defaultValue="`Config ${index + 1}`"
+                                                v-model="item.config_name" :hasCheckBox="checkBoxFlag"
+                                                @update:checkValue="(value) => checkedFields.product_url_for_three_d = value" />
+                                            <TextInput type="text" class="block h-[40px] w-full" label="Config Url"
+                                                placeholder="Enter config URL" v-model="item.config_url"
+                                                :hasCheckBox="checkBoxFlag"
+                                                @update:checkValue="(value) => checkedFields.product_url_for_three_d = value" />
+                                            <!-- Remove Button -->
+                                            <button v-if="form.product_url_for_three_d.length > 1" @click="removeThreeDView(index)" type="button"
+                                                class="p-1 mt-2 bg-red text-white rounded">
+                                                Remove
+                                            </button>
+                                        </div>
+
+                                        <!-- Add Button -->
+                                        <button @click="addThreeDView" type="button"
+                                            class="mt-2 p-2 bg-primary  text-white rounded">
+                                            + Add 3D View
+                                        </button>
                                     </div>
                                 </div>
 
@@ -897,7 +919,13 @@ const errors = ref({});
 const loading = ref(false);
 const tagsData = ref([]);
 const storeCategoryTree = ref([]);
-const form = ref(store.getters.editData || { ordering_images: { new_product_slider: [], gallery: [] }, simple_field: 0, product_option: [], is_store_product: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)' });
+
+const form = ref({...store.getters.editData  } || {
+    product_url_for_three_d: [{
+        config_name: 'Configuration 1',
+        config_url: '',
+    }], ordering_images: { new_product_slider: [], gallery: [] }, simple_field: 0, product_option: [], is_store_product: 0, featured_product: 0, status: 1, description: '', product_specs: [], banner_slide: [], logo_right_nav_settings: {}, product_template: 'First Version (OLD)'
+});
 const GlobalUpdateService = form.value.is_store_product ? StoreProductServices.globalUpdateStoreProduct : ProductServices.globalUpdateProduct;
 const productContractTree = ref([]);
 const productSeriesTree = ref([]);
@@ -909,6 +937,7 @@ const checkedFields = ref({})
 const productsSpecsIndex = ref()
 const logo_right_nav = ref('default')
 const iswithBg = ref(0)
+let configCounter = ref(2);
 const iswithBgHeading = ref(0)
 const checkBoxFlag = ref(Boolean(form.value.id))
 const { handleGlobalUpdate } = useGlobalUpdate(GlobalUpdateService, 'master_product_id');
@@ -926,6 +955,23 @@ const formItems = ref(
         export_field: false
     }
 );
+// Add new entry
+const addThreeDView = () => {
+    form.value.product_url_for_three_d.push({
+        config_name: `Configuration ${configCounter.value}`, // Always assign a new name
+        config_url: "",
+    });
+    configCounter.value++; 
+};
+
+// Remove entry WITHOUT renaming existing ones
+const removeThreeDView = (index) => {
+    if (form.value.product_url_for_three_d.length > 1) {
+        form.value.product_url_for_three_d.splice(index, 1);
+    }
+};
+
+
 
 const handleImageFiles = (data) => {
     const media_titles = data.map((item) => item.title);
