@@ -1,15 +1,15 @@
 <template>
     <div>
       <!-- Truncated text with "Read More" button -->
-      <div v-if="!isExpanded" class="overflow-hidden sm:hidden">
+      <div v-if="!isExpanded" class="overflow-hidden ">
         <div v-html="truncatedHtml" v-bind-html-events></div>
       </div>
       <!-- Full text on md to  large devices -->
-      <div v-show="!isExpanded" class="hidden overflow-hidden sm:block" v-html="text"></div>
+      <!-- <div v-show="!isExpanded" class="hidden overflow-hidden sm:block" v-html="text"></div> -->
 
       <!-- Full text with "Read Less" button -->
       <transition name="expand" @enter="setHeight" @leave="setHeight">
-        <div v-if="isExpanded" class="overflow-hidden sm:hidden">
+        <div v-if="isExpanded" class="overflow-hidden ">
           <div v-html="fullTextWithButton" v-bind-html-events></div>
         </div>
       </transition>

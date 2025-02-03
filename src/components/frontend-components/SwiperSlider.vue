@@ -1,7 +1,13 @@
 <template>
   <section class="relative h-screen overflow-hidden">
     <div class="slider_main">
-      <swiper :modules="modules" :pagination="{ clickable: true }"
+      <swiper :modules="modules" :pagination="{ clickable: true }" 
+      :effect="'fade'"
+      :loop="true"
+      :autoplay="{
+      delay: 3000,
+      disableOnInteraction: false,
+    }"
         :navigation="{ prevEl: '.custom-prev', nextEl: '.custom-next' }" class="mySwiper">
         <swiper-slide v-for="(slide, index) in images" :key="index">
           <div class="product_slide">
@@ -34,14 +40,14 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Navigation, Pagination } from "swiper/modules";
+import {EffectFade,Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Arrow } from "./Svg/Icons";
 
 import image1 from "@/assets/images/product/lebello-tubo-sofa-exposed-feature.jpg";
 import image2 from "@/assets/images/product/lebello_tubo_sofa_outdoor.jpg";
 import image3 from "@/assets/images/product/lebello-tubo-sofa-exposed.jpg";
 
-const modules = [Navigation];
+const modules = [EffectFade,Autoplay,Pagination,Navigation];
 const loading = ref(true);
 
 const handleImageLoad = () => {

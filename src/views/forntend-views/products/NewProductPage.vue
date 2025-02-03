@@ -1,5 +1,5 @@
-<template>
-  <section class="product_banner font-graphik">
+<template class=" overflow-y-hidden">
+  <section class="product_banner font-graphik ">
     <div class="relative overflow-hidden ">
       <NavbarStatic />
       <SwiperSlider :images="imageData" imageKeyName="gallery">
@@ -53,34 +53,37 @@
     </div>
   </section>
   <Breadcrumb :breadcrumbData="breadcrumbData" />
+ 
   <section class="three_d_section_main bg-white">
     <div class="threed_inner_main">
-      <div class="threed_img">
-        <img v-if="!isIframeVisible"
-          :src="$filePath(productData?.product_image_data && productData.product_image_data?.[0]?.file_url, true)"
-          :alt="productData?.product_image_data && productData.product_image_data?.[0]?.alternative_text" />
-        <iframe class="w-full h-full" v-if="isIframeVisible"
-          :src="productData?.product_url_for_three_d" allowfullscreen frameborder="0" scrolling="no" />
-        <button v-if="!isIframeVisible && productData?.product_url_for_three_d" @click="toggleIframe">
-          <img src="../../../assets/images/product/3D Icon.png" alt="" />
-        </button>
-      </div>
-      <div class="threed_cont">
-        <div class="product_top_cont">
-          <h2>3D CONFIGURATOR</h2>
-          <p><span>Recomended Configuration</span> Please select the configuration</p>
-          <select id="configuration">
-            <option value="1">Configuration 1</option>
-            <option value="2">Configuration 2</option>
-            <option value="3">Configuration 3</option>
-          </select>
-        </div>
-        <div class="threed_btns">
-          <a href="#">ENQUIRE / EMAIL</a>
-          <a href="#" class="see_store_btn">SEE AT STORE</a>
-        </div>
-      </div>
+      
+  <div class="threed_img" ref="containerRef">
+    <img v-if="!isIframeVisible" :src="$filePath(imageSrc,true)" :alt="$filePath(imageAlt)" class="w-full h-auto" ref="imageRef"
+      @load="updateDimensions" />
+    <iframe v-if="isIframeVisible" :src="iframeSrc" :style="{ width: `${width}px`, height: `${height}px` }"
+      class="w-full" allowfullscreen frameborder="0" scrolling="no" />
+    <button v-if="!isIframeVisible && iframeSrc" @click="toggleIframe"
+      class="absolute right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
+      <img src="../../../assets/images/product/3D Icon.png" alt="View 3D" class="w-6 h-6" />
+    </button>
+  </div>
+  <div class="threed_cont">
+    <div class="product_top_cont">
+      <h2>3D CONFIGURATOR</h2>
+      <p><span>Recomended Configuration</span> Please select the configuration</p>
+      <select id="configuration" v-model="selectedConfig">
+        <option v-for="(item, index) in productData?.product_url_for_three_d" :key="index" :value="item.config_url">
+          {{ item.config_name }}
+        </option>
+      </select>
     </div>
+    <div class="threed_btns">
+      <a href="#">ENQUIRE / EMAIL</a>
+      <a href="#" class="see_store_btn">SEE AT STORE</a>
+    </div>
+  </div>
+</div>
+
   </section>
 
   <section class="product_text_img">
@@ -120,11 +123,11 @@
   </section>
   <Transition name="modal-fade">
     <section class="modal popup" v-if="isModalOpen">
-      <div class="popup_inner fixed inset-0 bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
+      <div class=" fixed top-0 left-0 w-full h-full bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
         @click.self="closeModal">
         <div class="bg-white rounded shadow-lg transition-all  pt-[15px] duration-300 ease-in-out" :style="modalStyle">
           <div class="relative px-[15px]">
-            <button @click="closeModal" class="close_btn_popup absolute top-5 right-0 z-10">
+            <button @click="closeModal" class="close_btn_popup absolute top-0 right-0 z-10">
               <img src="/public/close-button.png" alt="Close">
             </button>
 
@@ -149,7 +152,7 @@
           <div
             class="bg-white rounded-b-lg text-black w-full font-graphik p-4 flex flex-wrap justify-between sm:flex  sm:items-center sm:justify-between sm:space-y-0">
             <div class="text-sm">
-             {{ activeImage?.description || productData?.title }}
+              {{ activeImage?.description || productData?.title }}
             </div>
             <div class="flex flex-wrap  sm:flex-row items-end justify-center sm:items-end  sm:space-y-0 ">
               <a href="#" class="flex items-end text-sm hover:underline">
@@ -228,8 +231,11 @@ const activeImage = ref(null);
 const activeIndex = ref(0);
 const modalWidth = ref(0);
 const modalHeight = ref(0);
+const width = ref(0)
+const height = ref(0)
+const selectedConfig = ref(null)
+const containerRef = ref(null)
 const slug = ref(router.currentRoute.value?.params?.slug);
-console.log('slug', router.currentRoute.value?.params);
 if (!slug.value) slug.value = 'pisa-dining-t';
 
 const socialIcons = computed(() => [
@@ -238,6 +244,59 @@ const socialIcons = computed(() => [
   { name: 'Pinterest', component: Pinterest, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://pinterest.com", title: "Pinterest" } },
   { name: 'Instagram', component: Instagram, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://instagram.com", title: "Instagram" } },
 ]);
+
+console.log("productData?.product_image_data?.[0]?.file_url",productData?.product_image_data?.[0]?.file_url);
+
+const imageSrc = computed(() => {
+  return productData.value?.product_image_data?.[0]?.file_url || '';
+});
+
+const imageAlt = computed(() => {
+  return productData.value?.product_image_data?.[0]?.alternative_text || '';
+});
+
+const iframeSrc = computed(() => {
+  return selectedConfig.value || '';
+});
+
+const updateDimensions = () => {
+  if (imageRef.value) {
+    width.value = imageRef.value.naturalWidth;
+    height.value = imageRef.value.naturalHeight;
+    adjustDimensions();
+  }
+};
+
+const adjustDimensions = () => {
+  if (containerRef.value) {
+    const containerWidth = containerRef.value.offsetWidth;
+    const aspectRatio = width.value / height.value;
+
+    if (containerWidth < width.value) {
+      width.value = containerWidth;
+      height.value = containerWidth / aspectRatio;
+    }
+  }
+};
+
+const handleResize = () => {
+  adjustDimensions();
+};
+
+onMounted(() => {
+  nextTick(() => {
+    updateDimensions();
+  });
+  window.addEventListener('resize', handleResize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+watch(selectedConfig, (newConfig) => {
+  iframeSrc.value = newConfig;
+});
 
 const breadcrumbData = ref([
   {
@@ -259,6 +318,8 @@ const handleProductDetailData = async () => {
       productData.value = res.data.data.product_data[0];
       productTypes.value = res.data.data?.product_types;
       rightBoxImage.value = filePath(productData.value?.new_product_additional_right_box_image_url?.file_url)
+      selectedConfig.value = productData.value?.product_url_for_three_d?.[0].config_url;
+      console("product_url_for_three_d", productData.value?.product_url_for_three_d);
     } else {
       window.location.href = 'https://lebello.com/product/';
     }
@@ -299,10 +360,10 @@ const adjustModalSize = () => {
   let modalWidth, modalHeight;
 
   if (imageAspectRatio > screenWidth / screenHeight) {
-    modalWidth = Math.min(img.naturalWidth, screenWidth * 0.8);
+    modalWidth = Math.min(img.naturalWidth, screenWidth * 0.9);
     modalHeight = modalWidth / imageAspectRatio;
   } else {
-    modalHeight = Math.min(img.naturalHeight, screenHeight * 0.7);
+    modalHeight = Math.min(img.naturalHeight, screenHeight * 0.8);
     modalWidth = modalHeight * imageAspectRatio;
   }
 
