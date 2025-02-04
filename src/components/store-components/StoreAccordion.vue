@@ -1214,6 +1214,11 @@ watch(() => props.accordionData, (newData) => {
 }, { immediate: true })
 </script>
 <style scoped>
+.inner_faq .faq_inner_cont {
+    border-bottom: 1px solid #7c7369;
+    border-left: none;
+    padding: 20px 0 20px 30px;
+}
 .expand-enter-active,
 .expand-leave-active {
   transition: height 0.7s ease;
