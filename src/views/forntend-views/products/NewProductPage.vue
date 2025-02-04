@@ -1,4 +1,5 @@
-<template class=" overflow-y-hidden">
+<template >
+  <div class="">
   <section class="product_banner font-graphik ">
     <div class="relative overflow-hidden ">
       <NavbarStatic />
@@ -112,7 +113,7 @@
       <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
           <div class="product_img max-h-[250px] h-full overflow-hidden cursor-pointer"
-            @click="openModal(product, index)">
+            @click="handleopenModal(product, index)">
             <img
               class="w-full h-full opacity-75 hover:opacity-100 object-cover transition-transform duration-700 ease-in-out transform hover:scale-125"
               :src="$filePath(product?.file_url)" :alt="product?.title" :title="product?.title" />
@@ -121,13 +122,13 @@
       </div>
     </TransitionExpand>
   </section>
-  <Transition name="modal-fade">
-    <section class="modal popup" v-if="isModalOpen">
+  <Transition name="modal-fade ">
+    <section class=" modal popup top-0" v-if="isModalOpen">
       <div class=" fixed top-0 left-0 w-full h-full bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
-        @click.self="closeModal">
+        @click.self="handlecloseModal">
         <div class="bg-white rounded shadow-lg transition-all  pt-[15px] duration-300 ease-in-out" :style="modalStyle">
           <div class="relative px-[15px]">
-            <button @click="closeModal" class="close_btn_popup absolute top-0 right-0 z-10">
+            <button @click="handlecloseModal" class="close_btn_popup absolute top-0 right-0 z-10">
               <img src="/public/close-button.png" alt="Close">
             </button>
 
@@ -191,6 +192,7 @@
   <section class="footer_section">
     <FooterSection :extraClasses="['text-black', 'bg-[#eae6e1]']" />
   </section>
+</div>
 </template>
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch, defineAsyncComponent, nextTick } from 'vue'
@@ -204,6 +206,8 @@ import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg
 import TransitionExpand from '@/components/TransitionExpand.vue';
 import NavbarStatic from '@/components/frontend-components/NavbarStatic.vue';
 import { filePath } from '@/helper/functions';
+import { useModal } from '@/Hooks/useModals.js'
+
 
 const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
 const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'))
@@ -222,7 +226,6 @@ const isExpanded = ref(false)
 const productData = ref([])
 const rightBoxImage = ref('')
 const productTypes = ref([])
-const isModalOpen = ref(false);
 const imageRef = ref(null);
 const modalStyle = ref({});
 const hoveredSide = ref(null);
@@ -234,6 +237,7 @@ const width = ref(0)
 const height = ref(0)
 const selectedConfig = ref(null)
 const containerRef = ref(null)
+const { isModalOpen, openModal, closeModal } = useModal()
 const slug = ref(router.currentRoute.value?.params?.slug);
 if (!slug.value) slug.value = 'pisa-dining-t';
 
@@ -244,7 +248,6 @@ const socialIcons = computed(() => [
   { name: 'Instagram', component: Instagram, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://instagram.com", title: "Instagram" } },
 ]);
 
-console.log("productData?.product_image_data?.[0]?.file_url",productData?.product_image_data?.[0]?.file_url);
 
 const imageSrc = computed(() => {
   return productData.value?.product_image_data?.[0]?.file_url || '';
@@ -318,7 +321,6 @@ const handleProductDetailData = async () => {
       productTypes.value = res.data.data?.product_types;
       rightBoxImage.value = filePath(productData.value?.new_product_additional_right_box_image_url?.file_url)
       selectedConfig.value = productData.value?.product_url_for_three_d?.[0].config_url;
-      console("product_url_for_three_d", productData.value?.product_url_for_three_d);
     } else {
       window.location.href = 'https://lebello.com/product/';
     }
@@ -359,18 +361,18 @@ const adjustModalSize = () => {
   let modalWidth, modalHeight;
 
   if (imageAspectRatio > screenWidth / screenHeight) {
-    modalWidth = Math.min(img.naturalWidth, screenWidth * 0.9);
+    modalWidth = Math.min(img.naturalWidth, screenWidth * 0.90);
     modalHeight = modalWidth / imageAspectRatio;
   } else {
-    modalHeight = Math.min(img.naturalHeight, screenHeight * 0.8);
+    modalHeight = Math.min(img.naturalHeight, screenHeight * 0.80);
     modalWidth = modalHeight * imageAspectRatio;
   }
 
   modalStyle.value = {
     width: `${modalWidth}px`,
     height: `${modalHeight}px`,
-    maxWidth: '80vw',
-    maxHeight: '80vh',
+    maxWidth: '95vw',
+    maxHeight: '95vh',
   };
 };
 
@@ -386,6 +388,7 @@ const footerClasses = computed(() => {
 });
 
 onMounted(() => {
+  document.body.style.overflow = 'hidden';
   handleProductDetailData()
   window.addEventListener('resize', adjustModalSize);
 })
@@ -408,10 +411,10 @@ const toggleIframe = () => {
   isIframeVisible.value = !isIframeVisible.value;
 };
 
-const openModal = (product, index) => {
+const handleopenModal = (product, index) => {
   activeImage.value = product;
   activeIndex.value = index;
-  isModalOpen.value = true;
+  openModal();
   // Set initial modal size
   modalWidth.value = window.innerWidth * 0.9;
   modalHeight.value = window.innerHeight * 0.9;
@@ -421,8 +424,8 @@ const openModal = (product, index) => {
   });
 };
 
-const closeModal = () => {
-  isModalOpen.value = false;
+const handlecloseModal = () => {
+  closeModal();
   activeImage.value = null;
   activeIndex.value = 0;
 };
@@ -528,6 +531,7 @@ body {
 }
 
 .product_banner {
+
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -811,10 +815,9 @@ button.slider_arrow.custom-next {
   .product_container {
     padding: 0px 94px;
   }
-
-  .threed_inner_main .threed_img iframe {
-    /* height: 577px; */
-  }
+  /* .threed_inner_main .threed_img iframe {
+    height: 577px;
+  } */
 
   .slider_arrow.custom-prev {
     left: 50px;
@@ -905,9 +908,9 @@ button.slider_arrow.custom-next {
     padding: 1px 23px;
   } */
 
-  .threed_inner_main .threed_img iframe {
-    /* height: 533px; */
-  }
+  /* .threed_inner_main .threed_img iframe {
+    height: 533px;
+  } */
 
 
   .product_inner_cont button svg {
