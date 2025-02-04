@@ -59,9 +59,9 @@
                 <!-- Images Grid -->
                 <div class="gallery_new_scrool  overflow-y-auto transition-all duration-300"
                   :style="{ height: adjustedHeight + 'px' }">
-                  <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                  <div class="gallery_images_main grid  grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
-                      <img :src="$filePath(image.file_url)" :alt="image.name" class="object-cover w-full h-full" />
+                      <img :src="$filePath(image.file_url)" :alt="image.name" class="w-full h-full aspect-square object-cover" />
                     </div>
                   </div>
                 </div>
