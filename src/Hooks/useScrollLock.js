@@ -1,25 +1,24 @@
-
 export function useScrollLock() {
   const lockScroll = () => {
     // Calculate scrollbar width to prevent content shift
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     
     // Store original styles
-    const originalOverflow = document.body.style.overflow
-    const originalPaddingRight = document.body.style.paddingRight
+    const originalOverflow = document.documentElement.style.overflow;
+    const originalPaddingRight = document.documentElement.style.paddingRight;
     
     // Apply scroll lock
-    document.body.style.overflow = 'hidden'
-    document.body.style.paddingRight = `${scrollbarWidth}px`
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.paddingRight = `${scrollbarWidth}px`;
     
     return () => {
       // Restore original styles
-      document.body.style.overflow = originalOverflow
-      document.body.style.paddingRight = originalPaddingRight
-    }
-  }
+      document.documentElement.style.overflow = originalOverflow;
+      document.documentElement.style.paddingRight = originalPaddingRight;
+    };
+  };
   
   return {
     lockScroll
-  }
+  };
 }

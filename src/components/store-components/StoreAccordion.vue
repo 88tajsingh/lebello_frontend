@@ -120,18 +120,15 @@ const toggleExpand = () => {
 
 const truncatedHtml = computed(() => {
   const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = text.value; // Assuming `text` is your full HTML content
+  tempDiv.innerHTML = text.value; 
   const textContent = tempDiv.textContent || tempDiv.innerText;
   
-  // If the content is smaller than the maxLength, just return it
   if (textContent.length <= props.maxLength) {
     return text.value;
   }
 
-  // Otherwise, truncate and add "Read More" button
   let truncated = textContent.slice(0, props.maxLength);
   
-  // Avoid cutting off words by trimming to the last space
   const lastSpace = truncated.lastIndexOf(' ');
   if (lastSpace > 0) {
     truncated = truncated.substr(0, lastSpace);
