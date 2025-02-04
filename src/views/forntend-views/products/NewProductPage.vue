@@ -214,7 +214,6 @@ const Breadcrumb = defineAsyncComponent(() => import('@/components/frontend-comp
 
 
 const store = useStore();
-console.log('store', store.getters);
 const router = useRouter();
 const isVisible = ref(false)
 const isIframeVisible = ref(false);
