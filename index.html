@@ -2,41 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="./favicon.ico" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-
-    <link rel="preload" href="./src/assets/fonts/fonts.css" as="style">
-    <link rel="preload" href="./src/assets/main.css" as="style">
-    <link rel="preload" href="./src/assets/css/style.css" as="style">
-    <link rel="preload" href="/node_modules/@bhplugin/vue3-datatable/dist/style.css" as="style">
-    <link rel="preload" href="/node_modules/vue-toast-notification/dist/theme-bootstrap.css" as="style">
-    <link rel="preload" href="/node_modules/vue-toastification/dist/index.css" as="style">
-    <!-- <link rel="preload" href="/node_modules/vue3-perfect-scrollbar/style.css" as="style"> -->
-  
-    <!-- Standard CSS link tags -->
-    <link href="./src/assets/fonts/fonts.css" rel="stylesheet">
-    <link href="./src/assets/main.css" rel="stylesheet">
-    <link href="./src/assets/css/style.css" rel="stylesheet">
-    <link href="/node_modules/@bhplugin/vue3-datatable/dist/style.css" rel="stylesheet">
-    <link href="/node_modules/vue-toast-notification/dist/theme-bootstrap.css" rel="stylesheet">
-    <link href="/node_modules/vue-toastification/dist/index.css" rel="stylesheet">
-    <link href="/node_modules/vue3-perfect-scrollbar/style.css" rel="stylesheet">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lebello</title>
-    <style>
-      html,
-      body {
-        padding: 0 !important;
-        overflow-x: hidden;
-      }
-    </style>
+    <link rel="icon" href="/favicon.ico" />
+    <!--seo-tags-->
+    <!--extra-data-->
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <div id="app"><!--ssr-outlet--></div>
+    <script type="module" src="/src/entry-client.js?v=123"></script>
   </body>
 </html>

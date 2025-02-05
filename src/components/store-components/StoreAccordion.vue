@@ -96,10 +96,11 @@ const calculateHeight = async () => {
 
   const staticContent = document.querySelector(".resizeDiv");
   if (staticContent) {
+    if (typeof window !== 'undefined') {
     const staticContentHeight = staticContent.offsetHeight;
     const viewportHeight = window.innerHeight;
     adjustedHeight.value = viewportHeight - staticContentHeight;
-  }
+  }}
 };
 
 // Handle the button click
@@ -108,10 +109,12 @@ const handleAdjustHeight = () => {
 };
 
 onMounted(async () => {
-  window.addEventListener("resize", calculateHeight);
+  if (typeof window !== 'undefined') {
+  window.addEventListener("resize", calculateHeight);}
 });
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", calculateHeight);
+  if (typeof window !== 'undefined') {
+  window.removeEventListener("resize", calculateHeight);}
 });
 
 const toggleExpand = () => {
@@ -1200,11 +1203,11 @@ const updateSelectedMaterial = () => {
     }));
   }
 };
-
+if (typeof window !== 'undefined') {
 watch(window.innerHeight, () => {
   height.value = window.innerHeight
 })
-
+}
 watch(selectedMaterialName, () => {
   updateSelectedMaterial()
 })

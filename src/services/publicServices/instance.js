@@ -1,5 +1,17 @@
 import axios from 'axios';
-const baseURL = import.meta.env.VITE_BASE_URL
+let baseURL
+
+async function setBaseURL() {
+  if (typeof process !== 'undefined' && process.env) {
+    const dotenv = await import('dotenv')
+    dotenv.config()
+    baseURL = process.env.VITE_BASE_URL
+  } else {
+    baseURL = import.meta.env.VITE_BASE_URL
+  }
+}
+
+await setBaseURL()
 
 const instance = axios.create({
   baseURL: baseURL,

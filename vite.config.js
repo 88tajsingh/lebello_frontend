@@ -1,50 +1,54 @@
-import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { visualizer } from 'rollup-plugin-visualizer';
+import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { visualizer } from 'rollup-plugin-visualizer'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => ['PerfectScrollbar', 'perfect-scrollbar'].includes(tag),
-        },
-      },
+          isCustomElement: (tag) => ['PerfectScrollbar', 'perfect-scrollbar'].includes(tag)
+        }
+      }
     }),
-    visualizer({ open: false }),
+    visualizer({ open: command === 'build' }) // Open visualizer only during build
   ],
-
-  // Change base to absolute path
   base: '/',
-  
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
   },
-
   build: {
+    target: 'es2022', 
     emptyOutDir: true,
+    ssr: 'src/entry-server.js', // Specify the server entry point
+    outDir: 'dist', // Output directory for both client and server builds
     rollupOptions: {
-      input: 'index.html',
+      input: {
+        app: './index.html', // Client entry point
+        server: './src/entry-server.js' // Server entry point
+      },
       output: {
-        assetFileNames: 'assets/[name].[hash][extname]',
-        chunkFileNames: 'assets/[name].[hash].js',
-        entryFileNames: 'assets/[name].[hash].js',
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            const packageName = id.split('node_modules/')[1].split('/')[0];
-            return `vendor-${packageName.replace('@', '')}`;
+            if (id.includes('lodash')) {
+              return 'vendor-lodash'
+            }
+            const packageName = id.split('node_modules/')[1].split('/')[0]
+            return `vendor-${packageName.replace('@', '')}`
           }
-        },
-      },
-    },
+        }
+      }
+    }
   },
-
+  ssr: {
+    noExternal: ['lodash'] // Include lodash in SSR bundle
+  },
   server: {
     host: '0.0.0.0',
     port: 5173,
-    open: true,
-  },
-});
+    open: true
+  }
+}))

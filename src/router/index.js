@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createMemoryHistory, createWebHistory } from 'vue-router'
 import { isAuthenticated } from '@/helper/functions'
 import store from '@/store'
 
@@ -557,8 +557,13 @@ const  routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  history: import.meta.env.SSR ? createMemoryHistory() : createWebHistory(),
+  routes,scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0 }
+  }
 })
 
 const relatedRoutesMap = {
@@ -612,11 +617,12 @@ const publicPaths = [
 ];
 
 router.beforeEach((to, from, next) => {
-  if(to.meta.title) document.title = to.meta.title;
-  console.log("to", to);
-  const token = store?.getters?.token || localStorage.getItem('token');
-  const allowedPaths = store.getters.user?.modules?.route || [];
-  const isAuthenticatedUser = isAuthenticated(token);
+  // if(window !=== undefined) 
+  // if(to.meta.title) document.title = to.meta.title;
+  // console.log("to", to);
+  const token = store?.getters?.token
+  const allowedPaths = store?.getters?.user?.modules?.route || []
+  const isAuthenticatedUser = isAuthenticated(token)
   // console.log(`Navigating to: ${to.path}`);
   // console.log("token", token);
 
