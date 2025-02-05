@@ -1,21 +1,22 @@
-<template >
-  <div class="">
-  <section class="product_banner font-graphik ">
-    <div class="relative overflow-hidden ">
-      <NavbarStatic />
-      <SwiperSlider :images="imageData" imageKeyName="gallery">
-        <template #utility>
-          <!-- lebellow icon right top -->
-          <a href="#" class="absolute top-11 right-0 mx-auto" style="z-index:9999999999999;">
-            <img src="/src/assets/logo/lebello-logo-right.png" />
-          </a>
-          <!-- text left bottom -->
-          <span class="slider_text ">
-            <h1> {{ productData?.title }} </h1>
-          </span>
-        </template>
-      </SwiperSlider>
-      <!-- <div class="absolute top-48 right-0">
+<template>
+  <!-- {{ $initialData ? $initialData : 'no' }} -->
+  <div v-if="$initialData" class="">
+    <section class="product_banner font-graphik ">
+      <div class="relative overflow-hidden ">
+        <NavbarStatic />
+        <SwiperSlider :images="imageData" imageKeyName="gallery">
+          <template #utility>
+            <!-- lebellow icon right top -->
+            <a href="#" class="absolute top-11 right-0 mx-auto" style="z-index:9999999999999;">
+              <img src="/src/assets/logo/lebello-logo-right.png" />
+            </a>
+            <!-- text left bottom -->
+            <span class="slider_text ">
+              <h1> {{ productData?.title }} </h1>
+            </span>
+          </template>
+        </SwiperSlider>
+        <!-- <div class="absolute top-48 right-0">
         <SideMenu openClass="w-[230px] absolute z-50 right-0" closeClass="w-[230px] z-50 absolute right-[-250px]"
           height="">
           <div class="z-50">
@@ -51,182 +52,183 @@
           </div>
         </SideMenu>
       </div> -->
-    </div>
-  </section>
-  <Breadcrumb :breadcrumbData="breadcrumbData" />
- 
-  <section class="three_d_section_main bg-white">
-    <div class="threed_inner_main">
-      
-  <div class="threed_img" ref="containerRef">
-    <img v-if="!isIframeVisible" :src="$filePath(imageSrc,true)" :alt="$filePath(imageAlt)" class="w-full h-auto" ref="imageRef"
-      @load="updateDimensions" />
-      <!-- <ThreeDview/> -->{{iframeSrc  }}
-    <iframe v-show="isIframeVisible" :src="iframeSrc" :style="{ width: `${width}px`, height: `${height}px` }"
-      class="w-full" allowfullscreen frameborder="0" scrolling="no" />
-    <button v-show="!isIframeVisible && iframeSrc" @click="toggleIframe"
-      class="absolute right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
-      <img src="../../../assets/images/product/3D Icon.png" alt="View 3D" class="w-6 h-6" />
-    </button>
-  </div>
-  <div class="threed_cont">
-    <div class="product_top_cont">
-      <h2>3D CONFIGURATOR</h2>
-      <p><span>Recomended Configuration</span> Please select the configuration</p>
-      <select id="configuration" v-model="selectedConfig">
-        <option v-for="(item, index) in productData?.product_url_for_three_d" :key="index" :value="item.config_url">
-          {{ item.config_name }}
-        </option>
-      </select>
-    </div>
-    <div class="threed_btns">
-      <a href="#">ENQUIRE / EMAIL</a>
-      <a href="#" class="see_store_btn">SEE AT STORE</a>
-    </div>
-  </div>
-</div>
-
-  </section>
-
-  <section class="product_text_img">
-    <div class="text_img_inner_main">
-      <div class="product_inner_cont">
-        <div>
-
-          <h2>{{ productData.title }}</h2>
-          <p v-html="productData.description"></p>
-        </div>
-        <button @click="isExpanded = !isExpanded" class=" flex pb-5 hover:text-orange">
-          <span>INSPIRATIONAL SCENE</span>
-          <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
-        </button>
-      </div>
-      <div v-if="rightBoxImage" class="product_inner_img aspect-square"
-        :style="{ backgroundImage: `url(${rightBoxImage})` }">
-      </div>
-    </div>
-    <div v-if="isVisible" class="info_div_product">
-      <p></p>
-    </div>
-  </section>
-  <section class="product_text_img product_new_gallery">
-    <TransitionExpand :isExpanded="isExpanded">
-      <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
-          <div class="product_img max-h-[250px] h-full overflow-hidden cursor-pointer"
-            @click="handleopenModal(product, index)">
-            <img
-              class="w-full h-full opacity-75 hover:opacity-100 object-cover transition-transform duration-700 ease-in-out transform hover:scale-125"
-              :src="$filePath(product?.file_url)" :alt="product?.title" :title="product?.title" />
-          </div>
-        </div>
-      </div>
-    </TransitionExpand>
-  </section>
-  <Transition name="modal-fade ">
-    <section class=" modal popup top-0" v-if="isModalOpen">
-      <div class=" fixed top-0 left-0 w-full h-full bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
-        @click.self="handlecloseModal">
-        <div class="bg-white rounded shadow-lg transition-all  pt-[15px] duration-300 ease-in-out" :style="modalStyle">
-          <div class="relative px-[15px]">
-            <button @click="handlecloseModal" class="close_btn_popup absolute top-0 right-0 z-10">
-              <img src="/public/close-button.png" alt="Close">
-            </button>
-
-            <Transition name="fade" mode="out-in">
-              <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
-                class="w-full h-full object-contain" @load="adjustModalSize" ref="imageRef" />
-            </Transition>
-
-            <div class="absolute mx-4 inset-0 z-10 flex justify-between">
-              <button @click.stop="prevImage" @mouseenter="hoveredSide = 'left'" @mouseleave="hoveredSide = null"
-                class="w-1/3 h-full cursor-pointer flex items-center justify-start">
-                <Arrow v-if="hoveredSide === 'left'" class="ml-2" direction="right" :strokeWidth="20.8" size="22px"
-                  fillColor="#FFF" />
-              </button>
-              <button @click.stop="nextImage" @mouseenter="hoveredSide = 'right'" @mouseleave="hoveredSide = null"
-                class="w-1/3 h-full cursor-pointer flex items-center justify-end">
-                <Arrow v-if="hoveredSide === 'right'" class="mr-2" direction="left" :strokeWidth="20.8" size="22px"
-                  fillColor="#FFF" />
-              </button>
-            </div>
-          </div>
-          <div
-            class="bg-white rounded-b-lg text-black w-full font-graphik p-4 flex flex-wrap justify-between sm:flex  sm:items-center sm:justify-between sm:space-y-0">
-            <div class="text-sm">
-              {{ activeImage?.description || productData?.title }}
-            </div>
-            <div class="flex flex-wrap  sm:flex-row items-end justify-center sm:items-end  sm:space-y-0 ">
-              <a href="#" class="flex items-end text-sm hover:underline">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="w-5 h-5 mr-1">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
-                </svg>
-                Download
-              </a>
-              <ul class="hidden md:flex space-x-1 ">
-                <li v-for="social in socialIcons" :key="social.name">
-                  <component :is="social.component" v-bind="social.props" />
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
-  </Transition>
-  <section class="materils_main_sec">
-    <div class="product_container">
-      <div class="materils_cut_top">
-        <ul>
-          <li>MATERIALS</li>
-          <li><a :href="$filePath(productData?.downloadable_files_url?.[0].file_url, true)"
-              class="hover:text-orange border-b hover:border-orange" target="_blank">
-              DOWNLOAD CUT SHEET
-            </a></li>
-        </ul>
+    <Breadcrumb :breadcrumbData="breadcrumbData" />
+
+    <section class="three_d_section_main bg-white">
+      <div class="threed_inner_main">
+
+        <div class="threed_img" ref="containerRef">
+          <img v-if="!isIframeVisible" :src="$filePath(imageSrc, true)" :alt="$filePath(imageAlt)" class="w-full h-auto"
+            ref="imageRef" @load="updateDimensions" />
+         
+          <iframe v-show="isIframeVisible" :src="iframeSrc" :style="{ width: `${width}px`, height: `${height}px` }"
+            class="w-full" allowfullscreen frameborder="0" scrolling="no" />
+          <button v-show="!isIframeVisible && iframeSrc" @click="toggleIframe"
+            class="absolute right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
+            <img src="../../../assets/images/product/3D Icon.png" alt="View 3D" class="w-6 h-6" />
+          </button>
+        </div>
+        <div class="threed_cont">
+          <div class="product_top_cont">
+            <h2>3D CONFIGURATOR</h2>
+            <p><span>Recomended Configuration</span> Please select the configuration</p>
+            <select id="configuration" v-model="selectedConfig">
+              <option v-for="(item, index) in productData?.product_url_for_three_d" :key="index"
+                :value="item.config_url">
+                {{ item.config_name }}
+              </option>
+            </select>
+          </div>
+          <div class="threed_btns">
+            <button disabled class=""> <a href="#" class=""> ENQUIRE / EMAIL</a></button>
+            <button disabled class=" cursor-not-allowed"><a href="#" class="see_store_btn pointer-events-none">SEE AT STORE</a></button>
+          </div>
+        </div>
       </div>
-      <StoreAccordion :accordionData="productData?.material_swatche_data" />
-    </div>
-  </section>
-  <section class="footer_section">
-    <FooterSection :extraClasses="['text-black', 'bg-[#eae6e1]']" />
-  </section>
-</div>
+
+    </section>
+
+    <section class="product_text_img">
+      <div class="text_img_inner_main">
+        <div class="product_inner_cont">
+          <div>
+
+            <h2>{{ productData.title }}</h2>
+            <p v-html="productData.description"></p>
+          </div>
+          <button @click="isExpanded = !isExpanded" class=" flex pb-5 hover:text-orange">
+            <span>INSPIRATIONAL SCENE</span>
+            <Arrow class="mt-0 ml-3 self-center" :strokeWidth="20.8" size="16px" fillColor="currentColor" />
+          </button>
+        </div>
+        <div v-if="rightBoxImage" class="product_inner_img aspect-square"
+          :style="{ backgroundImage: `url(${rightBoxImage})` }">
+        </div>
+      </div>
+      <div v-if="isVisible" class="info_div_product">
+        <p></p>
+      </div>
+    </section>
+    <section class="product_text_img product_new_gallery">
+      <TransitionExpand :isExpanded="isExpanded">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div class="product-item p-0" v-for="(product, index) in productData?.gallery_urls" :key="index">
+            <div class="product_img max-h-[250px] h-full overflow-hidden cursor-pointer"
+              @click="handleOpenModal(product, index)">
+              <img
+                class="w-full h-full opacity-75 hover:opacity-100 object-cover transition-transform duration-700 ease-in-out transform hover:scale-125"
+                :src="$filePath(product?.file_url)" :alt="product?.title" :title="product?.title" />
+            </div>
+          </div>
+        </div>
+      </TransitionExpand>
+    </section>
+    <Transition name="modal-fade ">
+      <section class=" modal popup top-0" v-if="isModalOpen">
+        <div class=" fixed top-0 left-0 w-full h-full bg-[#c3c1be] bg-opacity-75 flex items-center justify-center z-50"
+          @click.self="handleCloseModal">
+          <div class="bg-white rounded shadow-lg transition-all  pt-[15px] duration-300 ease-in-out"
+            :style="modalStyle">
+            <div class="relative px-[15px]">
+              <button @click="handleCloseModal" class="close_btn_popup absolute top-0 right-0 z-10">
+                <img src="/public/close-button.png" alt="Close">
+              </button>
+
+              <Transition name="fade" mode="out-in">
+                <img :key="activeImage?.file_url" :src="$filePath(activeImage?.file_url)" :alt="activeImage?.title"
+                  class="w-full h-full object-contain" @load="adjustModalSize" ref="imageRef" />
+              </Transition>
+
+              <div class="absolute mx-4 inset-0 z-10 flex justify-between">
+                <button @click.stop="prevImage" @mouseenter="hoveredSide = 'left'" @mouseleave="hoveredSide = null"
+                  class="w-1/3 h-full cursor-pointer flex items-center justify-start">
+                  <Arrow v-if="hoveredSide === 'left'" class="ml-2" direction="right" :strokeWidth="20.8" size="22px"
+                    fillColor="#FFF" />
+                </button>
+                <button @click.stop="nextImage" @mouseenter="hoveredSide = 'right'" @mouseleave="hoveredSide = null"
+                  class="w-1/3 h-full cursor-pointer flex items-center justify-end">
+                  <Arrow v-if="hoveredSide === 'right'" class="mr-2" direction="left" :strokeWidth="20.8" size="22px"
+                    fillColor="#FFF" />
+                </button>
+              </div>
+            </div>
+            <div
+              class="bg-white rounded-b-lg text-black w-full font-graphik p-4 flex flex-wrap justify-between sm:flex  sm:items-center sm:justify-between sm:space-y-0">
+              <div class="text-sm">
+                {{ activeImage?.description || productData?.title }}
+              </div>
+              <div class="flex flex-wrap  sm:flex-row items-end justify-center sm:items-end  sm:space-y-0 ">
+                <a href="#" class="flex items-end text-sm hover:underline">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-5 h-5 mr-1">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 16.5v3.75a.75.75 0 00.75.75h16.5a.75.75 0 00.75-.75V16.5M12 3v13.5M8.25 11.25l3.75 3.75 3.75-3.75" />
+                  </svg>
+                  Download
+                </a>
+                <ul class="hidden md:flex space-x-1 ">
+                  <li v-for="social in socialIcons" :key="social.name">
+                    <component :is="social.component" v-bind="social.props" />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </Transition>
+    <section class="materils_main_sec">
+      <div class="product_container">
+        <div class="materils_cut_top">
+          <ul>
+            <li>MATERIALS</li>
+            <li><a :href="$filePath(productData?.downloadable_files_url?.[0].file_url, true)"
+                class="hover:text-orange border-b hover:border-orange" target="_blank">
+                DOWNLOAD CUT SHEET
+              </a></li>
+          </ul>
+        </div>
+        <StoreAccordion :accordionData="productData?.material_swatche_data" />
+      </div>
+    </section>
+    <section class="footer_section">
+      <FooterSection :extraClasses="['text-black', 'bg-[#eae6e1]']" />
+    </section>
+  </div>
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch, defineAsyncComponent, nextTick } from 'vue'
+// Imports
+import { ref, onMounted, onUnmounted, computed, watch, defineAsyncComponent, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
-import { Arrow, Facebook, Menu, Instagram, Houzz, Pinterest, } from '@/components/frontend-components/Svg/Icons';
-import { getProductDetail } from '@/helper/frontendHelpers'
-import { useStore } from 'vuex'
-import Image1 from '../../../assets/images/product/lebello-tubo-sofa-exposed.jpg'
-import Image2 from '../../../assets/images/product/lebello-tubo-sofa-outdoor.jpg'
-import Image3 from '../../../assets/images/product/lebello_tubo_sofa_outdoor.jpg'
-import TransitionExpand from '@/components/TransitionExpand.vue';
-import NavbarStatic from '@/components/frontend-components/NavbarStatic.vue';
+import { Arrow, Facebook, Instagram, Houzz, Pinterest } from '@/components/frontend-components/Svg/Icons';
+import { useStore } from 'vuex';
+import { useModal } from '@/Hooks/useModals.js';
 import { filePath } from '@/helper/functions';
-import { useModal } from '@/Hooks/useModals.js'
-import ThreeDview from '@/components/ThreeDview.vue';
+import { useExtraData } from '@/composables/useExtraData';
+import TransitionExpand from '@/components/TransitionExpand.vue';
 
-const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
-const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'))
-const NavBar = defineAsyncComponent(() => import('@/components/frontend-components/Nav-bar.vue'))
-const FooterSection = defineAsyncComponent(() => import('@/components/frontend-components/Footer-section.vue'))
-const StoreAccordion = defineAsyncComponent(() => import('@/components/store-components/StoreAccordion.vue'))
-const Breadcrumb = defineAsyncComponent(() => import('@/components/frontend-components/BreadcrumbSection.vue'))
+// Define async components
+// const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'));
+const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'));
+const NavbarStatic = defineAsyncComponent(() => import('@/components/frontend-components/NavbarStatic.vue'));
+const FooterSection = defineAsyncComponent(() => import('@/components/frontend-components/Footer-section.vue'));
+const StoreAccordion = defineAsyncComponent(() => import('@/components/store-components/StoreAccordion.vue'));
+const Breadcrumb = defineAsyncComponent(() => import('@/components/frontend-components/BreadcrumbSection.vue'));
 
-
+// Store and Router
 const store = useStore();
 const router = useRouter();
-const isVisible = ref(false)
+const { extraData } = useExtraData();
+
+// Reactive Variables
+const isVisible = ref(false);
 const isIframeVisible = ref(false);
-const loading = ref(false)
-const isExpanded = ref(false)
-const productData = ref([])
-const rightBoxImage = ref('')
-const productTypes = ref([])
+const isExpanded = ref(false);
+const productData = ref([]);
+const rightBoxImage = ref('');
+const productTypes = ref([]);
 const imageRef = ref(null);
 const modalStyle = ref({});
 const hoveredSide = ref(null);
@@ -234,14 +236,18 @@ const activeImage = ref(null);
 const activeIndex = ref(0);
 const modalWidth = ref(0);
 const modalHeight = ref(0);
-const width = ref(0)
-const height = ref(0)
-const selectedConfig = ref(null)
-const containerRef = ref(null)
-const { isModalOpen, openModal, closeModal } = useModal()
-const slug = ref(router.currentRoute.value?.params?.slug);
-if (!slug.value) slug.value = 'pisa-dining-t';
+const width = ref(0);
+const height = ref(0);
+const selectedConfig = ref(null);
+const containerRef = ref(null);
 
+// Modal Functions
+const { isModalOpen, openModal, closeModal } = useModal();
+
+// Breadcrumb
+const breadcrumbData = ref([{ label: 'Collection', href: '#', isActive: false }, { label: `${productData.value?.name}`, href: '#', isActive: true }]);
+
+// Social Media Icons Computed Property
 const socialIcons = computed(() => [
   { name: 'Facebook', component: Facebook, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#000000", href: "https://www.facebook.com", title: "Facebook" } },
   { name: 'Houzz', component: Houzz, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#FFFFFF", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://www.houzz.com", title: "Houzz Share" } },
@@ -249,19 +255,38 @@ const socialIcons = computed(() => [
   { name: 'Instagram', component: Instagram, props: { bgColor: "#333333", bgSize: "28px", svgSize: "15px", svgColor: "#ffffff", hoverBgColor: "#ce8d39", hoverSvgColor: "#ffffff", href: "https://instagram.com", title: "Instagram" } },
 ]);
 
-
-const imageSrc = computed(() => {
-  return productData.value?.product_image_data?.[0]?.file_url || '';
+// Computed Image Data
+const imageData = computed(() => {
+  return productData.value.new_product_slider_url?.map(item => ({ gallery: item }));
 });
+const imageSrc = computed(() => productData.value?.product_image_data?.[0]?.file_url || '');
+const imageAlt = computed(() => productData.value?.product_image_data?.[0]?.alternative_text || '');
+const iframeSrc = computed(() => selectedConfig.value || '');
 
-const imageAlt = computed(() => {
-  return productData.value?.product_image_data?.[0]?.alternative_text || '';
-});
 
-const iframeSrc = computed(() => {
-  return selectedConfig.value || '';
-});
+const handleOpenModal = (product, index) => {
+  activeImage.value = product;
+  activeIndex.value = index;
+  openModal();
 
+  // Set initial modal size
+  if (typeof window !== 'undefined') {
+    modalWidth.value = window.innerWidth * 0.9;
+    modalHeight.value = window.innerHeight * 0.9;
+  }
+  // Use nextTick to ensure the modal is rendered before adjusting size
+  nextTick(() => adjustModalSize());
+};
+
+const handleCloseModal = () => {
+  closeModal();
+  activeImage.value = null;
+  activeIndex.value = 0;
+};
+
+
+
+// Image Dimensions and Adjustments
 const updateDimensions = () => {
   if (imageRef.value) {
     width.value = imageRef.value.naturalWidth;
@@ -282,154 +307,73 @@ const adjustDimensions = () => {
   }
 };
 
-const handleResize = () => {
-  adjustDimensions();
+const handleResize = () => adjustDimensions();
+
+// Modal Size Adjustments
+const adjustModalSize = () => {
+  if (!imageRef.value) return;
+  if (typeof window !== 'undefined') {
+    const img = imageRef.value;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const imageAspectRatio = img.naturalWidth / img.naturalHeight;
+
+    let modalWidth, modalHeight;
+    if (imageAspectRatio > screenWidth / screenHeight) {
+      modalWidth = Math.min(img.naturalWidth, screenWidth * 0.90);
+      modalHeight = modalWidth / imageAspectRatio;
+    } else {
+      modalHeight = Math.min(img.naturalHeight, screenHeight * 0.80);
+      modalWidth = modalHeight * imageAspectRatio;
+    }
+
+    modalStyle.value = { width: `${modalWidth}px`, height: `${modalHeight}px`, maxWidth: '95vw', maxHeight: '95vh' };
+  }
 };
 
+
+
+// Small Screen Detection
+const isSmallScreen = computed(() => typeof window !== 'undefined' && window.innerWidth < 640);
+
+// Lifecycle Hooks
 onMounted(() => {
-  nextTick(() => {
-    updateDimensions();
-  });
+  if (typeof window !== 'undefined') {
+    productData.value = extraData.value.product_data[0];
+    productTypes.value = extraData.value?.product_types;
+    rightBoxImage.value = filePath(productData.value?.new_product_additional_right_box_image_url?.file_url);
+    selectedConfig.value = productData.value?.product_url_for_three_d?.[0].config_url;
+
+    window.addEventListener('resize', adjustModalSize);
+    nextTick(() => updateDimensions());
+  }
+
   window.addEventListener('resize', handleResize);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
-});
-
-watch(selectedConfig, (newConfig) => {
-  iframeSrc.value = newConfig;
-});
-
-const breadcrumbData = ref([
-  {
-    label: 'Collection',
-    href: '#',
-    isActive: false,
-  },
-  {
-    label: `${productData.value?.name}`,
-    href: '#',
-    isActive: true,
-  },
-])
-const handleProductDetailData = async () => {
-  try {
-    loading.value = true
-    const res = await getProductDetail(slug.value)
-    if (res.status === 200 && res.data.success) {
-      productData.value = res.data.data.product_data[0];
-      productTypes.value = res.data.data?.product_types;
-      rightBoxImage.value = filePath(productData.value?.new_product_additional_right_box_image_url?.file_url)
-      selectedConfig.value = productData.value?.product_url_for_three_d?.[0].config_url;
-    } else {
-      window.location.href = 'https://lebello.com/product/';
-    }
-  } catch (error) {
-    console.error('Error fetching product details:', error)
-  } finally {
-    loading.value = false
-    console.log('Product detail data fetch attempt complete')
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', adjustModalSize);
+    window.removeEventListener('resize', handleResize);
   }
-}
-
-
-const imageData = computed(() => {
-  return productData.value.new_product_slider_url?.map(item => ({
-    gallery: item
-  }));
 });
 
-const handleSearch = (event) => {
-  if (event) event.preventDefault();
-  if (search.value.trim() !== '') {
-    console.log('Searching for:', search.value);
-    router.push({ name: 'search', query: { search: search.value } });
-    search.value = '';
-  } else {
-    console.log('Search query is empty!');
-  }
-};
-
-const adjustModalSize = () => {
-  if (!imageRef.value) return;
-
-  const img = imageRef.value;
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
-  const imageAspectRatio = img.naturalWidth / img.naturalHeight;
-
-  let modalWidth, modalHeight;
-
-  if (imageAspectRatio > screenWidth / screenHeight) {
-    modalWidth = Math.min(img.naturalWidth, screenWidth * 0.90);
-    modalHeight = modalWidth / imageAspectRatio;
-  } else {
-    modalHeight = Math.min(img.naturalHeight, screenHeight * 0.80);
-    modalWidth = modalHeight * imageAspectRatio;
-  }
-
-  modalStyle.value = {
-    width: `${modalWidth}px`,
-    height: `${modalHeight}px`,
-    maxWidth: '95vw',
-    maxHeight: '95vh',
-  };
-};
-
-const isSmallScreen = computed(() => {
-  return window.innerWidth < 640;
-});
-
-const footerClasses = computed(() => {
-  return {
-    'flex flex-col space-y-4': isSmallScreen.value,
-    'flex items-center justify-between': !isSmallScreen.value
-  };
-});
-
-onMounted(() => {
-  document.body.style.overflow = 'hidden';
-  handleProductDetailData()
-  window.addEventListener('resize', adjustModalSize);
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', adjustModalSize);
-});
+// Watchers
 watch([() => isModalOpen, () => activeImage], () => {
-  if (isModalOpen) {
-    nextTick(() => {
-      adjustModalSize();
-    });
-  }
+  if (isModalOpen) nextTick(() => adjustModalSize());
 });
-const toggleVisibility = () => {
-  isVisible.value = !isVisible.value
-}
 
-const toggleIframe = () => {
-  isIframeVisible.value = !isIframeVisible.value;
-};
+watch(selectedConfig, (newConfig) => iframeSrc.value = newConfig);
+watch(rightBoxImage, (newVal) => rightBoxImage.value = newVal);
+watch(isModalOpen, (newVal) => document.body.style.overflow = newVal ? 'hidden' : '');
+watch(productData, (newVal) => {
+  breadcrumbData.value = [{ label: 'Collection', href: '#', isActive: false }, { label: `${newVal?.title}`, href: '#', isActive: true }];
+});
 
-const handleopenModal = (product, index) => {
-  activeImage.value = product;
-  activeIndex.value = index;
-  openModal();
-  // Set initial modal size
-  modalWidth.value = window.innerWidth * 0.9;
-  modalHeight.value = window.innerHeight * 0.9;
-  // Use nextTick to ensure the modal is rendered before adjusting size
-  nextTick(() => {
-    adjustModalSize();
-  });
-};
+// Event Handlers
+const toggleIframe = () => isIframeVisible.value = !isIframeVisible.value;
 
-const handlecloseModal = () => {
-  closeModal();
-  activeImage.value = null;
-  activeIndex.value = 0;
-};
+
 
 const nextImage = () => {
   if (activeIndex.value < productData.value.gallery_urls.length - 1) {
@@ -446,55 +390,6 @@ const prevImage = () => {
     adjustModalSize();
   }
 };
-onUnmounted(() => {
-  document.body.style.overflow = '';
-});
-
-// Watch for changes in the active image and adjust modal size
-watch(rightBoxImage, (newVal) => {
-  rightBoxImage.value = newVal
-});
-watch(isModalOpen, (newVal) => {
-  document.body.style.overflow = newVal ? 'hidden' : '';
-});
-watch(isModalOpen, (newVal) => {
-  if (newVal) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
-  }
-});
-watch(productData, (newVal) => {
-  breadcrumbData.value = [
-    {
-      label: 'Collection',
-      href: '#',
-      isActive: false,
-    },
-    {
-      label: `${newVal?.title}`,
-      href: '#',
-      isActive: true,
-    },
-  ]
-});
-const products = ref([
-  {
-    image: Image1,
-    altText: 'Tubo Sofa Exposed',
-    title: 'Tubo Sofa Exposed'
-  },
-  {
-    image: Image2,
-    altText: 'Tubo Sofa Outdoor',
-    title: 'Tubo Sofa Exposed'
-  },
-  {
-    image: Image3,
-    altText: 'Tubo Sofa Outdoor Alternative',
-    title: 'Tubo Sofa Exposed'
-  }
-])
 </script>
 
 <style scoped>
@@ -638,31 +533,31 @@ button.slider_arrow.custom-next {
   column-gap: 34px;
 }
 
-.threed_btns a {
+.threed_btns button a {
   border-radius: 13px;
   background-color: #ffffff;
   border: 1px solid #bcb3a6;
   font-size: 14px;
   color: #333333;
   font-weight: 300;
-  padding: 5px 23px;
+  padding: 10px 23px;
   text-transform: uppercase;
   transition: all 0.5s;
 }
 
-.threed_btns a.see_store_btn {
+.threed_btns button a.see_store_btn {
   background-color: #cc9933;
   border-color: #cc9933;
   color: #fff;
 }
 
-.threed_btns a.see_store_btn:hover {
+.threed_btns button a.see_store_btn:hover {
   background-color: #ffffff;
   border: 1px solid #bcb3a6;
   color: #333333;
 }
 
-.threed_btns a:hover {
+.threed_btns button a:hover {
   background-color: #cc9933;
   border-color: #cc9933;
   color: #fff;
@@ -816,6 +711,7 @@ button.slider_arrow.custom-next {
   .product_container {
     padding: 0px 94px;
   }
+
   /* .threed_inner_main .threed_img iframe {
     height: 577px;
   } */
@@ -996,7 +892,7 @@ button.slider_arrow.custom-next {
     column-gap: 18px;
   }
 
-  .threed_btns a {
+  .threed_btns button a {
     padding: 5px 18px;
   }
 

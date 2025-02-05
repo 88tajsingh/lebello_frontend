@@ -1,4 +1,4 @@
-import PublicServices from "@/services/publicServices/PublicServices";
+import PublicServices from "../services/publicServices/PublicServices.js";
 
 export const scrollDown = (id) => {
     const targetDiv = document.getElementById(id);

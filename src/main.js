@@ -1,4 +1,4 @@
-import { createApp, defineAsyncComponent } from 'vue';
+import { createSSRApp, defineAsyncComponent, createApp as createVueApp } from 'vue'
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
@@ -9,13 +9,12 @@ const PerfectScrollbarPlugin = defineAsyncComponent(() => import('vue3-perfect-s
 import HelpersPlugin from './helper/helperPlugin';
 const Toast = defineAsyncComponent(() => import('vue-toastification'));
 
-// CSS already added in html  file 
-// import './assets/fonts/fonts.css';
-// import './assets/main.css';
-// import './assets/css/style.css';
-// import '@bhplugin/vue3-datatable/dist/style.css';
-// import 'vue-toast-notification/dist/theme-bootstrap.css';
-// import 'vue-toastification/dist/index.css';
+import './assets/main.css'
+import './assets/fonts/fonts.css'
+import './assets/css/style.css'
+import '@bhplugin/vue3-datatable/dist/style.css'
+import 'vue-toast-notification/dist/theme-bootstrap.css'
+import 'vue-toastification/dist/index.css'
 
 
 
@@ -60,7 +59,9 @@ const toastOptions = {
 };
 
 // Create Vue app
-const app = createApp(App);
+export function createApp() {
+  const isSSR = typeof window === 'undefined'
+  const app = isSSR ? createSSRApp(App) : createVueApp(App)
 
 app.use(HelpersPlugin);
 app.use(Toast, toastOptions);
@@ -91,5 +92,5 @@ app.component('RadioButton', components.RadioButton);
 app.component('MasterSlugForm', components.MasterSlugForm);
 app.component('GetLibrary', components.GetLibrary);
 
-// Mount the app
-app.mount('#app');
+ return { app, router }
+}

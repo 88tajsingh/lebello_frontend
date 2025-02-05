@@ -1,23 +1,26 @@
 import LoginServices from '@/services/LoginServices';
 import Vuex from 'vuex';
-import { encryptData, decryptData } from './EncriptDecript'; 
+import { encryptData, decryptData } from './EncriptDecript';
+import Cookie from 'cookie-universal';
+
+const cookies = Cookie();
 
 export default new Vuex.Store({
   state: {
-    currentID:localStorage.getItem('currentID')|| null,
-    token: decryptData(localStorage.getItem('token')) || null,
-    expiresAt: localStorage.getItem('expiresAt') || null,
-    user: decryptData(localStorage.getItem('user')) || null,
+    currentID: cookies.get('currentID') || null,
+    token: decryptData(cookies.get('token')) || null,
+    expiresAt: cookies.get('expiresAt') || null,
+    user: decryptData(cookies.get('user')) || null,
     editData: null,
-    edit: decryptData(localStorage.getItem('edit')) || null,
-    domain: decryptData(localStorage.getItem('domain')) || null,
+    edit: decryptData(cookies.get('edit')) || null,
+    domain: decryptData(cookies.get('domain')) || null,
   },
   getters: {
     getCurrentID: (state) => state.currentID,
     token: (state) => state.token,
     user: (state) => state.user,
     getDomain: (state) => state.domain,
-    editData: (state) => state.edit, 
+    editData: (state) => state.edit,
     isTokenExpired(state) {
       return state.expiresAt;
     }
@@ -26,55 +29,54 @@ export default new Vuex.Store({
     setToken(state, { token, expiresAt }) {
       state.token = token;
       state.expiresAt = expiresAt;
-      localStorage.setItem('expiresAt', expiresAt);
-      localStorage.setItem('token', encryptData(token)); 
+      cookies.set('token', encryptData(token));
+      cookies.set('expiresAt', expiresAt);
     },
     clearToken(state) {
       state.token = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('expiresAt');
+      cookies.remove('token');
+      cookies.remove('expiresAt');
     },
     setUser(state, user) {
       state.user = user;
-      localStorage.setItem('user', encryptData(user)); 
+      cookies.set('user', encryptData(user));
     },
     setEditData(state, data) {
-      state.editData = data; 
+      state.editData = data;
     },
     clearUser(state) {
       state.user = null;
-      localStorage.removeItem('user');
+      cookies.remove('user');
     },
     setDomain(state, domain) {
-      localStorage.setItem('domain', encryptData(domain));
+      cookies.set('domain', encryptData(domain));
       state.domain = domain;
     },
     clearDomain(state) {
-      localStorage.removeItem('domain');
+      cookies.remove('domain');
       state.domain = null;
     },
-
     setEdit(state, data) {
-      localStorage.setItem('edit', encryptData(data)); 
+      cookies.set('edit', encryptData(data));
       state.edit = data;
     },
     clearEdit(state) {
       state.edit = null;
-      localStorage.removeItem('edit');
+      cookies.remove('edit');
     },
     setCurrentId(state, params) {
-      console.log("currentID", params)
-      localStorage.setItem('currentID', params);
+      console.log("currentID", params);
+      cookies.set('currentID', params);
       state.currentID = params;
     },
   },
   actions: {
     login({ commit }, { token, user, expiresAt }) {
-      commit('setToken', { token, expiresAt }); 
-      commit('setUser', user); 
+      commit('setToken', { token, expiresAt });
+      commit('setUser', user);
     },
     refreshToken({ commit }, { token, expiresAt }) {
-      commit('setToken', { token, expiresAt }); 
+      commit('setToken', { token, expiresAt });
     },
     logout({ commit }) {
       commit('clearToken');
@@ -84,7 +86,7 @@ export default new Vuex.Store({
       commit('setUser', user);
     },
     editData({ commit }, data) {
-      commit('setEditData', data); 
+      commit('setEditData', data);
     },
     setDomain({ commit }, domain) {
       commit('setDomain', domain);
@@ -108,11 +110,3 @@ export default new Vuex.Store({
   },
   modules: {}
 });
-
-function safeJsonParse(jsonString) {
-  try {
-    return JSON.parse(jsonString);
-  } catch (e) {
-    return null; 
-  }
-}

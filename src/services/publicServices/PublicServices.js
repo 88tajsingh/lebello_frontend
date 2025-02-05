@@ -1,11 +1,25 @@
-import instance from './instance'
-import ApiConfig from '@/config/apiConfig'
+import instance from './instance.js'
+import ApiConfig from '../../config/apiConfig.js'
 
 class PublicServices {
-
-  getDomainData() {
-    return instance.get(ApiConfig.getDomain, { params: {name:import.meta.env.VITE_DOMAIN} })
+  async getDomainData() {
+    let domainName
+    if (typeof process !== 'undefined' && process.env) {
+      // Server-side code
+      domainName = process.env.VITE_DOMAIN
+    } else {
+      // Client-side code
+      domainName = import.meta.env.VITE_DOMAIN
+    }
+    try {
+      const response = await instance.get(ApiConfig.getDomain, { params: { name: domainName } })
+      return response
+    } catch (error) {
+      console.error('Error fetching domain data:', error)
+      return { status: error.response?.status, data: error.response?.data }
+    }
   }
+ 
   getLandingPageData(payload) {
     return instance.get(ApiConfig.getLandingPageData, { params: {domain_id:payload} })
   }
