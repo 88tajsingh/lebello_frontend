@@ -49,7 +49,7 @@
               <div class="text-black font-graphik w-full gallery_popup_imgs">
                 <div class="resizeDiv">
                   <h1 class="popup_title">{{ popupTitle }}</h1>
-                 <ReadMoreLess :text="text" :maxLength="140" />                
+                 <ReadMoreLess :text="text" :maxLength="140" :handleAdjustHeight="calculateHeight"  />                
                   <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
                     <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
                       {{ material.name }}
@@ -59,9 +59,9 @@
                 <!-- Images Grid -->
                 <div class="gallery_new_scrool  overflow-y-auto transition-all duration-300"
                   :style="{ height: adjustedHeight + 'px' }">
-                  <div class="gallery_images_main grid h-full grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                  <div class="gallery_images_main grid  grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                     <div v-for="(image, index) in selectedMaterialImages" :key="index" class="aspect-square">
-                      <img :src="$filePath(image.file_url)" :alt="image.name" class="object-cover w-full h-full" />
+                      <img :src="$filePath(image.file_url)" :alt="image.name" class="w-full h-full aspect-square object-cover" />
                     </div>
                   </div>
                 </div>
@@ -1214,6 +1214,11 @@ watch(() => props.accordionData, (newData) => {
 }, { immediate: true })
 </script>
 <style scoped>
+.inner_faq .faq_inner_cont {
+    border-bottom: 1px solid #7c7369;
+    border-left: none;
+    padding: 20px 0 20px 30px;
+}
 .expand-enter-active,
 .expand-leave-active {
   transition: height 0.7s ease;

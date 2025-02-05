@@ -28,6 +28,9 @@
       type: Number,
       default: 120,
     },
+    handleAdjustHeight: {
+      type: Function,
+    }
   });
   
   const isExpanded = ref(false);
@@ -54,6 +57,9 @@
   
   const toggleExpand = () => {
     isExpanded.value = !isExpanded.value;
+    if (props.handleAdjustHeight) {
+      props.handleAdjustHeight();
+    }
   };
   
   const setHeight = (el, done) => {

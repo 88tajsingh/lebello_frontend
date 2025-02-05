@@ -3,11 +3,11 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
-
-import HelpersPlugin from './helper/helperPlugin';
-import Toast from 'vue-toastification';
 import 'vue3-perfect-scrollbar/style.css';
+
+const PerfectScrollbarPlugin = defineAsyncComponent(() => import('vue3-perfect-scrollbar'));
+import HelpersPlugin from './helper/helperPlugin';
+const Toast = defineAsyncComponent(() => import('vue-toastification'));
 
 // CSS already added in html  file 
 // import './assets/fonts/fonts.css';
@@ -16,7 +16,6 @@ import 'vue3-perfect-scrollbar/style.css';
 // import '@bhplugin/vue3-datatable/dist/style.css';
 // import 'vue-toast-notification/dist/theme-bootstrap.css';
 // import 'vue-toastification/dist/index.css';
-// import Loader from '@/components/Admin-components/Loader.vue';
 
 
 
