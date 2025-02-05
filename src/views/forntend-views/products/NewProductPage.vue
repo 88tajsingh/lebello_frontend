@@ -61,9 +61,10 @@
   <div class="threed_img" ref="containerRef">
     <img v-if="!isIframeVisible" :src="$filePath(imageSrc,true)" :alt="$filePath(imageAlt)" class="w-full h-auto" ref="imageRef"
       @load="updateDimensions" />
-    <iframe v-if="isIframeVisible" :src="iframeSrc" :style="{ width: `${width}px`, height: `${height}px` }"
+      <!-- <ThreeDview/> -->{{iframeSrc  }}
+    <iframe v-show="isIframeVisible" :src="iframeSrc" :style="{ width: `${width}px`, height: `${height}px` }"
       class="w-full" allowfullscreen frameborder="0" scrolling="no" />
-    <button v-if="!isIframeVisible && iframeSrc" @click="toggleIframe"
+    <button v-show="!isIframeVisible && iframeSrc" @click="toggleIframe"
       class="absolute right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
       <img src="../../../assets/images/product/3D Icon.png" alt="View 3D" class="w-6 h-6" />
     </button>
@@ -207,7 +208,7 @@ import TransitionExpand from '@/components/TransitionExpand.vue';
 import NavbarStatic from '@/components/frontend-components/NavbarStatic.vue';
 import { filePath } from '@/helper/functions';
 import { useModal } from '@/Hooks/useModals.js'
-
+import ThreeDview from '@/components/ThreeDview.vue';
 
 const SideMenu = defineAsyncComponent(() => import('@/components/frontend-components/Side-Menu.vue'))
 const SwiperSlider = defineAsyncComponent(() => import('@/components/frontend-components/SwiperSlider.vue'))

@@ -49,7 +49,7 @@
               <div class="text-black font-graphik w-full gallery_popup_imgs">
                 <div class="resizeDiv">
                   <h1 class="popup_title">{{ popupTitle }}</h1>
-                 <ReadMoreLess :text="text" :maxLength="140" />                
+                 <ReadMoreLess :text="text" :maxLength="140" :handleAdjustHeight="calculateHeight"  />                
                   <select v-model="selectedMaterialName" @change="updateSelectedMaterial" class="popup_select_box">
                     <option v-for="material in currentItem.materials" :key="material.name" :value="material.name">
                       {{ material.name }}
