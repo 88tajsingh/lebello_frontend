@@ -54,7 +54,9 @@ const closeModal = () => {
 const handleSearch = (event) => {
   if (event) event.preventDefault(); 
   if (searchQuery.value.trim() !== '') {
-    router.push({ name: 'search', query: { search: searchQuery.value } });
+    if(typeof window !== 'undefined') {
+      window.location.href = 'https://lebello.com/?s=' + searchQuery.value
+    }
     search.value = ''; 
   } else {
     console.log('Search query is empty!');

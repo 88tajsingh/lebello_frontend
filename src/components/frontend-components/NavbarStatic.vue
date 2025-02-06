@@ -26,7 +26,11 @@
                     <img src="/public/menu-icon.svg" alt="" />
                 </button>
             </div>
-            <div v-if="openModal" class="transform transition-transform duration-1000 mobile_menu_main">
+            <div
+      class="fixed inset-0 z-40 bg-white transform transition-transform duration-1000"
+      :class="openModal ? 'translate-x-0' : '-translate-x-full'"
+    >
+            <div  class="transform transition-transform duration-1000 mobile_menu_main">
                 <div class="mobile_top_head">
                     <button @click="openModal=false"><img src="/public/close_sign.png"></button>
                     <ul class="top_new_menu mm-list">
@@ -44,11 +48,15 @@
                 </ul>
                 <div class="menu_bottom_search">
                     <form role="search" action="" method="get" id="searchform">
-                        <input placeholder="Search" type="text" name="s" value="">
-                        <button type="submit" class="new_submit_btn_menu"><img src="/public/search-btn-mobile.png"></button>
+                        <input type="text" placeholder="Search"
+           @keydown.enter="handleSearch"
+            class=""
+            v-model="searchQuery" style="caret-color: white;" />
+                        <button @click="handleSearch"  class="new_submit_btn_menu"><img src="/public/search-btn-mobile.png"></button>
                     </form>
                 </div>
             </div>
+        </div>
         </div>
         <SearchModal :show="showModal" @close="showModal = false" />
     </div>
@@ -62,7 +70,18 @@ const SearchModal = defineAsyncComponent(() =>
 );
 const openModal = ref(false)
 const showModal = ref(false);
-
+const searchQuery = ref("");
+const handleSearch = (event) => {
+  if (event) event.preventDefault(); 
+  if (searchQuery.value.trim() !== '') {
+    if(typeof window !== 'undefined') {
+      window.location.href = 'https://lebello.com/?s=' + searchQuery.value
+    }
+    search.value = ''; 
+  } else {
+    console.log('Search query is empty!');
+  }
+};
 
 </script>
 
