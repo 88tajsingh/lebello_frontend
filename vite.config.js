@@ -12,7 +12,7 @@ export default defineConfig(({ command }) => ({
         }
       }
     }),
-    visualizer({ open: command === 'build' }) // Open visualizer only during build
+    visualizer({ open: command === 'build' }) 
   ],
   base: '/',
   resolve: {
@@ -23,12 +23,12 @@ export default defineConfig(({ command }) => ({
   build: {
     target: 'es2022', 
     emptyOutDir: true,
-    ssr: 'src/entry-server.js', // Specify the server entry point
-    outDir: 'dist', // Output directory for both client and server builds
+    ssr: 'src/entry-server.js', 
+    outDir: 'dist',
     rollupOptions: {
       input: {
-        app: './index.html', // Client entry point
-        server: './src/entry-server.js' // Server entry point
+        app: './index.html', 
+        server: './src/entry-server.js' 
       },
       output: {
         manualChunks(id) {
@@ -44,7 +44,7 @@ export default defineConfig(({ command }) => ({
     }
   },
   ssr: {
-    noExternal: ['lodash'] // Include lodash in SSR bundle
+    noExternal: ['lodash'] 
   },
   server: {
     host: '0.0.0.0',

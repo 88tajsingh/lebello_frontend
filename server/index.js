@@ -31,7 +31,7 @@ async function createServer() {
 }
 
 createServer().then((app) => {
-    app.listen(3000, () => {
-        console.log('Server running at http://localhost:3000');
+    app.listen(4173, () => {
+        console.log('Server running at http://localhost:4173');
     });
 });
