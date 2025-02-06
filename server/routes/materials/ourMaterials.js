@@ -10,7 +10,6 @@ const router = express.Router();
 export default function ourMaterials(vite, isProduction) {
     router.get('/', async (req, res) => {
         const url = req.originalUrl;
-        console.log("ourMaterials");
         try {
             let template, render;
 

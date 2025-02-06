@@ -62,7 +62,7 @@
         <div class="threed_img" ref="containerRef">
           <img v-show ="!isIframeVisible" :src="$filePath(imageSrc, true)" :alt="$filePath(imageAlt)" class="w-full h-auto"
             ref="imageRef" @load="updateDimensions" />
-
+          <!-- {{ iframeSrc }} -->
           <iframe v-show="isIframeVisible" :src="iframeSrc"
             :style="{ width: `${iframeWidth}px`, height: `${iframeHeight}px` }" class="w-full"
             allowfullscreen frameborder="0" scrolling="no" />
@@ -300,20 +300,22 @@ const updateDimensions = () => {
     // Initially set the iframe to match image dimensions
     iframeWidth.value = width.value;
     iframeHeight.value = height.value;
-    adjustDimensions();
+    adjustDimensions(); // Adjust iframe size after image load
   }
 };
 
 const adjustDimensions = () => {
-  // console.log("iframeWidth", iframeWidth.value,"iframeHeight", iframeHeight.value)
   if (containerRef.value) {
     const containerWidth = containerRef.value.offsetWidth;
     const aspectRatio = width.value / height.value;
 
-    // Adjust iframe size dynamically if container width is less than image width
+    // Adjust iframe size dynamically based on container width
     if (containerWidth < width.value) {
       iframeWidth.value = containerWidth;
-      iframeHeight.value = containerWidth / aspectRatio;
+      iframeHeight.value = containerWidth / aspectRatio; // Maintain aspect ratio
+    } else {
+      iframeWidth.value = containerWidth; // If container width is greater than image width, use container width
+      iframeHeight.value = containerWidth / aspectRatio; // Calculate height based on width
     }
   }
 };

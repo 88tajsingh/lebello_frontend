@@ -5,7 +5,6 @@ import ssrMiddleware from './middlewares/ssr.js';
 import staticMiddleware from './middlewares/statics.js';
 import mainRoutes from './routes/mainRoute.js';
 import contractDesign from './routes/contract/contractDesign.js';
-import contractDetail from './routes/contract/contractDetail.js';
 import ProductDetail from './routes/Products/productDetail.js';
 
 async function createServer() {

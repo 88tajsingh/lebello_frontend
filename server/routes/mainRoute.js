@@ -8,7 +8,6 @@ const router = express.Router()
 
 export default function mainRoutes(vite, isProduction) {
   router.get('/', async (req, res) => {
-    console.log('home')
     const url = req.originalUrl
     try {
       let template, render
@@ -19,12 +18,10 @@ export default function mainRoutes(vite, isProduction) {
 
       if (!isProduction) {
         template = fs.readFileSync(indexPath, 'utf-8')
-        console.log('template client ', template)
         template = await vite.transformIndexHtml(url, template)
         render = (await vite.ssrLoadModule('/src/entry-server.js')).render
       } else {
         template = fs.readFileSync(indexPath, 'utf-8')
-        console.log('template server ', template)
         render = (await import('../../dist/server/entry-server.js')).render
       }
 
@@ -45,7 +42,6 @@ export default function mainRoutes(vite, isProduction) {
 
       const seoTags = setSeoTags(seoData)
       const context = { url, extraData }
-      //   console.log("extraData",context);
       const { html: appHtml } = await render(url, context)
 
       const html = template
@@ -55,7 +51,6 @@ export default function mainRoutes(vite, isProduction) {
           `<script>window.__EXTRA_DATA__ = ${JSON.stringify(extraData)}</script>`
         )
         .replace('<!--seo-tags-->', seoTags)
-    //   console.log('html', html)
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
       if (!isProduction) vite?.ssrFixStacktrace(e)

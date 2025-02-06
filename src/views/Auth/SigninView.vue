@@ -56,7 +56,6 @@ const handleLogin = async () => {
   try {
     const user = { ...form.value };
     const { status, data } = await LoginService.login(user);
-    console.log(status,data)
     if (status === 200) {
       const { access_token: token, expires_at: expiresAt, user_data: user } = data.data;
       showToast(data.message, 'success');
