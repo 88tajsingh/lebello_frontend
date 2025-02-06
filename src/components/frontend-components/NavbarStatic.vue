@@ -342,6 +342,22 @@ const showModal = ref(false);
     .mobile_menu_main ul.mobile_menu_ul li a svg.icon {
         transform: rotate(-90deg);
     }
+    .mobile_menu_main ul.mobile_menu_ul li a:hover {
+        color: #ce8d39 !important;
+    }
+    .mobile_menu_main ul.mobile_menu_ul li a {
+        transition: all 0.5s;
+    }
+    .mobile_menu_main ul.mobile_menu_ul li a svg {
+        transition: all 0.5s;
+    }
+    .mobile_menu_main ul.mobile_menu_ul li a:hover svg {
+        stroke: #ce8d39 !important;
+        fill: #ce8d39 !important;
+    }
+    .mobile_menu_main ul.mobile_menu_ul li a:hover svg path {
+        fill: #ce8d39 !important;
+    }
 }
 
 @media (max-width: 574px) {

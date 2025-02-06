@@ -1275,7 +1275,7 @@ watch(() => props.accordionData, (newData) => {
 .inner_faq .faq_inner_cont {
   border-bottom: 1px solid #7c7369;
   border-left: none;
-  padding: 30px 0px 30px 30px;
+  padding: 20px 0px 20px 30px;
 }
 
 .inner_faq .faq_inner_cont .inner_faq_head {
@@ -1363,10 +1363,14 @@ p.popup_desc {
   width: 0em;
   height: 0em
 }
+.gallery_images_main img {
+  height: 230px;
+  max-width: 100%;
+}
 
 @media (max-width: 1879px) {
   .popup_gallery_cont {
-    max-width: 1340px;
+    max-width: 1300px;
   }
 }
 
@@ -1376,23 +1380,17 @@ p.popup_desc {
   }
 
   .inner_faq .faq_inner_cont {
-    padding: 24px 0px 30px 24px;
+    padding: 20px 0px 20px 30px;
   }
 
 
-  .popup_gallery_cont {
-    max-width: 1230px;
-  }
+  
 
 }
 
 @media(max-width:1599px) {
   .popup_gallery_cont button {
     margin-top: 4px;
-  }
-
-  .popup_gallery_cont {
-    max-width: 1130px;
   }
 
   .gallery_popup_imgs {
@@ -1433,10 +1431,6 @@ p.popup_desc {
     transform: rotate(-91deg);
   }
 
-  .popup_gallery_cont {
-    max-width: 982px;
-  }
-
 
   .popup_gallery_cont svg.icon {
     height: 28px;
@@ -1450,15 +1444,10 @@ p.popup_desc {
     height: 51vh;
   }
 
-  .popup_gallery_cont {
-    max-width: 982px;
-  }
-
 }
 
 @media(max-width:1199px) {
   .popup_gallery_cont {
-    max-width: 832px;
     padding: 46px 40px 0px 30px;
   }
 
@@ -1469,12 +1458,14 @@ p.popup_desc {
   .popup_gallery_cont button {
     margin-top: 0px;
   }
+  .gallery_images_main img {
+    height: 200px;
+}
 
 }
 
 @media(max-width:991px) {
   .popup_gallery_cont {
-    max-width: 682px;
     padding: 46px 40px 0px 30px;
   }
 
@@ -1494,6 +1485,13 @@ p.popup_desc {
   .product_container {
     padding: 0px 32px;
   }
+  
+}
+
+@media(max-width:767px){
+  .gallery_images_main img {
+    height: 140px !important;
+}
 }
 
 @media(max-width:574px) {
@@ -1539,5 +1537,6 @@ p.popup_desc {
   .gallery_images_height {
     height: 43vh;
   }
+  
 }
 </style>

@@ -1011,7 +1011,7 @@ button.slider_arrow.custom-next {
   }
 
   .materils_main_sec {
-    padding: 40px 0px;
+    padding: 20px 0px 40px;
   }
 
   .product_container {
@@ -1042,5 +1042,8 @@ button.slider_arrow.custom-next {
   .product_new_gallery .product_img {
     height: 130px !important;
   }
+  .product_banner .swiper-pagination {
+    display: none;
+}
 }
 </style>
