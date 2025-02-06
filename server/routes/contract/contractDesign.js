@@ -9,7 +9,6 @@ const router = express.Router()
 export default function contractDesign(vite, isProduction) {
   router.get('/', async (req, res) => {
     const url = req.originalUrl
-    console.log('contractDesign')
     try {
       let template, render
 

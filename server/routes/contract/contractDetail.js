@@ -9,9 +9,7 @@ const router = express.Router();
 
 export default function contractDetail(vite, isProduction) {
     router.get('/:slug', async (req, res) => {
-        console.log("contractDetail", req.params.slug);
         const url = req.originalUrl;
-        console.log("contractDetail");
         try {
             let template, render;
 
