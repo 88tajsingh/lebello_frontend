@@ -64,7 +64,6 @@ const handleSubmit = async () => {
         }
     } catch (e) {
         if (res.status === 400) {
-            console.log(res.data.message)
             processing.value = false;
         }
         console.error('Error while register:', e);

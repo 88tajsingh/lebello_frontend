@@ -38,7 +38,6 @@ export default function ProductDetail(vite, isProduction) {
                 return;
             }
                extraData =extraData?.data?.data
-               console.log("getProductDetail",extraData?.product_data[0]?.seo_title)
                const seoData = {
                    title: extraData?.product_data[0]?.seo_title || 'Lebello',
                    description: extraData?.product_data[0]?.meta_description ,

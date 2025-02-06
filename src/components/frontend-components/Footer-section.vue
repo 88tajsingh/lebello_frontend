@@ -144,6 +144,9 @@ const props = defineProps({
     flex-direction: column;
     row-gap: 30px;
 }
+.menu_main_foot {
+  min-width: auto !important;
+}
 }
 
 @media (max-width: 991px) {
@@ -171,6 +174,7 @@ const props = defineProps({
 }
 .footer_new_grid .menu_main_foot {
   margin-bottom: 20px;
+  min-width: auto !important;
 }
 .footer_new_grid .menu_main_foot:nth-child(3), .footer_new_grid .menu_main_foot:nth-child(4) {
   margin-bottom: 0px;

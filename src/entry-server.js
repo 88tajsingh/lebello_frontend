@@ -9,7 +9,6 @@ export async function render(url, manifest) {
 
   const ctx = {}
   const html = await renderToString(app, ctx)
-  console.log('every render entry-server.js');
   // Get current route's meta data
   const route = router.currentRoute.value
   const meta = {

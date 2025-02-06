@@ -60,11 +60,13 @@
       <div class="threed_inner_main">
 
         <div class="threed_img" ref="containerRef">
-          <img v-if="!isIframeVisible" :src="$filePath(imageSrc, true)" :alt="$filePath(imageAlt)" class="w-full h-auto"
+          <img v-show ="!isIframeVisible" :src="$filePath(imageSrc, true)" :alt="$filePath(imageAlt)" class="w-full h-auto"
             ref="imageRef" @load="updateDimensions" />
-         
-          <iframe v-show="isIframeVisible" :src="iframeSrc" :style="{ width: `${width}px`, height: `${height}px` }"
-            class="w-full" allowfullscreen frameborder="0" scrolling="no" />
+          <!-- {{ iframeSrc }} -->
+          <iframe v-show="isIframeVisible" :src="iframeSrc"
+            :style="{ width: `${iframeWidth}px`, height: `${iframeHeight}px` }" class="w-full"
+            allowfullscreen frameborder="0" scrolling="no" />
+
           <button v-show="!isIframeVisible && iframeSrc" @click="toggleIframe"
             class="absolute right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
             <img src="../../../assets/images/product/3D Icon.png" alt="View 3D" class="w-6 h-6" />
@@ -83,7 +85,8 @@
           </div>
           <div class="threed_btns">
             <button disabled class=""> <a href="#" class=""> ENQUIRE / EMAIL</a></button>
-            <button disabled class=" cursor-not-allowed"><a href="#" class="see_store_btn pointer-events-none">SEE AT STORE</a></button>
+            <button disabled class=" cursor-not-allowed"><a href="#" class="see_store_btn pointer-events-none">SEE AT
+                STORE</a></button>
           </div>
         </div>
       </div>
@@ -200,7 +203,7 @@
 </template>
 <script setup>
 // Imports
-import { ref, onMounted, onUnmounted, computed, watch, defineAsyncComponent, nextTick } from 'vue';
+import { ref, onMounted, onUnmounted,onBeforeUnmount ,computed, watch, defineAsyncComponent, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { Arrow, Facebook, Instagram, Houzz, Pinterest } from '@/components/frontend-components/Svg/Icons';
 import { useStore } from 'vuex';
@@ -238,8 +241,11 @@ const modalWidth = ref(0);
 const modalHeight = ref(0);
 const width = ref(0);
 const height = ref(0);
+const iframeWidth = ref(0);
+const iframeHeight = ref(0);
 const selectedConfig = ref(null);
 const containerRef = ref(null);
+
 
 // Modal Functions
 const { isModalOpen, openModal, closeModal } = useModal();
@@ -291,7 +297,10 @@ const updateDimensions = () => {
   if (imageRef.value) {
     width.value = imageRef.value.naturalWidth;
     height.value = imageRef.value.naturalHeight;
-    adjustDimensions();
+    // Initially set the iframe to match image dimensions
+    iframeWidth.value = width.value;
+    iframeHeight.value = height.value;
+    adjustDimensions(); // Adjust iframe size after image load
   }
 };
 
@@ -300,12 +309,17 @@ const adjustDimensions = () => {
     const containerWidth = containerRef.value.offsetWidth;
     const aspectRatio = width.value / height.value;
 
+    // Adjust iframe size dynamically based on container width
     if (containerWidth < width.value) {
-      width.value = containerWidth;
-      height.value = containerWidth / aspectRatio;
+      iframeWidth.value = containerWidth;
+      iframeHeight.value = containerWidth / aspectRatio; // Maintain aspect ratio
+    } else {
+      iframeWidth.value = containerWidth; // If container width is greater than image width, use container width
+      iframeHeight.value = containerWidth / aspectRatio; // Calculate height based on width
     }
   }
 };
+
 
 const handleResize = () => adjustDimensions();
 
@@ -344,7 +358,7 @@ onMounted(() => {
     rightBoxImage.value = filePath(productData.value?.new_product_additional_right_box_image_url?.file_url);
     selectedConfig.value = productData.value?.product_url_for_three_d?.[0].config_url;
 
-    window.addEventListener('resize', adjustModalSize);
+    // window.addEventListener('resize', adjustModalSize);
     nextTick(() => updateDimensions());
   }
 
@@ -1011,7 +1025,7 @@ button.slider_arrow.custom-next {
   }
 
   .materils_main_sec {
-    padding: 40px 0px;
+    padding: 20px 0px 40px;
   }
 
   .product_container {
@@ -1042,5 +1056,8 @@ button.slider_arrow.custom-next {
   .product_new_gallery .product_img {
     height: 130px !important;
   }
+  .product_banner .swiper-pagination {
+    display: none;
+}
 }
 </style>

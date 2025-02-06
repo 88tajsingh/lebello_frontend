@@ -35,7 +35,6 @@ const validateForm = () => {
 const handleForgetPassword = () => {
     try {
         if (validateForm()) {
-            console.log(form.value)
             // processing.value = true;
             // const user = { ...form.value };
             // const token = "token"
