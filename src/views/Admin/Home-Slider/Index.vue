@@ -72,6 +72,7 @@
 import DeleteModal from '@/components/Admin-components/Modals/DeleteModal.vue'
 import { ref, onMounted, watch } from 'vue'
 import { showToast } from '@/helper/functions'
+import '@bhplugin/vue3-datatable/dist/style.css'
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import { getDomains } from '@/helper/Apis'

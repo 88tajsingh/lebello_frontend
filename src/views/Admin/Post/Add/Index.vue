@@ -67,6 +67,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import '@bhplugin/vue3-datatable/dist/style.css'
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import PostServices from '@/services/PostServices';
 import { useRouter } from 'vue-router';

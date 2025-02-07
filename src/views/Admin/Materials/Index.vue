@@ -66,6 +66,7 @@
 <script setup>
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import '@bhplugin/vue3-datatable/dist/style.css'
 import { getDomains } from '@/helper/Apis'
 import { materialCols } from '@/json/data'
 import { ref, onMounted, watch } from 'vue'

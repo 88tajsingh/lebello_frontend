@@ -49,6 +49,7 @@
   
   <script setup>
   import { ref, onMounted, watch } from 'vue';
+  import '@bhplugin/vue3-datatable/dist/style.css'
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import CompanyServices from '@/services/CompanyServices';
   import { useRouter } from 'vue-router';

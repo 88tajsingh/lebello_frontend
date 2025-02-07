@@ -66,6 +66,7 @@
 
 <script setup>
 import { ref, onMounted, toRaw } from 'vue'
+import '@bhplugin/vue3-datatable/dist/style.css'
 import { showToast } from '@/helper/functions'
 import { getAllCurrenciesList } from '@/helper/Apis'
 import AddEditForm from './AddEditForm.vue'

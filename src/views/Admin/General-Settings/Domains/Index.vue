@@ -55,6 +55,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import '@bhplugin/vue3-datatable/dist/style.css'
 import { showToast, } from '@/helper/functions'
 import { getAllCountries, } from '@/helper/Apis'
 import AddEditForm from './AddEditForm.vue';

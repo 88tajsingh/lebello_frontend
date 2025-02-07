@@ -2,9 +2,9 @@
   <PageHeader> Swatches</PageHeader>
   <div class="flex  content-between justify-between px-1 mb-2">
     <div class="flex">
-      <Select v-if="permissions.write" cusClass="h-[38px] border-boxdark	  " :options="SwatchesBulkOption"
+      <Select v-if="permissions?.write" cusClass="h-[38px] border-boxdark	  " :options="SwatchesBulkOption"
         showfield="text" valueField="value" label="Bulk Options" v-model="bulkActionSelected" />
-      <Button v-if="permissions.write" class="px-2 py-2 m-auto" @click="()=>modalflag.multiDelete=true">Apply</Button>
+      <Button v-if="permissions?.write" class="px-2 py-2 m-auto" @click="()=>modalflag.multiDelete=true">Apply</Button>
       <div class="max-w-52 mr-2">
         <Select :options="getDomainsList" showfield="name" class="w-full" valueField="id" label="All Domain"
           v-model="paginationData.domain_id" />
@@ -17,7 +17,7 @@
     <div class="flex">
       <TextInput type="text" class="block bg-white rounded-lg mr-2 h-[40px] w-full" placeholder="Search"
         v-model="search" />
-      <Button v-if="permissions.write"
+      <Button v-if="permissions?.write"
         @click="() => { router.push({ name: 'Swatches-form' }); store.dispatch('clearEditData'); }"
         class="px-2 py-2 m-auto whitespace-nowrap"> Add Swatches </Button>
     </div>
@@ -43,7 +43,7 @@
         <span v-else-if="data.value.status === 3">Publish</span>
         <span v-else>Status not selected</span>
       </template>
-      <template v-if="permissions.write" #actions="data">
+      <template v-if="permissions?.write" #actions="data">
         <div class="flex gap-3">
           <div @click="()=>handelEditClick(data.value)"
             id="edit svg">
@@ -79,6 +79,7 @@ import { showToast } from '@/helper/functions'
 import SwatchesServices from '@/services/SwatchesServices';
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
+import '@bhplugin/vue3-datatable/dist/style.css'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Select from "@/components/Admin-components/form-components/Select.vue";
 import TextInput from "@/components/Admin-components/form-components/TextInput.vue";
@@ -91,7 +92,7 @@ const router = useRouter();
 const getDomainsList = ref([]);
 const dataTableLoding = ref(false);
 const rows = ref([]);
-const permissions = store.getters.user.permissions;
+const permissions = store?.getters?.user?.permissions;
 const paginationData = ref({ limit: 10, page: 1, domain_id: '', status: '' })
 const loading = ref(false);
 const datatable = ref('')

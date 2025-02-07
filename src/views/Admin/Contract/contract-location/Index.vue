@@ -60,6 +60,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
+import '@bhplugin/vue3-datatable/dist/style.css'
 import ContractServices from '@/services/ContractServices';
 import { useRouter } from 'vue-router';
 import { showToast } from '@/helper/functions';

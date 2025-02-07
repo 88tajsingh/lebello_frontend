@@ -17,9 +17,9 @@ export async function render(url, manifest) {
     keywords: route.meta.keywords || 'vue,ssr,javascript',
     ogImage: route.meta.ogImage || ''
   }
-  // const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
+  const preloadLinks = renderPreloadLinks(ctx.modules, manifest)
 
-  return { html, meta, store }
+  return { html, meta,preloadLinks, store }
 }
 
 function renderPreloadLinks(modules, manifest) {

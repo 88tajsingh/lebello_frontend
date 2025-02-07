@@ -57,14 +57,13 @@
     <Breadcrumb :breadcrumbData="breadcrumbData" />
 
     <section class="three_d_section_main bg-white">
-      <div class="threed_inner_main">
-
+      <div class="threed_inner_main" ref="mainContainerRef">
         <div class="threed_img" ref="containerRef">
           <img v-show ="!isIframeVisible" :src="$filePath(imageSrc, true)" :alt="$filePath(imageAlt)" class="w-full h-auto"
             ref="imageRef" @load="updateDimensions" />
           <!-- {{ iframeSrc }} -->
           <iframe v-if="isIframeVisible" :src="iframeSrc" 
-            :style="{ width: `${iframeWidth}px`, height: `${iframeHeight}px` }" class="w-full "
+            :style="{ width: `100%`, height: `${iframeHeight}px` }" class="w-full bg-[#d1c8bf] "
               frameborder="0" scrolling="no" />
 
           <button v-show="!isIframeVisible && iframeSrc" @click="toggleIframe"
@@ -72,7 +71,7 @@
             <img src="../../../assets/images/product/3D Icon.png" alt="View 3D" class="w-6 h-6" />
           </button>
         </div>
-        <div class="threed_cont">
+        <div class="threed_cont" ref="threedContRef">
           <div class="product_top_cont">
             <h2>3D CONFIGURATOR</h2>
             <p><span>Recomended Configuration</span> Please select the configuration</p>
@@ -245,6 +244,9 @@ const iframeWidth = ref(0);
 const iframeHeight = ref(0);
 const selectedConfig = ref(null);
 const containerRef = ref(null);
+const threedContRef = ref(null);
+const mainContainerRef = ref(null);
+const isSmallScreen = ref(null);
 
 
 // Modal Functions
@@ -275,12 +277,10 @@ const handleOpenModal = (product, index) => {
   activeIndex.value = index;
   openModal();
 
-  // Set initial modal size
   if (typeof window !== 'undefined') {
     modalWidth.value = window.innerWidth * 0.9;
     modalHeight.value = window.innerHeight * 0.9;
   }
-  // Use nextTick to ensure the modal is rendered before adjusting size
   nextTick(() => adjustModalSize());
 };
 
@@ -297,31 +297,42 @@ const updateDimensions = () => {
   if (imageRef.value) {
     width.value = imageRef.value.naturalWidth;
     height.value = imageRef.value.naturalHeight;
-    // Initially set the iframe to match image dimensions
-    iframeWidth.value = width.value;
-    iframeHeight.value = height.value;
-    adjustDimensions(); // Adjust iframe size after image load
+    adjustDimensions();
   }
 };
 
 const adjustDimensions = () => {
-  if (containerRef.value) {
-    const containerWidth = containerRef.value.offsetWidth;
+  if (mainContainerRef.value && containerRef.value && threedContRef.value) {
+    const mainContainerWidth = mainContainerRef.value.offsetWidth;
     const aspectRatio = width.value / height.value;
 
-    // Adjust iframe size dynamically based on container width
-    if (containerWidth < width.value) {
-      iframeWidth.value = containerWidth;
-      iframeHeight.value = containerWidth / aspectRatio; // Maintain aspect ratio
+    isSmallScreen.value = window.innerWidth <= 760;
+
+    if (isSmallScreen.value) {
+      containerRef.value.style.width = '100%';
+      containerRef.value.style.flexBasis = '100%';
+      threedContRef.value.style.width = '100%';
+      threedContRef.value.style.flexBasis = '100%';
     } else {
-      iframeWidth.value = containerWidth; // If container width is greater than image width, use container width
-      iframeHeight.value = containerWidth / aspectRatio; // Calculate height based on width
+      const maxImageWidth = mainContainerWidth * 0.62;
+      
+      let actualWidth = Math.min(width.value, maxImageWidth);
+      
+      containerRef.value.style.width = `${actualWidth}px`;
+      containerRef.value.style.flexBasis = `${actualWidth}px`;
+      
+      threedContRef.value.style.width = `${mainContainerWidth - actualWidth}px`;
+      threedContRef.value.style.flexBasis = `${mainContainerWidth - actualWidth}px`;
     }
+
+    iframeHeight.value = containerRef.value.offsetWidth / aspectRatio;
   }
 };
 
+const handleResize = () => {
+  adjustDimensions();
+};
 
-const handleResize = () => adjustDimensions();
 
 // Modal Size Adjustments
 const adjustModalSize = () => {
@@ -345,11 +356,6 @@ const adjustModalSize = () => {
   }
 };
 
-
-
-// Small Screen Detection
-const isSmallScreen = computed(() => typeof window !== 'undefined' && window.innerWidth < 640);
-
 // Lifecycle Hooks
 onMounted(() => {
   if (typeof window !== 'undefined') {
@@ -360,9 +366,11 @@ onMounted(() => {
 
     // window.addEventListener('resize', adjustModalSize);
     nextTick(() => updateDimensions());
+
+    window.addEventListener('resize', handleResize);
+    
   }
 
-  window.addEventListener('resize', handleResize);
 });
 
 onUnmounted(() => {
@@ -385,8 +393,12 @@ watch(productData, (newVal) => {
 });
 
 // Event Handlers
-const toggleIframe = () => isIframeVisible.value = !isIframeVisible.value;
-
+const toggleIframe = () => {
+  isIframeVisible.value = !isIframeVisible.value;
+  nextTick(() => {
+    adjustDimensions();
+  });
+};
 
 
 const nextImage = () => {

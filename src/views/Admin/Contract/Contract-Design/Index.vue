@@ -68,6 +68,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import '@bhplugin/vue3-datatable/dist/style.css'
 import { getDomains } from '@/helper/Apis';
 import { useRouter } from 'vue-router';
 import { ContractCols, statusData } from '@/json/data';
