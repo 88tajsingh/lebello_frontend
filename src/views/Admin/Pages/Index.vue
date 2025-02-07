@@ -51,6 +51,7 @@
 
 <script setup>
 import { ref, onMounted,watch } from 'vue';
+import '@bhplugin/vue3-datatable/dist/style.css'
 import { showToast } from '@/helper/functions'
 import { getDomains } from '@/helper/Apis';
 import { pagesCol } from '@/json/data';

@@ -239,6 +239,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
+import '@bhplugin/vue3-datatable/dist/style.css'
 import StoreProductServices from '@/services/StoreProductServices';
 import ProductServices from '@/services/ProductServices';
 import AddEditForm from './AddEditForm.vue'

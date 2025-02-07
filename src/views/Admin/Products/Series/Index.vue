@@ -57,6 +57,7 @@ import { ref, onMounted, watch } from 'vue';
 import { showToast } from '@/helper/functions';
 import PageHeader from '@/components/Admin-components/PageHeader.vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
+import '@bhplugin/vue3-datatable/dist/style.css'
 import { getDomains } from '@/helper/Apis';
 import { productSeriesCols } from '@/json/data';
 import TextInput from '@/components/Admin-components/form-components/TextInput.vue';

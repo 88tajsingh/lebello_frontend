@@ -79,6 +79,7 @@ import { showToast } from '@/helper/functions'
 import SwatchesServices from '@/services/SwatchesServices';
 import PageHeader from '@/components/Admin-components/PageHeader.vue'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
+import '@bhplugin/vue3-datatable/dist/style.css'
 import Button from "@/components/Admin-components/Buttons/Button.vue";
 import Select from "@/components/Admin-components/form-components/Select.vue";
 import TextInput from "@/components/Admin-components/form-components/TextInput.vue";
