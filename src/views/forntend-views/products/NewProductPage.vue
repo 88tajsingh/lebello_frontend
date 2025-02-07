@@ -63,9 +63,9 @@
           <img v-show ="!isIframeVisible" :src="$filePath(imageSrc, true)" :alt="$filePath(imageAlt)" class="w-full h-auto"
             ref="imageRef" @load="updateDimensions" />
           <!-- {{ iframeSrc }} -->
-          <iframe v-show="isIframeVisible" :src="iframeSrc"
-            :style="{ width: `${iframeWidth}px`, height: `${iframeHeight}px` }" class="w-full"
-            allowfullscreen frameborder="0" scrolling="no" />
+          <iframe v-if="isIframeVisible" :src="iframeSrc" 
+            :style="{ width: `${iframeWidth}px`, height: `${iframeHeight}px` }" class="w-full "
+              frameborder="0" scrolling="no" />
 
           <button v-show="!isIframeVisible && iframeSrc" @click="toggleIframe"
             class="absolute right-4 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors">
