@@ -1,0 +1,39 @@
+{
+  "default_branch": "lebello_dev",
+  "branches": [
+    "SSR_rendring",
+    "backup_dev",
+    "developer007",
+    "feature-update",
+    "lebello_backup",
+    "lebello_design",
+    "lebello_dev",
+    "lebello_frontend",
+    "lebello_frontend_design",
+    "lebello_frontend_ssr"
+  ],
+  "parent": {
+    "SSR_rendring": "lebello_dev",
+    "backup_dev": "lebello_dev",
+    "developer007": "lebello_dev",
+    "feature-update": "lebello_dev",
+    "lebello_backup": "lebello_dev",
+    "lebello_design": "lebello_dev",
+    "lebello_dev": null,
+    "lebello_frontend": "lebello_dev",
+    "lebello_frontend_design": "lebello_dev",
+    "lebello_frontend_ssr": "lebello_dev"
+  },
+  "order": [
+    "lebello_dev",
+    "SSR_rendring",
+    "backup_dev",
+    "developer007",
+    "feature-update",
+    "lebello_backup",
+    "lebello_design",
+    "lebello_frontend",
+    "lebello_frontend_design",
+    "lebello_frontend_ssr"
+  ]
+}
